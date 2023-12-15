@@ -31,18 +31,29 @@ Route::post('/test', function (Request $request) {
     $document_id = $request['document_id'];
     $auth = $request['auth'];
     $company_id = $request['company_id'];
-    $date = $request['date'];
+    $deadline = $request['deadline'];
+    $created = $request['created'];
+    $responsible = $request['responsible'];
     Log::info('LOG', $request->all());
     Log::info('DOC_ID', $document_id);
     Log::info('AUTH', $auth);
     Log::info('COMP_ID', ['company_id' => $company_id]);
-    Log::info('DATE', ['date' => $date]);
+    Log::info('deadline', ['date' => $deadline]);
+    Log::info('CREATED_ID', ['created' => $created]);
+
+    Log::info('responsible', ['responsible' => $responsible]);
+    
     try {
 
 
         $response = Http::get('https://' . env('BITRIX_DOMAIN') . '/rest/' . env('BITRIX_REST_VERSION') . '/' . env('WEB_HOOK') . '/tasks.task.add.json', [
             'fields' => [
-                'TITLE' => 'task for test', 'RESPONSIBLE_ID' => 560
+                'TITLE' => 'task for test', 
+                'RESPONSIBLE_ID' => $responsible,
+                'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
+                'CREATED_BY' => $created, //- постановщик;
+                'CREATED_DATE' => now(), // - дата создания;
+                'DEADLINE' => $deadline //- крайний срок;
             ]
         ]);
 
