@@ -28,8 +28,9 @@ Route::post('/reset-password', [APIController::class, 'reset_pass']);
 
 Route::post('/test', function (Request $request) {
     $data = $request->all();
+    $document_id = $request['document_id'];
     Log::info('LOG', $request->all());
-  
+    Log::info('LOG', $document_id);
     try {
         
       
