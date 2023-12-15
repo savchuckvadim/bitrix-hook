@@ -27,11 +27,12 @@ Route::post('/forget-password', [APIController::class, 'forget_pass']);
 Route::post('/reset-password', [APIController::class, 'reset_pass']);
 
 Route::post('/test', function (Request $request) {
-
+    $data = $request->all();
+    Log::info('Webhook received', $request->all());
+    Log::info('Webhook', $data['company_id']);
     try {
-        $data = $request->all();
-        Log::info('Webhook received', $request->all());
-        Log::info('Webhook', $data['company_id']);
+        
+      
         $response = Http::get('https://' . env('BITRIX_DOMAIN') . '/rest/' . env('BITRIX_REST_VERSION') . '/' . env('WEB_HOOK') . '/tasks.task.add.json', [
             'fields' => [
                 'TITLE' => 'task for test', 'RESPONSIBLE_ID' => 560
