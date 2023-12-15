@@ -27,10 +27,12 @@ Route::post('/forget-password', [APIController::class, 'forget_pass']);
 Route::post('/reset-password', [APIController::class, 'reset_pass']);
 
 Route::post('/test', function (Request $request) {
-    $data = $request->all();
+   
     try {
+        $data = $request->all();
         Log::info('Webhook received', $request->all());
-        $response = Http::get('https://april-garant.bitrix24.ru/rest/1/1z69t5cso9s3vut7/crm.deal.add.json', [
+        Log::info('Webhook', $data['company_id']);
+        $response = Http::get('https://'.env('BITRIX_DOMAIN').'/rest/'.env('BITRIX_REST_VERSION').'/'.env('WEB_HOOK').'/crm.deal.add.json', [
             // Дополнительные параметры запроса, если необходимо
         ]);
 
