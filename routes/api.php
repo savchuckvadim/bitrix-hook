@@ -59,7 +59,8 @@ Route::post('/test', function (Request $request) {
         'BITRIX_REST_VERSION' => $restVersion,
         'WEB_HOOK' => $secret
     ]);
-    $novosibirskTime = Carbon::createFromFormat('Y-m-d H:i:s', $deadline, 'Asia/Novosibirsk');
+    $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
+
     $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
     try {
 
