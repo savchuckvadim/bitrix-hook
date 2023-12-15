@@ -62,6 +62,7 @@ Route::post('/test', function (Request $request) {
     $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
 
     $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
+    $moscowTime = $moscowTime->format('Y-m-d H:i:s');
     Log::info('novosibirskTime', ['novosibirskTime' => $novosibirskTime]);
     Log::info('moscowTime', ['moscowTime' => $moscowTime]);
     try {
