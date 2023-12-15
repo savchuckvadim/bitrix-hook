@@ -26,7 +26,7 @@ Route::post('/forget-password', [APIController::class, 'forget_pass']);
 Route::post('/reset-password', [APIController::class, 'reset_pass']);
 
 Route::get('/test', function () {
-    $response = Http::get('https://april-garant.bitrix24.ru/rest/1/4q9iqufwmd38jusu/', [
+    $response = Http::get('https://april-garant.bitrix24.ru/rest/1/1z69t5cso9s3vut7/crm.deal.add.json', [
         // Дополнительные параметры запроса, если необходимо
     ]);
 
