@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\APIController;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -58,7 +59,8 @@ Route::post('/test', function (Request $request) {
         'BITRIX_REST_VERSION' => $restVersion,
         'WEB_HOOK' => $secret
     ]);
-
+    $novosibirskTime = Carbon::createFromFormat('Y-m-d H:i:s', $deadline, 'Asia/Novosibirsk');
+    $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
     try {
 
 
@@ -69,7 +71,7 @@ Route::post('/test', function (Request $request) {
                 'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
                 'CREATED_BY' => $createdId, //- постановщик;
                 'CREATED_DATE' => $nowDate, // - дата создания;
-                'DEADLINE' => $deadline //- крайний срок;
+                'DEADLINE' => $moscowTime //- крайний срок;
             ]
         ]);
         Log::info('response ', ['response ' => $response]);
