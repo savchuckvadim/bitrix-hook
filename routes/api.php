@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\APIController;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,12 +26,17 @@ Route::post('/register', [APIController::class, 'register']);
 Route::post('/forget-password', [APIController::class, 'forget_pass']);
 Route::post('/reset-password', [APIController::class, 'reset_pass']);
 
-Route::post('/test', function () {
-    // Log::channel('single')->info('Request to /index', ['request' => $request->all()]);
-    $response = Http::get('https://april-garant.bitrix24.ru/rest/1/1z69t5cso9s3vut7/crm.deal.add.json', [
-        // Дополнительные параметры запроса, если необходимо
-    ]);
+Route::post('/test', function (Request $request) {
+    $data = $request->all();
+    try {
+        Log::info('Webhook received', $request->all());
+        $response = Http::get('https://april-garant.bitrix24.ru/rest/1/1z69t5cso9s3vut7/crm.deal.add.json', [
+            // Дополнительные параметры запроса, если необходимо
+        ]);
 
-    // Возвращаем ответ как ответ сервера Laravel
-    return $response;
+        // Возвращаем ответ как ответ сервера Laravel
+        return $response;
+    } catch (\Throwable $th) {
+        return response(['result' => 'error']);
+    }
 });
