@@ -56,7 +56,7 @@ Route::post('/test', function (Request $request) {
                 'DEADLINE' => $deadline //- крайний срок;
             ]
         ]);
-
+        Log::info('response ', ['response ' => $response ]);
         // Возвращаем ответ как ответ сервера Laravel
         return $response;
     } catch (\Throwable $th) {
