@@ -23,3 +23,7 @@ Route::post('/login', [APIController::class, 'login']);
 Route::post('/register', [APIController::class, 'register']);
 Route::post('/forget-password', [APIController::class, 'forget_pass']);
 Route::post('/reset-password', [APIController::class, 'reset_pass']);
+
+Route::get('/test', function () {
+    return response(['message' => 'hello!']);
+});
