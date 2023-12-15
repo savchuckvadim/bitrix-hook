@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\APIController;
+use Illuminate\Support\Facades\Http;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,5 +26,10 @@ Route::post('/forget-password', [APIController::class, 'forget_pass']);
 Route::post('/reset-password', [APIController::class, 'reset_pass']);
 
 Route::get('/test', function () {
-    return response(['message' => 'hello!']);
+    $response = Http::get('https://april-garant.bitrix24.ru/rest/1/4q9iqufwmd38jusu/', [
+        // Дополнительные параметры запроса, если необходимо
+    ]);
+
+    // Возвращаем ответ как ответ сервера Laravel
+    return $response;
 });
