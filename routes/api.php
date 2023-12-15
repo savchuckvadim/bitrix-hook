@@ -29,11 +29,14 @@ Route::post('/reset-password', [APIController::class, 'reset_pass']);
 Route::post('/test', function (Request $request) {
     $data = $request->all();
     $document_id = $request['document_id'];
+    $company_id = $request['company_id'];
     Log::info('LOG', $request->all());
-    Log::info('LOG', $document_id);
+    Log::info('DOC_ID', $document_id);
+    Log::info('COMP_ID', $company_id);
+
     try {
-        
-      
+
+
         $response = Http::get('https://' . env('BITRIX_DOMAIN') . '/rest/' . env('BITRIX_REST_VERSION') . '/' . env('WEB_HOOK') . '/tasks.task.add.json', [
             'fields' => [
                 'TITLE' => 'task for test', 'RESPONSIBLE_ID' => 560
