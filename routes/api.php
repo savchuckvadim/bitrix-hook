@@ -48,7 +48,12 @@ Route::post('/test', function (Request $request) {
     $createdId = $partsCreated[1];
     $responsibleId = $partsResponsible[1];
     $nowDate = now();
-
+    Log::info('Environment Variables', [
+        'BITRIX_DOMAIN' => env('BITRIX_DOMAIN'),
+        'BITRIX_REST_VERSION' => env('BITRIX_REST_VERSION'),
+        'WEB_HOOK' => env('WEB_HOOK')
+    ]);
+    
     try {
 
 
