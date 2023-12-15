@@ -28,8 +28,8 @@ Route::post('/reset-password', [APIController::class, 'reset_pass']);
 
 Route::post('/test', function (Request $request) {
     $data = $request->all();
-    Log::info('Webhook received', $request->all());
-    Log::info('Webhook', $data['company_id']);
+    Log::info('LOG', $request->all());
+  
     try {
         
       
