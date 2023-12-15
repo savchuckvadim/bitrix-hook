@@ -42,6 +42,8 @@ Route::post('/test', function (Request $request) {
     Log::info('CREATED_ID', ['created' => $created]);
 
     Log::info('responsible', ['responsible' => $responsible]);
+
+    $nowDate = now();
     
     try {
 
@@ -52,7 +54,7 @@ Route::post('/test', function (Request $request) {
                 'RESPONSIBLE_ID' => $responsible,
                 'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
                 'CREATED_BY' => $created, //- постановщик;
-                'CREATED_DATE' => now(), // - дата создания;
+                'CREATED_DATE' => $nowDate, // - дата создания;
                 'DEADLINE' => $deadline //- крайний срок;
             ]
         ]);
