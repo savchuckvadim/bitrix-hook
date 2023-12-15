@@ -30,10 +30,13 @@ Route::post('/test', function (Request $request) {
     $data = $request->all();
     $document_id = $request['document_id'];
     $auth = $request['auth'];
+    $company_id = $request['company_id'];
+    $date = $request['date'];
     Log::info('LOG', $request->all());
     Log::info('DOC_ID', $document_id);
     Log::info('AUTH', $auth);
-
+    Log::info('COMP_ID', $company_id);
+    Log::info('DATE', $date);
     try {
 
 
