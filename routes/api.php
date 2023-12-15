@@ -67,6 +67,7 @@ Route::post('/test', function (Request $request) {
         // Возвращаем ответ как ответ сервера Laravel
         return $response;
     } catch (\Throwable $th) {
+        Log::info('response ', ['error ' => $th ]);
         return response(['result' => 'error']);
     }
 });
