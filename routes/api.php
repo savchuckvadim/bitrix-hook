@@ -48,13 +48,13 @@ Route::post('/test', function (Request $request) {
     $createdId = $partsCreated[1];
     $responsibleId = $partsResponsible[1];
     $nowDate = now();
-  
+
     try {
 
 
         $response = Http::get('https://' . env('BITRIX_DOMAIN') . '/rest/' . env('BITRIX_REST_VERSION') . '/' . env('WEB_HOOK') . '/tasks.task.add.json', [
             'fields' => [
-                'TITLE' => 'task for test', 
+                'TITLE' => 'task for test',
                 'RESPONSIBLE_ID' => $responsibleId,
                 'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
                 'CREATED_BY' => $createdId, //- постановщик;
@@ -62,11 +62,19 @@ Route::post('/test', function (Request $request) {
                 'DEADLINE' => $deadline //- крайний срок;
             ]
         ]);
-        Log::info('response ', ['response ' => $response ]);
+        Log::info('response ', ['response ' => $response]);
         // Возвращаем ответ как ответ сервера Laravel
         return $response;
     } catch (\Throwable $th) {
-        Log::info('response ', ['error ' => $th ]);
-        return response(['result' => 'error']);
+        Log::error('Exception caught', [
+            'message'   => $th->getMessage(),
+            'file'      => $th->getFile(),
+            'line'      => $th->getLine(),
+            'trace'     => $th->getTraceAsString(),
+        ]);
+        return response([
+            'result' => 'error',
+            'message' => $th->getMessage()
+        ]);
     }
 });
