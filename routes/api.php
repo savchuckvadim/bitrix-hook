@@ -27,13 +27,15 @@ Route::post('/forget-password', [APIController::class, 'forget_pass']);
 Route::post('/reset-password', [APIController::class, 'reset_pass']);
 
 Route::post('/test', function (Request $request) {
-   
+
     try {
         $data = $request->all();
         Log::info('Webhook received', $request->all());
         Log::info('Webhook', $data['company_id']);
-        $response = Http::get('https://'.env('BITRIX_DOMAIN').'/rest/'.env('BITRIX_REST_VERSION').'/'.env('WEB_HOOK').'/crm.deal.add.json', [
-            // Дополнительные параметры запроса, если необходимо
+        $response = Http::get('https://' . env('BITRIX_DOMAIN') . '/rest/' . env('BITRIX_REST_VERSION') . '/' . env('WEB_HOOK') . '/tasks.task.add.json', [
+            'fields' => [
+                'TITLE' => 'task for test', 'RESPONSIBLE_ID' => 560
+            ]
         ]);
 
         // Возвращаем ответ как ответ сервера Laravel
