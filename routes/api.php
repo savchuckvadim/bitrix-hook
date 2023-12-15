@@ -42,7 +42,11 @@ Route::post('/test', function (Request $request) {
     Log::info('CREATED_ID', ['created' => $created]);
 
     Log::info('responsible', ['responsible' => $responsible]);
-
+    $partsCreated = explode("_", $created);
+    $partsResponsible = explode("_", $responsible);
+    // Извлечение ID (предполагается, что ID всегда находится после "user_")
+    $createdId = $partsCreated[1];
+    $responsibleId = $partsResponsible[1];
     $nowDate = now();
     
     try {
@@ -51,9 +55,9 @@ Route::post('/test', function (Request $request) {
         $response = Http::get('https://' . env('BITRIX_DOMAIN') . '/rest/' . env('BITRIX_REST_VERSION') . '/' . env('WEB_HOOK') . '/tasks.task.add.json', [
             'fields' => [
                 'TITLE' => 'task for test', 
-                'RESPONSIBLE_ID' => $responsible,
+                'RESPONSIBLE_ID' => $responsibleId,
                 'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
-                'CREATED_BY' => $created, //- постановщик;
+                'CREATED_BY' => $createdId, //- постановщик;
                 'CREATED_DATE' => $nowDate, // - дата создания;
                 'DEADLINE' => $deadline //- крайний срок;
             ]
