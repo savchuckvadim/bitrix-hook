@@ -35,8 +35,8 @@ Route::post('/test', function (Request $request) {
     Log::info('LOG', $request->all());
     Log::info('DOC_ID', $document_id);
     Log::info('AUTH', $auth);
-    Log::info('COMP_ID', $company_id);
-    Log::info('DATE', $date);
+    Log::info('COMP_ID', ['company_id' => $company_id]);
+    Log::info('DATE', ['date' => $date]);
     try {
 
 
