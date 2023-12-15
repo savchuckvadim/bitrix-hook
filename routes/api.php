@@ -34,13 +34,14 @@ Route::post('/test', function (Request $request) {
     $deadline = $request['deadline'];
     $created = $request['created'];
     $responsible = $request['responsible'];
+    $name = $request['name'];
     Log::info('LOG', $request->all());
     Log::info('DOC_ID', $document_id);
     Log::info('AUTH', $auth);
     Log::info('COMP_ID', ['company_id' => $company_id]);
     Log::info('deadline', ['date' => $deadline]);
     Log::info('CREATED_ID', ['created' => $created]);
-
+    Log::info('TITLE', ['created' => $name]);
     Log::info('responsible', ['responsible' => $responsible]);
     $partsCreated = explode("_", $created);
     $partsResponsible = explode("_", $responsible);
@@ -48,18 +49,22 @@ Route::post('/test', function (Request $request) {
     $createdId = $partsCreated[1];
     $responsibleId = $partsResponsible[1];
     $nowDate = now();
+    $domain = env('BITRIX_DOMAIN');
+    $secret = env('WEB_HOOK');
+    $restVersion = env('BITRIX_REST_VERSION');
+
     Log::info('Environment Variables', [
-        'BITRIX_DOMAIN' => env('BITRIX_DOMAIN'),
-        'BITRIX_REST_VERSION' => env('BITRIX_REST_VERSION'),
-        'WEB_HOOK' => env('WEB_HOOK')
+        'BITRIX_DOMAIN' => $domain,
+        'BITRIX_REST_VERSION' => $restVersion,
+        'WEB_HOOK' => $secret
     ]);
-    
+
     try {
 
 
-        $response = Http::get('https://' . env('BITRIX_DOMAIN') . '/rest/' . env('BITRIX_REST_VERSION') . '/' . env('WEB_HOOK') . '/tasks.task.add.json', [
+        $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
             'fields' => [
-                'TITLE' => 'task for test',
+                'TITLE' => 'Холодный обзвон' . $name . ' ' . $deadline,
                 'RESPONSIBLE_ID' => $responsibleId,
                 'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
                 'CREATED_BY' => $createdId, //- постановщик;
