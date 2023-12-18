@@ -149,7 +149,7 @@ Route::post('/smart', function (Request $request) {
         $trySmart = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.item.list.json', [
             'entityTypeId' => 156,
             'select' => ['*'],
-            'filter' => ["!=ufCrm24_1616150749" => ""]
+            // 'filter' => ["!=ufCrm24_1616150749" => ""]
 
         ]);
 
