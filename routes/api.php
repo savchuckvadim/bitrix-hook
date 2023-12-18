@@ -80,12 +80,11 @@ Route::post('/task', function (Request $request) {
                 'CREATED_DATE' => $nowDate, // - дата создания;
                 'DEADLINE' => $moscowTime, //- крайний срок;
                 'UF_CRM_TASK' => ['T9c_' . $crm],
-                'ALLOW_CHANGE_DEADLINE'=> 'N'
+                'ALLOW_CHANGE_DEADLINE' => 'N'
             ]
         ]);
         Log::info('response ', ['response ' => $response]);
-        $getFields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.getFields.json', [
-        ]);
+        $getFields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.getFields.json', []);
         Log::info('TASK_FIELDS ', ['fields ' => $getFields]);
         // Возвращаем ответ как ответ сервера Laravel
         return $response;
@@ -105,7 +104,7 @@ Route::post('/task', function (Request $request) {
 
 
 Route::post('/smart', function (Request $request) {
- 
+
     // companyId	UF_CRM_6_1697099643
     $document_id = $request['document_id'];
     $ownerType = $request['ownerType'];   // L C D T9c
@@ -146,14 +145,23 @@ Route::post('/smart', function (Request $request) {
 
         ]);
         Log::info('COMPANY ', ['getCompany ' => $getCompany]);
-        $trySmart = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.item.list.json', [
+        $responsetrySmart = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.item.list.json', [
             'entityTypeId' => 156,
             'select' => ['*'],
             'filter' => ["!=ufCrm6_1697099643" => $company_id]
 
         ]);
+        if ($responsetrySmart) {
+            if ($responsetrySmart['result']) {
+                if ($responsetrySmart['result']['items']) {
+                    if ($responsetrySmart['result']['items'][0]) {
+                        $smart = $responsetrySmart['result']['items'][0];
+                        Log::info('SMART ', ['trySmart ' => $smart]);
+                    }
+                }
+            }
+        }
 
-        Log::info('SMART ', ['trySmart ' => $trySmart]);
 
         // $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
         //     'fields' => [
@@ -167,7 +175,7 @@ Route::post('/smart', function (Request $request) {
         // ]);
         // Log::info('response ', ['response ' => $response]);
         // Возвращаем ответ как ответ сервера Laravel
-        return $trySmart;
+        return $responsetrySmart;
     } catch (\Throwable $th) {
         Log::error('Exception caught', [
             'message'   => $th->getMessage(),
