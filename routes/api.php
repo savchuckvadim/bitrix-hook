@@ -72,13 +72,14 @@ Route::post('/task', function (Request $request) {
 
         $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
             'fields' => [
-                'TITLE' => 'Холодный обзвон' . $name . ' ' . $deadline,
+                'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
                 'RESPONSIBLE_ID' => $responsibleId,
                 'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
+                'CHANGED_BY' => $createdId, //- постановщик;
                 'CREATED_BY' => $createdId, //- постановщик;
                 'CREATED_DATE' => $nowDate, // - дата создания;
                 'DEADLINE' => $moscowTime, //- крайний срок;
-                'UF_CRM_TASK' => ['T_9C' => $crm],
+                'UF_CRM_TASK' => ['T9c_' . $crm],
             ]
         ]);
         Log::info('response ', ['response ' => $response]);
