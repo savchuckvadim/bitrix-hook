@@ -145,7 +145,7 @@ const SidebarContent = props => {
       <SimpleBar className="h-100" ref={ref}>
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled" id="side-menu">
-            {/* <li className="menu-title">{props.t("Menu")} </li>
+            <li className="menu-title">{props.t("Menu")} </li>
             <li>
               <Link to="/#" className="has-arrow">
                 <i className="bx bx-home-circle"></i>
@@ -172,6 +172,21 @@ const SidebarContent = props => {
                 </li>
               </ul>
             </li>
+            <li className="menu-title">{props.t("April App")}</li>
+
+            <li>
+              <Link to="/clients" >
+                <i className="bx bx-calendar"></i>
+                <span>{props.t("Клиенты")}</span>
+              </Link>
+            </li>
+
+            <li>
+              <Link to="/templates" >
+                <i className="bx bx-calendar"></i>
+                <span>{props.t("Шаблоны")}</span>
+              </Link>
+            </li>
 
             <li className="menu-title">{props.t("Apps")}</li>
 
@@ -187,7 +202,7 @@ const SidebarContent = props => {
                 <i className="bx bx-chat"></i>
                 <span>{props.t("Chat")}</span>
               </Link>
-            </li> */}
+            </li>
             <li>
               <Link to="/apps-filemanager" >
                 <i className="bx bx-file"></i>

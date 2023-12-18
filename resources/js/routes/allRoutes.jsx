@@ -168,6 +168,8 @@ import Pages500 from "../pages/Utility/pages-500";
 import ContactsGrid from "../pages/Contacts/contacts-grid";
 import ContactsList from "../pages/Contacts/ContactList/contacts-list";
 import ContactsProfile from "../pages/Contacts/ContactsProfile/contacts-profile";
+import ClientsContainer from "../pages/April/Client/Clients-Container";
+
 
 const authProtectedRoutes = [
   //Index Main
@@ -181,6 +183,10 @@ const authProtectedRoutes = [
   { path: "/dashboard-crypto", component: <DashboardCrypto /> },
   { path: "/blog", component: <Blog /> },
   { path: "/dashboard-job", component: <DashboardJob /> },
+
+  //April
+  { path: "/clients", component:  <ClientsContainer /> },    
+
 
   //Crypto
   { path: "/crypto-wallet", component: <CryptoWallet /> },

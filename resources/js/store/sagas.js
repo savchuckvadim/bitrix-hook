@@ -21,6 +21,7 @@ import dashboardSaasSaga from "./dashboard-saas/saga";
 import dashboardCryptoSaga from "./dashboard-crypto/saga";
 import dashboardBlogSaga from "./dashboard-blog/saga";
 import dashboardJobSaga from "./dashboard-jobs/saga";
+import erClient from "./april/clients/saga";
 
 export default function* rootSaga() {
   yield all([
@@ -44,6 +45,9 @@ export default function* rootSaga() {
     fork(dashboardSaasSaga),
     fork(dashboardCryptoSaga),
     fork(dashboardBlogSaga),
-    fork(dashboardJobSaga)
+    fork(dashboardJobSaga),
+
+    //april
+    fork(erClient),
   ]);
 }
