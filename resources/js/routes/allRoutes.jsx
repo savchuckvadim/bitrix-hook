@@ -169,6 +169,7 @@ import ContactsGrid from "../pages/Contacts/contacts-grid";
 import ContactsList from "../pages/Contacts/ContactList/contacts-list";
 import ContactsProfile from "../pages/Contacts/ContactsProfile/contacts-profile";
 import ClientsContainer from "../pages/April/Client/Clients-Container";
+import LoginContainer from "../pages/Authentication/LoginContainer";
 
 
 const authProtectedRoutes = [
@@ -326,7 +327,7 @@ const authProtectedRoutes = [
 
 
 const publicRoutes = [
-  { path: "/login", component: <Login /> },
+  { path: "/login", component: <LoginContainer /> },
   { path: "/logout", component: <Logout /> },
   { path: "/forgot-password", component: <ForgetPwd /> },
   { path: "/register", component: <Register /> },

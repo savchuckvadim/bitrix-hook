@@ -11,52 +11,63 @@
 import { InferActionsTypes, ThunkType } from ".."
 import { onlineAPI } from "../../helpers/april-online/online-api"
 import { initFirebaseBackend } from "../../helpers/firebase/firebase_helper"
+import { FirebaseAuthBackendClassType, FirebaseAuthBackendInstanceType } from "../../helpers/firebase/types"
 import { firebaseConfig } from "../../secret/secret"
-import { getAuthApp } from "./auth/auth-reducer"
+import { AppStatus } from "../../types/app/app-type"
+
 
 //TYPES
 type AppStateType = typeof initialState
-type InitialActionType = InferActionsTypes<typeof initialActions>
+type InitialActionType = InferActionsTypes<typeof appActions>
 type AuthThunkType = ThunkType<InitialActionType>
 
 // STATE
 let initialState = {
     initialized: false as boolean,
+    firebaseBackend: null as FirebaseAuthBackendInstanceType | null,
+    status: 'off' as AppStatus
 }
 
 
 //ACTION CREATORS
-const initialActions = {
-    initializedSuccess: () => ({ type: 'SP/APP/INITIALIZED_SUCCES' } as const)
+const appActions = {
+    initializedSuccess: () => ({ type: 'SP/APP/INITIALIZED_SUCCES' } as const),
+    setFirebase: (firebase: FirebaseAuthBackendInstanceType) =>
+        ({ type: 'SP/APP/SET_FIREBASE', firebase } as const),
 }
 
 
 
 //THUNKS
 export const initialize = (): AuthThunkType => async (dispatch) => {
-    
+
+
+    const fireBack = initFirebaseBackend(firebaseConfig) as FirebaseAuthBackendInstanceType
+    fireBack && dispatch(appActions.setFirebase(fireBack))
+
     const response = await onlineAPI.service('portals', 'get', 'portals');
     const infoblocks = await onlineAPI.service('infoblocks', 'get', 'infoblocks', null)
-    const fire = initFirebaseBackend(firebaseConfig)
+    const templates = await onlineAPI.service('templates/april-garant.bitrix24.ru', 'get', 'templates', null)
     debugger
     // await dispatch(getAuthApp())
-    dispatch(initialActions.initializedSuccess())
+    dispatch(appActions.initializedSuccess())
     //FROM DIALOGS REDUCER -> get Dialogs
     // dispatch(getDialogs())
     // dispatch(inProgress(false, PreloaderCodesEnum.Global))//inProgress-status
     // await  generalAPI.clientFieldGenerate()
 
 
-    
+
 
 }
 
 
 //REDUCER
- const app = (state: AppStateType = initialState, action: InitialActionType): AppStateType => {
+const app = (state: AppStateType = initialState, action: InitialActionType): AppStateType => {
 
     switch (action.type) {
         case 'SP/APP/INITIALIZED_SUCCES': return { ...state, initialized: true }
+        case 'SP/APP/SET_FIREBASE': return { ...state, firebaseBackend: action.firebase }
         default: return state
     }
 

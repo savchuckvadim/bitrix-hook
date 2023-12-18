@@ -19,3 +19,5 @@ if (document.getElementById('react-app')) {
         </Provider>
     );
 }
+
+window.store = store

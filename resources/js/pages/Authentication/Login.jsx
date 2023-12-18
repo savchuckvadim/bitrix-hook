@@ -24,10 +24,10 @@ import profile from "../../../images/profile-img.png";
 import logo from "../../../images/logo.svg";
 import { createSelector } from "reselect";
 
-const Login = props => {
+const Login = ({app, router, initializeGoogleAuth}) => {
 
   //meta title
-  document.title = "Login | Skote React + Laravel 10 Admin And Dashboard Template";
+  document.title = "Login | April App";
 
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
@@ -71,7 +71,7 @@ const Login = props => {
       password: Yup.string().required("Please Enter Your Password"),
     }),
     onSubmit: (values) => {
-      dispatch(loginUser(values, props.router.navigate));
+      dispatch(loginUser(values, router.navigate));
     }
   });
 
@@ -199,7 +199,8 @@ const Login = props => {
                         <ul className="list-inline">
                           <li className="list-inline-item">
                           <Link
-                              to="#"
+                              // to="#"
+                              onClick={initializeGoogleAuth}
                               className="social-list-item bg-primary text-white border-primary"
                             >
                               <i className="mdi mdi-facebook" />
@@ -207,7 +208,7 @@ const Login = props => {
                           </li>
                           <li className="list-inline-item">
                           <Link
-                              to="#"
+                              onClick={initializeGoogleAuth}
                               className="social-list-item bg-danger text-white border-danger"
                             >
                               <i className="mdi mdi-google" />
