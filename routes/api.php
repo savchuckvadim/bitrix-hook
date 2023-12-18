@@ -77,7 +77,8 @@ Route::post('/task', function (Request $request) {
                 'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
                 'CREATED_BY' => $createdId, //- постановщик;
                 'CREATED_DATE' => $nowDate, // - дата создания;
-                'DEADLINE' => $moscowTime //- крайний срок;
+                'DEADLINE' => $moscowTime, //- крайний срок;
+                'UF_CRM_TASK' => $crm,
             ]
         ]);
         Log::info('response ', ['response ' => $response]);
