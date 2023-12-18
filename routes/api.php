@@ -80,6 +80,7 @@ Route::post('/task', function (Request $request) {
                 'CREATED_DATE' => $nowDate, // - дата создания;
                 'DEADLINE' => $moscowTime, //- крайний срок;
                 'UF_CRM_TASK' => ['T9c_' . $crm],
+                'ALLOW_CHANGE_DEADLINE'=> 'N'
             ]
         ]);
         Log::info('response ', ['response ' => $response]);
@@ -104,8 +105,10 @@ Route::post('/task', function (Request $request) {
 
 
 Route::post('/smart', function (Request $request) {
-    $data = $request->all();
+ 
+    // companyId	UF_CRM_6_1697099643
     $document_id = $request['document_id'];
+    $ownerType = $request['ownerType'];   // L C D T9c
     $auth = $request['auth'];
     $company_id = $request['company_id'];
 
@@ -137,21 +140,34 @@ Route::post('/smart', function (Request $request) {
     // Log::info('novosibirskTime', ['novosibirskTime' => $novosibirskTime]);
     // Log::info('moscowTime', ['moscowTime' => $moscowTime]);
     try {
+        $getCompany = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.company.get.json', [
+            'ID' => $company_id,
 
 
-        $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
-            'fields' => [
-                // 'TITLE' => 'Холодный обзвон' . $name . ' ' . $deadline,
-                // 'RESPONSIBLE_ID' => $responsibleId,
-                'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
-                // 'CREATED_BY' => $createdId, //- постановщик;
-                'CREATED_DATE' => $nowDate, // - дата создания;
-                // 'DEADLINE' => $moscowTime //- крайний срок;
-            ]
         ]);
-        Log::info('response ', ['response ' => $response]);
+        Log::info('COMPANY ', ['getCompany ' => $getCompany]);
+        $trySmart = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.item.list.json', [
+            'entityTypeId' => 9,
+            'select' => ['*'],
+            'filter' => ["!=ufCrm24_1616150749" => ""]
+
+        ]);
+
+        Log::info('SMART ', ['trySmart ' => $trySmart]);
+
+        // $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
+        //     'fields' => [
+        //         // 'TITLE' => 'Холодный обзвон' . $name . ' ' . $deadline,
+        //         // 'RESPONSIBLE_ID' => $responsibleId,
+        //         'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
+        //         // 'CREATED_BY' => $createdId, //- постановщик;
+        //         'CREATED_DATE' => $nowDate, // - дата создания;
+        //         // 'DEADLINE' => $moscowTime //- крайний срок;
+        //     ]
+        // ]);
+        // Log::info('response ', ['response ' => $response]);
         // Возвращаем ответ как ответ сервера Laravel
-        return $response;
+        return $trySmart;
     } catch (\Throwable $th) {
         Log::error('Exception caught', [
             'message'   => $th->getMessage(),
