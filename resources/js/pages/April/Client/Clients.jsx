@@ -16,7 +16,7 @@ import Breadcrumb from '../../../components/Common/Breadcrumb';
 
         }, [])
 
-debugger
+
         return (
             <>
                 <div className="page-content">

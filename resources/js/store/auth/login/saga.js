@@ -17,7 +17,7 @@ function* loginUser({ payload: { user, history } }) {
   try {
 
     const response = yield axios.post('/api/login', user);
-    debugger
+    
     const data = response.data;
     if (data.success === true && data.message === 'success') {
       const logged_user = {
@@ -27,6 +27,7 @@ function* loginUser({ payload: { user, history } }) {
         email: data.data.email,
       };
       sessionStorage.setItem('authUser', JSON.stringify(logged_user));
+      
       yield put(logoutUserSuccess(logged_user));
       yield new Promise((resolve) => {
         toast.success("User Login Successfully", {
@@ -37,6 +38,7 @@ function* loginUser({ payload: { user, history } }) {
       });
       history('/dashboard');
     } else {
+      
       if (data.data === 400) {
         toast.error(data.message, {
           position: "top-right",

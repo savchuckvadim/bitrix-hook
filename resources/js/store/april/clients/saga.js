@@ -17,7 +17,7 @@ function* workerGetClients({ payload: {  } }) {
     const infoblocks = yield onlineAPI.service('infoblocks', 'get', 'infoblocks', null)
     console.log(infoblocks)
     const data = response;
-    debugger
+    
     if (data) {
       toast.success('Password reset link send in your email.');
     } else {

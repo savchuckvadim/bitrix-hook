@@ -34,6 +34,8 @@ const appActions = {
     initializedSuccess: () => ({ type: 'SP/APP/INITIALIZED_SUCCES' } as const),
     setFirebase: (firebase: FirebaseAuthBackendInstanceType) =>
         ({ type: 'SP/APP/SET_FIREBASE', firebase } as const),
+    setAppStatus: (status: AppStatus) =>
+        ({ type: 'SP/APP/SET_STATUS', status } as const),
 }
 
 
@@ -48,7 +50,7 @@ export const initialize = (): AuthThunkType => async (dispatch) => {
     const response = await onlineAPI.service('portals', 'get', 'portals');
     const infoblocks = await onlineAPI.service('infoblocks', 'get', 'infoblocks', null)
     const templates = await onlineAPI.service('templates/april-garant.bitrix24.ru', 'get', 'templates', null)
-    debugger
+    
     // await dispatch(getAuthApp())
     dispatch(appActions.initializedSuccess())
     //FROM DIALOGS REDUCER -> get Dialogs
@@ -68,6 +70,7 @@ const app = (state: AppStateType = initialState, action: InitialActionType): App
     switch (action.type) {
         case 'SP/APP/INITIALIZED_SUCCES': return { ...state, initialized: true }
         case 'SP/APP/SET_FIREBASE': return { ...state, firebaseBackend: action.firebase }
+        case 'SP/APP/SET_STATUS': return { ...state, status: action.status}
         default: return state
     }
 

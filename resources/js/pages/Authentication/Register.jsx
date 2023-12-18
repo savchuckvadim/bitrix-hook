@@ -22,6 +22,7 @@ import profileImg from "../../../images/profile-img.png";
 import logoImg from "../../../images/logo.svg";
 import withRouter from "../../components/Common/withRouter";
 import { createSelector } from "reselect";
+import { COMPANY_NAME, CREATED_BY } from "../../constants/april";
 
 const Register = props => {
 
@@ -221,8 +222,8 @@ const Register = props => {
                   </Link>{" "}
                 </p>
                 <p>
-                  © {new Date().getFullYear()} Skote. Crafted with{" "}
-                  <i className="mdi mdi-heart text-danger" /> by Themesbrand
+                  © {new Date().getFullYear()} {COMPANY_NAME}. Crafted with{" "}
+                  <i className="mdi mdi-heart text-danger" /> by {CREATED_BY}
                 </p>
               </div>
             </Col>

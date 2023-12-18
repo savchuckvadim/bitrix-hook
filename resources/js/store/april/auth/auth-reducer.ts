@@ -1,7 +1,11 @@
 // import { stopSubmit } from "redux-form"
+import { toast } from "react-toastify"
 import { InferActionsTypes, ThunkType } from "../.."
 import { FirebaseAuthBackendInstanceType } from "../../../helpers/firebase/types"
 import { loginUser } from "../../auth/login/actions"
+import { showToastWithPromise } from "../../../utils/toast-util"
+import { getProfile } from "../../../utils/auth-util"
+import { Profile } from "../../../types/profile/profile-type"
 
 // import { authAPI } from "../../../services/auth-api";
 // import { PreloaderCodesEnum } from "../../../types/types"
@@ -18,7 +22,7 @@ type SetAuthUserDataType = InferActionsTypes<typeof actions>
 //STATE
 let initialState = {
     isAuth: false as boolean,
-    authUser: null as null
+    authUser: null as Profile | null
 
 }
 
@@ -26,7 +30,7 @@ let initialState = {
 
 //ACION CREATORS
 const actions = {
-    setAuthUserData: (authUser: null, isAuth: boolean = false) =>
+    setAuthUserData: (authUser: null | Profile, isAuth: boolean = false) =>
         ({ type: 'SP/AUTH/SET_USER_DATA', authUser, isAuth } as const)
 }
 
@@ -59,18 +63,37 @@ export const getAuthApp = (): AuthThunkType => async (dispatch) => {
 }
 
 
-export const initializeGoogleAuth = (): AuthThunkType => async (dispatch, getState) => {
+export const initializeGoogleAuth = (history: any): AuthThunkType => async (dispatch, getState) => {
     const firebaseBackend = getState().app.firebaseBackend
-    debugger
+    
     if (firebaseBackend) {
-        const user = await firebaseBackend.socialLoginUser('google')
-        dispatch(loginUser(user))
-        debugger
+        const fireBaseUser = await firebaseBackend.socialLoginUser('google')
+        //@ts-ignore
+        const email = fireBaseUser.email as string
+        const profile = await getProfile(email, firebaseBackend, history, dispatch, actions.setAuthUserData)
+        
+      
+    } else {
+        alert('something wrong with firebase api');
     }
 
 }
 
-export const login = (email: string, password: string): AuthThunkType => async (dispatch) => {
+export const login = (user: any, history: any): AuthThunkType => async (dispatch, getState) => {
+
+    const firebaseBackend = getState().app.firebaseBackend
+    
+    if (firebaseBackend) {
+        const fireBaseUser = await firebaseBackend.loginUser(user.email, user.password)
+        
+        //@ts-ignore
+        const firebaseEmail = fireBaseUser.email
+        const profile = await getProfile(firebaseEmail, firebaseBackend, history, dispatch, actions.setAuthUserData)
+        
+    } else {
+        alert('something wrong with firebase api')
+    }
+
     // dispatch(inProgress(true, PreloaderCodesEnum.Global))
 
     // await authAPI.login(email, password)

@@ -21,6 +21,7 @@ import { userForgetPassword } from "../../store/actions";
 // import images
 import profile from "../../../images/profile-img.png";
 import logo from "../../../images/logo.svg";
+import { COMPANY_NAME, CREATED_BY } from "../../constants/april";
 
 const ForgetPasswordPage = props => {
 
@@ -134,8 +135,8 @@ const ForgetPasswordPage = props => {
                   </Link>{" "}
                 </p>
                 <p>
-                  © {new Date().getFullYear()} Skote. Crafted with{" "}
-                  <i className="mdi mdi-heart text-danger" /> by Themesbrand
+                  © {new Date().getFullYear()} {COMPANY_NAME}. Crafted with{" "}
+                  <i className="mdi mdi-heart text-danger" /> by {CREATED_BY}
                 </p>
               </div>
             </Col>

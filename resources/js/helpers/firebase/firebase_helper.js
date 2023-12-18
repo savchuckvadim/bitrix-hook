@@ -67,7 +67,8 @@ export class FirebaseAuthBackend {
         .signInWithEmailAndPassword(email, password)
         .then(
           user => {
-            resolve(firebase.auth().currentUser);
+            
+            return resolve(firebase.auth().currentUser);
           },
           error => {
             reject(this._handleError(error));
@@ -120,18 +121,18 @@ export class FirebaseAuthBackend {
   socialLoginUser = async (type) => {
     let provider;
     if (type === "google") {
-        provider = new firebase.auth.GoogleAuthProvider();
+      provider = new firebase.auth.GoogleAuthProvider();
     } else if (type === "facebook") {
-        provider = new firebase.auth.FacebookAuthProvider();
+      provider = new firebase.auth.FacebookAuthProvider();
     }
     try {
-        const result = await firebase.auth().signInWithPopup(provider);
-        const user = result.user;
-        return user;
+      const result = await firebase.auth().signInWithPopup(provider);
+      const user = result.user;
+      return user;
     } catch (error) {
-        throw this._handleError(error);
+      throw this._handleError(error);
     }
-};
+  };
 
   addNewUserToFirestore = (user) => {
     const collection = firebase.firestore().collection("users");
@@ -147,6 +148,26 @@ export class FirebaseAuthBackend {
     };
     collection.doc(firebase.auth().currentUser.uid).set(details);
     return { user, details };
+  };
+
+  getDocByProp = async (collectionName, propName, propValue) => {
+    let result = null
+    try {
+  
+      const db = firebase.firestore();
+      const querySnapshot = await db.collection(collectionName)
+        .where(propName, '==', propValue)
+        .get()
+      
+      querySnapshot.forEach((doc) => {
+        result = doc.data()
+      });
+
+      return result
+    } catch (error) {
+      console.log(error.message)
+      return result
+    }
   };
 
   setLoggeedInUser = user => {

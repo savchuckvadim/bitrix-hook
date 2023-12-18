@@ -55,6 +55,7 @@ import DashboardBlog from "./dashboard-blog/reducer";
 import DashboardJob from "./dashboard-jobs/reducer";
 import clients from "./april/clients/reducer";
 import app from "./april/app-reducer";
+import authReducer from "./april/auth/auth-reducer";
 
 const rootReducer = combineReducers({
   // public
@@ -81,7 +82,8 @@ const rootReducer = combineReducers({
   
   //april
   app,
-  clients
+  authReducer,
+  clients,
 });
 
 export default rootReducer;

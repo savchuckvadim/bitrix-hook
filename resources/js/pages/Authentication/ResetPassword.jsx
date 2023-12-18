@@ -28,6 +28,7 @@ import logoImg from "../../../images/logo.svg";
 import lightlogo from "../../../images/logo-light.svg";
 import { useDispatch } from "react-redux";
 import withRouter from "../../components/Common/withRouter";
+import { COMPANY_NAME, CREATED_BY } from "../../constants/april";
 
 const ResetPassword = (props) => {
   const dispatch = useDispatch();
@@ -200,8 +201,8 @@ const ResetPassword = (props) => {
                   </Link>{" "}
                 </p>
                 <p>
-                  © {new Date().getFullYear()} Skote. Crafted with{" "}
-                  <i className="mdi mdi-heart text-danger"></i> by Themesbrand
+                  © {new Date().getFullYear()} {COMPANY_NAME}. Crafted with{" "}
+                  <i className="mdi mdi-heart text-danger" /> by {CREATED_BY}
                 </p>
               </div>
             </Col>
