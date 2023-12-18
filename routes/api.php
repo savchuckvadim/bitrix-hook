@@ -78,7 +78,7 @@ Route::post('/task', function (Request $request) {
                 'CREATED_BY' => $createdId, //- постановщик;
                 'CREATED_DATE' => $nowDate, // - дата создания;
                 'DEADLINE' => $moscowTime, //- крайний срок;
-                'UF_CRM_TASK' => ['T_9c' => $crm],
+                'UF_CRM_TASK' => ['T9c' => $crm],
             ]
         ]);
         Log::info('response ', ['response ' => $response]);
