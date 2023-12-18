@@ -36,6 +36,7 @@ Route::post('/task', function (Request $request) {
     $created = $request['created'];
     $responsible = $request['responsible'];
     $name = $request['name'];
+    $crm = $request['crm'];
     Log::info('LOG', $request->all());
     Log::info('DOC_ID', $document_id);
     Log::info('AUTH', $auth);
@@ -44,6 +45,7 @@ Route::post('/task', function (Request $request) {
     Log::info('CREATED_ID', ['created' => $created]);
     Log::info('TITLE', ['created' => $name]);
     Log::info('responsible', ['responsible' => $responsible]);
+    Log::info('crm', ['crm' => $crm]);
     $partsCreated = explode("_", $created);
     $partsResponsible = explode("_", $responsible);
     // Извлечение ID (предполагается, что ID всегда находится после "user_")
