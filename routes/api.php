@@ -78,7 +78,7 @@ Route::post('/task', function (Request $request) {
                 'CREATED_BY' => $createdId, //- постановщик;
                 'CREATED_DATE' => $nowDate, // - дата создания;
                 'DEADLINE' => $moscowTime, //- крайний срок;
-                'UF_CRM_TASK' => $crm,
+                'UF_CRM_TASK' => ['T_9c' => $crm],
             ]
         ]);
         Log::info('response ', ['response ' => $response]);
@@ -104,7 +104,7 @@ Route::post('/smart', function (Request $request) {
     $document_id = $request['document_id'];
     $auth = $request['auth'];
     $company_id = $request['company_id'];
- 
+
     Log::info('AUTH', $auth);
     Log::info('COMP_ID', ['company_id' => $company_id]);
     // Log::info('deadline', ['date' => $deadline]);
