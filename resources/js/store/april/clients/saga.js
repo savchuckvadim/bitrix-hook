@@ -11,9 +11,11 @@ import { onlineAPI } from "../../../helpers/april-online/online-api";
 
 //If user is send successfully send mail link then dispatch redux action's are directly from here.
 function* workerGetClients({ payload: {  } }) {
-  debugger
+  
   try {
     const response = yield onlineAPI.service('portals', 'get', 'portals');
+    const infoblocks = yield onlineAPI.service('infoblocks', 'get', 'infoblocks', null)
+    console.log(infoblocks)
     const data = response;
     debugger
     if (data) {
@@ -33,7 +35,7 @@ function* workerGetClients({ payload: {  } }) {
 
 export function* watcherGetClients() {
   yield takeEvery(GET_CLIENTS, workerGetClients)
-  debugger
+  
 }
 
 function* sagaGetClient() {
