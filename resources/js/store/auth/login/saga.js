@@ -7,7 +7,7 @@ import { apiError, logoutUserSuccess } from "./actions";
 //Toast
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { onlineAPI } from "../../../helpers/april-online/online-api";
+
 
 
 //TODO TESTING ONLINE
@@ -17,6 +17,7 @@ function* loginUser({ payload: { user, history } }) {
   try {
 
     const response = yield axios.post('/api/login', user);
+    debugger
     const data = response.data;
     if (data.success === true && data.message === 'success') {
       const logged_user = {

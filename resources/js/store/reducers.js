@@ -54,6 +54,7 @@ import DashboardBlog from "./dashboard-blog/reducer";
 //Dasboard job
 import DashboardJob from "./dashboard-jobs/reducer";
 import clients from "./april/clients/reducer";
+import app from "./april/app-reducer";
 
 const rootReducer = combineReducers({
   // public
@@ -79,6 +80,7 @@ const rootReducer = combineReducers({
   DashboardJob,
   
   //april
+  app,
   clients
 });
 

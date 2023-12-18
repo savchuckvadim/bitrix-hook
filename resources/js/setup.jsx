@@ -31,7 +31,7 @@ const getLayout = (layoutType) => {
     return Layout;
   };
 
-const Index = () => {
+const Index = ({app}) => {
     const selectLayoutData = createSelector(
         (state) => state.Layout,
         (layoutType) => layoutType

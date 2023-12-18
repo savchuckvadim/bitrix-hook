@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './setup'
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import "./i18n";
 
 import store from "./store";
+import AppContainer from './AppContainer';
 
 if (document.getElementById('react-app')) {
     const root = ReactDOM.createRoot(document.getElementById("react-app"));
@@ -13,7 +13,7 @@ if (document.getElementById('react-app')) {
         <Provider store={store}>
             <React.Fragment>
                 <BrowserRouter>
-                    <App />
+                    <AppContainer />
                 </BrowserRouter>
             </React.Fragment>
         </Provider>
