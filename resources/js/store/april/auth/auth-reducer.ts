@@ -1,6 +1,8 @@
 // import { stopSubmit } from "redux-form"
 import { InferActionsTypes, ThunkType } from "../.."
 import { FirebaseAuthBackendInstanceType } from "../../../helpers/firebase/types"
+import { loginUser } from "../../auth/login/actions"
+
 // import { authAPI } from "../../../services/auth-api";
 // import { PreloaderCodesEnum } from "../../../types/types"
 // import { InferActionsTypes, ThunkType } from "../../store"
@@ -61,7 +63,8 @@ export const initializeGoogleAuth = (): AuthThunkType => async (dispatch, getSta
     const firebaseBackend = getState().app.firebaseBackend
     debugger
     if (firebaseBackend) {
-        const google = await firebaseBackend.socialLoginUser('google')
+        const user = await firebaseBackend.socialLoginUser('google')
+        dispatch(loginUser(user))
         debugger
     }
 

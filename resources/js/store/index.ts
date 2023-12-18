@@ -4,7 +4,7 @@ import createSagaMiddleware from "redux-saga";
 import rootReducer from "./reducers";
 import rootSaga from "./sagas";
 
-import  { thunk, ThunkAction }  from "redux-thunk"; // Импорт Redux Thunk
+import  { ThunkAction, thunk }  from "redux-thunk"; // Импорт Redux Thunk
 
 const sagaMiddleware = createSagaMiddleware();
 //@ts-ignore
