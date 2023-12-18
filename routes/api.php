@@ -145,6 +145,7 @@ Route::post('/smart', function (Request $request) {
 
         ]);
         Log::info('COMPANY ', ['getCompany ' => $getCompany]);
+        Log::info('COMPANY ', ['company_id ' => $company_id]);
         $responsetrySmart = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.item.list.json', [
             'entityTypeId' => 156,
             'select' => ['*'],
