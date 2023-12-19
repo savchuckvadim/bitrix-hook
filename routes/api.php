@@ -165,7 +165,7 @@ Route::post('/smart', function (Request $request) {
                 'filter' => [
                     "!=stageId" => ["DT132_17:SUCCESS", "DT132_17:FAIL"],
                     // '0' => [
-                        
+
                     //     "=ufCrm6_1697099643" => $company_id
                     // ]
                 ]
@@ -175,6 +175,8 @@ Route::post('/smart', function (Request $request) {
             if ($responsetrySmart) {
                 if ($responsetrySmart['result']) {
                     if ($responsetrySmart['result']['items']) {
+                        Log::info('SMART ', ['ITEMS ' => $responsetrySmart['result']['items']]);
+                        Log::info('SMART ', ['TOTAL ' => $responsetrySmart['result']['total']]);
                         if ($responsetrySmart['result']['items'][0]) {
                             $smart = $responsetrySmart['result']['items'][0];
                             Log::info('SMART ', ['trySmart ' => $smart]);
