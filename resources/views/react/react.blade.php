@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>React App</title>
-    <link href="public/build/css/app.min.css" rel="stylesheet">
+    <link href="{{ asset('build/css/app.min.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="root"></div>
-    <script src="public/build/js/app.js"></script>
+    <script src="{{ asset('build/js/app.js') }}"></script>
 </body>
 </html>
