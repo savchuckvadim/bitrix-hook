@@ -140,64 +140,55 @@ Route::post('/smart', function (Request $request) {
     // Log::info('novosibirskTime', ['novosibirskTime' => $novosibirskTime]);
     // Log::info('moscowTime', ['moscowTime' => $moscowTime]);
     try {
-        //COMPANY
-        $getCompany = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.company.get.json', [
-            'ID' => $company_id,
+        if ($company_id) {
+            //COMPANY
+            $getCompany = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.company.get.json', [
+                'ID' => $company_id,
 
 
-        ]);
-        Log::info('COMPANY ', ['getCompany ' => $getCompany]);
-        Log::info('COMPANY ', ['company_id ' => $company_id]);
+            ]);
+            Log::info('COMPANY ', ['getCompany ' => $getCompany]);
+            Log::info('COMPANY ', ['company_id ' => $company_id]);
 
 
-        //SMART STATUS
-        $responseStatusSmart = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.status.list.json', [
-            'entityTypeId' => 156,
+            //SMART STATUS
+            $responseStatusSmart = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.status.list.json', [
+                'entityTypeId' => 156,
 
-        ]);
-        Log::debug('STATUS ', ['responseStatusSmart ' => $responseStatusSmart]);
+            ]);
+            Log::debug('STATUS ', ['responseStatusSmart ' => $responseStatusSmart]);
 
-        //SMART
-        $responsetrySmart = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.item.list.json', [
-            'entityTypeId' => 156,
-            'select' => ['*'],
-            'filter' => [
-                "!=stageId" => ["DT132_17:SUCCESS", "DT132_17:FAIL"],
-                '0' => [
-                    "!=ufCrm6_1697099643" => null, "=ufCrm6_1697099643" => $company_id
+            //SMART
+            $responsetrySmart = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.item.list.json', [
+                'entityTypeId' => 156,
+                'select' => ['*'],
+                'filter' => [
+                    "!=stageId" => ["DT132_17:SUCCESS", "DT132_17:FAIL"],
+                    '0' => [
+                        "=ufCrm6_1697099643" => $company_id
+                    ]
                 ]
-            ]
 
-        ]);
-        Log::info('SMART ', ['trySmart ' => $responsetrySmart]);
-        if ($responsetrySmart) {
-            if ($responsetrySmart['result']) {
-                if ($responsetrySmart['result']['items']) {
-                    if ($responsetrySmart['result']['items'][0]) {
-                        $smart = $responsetrySmart['result']['items'][0];
-                        Log::info('SMART ', ['trySmart ' => $smart]);
+            ]);
+            Log::info('SMART ', ['trySmart ' => $responsetrySmart]);
+            if ($responsetrySmart) {
+                if ($responsetrySmart['result']) {
+                    if ($responsetrySmart['result']['items']) {
+                        if ($responsetrySmart['result']['items'][0]) {
+                            $smart = $responsetrySmart['result']['items'][0];
+                            Log::info('SMART ', ['trySmart ' => $smart]);
+                        }
                     }
                 }
             }
-        }
 
-        if ($smart) {
-            //update smart
-        } else {
+            if ($smart) {
+                //update smart
+            } else {
+            }
+
+            return $responsetrySmart;
         }
-        // $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
-        //     'fields' => [
-        //         // 'TITLE' => 'Холодный обзвон' . $name . ' ' . $deadline,
-        //         // 'RESPONSIBLE_ID' => $responsibleId,
-        //         'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
-        //         // 'CREATED_BY' => $createdId, //- постановщик;
-        //         'CREATED_DATE' => $nowDate, // - дата создания;
-        //         // 'DEADLINE' => $moscowTime //- крайний срок;
-        //     ]
-        // ]);
-        // Log::info('response ', ['response ' => $response]);
-        // Возвращаем ответ как ответ сервера Laravel
-        return $responsetrySmart;
     } catch (\Throwable $th) {
         Log::error('Exception caught', [
             'message'   => $th->getMessage(),
