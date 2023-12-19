@@ -212,3 +212,8 @@ Route::post('/placement', function (Request $request) {
     $controller = new ReactAppController;
     return $controller->index();
 });
+
+Route::get('/placement', function (Request $request) {
+    $controller = new ReactAppController;
+    return $controller->index();
+});
