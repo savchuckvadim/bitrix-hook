@@ -148,12 +148,12 @@ Route::post('/smart', function (Request $request) {
         ]);
         Log::info('COMPANY ', ['getCompany ' => $getCompany]);
         Log::info('COMPANY ', ['company_id ' => $company_id]);
-        
+
 
         //SMART STATUS
         $responseStatusSmart = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.status.list.json', [
             'entityTypeId' => 156,
-           
+
         ]);
         Log::debug('STATUS ', ['responseStatusSmart ' => $responseStatusSmart]);
 
@@ -161,27 +161,30 @@ Route::post('/smart', function (Request $request) {
         $responsetrySmart = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.item.list.json', [
             'entityTypeId' => 156,
             'select' => ['*'],
-
-            'filter' => ["!=ufCrm6_1697099643" => "", "=ufCrm6_1697099643" => $company_id]
+            'filter' => [
+                "!=stageId" => ["DT132_17:SUCCESS", "DT132_17:FAIL"],
+                '0' => [
+                    "!=ufCrm6_1697099643" => null, "=ufCrm6_1697099643" => $company_id
+                ]
+            ]
 
         ]);
         Log::info('SMART ', ['trySmart ' => $responsetrySmart]);
-        // if ($responsetrySmart) {
-        //     if ($responsetrySmart['result']) {
-        //         if ($responsetrySmart['result']['items']) {
-        //             if ($responsetrySmart['result']['items'][0]) {
-        //                 $smart = $responsetrySmart['result']['items'][0];
-        //                 Log::info('SMART ', ['trySmart ' => $smart]);
-        //             }
-        //         }
-        //     }
-        // }
+        if ($responsetrySmart) {
+            if ($responsetrySmart['result']) {
+                if ($responsetrySmart['result']['items']) {
+                    if ($responsetrySmart['result']['items'][0]) {
+                        $smart = $responsetrySmart['result']['items'][0];
+                        Log::info('SMART ', ['trySmart ' => $smart]);
+                    }
+                }
+            }
+        }
 
-        // if ($smart) {
-        //     //update smart
-        // }else{
-
-        // }
+        if ($smart) {
+            //update smart
+        } else {
+        }
         // $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
         //     'fields' => [
         //         // 'TITLE' => 'Холодный обзвон' . $name . ' ' . $deadline,
