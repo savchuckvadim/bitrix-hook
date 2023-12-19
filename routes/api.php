@@ -205,3 +205,8 @@ Route::post('/smart', function (Request $request) {
         ]);
     }
 });
+
+
+Route::post('/placement', function (Request $request) {
+    return redirect('hhtps://april-hook.ru');
+});
