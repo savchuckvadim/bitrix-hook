@@ -132,6 +132,7 @@ Route::post('/smart', function (Request $request) {
         'BITRIX_REST_VERSION' => $restVersion,
         'WEB_HOOK' => $secret
     ]);
+    $smart = null;
     // $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
 
     // $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
@@ -139,6 +140,7 @@ Route::post('/smart', function (Request $request) {
     // Log::info('novosibirskTime', ['novosibirskTime' => $novosibirskTime]);
     // Log::info('moscowTime', ['moscowTime' => $moscowTime]);
     try {
+        //COMPANY
         $getCompany = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.company.get.json', [
             'ID' => $company_id,
 
@@ -146,10 +148,21 @@ Route::post('/smart', function (Request $request) {
         ]);
         Log::info('COMPANY ', ['getCompany ' => $getCompany]);
         Log::info('COMPANY ', ['company_id ' => $company_id]);
+        
+
+        //SMART STATUS
+        $responseStatusSmart = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.status.list.json', [
+            'entityTypeId' => 156,
+           
+        ]);
+        Log::info('STATUS ', ['responseStatusSmart ' => $responseStatusSmart]);
+
+        //SMART
         $responsetrySmart = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.item.list.json', [
             'entityTypeId' => 156,
             'select' => ['*'],
-            'filter' => ["=ufCrm6_1697099643" => $company_id]
+
+            'filter' => ["!=ufCrm24_1616150749" => "", "=ufCrm6_1697099643" => $company_id]
 
         ]);
         if ($responsetrySmart) {
@@ -163,7 +176,11 @@ Route::post('/smart', function (Request $request) {
             }
         }
 
+        if ($smart) {
+            //update smart
+        }else{
 
+        }
         // $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
         //     'fields' => [
         //         // 'TITLE' => 'Холодный обзвон' . $name . ' ' . $deadline,
