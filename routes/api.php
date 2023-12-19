@@ -162,7 +162,7 @@ Route::post('/smart', function (Request $request) {
             'entityTypeId' => 156,
             'select' => ['*'],
 
-            'filter' => ["!=ufCrm24_1697099643" => "", "=ufCrm6_1697099643" => $company_id]
+            'filter' => ["!=ufCrm6_1697099643" => "", "=ufCrm6_1697099643" => $company_id]
 
         ]);
         Log::info('SMART ', ['trySmart ' => $responsetrySmart]);
