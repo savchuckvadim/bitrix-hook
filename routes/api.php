@@ -165,22 +165,23 @@ Route::post('/smart', function (Request $request) {
             'filter' => ["!=ufCrm24_1616150749" => "", "=ufCrm6_1697099643" => $company_id]
 
         ]);
-        if ($responsetrySmart) {
-            if ($responsetrySmart['result']) {
-                if ($responsetrySmart['result']['items']) {
-                    if ($responsetrySmart['result']['items'][0]) {
-                        $smart = $responsetrySmart['result']['items'][0];
-                        Log::info('SMART ', ['trySmart ' => $smart]);
-                    }
-                }
-            }
-        }
+        Log::info('SMART ', ['trySmart ' => $responsetrySmart]);
+        // if ($responsetrySmart) {
+        //     if ($responsetrySmart['result']) {
+        //         if ($responsetrySmart['result']['items']) {
+        //             if ($responsetrySmart['result']['items'][0]) {
+        //                 $smart = $responsetrySmart['result']['items'][0];
+        //                 Log::info('SMART ', ['trySmart ' => $smart]);
+        //             }
+        //         }
+        //     }
+        // }
 
-        if ($smart) {
-            //update smart
-        }else{
+        // if ($smart) {
+        //     //update smart
+        // }else{
 
-        }
+        // }
         // $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
         //     'fields' => [
         //         // 'TITLE' => 'Холодный обзвон' . $name . ' ' . $deadline,
