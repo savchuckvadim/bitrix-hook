@@ -8,6 +8,6 @@ class ReactAppController extends Controller
 {
     public function index()
     {
-        return view('react');
+        return view('react.react');
     }
 }
