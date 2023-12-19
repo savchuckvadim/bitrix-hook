@@ -164,10 +164,10 @@ Route::post('/smart', function (Request $request) {
                 'select' => ['*'],
                 'filter' => [
                     "!=stageId" => ["DT132_17:SUCCESS", "DT132_17:FAIL"],
-                    '0' => [
+                    // '0' => [
                         
-                        "=ufCrm6_1697099643" => $company_id
-                    ]
+                    //     "=ufCrm6_1697099643" => $company_id
+                    // ]
                 ]
 
             ]);
