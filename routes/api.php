@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\APIController;
+use App\Http\Controllers\ReactAppController;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -208,5 +209,6 @@ Route::post('/smart', function (Request $request) {
 
 
 Route::post('/placement', function (Request $request) {
-    return redirect('hhtps://april-hook.ru');
+    $controller = new ReactAppController;
+    return $controller->index();
 });
