@@ -165,6 +165,7 @@ Route::post('/smart', function (Request $request) {
                 'filter' => [
                     "!=stageId" => ["DT132_17:SUCCESS", "DT132_17:FAIL"],
                     '0' => [
+                        
                         "=ufCrm6_1697099643" => $company_id
                     ]
                 ]
