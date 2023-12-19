@@ -155,7 +155,7 @@ Route::post('/smart', function (Request $request) {
             'entityTypeId' => 156,
            
         ]);
-        Log::info('STATUS ', ['responseStatusSmart ' => $responseStatusSmart]);
+        Log::debug('STATUS ', ['responseStatusSmart ' => $responseStatusSmart]);
 
         //SMART
         $responsetrySmart = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.item.list.json', [
