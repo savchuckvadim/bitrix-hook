@@ -21,12 +21,16 @@ class APIOnlineController extends Controller
 
             if ($portalResponse->successful()) {
                 $data = $portalResponse->json();
-                return $data[$dataname];
+                return [
+                    'resultCode' => 0,
+                    'message' => 'success',
+                    'data' => $data,
+                ];
             } else {
-                return response([
+                return[
                     'resultCode' => 1,
                     'message' => 'ONLINE: Ошибка при запросе к API.'
-                ], 200);
+                ];
             }
         } catch (\Throwable $th) {
             Log::error('API ONLINE: Exception caught', [
@@ -35,10 +39,10 @@ class APIOnlineController extends Controller
                 'line'      => $th->getLine(),
                 'trace'     => $th->getTraceAsString(),
             ]);
-            return response([
+            return [
                 'resultCode' => 1,
                 'message' => $th->getMessage()
-            ], 200);
+            ];
         }
     }
 }
