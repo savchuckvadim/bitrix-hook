@@ -19,7 +19,7 @@ class APIOnlineController extends Controller
                 $requestData
             );
 
-            if ($portalResponse->successful() && $portalResponse->json()->resultCode == 0) {
+            if ($portalResponse->successful()) {
                 $data = $portalResponse->json();
                 return response([
                     'resultCode' => 0,
