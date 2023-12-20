@@ -248,7 +248,7 @@ Route::post('/smart/categories', function (Request $request) {
             );
 
             Log::info('Environment Variables', [
-                'portalResponse' => $portalResponse->json()
+                'portalResponse' => $portalResponse
             ]);
         }
         // Проверка, успешно ли выполнен запрос
