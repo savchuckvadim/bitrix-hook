@@ -21,25 +21,25 @@ class APIOnlineController extends Controller
 
             if ($portalResponse->successful()) {
                 $data = $portalResponse->json();
-                if($data['resultCode'] == 0 && $data[$dataname]){
+                if ($data['resultCode'] == 0 && $data[$dataname]) {
                     return [
                         'resultCode' => 0,
                         'message' => 'success',
-                        'data' => $data,
+                        'data' => $data[$dataname],
                     ];
+                } else {
 
-                }else{
-
-                    return[
+                    return [
                         'resultCode' => 1,
-                        'message' => 'HOOK: invalid data'
+                        'message' => 'HOOK: invalid data',
+                        'data' => $data
                     ];
                 }
-                
             } else {
-                return[
+                return [
                     'resultCode' => 1,
-                    'message' => 'ONLINE: Ошибка при запросе к API.'
+                    'message' => 'ONLINE: Ошибка при запросе к API.',
+                    
                 ];
             }
         } catch (\Throwable $th) {
