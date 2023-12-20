@@ -224,7 +224,7 @@ Route::post('/smart/categories', function (Request $request) {
     Log::info('REQUEST', $request->all());
 
 
-   
+
     $domain = env('BITRIX_DOMAIN');
     $secret = env('WEB_HOOK');
     $restVersion = env('BITRIX_REST_VERSION');
@@ -238,8 +238,9 @@ Route::post('/smart/categories', function (Request $request) {
     try {
         if ($domain) {
             //COMPANY
-            $portalResponse = Http::get(
-                'https://april-online.ru/api' . '/' . 'getportal' . '/' . $domain
+            $portalResponse = Http::post(
+                'https://april-online.ru/api' . '/' . 'getportal',
+                ['domain' =>  $domain]
             );
 
             Log::info('Environment Variables', [
@@ -248,9 +249,8 @@ Route::post('/smart/categories', function (Request $request) {
         }
         return response([
             'result' => $portalResponse,
-            
+
         ]);
-        
     } catch (\Throwable $th) {
         Log::error('Exception caught', [
             'message'   => $th->getMessage(),
