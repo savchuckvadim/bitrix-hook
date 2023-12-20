@@ -208,6 +208,78 @@ Route::post('/smart', function (Request $request) {
 });
 
 
+
+
+Route::post('/smart/categories', function (Request $request) {
+
+
+    // entityTypeId - id смарт процесса как сущности
+    // domain for get keys
+
+    // companyId	UF_CRM_6_1697099643
+    $document_id = $request['document_id'];
+    $ownerType = $request['ownerType'];   // L C D T9c
+
+
+    Log::info('REQUEST', $request);
+
+
+   
+    $domain = env('BITRIX_DOMAIN');
+    $secret = env('WEB_HOOK');
+    $restVersion = env('BITRIX_REST_VERSION');
+
+    Log::info('Environment Variables', [
+        'BITRIX_DOMAIN' => $domain,
+        'BITRIX_REST_VERSION' => $restVersion,
+        'WEB_HOOK' => $secret
+    ]);
+
+    try {
+        // if ($domain) {
+        //     //COMPANY
+        //     $portalResponse = Http::get(
+        //         ONLINE_API . '/' . GET_PORTAL_BY_DOMAIN . '/' . $domain
+        //     );
+
+        //     Log::info('Environment Variables', [
+        //         'portalResponse' => $portalResponse
+        //     ]);
+        // }
+        return response([
+            'result' => $domain,
+            
+        ]);
+        
+    } catch (\Throwable $th) {
+        Log::error('Exception caught', [
+            'message'   => $th->getMessage(),
+            'file'      => $th->getFile(),
+            'line'      => $th->getLine(),
+            'trace'     => $th->getTraceAsString(),
+        ]);
+        return response([
+            'result' => 'error',
+            'message' => $th->getMessage()
+        ]);
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Route::post('/placement', function (Request $request) {
     $controller = new ReactAppController;
     return $controller->index();

@@ -168,8 +168,12 @@ import Pages500 from "../pages/Utility/pages-500";
 import ContactsGrid from "../pages/Contacts/contacts-grid";
 import ContactsList from "../pages/Contacts/ContactList/contacts-list";
 import ContactsProfile from "../pages/Contacts/ContactsProfile/contacts-profile";
-import ClientsContainer from "../pages/April/Client/Clients-Container";
+import ClientsContainer from "../pages/April/Client/ClientsContainer";
 import LoginContainer from "../pages/Authentication/LoginContainer";
+import EntityItemsContainer from "../components/April/Entity/EntityItems/EntityItemsContainer";
+import EntityContainer from "../components/April/Entity/EntityItems/EntityContainer";
+import { ENTITY_QUANTITY } from "../types/entity/entity-types";
+import { allEntities } from "../store/april/entity/initial-entities";
 
 
 const authProtectedRoutes = [
@@ -185,8 +189,7 @@ const authProtectedRoutes = [
   { path: "/blog", component: <Blog /> },
   { path: "/dashboard-job", component: <DashboardJob /> },
 
-  //April
-  { path: "/clients", component:  <ClientsContainer /> },    
+
 
 
   //Crypto
@@ -247,21 +250,21 @@ const authProtectedRoutes = [
   { path: "/tables-datatable", component: <DatatableTables /> },
   { path: "/tables-dragndrop", component: <DragDropTables /> },
 
-    // Maps
-    { path: "/maps-google", component: <MapsGoogle /> },
-    { path: "/maps-vector", component: <MapsVector /> },
-    { path: "/maps-leaflet", component: <MapsLeaflet /> },
+  // Maps
+  { path: "/maps-google", component: <MapsGoogle /> },
+  { path: "/maps-vector", component: <MapsVector /> },
+  { path: "/maps-leaflet", component: <MapsLeaflet /> },
 
   // Tasks
   { path: "/tasks-list", component: <TasksList /> },
   { path: "/tasks-create", component: <TasksCreate /> },
 
-    //Projects
-    { path: "/projects-grid", component: <ProjectsGrid /> },
-    { path: "/projects-list", component: <ProjectsList /> },
-    { path: "/projects-overview", component: <ProjectsOverview /> },
-    { path: "/projects-overview/:id", component: <ProjectsOverview /> },
-    { path: "/projects-create", component: <ProjectsCreate /> },
+  //Projects
+  { path: "/projects-grid", component: <ProjectsGrid /> },
+  { path: "/projects-list", component: <ProjectsList /> },
+  { path: "/projects-overview", component: <ProjectsOverview /> },
+  { path: "/projects-overview/:id", component: <ProjectsOverview /> },
+  { path: "/projects-create", component: <ProjectsCreate /> },
 
   //Blog
   { path: "/blog-list", component: <BlogList /> },
@@ -282,50 +285,74 @@ const authProtectedRoutes = [
   { path: "/contacts-list", component: <ContactsList /> },
   { path: "/contacts-profile", component: <ContactsProfile /> },
 
-    // Forms
-    { path: "/form-elements", component: <FormElements /> },
-    { path: "/form-layouts", component: <FormLayouts /> },
-    { path: "/form-advanced", component: <FormAdvanced /> },
-    { path: "/form-editors", component: <FormEditors /> },
-    { path: "/form-mask", component: <FormMask /> },
-    { path: "/form-repeater", component: <FormRepeater /> },
-    { path: "/form-uploads", component: <FormUpload /> },
-    { path: "/form-wizard", component: <FormWizard /> },
-    { path: "/form-validation", component: <FormValidations /> },
-  
-    // Ui
-    { path: "/ui-alerts", component: <UiAlert /> },
-    { path: "/ui-buttons", component: <UiButtons /> },
-    { path: "/ui-cards", component: <UiCards /> },
-    { path: "/ui-carousel", component: <UiCarousel /> },
-    { path: "/ui-colors", component: <UiColors /> },
-    { path: "/ui-dropdowns", component: <UiDropdown /> },
-    { path: "/ui-general", component: <UiGeneral /> },
-    { path: "/ui-grid", component: <UiGrid /> },
-    { path: "/ui-images", component: <UiImages /> },
-    { path: "/ui-lightbox", component: <UiLightbox /> },
-    { path: "/ui-modals", component: <UiModal /> },
-    { path: "/ui-progressbars", component: <UiProgressbar /> },
-    { path: "/ui-tabs-accordions", component: <UiTabsAccordions /> },
-    { path: "/ui-typography", component: <UiTypography /> },
-    { path: "/ui-video", component: <UiVideo /> },
-    { path: "/ui-session-timeout", component: <UiSessionTimeout /> },
-    { path: "/ui-rating", component: <UiRating /> },
-    { path: "/ui-rangeslider", component: <UiRangeSlider /> },
-    { path: "/ui-notifications", component: <UiNotifications /> },
-    { path: "/ui-offcanvas", component: <UiOffCanvas /> },
-    { path: "/ui-utilities", component: <UiUtilitie /> },
-    { path: "/ui-placeholders", component: <UiPlaceholders /> },
-    { path: "/ui-toasts", component: <UiToasts /> },
-  
-    //Utility
-    { path: "/pages-starter", component: <PagesStarter /> },
-    { path: "/pages-timeline", component: <PagesTimeline /> },
-    { path: "/pages-faqs", component: <PagesFaqs /> },
-    { path: "/pages-pricing", component: <PagesPricing /> },
+  // Forms
+  { path: "/form-elements", component: <FormElements /> },
+  { path: "/form-layouts", component: <FormLayouts /> },
+  { path: "/form-advanced", component: <FormAdvanced /> },
+  { path: "/form-editors", component: <FormEditors /> },
+  { path: "/form-mask", component: <FormMask /> },
+  { path: "/form-repeater", component: <FormRepeater /> },
+  { path: "/form-uploads", component: <FormUpload /> },
+  { path: "/form-wizard", component: <FormWizard /> },
+  { path: "/form-validation", component: <FormValidations /> },
+
+  // Ui
+  // { path: "/ui-alerts", component: <UiAlert /> },
+  // { path: "/ui-buttons", component: <UiButtons /> },
+  // { path: "/ui-cards", component: <UiCards /> },
+  // { path: "/ui-carousel", component: <UiCarousel /> },
+  // { path: "/ui-colors", component: <UiColors /> },
+  // { path: "/ui-dropdowns", component: <UiDropdown /> },
+  // { path: "/ui-general", component: <UiGeneral /> },
+  // { path: "/ui-grid", component: <UiGrid /> },
+  // { path: "/ui-images", component: <UiImages /> },
+  // { path: "/ui-lightbox", component: <UiLightbox /> },
+  // { path: "/ui-modals", component: <UiModal /> },
+  // { path: "/ui-progressbars", component: <UiProgressbar /> },
+  // { path: "/ui-tabs-accordions", component: <UiTabsAccordions /> },
+  // { path: "/ui-typography", component: <UiTypography /> },
+  // { path: "/ui-video", component: <UiVideo /> },
+  // { path: "/ui-session-timeout", component: <UiSessionTimeout /> },
+  // { path: "/ui-rating", component: <UiRating /> },
+  // { path: "/ui-rangeslider", component: <UiRangeSlider /> },
+  // { path: "/ui-notifications", component: <UiNotifications /> },
+  // { path: "/ui-offcanvas", component: <UiOffCanvas /> },
+  // { path: "/ui-utilities", component: <UiUtilitie /> },
+  // { path: "/ui-placeholders", component: <UiPlaceholders /> },
+  // { path: "/ui-toasts", component: <UiToasts /> },
+
+  //Utility
+  { path: "/pages-starter", component: <PagesStarter /> },
+  { path: "/pages-timeline", component: <PagesTimeline /> },
+  { path: "/pages-faqs", component: <PagesFaqs /> },
+  { path: "/pages-pricing", component: <PagesPricing /> },
 ];
 
+//April
+allEntities.forEach(entity => {
+  [entity.item, entity.items].forEach(entityType => {
 
+
+    const path = entityType.type === ENTITY_QUANTITY.ENTITIES
+      ? entityType.get.url
+      : `${entityType.get.url}/:entityId`
+    authProtectedRoutes.push(
+
+
+      {
+        path, component: <EntityContainer
+          type={entityType.type}
+          itemUrl={entity.item.get.url}
+          itemsUrl={entity.items.get.url}
+          entityName={entityType.name}
+          entityTitle={entityType.title}
+
+        />
+      },
+    )
+
+  })
+})
 const publicRoutes = [
   { path: "/login", component: <LoginContainer /> },
   { path: "/logout", component: <Logout /> },
@@ -340,22 +367,22 @@ const publicRoutes = [
   { path: "/crypto-ico-landing", component: <CryptoIcoLanding /> },
 
   // Authentication Inner
-  { path: "/pages-login", component: <Login1 /> },
-  { path: "/pages-login-2", component: <Login2 /> },
-  { path: "/pages-register", component: <Register1 /> },
-  { path: "/pages-register-2", component: <Register2 /> },
-  { path: "/page-recoverpw", component: <Recoverpw /> },
-  { path: "/page-recoverpw-2", component: <Recoverpw2 /> },
-  { path: "/pages-forgot-pwd", component: <ForgetPwd1 /> },
-  { path: "/auth-recoverpw-2", component: <ForgetPwd2 /> },
-  { path: "/auth-lock-screen", component: <LockScreen /> },
-  { path: "/auth-lock-screen-2", component: <LockScreen2 /> },
-  { path: "/page-confirm-mail", component: <ConfirmMail /> },
-  { path: "/page-confirm-mail-2", component: <ConfirmMail2 /> },
-  { path: "/auth-email-verification", component: <EmailVerification /> },
-  { path: "/auth-email-verification-2", component: <EmailVerification2 /> },
-  { path: "/auth-two-step-verification", component: <TwostepVerification /> },
-  { path: "/auth-two-step-verification-2", component: <TwostepVerification2 /> },
+  // { path: "/pages-login", component: <Login1 /> },
+  // { path: "/pages-login-2", component: <Login2 /> },
+  // { path: "/pages-register", component: <Register1 /> },
+  // { path: "/pages-register-2", component: <Register2 /> },
+  // { path: "/page-recoverpw", component: <Recoverpw /> },
+  // { path: "/page-recoverpw-2", component: <Recoverpw2 /> },
+  // { path: "/pages-forgot-pwd", component: <ForgetPwd1 /> },
+  // { path: "/auth-recoverpw-2", component: <ForgetPwd2 /> },
+  // { path: "/auth-lock-screen", component: <LockScreen /> },
+  // { path: "/auth-lock-screen-2", component: <LockScreen2 /> },
+  // { path: "/page-confirm-mail", component: <ConfirmMail /> },
+  // { path: "/page-confirm-mail-2", component: <ConfirmMail2 /> },
+  // { path: "/auth-email-verification", component: <EmailVerification /> },
+  // { path: "/auth-email-verification-2", component: <EmailVerification2 /> },
+  // { path: "/auth-two-step-verification", component: <TwostepVerification /> },
+  // { path: "/auth-two-step-verification-2", component: <TwostepVerification2 /> },
 ];
 
 export { publicRoutes, authProtectedRoutes };

@@ -170,6 +170,91 @@ export class FirebaseAuthBackend {
     }
   };
 
+  getCollection = async (collectionName) => {
+
+    let result = []
+    try {
+
+      const queryGet = query(collection(db, collectionName), orderBy("number"));
+      const querySnapshot = await getDocs(queryGet);
+
+      querySnapshot.forEach((doc) => {
+        let data = doc.data()
+
+        result.push(data)
+      });
+
+      return result
+    } catch (error) {
+
+      console.log(error)
+    }
+
+    return result
+  };
+
+  setCollection = async (collectionName, objects) => {
+
+    try {
+
+
+      let docRef = null
+      const chunks = makeChunks(objects, 500);
+      for (let i = 0; i < chunks.length; i++) {
+
+        const batch = writeBatch(db)
+        chunks[i].forEach((element) => {
+          let number = element.number ? `${element.number}` : null
+          docRef = docRef = doc(db, collectionName, `${element.number}`);
+          batch.set(docRef, element, `${element.number}`)
+
+        });
+
+        await batch.commit();
+      }
+      let result = await generalAPI.getCollection(collectionName)
+
+      return result
+
+
+    } catch (error) {
+
+      console.error(error)
+    }
+  };
+
+  setCollectionUniqueId = async (collectionName, objects) => {
+
+    try {
+
+
+      let docRef = null
+      const chunks = makeChunks(objects, 500);
+      for (let i = 0; i < chunks.length; i++) {
+
+        const batch = writeBatch(db)
+        chunks[i].forEach((element) => {
+          // Получите ссылку на коллекцию
+          const collectionRef = collection(db, collectionName);
+          // Создайте новую ссылку на документ в этой коллекции без указания ID
+          const docRef = doc(collectionRef);
+          // Используйте эту ссылку в пакетной записи
+          batch.set(docRef, element);
+
+        });
+        await batch.commit();
+      }
+      let result = await generalAPI.getCollection(collectionName)
+
+      return result
+
+
+    } catch (error) {
+
+      console.error(error)
+    }
+  };
+
   setLoggeedInUser = user => {
     localStorage.setItem("authUser", JSON.stringify(user));
   };

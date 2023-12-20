@@ -5,6 +5,7 @@
 /public/storage
 /storage/*.key
 /vendor
+/bitrix-api-info
 .env
 .env.backup
 .env.production

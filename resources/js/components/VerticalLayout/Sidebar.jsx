@@ -13,6 +13,8 @@ import logo from "../../../images/logo.svg";
 import logoLightPng from "../../../images/logo-light.png";
 import logoLightSvg from "../../../images/logo-light.svg";
 import logoDark from "../../../images/logo-dark.png";
+import { IS_APRIL_SIDEBAR } from "../../constants/april";
+import SidebarContentApril from "./SidebarContentApril";
 
 const Sidebar = props => {
 
@@ -32,6 +34,7 @@ const Sidebar = props => {
           <Link to="/" className="logo logo-light">
             <span className="logo-sm">
               <img src={logoLightSvg} alt="" height="22" />
+              <h2 style={{ color: 'white' }}>April</h2>
             </span>
             <span className="logo-lg">
               <img src={logoLightPng} alt="" height="19" />
@@ -39,7 +42,7 @@ const Sidebar = props => {
           </Link>
         </div>
         <div data-simplebar className="h-100">
-          {props.type !== "condensed" ? <SidebarContent /> : <SidebarContent />}
+          {props.type !== "condensed" && !IS_APRIL_SIDEBAR ? <SidebarContent /> : <SidebarContentApril />}
         </div>
         <div className="sidebar-background"></div>
       </div>

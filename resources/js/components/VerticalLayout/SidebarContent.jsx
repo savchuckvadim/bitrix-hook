@@ -13,8 +13,10 @@ import { Link } from "react-router-dom";
 
 //i18n
 import { withTranslation } from "react-i18next";
+import { allEntities } from "../../store/april/entity/initial-entities";
 
 const SidebarContent = props => {
+  
   const ref = useRef();
   const activateParentDropdown = useCallback((item) => {
     item.classList.add("active");
@@ -173,20 +175,19 @@ const SidebarContent = props => {
               </ul>
             </li>
             <li className="menu-title">{props.t("April App")}</li>
+            {allEntities.map(entity => {
 
-            <li>
-              <Link to="/clients" >
-                <i className="bx bx-calendar"></i>
-                <span>{props.t("Клиенты")}</span>
-              </Link>
-            </li>
+              return (
+                <li>
+                  <Link to={entity.items.name} >
+                    <i className="bx bx-file"></i>
+                    <span>{props.t(entity.items.title)}</span>
+                  </Link>
+                </li>
 
-            <li>
-              <Link to="/templates" >
-                <i className="bx bx-calendar"></i>
-                <span>{props.t("Шаблоны")}</span>
-              </Link>
-            </li>
+              )
+            })}
+            
 
             <li className="menu-title">{props.t("Apps")}</li>
 
@@ -247,7 +248,7 @@ const SidebarContent = props => {
               </ul>
             </li>
 
-            {/* <li>
+            <li>
               <Link to="/#" className="has-arrow ">
                 <i className="bx bx-bitcoin"></i>
                 <span>{props.t("Crypto")}</span>
@@ -367,9 +368,9 @@ const SidebarContent = props => {
                   <Link to="/tasks-create">{props.t("Create Task")}</Link>
                 </li>
               </ul>
-            </li> */}
+            </li> 
 
-            {/* <li>
+             <li>
               <Link to="/#" className="has-arrow ">
                 <i className="bx bxs-user-detail"></i>
                 <span>{props.t("Contacts")}</span>
@@ -404,7 +405,7 @@ const SidebarContent = props => {
                   <Link to="/blog-details">{props.t("Blog Details")}</Link>
                 </li>
               </ul>
-            </li> */}
+            </li>
 
             <li>
               <Link to="/#">
@@ -619,11 +620,11 @@ const SidebarContent = props => {
                     {props.t("Notifications")}
                   </Link>
                 </li>
-                {/* <li>
+                <li>
                   <Link to="/ui-breadcrumb">
                     {props.t("Breadcrumb")}
                   </Link>
-                </li> */}
+                </li> 
                 <li>
                   <Link to="/ui-utilities">
                     {props.t("Utilities")}

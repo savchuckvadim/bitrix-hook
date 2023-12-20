@@ -16,8 +16,13 @@ export const getProfile = async (email: string, firebase: any, history: any, dis
         const profile = await firebase.getDocByProp('profile', 'email', email) as Profile | null
 
         if (profile) {
-            sessionStorage.setItem('user', JSON.stringify(profile));
-            sessionStorage.setItem('authUser', JSON.stringify(profile));
+            const logged_user = {
+                login: true,
+                user_id: 0,
+                name: profile.name,
+            }
+            sessionStorage.setItem('user', JSON.stringify(logged_user));
+            sessionStorage.setItem('authUser', JSON.stringify(logged_user));
             result = profile
 
             

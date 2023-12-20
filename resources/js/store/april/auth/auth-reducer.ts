@@ -155,7 +155,7 @@ export const logout = (): AuthThunkType => async (dispatch) => {
 // }
 
 //REDUCER
-const authReducer = (state: AuthStateType = initialState, action: SetAuthUserDataType): AuthStateType => {
+const auth = (state: AuthStateType = initialState, action: SetAuthUserDataType): AuthStateType => {
     let result = state
 
     switch (action.type) {
@@ -172,4 +172,4 @@ const authReducer = (state: AuthStateType = initialState, action: SetAuthUserDat
     }
 
 }
-export default authReducer
+export default auth

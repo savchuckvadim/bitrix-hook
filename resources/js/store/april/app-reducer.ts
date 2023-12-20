@@ -9,11 +9,12 @@
 // import { inProgress, InProgressType } from './preloader/preloader-reducer'
 
 import { InferActionsTypes, ThunkType } from ".."
+import { hookAPI } from "../../helpers/april-hook/hook-api"
 import { onlineAPI } from "../../helpers/april-online/online-api"
 import { initFirebaseBackend } from "../../helpers/firebase/firebase_helper"
 import { FirebaseAuthBackendClassType, FirebaseAuthBackendInstanceType } from "../../helpers/firebase/types"
 import { firebaseConfig } from "../../secret/secret"
-import { AppStatus } from "../../types/app/app-type"
+import { API_METHOD, AppStatus } from "../../types/app/app-type"
 
 
 //TYPES
@@ -50,7 +51,7 @@ export const initialize = (): AuthThunkType => async (dispatch) => {
     const response = await onlineAPI.service('portals', 'get', 'portals');
     const infoblocks = await onlineAPI.service('infoblocks', 'get', 'infoblocks', null)
     const templates = await onlineAPI.service('templates/april-garant.bitrix24.ru', 'get', 'templates', null)
-    
+    const tryHook = await hookAPI.service('/smart/categories', API_METHOD.GET, 'result', null)
     // await dispatch(getAuthApp())
     dispatch(appActions.initializedSuccess())
     //FROM DIALOGS REDUCER -> get Dialogs
@@ -70,7 +71,7 @@ const app = (state: AppStateType = initialState, action: InitialActionType): App
     switch (action.type) {
         case 'SP/APP/INITIALIZED_SUCCES': return { ...state, initialized: true }
         case 'SP/APP/SET_FIREBASE': return { ...state, firebaseBackend: action.firebase }
-        case 'SP/APP/SET_STATUS': return { ...state, status: action.status}
+        case 'SP/APP/SET_STATUS': return { ...state, status: action.status }
         default: return state
     }
 

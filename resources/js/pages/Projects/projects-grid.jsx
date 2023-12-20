@@ -30,6 +30,7 @@ const ProjectsGrid = props => {
   const dispatch = useDispatch();
 
   const projectsSelector = createSelector(
+    
     state => state.projects.projects,
     projects => ({
       projects

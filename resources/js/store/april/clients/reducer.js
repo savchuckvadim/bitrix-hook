@@ -1,8 +1,12 @@
+import { API_METHOD, PORTALS_URL } from "../../../types/app/app-type"
 import { GET_CLIENTS, SET_CLIENTS } from "./actionTypes"
 
 
 const initialState = {
-  items: [{ domain: 34 }],
+ 
+  itemUrl: PORTALS_URL.PORTAL,
+  itemsUrl:PORTALS_URL.PORTALS,
+
   isFetching: false,
   isFetched: false
 }

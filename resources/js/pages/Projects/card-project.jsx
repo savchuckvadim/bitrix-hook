@@ -13,6 +13,7 @@ import images from "../../../images";
 import companies from "../../../images/companies";
 
 const CardProject = ({ projects }) => {
+  
   return (
     <React.Fragment>
       {map(projects, (project, key) => (

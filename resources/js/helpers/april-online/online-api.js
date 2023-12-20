@@ -310,7 +310,7 @@ export const onlineAPI = {
 
         } catch (error) {
             console.log(error)
-
+            
             
             return result
         }
@@ -341,9 +341,9 @@ export const onlineAPI = {
         let result = null
         
         try {
-
+            
             const response = await online[method](url, data)
-
+            
             if (response && response.data) {
                 if (response.data.resultCode === 0) {
                     result = response.data[model]
@@ -355,6 +355,7 @@ export const onlineAPI = {
             return result
         } catch (error) {
             console.log('error')
+            
             return result
         }
     }

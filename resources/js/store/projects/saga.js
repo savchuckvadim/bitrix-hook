@@ -21,6 +21,7 @@ import { getProjects, getProjectsDetails, addNewProject, updateProject, deletePr
 function* fetchProjects() {
   try {
     const response = yield call(getProjects)
+    
     yield put(getProjectsSuccess(response))
   } catch (error) {
     yield put(getProjectsFail(error))
