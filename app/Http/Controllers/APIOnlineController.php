@@ -14,7 +14,7 @@ class APIOnlineController extends Controller
         try {
             $portalResponse = Http::withHeaders([
                 'X-Requested-With' => 'XMLHttpRequest'
-            ])[$method](
+            ])->$method(
                 BASE_URL . '/' . $endpoint,
                 $requestData
             );
