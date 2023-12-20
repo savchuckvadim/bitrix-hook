@@ -254,7 +254,7 @@ Route::post('/smart/categories', function (Request $request) {
             // Возвращение ответа клиенту в формате JSON
            
             $responseData =  $portalResponse->json();
-            $hookUrl = $responseData['C_REST_WEB_HOOK_URL'];
+            $hookUrl = $responseData['portal']['C_REST_WEB_HOOK_URL'];
             if ($hookUrl) {
                 $hook = $hookUrl . '/' . 'crm.category.list.json';
                 $hookData = ['entityTypeId' => env('BITRIX_SMART_MAIN_ID')];
