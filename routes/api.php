@@ -246,13 +246,21 @@ Route::post('/smart/categories', function (Request $request) {
             );
 
             Log::info('Environment Variables', [
-                'portalResponse' => $portalResponse
+                'portalResponse' => $portalResponse->json()
             ]);
         }
-        return response([
-            'result' => $portalResponse->data(),
-
-        ]);
+        // Проверка, успешно ли выполнен запрос
+        if ($portalResponse->successful()) {
+            // Возвращение ответа клиенту в формате JSON
+            return response()->json([
+                'result' => $portalResponse->json(),
+            ]);
+        } else {
+            // Обработка ошибки, если запрос не удался
+            return response()->json([
+                'error' => 'Ошибка при запросе к API.'
+            ], 500);
+        }
     } catch (\Throwable $th) {
         Log::error('Exception caught', [
             'message'   => $th->getMessage(),
