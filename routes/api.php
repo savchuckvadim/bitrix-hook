@@ -238,7 +238,9 @@ Route::post('/smart/categories', function (Request $request) {
     try {
         if ($domain) {
             //COMPANY
-            $portalResponse = Http::post(
+            $portalResponse = Http::withHeaders([
+                'X-Requested-With' => 'XMLHttpRequest'
+            ])->post(
                 'https://april-online.ru/api' . '/' . 'getportal',
                 ['domain' =>  $domain]
             );
