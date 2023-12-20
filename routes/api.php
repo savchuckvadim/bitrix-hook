@@ -250,7 +250,7 @@ Route::post('/smart/categories', function (Request $request) {
             ]);
         }
         return response([
-            'result' => $portalResponse,
+            'result' => $portalResponse->data(),
 
         ]);
     } catch (\Throwable $th) {
