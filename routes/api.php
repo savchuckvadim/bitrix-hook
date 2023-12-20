@@ -221,7 +221,7 @@ Route::post('/smart/categories', function (Request $request) {
     $ownerType = $request['ownerType'];   // L C D T9c
 
 
-    Log::info('REQUEST', $request);
+    Log::info('REQUEST', $request->all());
 
 
    
