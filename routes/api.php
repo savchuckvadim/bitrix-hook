@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\APIController;
+use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\ReactAppController;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
@@ -237,12 +238,13 @@ Route::post('/smart/categories', function (Request $request) {
 
     try {
         if ($domain) {
-
-            $portalResponse = Http::withHeaders([
-                'X-Requested-With' => 'XMLHttpRequest'
-            ])->post(
-                'https://april-online.ru/api' . '/' . 'getportal',
-                ['domain' =>  $domain]
+            $onlineRequestData =  ['domain' =>  $domain];
+            $portalResponse = APIOnlineController::online(
+                $domain,
+                'post',
+                'getportal',
+                $onlineRequestData,
+                'portals'
             );
 
             Log::info('Environment Variables', [
@@ -250,26 +252,23 @@ Route::post('/smart/categories', function (Request $request) {
             ]);
         }
         // Проверка, успешно ли выполнен запрос
-        if ($portalResponse->successful()) {
+        if ($portalResponse['resultCode'] == 0) {
             // Возвращение ответа клиенту в формате JSON
-           
-            $responseData =  $portalResponse->json();
+
+            $responseData =  $portalResponse['data'];
             $hookUrl = $responseData['portal']['C_REST_WEB_HOOK_URL'];
             if ($hookUrl) {
                 $hook = $hookUrl . '/' . 'crm.category.list.json';
                 $hookData = ['entityTypeId' => env('BITRIX_SMART_MAIN_ID')];
 
                 $smartCategoriesResponse = Http::get($hook, $hookData);
-                $bitrixResponse = $smartCategoriesResponse->json(); 
+                $bitrixResponse = $smartCategoriesResponse->json();
                 return response()->json([
                     'resultCode' => 0,
                     'online' => $portalResponse->json(),
                     'bitrix' => $bitrixResponse
                 ]);
-
-
-
-            }else{
+            } else {
 
                 return response()->json([
                     'error' => 'Hook url not found'
