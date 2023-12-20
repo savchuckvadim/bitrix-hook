@@ -21,11 +21,21 @@ class APIOnlineController extends Controller
 
             if ($portalResponse->successful()) {
                 $data = $portalResponse->json();
-                return [
-                    'resultCode' => 0,
-                    'message' => 'success',
-                    'data' => $data,
-                ];
+                if($data['resultCode'] == 0 && $data[$dataname]){
+                    return [
+                        'resultCode' => 0,
+                        'message' => 'success',
+                        'data' => $data,
+                    ];
+
+                }else{
+
+                    return[
+                        'resultCode' => 1,
+                        'message' => 'HOOK: invalid data'
+                    ];
+                }
+                
             } else {
                 return[
                     'resultCode' => 1,

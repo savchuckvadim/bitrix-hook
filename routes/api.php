@@ -244,7 +244,7 @@ Route::post('/smart/categories', function (Request $request) {
                 'post',
                 'getportal',
                 $onlineRequestData,
-                'portals'
+                'portal'
             );
 
             Log::info('Environment Variables', [
