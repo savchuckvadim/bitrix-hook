@@ -236,18 +236,18 @@ Route::post('/smart/categories', function (Request $request) {
     ]);
 
     try {
-        // if ($domain) {
-        //     //COMPANY
-        //     $portalResponse = Http::get(
-        //         ONLINE_API . '/' . GET_PORTAL_BY_DOMAIN . '/' . $domain
-        //     );
+        if ($domain) {
+            //COMPANY
+            $portalResponse = Http::get(
+                ONLINE_API . '/' . GET_PORTAL_BY_DOMAIN . '/' . $domain
+            );
 
-        //     Log::info('Environment Variables', [
-        //         'portalResponse' => $portalResponse
-        //     ]);
-        // }
+            Log::info('Environment Variables', [
+                'portalResponse' => $portalResponse
+            ]);
+        }
         return response([
-            'result' => $domain,
+            'result' => $portalResponse,
             
         ]);
         
