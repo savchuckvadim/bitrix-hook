@@ -7,7 +7,7 @@ use App\Http\Controllers\ReactAppController;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-include 'online-urls.php';
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -239,7 +239,7 @@ Route::post('/smart/categories', function (Request $request) {
         if ($domain) {
             //COMPANY
             $portalResponse = Http::get(
-                ONLINE_API . '/' . GET_PORTAL_BY_DOMAIN . '/' . $domain
+                'https://april-online.ru/api' . '/' . 'getportal' . '/' . $domain
             );
 
             Log::info('Environment Variables', [
