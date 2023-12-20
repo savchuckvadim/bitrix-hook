@@ -250,36 +250,37 @@ Route::post('/smart/categories', function (Request $request) {
             Log::info('Environment Variables', [
                 'portalResponse' => $portalResponse
             ]);
+            return response(['test' => $portalResponse ]);
         }
         // Проверка, успешно ли выполнен запрос
-        if ($portalResponse['resultCode'] == 0) {
+        // if ($portalResponse['resultCode'] == 0) {
             // Возвращение ответа клиенту в формате JSON
 
-            $responseData =  $portalResponse['data'];
-            $hookUrl = $responseData['portal']['C_REST_WEB_HOOK_URL'];
-            if ($hookUrl) {
-                $hook = $hookUrl . '/' . 'crm.category.list.json';
-                $hookData = ['entityTypeId' => env('BITRIX_SMART_MAIN_ID')];
+            // $responseData =  $portalResponse['data'];
+            // $hookUrl = $responseData['portal']['C_REST_WEB_HOOK_URL'];
+            // if ($hookUrl) {
+            //     $hook = $hookUrl . '/' . 'crm.category.list.json';
+            //     $hookData = ['entityTypeId' => env('BITRIX_SMART_MAIN_ID')];
 
-                $smartCategoriesResponse = Http::get($hook, $hookData);
-                $bitrixResponse = $smartCategoriesResponse->json();
-                return response()->json([
-                    'resultCode' => 0,
-                    'online' => $portalResponse->json(),
-                    'bitrix' => $bitrixResponse
-                ]);
-            } else {
+            //     $smartCategoriesResponse = Http::get($hook, $hookData);
+            //     $bitrixResponse = $smartCategoriesResponse->json();
+            //     return response()->json([
+            //         'resultCode' => 0,
+            //         'online' => $portalResponse->json(),
+            //         'bitrix' => $bitrixResponse
+            //     ]);
+            // } else {
 
-                return response()->json([
-                    'error' => 'Hook url not found'
-                ], 500);
-            }
-        } else {
-            // Обработка ошибки, если запрос не удался
-            return response()->json([
-                'error' => 'Ошибка при запросе к API.'
-            ], 500);
-        }
+            //     return response()->json([
+            //         'error' => 'Hook url not found'
+            //     ], 500);
+            // }
+        // } else {
+        //     // Обработка ошибки, если запрос не удался
+        //     return response()->json([
+        //         'error' => 'Ошибка при запросе к API.'
+        //     ], 500);
+        // }
     } catch (\Throwable $th) {
         Log::error('Exception caught', [
             'message'   => $th->getMessage(),

@@ -23,7 +23,7 @@ class APIOnlineController extends Controller
                 $data = $portalResponse->json();
                 return response([
                     'resultCode' => 0,
-                    'data' => $data[$dataname],
+                    'data' => $data,
                     'message' => 'success'
                 ], 200);
             } else {
