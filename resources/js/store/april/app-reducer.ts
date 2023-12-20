@@ -51,7 +51,7 @@ export const initialize = (): AuthThunkType => async (dispatch) => {
     const response = await onlineAPI.service('portals', 'get', 'portals');
     const infoblocks = await onlineAPI.service('infoblocks', 'get', 'infoblocks', null)
     const templates = await onlineAPI.service('templates/april-garant.bitrix24.ru', 'get', 'templates', null)
-    const tryHook = await hookAPI.service('/smart/categories', API_METHOD.GET, 'result', null)
+    const tryHook = await hookAPI.service('/smart/categories', API_METHOD.POST, 'result', null)
     // await dispatch(getAuthApp())
     dispatch(appActions.initializedSuccess())
     //FROM DIALOGS REDUCER -> get Dialogs
