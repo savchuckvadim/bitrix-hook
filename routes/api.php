@@ -237,7 +237,7 @@ Route::post('/smart/categories', function (Request $request) {
 
     try {
         if ($domain) {
-            //COMPANY
+
             $portalResponse = Http::withHeaders([
                 'X-Requested-With' => 'XMLHttpRequest'
             ])->post(
@@ -252,9 +252,29 @@ Route::post('/smart/categories', function (Request $request) {
         // Проверка, успешно ли выполнен запрос
         if ($portalResponse->successful()) {
             // Возвращение ответа клиенту в формате JSON
-            return response()->json([
-                'result' => $portalResponse->json(),
-            ]);
+           
+            $responseData =  $portalResponse->json();
+            $hookUrl = $responseData['C_REST_WEB_HOOK_URL'];
+            if ($hookUrl) {
+                $hook = $hookUrl . '/' . 'crm.category.list.json';
+                $hookData = ['entityTypeId' => env('BITRIX_SMART_MAIN_ID')];
+
+                $smartCategoriesResponse = Http::get($hook, $hookData);
+                $bitrixResponse = $smartCategoriesResponse->json(); 
+                return response()->json([
+                    'resultCode' => 0,
+                    'online' => $portalResponse->json(),
+                    'bitrix' => $bitrixResponse
+                ]);
+
+
+
+            }else{
+
+                return response()->json([
+                    'error' => 'Hook url not found'
+                ], 500);
+            }
         } else {
             // Обработка ошибки, если запрос не удался
             return response()->json([
@@ -271,7 +291,7 @@ Route::post('/smart/categories', function (Request $request) {
         return response([
             'result' => 'error',
             'message' => $th->getMessage()
-        ]);
+        ], 500);
     }
 });
 
