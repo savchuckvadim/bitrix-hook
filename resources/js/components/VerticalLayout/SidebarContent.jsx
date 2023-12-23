@@ -175,7 +175,7 @@ const SidebarContent = props => {
               </ul>
             </li>
             <li className="menu-title">{props.t("April App")}</li>
-            {allEntities.map(entity => {
+            {/* {allEntities.map(entity => {
 
               return (
                 <li>
@@ -186,7 +186,7 @@ const SidebarContent = props => {
                 </li>
 
               )
-            })}
+            })} */}
             
 
             <li className="menu-title">{props.t("Apps")}</li>

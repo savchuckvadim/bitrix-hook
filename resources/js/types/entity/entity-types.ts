@@ -1,17 +1,24 @@
+import { number, string } from "prop-types"
 import { Template } from "./template-types"
 
-type GeneralEntity = {
+export type GeneralEntity = {
+    id:number
+    [key:string]: any
 
+
+}
+export type InitialEntity ={
+    
 }
 export type TemplateInitialAddData = {
     domain: string
     type: 'offer' | 'invoice' | 'contract' | 'other'
     name: string
 }
-export enum ENTITY_QUANTITY{
+export enum ENTITY_QUANTITY {
 
-    ENTITY='entity',
-    ENTITIES='entities'
+    ENTITY = 'entity',
+    ENTITIES = 'entities'
 
 }
 
@@ -52,4 +59,68 @@ export type EntityParameter = {
     type: string // 'string'
     value: string | null | Array<string>
     items: Array<string>
+}
+
+
+export type InitialEntityData = Array<InitialEntityGroup>
+export type InitialEntityGroup = {
+    groupName: string
+    type: 'template' | 'portal'
+    isCanAddField: boolean
+    isCanDeleteField: boolean
+    fields: Array<EntityFormField>
+    // fieldGroups?: Array<Array<EntityFormField>>
+    // relations?: Array<EntityFormField>
+    isRequired: boolean
+
+}
+
+export type EntityFieldSelectItem = {
+    id: number
+    name: string
+    title: string
+    type: string
+
+}
+
+
+export type EntityFormField = {
+    id: number
+    title: string
+    name: string
+    type: 'string' | 'text' | 'data' | 'boolean' | 'img' | 'entity' | 'select'
+    apiName: string
+
+    validation: string
+    initialValue: string | Array<InitialEntityGroup>
+    isCanAddField: boolean
+    getSelect?: string | 'portals'
+    dependOf?: Array<string> | null
+    templatePlace: null
+    fields?: Array<EntityFormField>
+    items?: Array<EntityFieldSelectItem>
+}
+
+export type FormikInitialValues = {
+    [key: string]: any
+}
+export type EntityStateType = {
+    items: Array<InitialEntityData>
+    type: null | 'entity' | 'entities'
+    current: null | any,
+    creating: CreatingEntityType
+    relation: {
+        isCreating: boolean,
+        entity: null | any
+    }
+    // fields: [],
+}
+
+export type CreatingEntityType = {
+
+    formData: null | InitialEntityData,
+    isInitialized: boolean,
+    isFetching: boolean,
+    isHaveGroup: boolean,
+
 }

@@ -1,13 +1,16 @@
 import axios from "axios";
+import { IS_HOOK_SERVER_DEV } from "../../constants/april";
 
 
-const IS_APRIL_DEV = false
+
 
 
 export const online = axios.create({
     withCredentials: true,
     // baseURL: 'https://april-online.ru/api',
-    baseURL:'https://april-hook.ru/api',
+    baseURL: IS_HOOK_SERVER_DEV 
+    ? 'http://localhost:8000/api'
+    : 'https://april-hook.ru/api',
     headers: {
         'content-type': 'application/json',
         'accept': 'application/json',
@@ -91,7 +94,7 @@ export const hookAPI = {
         try {
             
             const response = await online[method](url, data)
-            debugger
+            
             if (response && response.data) {
                 if (response.data.resultCode === 0) {
                     result = response.data[model]

@@ -52,7 +52,7 @@ export const allEntities = [
 
     },
     {
-        id: 0,
+        id: 2,
         item: {
             name: 'field',
             title: 'Свойство',
@@ -73,6 +73,86 @@ export const allEntities = [
             }
 
         },
+
+
+    },
+    {
+        id: 3,
+        item: {
+            name: 'infoblock',
+            title: 'Инфоблок',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'infoblock',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'infoblocks',
+            title: 'Инфоблоки',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'infoblocks',
+                method: API_METHOD.GET
+            }
+
+        },
+
+
+
+    },
+
+    {
+        id: 4,
+        item: {
+            name: 'provider',
+            title: 'Поставщик',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'provider',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'providers',
+            title: 'Поставщики',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'providers',
+                method: API_METHOD.GET
+            }
+
+        },
+
+
+
+    },
+    {
+        id: 5,
+        item: {
+            name: 'rq',
+            title: 'Реквизиты',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'rq',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'rqs',
+            title: 'Реквизиты',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'rqs',
+                method: API_METHOD.GET
+            }
+
+        },
+
+
 
     },
 

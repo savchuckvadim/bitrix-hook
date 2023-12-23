@@ -94,10 +94,10 @@ import MapsVector from "../pages/Maps/MapsVector";
 import MapsLeaflet from "../pages/Maps/MapsLeaflet";
 
 //Icons
-import IconBoxicons from "../pages/Icons/IconBoxicons";
-import IconDripicons from "../pages/Icons/IconDripicons";
-import IconMaterialdesign from "../pages/Icons/IconMaterialdesign";
-import IconFontawesome from "../pages/Icons/IconFontawesome";
+// import IconBoxicons from "../pages/Icons/IconBoxicons";
+// import IconDripicons from "../pages/Icons/IconDripicons";
+// import IconMaterialdesign from "../pages/Icons/IconMaterialdesign";
+// import IconFontawesome from "../pages/Icons/IconFontawesome";
 
 //Tables
 import BasicTables from "../pages/Tables/BasicTables";
@@ -171,7 +171,7 @@ import ContactsProfile from "../pages/Contacts/ContactsProfile/contacts-profile"
 import ClientsContainer from "../pages/April/Client/ClientsContainer";
 import LoginContainer from "../pages/Authentication/LoginContainer";
 import EntityItemsContainer from "../components/April/Entity/EntityItems/EntityItemsContainer";
-import EntityContainer from "../components/April/Entity/EntityItems/EntityContainer";
+import EntityContainer from "../components/April/Entity/EntityContainer";
 import { ENTITY_QUANTITY } from "../types/entity/entity-types";
 import { allEntities } from "../store/april/entity/initial-entities";
 
@@ -240,10 +240,10 @@ const authProtectedRoutes = [
   { path: "/re-charts", component: <ReCharts /> },
 
   // Icons
-  { path: "/icons-boxicons", component: <IconBoxicons /> },
-  { path: "/icons-dripicons", component: <IconDripicons /> },
-  { path: "/icons-materialdesign", component: <IconMaterialdesign /> },
-  { path: "/icons-fontawesome", component: <IconFontawesome /> },
+  // { path: "/icons-boxicons", component: <IconBoxicons /> },
+  // { path: "/icons-dripicons", component: <IconDripicons /> },
+  // { path: "/icons-materialdesign", component: <IconMaterialdesign /> },
+  // { path: "/icons-fontawesome", component: <IconFontawesome /> },
 
   // Tables
   { path: "/tables-basic", component: <BasicTables /> },
@@ -297,29 +297,29 @@ const authProtectedRoutes = [
   { path: "/form-validation", component: <FormValidations /> },
 
   // Ui
-  // { path: "/ui-alerts", component: <UiAlert /> },
-  // { path: "/ui-buttons", component: <UiButtons /> },
-  // { path: "/ui-cards", component: <UiCards /> },
-  // { path: "/ui-carousel", component: <UiCarousel /> },
-  // { path: "/ui-colors", component: <UiColors /> },
-  // { path: "/ui-dropdowns", component: <UiDropdown /> },
-  // { path: "/ui-general", component: <UiGeneral /> },
-  // { path: "/ui-grid", component: <UiGrid /> },
-  // { path: "/ui-images", component: <UiImages /> },
-  // { path: "/ui-lightbox", component: <UiLightbox /> },
-  // { path: "/ui-modals", component: <UiModal /> },
-  // { path: "/ui-progressbars", component: <UiProgressbar /> },
-  // { path: "/ui-tabs-accordions", component: <UiTabsAccordions /> },
-  // { path: "/ui-typography", component: <UiTypography /> },
-  // { path: "/ui-video", component: <UiVideo /> },
-  // { path: "/ui-session-timeout", component: <UiSessionTimeout /> },
-  // { path: "/ui-rating", component: <UiRating /> },
-  // { path: "/ui-rangeslider", component: <UiRangeSlider /> },
-  // { path: "/ui-notifications", component: <UiNotifications /> },
-  // { path: "/ui-offcanvas", component: <UiOffCanvas /> },
-  // { path: "/ui-utilities", component: <UiUtilitie /> },
-  // { path: "/ui-placeholders", component: <UiPlaceholders /> },
-  // { path: "/ui-toasts", component: <UiToasts /> },
+  { path: "/ui-alerts", component: <UiAlert /> },
+  { path: "/ui-buttons", component: <UiButtons /> },
+  { path: "/ui-cards", component: <UiCards /> },
+  { path: "/ui-carousel", component: <UiCarousel /> },
+  { path: "/ui-colors", component: <UiColors /> },
+  { path: "/ui-dropdowns", component: <UiDropdown /> },
+  { path: "/ui-general", component: <UiGeneral /> },
+  { path: "/ui-grid", component: <UiGrid /> },
+  { path: "/ui-images", component: <UiImages /> },
+  { path: "/ui-lightbox", component: <UiLightbox /> },
+  { path: "/ui-modals", component: <UiModal /> },
+  { path: "/ui-progressbars", component: <UiProgressbar /> },
+  { path: "/ui-tabs-accordions", component: <UiTabsAccordions /> },
+  { path: "/ui-typography", component: <UiTypography /> },
+  { path: "/ui-video", component: <UiVideo /> },
+  { path: "/ui-session-timeout", component: <UiSessionTimeout /> },
+  { path: "/ui-rating", component: <UiRating /> },
+  { path: "/ui-rangeslider", component: <UiRangeSlider /> },
+  { path: "/ui-notifications", component: <UiNotifications /> },
+  { path: "/ui-offcanvas", component: <UiOffCanvas /> },
+  { path: "/ui-utilities", component: <UiUtilitie /> },
+  { path: "/ui-placeholders", component: <UiPlaceholders /> },
+  { path: "/ui-toasts", component: <UiToasts /> },
 
   //Utility
   { path: "/pages-starter", component: <PagesStarter /> },

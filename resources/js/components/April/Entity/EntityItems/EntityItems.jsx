@@ -10,28 +10,39 @@ import {
     CardSubtitle,
     NavLink,
     NavItem,
+    Button,
 
 } from "reactstrap"
 //Import Breadcrumb
 import Breadcrumb from "../../../Common/Breadcrumb";
+import EntityItemsFilter from "./Items/ItemsFilter";
 
 
 
 
 
 
-const EntityItems = ({ entityName,entityTitle, items, itemUrl, router, tableHeaders, }) => {
-    
+const EntityItems = ({ entityName, entityTitle, items, itemUrl, router, tableHeaders,
+    getInitialEntityData, updateEntities
+}) => {
+
     document.title = entityTitle + " | April App"
     const [currentItems, setCurrentItems] = useState(items)
     useEffect(() => {
-     setCurrentItems(items)
+        setCurrentItems(items)
     }, [items])
+
+    const createNewEntityItem = () => {
+
+        getInitialEntityData(itemUrl, router.location.pathname, router.navigate)
+    }
 
     return (
         <React.Fragment>
+            <EntityItemsFilter updateEntities={updateEntities} entityName={entityName} />
             <div className="page-content">
                 <div className="container-fluid">
+
                     <Breadcrumb title={entityTitle} breadcrumbItem="Таблица" />
 
                     <Row>
@@ -85,14 +96,24 @@ const EntityItems = ({ entityName,entityTitle, items, itemUrl, router, tableHead
                                                     })}
 
                                                 </tbody>
+
                                             </Table>
                                         </div>
 
                                     </div>
+
+
                                 </CardBody>
+
                             </Card>
                         </Col>
-
+                        <div>
+                            <Button className="mb-4" color="primary"
+                                onClick={createNewEntityItem}
+                            >
+                                Добавить
+                            </Button>
+                        </div>
                     </Row>
                 </div>
             </div>

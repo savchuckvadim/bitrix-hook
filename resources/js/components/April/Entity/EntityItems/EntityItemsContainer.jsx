@@ -5,7 +5,7 @@ import withRouter from "../../../Common/withRouter"
 import { useEffect, useState } from "react"
 import EntityPage from "../../../../pages/April/Entity/Entity"
 import { API_METHOD, PORTALS_URL } from "../../../../types/app/app-type"
-import { getEntities } from "../../../../store/april/entity/entity-reducer"
+import { getEntities, getInitialEntityData, updateEntities } from "../../../../store/april/entity/entity-reducer"
 
 
 const mapState = (state, own) => {
@@ -53,8 +53,9 @@ const mapState = (state, own) => {
 
 
 
-const EntityItemsContainer = ({ router, entityName, entityTitle, itemUrl,itemsUrl, items, tableHeaders,
-    getEntities
+const EntityItemsContainer = ({ 
+    router, entityName, entityTitle, itemUrl,itemsUrl, items, tableHeaders,
+    getEntities, getInitialEntityData, updateEntities,
 }) => {
 
     // const [currentItems, setCurrentItems] = useState(items)
@@ -73,6 +74,8 @@ const EntityItemsContainer = ({ router, entityName, entityTitle, itemUrl,itemsUr
         itemUrl={itemUrl}
         items={items}
         tableHeaders={tableHeaders}
+        getInitialEntityData={getInitialEntityData}
+        updateEntities={updateEntities}
     />
 
 }
@@ -90,5 +93,7 @@ const EntityItemsContainer = ({ router, entityName, entityTitle, itemUrl,itemsUr
 // export default connect(mapState, {})(EntityItems)
 // const connector = connect(mapState, {});
 export default connect(mapState, {
-    getEntities
+    getEntities,
+    getInitialEntityData,
+    updateEntities,
 })(EntityItemsContainer)

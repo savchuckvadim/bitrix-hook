@@ -3,52 +3,65 @@ import { AppDispatchType, AppStateType, InferActionsTypes } from "../.."
 import { onlineAPI } from "../../../helpers/april-online/online-api"
 import { googleAPI } from "../../../helpers/google/google-api"
 import { API_METHOD } from "../../../types/app/app-type"
-import { Entity, EntityField, TemplateAddData, TemplateInitialAddData } from "../../../types/entity/entity-types"
+import { CreatingEntityType, Entity, EntityField, EntityStateType, InitialEntity, InitialEntityData, TemplateAddData, TemplateInitialAddData } from "../../../types/entity/entity-types"
 import { Template } from "../../../types/entity/template-types"
 import { tfieldsSetToFirebase } from "../../../utils/service-utils/service-utils"
 import { getDataForSetTField, getDataForSetTemplate, getInitialTemplateData, getInitialTemplateFieldData } from "../../../utils/template-utils"
 
 
-type EntityStateType = typeof initialState
+
 type EntityActionsTypes = InferActionsTypes<typeof entityActions>
 type GetStateType = () => AppStateType
+export type GetInitialRelationFunction = typeof getInitialRelationEntity
+
 
 
 const initialState = {
 
-    items: [] as Array<any>,
+    items: [] as Array<InitialEntityData>,
     type: null, // 'entity' 'entities'
     current: null,
-    fields: [],
-    adding: {
-        parameters: [],
-        fields: [
-            // {
-            //     name: 'название шаблона',
-            //     type: 'array',
-            //     items: []
-            // },
-            // {
-            //     name: 'название шаблона',
-            //     type: 'array',
-            //     items: []
-            // },
-        ]
-    },
-
-    isInitializingAdd: false
+    creating: {
+        formData: null as null | InitialEntityData,
+        isInitialized: false as boolean,
+        isFetching: false as boolean,
+        isHaveGroup: false as boolean,
+    } as CreatingEntityType,
+    relation: {
+        isCreating: false as boolean,
+        entity: null as null | any,
+        formData: null as null | any
+    }
+    // fields: [],
 
 
-}
+} as EntityStateType
 
 
 
 //AC
 export const entityActions = {
-    setEntityItems: (items: Array<Template>) => ({ type: 'entity/SET_ENTITIES', items } as const),
-    setEntityItem: (item: Template) => ({ type: 'entity/SET_CURRENT_ENTIY', item } as const),
+    setEntityItems:
+        (items: Array<Template>) =>
+            ({ type: 'entity/SET_ENTITIES', items } as const),
+    setEntityItem:
+        (item: Template | null) =>
+            ({ type: 'entity/SET_CURRENT_ENTIY', item } as const),
     // setInitializingAddProcess: () => ({ type: 'entity/SET_INITIALIZING_ADD' } as const),
-    setInitialAdd: (initialData: TemplateAddData) => ({ type: 'entity/SET_INITIAL_ADD', initialData } as const)
+    setFetchingInitialAdd:
+        () =>
+            ({ type: 'entity/SET_FETCHING_INITIAL_DATA' } as const),
+    setInitialAdd:
+        (initialData: TemplateAddData | null) =>
+            ({ type: 'entity/SET_INITIAL_CREATE_ENTITY', initialData } as const),
+    setCreatingRelation:
+        (status: boolean, entity: null | any, groupName: string, fieldId: number) =>
+            ({ type: 'entity/SET_CREATING_RELATION', status, entity, groupName, fieldId } as const),
+    setCreatedRelation:
+        (entity: null | any) =>
+            ({ type: 'entity/SET_CREATED_RELATION', status, entity } as const),
+
+
 }
 
 
@@ -72,16 +85,16 @@ export const updateEntities = (token = null, entityName: string) => async (dispa
         const data = fetchedData[`${entityName}`]
 
         if (entityName === 'tfields') {
-            const firebasedata = tfieldsSetToFirebase(data.fields, data.items)
-            savedfireData = await firebaseAPI?.setCollection(entityName, firebasedata)
+            // const firebasedata = tfieldsSetToFirebase(data.fields, data.items)
+            // savedfireData = await firebaseAPI?.setCollection(entityName, firebasedata)
 
-            onlineSavedData = await onlineAPI.setCollection(entityName, data)
+            // onlineSavedData = await onlineAPI.setCollection(entityName, data)
 
 
 
 
         } else {
-            savedfireData = await firebaseAPI?.setCollection(entityName, data)
+            // savedfireData = await firebaseAPI?.setCollection(entityName, data)
             onlineSavedData = await onlineAPI.setCollection(entityName, data)
 
         }
@@ -93,12 +106,10 @@ export const updateEntities = (token = null, entityName: string) => async (dispa
     // dispatch(inProgress(false, 'component'))
 
 }
-
-
 export const getEntities = (url: string, method: string, collectionName: string, data: any = null) => async (dispatch: AppDispatchType, getState: GetStateType) => {
 
     if (url) {
-        const collection = await onlineAPI.getCollection(url, method, collectionName, data)
+        const collection = await onlineAPI.service(url, API_METHOD.GET, collectionName, null)
 
 
         if (collection) {
@@ -118,7 +129,7 @@ export const getEntityItem = (url: string, entityName: string, entityId: number)
         const fullUrl = `${url}/${entityId}`
         const item = await onlineAPI.service(fullUrl, API_METHOD.GET, entityName, null)
 
-        
+
         if (item) {
             dispatch(entityActions.setEntityItem(item))
         } else {
@@ -130,8 +141,111 @@ export const getEntityItem = (url: string, entityName: string, entityId: number)
 
 
 }
+export const setOrupdateEntityItem = (history: (url: string) => void, currentUrl: string, url: string, entityName: string, data: number) => async (dispatch: AppDispatchType, getState: GetStateType) => {
 
-//entity
+    if (url) {
+        const apiData = data
+        //@ts-ignore
+        if (apiData.number) {
+            //@ts-ignore
+            apiData.number = Number(apiData.number)
+        }
+
+        const item = await onlineAPI.service(url, API_METHOD.POST, entityName, apiData)
+
+
+        if (item) {
+            dispatch(entityActions.setEntityItem(item))
+
+            if (item.id) {
+
+                const redirectUrl = `${url}/${item.id}`
+                redirectUrl !== currentUrl
+                    && history(`../../${url}/${item.id}`)
+            }
+
+        } else {
+            console.log('no collection')
+        }
+    } else {
+        console.log('no url')
+    }
+
+
+}
+export const getInitialEntityData = (url: string, currentUrl: string, history: (url: string) => void) => async (dispatch: AppDispatchType, getState: GetStateType) => {
+
+    if (url) {
+        const fullUrl = `initial/${url}`
+        dispatch(entityActions.setFetchingInitialAdd())
+        const cretingEntity = await onlineAPI.service(fullUrl, API_METHOD.GET, 'initial', null)
+
+
+        if (cretingEntity) {
+
+            dispatch(entityActions.setInitialAdd(cretingEntity))
+        } else {
+            console.log('no initial data')
+        }
+
+        if (currentUrl !== `/${url}/add`) {
+
+
+            history(`../${url}/add`)
+        }
+
+    } else {
+        console.log('no url')
+    }
+}
+export const deleteEntityItem = (history: (url: string) => void, url: string, entityName: string, entityId: number) =>
+    async (dispatch: AppDispatchType, getState: GetStateType) => {
+
+        if (url) {
+            const fullUrl = `${url}/${entityId}`
+            const item = await onlineAPI.service(fullUrl, API_METHOD.DELETE, `${entityName}Id`, null)
+
+
+            if (item) {
+
+                dispatch(entityActions.setEntityItem(null))
+                history(`../../${entityName}s`)
+            } else {
+                console.log('no collection')
+            }
+        } else {
+            console.log('no url')
+        }
+
+
+    }
+
+
+
+//relation
+export const getInitialRelationEntity = (groupName: string, fieldId: number | null, relationEntityId: number | null) =>
+    async (dispatch: AppDispatchType, getState: GetStateType) => {
+
+        const state = getState()
+        const entity = state.entity as EntityStateType
+        const formData = entity.creating.formData
+        const searchingGroup = formData && formData.find(group => group.groupName === groupName)
+
+
+        if (searchingGroup) {
+            const searchingItem = searchingGroup.fields.find(field => field.id === fieldId)
+            if (searchingItem && fieldId) {
+                dispatch(entityActions.setCreatingRelation(true, searchingItem, groupName, fieldId))
+            }
+        }
+
+    }
+export const setRelation = (fieldId: number, relationEntity: InitialEntity) =>
+    async (dispatch: AppDispatchType, getState: GetStateType) => {
+        debugger
+    }
+
+//entity old
 export const initialAddEntity = (entityName: string) => async (dispatch: AppDispatchType, getState: GetStateType) => {
 
     let initialData = {
@@ -225,20 +339,83 @@ const entity = (state: EntityStateType = initialState, action: EntityActionsType
             return {
                 ...state,
                 current: action.item,
+                creating: {
+                    formData: null,
+                    isInitialized: false,
+                    isFetching: false,
+                },
 
             }
-        case 'entity/SET_INITIAL_ADD':
+        case 'entity/SET_INITIAL_CREATE_ENTITY':
 
             const initialData = action.initialData
 
             return {
                 ...state,
-                adding: {
-                    ...initialData
+                creating: {
+                    formData: initialData,
+                    isInitialized: true,
+                    isFetching: false,
                 },
-                isInitializingAdd: true
+
 
             }
+        case 'entity/SET_FETCHING_INITIAL_DATA':
+            return {
+                ...state,
+                creating: {
+                    ...state.creating,
+                    isInitialized: false,
+                    isFetching: true,
+                },
+            }
+        case 'entity/SET_CREATING_RELATION':
+
+            if (action.entity && action.entity.fields) {
+                const entiyFields = action.entity.fields.length > 0
+                    ? action.entity.fields
+                    : action.entity.initialValue
+
+                return {
+                    ...state,
+                    relation: {
+                        ...state.relation,
+                        isCreating: action.status,
+                        entity: {
+                            ...action.entity,
+                            fields: entiyFields,
+
+                        },
+                        formData: entiyFields,
+                        parrentFfieldId: action.fieldId,
+                        parrentGroupName: action.groupName
+
+                    },
+                }
+            } else return state
+
+        case 'entity/SET_CREATED_RELATION':
+
+            if (action.entity && action.entity.fields) {
+                const entiyFields = action.entity.fields.length > 0
+                    ? action.entity.fields
+                    : action.entity.initialValue
+
+                return {
+                    ...state,
+                    relation: {
+                        ...state.relation,
+                        isCreating: action.status,
+                        entity: {
+                            ...action.entity,
+                            fields: entiyFields,
+
+                        },
+                        formData: entiyFields,
+
+                    },
+                }
+            } else return state
 
         // case 'entity/SET_INITIALIZING_ADD':
         //     

@@ -153,7 +153,7 @@ const SidebarContentApril = props => {
 
               return (
                 <li>
-                  <Link to={`../${entity.items.name}`} >
+                  <Link replace to={`../${entity.items.name}`} >
                     <i className="bx bx-file"></i>
                     <span>{props.t(entity.items.title)}</span>
                   </Link>

@@ -29,6 +29,13 @@ Route::post('/register', [APIController::class, 'register']);
 Route::post('/forget-password', [APIController::class, 'forget_pass']);
 Route::post('/reset-password', [APIController::class, 'reset_pass']);
 
+
+
+//FRONTEND TESTING
+Route::post('front', [App\Http\Controllers\HomeController::class, 'index'])->where('any', '^(?!api\/)[\/\w\.-]*');
+
+
+
 Route::post('/task', function (Request $request) {
     $data = $request->all();
     $document_id = $request['document_id'];

@@ -1,14 +1,14 @@
 import { connect } from "react-redux"
-import EntityItems from "./EntityItems"
+import EntityItems from "./EntityItems/EntityItems"
 import { compose } from "@reduxjs/toolkit"
-import withRouter from "../../../Common/withRouter"
+import withRouter from "../../Common/withRouter"
 import { useEffect } from "react"
-import EntityPage from "../../../../pages/April/Entity/Entity"
-import EntityItemsContainer from "./EntityItemsContainer"
-import { getEntities } from "../../../../store/april/entity/entity-reducer"
-import { API_METHOD, PORTALS_URL } from "../../../../types/app/app-type"
-import { ENTITY_QUANTITY } from "../../../../types/entity/entity-types"
-import EntityItemContainer from "./EntityItemContainer"
+import EntityPage from "../../../pages/April/Entity/Entity"
+import EntityItemsContainer from "./EntityItems/EntityItemsContainer"
+import { getEntities } from "../../../store/april/entity/entity-reducer"
+import { API_METHOD, PORTALS_URL } from "../../../types/app/app-type"
+import { ENTITY_QUANTITY } from "../../../types/entity/entity-types"
+import EntityItemContainer from "./EntityItem/EntityItemContainer"
 
 
 const mapState = (state, own) => {

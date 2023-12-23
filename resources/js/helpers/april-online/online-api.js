@@ -346,7 +346,12 @@ export const onlineAPI = {
             
             if (response && response.data) {
                 if (response.data.resultCode === 0) {
-                    result = response.data[model]
+                    if(response.data.data){
+                        result = response.data.data[model]
+                    }else{
+                        result = response.data[model]
+                    }
+                    
                 } else {
                     console.log(response.data.message)
                 }
@@ -354,6 +359,7 @@ export const onlineAPI = {
 
             return result
         } catch (error) {
+            
             console.log('error')
             
             return result
