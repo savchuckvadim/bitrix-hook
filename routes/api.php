@@ -126,7 +126,7 @@ Route::post('/taskfields', function (Request $request) {
     try {
 
 
-        $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.getFields.json');
+        $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/task.commentitem.getmanifest.json');
         Log::info('response ', ['response ' => $response]);
         $getFields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.getFields.json', []);
         Log::info('TASK_FIELDS ', ['fields ' => $getFields]);
