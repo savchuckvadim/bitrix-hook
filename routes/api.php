@@ -125,6 +125,55 @@ Route::post('/taskfields', function (Request $request) {
 
     try {
 
+        $listsfields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/lists.element.get.json', [
+            'IBLOCK_TYPE_ID' => 'lists',
+            'IBLOCK_ID' => '86',
+          
+        ]);
+        $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/lists.element.get.json', [
+            'IBLOCK_TYPE_ID' => 'lists',
+            'IBLOCK_ID' => '86',
+            'FILTER' => [
+                '>=DATE_CREATE' => '01.01.2023 00:00:00',
+                '<=DATE_CREATE' => '01.01.2024 23:59:59',
+            ]
+
+
+        ]);
+        Log::info('response ', ['response ' => $response]);
+        $getFields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.getFields.json', []);
+        Log::info('TASK_FIELDS ', ['fields ' => $getFields]);
+        // Возвращаем ответ как ответ сервера Laravel
+        return['response' => $response, 'listsfields' => $listsfields];
+    } catch (\Throwable $th) {
+        Log::error('Exception caught', [
+            'message'   => $th->getMessage(),
+            'file'      => $th->getFile(),
+            'line'      => $th->getLine(),
+            'trace'     => $th->getTraceAsString(),
+        ]);
+        return response([
+            'result' => 'error',
+            'message' => $th->getMessage()
+        ]);
+    }
+});
+
+Route::post('/calling', function (Request $request) {
+
+    $domain = env('APRIL_BITRIX_DOMAIN');
+    $secret = env('APRIL_WEB_HOOK');
+    $restVersion = env('APRIL_BITRIX_REST_VERSION');
+    $durationTop = $request['durationTop'];
+    Log::info('Environment Variables', [
+        'BITRIX_DOMAIN' => $domain,
+        'BITRIX_REST_VERSION' => $restVersion,
+        'WEB_HOOK' => $secret
+    ]);
+
+
+    try {
+
 
         $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/voximplant.statistic.get.json', [
             "FILTER" => [
@@ -134,8 +183,7 @@ Route::post('/taskfields', function (Request $request) {
             ]
         ]);
         Log::info('response ', ['response ' => $response]);
-        $getFields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.getFields.json', []);
-        Log::info('TASK_FIELDS ', ['fields ' => $getFields]);
+
         // Возвращаем ответ как ответ сервера Laravel
         return $response;
     } catch (\Throwable $th) {
@@ -151,6 +199,7 @@ Route::post('/taskfields', function (Request $request) {
         ]);
     }
 });
+
 // Route::post('/taskfields', function (Request $request) {
 
 //     $domain = env('BITRIX_DOMAIN');
