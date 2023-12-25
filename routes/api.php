@@ -140,7 +140,7 @@ Route::post('/taskfields', function (Request $request) {
         ]);
         $company = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.company.get.json', [
             'ID'  => '33838',
-            'select' => ["COMMENTS"],
+            'select' => ["TITLE"],
         ]);
 
         $comments = '';
@@ -153,7 +153,7 @@ Route::post('/taskfields', function (Request $request) {
             $comments = $comments . "<p>" . $contact["NAME"] . " " . $contact["SECOND_NAME"] . " " . $contact["SECOND_NAME"] . "  "  .  $contactPhones . "</p>";
         }
 
-        $comments = $comments . '<p>' . $company['result']['COMMENTS'] . '</p>';
+        $comments = $comments . '<p>' . $company['result']['TITLE'] . '</p>';
 
         $newTask = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
             'fields' => [
