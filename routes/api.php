@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\APIBitrixController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\APIController;
@@ -38,121 +39,27 @@ Route::get('front', [App\Http\Controllers\HomeController::class, 'index']);
 
 
 Route::post('/task', function (Request $request) {
-    $data = $request->all();
-    $document_id = $request['document_id'];
-    $auth = $request['auth'];
-    $company_id = $request['company_id'];
-    $deadline = $request['deadline'];
+ 
     $created = $request['created'];
     $responsible = $request['responsible'];
-    $name = $request['name'];
-    $crm = $request['crm'];
+   
     Log::info('LOG', $request->all());
-    Log::info('DOC_ID', $document_id);
-    Log::info('AUTH', $auth);
-    Log::info('COMP_ID', ['company_id' => $company_id]);
-    Log::info('deadline', ['date' => $deadline]);
-    Log::info('CREATED_ID', ['created' => $created]);
-    Log::info('TITLE', ['created' => $name]);
-    Log::info('responsible', ['responsible' => $responsible]);
-    Log::info('crm', ['crm' => $crm]);
+
     $partsCreated = explode("_", $created);
     $partsResponsible = explode("_", $responsible);
-    // Извлечение ID (предполагается, что ID всегда находится после "user_")
+ 
+    $auth = $request['auth'];
+    $domain = $auth['domain'];
+    $companyId = $request['company_id'];
     $createdId = $partsCreated[1];
     $responsibleId = $partsResponsible[1];
-    $nowDate = now();
-    $domain = $auth['domain'];
-    $secret = env('WEB_HOOK');
-    $restVersion = env('BITRIX_REST_VERSION');
+    $deadline = $request['deadline'];
+    $name = $request['name'];
+    $crm = $request['crm'];
 
-    Log::info('Environment Variables', [
-        'BITRIX_DOMAIN' => $domain,
-        'BITRIX_REST_VERSION' => $restVersion,
-        'WEB_HOOK' => $secret
-    ]);
-    $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
+    return APIBitrixController::createTask($domain, $companyId, $createdId, $responsibleId, $deadline, $name, $crm);
 
-    $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
-    $moscowTime = $moscowTime->format('Y-m-d H:i:s');
-    Log::info('novosibirskTime', ['novosibirskTime' => $novosibirskTime]);
-    Log::info('moscowTime', ['moscowTime' => $moscowTime]);
-
-   
-
-
-    try {
-        $user = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/user.get.json', [
-            'ID' => $responsibleId
-        ]);
-        Log::info('USER_TEST ', ['user ' => $user['result']]);
-
-        
-        $portal = PortalController::getPortal($domain);
-        Log::info('PORTAL_TEST ', ['portal ' => $portal]);
-
-        $contacts = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.contact.list.json', [
-            'FILTER' => [
-                'COMPANY_ID' => $company_id,
-    
-            ],
-            'select' => ["ID", "NAME", "LAST_NAME", "SECOND_NAME", "TYPE_ID", "SOURCE_ID", "PHONE", "EMAIL", "COMMENTS"],
-        ]);
-        $company = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.company.get.json', [
-            'ID'  => $company_id,
-            'select' => ["TITLE"],
-        ]);
-    
-        $contactsString = '';
-    
-        foreach ($contacts['result'] as  $contact) {
-            $contactPhones = '';
-            foreach ($contact["PHONE"] as $phone) {
-                $contactPhones = $contactPhones .  $phone["VALUE"] . "   ";
-            }
-            $contactsString = $contactsString . "<p>" . $contact["NAME"] . " " . $contact["SECOND_NAME"] . " " . $contact["SECOND_NAME"] . "  "  .  $contactPhones . "</p>";
-        }
-    
-        $companyTitleString = $company['result']['TITLE'];
-        $description =  '<p>' . $companyTitleString . '</p>' . '<p> Контакты компании: </p>' . $contactsString;
-
-
-
-
-
-
-
-        $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
-            'fields' => [
-                'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
-                'RESPONSIBLE_ID' => $responsibleId,
-                'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
-                'CHANGED_BY' => $createdId, //- постановщик;
-                'CREATED_BY' => $createdId, //- постановщик;
-                'CREATED_DATE' => $nowDate, // - дата создания;
-                'DEADLINE' => $moscowTime, //- крайний срок;
-                'UF_CRM_TASK' => ['T9c_' . $crm],
-                'ALLOW_CHANGE_DEADLINE' => 'N',
-                'DESCRIPTION' => $description
-            ]
-        ]);
-        Log::info('response ', ['response ' => $response]);
-        $getFields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.getFields.json', []);
-        Log::info('TASK_FIELDS ', ['fields ' => $getFields]);
-        // Возвращаем ответ как ответ сервера Laravel
-        return $response;
-    } catch (\Throwable $th) {
-        Log::error('Exception caught', [
-            'message'   => $th->getMessage(),
-            'file'      => $th->getFile(),
-            'line'      => $th->getLine(),
-            'trace'     => $th->getTraceAsString(),
-        ]);
-        return response([
-            'result' => 'error',
-            'message' => $th->getMessage()
-        ]);
-    }
+  
 });
 
 
