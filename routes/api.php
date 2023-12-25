@@ -76,8 +76,12 @@ Route::post('/task', function (Request $request) {
     $moscowTime = $moscowTime->format('Y-m-d H:i:s');
     Log::info('novosibirskTime', ['novosibirskTime' => $novosibirskTime]);
     Log::info('moscowTime', ['moscowTime' => $moscowTime]);
-    try {
 
+
+  
+
+    try {
+      
 
         $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
             'fields' => [
@@ -124,29 +128,35 @@ Route::post('/taskfields', function (Request $request) {
 
 
     try {
-
-        $listsfields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/lists.field.get.json', [
-            'IBLOCK_TYPE_ID' => 'lists',
-            'IBLOCK_ID' => '86',
-
-        ]);
-        Log::info('listsfields ', ['listsfields ' => $listsfields['result']]);
-        $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/lists.element.get.json', [
-            'IBLOCK_TYPE_ID' => 'lists',
-            'IBLOCK_ID' => '86',
+        $contacts = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.contact.list.json', [
             'FILTER' => [
-                '>=DATE_CREATE' => '01.01.2023 00:00:00',
-                '<=DATE_CREATE' => '01.01.2024 23:59:59',
-            ]
-
-
+                'COMPANY_ID' => '33838',
+                
+            ],
+            'select'=> [ "ID", "NAME", "LAST_NAME", "TYPE_ID", "SOURCE_ID" ],
         ]);
-        Log::info('response ', ['response ' => $response]);
+        // $listsfields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/lists.field.get.json', [
+        //     'IBLOCK_TYPE_ID' => 'lists',
+        //     'IBLOCK_ID' => '86',
+
+        // ]);
+        // Log::info('listsfields ', ['listsfields ' => $listsfields['result']]);
+        // $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/lists.element.get.json', [
+        //     'IBLOCK_TYPE_ID' => 'lists',
+        //     'IBLOCK_ID' => '86',
+        //     'FILTER' => [
+        //         '>=DATE_CREATE' => '01.01.2023 00:00:00',
+        //         '<=DATE_CREATE' => '01.01.2024 23:59:59',
+        //     ]
+
+
+        // ]);
+        Log::info('response ', ['contacts ' => $contacts]);
         // $getFields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.getFields.json', []);
         // Log::info('TASK_FIELDS ', ['fields ' => $getFields]);
-        // Возвращаем ответ как ответ сервера Laravel
+      
         return  response([
-            'result' => ['response' => $response['result'], 'listsfields' => $listsfields['result']],
+            'result' => ['contacts' => $contacts['result']],
             'message' => 'success'
         ]);
     } catch (\Throwable $th) {
@@ -190,6 +200,56 @@ Route::post('/calling', function (Request $request) {
 
         // Возвращаем ответ как ответ сервера Laravel
         return $response;
+    } catch (\Throwable $th) {
+        Log::error('Exception caught', [
+            'message'   => $th->getMessage(),
+            'file'      => $th->getFile(),
+            'line'      => $th->getLine(),
+            'trace'     => $th->getTraceAsString(),
+        ]);
+        return response([
+            'result' => 'error',
+            'message' => $th->getMessage()
+        ]);
+    }
+});
+Route::post('/lists', function (Request $request) {
+
+    $domain = env('APRIL_BITRIX_DOMAIN');
+    $secret = env('APRIL_WEB_HOOK');
+    $restVersion = env('APRIL_BITRIX_REST_VERSION');
+
+    Log::info('Environment Variables', [
+        'BITRIX_DOMAIN' => $domain,
+        'BITRIX_REST_VERSION' => $restVersion,
+        'WEB_HOOK' => $secret
+    ]);
+
+
+    try {
+
+        $listsfields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/lists.field.get.json', [
+            'IBLOCK_TYPE_ID' => 'lists',
+            'IBLOCK_ID' => '86',
+
+        ]);
+        Log::info('listsfields ', ['listsfields ' => $listsfields['result']]);
+        $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/lists.element.get.json', [
+            'IBLOCK_TYPE_ID' => 'lists',
+            'IBLOCK_ID' => '86',
+            'FILTER' => [
+                '>=DATE_CREATE' => '01.01.2023 00:00:00',
+                '<=DATE_CREATE' => '01.01.2024 23:59:59',
+            ]
+
+
+        ]);
+        Log::info('response ', ['response ' => $response]);
+ 
+        return  response([
+            'result' => ['response' => $response['result'], 'listsfields' => $listsfields['result']],
+            'message' => 'success'
+        ]);
     } catch (\Throwable $th) {
         Log::error('Exception caught', [
             'message'   => $th->getMessage(),
