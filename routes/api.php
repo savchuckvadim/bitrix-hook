@@ -130,7 +130,7 @@ Route::post('/taskfields', function (Request $request) {
             'IBLOCK_ID' => '86',
 
         ]);
-        Log::info('listsfields ', ['listsfields ' => $listsfields]);
+        Log::info('listsfields ', ['listsfields ' => $listsfields['result']]);
         $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/lists.element.get.json', [
             'IBLOCK_TYPE_ID' => 'lists',
             'IBLOCK_ID' => '86',
@@ -146,7 +146,7 @@ Route::post('/taskfields', function (Request $request) {
         // Log::info('TASK_FIELDS ', ['fields ' => $getFields]);
         // Возвращаем ответ как ответ сервера Laravel
         return  response([
-            'result' => ['response' => $response, 'listsfields' => $listsfields],
+            'result' => ['response' => $response['result'], 'listsfields' => $listsfields],
             'message' => 'success'
         ]);
     } catch (\Throwable $th) {
