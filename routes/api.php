@@ -125,7 +125,7 @@ Route::post('/taskfields', function (Request $request) {
 
     try {
 
-        $listsfields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/lists.element.get.json', [
+        $listsfields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/lists.field.get.json', [
             'IBLOCK_TYPE_ID' => 'lists',
             'IBLOCK_ID' => '86',
 
