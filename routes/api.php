@@ -62,7 +62,7 @@ Route::post('/task', function (Request $request) {
     $createdId = $partsCreated[1];
     $responsibleId = $partsResponsible[1];
     $nowDate = now();
-    $domain = env('BITRIX_DOMAIN');
+    $domain = $auth['domain'];
     $secret = env('WEB_HOOK');
     $restVersion = env('BITRIX_REST_VERSION');
 
@@ -82,9 +82,15 @@ Route::post('/task', function (Request $request) {
 
 
     try {
+        $user = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/user.get.json', [
+            'ID' => $responsibleId
+        ]);
+        Log::info('USER_TEST ', ['user ' => $user['result']]);
+
+        
         $portal = PortalController::getPortal($domain);
         Log::info('PORTAL_TEST ', ['portal ' => $portal]);
-        
+
         $contacts = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.contact.list.json', [
             'FILTER' => [
                 'COMPANY_ID' => $company_id,
