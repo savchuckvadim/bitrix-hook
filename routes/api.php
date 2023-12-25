@@ -32,7 +32,7 @@ Route::post('/reset-password', [APIController::class, 'reset_pass']);
 
 
 //FRONTEND TESTING
-    Route::get('front', [App\Http\Controllers\HomeController::class, 'index']);
+Route::get('front', [App\Http\Controllers\HomeController::class, 'index']);
 
 
 
@@ -112,9 +112,9 @@ Route::post('/task', function (Request $request) {
 });
 Route::post('/taskfields', function (Request $request) {
 
-    $domain = env('BITRIX_DOMAIN');
-    $secret = env('WEB_HOOK');
-    $restVersion = env('BITRIX_REST_VERSION');
+    $domain = env('APRIL_BITRIX_DOMAIN');
+    $secret = env('APRIL_WEB_HOOK');
+    $restVersion = env('APRIL_BITRIX_REST_VERSION');
 
     Log::info('Environment Variables', [
         'BITRIX_DOMAIN' => $domain,
@@ -126,7 +126,9 @@ Route::post('/taskfields', function (Request $request) {
     try {
 
 
-        $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/voximplant.statistic.get.json');
+        $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/voximplant.statistic.get.json', [
+            "FILTER" => [">CALL_DURATION" => 60]
+        ]);
         Log::info('response ', ['response ' => $response]);
         $getFields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.getFields.json', []);
         Log::info('TASK_FIELDS ', ['fields ' => $getFields]);
@@ -326,31 +328,31 @@ Route::post('/smart/categories', function (Request $request) {
             Log::info('Environment Variables', [
                 'portalResponse' => $portalResponse
             ]);
-            return response(['test' => $portalResponse ]);
+            return response(['test' => $portalResponse]);
         }
         // Проверка, успешно ли выполнен запрос
         // if ($portalResponse['resultCode'] == 0) {
-            // Возвращение ответа клиенту в формате JSON
+        // Возвращение ответа клиенту в формате JSON
 
-            // $responseData =  $portalResponse['data'];
-            // $hookUrl = $responseData['portal']['C_REST_WEB_HOOK_URL'];
-            // if ($hookUrl) {
-            //     $hook = $hookUrl . '/' . 'crm.category.list.json';
-            //     $hookData = ['entityTypeId' => env('BITRIX_SMART_MAIN_ID')];
+        // $responseData =  $portalResponse['data'];
+        // $hookUrl = $responseData['portal']['C_REST_WEB_HOOK_URL'];
+        // if ($hookUrl) {
+        //     $hook = $hookUrl . '/' . 'crm.category.list.json';
+        //     $hookData = ['entityTypeId' => env('BITRIX_SMART_MAIN_ID')];
 
-            //     $smartCategoriesResponse = Http::get($hook, $hookData);
-            //     $bitrixResponse = $smartCategoriesResponse->json();
-            //     return response()->json([
-            //         'resultCode' => 0,
-            //         'online' => $portalResponse->json(),
-            //         'bitrix' => $bitrixResponse
-            //     ]);
-            // } else {
+        //     $smartCategoriesResponse = Http::get($hook, $hookData);
+        //     $bitrixResponse = $smartCategoriesResponse->json();
+        //     return response()->json([
+        //         'resultCode' => 0,
+        //         'online' => $portalResponse->json(),
+        //         'bitrix' => $bitrixResponse
+        //     ]);
+        // } else {
 
-            //     return response()->json([
-            //         'error' => 'Hook url not found'
-            //     ], 500);
-            // }
+        //     return response()->json([
+        //         'error' => 'Hook url not found'
+        //     ], 500);
+        // }
         // } else {
         //     // Обработка ошибки, если запрос не удался
         //     return response()->json([
