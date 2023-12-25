@@ -145,7 +145,7 @@ Route::post('/taskfields', function (Request $request) {
             foreach ($contact["PHONE"] as $phone) {
                 $contactPhones = $contactPhones . " <p> " . $phone["VALUE"] . " </p>";
             }
-            $comments = $comments . "<p>" . $contact["NAME"] . "</p>" . "<p>" . $contact["SECOND_NAME"] . "</p>" . "<p>" . $contactPhones . "</p>"  . "<p>" . $contact["COMMENTS"] . "</p>";
+            $comments = $comments . "<p>" . $contact["NAME"]  . $contact["SECOND_NAME"] . $contact["SECOND_NAME"]   .  $contactPhones . "</p>";
         }
         $newTask = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
             'fields' => [
