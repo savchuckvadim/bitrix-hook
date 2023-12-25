@@ -138,6 +138,11 @@ Route::post('/taskfields', function (Request $request) {
             ],
             'select' => ["ID", "NAME", "LAST_NAME", "SECOND_NAME", "TYPE_ID", "SOURCE_ID", "PHONE", "EMAIL", "COMMENTS"],
         ]);
+        $company = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.company.get.json', [
+            'ID'  => '33838',
+            'select' => ["COMMENTS"],
+        ]);
+
         $comments = '';
 
         foreach ($contacts['result'] as  $contact) {
@@ -145,8 +150,11 @@ Route::post('/taskfields', function (Request $request) {
             foreach ($contact["PHONE"] as $phone) {
                 $contactPhones = $contactPhones .  $phone["VALUE"] . "   ";
             }
-            $comments = $comments . "<p>" . $contact["NAME"] . "   " . $contact["SECOND_NAME"] . "   " . $contact["SECOND_NAME"]   .  $contactPhones . "</p>";
+            $comments = $comments . "<p>" . $contact["NAME"] . " " . $contact["SECOND_NAME"] . " " . $contact["SECOND_NAME"] . "  "  .  $contactPhones . "</p>";
         }
+
+        $comments = $comments . '<p>' . $company['result']['COMMENTS'] . '</p>';
+
         $newTask = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
             'fields' => [
                 'TITLE' => 'Холодный обзвон  ',
