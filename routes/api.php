@@ -114,17 +114,20 @@ Route::post('/task', function (Request $request) {
         ]);
     }
 });
+
+
+
 Route::post('/taskfields', function (Request $request) {
 
     $domain = env('APRIL_BITRIX_DOMAIN');
     $secret = env('APRIL_WEB_HOOK');
     $restVersion = env('APRIL_BITRIX_REST_VERSION');
 
-    Log::info('Environment Variables', [
-        'BITRIX_DOMAIN' => $domain,
-        'BITRIX_REST_VERSION' => $restVersion,
-        'WEB_HOOK' => $secret
-    ]);
+    // Log::info('Environment Variables', [
+    //     'BITRIX_DOMAIN' => $domain,
+    //     'BITRIX_REST_VERSION' => $restVersion,
+    //     'WEB_HOOK' => $secret
+    // ]);
 
 
     try {
@@ -133,7 +136,22 @@ Route::post('/taskfields', function (Request $request) {
                 'COMPANY_ID' => '33838',
                 
             ],
-            'select'=> [ "ID", "NAME", "LAST_NAME", "TYPE_ID", "SOURCE_ID" ],
+            'select'=> [ "ID", "NAME", "LAST_NAME", "SECOND_NAME", "TYPE_ID", "SOURCE_ID" , "PHONE", "EMAIL", "COMMENTS"],
+        ]);
+        $comments = '';
+        foreach ($contacts['result'] as  $contact) {
+            $comments += "<p>".$contact["NAME"] ."</p>" . "<p>".$contact["SECOND_NAME"] ."</p>"."<p>".$contact["PHONE"] ."</p>" . "<p>".$contact["EMAIL"] ."</p>"."<p>".$contact["COMMENTS"] ."</p>";
+        }
+        $newTask = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
+            'fields' => [
+                'TITLE' => 'Холодный обзвон  ' ,
+                'RESPONSIBLE_ID' => 1,
+                'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
+                'CHANGED_BY' => 1, //- постановщик;
+                'DESCRIPTION' => $comments, 
+
+                'ALLOW_CHANGE_DEADLINE' => 'N'
+            ]
         ]);
         // $listsfields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/lists.field.get.json', [
         //     'IBLOCK_TYPE_ID' => 'lists',
@@ -156,7 +174,7 @@ Route::post('/taskfields', function (Request $request) {
         // Log::info('TASK_FIELDS ', ['fields ' => $getFields]);
       
         return  response([
-            'result' => ['contacts' => $contacts['result']],
+            'result' => ['contacts' => $contacts['result'], 'newTask' => $contacts['newTask']],
             'message' => 'success'
         ]);
     } catch (\Throwable $th) {
