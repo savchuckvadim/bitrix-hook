@@ -146,7 +146,7 @@ Route::post('/taskfields', function (Request $request) {
         // Log::info('TASK_FIELDS ', ['fields ' => $getFields]);
         // Возвращаем ответ как ответ сервера Laravel
         return  response([
-            'result' => ['response' => $response['result'], 'listsfields' => $listsfields],
+            'result' => ['response' => $response['result'], 'listsfields' => $listsfields['result']],
             'message' => 'success'
         ]);
     } catch (\Throwable $th) {
