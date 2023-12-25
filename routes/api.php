@@ -139,9 +139,9 @@ Route::post('/taskfields', function (Request $request) {
             'select'=> [ "ID", "NAME", "LAST_NAME", "SECOND_NAME", "TYPE_ID", "SOURCE_ID" , "PHONE", "EMAIL", "COMMENTS"],
         ]);
         $comments = '';
-        foreach ($contacts['result'] as  $contact) {
-            $comments += "<p>".$contact["NAME"] ."</p>" . "<p>".$contact["SECOND_NAME"] ."</p>"."<p>".$contact["PHONE"] ."</p>" . "<p>".$contact["EMAIL"] ."</p>"."<p>".$contact["COMMENTS"] ."</p>";
-        }
+        // foreach ($contacts['result'] as  $contact) {
+        //     $comments += "<p>".$contact["NAME"] ."</p>" . "<p>".$contact["SECOND_NAME"] ."</p>"."<p>".$contact["PHONE"] ."</p>" . "<p>".$contact["EMAIL"] ."</p>"."<p>".$contact["COMMENTS"] ."</p>";
+        // }
         $newTask = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
             'fields' => [
                 'TITLE' => 'Холодный обзвон  ' ,
@@ -174,7 +174,7 @@ Route::post('/taskfields', function (Request $request) {
         // Log::info('TASK_FIELDS ', ['fields ' => $getFields]);
       
         return  response([
-            'result' => ['contacts' => $contacts['result'], 'newTask' => $contacts['newTask']],
+            'result' => ['contacts' => $contacts['result'], 'newTask' => $newTask['result']],
             'message' => 'success'
         ]);
     } catch (\Throwable $th) {
