@@ -126,7 +126,7 @@ Route::post('/taskfields', function (Request $request) {
     try {
 
 
-        $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/task.commentitem.getmanifest.json');
+        $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/voximplant.statistic.get.json');
         Log::info('response ', ['response ' => $response]);
         $getFields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.getFields.json', []);
         Log::info('TASK_FIELDS ', ['fields ' => $getFields]);
@@ -145,6 +145,41 @@ Route::post('/taskfields', function (Request $request) {
         ]);
     }
 });
+// Route::post('/taskfields', function (Request $request) {
+
+//     $domain = env('BITRIX_DOMAIN');
+//     $secret = env('WEB_HOOK');
+//     $restVersion = env('BITRIX_REST_VERSION');
+
+//     Log::info('Environment Variables', [
+//         'BITRIX_DOMAIN' => $domain,
+//         'BITRIX_REST_VERSION' => $restVersion,
+//         'WEB_HOOK' => $secret
+//     ]);
+
+
+//     try {
+
+
+//         $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/task.commentitem.getmanifest.json');
+//         Log::info('response ', ['response ' => $response]);
+//         $getFields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.getFields.json', []);
+//         Log::info('TASK_FIELDS ', ['fields ' => $getFields]);
+//         // Возвращаем ответ как ответ сервера Laravel
+//         return $response;
+//     } catch (\Throwable $th) {
+//         Log::error('Exception caught', [
+//             'message'   => $th->getMessage(),
+//             'file'      => $th->getFile(),
+//             'line'      => $th->getLine(),
+//             'trace'     => $th->getTraceAsString(),
+//         ]);
+//         return response([
+//             'result' => 'error',
+//             'message' => $th->getMessage()
+//         ]);
+//     }
+// });
 
 Route::post('/smart', function (Request $request) {
 
