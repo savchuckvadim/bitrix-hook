@@ -143,7 +143,7 @@ Route::post('/taskfields', function (Request $request) {
         foreach ($contacts['result'] as  $contact) {
             $contactPhones = '';
             foreach ($contact["PHONE"] as $phone) {
-                $contactPhones += "<p> " . $phone["VALUE"] . " </p>";
+                $contactPhones = $contactPhones . " <p> " . $phone["VALUE"] . " </p>";
             }
             $comments = $comments . "<p>" . $contact["NAME"] . "</p>" . "<p>" . $contact["SECOND_NAME"] . "</p>" . "<p>" . $contactPhones . "</p>" . "<p>" . $contact["EMAIL"] . "</p>" . "<p>" . $contact["COMMENTS"] . "</p>";
         }
