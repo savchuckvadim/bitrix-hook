@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\APIController;
 use App\Http\Controllers\APIOnlineController;
+use App\Http\Controllers\PortalController;
 use App\Http\Controllers\ReactAppController;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
@@ -77,10 +78,42 @@ Route::post('/task', function (Request $request) {
     Log::info('novosibirskTime', ['novosibirskTime' => $novosibirskTime]);
     Log::info('moscowTime', ['moscowTime' => $moscowTime]);
 
-
+   
 
 
     try {
+        $portal = PortalController::getPortal($domain);
+        Log::info('PORTAL_TEST ', ['portal ' => $portal]);
+        
+        $contacts = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.contact.list.json', [
+            'FILTER' => [
+                'COMPANY_ID' => $company_id,
+    
+            ],
+            'select' => ["ID", "NAME", "LAST_NAME", "SECOND_NAME", "TYPE_ID", "SOURCE_ID", "PHONE", "EMAIL", "COMMENTS"],
+        ]);
+        $company = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.company.get.json', [
+            'ID'  => $company_id,
+            'select' => ["TITLE"],
+        ]);
+    
+        $contactsString = '';
+    
+        foreach ($contacts['result'] as  $contact) {
+            $contactPhones = '';
+            foreach ($contact["PHONE"] as $phone) {
+                $contactPhones = $contactPhones .  $phone["VALUE"] . "   ";
+            }
+            $contactsString = $contactsString . "<p>" . $contact["NAME"] . " " . $contact["SECOND_NAME"] . " " . $contact["SECOND_NAME"] . "  "  .  $contactPhones . "</p>";
+        }
+    
+        $companyTitleString = $company['result']['TITLE'];
+        $description =  '<p>' . $companyTitleString . '</p>' . '<p> Контакты компании: </p>' . $contactsString;
+
+
+
+
+
 
 
         $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
@@ -93,7 +126,8 @@ Route::post('/task', function (Request $request) {
                 'CREATED_DATE' => $nowDate, // - дата создания;
                 'DEADLINE' => $moscowTime, //- крайний срок;
                 'UF_CRM_TASK' => ['T9c_' . $crm],
-                'ALLOW_CHANGE_DEADLINE' => 'N'
+                'ALLOW_CHANGE_DEADLINE' => 'N',
+                'DESCRIPTION' => $description
             ]
         ]);
         Log::info('response ', ['response ' => $response]);
@@ -131,63 +165,12 @@ Route::post('/taskfields', function (Request $request) {
 
 
     try {
-        $contacts = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.contact.list.json', [
-            'FILTER' => [
-                'COMPANY_ID' => '33838',
 
-            ],
-            'select' => ["ID", "NAME", "LAST_NAME", "SECOND_NAME", "TYPE_ID", "SOURCE_ID", "PHONE", "EMAIL", "COMMENTS"],
-        ]);
-        $company = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.company.get.json', [
-            'ID'  => '33838',
-            'select' => ["TITLE"],
-        ]);
-
-        $comments = '';
-
-        foreach ($contacts['result'] as  $contact) {
-            $contactPhones = '';
-            foreach ($contact["PHONE"] as $phone) {
-                $contactPhones = $contactPhones .  $phone["VALUE"] . "   ";
-            }
-            $comments = $comments . "<p>" . $contact["NAME"] . " " . $contact["SECOND_NAME"] . " " . $contact["SECOND_NAME"] . "  "  .  $contactPhones . "</p>";
-        }
-
-        $comments =  '<p>' . $company['result']['TITLE'] . '</p>' . $comments;
-
-        $newTask = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
-            'fields' => [
-                'TITLE' => 'Холодный обзвон  ',
-                'RESPONSIBLE_ID' => 1,
-                'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
-                'CHANGED_BY' => 1, //- постановщик;
-                'DESCRIPTION' => $comments,
-
-                'ALLOW_CHANGE_DEADLINE' => 'N'
-            ]
-        ]);
-        // $listsfields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/lists.field.get.json', [
-        //     'IBLOCK_TYPE_ID' => 'lists',
-        //     'IBLOCK_ID' => '86',
-
-        // ]);
-        // Log::info('listsfields ', ['listsfields ' => $listsfields['result']]);
-        // $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/lists.element.get.json', [
-        //     'IBLOCK_TYPE_ID' => 'lists',
-        //     'IBLOCK_ID' => '86',
-        //     'FILTER' => [
-        //         '>=DATE_CREATE' => '01.01.2023 00:00:00',
-        //         '<=DATE_CREATE' => '01.01.2024 23:59:59',
-        //     ]
-
-
-        // ]);
-        Log::info('response ', ['contacts ' => $contacts]);
-        // $getFields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.getFields.json', []);
-        // Log::info('TASK_FIELDS ', ['fields ' => $getFields]);
+        $getFields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.getFields.json', []);
+        Log::info('TASK_FIELDS ', ['fields ' => $getFields['result']]);
 
         return  response([
-            'result' => ['contacts' => $contacts['result'], 'newTask' => $newTask['result']],
+            'result' => ['task fields' => $getFields['result']],
             'message' => 'success'
         ]);
     } catch (\Throwable $th) {

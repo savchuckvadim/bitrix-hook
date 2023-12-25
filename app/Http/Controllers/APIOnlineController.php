@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 const BASE_URL = 'https://april-online.ru/api';
 class APIOnlineController extends Controller
 {
-    public static function online($domain, $method, $endpoint, $requestData, $dataname)
+    public static function online($method, $endpoint, $requestData, $dataname)
     {
         try {
             $portalResponse = Http::withHeaders([
@@ -54,5 +54,14 @@ class APIOnlineController extends Controller
                 'message' => $th->getMessage()
             ];
         }
+    }
+
+    public static function getResponse($resultCode, $message, $data){
+
+        return response([
+            'resultCode' => $resultCode,
+            'message' => $message,
+            'data' => $data
+        ]);
     }
 }
