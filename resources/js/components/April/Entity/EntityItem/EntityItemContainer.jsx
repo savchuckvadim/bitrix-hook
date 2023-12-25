@@ -69,11 +69,11 @@ const EntityItemContainer = ({
             ...dataInitialValues
         },
 
-
+        
         onSubmit: (values) => {
             console.log("values", values);
 
-            debugger
+
 
             setOrupdateEntityItem(router.navigate, router.location.pathname, itemUrl, itemUrl, values)
             console.log("values", values);

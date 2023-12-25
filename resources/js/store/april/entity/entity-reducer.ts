@@ -3,7 +3,7 @@ import { AppDispatchType, AppStateType, InferActionsTypes } from "../.."
 import { onlineAPI } from "../../../helpers/april-online/online-api"
 import { googleAPI } from "../../../helpers/google/google-api"
 import { API_METHOD } from "../../../types/app/app-type"
-import { CreatingEntityType, Entity, EntityField, EntityStateType, InitialEntity, InitialEntityData, TemplateAddData, TemplateInitialAddData } from "../../../types/entity/entity-types"
+import { CreatingEntityType, Entity, EntityField, EntityFormField, EntityStateType, InitialEntity, InitialEntityData, InitialEntityGroup, RelationState, TemplateAddData, TemplateInitialAddData } from "../../../types/entity/entity-types"
 import { Template } from "../../../types/entity/template-types"
 import { tfieldsSetToFirebase } from "../../../utils/service-utils/service-utils"
 import { getDataForSetTField, getDataForSetTemplate, getInitialTemplateData, getInitialTemplateFieldData } from "../../../utils/template-utils"
@@ -30,7 +30,10 @@ const initialState = {
     relation: {
         isCreating: false as boolean,
         entity: null as null | any,
-        formData: null as null | any
+        formData: null as null | any,
+        parrentGroupName: null as string | null,
+        parrentFieldId: null as number | null,
+
     }
     // fields: [],
 
@@ -58,8 +61,8 @@ export const entityActions = {
         (status: boolean, entity: null | any, groupName: string, fieldId: number) =>
             ({ type: 'entity/SET_CREATING_RELATION', status, entity, groupName, fieldId } as const),
     setCreatedRelation:
-        (entity: null | any) =>
-            ({ type: 'entity/SET_CREATED_RELATION', status, entity } as const),
+        (group: InitialEntityGroup) =>
+            ({ type: 'entity/SET_CREATED_RELATION', group } as const),
 
 
 }
@@ -225,24 +228,71 @@ export const deleteEntityItem = (history: (url: string) => void, url: string, en
 //relation
 export const getInitialRelationEntity = (groupName: string, fieldId: number | null, relationEntityId: number | null) =>
     async (dispatch: AppDispatchType, getState: GetStateType) => {
-
+        
         const state = getState()
         const entity = state.entity as EntityStateType
         const formData = entity.creating.formData
         const searchingGroup = formData && formData.find(group => group.groupName === groupName)
 
-
+        
         if (searchingGroup) {
-            const searchingItem = searchingGroup.fields.find(field => field.id === fieldId)
-            if (searchingItem && fieldId) {
+            const searchingItem = searchingGroup.initialField
+            
+            if ((searchingItem && fieldId) || (searchingItem && fieldId === 0)) {
+                
                 dispatch(entityActions.setCreatingRelation(true, searchingItem, groupName, fieldId))
             }
         }
 
     }
-export const setRelation = (fieldId: number, relationEntity: InitialEntity) =>
+export const setRelation = (relation: RelationState) =>
     async (dispatch: AppDispatchType, getState: GetStateType) => {
-        debugger
+        const entityState = getState().entity as EntityStateType
+        const creatingEntity = entityState.creating
+        
+        if (creatingEntity && creatingEntity.formData) {
+            if (relation && relation.parrentGroupName &&
+                (relation.parrentFieldId || relation.parrentFieldId === 0)) {
+                
+                let updatedFields = [] as Array<EntityFormField | any>
+                const updatedGroup = {
+                    ...creatingEntity,
+                    formData: creatingEntity.formData.map((group: InitialEntityGroup) => {
+                        if (group.groupName === relation.parrentGroupName) {
+                            let count = 0
+                            updatedFields = group.fields
+                            if (group.fields.find(field => field.id === relation.parrentFieldId)) {
+                                updatedFields = group.fields.map(field => {
+                                    if (field.id === relation.parrentFieldId) {
+                                        return relation
+                                    } else {
+                                        return field
+                                    }
+                                })
+
+
+                            } else {
+                                updatedFields.push(relation)
+                            }
+
+                        }
+                        return {
+                            ...group,
+
+                            fields: updatedFields
+                        }
+                    }
+                    )
+                } 
+                //@ts-ignore
+                dispatch(entityActions.setCreatedRelation(updatedGroup))
+
+
+                
+            }
+        }
+
+
     }
 
 //entity old
@@ -370,7 +420,7 @@ const entity = (state: EntityStateType = initialState, action: EntityActionsType
                 },
             }
         case 'entity/SET_CREATING_RELATION':
-
+            
             if (action.entity && action.entity.fields) {
                 const entiyFields = action.entity.fields.length > 0
                     ? action.entity.fields
@@ -387,7 +437,7 @@ const entity = (state: EntityStateType = initialState, action: EntityActionsType
 
                         },
                         formData: entiyFields,
-                        parrentFfieldId: action.fieldId,
+                        parrentFieldId: action.fieldId,
                         parrentGroupName: action.groupName
 
                     },
@@ -396,26 +446,46 @@ const entity = (state: EntityStateType = initialState, action: EntityActionsType
 
         case 'entity/SET_CREATED_RELATION':
 
-            if (action.entity && action.entity.fields) {
-                const entiyFields = action.entity.fields.length > 0
-                    ? action.entity.fields
-                    : action.entity.initialValue
+            return {
+                ...state,
+                creating: {
+                    ...state.creating,
+                    formData: state.creating.formData?.map(group =>
+                        group.groupName !== action.group.groupName
+                            ? group
+                            : action.group
+                    )
+                },
+                relation: {
+                    ...state.relation,
+                    isCreating: false as boolean,
+                    entity: null as null | any,
+                    formData: null as null | any,
+                    parrentGroupName: null as string | null,
+                    parrentFieldId: null as number | null,
 
-                return {
-                    ...state,
-                    relation: {
-                        ...state.relation,
-                        isCreating: action.status,
-                        entity: {
-                            ...action.entity,
-                            fields: entiyFields,
+                },
+            }
+        // if (action.entity && action.entity.fields) {
+        //     const entiyFields = action.entity.fields.length > 0
+        //         ? action.entity.fields
+        //         : action.entity.initialValue
 
-                        },
-                        formData: entiyFields,
+        //     return {
+        //         ...state,
+        //         relation: {
+        //             ...state.relation,
+        //             isCreating: action.status,
+        //             entity: {
+        //                 ...action.entity,
+        //                 fields: entiyFields,
 
-                    },
-                }
-            } else return state
+        //             },
+        //             formData: entiyFields,
+
+        //         },
+        //     }
+        // } else return state
 
         // case 'entity/SET_INITIALIZING_ADD':
         //     

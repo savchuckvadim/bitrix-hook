@@ -80,7 +80,7 @@ const RelationAdd = ({
                 <button
                     type="button"
                     className="btn btn-primary "
-                    onClick={() => setRelation()}
+                    onClick={() => setRelation(relation)}
                 >
                     Save changes
                 </button>

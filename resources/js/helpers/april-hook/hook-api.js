@@ -105,6 +105,7 @@ export const hookAPI = {
 
             return result
         } catch (error) {
+            
             console.log('error')
             
             return result

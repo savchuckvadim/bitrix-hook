@@ -40,13 +40,17 @@ const EntityItemAdd = ({
     const getItems = (creatingEntity) => {
         let result = []
 
-        creatingEntity.forEach(group => {
+        creatingEntity.forEach((group, index) => {
+
+            const items = group.type === 'entities' && group.fields.length < 1
+                ? [group.initialField]
+                : group.fields
 
             result.push(
                 <div>
                     <h4>{group.groupName}</h4>
 
-                    {group.fields.map(field => {
+                    {items.map(field => {
                         return (
                             <Row className="mb-4">
                                 <Label
@@ -56,6 +60,7 @@ const EntityItemAdd = ({
                                     <Col sm={12}>
                                         <EntityItemDynamicInput
                                             field={field}
+                                            fieldIndex={index}
                                             groupName={group.groupName}
                                             validation={validation}
                                             isRelation={isRelation}
@@ -78,7 +83,7 @@ const EntityItemAdd = ({
 
         return result
     }
-    console.log(validation.initialValues)
+    console.log(validation.values)
     const items = creating.formData && getItems(creating.formData)
     return (
         <React.Fragment>

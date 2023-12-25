@@ -10,17 +10,19 @@ type DynamicInputProps = {
     groupName: string
     relationIndex: number
     isRelation: boolean
+    fieldIndex: number
     getInitialRelationEntity: GetInitialRelationFunction
 
 }
-const EntityItemDynamicInput = ({ field, groupName, validation, isRelation, relationIndex, getInitialRelationEntity }: DynamicInputProps) => {
+const EntityItemDynamicInput = ({ field, fieldIndex, groupName, validation, isRelation, relationIndex, getInitialRelationEntity }: DynamicInputProps) => {
 
     // string | text | data | img | entity
     let input = <div></div>
     let width = 12
     const [singlebtn, setSinglebtn] = useState(false)
-    const getRelationFieldName = (name: string) => `field.${name}`
-    const fieldFormName = isRelation ? getRelationFieldName(field['apiName']) : field['apiName']
+    const getRelationFieldName = (name: string) => `field[${fieldIndex}].${name}`
+    const fieldFormName = (field.type === 'entity' || isRelation) ? getRelationFieldName(field['apiName']) : field['apiName']
+
     switch (field.type) {
 
         case 'string':
@@ -33,7 +35,7 @@ const EntityItemDynamicInput = ({ field, groupName, validation, isRelation, rela
                 name={fieldFormName}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
-                value={typeof field.initialValue == 'string' ? validation.values[field.initialValue] : ""}
+            // value={typeof field.initialValue == 'string' ? validation.values[field.initialValue] : ""}
 
             />
                 {field.isCanAddField && <Button

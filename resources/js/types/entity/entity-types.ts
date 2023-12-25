@@ -2,14 +2,15 @@ import { number, string } from "prop-types"
 import { Template } from "./template-types"
 
 export type GeneralEntity = {
-    id:number
-    [key:string]: any
+    id: number
+    [key: string]: any
 
 
 }
-export type InitialEntity ={
-    
+export type InitialEntity = {
+
 }
+
 export type TemplateInitialAddData = {
     domain: string
     type: 'offer' | 'invoice' | 'contract' | 'other'
@@ -22,7 +23,7 @@ export enum ENTITY_QUANTITY {
 
 }
 
-export type EntityField = {
+export type EntityField = { //template field
     id: number
     number: number
     items: Array<number> // TODO ItemType
@@ -68,10 +69,13 @@ export type InitialEntityGroup = {
     type: 'template' | 'portal'
     isCanAddField: boolean
     isCanDeleteField: boolean
-    fields: Array<EntityFormField>
+    fields: Array<EntityFormField | any>
     // fieldGroups?: Array<Array<EntityFormField>>
     // relations?: Array<EntityFormField>
     isRequired: boolean
+    initialField?:{
+        [key:string]:any
+    }
 
 }
 
@@ -109,10 +113,7 @@ export type EntityStateType = {
     type: null | 'entity' | 'entities'
     current: null | any,
     creating: CreatingEntityType
-    relation: {
-        isCreating: boolean,
-        entity: null | any
-    }
+    relation: RelationState
     // fields: [],
 }
 
@@ -123,4 +124,13 @@ export type CreatingEntityType = {
     isFetching: boolean,
     isHaveGroup: boolean,
 
+}
+
+export type RelationState = {
+    id: number
+    parrentGroupName: string | null
+    parrentFieldId: number | null
+    isCreating: boolean,
+    entity: null | GeneralEntity
+    formData: null | InitialEntityData
 }
