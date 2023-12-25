@@ -78,10 +78,10 @@ Route::post('/task', function (Request $request) {
     Log::info('moscowTime', ['moscowTime' => $moscowTime]);
 
 
-  
+
 
     try {
-      
+
 
         $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
             'fields' => [
@@ -134,21 +134,26 @@ Route::post('/taskfields', function (Request $request) {
         $contacts = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/crm.contact.list.json', [
             'FILTER' => [
                 'COMPANY_ID' => '33838',
-                
+
             ],
-            'select'=> [ "ID", "NAME", "LAST_NAME", "SECOND_NAME", "TYPE_ID", "SOURCE_ID" , "PHONE", "EMAIL", "COMMENTS"],
+            'select' => ["ID", "NAME", "LAST_NAME", "SECOND_NAME", "TYPE_ID", "SOURCE_ID", "PHONE", "EMAIL", "COMMENTS"],
         ]);
         $comments = '';
-        // foreach ($contacts['result'] as  $contact) {
-        //     $comments += "<p>".$contact["NAME"] ."</p>" . "<p>".$contact["SECOND_NAME"] ."</p>"."<p>".$contact["PHONE"] ."</p>" . "<p>".$contact["EMAIL"] ."</p>"."<p>".$contact["COMMENTS"] ."</p>";
-        // }
+
+        foreach ($contacts['result'] as  $contact) {
+            $contactPhones = '';
+            foreach ($contact["PHONE"] as $phone) {
+                $contactPhones += "<p> " . $phone["VALUE"] . " </p>";
+            }
+            $comments += "<p>" . $contact["NAME"] . "</p>" . "<p>" . $contact["SECOND_NAME"] . "</p>" . "<p>" . $contactPhones . "</p>" . "<p>" . $contact["EMAIL"] . "</p>" . "<p>" . $contact["COMMENTS"] . "</p>";
+        }
         $newTask = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
             'fields' => [
-                'TITLE' => 'Холодный обзвон  ' ,
+                'TITLE' => 'Холодный обзвон  ',
                 'RESPONSIBLE_ID' => 1,
                 'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
                 'CHANGED_BY' => 1, //- постановщик;
-                'DESCRIPTION' => $comments, 
+                'DESCRIPTION' => $comments,
 
                 'ALLOW_CHANGE_DEADLINE' => 'N'
             ]
@@ -172,9 +177,9 @@ Route::post('/taskfields', function (Request $request) {
         Log::info('response ', ['contacts ' => $contacts]);
         // $getFields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.getFields.json', []);
         // Log::info('TASK_FIELDS ', ['fields ' => $getFields]);
-      
+
         return  response([
-            'result' => ['contacts' => $contacts['result'], 'newTask' => $newTask['result']],
+            'result' => ['contacts' => $contacts['result'], 'newTask' => $newTask['newTask']],
             'message' => 'success'
         ]);
     } catch (\Throwable $th) {
@@ -263,7 +268,7 @@ Route::post('/lists', function (Request $request) {
 
         ]);
         Log::info('response ', ['response ' => $response]);
- 
+
         return  response([
             'result' => ['response' => $response['result'], 'listsfields' => $listsfields['result']],
             'message' => 'success'
