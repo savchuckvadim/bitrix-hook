@@ -128,8 +128,9 @@ Route::post('/taskfields', function (Request $request) {
         $listsfields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/lists.element.get.json', [
             'IBLOCK_TYPE_ID' => 'lists',
             'IBLOCK_ID' => '86',
-          
+
         ]);
+        Log::info('listsfields ', ['listsfields ' => $listsfields]);
         $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/lists.element.get.json', [
             'IBLOCK_TYPE_ID' => 'lists',
             'IBLOCK_ID' => '86',
@@ -141,10 +142,10 @@ Route::post('/taskfields', function (Request $request) {
 
         ]);
         Log::info('response ', ['response ' => $response]);
-        $getFields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.getFields.json', []);
-        Log::info('TASK_FIELDS ', ['fields ' => $getFields]);
+        // $getFields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.getFields.json', []);
+        // Log::info('TASK_FIELDS ', ['fields ' => $getFields]);
         // Возвращаем ответ как ответ сервера Laravel
-        return['response' => $response, 'listsfields' => $listsfields];
+        return ['response' => $response, 'listsfields' => $listsfields];
     } catch (\Throwable $th) {
         Log::error('Exception caught', [
             'message'   => $th->getMessage(),
