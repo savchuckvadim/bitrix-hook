@@ -153,7 +153,7 @@ Route::post('/taskfields', function (Request $request) {
             $comments = $comments . "<p>" . $contact["NAME"] . " " . $contact["SECOND_NAME"] . " " . $contact["SECOND_NAME"] . "  "  .  $contactPhones . "</p>";
         }
 
-        $comments = $comments . '<p>' . $company['result']['TITLE'] . '</p>';
+        $comments =  '<h2>' . $company['result']['TITLE'] . '</h2>' . $comments;
 
         $newTask = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.add.json', [
             'fields' => [
