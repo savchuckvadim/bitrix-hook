@@ -129,7 +129,7 @@ Route::post('/taskfields', function (Request $request) {
         $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/voximplant.statistic.get.json', [
             "FILTER" => [
                 ">CALL_DURATION" => 60,
-                ">CALL_START_DATE" => "2023-08-01T00:00:00+00:00",
+                ">CALL_START_DATE" => "2023-12-01T00:00:00+00:00",
                 // "<CALL_START_DATE" =>  "2024-08-23T00:00:00+00:00"
             ]
         ]);
