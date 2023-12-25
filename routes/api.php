@@ -179,7 +179,7 @@ Route::post('/taskfields', function (Request $request) {
         // Log::info('TASK_FIELDS ', ['fields ' => $getFields]);
 
         return  response([
-            'result' => ['contacts' => $contacts['result'], 'newTask' => $newTask['newTask']],
+            'result' => ['contacts' => $contacts['result'], 'newTask' => $newTask['result']],
             'message' => 'success'
         ]);
     } catch (\Throwable $th) {
