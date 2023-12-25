@@ -145,7 +145,10 @@ Route::post('/taskfields', function (Request $request) {
         // $getFields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.getFields.json', []);
         // Log::info('TASK_FIELDS ', ['fields ' => $getFields]);
         // Возвращаем ответ как ответ сервера Laravel
-        return ['response' => $response, 'listsfields' => $listsfields];
+        return  response([
+            'result' => ['response' => $response, 'listsfields' => $listsfields],
+            'message' => 'success'
+        ]);
     } catch (\Throwable $th) {
         Log::error('Exception caught', [
             'message'   => $th->getMessage(),
