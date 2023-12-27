@@ -202,22 +202,34 @@ class APIBitrixController extends Controller
         Log::info('portal', ['portal' => $portal]);
         try {
 
+            //CATEGORIES
             $webhookRestKey = $portal['data']['C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
 
-
-            //company and contacts
-            // $methodContacts = '/crm.contact.list.json';
             $methodSmart = '/crm.category.list.json';
             $url = $hook . $methodSmart;
             $entityId = env('APRIL_BITRIX_SMART_MAIN_ID');
-            $hookData = ['entityTypeId' => $entityId];
+            $hookCategoriesData = ['entityTypeId' => $entityId];
 
             // Возвращение ответа клиенту в формате JSON
 
-            $smartCategoriesResponse = Http::get($url, $hookData);
+            $smartCategoriesResponse = Http::get($url, $hookCategoriesData);
             $bitrixResponse = $smartCategoriesResponse->json();
             Log::info('SUCCESS RESPONSE SMART CATEGORIES', ['categories' => $bitrixResponse]);
+            $categories = $smartCategoriesResponse['result']['categories'];
+
+            //STAGES
+
+            foreach ($categories as $category) {
+                Log::info('category', ['category' => $category]);
+                $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+                $stageMethod = '/crm.status.list.json';
+                $url = $hook . $stageMethod;
+                $hookStagesData = ['entityTypeId' => $entityId, 'categoryId' => $category['id']];
+                Log::info('hookStagesData', ['hookStagesData' => $hookStagesData]);
+                $stagesResponse = Http::get($url, $hookStagesData);
+                Log::info('stagesResponse', ['stagesResponse' => $stagesResponse]);
+            }
 
 
             return APIOnlineController::getResponse(0, 'success', ['Smart-Categories' => $bitrixResponse]);
