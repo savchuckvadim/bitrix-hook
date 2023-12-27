@@ -50,7 +50,7 @@ Route::post('/task', function (Request $request) {
     $createdId = $partsCreated[1];
     $responsibleId = $partsResponsible[1];
 
-    
+
     $auth = $request['auth'];
     $domain = $auth['domain'];
     $companyId = $request['company_id'];
@@ -319,6 +319,14 @@ Route::post('/smart/categories', function (Request $request) {
     return APIBitrixController::getSmartStages($domain);
 });
 
+Route::post('/install/smart/', function (Request $request) {
+
+    $auth = $request['auth'];
+    $domain = $auth['domain'];
+
+
+    return APIBitrixController::installSmart($domain);
+});
 
 
 

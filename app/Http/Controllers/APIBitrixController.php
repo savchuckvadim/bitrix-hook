@@ -267,4 +267,57 @@ class APIBitrixController extends Controller
             return APIOnlineController::getResponse(1, $th->getMessage(), null);
         }
     }
+    public static function installSmart(
+        $domain
+    ) {
+        $portal = PortalController::getPortal($domain);
+        Log::info('portal', ['portal' => $portal]);
+        try {
+
+            //CATEGORIES
+            $webhookRestKey = $portal['data']['C_REST_WEB_HOOK_URL'];
+            $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+
+            $methodSmart = '/crm.type.add.json';
+            $url = $hook . $methodSmart;
+            // $entityId = env('APRIL_BITRIX_SMART_MAIN_ID');
+            $hookCategoriesData = [
+                'fields' => [
+                    'id' => 134,
+                    "title" => "TEST Смарт-процесс",
+                    "entityTypeId" => 134,
+                    'code' => 'april-garant',
+                    "isCategoriesEnabled" => "Y",
+                    "isStagesEnabled" => "Y",
+                    "isClientEnabled" => "Y",
+                    "isUseInUserfieldEnabled" => "Y",
+                    "isLinkWithProductsEnabled" => "Y",
+                    "isAutomationEnabled" => "Y",
+                    "isBizProcEnabled" => "Y",
+                ]
+            ];
+
+            // Возвращение ответа клиенту в формате JSON
+
+            $smartCategoriesResponse = Http::get($url, $hookCategoriesData);
+            $bitrixResponse = $smartCategoriesResponse->json();
+            Log::info('SUCCESS SMART INSTALL', ['categories' => $bitrixResponse]);
+          
+
+            //STAGES
+
+
+
+
+            return APIOnlineController::getResponse(0, 'success', ['Smart-Categories' => $bitrixResponse]);
+        } catch (\Throwable $th) {
+            Log::error('ERROR: Exception caught', [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ]);
+            return APIOnlineController::getResponse(1, $th->getMessage(), null);
+        }
+    }
 }
