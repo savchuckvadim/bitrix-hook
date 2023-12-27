@@ -270,6 +270,11 @@ class APIBitrixController extends Controller
     public static function installSmart(
         $domain
     ) {
+        //1) создает смарт процесс и сам задает  "entityTypeId" => 134,
+
+        //3) записывает стадии и направления ввиде одного объекта json связь portal-smart
+
+
         $portal = PortalController::getPortal($domain);
         Log::info('portal', ['portal' => $portal]);
         try {
@@ -278,10 +283,10 @@ class APIBitrixController extends Controller
             $webhookRestKey = $portal['data']['C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
 
-            $methodSmart = '/crm.type.add.json';
-            $url = $hook . $methodSmart;
+            $methodSmartInstall = '/crm.type.add.json';
+            $url = $hook . $methodSmartInstall;
             // $entityId = env('APRIL_BITRIX_SMART_MAIN_ID');
-            $hookCategoriesData = [
+            $hookSmartInstallData = [
                 'fields' => [
                     'id' => 134,
                     "title" => "TEST Смарт-процесс",
@@ -299,11 +304,32 @@ class APIBitrixController extends Controller
 
             // Возвращение ответа клиенту в формате JSON
 
-            $smartCategoriesResponse = Http::get($url, $hookCategoriesData);
-            $bitrixResponse = $smartCategoriesResponse->json();
-            Log::info('SUCCESS SMART INSTALL', ['categories' => $bitrixResponse]);
-          
+            $smartInstallResponse = Http::get($url, $hookSmartInstallData);
+            //2) использует "entityTypeId" чтобы создать направления и стадии
+            $methodCategoryInstall = '/crm.type.add.json';
+            $url = $hook . $methodCategoryInstall;
+            $hookCategoriesData1  =
+                [
+                    "entityTypeId" => 134,
+                    'name' => 'Холодный обзвон',
+                    "isDefault"=> "N"
+                ];
+                $hookCategoriesData2  =
+                [
+                    "entityTypeId" => 134,
+                    'name' => 'Продажи',
+                    "isDefault"=> "Y"
+                ];
+            $smartCategoriesResponse1 = Http::get($url, $hookCategoriesData1);
+            $smartCategoriesResponse2 = Http::get($url, $hookCategoriesData2);
 
+
+            $bitrixResponse = $smartInstallResponse->json();
+            $bitrixResponseCategory1 = $smartCategoriesResponse1->json();
+            $bitrixResponseCategory2 = $smartCategoriesResponse2->json();
+            Log::info('SUCCESS SMART INSTALL', ['smart' => $bitrixResponse]);
+            Log::info('SUCCESS CATEGORY INSTALL', ['categories1' => $bitrixResponseCategory1]);
+            Log::info('SUCCESS CATEGORY INSTALL', ['categories2' => $bitrixResponseCategory2]);
             //STAGES
 
 
