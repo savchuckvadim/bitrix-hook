@@ -251,7 +251,7 @@ class APIBitrixController extends Controller
                         'nameInit' => $stage['NAME_INIT'],
 
                     ];
-                    Log::info('STAGE', [$stage['NAME_INIT'] => $resultstageData]);
+                    Log::info('STAGE', [$stage['NAME'] => $stage]);
                 }
             }
 
