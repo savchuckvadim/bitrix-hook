@@ -367,7 +367,7 @@ class APIBitrixController extends Controller
                 $hookStagesDataCalls  =
                     [
                        
-
+                        'statusId' => 'DT134_'. $category1Id,
                         'fields' => [
                             'statusId' => 'DT134_'. $category1Id,
                             "entityId" => 'DYNAMIC_134_STAGE_' . $category1Id,
