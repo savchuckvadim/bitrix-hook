@@ -306,7 +306,7 @@ class APIBitrixController extends Controller
 
             $smartInstallResponse = Http::get($url, $hookSmartInstallData);
             //2) использует "entityTypeId" чтобы создать направления и стадии
-            $methodCategoryInstall = '/crm.type.add.json';
+            $methodCategoryInstall = '/crm.category.add.json';
             $url = $hook . $methodCategoryInstall;
             $hookCategoriesData1  =
                 [
