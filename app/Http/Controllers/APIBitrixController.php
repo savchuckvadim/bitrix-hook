@@ -311,16 +311,18 @@ class APIBitrixController extends Controller
             $hookCategoriesData1  =
                 [
                     "entityTypeId" => 134,
+                    'NAME' => 'Холодный обзвон',
                     'fields' => [
-                        'NAME' => 'Холодный обзвон',
+                       
                         "isDefault" => "N"
                     ]
                 ];
             $hookCategoriesData2  =
                 [
                     "entityTypeId" => 134,
+                    'name' => 'Продажи',
                     'fields' => [
-                        'NAME' => 'Продажи',
+                     
                         "isDefault" => "Y"
                     ]
                 ];
