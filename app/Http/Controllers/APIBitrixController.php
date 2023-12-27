@@ -208,7 +208,8 @@ class APIBitrixController extends Controller
 
             $methodSmart = '/crm.category.list.json';
             $url = $hook . $methodSmart;
-            $entityId = env('APRIL_BITRIX_SMART_MAIN_ID');
+            // $entityId = env('APRIL_BITRIX_SMART_MAIN_ID');
+            $entityId = 134;
             $hookCategoriesData = ['entityTypeId' => $entityId];
 
             // Возвращение ответа клиенту в формате JSON
@@ -368,6 +369,9 @@ class APIBitrixController extends Controller
             $methodStageInstall = '/crm.status.add.json';
             $url = $hook . $methodStageInstall;
             foreach ($callStages as $index => $callStage) {
+
+                //TODO: try get stage if true -> update stage else -> create
+
                 $hookStagesDataCalls  =
                     [
 
