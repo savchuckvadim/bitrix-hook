@@ -24,7 +24,7 @@ class APIBitrixController extends Controller
             $webhookRestKey = $portal[' C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
 
-
+            Log::info('portal', ['portal' => $portal]);
             //company and contacts
             $methodContacts = '/crm.contact.list.json';
             $methodCompany = '/crm.company.get.json';
