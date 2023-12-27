@@ -343,26 +343,47 @@ class APIBitrixController extends Controller
             Log::info('SUCCESS CATEGORY INSTALL', ['category2Id' => $category2Id]);
             //STAGES
             //2) использует "entityTypeId" и category1Id  чтобы создать стадии
+            $currentstagesMethod = '/crm.status.list.json';
+            $url = $hook . $currentstagesMethod;
+            $hookCurrentStagesData = [
+                'entityTypeId' => 134,
+                'entityId' => 'STATUS',
+                'categoryId' => $category1Id,
+                'filter' => ['ENTITY_ID' => 'DYNAMIC_' . 134 . '_STAGE_' . $category1Id]
+
+            ];
+
+
+            Log::info('CURRENT STAGES GET 134', ['currentStagesResponse' => $hookCurrentStagesData]);
+            $currentStagesResponse = Http::get($url, $hookCurrentStagesData);
+            $currentStages = $currentStagesResponse['result'];
+            Log::info('CURRENT STAGES GET 134', ['currentStages' => $currentStages]);
+
+            
             $callStages = [
                 [
                     'title' => 'Создан',
                     'name' => 'NEW',
                     'color' => '',
+                    'sort' => 10,
                 ],
                 [
                     'title' => 'Запланирован',
                     'name' => 'PLAN',
                     'color' => '',
+                    'sort' => 20,
                 ],
                 [
                     'title' => 'Просрочен',
                     'name' => 'PREPARATION',
                     'color' => '',
+                    'sort' => 30,
                 ],
                 [
                     'title' => 'Завершен без результата',
                     'name' => 'WITHOUT_RESULT',
                     'color' => '',
+                    'sort' => 40,
                 ],
 
             ];
