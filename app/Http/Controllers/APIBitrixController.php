@@ -305,7 +305,7 @@ class APIBitrixController extends Controller
             // Возвращение ответа клиенту в формате JSON
 
             $smartInstallResponse = Http::get($url, $hookSmartInstallData);
-            //2) использует "entityTypeId" чтобы создать направления и стадии
+            //2) использует "entityTypeId" чтобы создать направления
             $methodCategoryInstall = '/crm.category.add.json';
             $url = $hook . $methodCategoryInstall;
             $hookCategoriesData1  =
@@ -341,6 +341,42 @@ class APIBitrixController extends Controller
             Log::info('SUCCESS CATEGORY INSTALL', ['category1Id' => $category1Id]);
             Log::info('SUCCESS CATEGORY INSTALL', ['category2Id' => $category2Id]);
             //STAGES
+            //2) использует "entityTypeId" и category1Id  чтобы создать стадии
+            $callStages = [
+                [
+                    'title' => 'Создан',
+                    'color' => '',
+                ],
+                [
+                    'title' => 'Запланирован',
+                    'color' => '',
+                ],
+                [
+                    'title' => 'Просрочен',
+                    'color' => '',
+                ],
+                [
+                    'title' => 'Завершен без результата',
+                    'color' => '',
+                ],
+
+            ];
+            $methodCategoryInstall = '/crm.status.add.json';
+            $url = $hook . $methodCategoryInstall;
+            foreach ($callStages as $callStage) {
+                $hookStagesDataCalls  =
+                    [
+                        "entityTypeId" => ' DYNAMIC_134_STAGE_' . $category1Id,
+
+                        'fields' => [
+                            'name' => $callStage['title'],
+                            'title' => $callStage['title'],
+                            "isDefault" => $callStage['title'] === 'Создан' ? "Y" : "N"
+                        ]
+                    ];
+
+                    $smartCategoriesResponse2 = Http::get($url, $hookStagesDataCalls);
+            }
 
 
 
