@@ -361,21 +361,24 @@ class APIBitrixController extends Controller
                 ],
 
             ];
-            $methodCategoryInstall = '/crm.status.add.json';
-            $url = $hook . $methodCategoryInstall;
+            $methodStageInstall = '/crm.status.add.json';
+            $url = $hook . $methodStageInstall;
             foreach ($callStages as $callStage) {
                 $hookStagesDataCalls  =
                     [
-                        "entityTypeId" => ' DYNAMIC_134_STAGE_' . $category1Id,
+                       
 
                         'fields' => [
+                            "entityId" => 'DYNAMIC_134_STAGE_' . $category1Id,
                             'name' => $callStage['title'],
                             'title' => $callStage['title'],
-                            "isDefault" => $callStage['title'] === 'Создан' ? "Y" : "N"
+                            // "isDefault" => $callStage['title'] === 'Создан' ? "Y" : "N"
                         ]
                     ];
 
-                    $smartCategoriesResponse2 = Http::get($url, $hookStagesDataCalls);
+                    $smartStageResponse = Http::get($url, $hookStagesDataCalls);
+                    $bitrixResponseStage = $smartStageResponse->json();
+                    Log::info('SUCCESS SMART INSTALL', ['stage_response' => $bitrixResponseStage]);
             }
 
 
