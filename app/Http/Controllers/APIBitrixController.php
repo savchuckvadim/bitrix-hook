@@ -359,7 +359,8 @@ class APIBitrixController extends Controller
             $currentStages = $currentStagesResponse['result'];
             Log::info('CURRENT STAGES GET 134', ['currentStages' => $currentStages]);
 
-            
+
+
             $callStages = [
                 [
                     'title' => 'Создан',
@@ -393,6 +394,13 @@ class APIBitrixController extends Controller
 
                 //TODO: try get stage if true -> update stage else -> create
 
+                foreach ($currentStages as $index => $currentStage) {
+                    Log::info('currentStage ITERABLE', ['STAGE STATUS ID' => $currentStage['STATUS_ID']]);
+                    if($currentStage['STATUS_ID'] === 'DT134_' . $category1Id . ':'. $callStage['name']){
+                        Log::info('EQUAL STAGE', ['EQUAL STAGE' => $currentStage['STATUS_ID']]);
+
+                    }
+                }
                 $hookStagesDataCalls  =
                     [
 
