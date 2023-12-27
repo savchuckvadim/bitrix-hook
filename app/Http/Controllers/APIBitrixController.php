@@ -312,8 +312,7 @@ class APIBitrixController extends Controller
                 [
                     "entityTypeId" => 134,
                     'fields' => [
-
-                        'name' => 'Холодный обзвон',
+                        'NAME' => 'Холодный обзвон',
                         "isDefault" => "N"
                     ]
                 ];
@@ -321,8 +320,7 @@ class APIBitrixController extends Controller
                 [
                     "entityTypeId" => 134,
                     'fields' => [
-
-                        'name' => 'Продажи',
+                        'NAME' => 'Продажи',
                         "isDefault" => "Y"
                     ]
                 ];
