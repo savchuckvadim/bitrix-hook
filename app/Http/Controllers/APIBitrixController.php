@@ -21,7 +21,7 @@ class APIBitrixController extends Controller
         $portal = PortalController::getPortal($domain);
         Log::info('portal', ['portal' => $portal]);
         try {
-            $portal = $portal['data'];
+            $portal = $portal['data']['portal'];
             Log::info('portalData', ['portal' => $portal]);
             $webhookRestKey = $portal[' C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
