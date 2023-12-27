@@ -388,8 +388,8 @@ class APIBitrixController extends Controller
                 ],
 
             ];
-           
-           
+
+
             foreach ($callStages as $index => $callStage) {
 
                 //TODO: try get stage if true -> update stage else -> create
@@ -400,54 +400,47 @@ class APIBitrixController extends Controller
                     if ($currentStage['STATUS_ID'] === $NEW_STAGE_STATUS_ID) {
                         Log::info('EQUAL STAGE', ['EQUAL STAGE' => $currentStage['STATUS_ID']]);
                         $isExist = $currentStage['ID'];
-
-
                     }
                 }
 
-                if($isExist){ //если стадия с таким STATUS_ID существует - надо сделать update
+                if ($isExist) { //если стадия с таким STATUS_ID существует - надо сделать update
                     $methodStageInstall = '/crm.status.update.json';
                     $url = $hook . $methodStageInstall;
                     $hookStagesDataCalls  =
-                    [
+                        [
 
-                        'ID' => $isExist,
-                        'fields' => [
-                            // 'STATUS_ID' => 'DT134_' . $category1Id . ':' . $callStage['name'],
-                            // "ENTITY_ID" => 'DYNAMIC_134_STAGE_' . $category1Id,
-                            'NAME' => $callStage['title'],
-                            'TITLE' => $callStage['title'],
-                            'SORT' => $callStage['title'],
-                            'COLOR' => $callStage['color']
-                            // "isDefault" => $callStage['title'] === 'Создан' ? "Y" : "N"
-                        ]
-                    ];
-
-
-                }else{
+                            'ID' => $isExist,
+                            'fields' => [
+                                // 'STATUS_ID' => 'DT134_' . $category1Id . ':' . $callStage['name'],
+                                // "ENTITY_ID" => 'DYNAMIC_134_STAGE_' . $category1Id,
+                                'NAME' => $callStage['title'],
+                                'TITLE' => $callStage['title'],
+                                'SORT' => $callStage['title'],
+                                'COLOR' => $callStage['color']
+                                // "isDefault" => $callStage['title'] === 'Создан' ? "Y" : "N"
+                            ]
+                        ];
+                } else {
                     $methodStageInstall = '/crm.status.add.json';
                     $url = $hook . $methodStageInstall;
                     $hookStagesDataCalls  =
-                    [
+                        [
 
-                        'statusId' => 'DT134_' . $category1Id,
-                        'fields' => [
-                            'STATUS_ID' => 'DT134_' . $category1Id . ':' . $callStage['name'],
-                            "ENTITY_ID" => 'DYNAMIC_134_STAGE_' . $category1Id,
-                            'NAME' => $callStage['title'],
-                            'TITLE' => $callStage['title'],
-                            'SORT' => $callStage['title'],
-                            'COLOR' => $callStage['color']
-                            // "isDefault" => $callStage['title'] === 'Создан' ? "Y" : "N"
-                        ]
-                    ];
-
+                            'statusId' => 'DT134_' . $category1Id,
+                            'fields' => [
+                                'STATUS_ID' => 'DT134_' . $category1Id . ':' . $callStage['name'],
+                                "ENTITY_ID" => 'DYNAMIC_134_STAGE_' . $category1Id,
+                                'NAME' => $callStage['title'],
+                                'TITLE' => $callStage['title'],
+                                'SORT' => $callStage['title'],
+                                'COLOR' => $callStage['color']
+                                // "isDefault" => $callStage['title'] === 'Создан' ? "Y" : "N"
+                            ]
+                        ];
+                }
                 $smartStageResponse = Http::get($url, $hookStagesDataCalls);
                 $bitrixResponseStage = $smartStageResponse->json();
                 Log::info('SUCCESS SMART INSTALL', ['stage_response' => $bitrixResponseStage]);
-
-                }
-               
             }
 
 
