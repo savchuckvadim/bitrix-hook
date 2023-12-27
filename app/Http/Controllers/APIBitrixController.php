@@ -228,7 +228,7 @@ class APIBitrixController extends Controller
                 $hookStagesData = ['entityTypeId' => $entityId, 'categoryId' => $category['id']];
                 Log::info('hookStagesData', ['hookStagesData' => $hookStagesData]);
                 $stagesResponse = Http::get($url, $hookStagesData);
-                Log::info('stagesResponse', ['stagesResponse' => $stagesResponse]);
+                Log::info('stagesResponse', ['stagesResponse' => $stagesResponse['result'][0]]);
             }
 
 
