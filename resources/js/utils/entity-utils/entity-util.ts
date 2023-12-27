@@ -1,61 +1,51 @@
-import { FormikInitialValues, InitialEntityData } from "../../types/entity/entity-types";
+import { EntityFormField, FormikInitialValues, InitialEntityData } from "../../types/entity/entity-types";
 
 
 export const getInitialValues = (initialData: InitialEntityData) => {
 
-    let resultInitialData = {} as FormikInitialValues
+    let resultInitialData = {
 
-    initialData.map(group => {
-        const itemsFields = group.fields && group.fields.length
-            ? group.fields
-            : group.initialField && [group.initialField]
+    } as FormikInitialValues
+
+    initialData && initialData.groups && initialData.groups.map(group => {
+        let itemsFields = [...group.fields]
 
 
-        itemsFields && itemsFields.length && itemsFields.map(field => {
+        group.fields && group.fields.length && group.fields.map(field => {
 
             if (field.type !== 'entity') {
                 resultInitialData[field.apiName] = ''
-            } else {
-                
-                if (typeof field.initialValue !== 'string') {
-                    
-                    field.initialValue &&
-                        field.initialValue.length &&
-                        //@ts-ignore
-                        field.initialValue.forEach(relationGroup => {
-
-                            
-                            resultInitialData[field.apiName] = [{}]
-                            // resultInitialData[field.apiName] = {}
-                            //@ts-ignore
-                            relationGroup.fields.forEach(relationField => {
-
-
-                                //TODO 
-                                //refactoring на множество филдов-энтити - так как их может быть много
-                                
-                                resultInitialData[field.apiName][0][relationField.apiName] = ''
-                                // resultInitialData[field.apiName][relationField.apiName] = ''
-                            })
-                        });
-                }
-
-
             }
 
         })
-        // group.fieldGroups && group.fieldGroups.map(fieldGroup => {
-        //     fieldGroup.map(field => {
+        resultInitialData.relations = {}
+        
+        group.relations && group.relations.length && group.relations.map((relation, relationIndex) => {
+            
+            
 
-        //         resultInitialData[field.apiName] = ''
-        //     })
-        // })
-        // group.relations && group.relations.map(field => {
+            relation.groups.map(rltnGroup => {
+                resultInitialData.relations[rltnGroup.groupName] = {}
+                resultInitialData.relations[rltnGroup.groupName][relation.apiName] = []
+                
+                resultInitialData.relations[rltnGroup.groupName][relation.apiName][relationIndex] = {}
+                rltnGroup.fields && rltnGroup.fields.length && rltnGroup.fields.map(fld => {
+                    resultInitialData.relations[rltnGroup.groupName][relation.apiName][relationIndex][fld.apiName] = ''
 
-        //     resultInitialData[field.apiName] = ''
-        // })
+
+                })
+                
+                // resultInitialData.relations = [...resultInitialData.relations]
+                // resultInitialData.relations[relationIndex][relation.apiName] = getInitialValues(relation)
+
+
+            })
+        })
 
     })
+
     
     return resultInitialData
+
+
 }

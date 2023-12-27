@@ -8,100 +8,77 @@ type DynamicInputProps = {
     field: EntityFormField
     validation: any
     groupName: string
+
     relationIndex: number
+    isFromRelation: boolean
     isRelation: boolean
+    isEntitiesGroup: boolean
     fieldIndex: number
     getInitialRelationEntity: GetInitialRelationFunction
+    addRelation: (groupName: string, relationIndex: number) => void
 
 }
-const EntityItemDynamicInput = ({ field, fieldIndex, groupName, validation, isRelation, relationIndex, getInitialRelationEntity }: DynamicInputProps) => {
+const EntityItemDynamicInput = ({
+    field, fieldIndex, groupName, validation, isRelation, isFromRelation, 
+    relationIndex, isEntitiesGroup,
+    getInitialRelationEntity, addRelation
+}: DynamicInputProps) => {
 
     // string | text | data | img | entity
     let input = <div></div>
     let width = 12
     const [singlebtn, setSinglebtn] = useState(false)
-    const getRelationFieldName = (name: string) => `field[${fieldIndex}].${name}`
-    const fieldFormName = (field.type === 'entity' || isRelation) ? getRelationFieldName(field['apiName']) : field['apiName']
+    const getRelationFieldName = (name: string) => `relations.${groupName}.${relationIndex}.${name}`
+    const fieldFormName = (isRelation || isFromRelation) ? getRelationFieldName(field['apiName']) : field['apiName']
+    
+    if (!isRelation) {
+        switch (field.type) {
 
-    switch (field.type) {
+            case 'string':
 
-        case 'string':
-
-            input = <div> <Input
-                type={'text'}
-                className="form-control"
-                id="horizontal-firstname-Input"
-                placeholder={field['title']}
-                name={fieldFormName}
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-            // value={typeof field.initialValue == 'string' ? validation.values[field.initialValue] : ""}
-
-            />
-                {field.isCanAddField && <Button
-
-                    type={'button'}
-                    className="ml-30 btn"
-                    color="success"
-
+                input = <div> <Input
+                    type={'text'}
+                    className="form-control"
+                    id="horizontal-firstname-Input"
+                    placeholder={field['title']}
                     name={fieldFormName}
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
-                    value={"Добавить"}
+                // value={typeof field.initialValue == 'string' ? validation.values[field.initialValue] : ""}
 
-                >+ Добавить</Button>}
-            </div>
-            break;
+                />
+                    {field.isCanAddField && <Button
 
-        case 'entity':
+                        type={'button'}
+                        className="ml-30 btn"
+                        color="success"
 
-            input = <div>
-                <Label className="mr-10 btn">{field['title']}</Label>
-                <Button
+                        name={fieldFormName}
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                        value={"Добавить"}
 
-                    type={'button'}
-                    className="ml-30 btn"
-                    color="primary"
-                    onClick={() => getInitialRelationEntity(groupName, field.id, null)}
-                    name={fieldFormName}
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={"Редактировать"}
+                    >+ Добавить</Button>}
+                </div>
+                break;
 
-                >Редактировать</Button>
-                {field.isCanAddField && <Button
+            case 'entity':
 
-                    type={'button'}
-                    className="ml-30 btn"
-                    color="success"
+                input = <div>
+                    <Label className="mr-10 btn">{field['title']}</Label>
+                    <Button
 
-                    name={field['apiName']}
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={"Добавить"}
+                        type={'button'}
+                        className="ml-30 btn"
+                        color="primary"
+                        onClick={() => getInitialRelationEntity(groupName, 0)}
+                        name={fieldFormName}
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                        value={"Редактировать"}
 
-                >+ Добавить</Button>}
-            </div>
-            break;
-
-        case 'select':
-
-            input = <div> <Dropdown
-                isOpen={singlebtn}
-                toggle={() => setSinglebtn(!singlebtn)}
-            >
-                <DropdownToggle className="btn btn-info" caret>
-                    {field['title']}
-                    <i className="mdi mdi-chevron-down" />
-                </DropdownToggle>
-                <DropdownMenu>
-                    {field.items && field.items.length && field.items.map(item => (
-                        <DropdownItem>{item.title}</DropdownItem>
-                    ))}
-                </DropdownMenu>
-            </Dropdown>
-                {
-                    field.isCanAddField && <Button
+                    >Редактировать</Button>
+                    {field.isCanAddField && <Button
 
                         type={'button'}
                         className="ml-30 btn"
@@ -112,78 +89,143 @@ const EntityItemDynamicInput = ({ field, fieldIndex, groupName, validation, isRe
                         onBlur={validation.handleBlur}
                         value={"Добавить"}
 
-                    >+ Добавить</Button>
-                }
-            </div >
-            break;
+                    >+ Добавить</Button>}
+                </div>
+                break;
 
-        case 'boolean':
+            case 'select':
 
-            input = <div>  <div className="form-check form-check-right mb-3">
-                <input
-                    type="checkbox"
-                    className="form-check-input"
-                    id="CustomCheck1"
-                />
-                <label
-                    className="form-check-label"
+                input = <div> <Dropdown
+                    isOpen={singlebtn}
+                    toggle={() => setSinglebtn(!singlebtn)}
                 >
-                    {field['title']}
-                </label>
-            </div>
-                {field.isCanAddField && <Button
+                    <DropdownToggle className="btn btn-info" caret>
+                        {field['title']}
+                        <i className="mdi mdi-chevron-down" />
+                    </DropdownToggle>
+                    <DropdownMenu>
+                        {field.items && field.items.length && field.items.map(item => (
+                            <DropdownItem>{item.title}</DropdownItem>
+                        ))}
+                    </DropdownMenu>
+                </Dropdown>
+                    {
+                        field.isCanAddField && <Button
 
-                    type={'button'}
-                    className="ml-30 btn"
-                    color="success"
+                            type={'button'}
+                            className="ml-30 btn"
+                            color="success"
 
+                            name={field['apiName']}
+                            onChange={validation.handleChange}
+                            onBlur={validation.handleBlur}
+                            value={"Добавить"}
+
+                        >+ Добавить</Button>
+                    }
+                </div >
+                break;
+
+            case 'boolean':
+
+                input = <div>  <div className="form-check form-check-right mb-3">
+                    <input
+                        type="checkbox"
+                        className="form-check-input"
+                        id="CustomCheck1"
+                    />
+                    <label
+                        className="form-check-label"
+                    >
+                        {field['title']}
+                    </label>
+                </div>
+                    {field.isCanAddField && <Button
+
+                        type={'button'}
+                        className="ml-30 btn"
+                        color="success"
+
+                        name={field['apiName']}
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                        value={"Добавить"}
+
+                    >+ Добавить</Button>}
+                </div>
+                break;
+
+
+            case 'img':
+
+                input = <div className="mt-3">
+                    <Label htmlFor="formFile" className="form-label">{field['title']}</Label>
+                    <Input className="form-control" type="file" id="formFile" />
+                </div>
+
+
+
+                break;
+
+            default:
+
+                return input = <div> <Input
+                    type={'text'}
+                    className="form-control"
+                    id="horizontal-firstname-Input"
+                    placeholder={field['title']}
                     name={field['apiName']}
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
-                    value={"Добавить"}
+                    value={typeof field.initialValue == 'string' ? validation.values[field.initialValue] : ""}
 
-                >+ Добавить</Button>}
-            </div>
-            break;
+                />
+                    {<Button
 
+                        type={'button'}
+                        className="ml-30 btn"
+                        color="success"
 
-        case 'img':
+                        name={field['apiName']}
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                        value={"Добавить"}
 
-            input = <div className="mt-3">
-                <Label htmlFor="formFile" className="form-label">{field['title']}</Label>
-                <Input className="form-control" type="file" id="formFile" />
-            </div>
+                    >+ Добавить</Button>}
+                </div>
+        }
 
+    } else {
+        
+        input = <div>
+            <Label className="mr-10 btn">{field['apiName']}</Label>
+            <Button
 
+                type={'button'}
+                className="ml-30 btn"
+                color="primary"
+                onClick={() => getInitialRelationEntity(groupName, relationIndex)}
+                name={fieldFormName}
+                onChange={validation.handleChange}
+                onBlur={validation.handleBlur}
+                value={"Редактировать"}
 
-            break;
+            >Редактировать</Button>
+            {<Button
 
-        default:
-            return input = <div> <Input
-                type={'text'}
-                className="form-control"
-                id="horizontal-firstname-Input"
-                placeholder={field['title']}
+                type={'button'}
+                className="ml-30 btn"
+                color="success"
+                onClick={() => addRelation(groupName, relationIndex)}
                 name={field['apiName']}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
-                value={typeof field.initialValue == 'string' ? validation.values[field.initialValue] : ""}
+                value={"Добавить"}
 
-            />
-                {<Button
-
-                    type={'button'}
-                    className="ml-30 btn"
-                    color="success"
-
-                    name={field['apiName']}
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={"Добавить"}
-
-                >+ Добавить</Button>}
-            </div>
+            >+ Добавить</Button>}
+        </div>
     }
+
 
     return (
         <Col sm={width}>

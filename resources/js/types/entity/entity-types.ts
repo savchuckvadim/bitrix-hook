@@ -63,19 +63,26 @@ export type EntityParameter = {
 }
 
 
-export type InitialEntityData = Array<InitialEntityGroup>
+export type InitialEntityData = {
+    apiName: string
+    title: string
+    groups: Array<InitialEntityGroup>
+    isCreated?:boolean
+}
 export type InitialEntityGroup = {
     groupName: string
-    type: 'template' | 'portal'
+
     isCanAddField: boolean
     isCanDeleteField: boolean
-    fields: Array<EntityFormField | any>
+    fields: Array<EntityFormField>
+    relations: Array<InitialEntityData>
     // fieldGroups?: Array<Array<EntityFormField>>
     // relations?: Array<EntityFormField>
     isRequired: boolean
-    initialField?:{
-        [key:string]:any
-    }
+    // isCreated?:boolean
+    // initialField?:{
+    //     [key:string]:any
+    // }
 
 }
 
@@ -128,9 +135,14 @@ export type CreatingEntityType = {
 
 export type RelationState = {
     id: number
+    [key: string]: any
+    groups: Array<InitialEntityGroup>
+    apiName:string
     parrentGroupName: string | null
-    parrentFieldId: number | null
+    // parrentGroupName: string | null
+    // parrentFieldId: number | null
     isCreating: boolean,
-    entity: null | GeneralEntity
-    formData: null | InitialEntityData
+    relationIndex: number
+    //     entity: null | GeneralEntity
+    //     formData: null | InitialEntityData
 }

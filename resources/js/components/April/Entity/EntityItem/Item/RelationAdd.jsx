@@ -5,7 +5,7 @@ import EntityItemAdd from "../EntityItemAdd";
 
 const RelationAdd = ({ 
     validation, relation, router, entityName, itemUrl, 
-    setOrupdateEntityItem, getInitialRelationEntity, setRelation
+    setOrupdateEntityItem, getInitialRelationEntity, setRelation, addRelation
  }) => {
 
     document.title = "Models | Skote React + Laravel 10 Admin And Dashboard Template";
@@ -18,8 +18,8 @@ const RelationAdd = ({
         setmodal_fullscreen(!modal_fullscreen);
         removeBodyCss();
     }
-
-
+    
+    
     return (
 
 
@@ -54,7 +54,7 @@ const RelationAdd = ({
             <div className="modal-body">
                 {/* <h5>Overflowing text to show scroll behavior</h5> */}
                 <EntityItemAdd
-                    isRelation={true}
+                    isFromRelation={true}
                     validation={validation}
                     router={router}
                     creating={relation}
@@ -64,6 +64,7 @@ const RelationAdd = ({
                     setOrupdateEntityItem={setOrupdateEntityItem}
                     getInitialRelationEntity={getInitialRelationEntity}
                     setRelation={setRelation}
+                    addRelation={addRelation}
                 />
             </div>
             <div className="modal-footer">

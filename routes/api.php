@@ -39,15 +39,15 @@ Route::get('front', [App\Http\Controllers\HomeController::class, 'index']);
 
 
 Route::post('/task', function (Request $request) {
- 
+
     $created = $request['created'];
     $responsible = $request['responsible'];
-   
+
     Log::info('LOG', $request->all());
 
     $partsCreated = explode("_", $created);
     $partsResponsible = explode("_", $responsible);
- 
+
     $auth = $request['auth'];
     $domain = $auth['domain'];
     $companyId = $request['company_id'];
@@ -58,8 +58,6 @@ Route::post('/task', function (Request $request) {
     $crm = $request['crm'];
 
     return APIBitrixController::createTask($domain, $companyId, $createdId, $responsibleId, $deadline, $name, $crm);
-
-  
 });
 
 
@@ -121,6 +119,7 @@ Route::post('/calling', function (Request $request) {
                 ">CALL_DURATION" => 60,
                 ">CALL_START_DATE" => "2023-12-01T00:00:00+00:00",
                 // "<CALL_START_DATE" =>  "2024-08-23T00:00:00+00:00"
+                // PORTAL_USER_ID
             ]
         ]);
         Log::info('response ', ['response ' => $response]);
@@ -191,41 +190,7 @@ Route::post('/lists', function (Request $request) {
     }
 });
 
-// Route::post('/taskfields', function (Request $request) {
 
-//     $domain = env('BITRIX_DOMAIN');
-//     $secret = env('WEB_HOOK');
-//     $restVersion = env('BITRIX_REST_VERSION');
-
-//     Log::info('Environment Variables', [
-//         'BITRIX_DOMAIN' => $domain,
-//         'BITRIX_REST_VERSION' => $restVersion,
-//         'WEB_HOOK' => $secret
-//     ]);
-
-
-//     try {
-
-
-//         $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/task.commentitem.getmanifest.json');
-//         Log::info('response ', ['response ' => $response]);
-//         $getFields = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/tasks.task.getFields.json', []);
-//         Log::info('TASK_FIELDS ', ['fields ' => $getFields]);
-//         // Возвращаем ответ как ответ сервера Laravel
-//         return $response;
-//     } catch (\Throwable $th) {
-//         Log::error('Exception caught', [
-//             'message'   => $th->getMessage(),
-//             'file'      => $th->getFile(),
-//             'line'      => $th->getLine(),
-//             'trace'     => $th->getTraceAsString(),
-//         ]);
-//         return response([
-//             'result' => 'error',
-//             'message' => $th->getMessage()
-//         ]);
-//     }
-// });
 
 Route::post('/smart', function (Request $request) {
 
@@ -349,72 +314,7 @@ Route::post('/smart/categories', function (Request $request) {
 
 
     $domain = env('BITRIX_DOMAIN');
-    $secret = env('WEB_HOOK');
-    $restVersion = env('BITRIX_REST_VERSION');
-
-    Log::info('Environment Variables', [
-        'BITRIX_DOMAIN' => $domain,
-        'BITRIX_REST_VERSION' => $restVersion,
-        'WEB_HOOK' => $secret
-    ]);
-
-    try {
-        if ($domain) {
-            $onlineRequestData =  ['domain' =>  $domain];
-            $portalResponse = APIOnlineController::online(
-                $domain,
-                'post',
-                'getportal',
-                $onlineRequestData,
-                'portal'
-            );
-
-            Log::info('Environment Variables', [
-                'portalResponse' => $portalResponse
-            ]);
-            return response(['test' => $portalResponse]);
-        }
-        // Проверка, успешно ли выполнен запрос
-        // if ($portalResponse['resultCode'] == 0) {
-        // Возвращение ответа клиенту в формате JSON
-
-        // $responseData =  $portalResponse['data'];
-        // $hookUrl = $responseData['portal']['C_REST_WEB_HOOK_URL'];
-        // if ($hookUrl) {
-        //     $hook = $hookUrl . '/' . 'crm.category.list.json';
-        //     $hookData = ['entityTypeId' => env('BITRIX_SMART_MAIN_ID')];
-
-        //     $smartCategoriesResponse = Http::get($hook, $hookData);
-        //     $bitrixResponse = $smartCategoriesResponse->json();
-        //     return response()->json([
-        //         'resultCode' => 0,
-        //         'online' => $portalResponse->json(),
-        //         'bitrix' => $bitrixResponse
-        //     ]);
-        // } else {
-
-        //     return response()->json([
-        //         'error' => 'Hook url not found'
-        //     ], 500);
-        // }
-        // } else {
-        //     // Обработка ошибки, если запрос не удался
-        //     return response()->json([
-        //         'error' => 'Ошибка при запросе к API.'
-        //     ], 500);
-        // }
-    } catch (\Throwable $th) {
-        Log::error('Exception caught', [
-            'message'   => $th->getMessage(),
-            'file'      => $th->getFile(),
-            'line'      => $th->getLine(),
-            'trace'     => $th->getTraceAsString(),
-        ]);
-        return response([
-            'result' => 'error',
-            'message' => $th->getMessage()
-        ], 500);
-    }
+    return APIBitrixController::getSmartStages($domain);
 });
 
 

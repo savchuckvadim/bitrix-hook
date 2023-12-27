@@ -24,8 +24,8 @@ import RelationAdd from "./Item/RelationAdd";
 const EntityItemAdd = ({
     validation,
     router, creating, relation, entityName, itemUrl,
-    isRelation = false,
-    setOrupdateEntityItem, getInitialRelationEntity, setRelation
+    isFromRelation = false, relationIndex,
+    setOrupdateEntityItem, getInitialRelationEntity, setRelation, addRelation
 }) => {
 
     //meta title
@@ -34,23 +34,24 @@ const EntityItemAdd = ({
 
 
 
-
+    
 
 
     const getItems = (creatingEntity) => {
         let result = []
 
-        creatingEntity.forEach((group, index) => {
+        creatingEntity.groups.forEach((group, index) => {
 
-            const items = group.type === 'entities' && group.fields.length < 1
-                ? [group.initialField]
-                : group.fields
+            const isEntitiesGroup = group.type === 'entities'
+            const fields = group.fields
+            const relations = group.relations
 
             result.push(
                 <div>
                     <h4>{group.groupName}</h4>
 
-                    {items.map(field => {
+                    {fields.map(field => {
+
                         return (
                             <Row className="mb-4">
                                 <Label
@@ -60,11 +61,15 @@ const EntityItemAdd = ({
                                     <Col sm={12}>
                                         <EntityItemDynamicInput
                                             field={field}
+                                            isRelation={false}
                                             fieldIndex={index}
+                                            relationIndex={creating.relationIndex}
                                             groupName={group.groupName}
+                                            isEntitiesGroup={isEntitiesGroup}
                                             validation={validation}
-                                            isRelation={isRelation}
+                                            isFromRelation={isFromRelation}
                                             getInitialRelationEntity={getInitialRelationEntity}
+                                            addRelation={addRelation}
 
                                         />
 
@@ -72,6 +77,35 @@ const EntityItemAdd = ({
                                 </Label>
                             </Row>
                         )
+                    })}
+                    {relations.map((relation, relationIndex) => {
+                        return relation.groups.map(relationGroup => {
+                            let firstField = relationGroup.fields[0]
+                            return <Row className="mb-4">
+                                <Label
+                                    htmlFor="horizontal-firstname-Input"
+                                    className="col-sm-12 col-form-label"
+                                >
+                                    <Col sm={12}>
+                                        <EntityItemDynamicInput
+                                            field={firstField}
+                                            fieldIndex={index}
+                                            groupName={group.groupName}
+                                            relationIndex={relationIndex}
+                                            isEntitiesGroup={isEntitiesGroup}
+                                            validation={validation}
+                                            isRelation={true}
+                                            isFromRelation={isFromRelation}
+                                            getInitialRelationEntity={getInitialRelationEntity}
+                                            addRelation={addRelation}
+
+                                        />
+
+                                    </Col>
+                                </Label>
+                            </Row>
+                        })
+
                     })}
 
                 </div>
@@ -85,19 +119,21 @@ const EntityItemAdd = ({
     }
     console.log(validation.values)
     const items = creating.formData && getItems(creating.formData)
+
     return (
         <React.Fragment>
             {relation && <RelationAdd
                 validation={validation}
                 relation={relation}
                 router={router}
-                creating={relation.entity}
+                creating={relation}
 
                 entityName={entityName}
                 itemUrl={itemUrl}
                 setOrupdateEntityItem={setOrupdateEntityItem}
                 getInitialRelationEntity={getInitialRelationEntity}
                 setRelation={setRelation}
+                addRelation={addRelation}
 
             />}
             {/* <div className="page-content"> */}

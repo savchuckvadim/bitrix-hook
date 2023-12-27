@@ -5,7 +5,7 @@ import withRouter from "../../../Common/withRouter"
 import { useEffect, useState } from "react"
 import EntityPage from "../../../../pages/April/Entity/Entity"
 import { API_METHOD, PORTALS_URL } from "../../../../types/app/app-type"
-import { deleteEntityItem, getEntities, getEntityItem, getInitialEntityData, getInitialRelationEntity, setOrupdateEntityItem, setRelation } from "../../../../store/april/entity/entity-reducer"
+import { addRelation, deleteEntityItem, getEntities, getEntityItem, getInitialEntityData, getInitialRelationEntity, setOrupdateEntityItem, setRelation } from "../../../../store/april/entity/entity-reducer"
 import EntityItem from "./EntityItem"
 import EntityItemAdd from "./EntityItemAdd"
 import { getInitialValues } from "../../../../utils/entity-utils/entity-util"
@@ -38,7 +38,8 @@ const EntityItemContainer = ({
     getInitialEntityData,
     deleteEntityItem,
     getInitialRelationEntity,
-    setRelation
+    setRelation,
+    addRelation
 }) => {
 
     // const [currentItems, setCurrentItems] = useState(items)
@@ -60,6 +61,7 @@ const EntityItemContainer = ({
     }, [creating])
 
     const dataInitialValues = creating.formData && getInitialValues(creating.formData)
+    
     // Form validation 
     const validation = useFormik({
         // enableReinitialize : use this flag when initial values needs to be changed
@@ -74,12 +76,12 @@ const EntityItemContainer = ({
             console.log("values", values);
 
 
-
+debugger
             setOrupdateEntityItem(router.navigate, router.location.pathname, itemUrl, itemUrl, values)
             console.log("values", values);
         }
     });
-
+    
     return !isCreating ? <EntityItem
         router={router}
         entity={current}
@@ -94,11 +96,13 @@ const EntityItemContainer = ({
             router={router}
             creating={creatingData}
             relation={relation}
+            isFromRelation={false}
             entityName={entityName}
             itemUrl={itemUrl}
             setOrupdateEntityItem={setOrupdateEntityItem}
             getInitialRelationEntity={getInitialRelationEntity}
             setRelation={setRelation}
+            addRelation={addRelation}
 
         />
 
@@ -122,5 +126,6 @@ export default connect(mapState, {
     getInitialEntityData,
     deleteEntityItem,
     getInitialRelationEntity,
-    setRelation
+    setRelation,
+    addRelation,
 })(EntityItemContainer)
