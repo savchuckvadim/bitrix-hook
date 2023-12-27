@@ -415,7 +415,7 @@ class APIBitrixController extends Controller
                                 // "ENTITY_ID" => 'DYNAMIC_134_STAGE_' . $category1Id,
                                 'NAME' => $callStage['title'],
                                 'TITLE' => $callStage['title'],
-                                'SORT' => $callStage['title'],
+                                'SORT' => $callStage['sort'],
                                 'COLOR' => $callStage['color']
                                 // "isDefault" => $callStage['title'] === 'Создан' ? "Y" : "N"
                             ]
@@ -432,7 +432,7 @@ class APIBitrixController extends Controller
                                 "ENTITY_ID" => 'DYNAMIC_134_STAGE_' . $category1Id,
                                 'NAME' => $callStage['title'],
                                 'TITLE' => $callStage['title'],
-                                'SORT' => $callStage['title'],
+                                'SORT' => $callStage['sort'],
                                 'COLOR' => $callStage['color']
                                 // "isDefault" => $callStage['title'] === 'Создан' ? "Y" : "N"
                             ]
