@@ -223,34 +223,35 @@ class APIBitrixController extends Controller
             foreach ($categories as $category) {
                 Log::info('category', ['category' => $category]);
                 $hook = 'https://' . $domain  . '/' . $webhookRestKey;
-                $stageMethod = '/crm.status.entity.items.json';
+                $stageMethod = '/crm.status.list.json';
                 $url = $hook . $stageMethod;
                 $hookStagesData = [
-                    'entityId' => $entityId, 
+                    'entityTypeId' => $entityId,
+                    'entityId' => 'DYNAMIC_' . $entityId,
                     'categoryId' => $category['id']
-                
+
                 ];
 
 
                 Log::info('hookStagesData', ['hookStagesData' => $hookStagesData]);
                 $stagesResponse = Http::get($url, $hookStagesData);
-                // $stages = $stagesResponse['result'];
-                Log::info('stages', ['stages' => $stagesResponse]);
-                // foreach ($stages as $stage) {
-                //     $resultstageData = [
-                //         // 'category' => [
-                //         //     'id' => $category['id'],
-                //         //     'name' => $category['name'],
-                //         // ],
-                //         'id' => $stage['ID'],
-                //         'entityId' => $stage['ENTITY_ID'],
-                //         'statusId' => $stage['STATUS_ID'],
-                //         'title' => $stage['NAME'],
-                //         'nameInit' => $stage['NAME_INIT'],
+                $stages = $stagesResponse['result'];
+                Log::info('stages', ['stages' => $stages]);
+                foreach ($stages as $stage) {
+                    $resultstageData = [
+                        // 'category' => [
+                        //     'id' => $category['id'],
+                        //     'name' => $category['name'],
+                        // ],
+                        'id' => $stage['ID'],
+                        'entityId' => $stage['ENTITY_ID'],
+                        'statusId' => $stage['STATUS_ID'],
+                        'title' => $stage['NAME'],
+                        'nameInit' => $stage['NAME_INIT'],
 
-                //     ];
-                //     Log::info('STAGE', [$stage['NAME_INIT'] => $resultstageData]);
-                // }
+                    ];
+                    Log::info('STAGE', [$stage['NAME_INIT'] => $resultstageData]);
+                }
             }
 
 
