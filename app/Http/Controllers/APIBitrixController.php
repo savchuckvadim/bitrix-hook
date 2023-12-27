@@ -311,14 +311,20 @@ class APIBitrixController extends Controller
             $hookCategoriesData1  =
                 [
                     "entityTypeId" => 134,
-                    'name' => 'Холодный обзвон',
-                    "isDefault"=> "N"
+                    'fields' => [
+
+                        'name' => 'Холодный обзвон',
+                        "isDefault" => "N"
+                    ]
                 ];
-                $hookCategoriesData2  =
+            $hookCategoriesData2  =
                 [
                     "entityTypeId" => 134,
-                    'name' => 'Продажи',
-                    "isDefault"=> "Y"
+                    'fields' => [
+
+                        'name' => 'Продажи',
+                        "isDefault" => "Y"
+                    ]
                 ];
             $smartCategoriesResponse1 = Http::get($url, $hookCategoriesData1);
             $smartCategoriesResponse2 = Http::get($url, $hookCategoriesData2);
