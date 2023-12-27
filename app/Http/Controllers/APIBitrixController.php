@@ -363,13 +363,13 @@ class APIBitrixController extends Controller
             ];
             $methodStageInstall = '/crm.status.add.json';
             $url = $hook . $methodStageInstall;
-            foreach ($callStages as $callStage) {
+            foreach ($callStages as $index => $callStage) {
                 $hookStagesDataCalls  =
                     [
                        
                         'statusId' => 'DT134_'. $category1Id,
                         'fields' => [
-                            'STATUS_ID' => 'DT134_'. $category1Id,
+                            'STATUS_ID' => 'DT134_'. $index,
                             "ENTITY_ID" => 'DYNAMIC_134_STAGE_' . $category1Id,
                             'NAME' => $callStage['title'],
                             'TITLE' => $callStage['title'],
