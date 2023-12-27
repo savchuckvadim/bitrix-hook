@@ -226,7 +226,7 @@ class APIBitrixController extends Controller
                 $stageMethod = '/crm.status.entity.items.json';
                 $url = $hook . $stageMethod;
                 $hookStagesData = [
-                    'entityTypeId' => $entityId, 
+                    'entityId' => $entityId, 
                     'categoryId' => $category['id']
                 
                 ];
