@@ -229,7 +229,7 @@ class APIBitrixController extends Controller
                     'entityTypeId' => $entityId,
                     'entityId' => 'STATUS',
                     'categoryId' => $category['id'],
-                    'filter' => ['ENTITY_ID' => $entityId]
+                    'filter' => ['ENTITY_ID' => 'DYNAMIC_STAGE_' . $entityId . '_STAGE_' . $category['id']]
 
                 ];
 
