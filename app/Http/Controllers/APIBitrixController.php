@@ -227,7 +227,7 @@ class APIBitrixController extends Controller
                 $url = $hook . $stageMethod;
                 $hookStagesData = [
                     'entityTypeId' => $entityId,
-                    'entityId' => 'DYNAMIC_' . $entityId,
+                    'entityId' => 'STATUS',
                     'categoryId' => $category['id']
 
                 ];
