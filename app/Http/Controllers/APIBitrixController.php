@@ -223,9 +223,15 @@ class APIBitrixController extends Controller
             foreach ($categories as $category) {
                 Log::info('category', ['category' => $category]);
                 $hook = 'https://' . $domain  . '/' . $webhookRestKey;
-                $stageMethod = '/crm.status.list.json';
+                $stageMethod = '/crm.status.entity.items.json';
                 $url = $hook . $stageMethod;
-                $hookStagesData = ['entityTypeId' => $entityId, 'categoryId' => $category['id']];
+                $hookStagesData = [
+                    'entityTypeId' => $entityId, 
+                    'categoryId' => $category['ID']
+                
+                ];
+
+
                 Log::info('hookStagesData', ['hookStagesData' => $hookStagesData]);
                 $stagesResponse = Http::get($url, $hookStagesData);
                 $stages = $stagesResponse['result'];
