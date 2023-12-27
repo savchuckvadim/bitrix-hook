@@ -47,12 +47,14 @@ Route::post('/task', function (Request $request) {
 
     $partsCreated = explode("_", $created);
     $partsResponsible = explode("_", $responsible);
+    $createdId = $partsCreated[1];
+    $responsibleId = $partsResponsible[1];
 
+    
     $auth = $request['auth'];
     $domain = $auth['domain'];
     $companyId = $request['company_id'];
-    $createdId = $partsCreated[1];
-    $responsibleId = $partsResponsible[1];
+  
     $deadline = $request['deadline'];
     $name = $request['name'];
     $crm = $request['crm'];
