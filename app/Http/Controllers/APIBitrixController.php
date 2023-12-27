@@ -196,12 +196,13 @@ class APIBitrixController extends Controller
     public static function getSmartStages(
         $domain
     ) {
-
+        $portal = PortalController::getPortal($domain);
+        Log::info('portal', ['portal' => $portal]);
         try {
-            $portal = PortalController::getPortal($domain);
+            
             $webhookRestKey = $portal[' C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
-            Log::info('portal', ['portal' => $portal]);
+          
 
             //company and contacts
             // $methodContacts = '/crm.contact.list.json';

@@ -307,7 +307,8 @@ Route::post('/smart/categories', function (Request $request) {
     // companyId	UF_CRM_6_1697099643
     $document_id = $request['document_id'];
     $ownerType = $request['ownerType'];   // L C D T9c
-    $domain = $request['domain'];   // L C D T9c
+    $auth = $request['auth'];
+    $domain = $auth['domain'];
 
     Log::info('REQUEST', $request->all());
     Log::info('domain', ['domain' => $domain]);
