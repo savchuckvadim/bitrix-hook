@@ -371,8 +371,8 @@ class APIBitrixController extends Controller
                         'fields' => [
                             'STATUS_ID' => 'DT134_'. $category1Id,
                             "ENTITY_ID" => 'DYNAMIC_134_STAGE_' . $category1Id,
-                            'name' => $callStage['title'],
-                            'title' => $callStage['title'],
+                            'NAME' => $callStage['title'],
+                            'TITLE' => $callStage['title'],
                             // "isDefault" => $callStage['title'] === 'Создан' ? "Y" : "N"
                         ]
                     ];
