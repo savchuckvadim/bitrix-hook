@@ -231,10 +231,10 @@ class APIBitrixController extends Controller
                 $stages = $stagesResponse['result'];
                 foreach ($stages as $stage) {
                     $resultstageData = [
-                        'category' => [
-                            'id' => $category['id'],
-                            'name' => $category['name'],
-                        ],
+                        // 'category' => [
+                        //     'id' => $category['id'],
+                        //     'name' => $category['name'],
+                        // ],
                         'id' => $stage['id'],
                         'entityId' => $stage['ENTITY_ID'],
                         'statusId' => $stage['STATUS_ID'],
