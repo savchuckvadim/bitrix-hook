@@ -365,25 +365,25 @@ class APIBitrixController extends Controller
                 [
                     'title' => 'Создан',
                     'name' => 'NEW',
-                    'color' => '#C35CFC',
+                    'color' => '#832EF9',
                     'sort' => 10,
                 ],
                 [
                     'title' => 'Запланирован',
                     'name' => 'PLAN',
-                    'color' => '#C35CFC',
+                    'color' => '#BA8BFC',
                     'sort' => 20,
                 ],
                 [
                     'title' => 'Просрочен',
                     'name' => 'PREPARATION',
-                    'color' => '#C35CFC',
+                    'color' => '#A262FC',
                     'sort' => 30,
                 ],
                 [
                     'title' => 'Завершен без результата',
-                    'name' => 'WITHOUT_RESULT',
-                    'color' => '#C35CFC',
+                    'name' => 'CLIENT',
+                    'color' => '#7849BB',
                     'sort' => 40,
                 ],
 
