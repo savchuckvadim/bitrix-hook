@@ -311,7 +311,7 @@ class APIBitrixController extends Controller
             $hookCategoriesData1  =
                 [
                     "entityTypeId" => 134,
-                    
+
                     'fields' => [
                         'name' => 'Холодный обзвон',
                         'title' => 'Холодный обзвон',
@@ -321,7 +321,7 @@ class APIBitrixController extends Controller
             $hookCategoriesData2  =
                 [
                     "entityTypeId" => 134,
-                   
+
                     'fields' => [
                         'name' => 'Продажи',
                         'title' => 'Продажи',
@@ -335,9 +335,11 @@ class APIBitrixController extends Controller
             $bitrixResponse = $smartInstallResponse->json();
             $bitrixResponseCategory1 = $smartCategoriesResponse1->json();
             $bitrixResponseCategory2 = $smartCategoriesResponse2->json();
+            $category1Id = $bitrixResponseCategory1['result']['category']['id'];
+            $category2Id = $bitrixResponseCategory2['result']['category']['id'];
             Log::info('SUCCESS SMART INSTALL', ['smart' => $bitrixResponse]);
-            Log::info('SUCCESS CATEGORY INSTALL', ['categories1' => $bitrixResponseCategory1]);
-            Log::info('SUCCESS CATEGORY INSTALL', ['categories2' => $bitrixResponseCategory2]);
+            Log::info('SUCCESS CATEGORY INSTALL', ['category1Id' => $category1Id]);
+            Log::info('SUCCESS CATEGORY INSTALL', ['category2Id' => $category2Id]);
             //STAGES
 
 
