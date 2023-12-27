@@ -345,18 +345,22 @@ class APIBitrixController extends Controller
             $callStages = [
                 [
                     'title' => 'Создан',
+                    'name' => 'NEW',
                     'color' => '',
                 ],
                 [
                     'title' => 'Запланирован',
+                    'name' => 'PLAN',
                     'color' => '',
                 ],
                 [
                     'title' => 'Просрочен',
+                    'name' => 'PREPARATION',
                     'color' => '',
                 ],
                 [
                     'title' => 'Завершен без результата',
+                    'name' => 'WITHOUT_RESULT',
                     'color' => '',
                 ],
 
@@ -366,10 +370,10 @@ class APIBitrixController extends Controller
             foreach ($callStages as $index => $callStage) {
                 $hookStagesDataCalls  =
                     [
-                       
-                        'statusId' => 'DT134_'. $category1Id,
+
+                        'statusId' => 'DT134_' . $category1Id,
                         'fields' => [
-                            'STATUS_ID' => 'DT134_'. $index,
+                            'STATUS_ID' => 'DT134_' . $category1Id . ':'. $callStage['name'],
                             "ENTITY_ID" => 'DYNAMIC_134_STAGE_' . $category1Id,
                             'NAME' => $callStage['title'],
                             'TITLE' => $callStage['title'],
@@ -377,13 +381,14 @@ class APIBitrixController extends Controller
                         ]
                     ];
 
-                    $smartStageResponse = Http::get($url, $hookStagesDataCalls);
-                    $bitrixResponseStage = $smartStageResponse->json();
-                    Log::info('SUCCESS SMART INSTALL', ['stage_response' => $bitrixResponseStage]);
+                $smartStageResponse = Http::get($url, $hookStagesDataCalls);
+                $bitrixResponseStage = $smartStageResponse->json();
+                Log::info('SUCCESS SMART INSTALL', ['stage_response' => $bitrixResponseStage]);
             }
 
 
 
+            APIBitrixController::getSmartStages($domain);
 
             return APIOnlineController::getResponse(0, 'success', ['Smart-Categories' => $bitrixResponse]);
         } catch (\Throwable $th) {
