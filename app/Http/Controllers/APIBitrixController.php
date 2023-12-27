@@ -26,7 +26,7 @@ class APIBitrixController extends Controller
             $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
 
-            
+
             //company and contacts
             $methodContacts = '/crm.contact.list.json';
             $methodCompany = '/crm.company.get.json';
@@ -201,10 +201,10 @@ class APIBitrixController extends Controller
         $portal = PortalController::getPortal($domain);
         Log::info('portal', ['portal' => $portal]);
         try {
-            
+
             $webhookRestKey = $portal['data']['C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
-          
+
 
             //company and contacts
             // $methodContacts = '/crm.contact.list.json';
@@ -216,15 +216,9 @@ class APIBitrixController extends Controller
 
             $smartCategoriesResponse = Http::get($url, $hookData);
             $bitrixResponse = $smartCategoriesResponse->json();
-            return response()->json([
-                'resultCode' => 0,
-                // 'online' => $portalResponse->json(),
-                'bitrix' => $bitrixResponse
-            ]);
+            Log::info('SUCCESS RESPONSE SMART CATEGORIES', ['categories' => $bitrixResponse]);
 
-        
 
-            Log::info('SUCCESS RESPONSE TASK', ['createdTask' => $bitrixResponse]);
             return APIOnlineController::getResponse(0, 'success', ['Smart-Categories' => $bitrixResponse]);
         } catch (\Throwable $th) {
             Log::error('ERROR: Exception caught', [
