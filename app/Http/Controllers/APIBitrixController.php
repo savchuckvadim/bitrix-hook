@@ -236,10 +236,10 @@ class APIBitrixController extends Controller
                         //     'id' => $category['id'],
                         //     'name' => $category['name'],
                         // ],
-                        'id' => $stage['id'],
+                        'id' => $stage['ID'],
                         'entityId' => $stage['ENTITY_ID'],
                         'statusId' => $stage['STATUS_ID'],
-                        'title' => $stage->name,
+                        'title' => $stage['NAME'],
                         'nameInit' => $stage['NAME_INIT'],
 
                     ];
