@@ -391,7 +391,7 @@ Route::post('/update/smart/', function (Request $request) {
         $url = $hook . $methodSmartUpdate;
         $smartData =  [
             'id' => $currentSmartId,
-            'entityTypeId' => $crm,
+            'entityTypeId' => env('BITRIX_SMART_MAIN_ID'),
             // 'fields' => [
             //     'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
             //     'RESPONSIBLE_ID' => $responsibleId,
