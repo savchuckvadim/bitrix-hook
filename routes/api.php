@@ -350,11 +350,13 @@ Route::post('/update/smart/', function (Request $request) {
 
     $auth = $request['auth'];
     $domain = $auth['domain'];
+    $document_id = $auth['document_id'];
     // $companyId = $request['company_id'];
 
     $deadline = $request['deadline'];
     $name = $request['name'];
     $logData = [
+        'document_id' => $document_id,
         'domain' => $domain,
         'deadline' => $deadline,
         'createdId' => $createdId,
@@ -364,7 +366,55 @@ Route::post('/update/smart/', function (Request $request) {
 
     // Log::info('REQUEST', $request->all());
     Log::info('REQUEST DATA', $logData);
-    // return APIBitrixController::installSmart($domain);
+   
+    try {
+        $portal = PortalController::getPortal($domain);
+        Log::info('portal', ['portal' => $portal]);
+        $portal = $portal['data'];
+        Log::info('portalData', ['portal' => $portal]);
+       
+        $nowDate = now();
+        $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
+        $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
+        $moscowTime = $moscowTime->format('Y-m-d H:i:s');
+        Log::info('novosibirskTime', ['novosibirskTime' => $novosibirskTime]);
+        Log::info('moscowTime', ['moscowTime' => $moscowTime]);
+
+
+         //smart update
+         $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+         $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+         $methodSmartUpdate = '/crm.item.update.json';
+         $url = $hook . $methodSmartUpdate;
+        //  $smartData =  [
+        //     'ENTITY_TYPE_ID' => ,
+        //     'fields' => [
+        //         'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
+        //         'RESPONSIBLE_ID' => $responsibleId,
+        //         'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
+        //         'CHANGED_BY' => $createdId, //- постановщик;
+        //         'CREATED_BY' => $createdId, //- постановщик;
+        //         'CREATED_DATE' => $nowDate, // - дата создания;
+        //         'DEADLINE' => $moscowTime, //- крайний срок;
+        //         'UF_CRM_TASK' => ['T9c_' . $crm],
+        //         'ALLOW_CHANGE_DEADLINE' => 'N',
+        //         'DESCRIPTION' => $description
+        //     ]
+        // ];
+
+        // $responseData = Http::get($url, $smartData);
+
+
+
+    } catch (\Throwable $th) {
+        Log::error('ERROR: Exception caught', [
+            'message'   => $th->getMessage(),
+            'file'      => $th->getFile(),
+            'line'      => $th->getLine(),
+            'trace'     => $th->getTraceAsString(),
+        ]);
+        return APIOnlineController::getResponse(1, $th->getMessage(), null);
+    }
 });
 
 
