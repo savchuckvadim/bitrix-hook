@@ -391,7 +391,7 @@ Route::post('/update/smart/', function (Request $request) {
         $url = $hook . $methodSmartUpdate;
         $smartData =  [
             'id' => $currentSmartId,
-            'ENTITY_TYPE_ID' => $crm,
+            'entityTypeId' => $crm,
             // 'fields' => [
             //     'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
             //     'RESPONSIBLE_ID' => $responsibleId,
