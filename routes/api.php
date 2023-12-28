@@ -355,8 +355,10 @@ Route::post('/update/smart/', function (Request $request) {
 
     $deadline = $request['deadline'];
     $name = $request['name'];
+    $currentSmartId = $request['id'];
     $logData = [
         'crm' => $crm,
+        'currentSmartId' => $currentSmartId,
         'domain' => $domain,
         'deadline' => $deadline,
         'createdId' => $createdId,
@@ -366,13 +368,13 @@ Route::post('/update/smart/', function (Request $request) {
 
     // Log::info('REQUEST', $request->all());
     Log::info('REQUEST DATA', $logData);
-   
+
     try {
         $portal = PortalController::getPortal($domain);
         Log::info('portal', ['portal' => $portal]);
         $portal = $portal['data'];
         Log::info('portalData', ['portal' => $portal]);
-       
+
         $nowDate = now();
         $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
         $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
@@ -381,13 +383,14 @@ Route::post('/update/smart/', function (Request $request) {
         Log::info('moscowTime', ['moscowTime' => $moscowTime]);
 
 
-         //smart update
-         $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
-         $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+        //smart update
+        $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+        $hook = 'https://' . $domain  . '/' . $webhookRestKey;
         //  $methodSmartUpdate = '/crm.item.update.json';
         $methodSmartUpdate = '/crm.item.get.json';
-         $url = $hook . $methodSmartUpdate;
-         $smartData =  [
+        $url = $hook . $methodSmartUpdate;
+        $smartData =  [
+            'ID' => $currentSmartId,
             'ENTITY_TYPE_ID' => $crm,
             // 'fields' => [
             //     'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
@@ -406,7 +409,6 @@ Route::post('/update/smart/', function (Request $request) {
         $responseData = Http::get($url, $smartData);
 
         Log::info('responseData', ['responseData' => $responseData]);
-
     } catch (\Throwable $th) {
         Log::error('ERROR: Exception caught', [
             'message'   => $th->getMessage(),
