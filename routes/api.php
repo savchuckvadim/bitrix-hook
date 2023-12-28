@@ -458,7 +458,7 @@ Route::post('/update/smart/', function (Request $request) {
                 "ufCrm1702453779"=> $createdId,
                 "ufCrm1702652862"=> $responsibleId,
                 
-                "stageId"=> 'DYNAMIC_156_STAGE:NEW',
+                "stageId"=> 'DT156_14:NEW',
                 
 
             ]
