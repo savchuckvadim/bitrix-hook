@@ -54,7 +54,7 @@ Route::post('/task', function (Request $request) {
     $auth = $request['auth'];
     $domain = $auth['domain'];
     $companyId = $request['company_id'];
-  
+
     $deadline = $request['deadline'];
     $name = $request['name'];
     $crm = $request['crm'];
@@ -335,12 +335,35 @@ Route::post('/update/smart/', function (Request $request) {
 
     $auth = $request['auth'];
     $domain = $auth['domain'];
-    Log::info('REQUEST', $request->all());
-    Log::info('domain', ['domain' => $domain]);
-   
 
 
+    $created = $request['created'];
+    $responsible = $request['responsible'];
 
+    Log::info('LOG', $request->all());
+
+    $partsCreated = explode("_", $created);
+    $partsResponsible = explode("_", $responsible);
+    $createdId = $partsCreated[1];
+    $responsibleId = $partsResponsible[1];
+
+
+    $auth = $request['auth'];
+    $domain = $auth['domain'];
+    // $companyId = $request['company_id'];
+
+    $deadline = $request['deadline'];
+    $name = $request['name'];
+    $logData = [
+        'domain' => $domain,
+        'deadline' => $deadline,
+        'createdId' => $createdId,
+        'responsibleId' => $responsibleId,
+        'name' => $name,
+    ];
+
+    // Log::info('REQUEST', $request->all());
+    Log::info('REQUEST DATA', $logData);
     // return APIBitrixController::installSmart($domain);
 });
 
