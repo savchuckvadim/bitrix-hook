@@ -384,27 +384,28 @@ Route::post('/update/smart/', function (Request $request) {
          //smart update
          $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
          $hook = 'https://' . $domain  . '/' . $webhookRestKey;
-         $methodSmartUpdate = '/crm.item.update.json';
+        //  $methodSmartUpdate = '/crm.item.update.json';
+        $methodSmartUpdate = '/crm.item.get.json';
          $url = $hook . $methodSmartUpdate;
-        //  $smartData =  [
-        //     'ENTITY_TYPE_ID' => ,
-        //     'fields' => [
-        //         'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
-        //         'RESPONSIBLE_ID' => $responsibleId,
-        //         'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
-        //         'CHANGED_BY' => $createdId, //- постановщик;
-        //         'CREATED_BY' => $createdId, //- постановщик;
-        //         'CREATED_DATE' => $nowDate, // - дата создания;
-        //         'DEADLINE' => $moscowTime, //- крайний срок;
-        //         'UF_CRM_TASK' => ['T9c_' . $crm],
-        //         'ALLOW_CHANGE_DEADLINE' => 'N',
-        //         'DESCRIPTION' => $description
-        //     ]
-        // ];
+         $smartData =  [
+            'ENTITY_TYPE_ID' => $crm,
+            // 'fields' => [
+            //     'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
+            //     'RESPONSIBLE_ID' => $responsibleId,
+            //     'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
+            //     'CHANGED_BY' => $createdId, //- постановщик;
+            //     'CREATED_BY' => $createdId, //- постановщик;
+            //     'CREATED_DATE' => $nowDate, // - дата создания;
+            //     'DEADLINE' => $moscowTime, //- крайний срок;
+            //     'UF_CRM_TASK' => ['T9c_' . $crm],
+            //     'ALLOW_CHANGE_DEADLINE' => 'N',
+            //     'DESCRIPTION' => $description
+            // ]
+        ];
 
-        // $responseData = Http::get($url, $smartData);
+        $responseData = Http::get($url, $smartData);
 
-
+        Log::info('responseData', ['responseData' => $responseData]);
 
     } catch (\Throwable $th) {
         Log::error('ERROR: Exception caught', [
