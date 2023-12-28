@@ -331,6 +331,18 @@ Route::post('/install/smart/', function (Request $request) {
 
 
 
+Route::post('/update/smart/', function (Request $request) {
+
+    $auth = $request['auth'];
+    $domain = $auth['domain'];
+    Log::info('REQUEST', $request->all());
+    Log::info('domain', ['domain' => $domain]);
+   
+
+
+
+    // return APIBitrixController::installSmart($domain);
+});
 
 
 

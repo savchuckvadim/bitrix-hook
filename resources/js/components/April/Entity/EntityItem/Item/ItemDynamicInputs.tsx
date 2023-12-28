@@ -3,7 +3,7 @@ import { EntityFormField } from "../../../../../types/entity/entity-types";
 import { FormikProps } from "formik";
 import { GetInitialRelationFunction } from "../../../../../store/april/entity/entity-reducer";
 import { useState } from "react";
-
+import Select from "react-select";
 type DynamicInputProps = {
     field: EntityFormField
     validation: any
@@ -19,23 +19,26 @@ type DynamicInputProps = {
 
 }
 const EntityItemDynamicInput = ({
-    field, fieldIndex, groupName, validation, isRelation, isFromRelation, 
+    field, fieldIndex, groupName, validation, isRelation, isFromRelation,
     relationIndex, isEntitiesGroup,
     getInitialRelationEntity, addRelation
 }: DynamicInputProps) => {
-
+    const [selectedGroup, setselectedGroup] = useState(null);
     // string | text | data | img | entity
     let input = <div></div>
     let width = 12
     const [singlebtn, setSinglebtn] = useState(false)
+    function handleSelectGroup(selectedGroup: any) {
+        setselectedGroup(selectedGroup);
+    }
     const getRelationFieldName = (name: string) => `relations.${groupName}.${relationIndex}.${name}`
     const fieldFormName = (isRelation || isFromRelation) ? getRelationFieldName(field['apiName']) : field['apiName']
-    
+
     if (!isRelation) {
         switch (field.type) {
 
             case 'string':
-
+                debugger
                 input = <div> <Input
                     type={'text'}
                     className="form-control"
@@ -94,21 +97,45 @@ const EntityItemDynamicInput = ({
                 break;
 
             case 'select':
+                debugger
+                const optionGroup = [
+                    {
+                        label: "Picnic",
+                        options: field.items?.map(item => (
+                            { label: item.title, value: item.name }
+                        ))
+                    },
 
-                input = <div> <Dropdown
-                    isOpen={singlebtn}
-                    toggle={() => setSinglebtn(!singlebtn)}
-                >
-                    <DropdownToggle className="btn btn-info" caret>
-                        {field['title']}
-                        <i className="mdi mdi-chevron-down" />
-                    </DropdownToggle>
-                    <DropdownMenu>
-                        {field.items && field.items.length && field.items.map(item => (
-                            <DropdownItem>{item.title}</DropdownItem>
-                        ))}
-                    </DropdownMenu>
-                </Dropdown>
+                ];
+
+                //@ts-ignore
+                const value = optionGroup[0].options.find(option => option === validation.values[fieldFormName])
+                let tets = validation.initialValues[fieldFormName]
+                debugger
+                input = <div className="mb-3">
+                    <Label>Single Select</Label>
+                    <Select
+                        name={fieldFormName}
+                        // type={'select'}
+                        // value={selectedGroup}
+                        // onChange={() => {
+                        //     handleSelectGroup();
+                        // }}
+                        //@ts-ignore
+                        // value={value}
+
+                        onChange={(option) => {
+                            debugger
+                            //@ts-ignore
+                            validation.setFieldValue(fieldFormName, option.value)
+                        }}
+                        onBlur={() => validation.setFieldTouched(fieldFormName, true)}
+                        // onChange={validation.handleChange}
+                        // onBlur={validation.handleBlur}
+                        options={optionGroup}
+                        className="select2-selection"
+                    />
+
                     {
                         field.isCanAddField && <Button
 
@@ -196,7 +223,7 @@ const EntityItemDynamicInput = ({
         }
 
     } else {
-        
+
         input = <div>
             <Label className="mr-10 btn">{field['apiName']}</Label>
             <Button
