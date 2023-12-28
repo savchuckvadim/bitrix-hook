@@ -350,7 +350,7 @@ Route::post('/update/smart/', function (Request $request) {
 
     $auth = $request['auth'];
     $domain = $auth['domain'];
-    $crm = $request['crm'];
+    $crm = $request['document_id'][2];
     // $companyId = $request['company_id'];
 
     $deadline = $request['deadline'];
