@@ -372,7 +372,7 @@ Route::post('/update/smart/', function (Request $request) {
     try {
 
 
-
+        APIBitrixController::getSmartStages($domain);
 
         //portal and keys
         $portal = PortalController::getPortal($domain);
