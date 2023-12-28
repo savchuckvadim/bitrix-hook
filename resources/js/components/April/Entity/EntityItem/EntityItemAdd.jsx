@@ -25,7 +25,8 @@ const EntityItemAdd = ({
     validation,
     router, creating, relation, entityName, itemUrl,
     isFromRelation = false, relationIndex,
-    setOrupdateEntityItem, getInitialRelationEntity, setRelation, addRelation
+    setOrupdateEntityItem, getInitialRelationEntity, setRelation, addRelation,
+    handleFileChange,
 }) => {
 
     //meta title
@@ -70,6 +71,7 @@ const EntityItemAdd = ({
                                             isFromRelation={isFromRelation}
                                             getInitialRelationEntity={getInitialRelationEntity}
                                             addRelation={addRelation}
+                                            handleFileChange={handleFileChange}
 
                                         />
 
@@ -98,6 +100,7 @@ const EntityItemAdd = ({
                                             isFromRelation={isFromRelation}
                                             getInitialRelationEntity={getInitialRelationEntity}
                                             addRelation={addRelation}
+                                            handleFileChange={handleFileChange}
 
                                         />
 
@@ -134,6 +137,7 @@ const EntityItemAdd = ({
                 getInitialRelationEntity={getInitialRelationEntity}
                 setRelation={setRelation}
                 addRelation={addRelation}
+                handleFileChange={handleFileChange}
 
             />}
             {/* <div className="page-content"> */}

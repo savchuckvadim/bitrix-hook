@@ -10,6 +10,7 @@ import EntityItem from "./EntityItem"
 import EntityItemAdd from "./EntityItemAdd"
 import { getInitialValues } from "../../../../utils/entity-utils/entity-util"
 import { useFormik } from "formik"
+import { appendFormData } from "../../../../utils/entity-utils/form-util"
 
 
 const mapState = (state) => {
@@ -45,6 +46,7 @@ const EntityItemContainer = ({
     // const [currentItems, setCurrentItems] = useState(items)
     const [isCreating, setIsCreating] = useState(router.params.entityId === 'add')
     const [creatingData, setCreating] = useState(creating)
+    const [files, setFiles] = useState([]);
     useEffect(() => {
 
         if (router.params.entityId) {
@@ -61,7 +63,7 @@ const EntityItemContainer = ({
     }, [creating])
 
     const dataInitialValues = creating.formData && getInitialValues(creating.formData)
-    
+
     // Form validation 
     const validation = useFormik({
         // enableReinitialize : use this flag when initial values needs to be changed
@@ -71,17 +73,31 @@ const EntityItemContainer = ({
             ...dataInitialValues
         },
 
-        
+
         onSubmit: (values) => {
             console.log("values", values);
+            const formData = new FormData();
 
 
-debugger
-            setOrupdateEntityItem(router.navigate, router.location.pathname, itemUrl, itemUrl, values)
-            console.log("values", values);
+            for (const key in values) {
+                appendFormData(formData, key, values[key]);
+            }
+
+            for (let [key, value] of formData.entries()) {
+                console.log(key, value);
+            }
+            
+            setOrupdateEntityItem(router.navigate, router.location.pathname, itemUrl, itemUrl, formData)
+           
         }
+
     });
-    
+    const handleFileChange = (event, inputName) => {
+        // Добавляем все выбранные файлы в массив
+        // setFiles([...files, ...event.target.files]);
+        // Обновляем стейт Formik (необязательно)
+        validation.setFieldValue(inputName, event.target.files);
+    };
     return !isCreating ? <EntityItem
         router={router}
         entity={current}
@@ -103,6 +119,7 @@ debugger
             getInitialRelationEntity={getInitialRelationEntity}
             setRelation={setRelation}
             addRelation={addRelation}
+            handleFileChange={handleFileChange}
 
         />
 

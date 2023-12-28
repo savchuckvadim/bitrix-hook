@@ -16,21 +16,20 @@ type DynamicInputProps = {
     fieldIndex: number
     getInitialRelationEntity: GetInitialRelationFunction
     addRelation: (groupName: string, relationIndex: number) => void
+    handleFileChange: (event: any, inputName: string) => void
 
 }
 const EntityItemDynamicInput = ({
     field, fieldIndex, groupName, validation, isRelation, isFromRelation,
     relationIndex, isEntitiesGroup,
-    getInitialRelationEntity, addRelation
+    handleFileChange, getInitialRelationEntity, addRelation
 }: DynamicInputProps) => {
-    const [selectedGroup, setselectedGroup] = useState(null);
+
     // string | text | data | img | entity
     let input = <div></div>
     let width = 12
-    const [singlebtn, setSinglebtn] = useState(false)
-    function handleSelectGroup(selectedGroup: any) {
-        setselectedGroup(selectedGroup);
-    }
+
+
     const getRelationFieldName = (name: string) => `relations.${groupName}.${relationIndex}.${name}`
     const fieldFormName = (isRelation || isFromRelation) ? getRelationFieldName(field['apiName']) : field['apiName']
 
@@ -38,7 +37,7 @@ const EntityItemDynamicInput = ({
         switch (field.type) {
 
             case 'string':
-                debugger
+
                 input = <div> <Input
                     type={'text'}
                     className="form-control"
@@ -97,44 +96,24 @@ const EntityItemDynamicInput = ({
                 break;
 
             case 'select':
-                debugger
-                const optionGroup = [
-                    {
-                        label: "Picnic",
-                        options: field.items?.map(item => (
-                            { label: item.title, value: item.name }
-                        ))
-                    },
 
-                ];
 
-                //@ts-ignore
-                const value = optionGroup[0].options.find(option => option === validation.values[fieldFormName])
-                let tets = validation.initialValues[fieldFormName]
-                debugger
                 input = <div className="mb-3">
-                    <Label>Single Select</Label>
-                    <Select
-                        name={fieldFormName}
-                        // type={'select'}
-                        // value={selectedGroup}
-                        // onChange={() => {
-                        //     handleSelectGroup();
-                        // }}
-                        //@ts-ignore
-                        // value={value}
+                    <label className="col-md-2 col-form-label">Select</label>
+                    <div className="col-md-10">
+                        <select
+                            name={fieldFormName}
+                            onChange={validation.handleChange}
+                            onBlur={validation.handleBlur}
+                            className="form-control"
+                        >
+                            {field.items?.map(item => (
+                                <option value={item.name}>{item.title}</option>
 
-                        onChange={(option) => {
-                            debugger
-                            //@ts-ignore
-                            validation.setFieldValue(fieldFormName, option.value)
-                        }}
-                        onBlur={() => validation.setFieldTouched(fieldFormName, true)}
-                        // onChange={validation.handleChange}
-                        // onBlur={validation.handleBlur}
-                        options={optionGroup}
-                        className="select2-selection"
-                    />
+                            ))}
+                        </select>
+                    </div>
+
 
                     {
                         field.isCanAddField && <Button
@@ -160,6 +139,10 @@ const EntityItemDynamicInput = ({
                         type="checkbox"
                         className="form-check-input"
                         id="CustomCheck1"
+                        name={fieldFormName}
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                        value="true"
                     />
                     <label
                         className="form-check-label"
@@ -187,7 +170,13 @@ const EntityItemDynamicInput = ({
 
                 input = <div className="mt-3">
                     <Label htmlFor="formFile" className="form-label">{field['title']}</Label>
-                    <Input className="form-control" type="file" id="formFile" />
+                    <Input
+                        name={fieldFormName}
+                        onChange={(e) => handleFileChange(e, fieldFormName)}
+                        onBlur={validation.handleBlur}
+                        className="form-control"
+                        type="file" id="formFile"
+                    />
                 </div>
 
 

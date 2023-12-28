@@ -149,13 +149,13 @@ export const setOrupdateEntityItem = (history: (url: string) => void, currentUrl
     if (url) {
         const apiData = data
         //@ts-ignore
-        if (apiData.number) {
-            //@ts-ignore
-            apiData.number = Number(apiData.number)
-        }
-
-        const item = await onlineAPI.service(url, API_METHOD.POST, entityName, apiData)
-
+        // if (apiData.number) {
+        //     //@ts-ignore
+        //     apiData.number = Number(apiData.number)
+        // }
+debugger
+        // const item = await onlineAPI.service(url, API_METHOD.POST, entityName, apiData)
+        const item = await onlineAPI.service('test/template', API_METHOD.POST, 'result', apiData)
 
         if (item) {
             dispatch(entityActions.setEntityItem(item))

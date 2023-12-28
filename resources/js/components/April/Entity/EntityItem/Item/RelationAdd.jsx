@@ -5,7 +5,8 @@ import EntityItemAdd from "../EntityItemAdd";
 
 const RelationAdd = ({ 
     validation, relation, router, entityName, itemUrl, 
-    setOrupdateEntityItem, getInitialRelationEntity, setRelation, addRelation
+    setOrupdateEntityItem, getInitialRelationEntity, setRelation, addRelation,
+    handleFileChange
  }) => {
 
     document.title = "Models | Skote React + Laravel 10 Admin And Dashboard Template";
@@ -65,6 +66,7 @@ const RelationAdd = ({
                     getInitialRelationEntity={getInitialRelationEntity}
                     setRelation={setRelation}
                     addRelation={addRelation}
+                    handleFileChange={handleFileChange}
                 />
             </div>
             <div className="modal-footer">
