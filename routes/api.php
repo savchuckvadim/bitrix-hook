@@ -371,7 +371,7 @@ Route::post('/update/smart/', function (Request $request) {
 
     try {
 
-        
+
 
 
         //portal and keys
@@ -387,6 +387,7 @@ Route::post('/update/smart/', function (Request $request) {
 
 
         //user and time
+        $responsibleTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
         $methodGetUser = '/user.get.json';
         $url = $hook . $methodGetUser;
         $userData = [
@@ -394,8 +395,13 @@ Route::post('/update/smart/', function (Request $request) {
         ];
         $userResponse =  $responseData = Http::get($url, $userData);
         Log::info('RESPONSIBLE', ['userResponse' => $userResponse]);
+        if ($userResponse && $userResponse['result']) {
+            $userTimeZone =  $userResponse['result']['TIME_ZONE'];
+            Log::info('userTimeZone', ['userTimeZone' => $userTimeZone]);
+            $responsibleTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, $userTimeZone );
 
-        
+        }
+
         $nowDate = now();
         $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
         $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
@@ -405,7 +411,7 @@ Route::post('/update/smart/', function (Request $request) {
 
 
         //smart update
-      
+
         //  $methodSmartUpdate = '/crm.item.update.json';
         $methodSmartUpdate = '/crm.item.get.json';
         $url = $hook . $methodSmartUpdate;
