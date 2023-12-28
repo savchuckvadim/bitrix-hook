@@ -387,7 +387,7 @@ Route::post('/update/smart/', function (Request $request) {
 
 
         //user and time
-        $responsibleTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
+        $createdTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
         $methodGetUser = '/user.get.json';
         $url = $hook . $methodGetUser;
         $userData = [
@@ -398,13 +398,13 @@ Route::post('/update/smart/', function (Request $request) {
         if ($userResponse && $userResponse['result'] && $userResponse['result'][0]) {
             $userTimeZone =  $userResponse['result'][0]['TIME_ZONE'];
         
-            $createdTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, $userTimeZone );
+            $createdTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, $userTimeZone);
 
         }
 
         // $nowDate = now();
         // $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
-        $moscowTime = $userTimeZone->setTimezone('Europe/Moscow');
+        $moscowTime = $createdTime->setTimezone('Europe/Moscow');
         $moscowTime = $moscowTime->format('Y-m-d H:i:s');
         Log::info('novosibirskTime', ['novosibirskTime' => $createdTime]);
         Log::info('moscowTime', ['moscowTime' => $moscowTime]);
