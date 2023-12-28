@@ -390,7 +390,7 @@ Route::post('/update/smart/', function (Request $request) {
         $methodSmartUpdate = '/crm.item.get.json';
         $url = $hook . $methodSmartUpdate;
         $smartData =  [
-            'ID' => $currentSmartId,
+            'id' => $currentSmartId,
             'ENTITY_TYPE_ID' => $crm,
             // 'fields' => [
             //     'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
