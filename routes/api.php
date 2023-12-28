@@ -370,11 +370,32 @@ Route::post('/update/smart/', function (Request $request) {
     Log::info('REQUEST DATA', $logData);
 
     try {
+
+        
+
+
+        //portal and keys
         $portal = PortalController::getPortal($domain);
         Log::info('portal', ['portal' => $portal]);
         $portal = $portal['data'];
         Log::info('portalData', ['portal' => $portal]);
 
+        //base hook
+        $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+        $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+
+
+
+        //user and time
+        $methodGetUser = '/user.get.json';
+        $url = $hook . $methodGetUser;
+        $userData = [
+            'id' => $responsibleId
+        ];
+        $userResponse =  $responseData = Http::get($url, $userData);
+        Log::info('RESPONSIBLE', ['userResponse' => $userResponse]);
+
+        
         $nowDate = now();
         $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
         $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
@@ -384,8 +405,7 @@ Route::post('/update/smart/', function (Request $request) {
 
 
         //smart update
-        $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
-        $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+      
         //  $methodSmartUpdate = '/crm.item.update.json';
         $methodSmartUpdate = '/crm.item.get.json';
         $url = $hook . $methodSmartUpdate;
