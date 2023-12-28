@@ -396,7 +396,7 @@ Route::post('/update/smart/', function (Request $request) {
         $userResponse =  $responseData = Http::get($url, $userData);
         Log::info('RESPONSIBLE', ['userResponse' => $userResponse]);
         if ($userResponse && $userResponse['result']) {
-            $userTimeZone =  $userResponse['result']['timeZone'];
+            $userTimeZone =  $userResponse['result'];
             Log::info('userTimeZone', ['userTimeZone' => $userTimeZone]);
             // $responsibleTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, $userTimeZone );
 
