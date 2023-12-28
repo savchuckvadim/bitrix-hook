@@ -412,10 +412,11 @@ Route::post('/update/smart/', function (Request $request) {
 
         //smart update
 
+        //get smart
         //  $methodSmartUpdate = '/crm.item.update.json';
-        $methodSmartUpdate = '/crm.item.get.json';
-        $url = $hook . $methodSmartUpdate;
-        $smartData =  [
+        $methodSmartGet = '/crm.item.get.json';
+        $url = $hook . $methodSmartGet;
+        $smartGetData =  [
             'id' => $currentSmartId,
             'entityTypeId' => env('BITRIX_SMART_MAIN_ID'),
             // 'fields' => [
@@ -432,8 +433,38 @@ Route::post('/update/smart/', function (Request $request) {
             // ]
         ];
 
-        $responseData = Http::get($url, $smartData);
+        $responseGetData = Http::get($url, $smartGetData);
+        Log::info('responseGetData', ['responseGetData' => $responseGetData]);
 
+         //update smart
+        //  $methodSmartUpdate = '/crm.item.update.json';
+        $methodSmartUpdate = '/crm.item.update.json';
+        $url = $hook . $methodSmartUpdate;
+        $smartUpdateData =  [
+            'id' => $currentSmartId,
+            'entityTypeId' => env('BITRIX_SMART_MAIN_ID'),
+            'fields' => [
+                // 'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
+                // 'RESPONSIBLE_ID' => $responsibleId,
+                // 'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
+                // 'CHANGED_BY' => $createdId, //- постановщик;
+                // 'CREATED_BY' => $createdId, //- постановщик;
+                // 'CREATED_DATE' => $nowDate, // - дата создания;
+                // 'DEADLINE' => $moscowTime, //- крайний срок;
+                // 'UF_CRM_TASK' => ['T9c_' . $crm],
+                // 'ALLOW_CHANGE_DEADLINE' => 'N',
+                // 'DESCRIPTION' => $description
+                "ufCrm1700645937"=> $moscowTime,
+                "ufCrm1702453779"=> $createdId,
+                "ufCrm1702652862"=> $responsibleId,
+                
+                "stageId"=> 'DYNAMIC_156_STAGE:NEW',
+                
+
+            ]
+        ];
+
+        $responseData = Http::get($url, $smartUpdateData);
         Log::info('responseData', ['responseData' => $responseData]);
     } catch (\Throwable $th) {
         Log::error('ERROR: Exception caught', [
