@@ -391,22 +391,22 @@ Route::post('/update/smart/', function (Request $request) {
         $methodGetUser = '/user.get.json';
         $url = $hook . $methodGetUser;
         $userData = [
-            'id' => $responsibleId
+            'id' => $createdId
         ];
         $userResponse =  $responseData = Http::get($url, $userData);
         Log::info('RESPONSIBLE', ['userResponse' => $userResponse]);
         if ($userResponse && $userResponse['result'] && $userResponse['result'][0]) {
             $userTimeZone =  $userResponse['result'][0]['TIME_ZONE'];
-            Log::info('userTimeZone', ['userTimeZone' => $userTimeZone]);
-            // $responsibleTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, $userTimeZone );
+        
+            $createdTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, $userTimeZone );
 
         }
 
-        $nowDate = now();
-        $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
-        $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
+        // $nowDate = now();
+        // $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
+        $moscowTime = $userTimeZone->setTimezone('Europe/Moscow');
         $moscowTime = $moscowTime->format('Y-m-d H:i:s');
-        Log::info('novosibirskTime', ['novosibirskTime' => $novosibirskTime]);
+        Log::info('novosibirskTime', ['novosibirskTime' => $createdTime]);
         Log::info('moscowTime', ['moscowTime' => $moscowTime]);
 
 
