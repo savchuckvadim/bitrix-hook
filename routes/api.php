@@ -445,7 +445,7 @@ Route::post('/update/smart/', function (Request $request) {
             'entityTypeId' => env('BITRIX_SMART_MAIN_ID'),
             'fields' => [
                 // 'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
-                'RESPONSIBLE_ID' => $responsibleId,
+                'responsibleId' => $responsibleId,
                 // 'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
                 // 'CHANGED_BY' => $createdId, //- постановщик;
                 // 'CREATED_BY' => $createdId, //- постановщик;
