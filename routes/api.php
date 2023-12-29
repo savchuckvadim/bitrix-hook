@@ -414,11 +414,11 @@ Route::post('/update/smart/', function (Request $request) {
 
         //get smart
         //  $methodSmartUpdate = '/crm.item.update.json';
-        $methodSmartGet = '/crm.item.get.json';
-        $url = $hook . $methodSmartGet;
-        $smartGetData =  [
-            'id' => $currentSmartId,
-            'entityTypeId' => env('BITRIX_SMART_MAIN_ID'),
+        // $methodSmartGet = '/crm.item.get.json';
+        // $url = $hook . $methodSmartGet;
+        // $smartGetData =  [
+        //     'id' => $currentSmartId,
+        //     'entityTypeId' => env('BITRIX_SMART_MAIN_ID'),
             // 'fields' => [
             //     'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
             //     'RESPONSIBLE_ID' => $responsibleId,
@@ -431,10 +431,10 @@ Route::post('/update/smart/', function (Request $request) {
             //     'ALLOW_CHANGE_DEADLINE' => 'N',
             //     'DESCRIPTION' => $description
             // ]
-        ];
+        // ];
 
-        $responseGetData = Http::get($url, $smartGetData);
-        Log::info('responseGetData', ['responseGetData' => $responseGetData]);
+        // $responseGetData = Http::get($url, $smartGetData);
+        // Log::info('responseGetData', ['responseGetData' => $responseGetData]);
 
         //update smart
         //  $methodSmartUpdate = '/crm.item.update.json';
@@ -454,7 +454,7 @@ Route::post('/update/smart/', function (Request $request) {
                 // 'UF_CRM_TASK' => ['T9c_' . $crm],
                 // 'ALLOW_CHANGE_DEADLINE' => 'N',
                 // 'DESCRIPTION' => $description
-                "ufCrm_1696580389" => $moscowTime,
+                "ufCrm_1696580389" => $deadline,
                 "ufCrm_6_1702453779" => $createdId,
                 "ufCrm_6_1702652862" => $responsibleId,
                 "ufCrm_6_1700645937" => $name,
