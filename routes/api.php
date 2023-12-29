@@ -395,12 +395,12 @@ Route::post('/update/smart/', function (Request $request) {
         ];
         $userResponse =  $responseData = Http::get($url, $userData);
         Log::info('RESPONSIBLE', ['userResponse' => $userResponse]);
-        if ($userResponse && $userResponse['result'] && $userResponse['result'][0]) {
-            $userTimeZone =  $userResponse['result'][0]['TIME_ZONE'];
-            if ($userTimeZone) {
-                $createdTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, $userTimeZone);
-            }
-        }
+        // if ($userResponse && $userResponse['result'] && $userResponse['result'][0]) {
+        //     $userTimeZone =  $userResponse['result'][0]['TIME_ZONE'];
+        //     if ($userTimeZone) {
+        //         $createdTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, $userTimeZone);
+        //     }
+        // }
 
         // $nowDate = now();
         // $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
