@@ -455,9 +455,9 @@ Route::post('/update/smart/', function (Request $request) {
                 // 'ALLOW_CHANGE_DEADLINE' => 'N',
                 // 'DESCRIPTION' => $description
                 "ufCrm_1696580389" => $moscowTime,
-                "ufCrm6_1702453779" => $createdId,
-                "UF_CRM_6_1702652862" => $responsibleId,
-                "UF_CRM_6_700645937" => $name,
+                "ufCrm_6_1702453779" => $createdId,
+                "ufCrm_6_1702652862" => $responsibleId,
+                "ufCrm_6_700645937" => $name,
                 
                 "stageId" => 'DT156_14:NEW',
 
