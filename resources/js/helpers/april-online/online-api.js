@@ -12,8 +12,9 @@ export const online = axios.create({
     ? 'http://localhost:8000/api'
     : 'https://april-online.ru/api',
     headers: {
-        'content-type': 'application/json',
-        'accept': 'application/json',
+        // 'content-type': 'application/json',
+        // 'content-type': undefined,
+        // 'accept': 'application/json',
         // 'Access-Control-Allow-Origin': '*',
         'X-Requested-With': 'XMLHttpRequest'
     },
