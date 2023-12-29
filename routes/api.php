@@ -445,7 +445,7 @@ Route::post('/update/smart/', function (Request $request) {
             'entityTypeId' => env('BITRIX_SMART_MAIN_ID'),
             'fields' => [
                 // 'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
-                'responsibleId' => $responsibleId,
+                'assignedById' => $responsibleId,
                 // 'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
                 // 'CHANGED_BY' => $createdId, //- постановщик;
                 // 'CREATED_BY' => $createdId, //- постановщик;
@@ -454,8 +454,8 @@ Route::post('/update/smart/', function (Request $request) {
                 // 'UF_CRM_TASK' => ['T9c_' . $crm],
                 // 'ALLOW_CHANGE_DEADLINE' => 'N',
                 // 'DESCRIPTION' => $description
-                "UF_CRM_1696580389" => $moscowTime,
-                "UF_CRM_6_1702453779" => $createdId,
+                "ufCrm_1696580389" => $moscowTime,
+                "ufCrm6_1702453779" => $createdId,
                 "UF_CRM_6_1702652862" => $responsibleId,
                 "UF_CRM_6_700645937" => $name,
                 
