@@ -25,12 +25,12 @@ export const getInitialValues = (initialData: InitialEntityData) => {
             
 
             relation.groups.map(rltnGroup => {
-                resultInitialData.relations[rltnGroup.groupName] = {}
-                resultInitialData.relations[rltnGroup.groupName][relation.apiName] = []
+                resultInitialData.relations[relation.apiName] = []
+                // resultInitialData.relations[rltnGroup.groupName][relation.apiName] = []
                 
-                resultInitialData.relations[rltnGroup.groupName][relation.apiName][relationIndex] = {}
+                resultInitialData.relations[relation.apiName][relationIndex] = {}
                 rltnGroup.fields && rltnGroup.fields.length && rltnGroup.fields.map(fld => {
-                    resultInitialData.relations[rltnGroup.groupName][relation.apiName][relationIndex][fld.apiName] = ''
+                    resultInitialData.relations[relation.apiName][relationIndex][fld.apiName] = ''
 
 
                 })

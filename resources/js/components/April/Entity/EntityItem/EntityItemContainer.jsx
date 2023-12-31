@@ -82,13 +82,15 @@ const EntityItemContainer = ({
             for (const key in values) {
                 appendFormData(formData, key, values[key]);
             }
+            console.log("formData", formData.values());
+
 
             for (let [key, value] of formData.entries()) {
                 console.log(key, value);
             }
-            
+
             setOrupdateEntityItem(router.navigate, router.location.pathname, itemUrl, itemUrl, formData)
-           
+
         }
 
     });

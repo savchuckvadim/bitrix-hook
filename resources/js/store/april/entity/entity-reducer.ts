@@ -153,7 +153,7 @@ export const setOrupdateEntityItem = (history: (url: string) => void, currentUrl
         //     //@ts-ignore
         //     apiData.number = Number(apiData.number)
         // }
-debugger
+
         // const item = await onlineAPI.service(url, API_METHOD.POST, entityName, apiData)
         const item = await onlineAPI.service('/test/template', API_METHOD.POST, 'result', apiData)
 

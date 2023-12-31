@@ -33,14 +33,14 @@ const EntityItemAdd = ({
     document.title = entityName + " | Skote React + Laravel 10 Admin And Dashboard Template";
 
 
-
+    
 
     
 
 
     const getItems = (creatingEntity) => {
         let result = []
-
+        
         creatingEntity.groups.forEach((group, index) => {
 
             const isEntitiesGroup = group.type === 'entities'
@@ -52,6 +52,10 @@ const EntityItemAdd = ({
                     <h4>{group.groupName}</h4>
 
                     {fields.map(field => {
+                        if(field.type === 'img'){
+                            
+
+                        }
 
                         return (
                             <Row className="mb-4">
@@ -65,6 +69,7 @@ const EntityItemAdd = ({
                                             isRelation={false}
                                             fieldIndex={index}
                                             relationIndex={creating.relationIndex}
+                                            relationApiName={creatingEntity.apiName}
                                             groupName={group.groupName}
                                             isEntitiesGroup={isEntitiesGroup}
                                             validation={validation}
@@ -83,6 +88,7 @@ const EntityItemAdd = ({
                     {relations.map((relation, relationIndex) => {
                         return relation.groups.map(relationGroup => {
                             let firstField = relationGroup.fields[0]
+                            
                             return <Row className="mb-4">
                                 <Label
                                     htmlFor="horizontal-firstname-Input"
@@ -94,6 +100,7 @@ const EntityItemAdd = ({
                                             fieldIndex={index}
                                             groupName={group.groupName}
                                             relationIndex={relationIndex}
+                                            relationApiName={relation.apiName}
                                             isEntitiesGroup={isEntitiesGroup}
                                             validation={validation}
                                             isRelation={true}

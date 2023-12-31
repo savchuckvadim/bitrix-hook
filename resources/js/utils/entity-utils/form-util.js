@@ -2,10 +2,14 @@ export const appendFormData = (formData, key, value) => {
     if (value instanceof File) {
         // Если значение - файл, добавляем его
         formData.append(key, value);
+    } else if (value instanceof FileList) {
+        // Если значение - FileList, обрабатываем каждый файл
+        Array.from(value).forEach((file, index) => {
+            formData.append(`${key}[${index}]`, file);
+        });
     } else if (Array.isArray(value)) {
         // Если значение - массив, обрабатываем каждый его элемент
         value.forEach((item, index) => {
-            // Для каждого элемента массива обрабатываем его как объект
             for (const subKey in item) {
                 appendFormData(formData, `${key}[${index}].${subKey}`, item[subKey]);
             }
@@ -19,5 +23,5 @@ export const appendFormData = (formData, key, value) => {
         // Для всех остальных типов данных просто добавляем их в formData
         formData.append(key, value);
     }
-    return formData
-}
+    return formData;
+};

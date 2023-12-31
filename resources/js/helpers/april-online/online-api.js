@@ -340,11 +340,11 @@ export const onlineAPI = {
     },
     service: async (url, method, model, data) => {
         let result = null
-        debugger
+        
         try {
             
             const response = await online[method](url, data)
-            debugger
+            
             if (response && response.data) {
                 if (response.data.resultCode === 0) {
                     if(response.data.data){
@@ -354,16 +354,16 @@ export const onlineAPI = {
                     }
                     
                 } else {
-                    debugger
+                    
                     console.log(response.data.message)
                 }
             }
 
             return result
         } catch (error) {
-            debugger
+            
             console.log(error)
-            debugger
+            
             return result
         }
     }
