@@ -24,7 +24,8 @@ const EntityItemsFilter = ({updateEntities, entityName}) => {
         },
 
         onSubmit: (values) => {
-            updateEntities(values, entityName)
+            debugger
+            updateEntities(values.upload, entityName)
             console.log("upload values", values);
         }
     });
