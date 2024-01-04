@@ -184,7 +184,7 @@ const Login = ({ app, router, initializeGoogleAuth }) => {
                         </button>
                       </div>
 
-                      <Alert color="info" className="mt-4">
+                      {/* <Alert color="info" className="mt-4">
                         <div className="d-flex align-items-center">
                           <div className="flex-grow-1">
                                 <p className="mb-0 email">Email - admin@themesbrand.com</p>
@@ -194,7 +194,7 @@ const Login = ({ app, router, initializeGoogleAuth }) => {
                                 <Link to="#"  onClick={handleClick} className="btn btn-primary">Click Me</Link>
                             </div>
                         </div>
-                      </Alert>
+                      </Alert> */}
 
                       <div className="mt-4 text-center">
                         <h5 className="font-size-14 mb-3">Sign in with</h5>

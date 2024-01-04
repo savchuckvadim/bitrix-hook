@@ -94,10 +94,10 @@ import MapsVector from "../pages/Maps/MapsVector";
 import MapsLeaflet from "../pages/Maps/MapsLeaflet";
 
 //Icons
-// import IconBoxicons from "../pages/Icons/IconBoxicons";
-// import IconDripicons from "../pages/Icons/IconDripicons";
-// import IconMaterialdesign from "../pages/Icons/IconMaterialdesign";
-// import IconFontawesome from "../pages/Icons/IconFontawesome";
+import IconBoxicons from "../pages/Icons/IconBoxicons";
+import IconDripicons from "../pages/Icons/IconDripicons";
+import IconMaterialdesign from "../pages/Icons/IconMaterialdesign";
+import IconFontawesome from "../pages/Icons/IconFontawesome";
 
 //Tables
 import BasicTables from "../pages/Tables/BasicTables";
@@ -240,10 +240,10 @@ const authProtectedRoutes = [
   { path: "/re-charts", component: <ReCharts /> },
 
   // Icons
-  // { path: "/icons-boxicons", component: <IconBoxicons /> },
-  // { path: "/icons-dripicons", component: <IconDripicons /> },
-  // { path: "/icons-materialdesign", component: <IconMaterialdesign /> },
-  // { path: "/icons-fontawesome", component: <IconFontawesome /> },
+  { path: "/icons-boxicons", component: <IconBoxicons /> },
+  { path: "/icons-dripicons", component: <IconDripicons /> },
+  { path: "/icons-materialdesign", component: <IconMaterialdesign /> },
+  { path: "/icons-fontawesome", component: <IconFontawesome /> },
 
   // Tables
   { path: "/tables-basic", component: <BasicTables /> },

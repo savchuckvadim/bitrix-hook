@@ -66,35 +66,26 @@ const EntityItems = ({ entityName, entityTitle, items, itemUrl, router, tableHea
                                                 </thead>
                                                 <tbody>
                                                     {currentItems.map(entity => {
-
                                                         return <tr key={`${entityName}-row-${entity.id}`}>
-                                                            {entity.items.map((prop, i) => prop.name === 'id' || i === 0
-                                                                ? <th key={`first-cell-${i}`} scope="row">{prop.value}</th>
-                                                                : <td key={`${prop.value}-cell-${i}`}>{prop.value}</td>)}
+                                                            {entity.items.map((prop, i) => {
+                                                                if (prop.name === 'id' || i === 0) {
+                                                                    return <th key={`first-cell-${i}`} scope="row">{prop.value}</th>;
+                                                                } else if (typeof prop.value === 'object' || Array.isArray(prop.value)) {
+                                                                    // Пропускаем элементы, чьё значение - объект или массив
+                                                                    return null;
+                                                                } else {
+                                                                    return <td key={`${prop.value}-cell-${i}`}>{prop.value}</td>;
+                                                                }
+                                                            })}
                                                             <td>
-                                                                {/* <NavItem>
-                                                                    <NavLink
-                                                                        replace
-                                                                        to={`../${itemUrl}/${entity.id}`}
-                                                                        // className={classnames({
-                                                                        //     active: activeTab === "1",
-                                                                        // })}
-                                                                        onClick={() => {
-
-                                                                        }}
-                                                                    > */}
                                                                 <button type="button" className="btn btn-light btn-sm"
                                                                     onClick={() => {
                                                                         router.navigate(`/${itemUrl}/${entity.id}`)
                                                                     }}
                                                                 >View</button>
-                                                                {/* </NavLink>
-                                                                </NavItem> */}
-
                                                             </td>
-                                                        </tr>
+                                                        </tr>;
                                                     })}
-
                                                 </tbody>
 
                                             </Table>

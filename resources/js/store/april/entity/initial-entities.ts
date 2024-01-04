@@ -64,11 +64,11 @@ export const allEntities = [
 
         },
         items: {
-            name: 'tfields',
+            name: 'fields',
             title: 'Свойства',
             type: ENTITY_QUANTITY.ENTITIES,
             get: {
-                url: 'tfields',
+                url: 'fields',
                 method: API_METHOD.GET
             }
 

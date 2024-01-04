@@ -21,7 +21,7 @@ type DynamicInputProps = {
 
 }
 const EntityItemDynamicInput = ({
-    field, fieldIndex, groupName, validation, isRelation, isFromRelation, 
+    field, fieldIndex, groupName, validation, isRelation, isFromRelation,
     relationIndex, relationApiName, isEntitiesGroup,
     handleFileChange, getInitialRelationEntity, addRelation
 }: DynamicInputProps) => {
@@ -31,7 +31,8 @@ const EntityItemDynamicInput = ({
     let width = 12
 
 
-    const getRelationFieldName = (name: string) =>  `relations.${name}`
+    const getRelationFieldName = (name: string) => `relations.${relationApiName}.${relationIndex}.${name}`
+    //   `relations.${name}`
     // `relations.${relationApiName}.${relationIndex}.${name}`
     const fieldFormName = relationApiName && (isRelation || isFromRelation) ? getRelationFieldName(field['apiName']) : field['apiName']
 
@@ -169,7 +170,7 @@ const EntityItemDynamicInput = ({
 
 
             case 'img':
-                
+
                 input = <div className="mt-3">
                     <Label htmlFor="formFile" className="form-label">{field['title']}</Label>
                     <Input
