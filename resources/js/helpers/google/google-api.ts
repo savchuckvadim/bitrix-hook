@@ -56,11 +56,11 @@ type ContractsDataType = {
 
 export const googleAPI = {
     async get(token = null) {
-        debugger
+        
         let googleToken = token || ''
         try {
             const res = await api.get(`${googleToken}/exec`);
-            debugger
+            
             return res.data;
         } catch (error) {
             console.error(error);

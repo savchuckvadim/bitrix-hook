@@ -33,8 +33,9 @@ const EntityItems = ({ entityName, entityTitle, items, itemUrl, router, tableHea
     }, [items])
 
     const createNewEntityItem = () => {
-
-        getInitialEntityData(itemUrl, router.location.pathname, router.navigate)
+        const initialUrl = router.location.pathname
+        
+        getInitialEntityData(itemUrl, router, router.location.pathname, router.navigate)
     }
 
     return (

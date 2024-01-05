@@ -351,6 +351,52 @@ allEntities.forEach(entity => {
       },
     )
 
+    //ENTITY RELATIONS
+    if (entityType.relations && entityType.relations.length) {
+      entityType.relations.forEach(relation => {
+
+
+        if (relation.item) {
+          const rltn = relation.item
+          const relationPath = `${entityType.get.url}/:entityId/${rltn.get.url}/:entityChildrenId`
+
+
+          authProtectedRoutes.push(
+            {
+              path: relationPath, component: <EntityContainer
+                type={rltn && rltn.type}
+                itemUrl={rltn && rltn.get.url}
+                itemsUrl={relation.items && relation.items.get.url}
+                entityName={rltn && rltn.name}
+                entityTitle={rltn && rltn.title}
+
+              />
+            },
+          )
+        }
+
+        if (relation.items) {
+          const rltn = relation.items
+          const relationPath = `${entityType.get.url}/:entityId/${rltn.get.url}`
+
+          
+          authProtectedRoutes.push(
+            {
+              path: relationPath, component: <EntityContainer
+                type={rltn && rltn.type}
+                itemUrl={relation.item && relation.item.get.url}
+                itemsUrl={rltn && rltn.get.url}
+                entityName={rltn && rltn.name}
+                entityTitle={rltn && rltn.title}
+
+              />
+            },
+          )
+        }
+
+      })
+    }
+
   })
 })
 const publicRoutes = [

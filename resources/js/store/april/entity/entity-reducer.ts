@@ -176,25 +176,45 @@ export const setOrupdateEntityItem = (history: (url: string) => void, currentUrl
 
 
 }
-export const getInitialEntityData = (url: string, currentUrl: string, history: (url: string) => void) => async (dispatch: AppDispatchType, getState: GetStateType) => {
-
+export const getInitialEntityData = (url: string, router: any, currentUrl: string, history: (url: string) => void) => async (dispatch: AppDispatchType, getState: GetStateType) => {
+    debugger
     if (url) {
-        const fullUrl = `initial/${url}`
+        let fullUrl = `initial/${url}`
+        let targetUrl = `${url}/add`
+        let targetRoot = `${url}/add`
+        
+        if (router) {
+            if (router.params && router.params.entityId) {
+                //значит инициализируется создание дочерней сущности
+                let itemCurrentUrl = currentUrl
+                if (itemCurrentUrl.endsWith('s')) {
+                    itemCurrentUrl = itemCurrentUrl.slice(0, -1);
+                }
+                // fullUrl = `initial${itemCurrentUrl}`
+                targetUrl = `${itemCurrentUrl}/add`
+                targetRoot = `${itemCurrentUrl}/add`
+                
+                debugger
+            }
+
+        }
+
         dispatch(entityActions.setFetchingInitialAdd())
+        debugger
         const cretingEntity = await onlineAPI.service(fullUrl, API_METHOD.GET, 'initial', null)
-
-
+        debugger
+        
         if (cretingEntity) {
-
+            
             dispatch(entityActions.setInitialAdd(cretingEntity))
         } else {
             console.log('no initial data')
         }
 
-        if (currentUrl !== `/${url}/add`) {
+        if (currentUrl !== targetRoot) {
 
 
-            history(`../${url}/add`)
+            router.navigate(targetUrl, { replace: true })
         }
 
     } else {
@@ -272,17 +292,17 @@ export const setRelation = (relation: RelationState) =>
                         let resultRelations = [resultPushData]
                         if (group.relations[0].isCreated) {
                             let isUpdated = false
-                            resultRelations =  group.relations.map((rltn, index) => {
+                            resultRelations = group.relations.map((rltn, index) => {
                                 if (index === relation.relationIndex) {
                                     isUpdated = true
                                     return resultPushData
-                                }else{
+                                } else {
                                     return rltn
                                 }
-                                
+
                             })
 
-                            if(!isUpdated){
+                            if (!isUpdated) {
                                 resultRelations.push(resultPushData)
                             }
                         }
@@ -444,7 +464,7 @@ const entity = (state: EntityStateType = initialState, action: EntityActionsType
         case 'entity/SET_INITIAL_CREATE_ENTITY':
 
             const initialData = action.initialData
-
+            debugger
             return {
                 ...state,
                 creating: {
@@ -465,7 +485,7 @@ const entity = (state: EntityStateType = initialState, action: EntityActionsType
                 },
             }
         case 'entity/SET_CREATING_RELATION':
-
+            
             if (action.entity && action.entity.groups[0] && action.entity.groups[0].fields) {
                 // const entiyFields = action.entity.fields.length > 0
                 //     ? action.entity.fields

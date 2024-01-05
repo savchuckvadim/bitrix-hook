@@ -84,12 +84,12 @@ export const login = (user: any, history: any): AuthThunkType => async (dispatch
     const firebaseBackend = getState().app.firebaseBackend
     
     if (firebaseBackend) {
-        debugger
+        
         const fireBaseUser = await firebaseBackend.loginUser(user.email, user.password)
-        debugger
+        
         //@ts-ignore
         const firebaseEmail = fireBaseUser.email
-        debugger
+        
         const profile = await getProfile(firebaseEmail, firebaseBackend, history, dispatch, actions.setAuthUserData)
         
     } else {

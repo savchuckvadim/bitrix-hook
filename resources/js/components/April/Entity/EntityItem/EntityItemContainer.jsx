@@ -48,13 +48,15 @@ const EntityItemContainer = ({
     const [creatingData, setCreating] = useState(creating)
     const [files, setFiles] = useState([]);
     useEffect(() => {
-
+        const isCurrentCreating = router.params.entityId === 'add'
+            || (router.params.entityChildrenId
+                && router.params.entityChildrenId === 'add')
         if (router.params.entityId) {
-            router.params.entityId !== 'add'
+            !isCurrentCreating
                 ? getEntityItem(itemUrl, entityName, Number(router.params.entityId))
                 : getInitialEntityData(itemUrl, router.location.pathname, router.navigate)
         }
-        setIsCreating(router.params.entityId === 'add')
+        setIsCreating(isCurrentCreating)
     }, [router.location.pathname])
 
     useEffect(() => {
@@ -100,6 +102,7 @@ const EntityItemContainer = ({
         // Обновляем стейт Formik (необязательно)
         validation.setFieldValue(inputName, event.target.files);
     };
+    debugger
     return !isCreating ? <EntityItem
         router={router}
         entity={current}

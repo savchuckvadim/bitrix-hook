@@ -67,13 +67,13 @@ export class FirebaseAuthBackend {
         .signInWithEmailAndPassword(email, password)
         .then(
           user => {
-            debugger
+            
             return resolve(firebase.auth().currentUser);
           },
           error => {
             let er = error
             console.log
-            debugger
+            
             reject(this._handleError(error));
           }
         );

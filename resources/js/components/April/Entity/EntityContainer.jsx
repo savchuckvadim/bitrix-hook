@@ -30,10 +30,10 @@ const EntityContainer = ({
 }) => {
 
 
-
+    debugger
 
     return <EntityPage name={entityTitle}>
-        {type === ENTITY_QUANTITY.ENTITIES
+        {type === ENTITY_QUANTITY.ENTITIES 
             ? <EntityItemsContainer
                 router={router}
                 itemUrl={itemUrl}

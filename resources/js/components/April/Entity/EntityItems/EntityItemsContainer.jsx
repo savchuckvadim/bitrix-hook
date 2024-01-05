@@ -62,7 +62,7 @@ const EntityItemsContainer = ({
 
     useEffect(() => {
 
-        getEntities(itemsUrl, API_METHOD.GET, entityName, null)
+        getEntities(router.location.pathname, API_METHOD.GET, entityName, null)
     }, [router.location.pathname])
 
 

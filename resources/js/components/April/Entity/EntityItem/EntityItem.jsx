@@ -16,6 +16,7 @@ import {
 } from "reactstrap";
 
 import Breadcrumb from "../../../Common/Breadcrumb";
+import TypeEntityItemDynamicInput from "./Item/TypeItemDynamicInputs";
 
 
 const EntityItem = ({ router, entity, entityName, itemUrl, setOrupdateEntityItem, deleteEntityItem }) => {
@@ -58,18 +59,26 @@ const EntityItem = ({ router, entity, entityName, itemUrl, setOrupdateEntityItem
 
     const getItems = (entity) => {
         let result = []
-        
-        for (const key in entity) {
 
-            result.push(
-                <Row className="mb-4">
-                    <Label
-                        htmlFor="horizontal-firstname-Input"
-                        className="col-sm-3 col-form-label"
-                    >
-                        {key}
-                    </Label>
-                    <Col sm={9}>
+        for (const key in entity) {
+            
+
+            if (entity.hasOwnProperty(key)) {
+                const value = entity[key];
+
+
+
+
+
+                result.push(
+                    <Row className="mb-4">
+                        <Label
+                            htmlFor="horizontal-firstname-Input"
+                            className="col-sm-3 col-form-label"
+                        >
+                            {key}
+                        </Label>
+                        {/* <Col sm={9}>
                         <Input
                             type="text"
                             className="form-control"
@@ -79,13 +88,17 @@ const EntityItem = ({ router, entity, entityName, itemUrl, setOrupdateEntityItem
                             onChange={validation.handleChange}
                             onBlur={validation.handleBlur}
                             value={validation.values[key] || ""}
-                        // invalid={
-                        //     validation.touched[key] && validation.errors[key] ? true : false
-                        // }
+
                         />
-                    </Col>
-                </Row>
-            )
+                    </Col> */}
+                        <TypeEntityItemDynamicInput 
+                        field={value}
+                        fieldName={key}
+                        validation={validation}
+                         />
+                    </Row>
+                )
+            }
         }
 
         return result
@@ -120,12 +133,12 @@ const EntityItem = ({ router, entity, entityName, itemUrl, setOrupdateEntityItem
                                             display: 'flex',
                                             justifyContent: 'flex-end',
                                             alignItems: 'center'
-                                    }}>
+                                        }}>
                                             <Button color="primary" type="submit">
                                                 Submit form
                                             </Button>
-                                      
-                                            <Button style={{marginLeft: '5px'}} color="danger" type="button"
+
+                                            <Button style={{ marginLeft: '5px' }} color="danger" type="button"
                                                 onClick={deleteItem}
                                             >
                                                 Delete

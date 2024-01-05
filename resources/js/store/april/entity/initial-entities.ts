@@ -36,7 +36,32 @@ export const allEntities = [
             get: {
                 url: 'template',
                 method: API_METHOD.GET
-            }
+            },
+            relations: [
+                {
+                    id: 2,
+                    item: {
+                        name: 'field',
+                        title: 'Свойство',
+                        type: ENTITY_QUANTITY.ENTITY,
+                        get: {
+                            url: 'field',
+                            method: API_METHOD.GET
+                        }
+
+                    },
+                    items: {
+                        name: 'fields',
+                        title: 'Свойства',
+                        type: ENTITY_QUANTITY.ENTITIES,
+                        get: {
+                            url: 'fields',
+                            method: API_METHOD.GET
+                        }
+
+                    },
+                }
+            ]
 
         },
         items: {
@@ -58,7 +83,7 @@ export const allEntities = [
             title: 'Свойство',
             type: ENTITY_QUANTITY.ENTITY,
             get: {
-                url: 'tfield',
+                url: 'field',
                 method: API_METHOD.GET
             }
 

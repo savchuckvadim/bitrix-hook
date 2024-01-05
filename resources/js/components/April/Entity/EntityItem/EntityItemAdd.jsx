@@ -17,7 +17,7 @@ import {
 
 import Breadcrumb from "../../../Common/Breadcrumb";
 import { getInitialValues } from "../../../../utils/entity-utils/entity-util";
-import EntityItemDynamicInput from "./Item/ItemDynamicInputs";
+import EntityItemDynamicInput from "./Item/FieldItemDynamicInputs";
 import RelationAdd from "./Item/RelationAdd";
 
 
