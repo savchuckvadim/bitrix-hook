@@ -34,7 +34,7 @@ export const getProfile = async (email: string, firebase: any, history: any, dis
         history('/dashboard');
     } else {
         
-        await showToastWithPromise("Вы не зарегестрированы", 'error', {
+        await showToastWithPromise("Вы не Admin", 'error', {
             position: "top-right",
             autoClose: 3000
         })

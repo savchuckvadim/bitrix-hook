@@ -7,12 +7,13 @@ export const api = axios.create({
     baseURL: 'https://script.google.com/macros/s/',
 
     headers: {
-        'content-type': 'application/json',
+        // 'content-type': 'application/json',
         // 'accept': 'application/json',
-        // "Content-Type": "text/plain;charset=utf-8",
+        "Content-Type": "text/plain;charset=utf-8",
         'Access-Control-Allow-Origin' : '*',
+        
     },
-    withCredentials:false
+    // withCredentials:false
 
 })
 // @ts-ignore

@@ -67,10 +67,13 @@ export class FirebaseAuthBackend {
         .signInWithEmailAndPassword(email, password)
         .then(
           user => {
-            
+            debugger
             return resolve(firebase.auth().currentUser);
           },
           error => {
+            let er = error
+            console.log
+            debugger
             reject(this._handleError(error));
           }
         );
@@ -144,7 +147,8 @@ export class FirebaseAuthBackend {
       email: profile.email,
       picture: profile.picture,
       createdDtm: firebase.firestore.FieldValue.serverTimestamp(),
-      lastLoginTime: firebase.firestore.FieldValue.serverTimestamp()
+      lastLoginTime: firebase.firestore.FieldValue.serverTimestamp(),
+      isAdmin: false,
     };
     collection.doc(firebase.auth().currentUser.uid).set(details);
     return { user, details };
@@ -153,12 +157,12 @@ export class FirebaseAuthBackend {
   getDocByProp = async (collectionName, propName, propValue) => {
     let result = null
     try {
-  
+
       const db = firebase.firestore();
       const querySnapshot = await db.collection(collectionName)
         .where(propName, '==', propValue)
         .get()
-      
+
       querySnapshot.forEach((doc) => {
         result = doc.data()
       });

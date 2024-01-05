@@ -74,7 +74,8 @@ const Login = ({ app, router, initializeGoogleAuth }) => {
     }),
     onSubmit: (values) => {
       
-      dispatch(loginUser(values, router.navigate));
+      // dispatch(loginUser(values, router.navigate));
+      dispatch(login(values, router.navigate));
     }
   });
 
