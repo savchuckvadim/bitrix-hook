@@ -146,22 +146,35 @@ export const getEntityItem = (url: string, entityName: string, entityId: number)
 }
 export const setOrupdateEntityItem = (history: (url: string) => void, currentUrl: string, url: string, entityName: string, data: number) => async (dispatch: AppDispatchType, getState: GetStateType) => {
 
+
     if (url) {
         const apiData = data
+        let targetUrl = currentUrl
+        let method = API_METHOD.POST
+        if (targetUrl) {
+            if (targetUrl.endsWith("/add")) {
+                targetUrl = targetUrl.slice(0, -4);
+            } else {
+                //update
+
+                // method = API_METHOD.PUT
+
+            }
+        }
         //@ts-ignore
         // if (apiData.number) {
         //     //@ts-ignore
         //     apiData.number = Number(apiData.number)
         // }
-
+        
         // const item = await onlineAPI.service(url, API_METHOD.POST, entityName, apiData)
-        const item = await onlineAPI.service('/test/template', API_METHOD.POST, 'result', apiData)
-
+        const item = await onlineAPI.service(targetUrl, method, entityName, apiData)
+debugger
         if (item) {
             dispatch(entityActions.setEntityItem(item))
-
+            debugger
             if (item.id) {
-
+                debugger
                 const redirectUrl = `${url}/${item.id}`
                 redirectUrl !== currentUrl
                     && history(`../../${url}/${item.id}`)
@@ -177,12 +190,12 @@ export const setOrupdateEntityItem = (history: (url: string) => void, currentUrl
 
 }
 export const getInitialEntityData = (url: string, router: any, currentUrl: string, history: (url: string) => void) => async (dispatch: AppDispatchType, getState: GetStateType) => {
-    debugger
+
     if (url) {
         let fullUrl = `initial/${url}`
         let targetUrl = `${url}/add`
         let targetRoot = `${url}/add`
-        
+
         if (router) {
             if (router.params && router.params.entityId) {
                 //значит инициализируется создание дочерней сущности
@@ -193,19 +206,19 @@ export const getInitialEntityData = (url: string, router: any, currentUrl: strin
                 // fullUrl = `initial${itemCurrentUrl}`
                 targetUrl = `${itemCurrentUrl}/add`
                 targetRoot = `${itemCurrentUrl}/add`
-                
-                debugger
+
+
             }
 
         }
 
         dispatch(entityActions.setFetchingInitialAdd())
-        debugger
+
         const cretingEntity = await onlineAPI.service(fullUrl, API_METHOD.GET, 'initial', null)
-        debugger
-        
+
+
         if (cretingEntity) {
-            
+
             dispatch(entityActions.setInitialAdd(cretingEntity))
         } else {
             console.log('no initial data')
@@ -464,7 +477,7 @@ const entity = (state: EntityStateType = initialState, action: EntityActionsType
         case 'entity/SET_INITIAL_CREATE_ENTITY':
 
             const initialData = action.initialData
-            debugger
+
             return {
                 ...state,
                 creating: {
@@ -485,7 +498,7 @@ const entity = (state: EntityStateType = initialState, action: EntityActionsType
                 },
             }
         case 'entity/SET_CREATING_RELATION':
-            
+
             if (action.entity && action.entity.groups[0] && action.entity.groups[0].fields) {
                 // const entiyFields = action.entity.fields.length > 0
                 //     ? action.entity.fields

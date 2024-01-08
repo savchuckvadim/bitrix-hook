@@ -30,7 +30,7 @@ const EntityContainer = ({
 }) => {
 
 
-    debugger
+    
 
     return <EntityPage name={entityTitle}>
         {type === ENTITY_QUANTITY.ENTITIES 

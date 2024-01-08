@@ -129,7 +129,7 @@ const EntityItemAdd = ({
     }
     console.log(validation.values)
     const items = creating.formData && getItems(creating.formData)
-
+    
     return (
         <React.Fragment>
             {relation && <RelationAdd

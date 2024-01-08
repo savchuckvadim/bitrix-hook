@@ -64,8 +64,17 @@ const EntityItemContainer = ({
         setCreating(creating)
     }, [creating])
 
-    const dataInitialValues = creating.formData && getInitialValues(creating.formData)
+    let dataInitialValues = null
+    if (current) {
+        
+        dataInitialValues = current
+    }
+    else if (creating.formData) {
+        
+        dataInitialValues =  getInitialValues(creating.formData)
+    }
 
+    
     // Form validation 
     const validation = useFormik({
         // enableReinitialize : use this flag when initial values needs to be changed
@@ -102,8 +111,9 @@ const EntityItemContainer = ({
         // Обновляем стейт Formik (необязательно)
         validation.setFieldValue(inputName, event.target.files);
     };
-    debugger
+    
     return !isCreating ? <EntityItem
+    validation={validation}
         router={router}
         entity={current}
         entityName={entityName}

@@ -342,9 +342,9 @@ export const onlineAPI = {
         let result = null
         
         try {
-            
+            debugger
             const response = await online[method](url, data)
-            
+            debugger
             if (response && response.data) {
                 if (response.data.resultCode === 0) {
                     if(response.data.data){
@@ -354,7 +354,7 @@ export const onlineAPI = {
                     }
                     
                 } else {
-                    
+                    debugger
                     console.log(response.data.message)
                 }
             }
@@ -362,7 +362,7 @@ export const onlineAPI = {
             return result
             
         } catch (error) {
-            
+            debugger
             console.log(error)
             
             return result

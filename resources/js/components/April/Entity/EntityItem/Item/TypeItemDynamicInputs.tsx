@@ -43,6 +43,7 @@ const TypeEntityItemDynamicInput = ({
     } else if (typeof field === 'object' && field !== null) {
         input = <NavLink to={`${fieldName}`}>{fieldName}</NavLink>
     } else {
+        
         input = <Input
             type={'text'}
             className="form-control"
@@ -51,6 +52,8 @@ const TypeEntityItemDynamicInput = ({
             name={fieldName}
             onChange={validation.handleChange}
             onBlur={validation.handleBlur}
+            value={validation.values[fieldName]}
+            disabled={fieldName === 'id'}
        
 
         />

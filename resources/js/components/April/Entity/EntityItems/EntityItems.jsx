@@ -34,7 +34,7 @@ const EntityItems = ({ entityName, entityTitle, items, itemUrl, router, tableHea
 
     const createNewEntityItem = () => {
         const initialUrl = router.location.pathname
-        
+
         getInitialEntityData(itemUrl, router, router.location.pathname, router.navigate)
     }
 
@@ -71,9 +71,14 @@ const EntityItems = ({ entityName, entityTitle, items, itemUrl, router, tableHea
                                                             {entity.items.map((prop, i) => {
                                                                 if (prop.name === 'id' || i === 0) {
                                                                     return <th key={`first-cell-${i}`} scope="row">{prop.value}</th>;
-                                                                } else if (typeof prop.value === 'object' || Array.isArray(prop.value)) {
+                                                                } else if ((typeof prop.value === 'object' || Array.isArray(prop.value)) && prop.value !== null) {
                                                                     // Пропускаем элементы, чьё значение - объект или массив
-                                                                    return null;
+                                                                    
+                                                                    return <th key={`first-cell-${i}`} scope="row">{'object'}</th>;
+                                                                } else if (prop.value === null) {
+                                                                    // Пропускаем элементы, чьё значение - объект или массив
+                                                                    
+                                                                    return <th key={`first-cell-${i}`} scope="row">{''}</th>;
                                                                 } else {
                                                                     return <td key={`${prop.value}-cell-${i}`}>{prop.value}</td>;
                                                                 }

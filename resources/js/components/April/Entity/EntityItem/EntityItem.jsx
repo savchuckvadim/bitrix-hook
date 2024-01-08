@@ -19,43 +19,47 @@ import Breadcrumb from "../../../Common/Breadcrumb";
 import TypeEntityItemDynamicInput from "./Item/TypeItemDynamicInputs";
 
 
-const EntityItem = ({ router, entity, entityName, itemUrl, setOrupdateEntityItem, deleteEntityItem }) => {
+const EntityItem = ({ 
+    router, 
+    validation,
+    entity, entityName, itemUrl, 
+    setOrupdateEntityItem, deleteEntityItem }) => {
 
     //meta title
     document.title = entityName + " | Skote React + Laravel 10 Admin And Dashboard Template";
 
 
     // Form validation 
-    const validation = useFormik({
-        // enableReinitialize : use this flag when initial values needs to be changed
-        enableReinitialize: true,
+    // const validation = useFormik({
+    //     // enableReinitialize : use this flag when initial values needs to be changed
+    //     enableReinitialize: true,
 
-        initialValues: {
-            ...entity
-        },
-        // validationSchema: Yup.object({
-        //     firstname: Yup.string().required("Please Enter Your First Name"),
-        //     lastname: Yup.string().required("Please Enter Your Last Name"),
-        //     city: Yup.string().required("Please Enter Your City"),
-        //     state: Yup.string().required("Please Enter Your State"),
-        //     zip: Yup.string().required("Please Enter Your Zip"),
-        // }),
-        onSubmit: (values) => {
-            console.log("values", values);
+    //     initialValues: {
+    //         ...entity
+    //     },
+    //     // validationSchema: Yup.object({
+    //     //     firstname: Yup.string().required("Please Enter Your First Name"),
+    //     //     lastname: Yup.string().required("Please Enter Your Last Name"),
+    //     //     city: Yup.string().required("Please Enter Your City"),
+    //     //     state: Yup.string().required("Please Enter Your State"),
+    //     //     zip: Yup.string().required("Please Enter Your Zip"),
+    //     // }),
+    //     onSubmit: (values) => {
+    //         console.log("values", values);
 
 
 
-            setOrupdateEntityItem(router.navigate, router.location.pathname, 'portal', 'portal', {
-                number: values.number,
-                clientId: values.C_REST_CLIENT_ID,
-                clientSecret: values.C_REST_CLIENT_SECRET,
-                hook: values.C_REST_WEB_HOOK_URL,
-                domain: values.domain,
-                key: values.key
-            })
-            console.log("values", values);
-        }
-    });
+    //         setOrupdateEntityItem(router.navigate, router.location.pathname, 'portal', 'portal', {
+    //             number: values.number,
+    //             clientId: values.C_REST_CLIENT_ID,
+    //             clientSecret: values.C_REST_CLIENT_SECRET,
+    //             hook: values.C_REST_WEB_HOOK_URL,
+    //             domain: values.domain,
+    //             key: values.key
+    //         })
+    //         console.log("values", values);
+    //     }
+    // });
 
     const getItems = (entity) => {
         let result = []
@@ -110,7 +114,7 @@ const EntityItem = ({ router, entity, entityName, itemUrl, setOrupdateEntityItem
         deleteEntityItem(router.navigate, itemUrl, entityName, entity.id)
     }
 
-
+    
     return (
         <React.Fragment>
             <div className="page-content">

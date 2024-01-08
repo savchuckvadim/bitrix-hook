@@ -85,7 +85,32 @@ export const allEntities = [
             get: {
                 url: 'field',
                 method: API_METHOD.GET
-            }
+            },
+            relations: [
+                {
+                    id: 2,
+                    item: {
+                        name: 'item',
+                        title: 'Элемент свойства',
+                        type: ENTITY_QUANTITY.ENTITY,
+                        get: {
+                            url: 'item',
+                            method: API_METHOD.GET
+                        }
+
+                    },
+                    items: {
+                        name: 'items',
+                        title: 'Свойства',
+                        type: ENTITY_QUANTITY.ENTITIES,
+                        get: {
+                            url: 'items',
+                            method: API_METHOD.GET
+                        }
+
+                    },
+                }
+            ]
 
         },
         items: {
@@ -103,6 +128,29 @@ export const allEntities = [
     },
     {
         id: 3,
+        item: {
+            name: 'item',
+            title: 'Элемент свойства',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'item',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'items',
+            title: 'Свойства',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'items',
+                method: API_METHOD.GET
+            }
+
+        },
+    },
+    {
+        id: 4,
         item: {
             name: 'infoblock',
             title: 'Инфоблок',
@@ -129,7 +177,7 @@ export const allEntities = [
     },
 
     {
-        id: 4,
+        id: 5,
         item: {
             name: 'provider',
             title: 'Поставщик',
@@ -155,7 +203,7 @@ export const allEntities = [
 
     },
     {
-        id: 5,
+        id: 6,
         item: {
             name: 'rq',
             title: 'Реквизиты',
