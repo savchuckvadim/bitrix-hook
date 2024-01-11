@@ -57,6 +57,7 @@ import clients from "./april/clients/reducer";
 import app from "./april/app-reducer";
 import entity from "./april/entity/entity-reducer";
 import auth from "./april/auth/auth-reducer";
+import settings from "./april/settings/settings-reducer";
 
 const rootReducer = combineReducers({
   // public
@@ -86,6 +87,7 @@ const rootReducer = combineReducers({
   auth,
   entity,
   clients,
+  settings,
 });
 
 export default rootReducer;

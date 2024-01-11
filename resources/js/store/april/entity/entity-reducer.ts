@@ -169,12 +169,12 @@ export const setOrupdateEntityItem = (history: (url: string) => void, currentUrl
         
         // const item = await onlineAPI.service(url, API_METHOD.POST, entityName, apiData)
         const item = await onlineAPI.service(targetUrl, method, entityName, apiData)
-debugger
+
         if (item) {
             dispatch(entityActions.setEntityItem(item))
-            debugger
+            
             if (item.id) {
-                debugger
+                
                 const redirectUrl = `${url}/${item.id}`
                 redirectUrl !== currentUrl
                     && history(`../../${url}/${item.id}`)

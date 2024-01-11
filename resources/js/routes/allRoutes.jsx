@@ -174,6 +174,7 @@ import EntityItemsContainer from "../components/April/Entity/EntityItems/EntityI
 import EntityContainer from "../components/April/Entity/EntityContainer";
 import { ENTITY_QUANTITY } from "../types/entity/entity-types";
 import { allEntities } from "../store/april/entity/initial-entities";
+import SettingsContainer from "../components/April/Settings/SettingsContainer";
 
 
 const authProtectedRoutes = [
@@ -379,7 +380,7 @@ allEntities.forEach(entity => {
           const rltn = relation.items
           const relationPath = `${entityType.get.url}/:entityId/${rltn.get.url}`
 
-          
+
           authProtectedRoutes.push(
             {
               path: relationPath, component: <EntityContainer
@@ -399,6 +400,16 @@ allEntities.forEach(entity => {
 
   })
 })
+
+authProtectedRoutes.push(
+
+
+  {
+    path: '/settings', component: <SettingsContainer />
+  },
+)
+
+
 const publicRoutes = [
   { path: "/login", component: <LoginContainer /> },
   { path: "/logout", component: <Logout /> },
