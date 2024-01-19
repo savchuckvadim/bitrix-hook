@@ -459,7 +459,7 @@ class APIBitrixController extends Controller
         }
     }
 
-    public function getCalling(
+    public static function getCalling(
 
 
         $domain,

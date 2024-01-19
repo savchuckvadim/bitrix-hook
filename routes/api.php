@@ -109,40 +109,42 @@ Route::post('/calling', function (Request $request) {
     $secret = env('APRIL_WEB_HOOK');
     $restVersion = env('APRIL_BITRIX_REST_VERSION');
     $durationTop = $request['durationTop'];
-    Log::info('Environment Variables', [
-        'BITRIX_DOMAIN' => $domain,
-        'BITRIX_REST_VERSION' => $restVersion,
-        'WEB_HOOK' => $secret
-    ]);
+
+    return APIBitrixController::getCalling($domain, $callStartDateFrom, $callStartDateTo );
+    // Log::info('Environment Variables', [
+    //     'BITRIX_DOMAIN' => $domain,
+    //     'BITRIX_REST_VERSION' => $restVersion,
+    //     'WEB_HOOK' => $secret
+    // ]);
 
 
-    try {
+    // try {
 
 
-        $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/voximplant.statistic.get.json', [
-            "FILTER" => [
-                ">CALL_DURATION" => 60,
-                ">CALL_START_DATE" => $callStartDateFrom,
-                "<CALL_START_DATE" =>  $callStartDateTo
-                // PORTAL_USER_ID
-            ]
-        ]);
-        Log::info('response ', ['response ' => $response]);
+    //     $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/voximplant.statistic.get.json', [
+    //         "FILTER" => [
+    //             ">CALL_DURATION" => 60,
+    //             ">CALL_START_DATE" => $callStartDateFrom,
+    //             "<CALL_START_DATE" =>  $callStartDateTo
+    //             // PORTAL_USER_ID
+    //         ]
+    //     ]);
+    //     Log::info('response ', ['response ' => $response]);
 
-        // Возвращаем ответ как ответ сервера Laravel
-        return $response;
-    } catch (\Throwable $th) {
-        Log::error('Exception caught', [
-            'message'   => $th->getMessage(),
-            'file'      => $th->getFile(),
-            'line'      => $th->getLine(),
-            'trace'     => $th->getTraceAsString(),
-        ]);
-        return response([
-            'result' => 'error',
-            'message' => $th->getMessage()
-        ]);
-    }
+    //     // Возвращаем ответ как ответ сервера Laravel
+    //     return $response;
+    // } catch (\Throwable $th) {
+    //     Log::error('Exception caught', [
+    //         'message'   => $th->getMessage(),
+    //         'file'      => $th->getFile(),
+    //         'line'      => $th->getLine(),
+    //         'trace'     => $th->getTraceAsString(),
+    //     ]);
+    //     return response([
+    //         'result' => 'error',
+    //         'message' => $th->getMessage()
+    //     ]);
+    // }
 });
 Route::post('/lists', function (Request $request) {
 
