@@ -480,11 +480,12 @@ class APIBitrixController extends Controller
             $actionUrl = '/voximplant.statistic.get.json';
             $url = $hook . $actionUrl;
             $next = 0; // Начальное значение параметра "next"
-
+            $userId = 107;
             do {
                 // Отправляем запрос на другой сервер
                 $response = Http::get($url, [
                     "FILTER" => [
+                        "USER_ID" => $userId,
                         ">CALL_START_DATE" => $callStartDateFrom,
                         "<CALL_START_DATE" =>  $callStartDateTo
                     ],
