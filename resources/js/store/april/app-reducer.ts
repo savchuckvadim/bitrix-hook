@@ -52,7 +52,7 @@ export const initialize = (): AuthThunkType => async (dispatch) => {
     // const infoblocks = await onlineAPI.service('infoblocks', 'get', 'infoblocks', null)
     // const templates = await onlineAPI.service('templates/april-garant.bitrix24.ru', 'get', 'templates', null)
     // const tryHook = await hookAPI.service('/taskfields', API_METHOD.POST, 'result', null)
-    
+
     // const tryFront = await hookAPI.service('/front', API_METHOD.POST, 'result', null)
     // await dispatch(getAuthApp())
     dispatch(appActions.initializedSuccess())
@@ -61,8 +61,9 @@ export const initialize = (): AuthThunkType => async (dispatch) => {
     // dispatch(inProgress(false, PreloaderCodesEnum.Global))//inProgress-status
     // await  generalAPI.clientFieldGenerate()
 
-
-
+    debugger
+    const calling = await hookAPI.service('calling', 'post', 'calling', { domain: 'april-dev.bitrix24.ru' })
+    debugger
 
 }
 
