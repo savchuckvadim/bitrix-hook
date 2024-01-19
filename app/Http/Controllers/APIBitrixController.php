@@ -479,37 +479,30 @@ class APIBitrixController extends Controller
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
             $actionUrl = '/voximplant.statistic.get.json';
             $url = $hook . $actionUrl;
+            $next = 0; // Начальное значение параметра "next"
+
             do {
-            // Отправляем запрос на другой сервер
-            $response = Http::get($url, [
-                "FILTER" => [
-                    // ">CALL_DURATION" => 60,
-                    ">CALL_START_DATE" => $callStartDateFrom,
-                    "<CALL_START_DATE" =>  $callStartDateTo
-                    // PORTAL_USER_ID
-                ]
-            ]);
-            Log::info('response', ['response' => $response]);
-            // Проверяем, получили ли мы успешный ответ
+                // Отправляем запрос на другой сервер
+                $response = Http::get($url, [
+                    "FILTER" => [
+                        ">CALL_START_DATE" => $callStartDateFrom,
+                        "<CALL_START_DATE" =>  $callStartDateTo
+                    ],
+                    "start" => $next // Передаем значение "next" в запросе
+                ]);
+                Log::info('response', ['response' => $response]);
 
-            // Декодируем JSON-ответ (если он JSON)
-            // $data = $response->json();
+                if (!empty($response['result'])) {
+                    // Добавляем полученные звонки к общему списку
+                    $resultCallings = array_merge($resultCallings, $response['result']);
 
-            // Проверяем, что результат не равен 0 и не является пустым массивом
-            if (!empty($response['result'])) {
-                // Делаем что-то с полученными данными
-                // Например, вы можете их обработать или сохранить
-                // и затем продолжить цикл или выйти из него, в зависимости от вашей логики
-
-                foreach ($response['result'] as $call) {
-                    array_push($resultCallings, $call);
+                    // Получаем значение "next" из ответа
+                    $next = $response['next'];
+                } else {
+                    // Ждем некоторое время перед следующим запросом
+                    sleep(5); // Например, ждем 5 секунд
                 }
-            } else {
-                // Ждем некоторое время перед следующим запросом
-                sleep(5); // Например, ждем 5 секунд
-            }
-
-            } while (empty($response['result'])); // Продолжаем цикл, пока условие не выполнится
+            } while ($next > 0); // Продолжаем цикл, пока значение "next" больше нуля
 
 
             return APIOnlineController::getResponse(
