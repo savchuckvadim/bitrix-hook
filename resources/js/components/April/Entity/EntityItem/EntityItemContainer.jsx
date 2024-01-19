@@ -52,9 +52,10 @@ const EntityItemContainer = ({
             || (router.params.entityChildrenId
                 && router.params.entityChildrenId === 'add')
         if (router.params.entityId) {
-            !isCurrentCreating
+            
+            !isCurrentCreating 
                 ? getEntityItem(itemUrl, entityName, Number(router.params.entityId))
-                : getInitialEntityData(itemUrl, router.location.pathname, router.navigate)
+                : getInitialEntityData(itemUrl, router, router.location.pathname, router.navigate)
         }
         setIsCreating(isCurrentCreating)
     }, [router.location.pathname])

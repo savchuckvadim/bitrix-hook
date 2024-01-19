@@ -55,7 +55,7 @@ export const entityActions = {
         () =>
             ({ type: 'entity/SET_FETCHING_INITIAL_DATA' } as const),
     setInitialAdd:
-        (initialData: TemplateAddData | null) =>
+        (initialData: InitialEntityData | null) =>
             ({ type: 'entity/SET_INITIAL_CREATE_ENTITY', initialData } as const),
     setCreatingRelation:
         (status: boolean, entity: null | any, groupName: string, relationIndex: number) =>
@@ -132,7 +132,7 @@ export const getEntityItem = (url: string, entityName: string, entityId: number)
         const fullUrl = `${url}/${entityId}`
         const item = await onlineAPI.service(fullUrl, API_METHOD.GET, entityName, null)
 
-
+        
         if (item) {
             dispatch(entityActions.setEntityItem(item))
         } else {
@@ -146,7 +146,7 @@ export const getEntityItem = (url: string, entityName: string, entityId: number)
 }
 export const setOrupdateEntityItem = (history: (url: string) => void, currentUrl: string, url: string, entityName: string, data: number) => async (dispatch: AppDispatchType, getState: GetStateType) => {
 
-
+    debugger
     if (url) {
         const apiData = data
         let targetUrl = currentUrl
@@ -166,15 +166,15 @@ export const setOrupdateEntityItem = (history: (url: string) => void, currentUrl
         //     //@ts-ignore
         //     apiData.number = Number(apiData.number)
         // }
-        
+
         // const item = await onlineAPI.service(url, API_METHOD.POST, entityName, apiData)
         const item = await onlineAPI.service(targetUrl, method, entityName, apiData)
 
         if (item) {
             dispatch(entityActions.setEntityItem(item))
-            
+
             if (item.id) {
-                
+
                 const redirectUrl = `${url}/${item.id}`
                 redirectUrl !== currentUrl
                     && history(`../../${url}/${item.id}`)
@@ -190,12 +190,24 @@ export const setOrupdateEntityItem = (history: (url: string) => void, currentUrl
 
 }
 export const getInitialEntityData = (url: string, router: any, currentUrl: string, history: (url: string) => void) => async (dispatch: AppDispatchType, getState: GetStateType) => {
+    
+    const entityState = getState().entity as EntityStateType
+    let cretingEntity = entityState.creating.formData
 
     if (url) {
-        let fullUrl = `initial/${url}`
-        let targetUrl = `${url}/add`
-        let targetRoot = `${url}/add`
-
+        let fullUrl = `initial${currentUrl}`
+        if (fullUrl.endsWith("/add")) {
+            fullUrl = fullUrl.slice(0, -4); // Обрезать последние 4 символа ("/add")
+        }
+        if (fullUrl.endsWith("s")) {
+            fullUrl = fullUrl.slice(0, -1); // Обрезать последние 4 символа ("/add")
+        }
+        if (fullUrl.endsWith("s/")) {
+            fullUrl = fullUrl.slice(0, -2); // Обрезать последние 4 символа ("/add")
+        }
+        let targetUrl = `/${url}/add`
+        let targetRoot = `/${url}/add`
+        
         if (router) {
             if (router.params && router.params.entityId) {
                 //значит инициализируется создание дочерней сущности
@@ -203,30 +215,44 @@ export const getInitialEntityData = (url: string, router: any, currentUrl: strin
                 if (itemCurrentUrl.endsWith('s')) {
                     itemCurrentUrl = itemCurrentUrl.slice(0, -1);
                 }
+                if (!router.params.entityChildrenId
+                    && !itemCurrentUrl.endsWith('add')
+                    && !itemCurrentUrl.endsWith('add/')
+                ) {
+                    targetUrl = `${itemCurrentUrl}/add`
+                    targetRoot = `${itemCurrentUrl}/add`
+                } else {
+                    targetUrl = `${itemCurrentUrl}`
+                    targetRoot = `${itemCurrentUrl}`
+                }
+                
                 // fullUrl = `initial${itemCurrentUrl}`
-                targetUrl = `${itemCurrentUrl}/add`
-                targetRoot = `${itemCurrentUrl}/add`
 
+                
 
             }
 
         }
 
         dispatch(entityActions.setFetchingInitialAdd())
+        
+        if (!cretingEntity) {
+            cretingEntity = await onlineAPI.service(fullUrl, API_METHOD.GET, 'initial', null) as InitialEntityData | null
+            if (cretingEntity) {
 
-        const cretingEntity = await onlineAPI.service(fullUrl, API_METHOD.GET, 'initial', null)
-
-
-        if (cretingEntity) {
-
-            dispatch(entityActions.setInitialAdd(cretingEntity))
-        } else {
-            console.log('no initial data')
+                dispatch(entityActions.setInitialAdd(cretingEntity))
+            } else {
+                console.log('no initial data')
+            }
         }
 
+        
+
+
+        
         if (currentUrl !== targetRoot) {
 
-
+            
             router.navigate(targetUrl, { replace: true })
         }
 
@@ -374,29 +400,29 @@ export const addRelation = (groupName: string, relationIndex: number) =>
     }
 
 //entity old
-export const initialAddEntity = (entityName: string) => async (dispatch: AppDispatchType, getState: GetStateType) => {
+const initialAddEntity = (entityName: string) => async (dispatch: AppDispatchType, getState: GetStateType) => {
 
-    let initialData = {
-        parameters: [],
-        fields: []
-    } as TemplateAddData
-
-
-    switch (entityName) {
-        case 'template':
-            initialData = await getInitialTemplateData()
-            dispatch(entityActions.setInitialAdd(initialData))
-            break;
+    // let initialData = {
+    //     parameters: [],
+    //     fields: []
+    // } as TemplateAddData
 
 
-        case 'field':
+    // switch (entityName) {
+    //     case 'template':
+    //         initialData = await getInitialTemplateData()
+    //         dispatch(entityActions.setInitialAdd(initialData))
+    //         break;
 
-            initialData = await getInitialTemplateFieldData()
-            dispatch(entityActions.setInitialAdd(initialData))
-            break;
-        default:
-            break;
-    }
+
+    //     case 'field':
+
+    //         initialData = await getInitialTemplateFieldData()
+    //         dispatch(entityActions.setInitialAdd(initialData))
+    //         break;
+    //     default:
+    //         break;
+    // }
 
 }
 

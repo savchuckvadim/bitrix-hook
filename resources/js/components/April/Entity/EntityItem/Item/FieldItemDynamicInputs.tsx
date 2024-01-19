@@ -41,8 +41,8 @@ const EntityItemDynamicInput = ({
 
             case 'string':
 
-                input = <div> <Input
-                    type={'text'}
+                input = <div> <textarea
+                    // type={'text'}
                     className="form-control"
                     id="horizontal-firstname-Input"
                     placeholder={field['title']}
@@ -51,7 +51,7 @@ const EntityItemDynamicInput = ({
                     onBlur={validation.handleBlur}
                 // value={typeof field.initialValue == 'string' ? validation.values[field.initialValue] : ""}
 
-                />
+                ></textarea>
                     {field.isCanAddField && <Button
 
                         type={'button'}

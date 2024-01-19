@@ -101,7 +101,7 @@ Route::post('/taskfields', function (Request $request) {
 });
 
 Route::post('/calling', function (Request $request) {
-
+    Log::info('calling ', ['request ' => $request->all()]);
     $domain = env('APRIL_BITRIX_DOMAIN');
     $secret = env('APRIL_WEB_HOOK');
     $restVersion = env('APRIL_BITRIX_REST_VERSION');
@@ -482,6 +482,15 @@ Route::post('/update/smart/', function (Request $request) {
 
 
 
+
+Route::post('/get/report/', function (Request $request) {
+
+    $auth = $request['auth'];
+    $domain = $auth['domain'];
+
+
+    return APIBitrixController::installSmart($domain);
+});
 
 
 

@@ -211,7 +211,78 @@ export const allEntities = [
             get: {
                 url: 'rq',
                 method: API_METHOD.GET
-            }
+            },
+            relations: [
+                {
+                    id: 0,
+                    item: {
+                        name: 'logo',
+                        title: 'Логотип',
+                        type: ENTITY_QUANTITY.ENTITY,
+                        get: {
+                            url: 'logo',
+                            method: API_METHOD.GET
+                        }
+    
+                    },
+                    items: {
+                        name: 'logos',
+                        title: 'Логотипы',
+                        type: ENTITY_QUANTITY.ENTITIES,
+                        get: {
+                            url: 'logos',
+                            method: API_METHOD.GET
+                        }
+    
+                    },
+                },
+                {
+                    id: 1,
+                    item: {
+                        name: 'signature',
+                        title: 'Подпись',
+                        type: ENTITY_QUANTITY.ENTITY,
+                        get: {
+                            url: 'signature',
+                            method: API_METHOD.GET
+                        }
+    
+                    },
+                    items: {
+                        name: 'signatures',
+                        title: 'Подписи',
+                        type: ENTITY_QUANTITY.ENTITIES,
+                        get: {
+                            url: 'signatures',
+                            method: API_METHOD.GET
+                        }
+    
+                    },
+                },
+                {
+                    id: 1,
+                    item: {
+                        name: 'stamp',
+                        title: 'Печать',
+                        type: ENTITY_QUANTITY.ENTITY,
+                        get: {
+                            url: 'stamp',
+                            method: API_METHOD.GET
+                        }
+    
+                    },
+                    items: {
+                        name: 'stamps',
+                        title: 'Печати',
+                        type: ENTITY_QUANTITY.ENTITIES,
+                        get: {
+                            url: 'stamps',
+                            method: API_METHOD.GET
+                        }
+    
+                    },
+                }
+            ]
 
         },
         items: {
@@ -224,9 +295,79 @@ export const allEntities = [
             }
 
         },
+        
 
 
 
     },
+    {
+        id: 7,
+        item: {
+            name: 'logo',
+            title: 'Логотип',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'logo',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'logos',
+            title: 'Логотипы',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'logos',
+                method: API_METHOD.GET
+            }
+
+        },
+    },
+    {
+        id: 8,
+        item: {
+            name: 'signature',
+            title: 'Подпись',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'signature',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'signatures',
+            title: 'Подписи',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'signatures',
+                method: API_METHOD.GET
+            }
+
+        },
+    },
+    {
+        id: 9,
+        item: {
+            name: 'stamp',
+            title: 'Печать',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'stamp',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'stamps',
+            title: 'Печати',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'stamps',
+                method: API_METHOD.GET
+            }
+
+        },
+    }
 
 ]
