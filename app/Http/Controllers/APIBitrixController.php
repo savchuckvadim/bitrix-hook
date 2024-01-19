@@ -483,7 +483,7 @@ class APIBitrixController extends Controller
                 // Отправляем запрос на другой сервер
                 $response = Http::get($url, [
                     "FILTER" => [
-                        ">CALL_DURATION" => 60,
+                        // ">CALL_DURATION" => 60,
                         ">CALL_START_DATE" => $callStartDateFrom,
                         "<CALL_START_DATE" =>  $callStartDateTo
                         // PORTAL_USER_ID
