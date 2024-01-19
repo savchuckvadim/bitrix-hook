@@ -492,16 +492,20 @@ class APIBitrixController extends Controller
                 ]);
                 Log::info('response', ['response' => $response]);
 
-                if (!empty($response['result'])) {
+                if (isset($response['result']) && !empty($response['result'])) {
                     // Добавляем полученные звонки к общему списку
                     $resultCallings = array_merge($resultCallings, $response['result']);
-
-                    // Получаем значение "next" из ответа
-                    $next = $response['next'];
-                } else {
-                    // Ждем некоторое время перед следующим запросом
-                    sleep(5); // Например, ждем 5 секунд
+                    if (isset($response['next'])) {
+                        // Получаем значение "next" из ответа
+                        $next = $response['next'];
+                    } else {
+                        // Если ключ "next" отсутствует, выходим из цикла
+                        break;
+                    }
                 }
+                // Ждем некоторое время перед следующим запросом
+                sleep(5); // Например, ждем 5 секунд
+
             } while ($next > 0); // Продолжаем цикл, пока значение "next" больше нуля
 
 
