@@ -496,20 +496,30 @@ class APIBitrixController extends Controller
             // $data = $response->json();
 
             // Проверяем, что результат не равен 0 и не является пустым массивом
-            if ($response['result'] && !empty($response['result'])) {
-                // Делаем что-то с полученными данными
-                // Например, вы можете их обработать или сохранить
-                // и затем продолжить цикл или выйти из него, в зависимости от вашей логики
+            // if (!empty($response['result'])) {
+            //     // Делаем что-то с полученными данными
+            //     // Например, вы можете их обработать или сохранить
+            //     // и затем продолжить цикл или выйти из него, в зависимости от вашей логики
 
-                foreach ($response['result'] as $call) {
-                    array_push($resultCallings, $call);
-                }
-            } else {
-                // Ждем некоторое время перед следующим запросом
-                sleep(5); // Например, ждем 5 секунд
-            }
+            //     foreach ($response['result'] as $call) {
+            //         array_push($resultCallings, $call);
+            //     }
+            // } else {
+            //     // Ждем некоторое время перед следующим запросом
+            //     sleep(5); // Например, ждем 5 секунд
+            // }
 
             // } while (empty($response['result'])); // Продолжаем цикл, пока условие не выполнится
+
+
+            return APIOnlineController::getResponse(
+                0,
+                'error callings',
+                [
+                    'result' => $resultCallings, 'response' => $response,
+                    'callStartDateFrom' => $callStartDateFrom, 'callStartDateTo' => $callStartDateTo
+                ]
+            );
         } catch (\Throwable $th) {
             return APIOnlineController::getResponse(
                 1,
