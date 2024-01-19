@@ -459,26 +459,75 @@ class APIBitrixController extends Controller
         }
     }
 
-    public function getBatch(
+    public function getCalling(
 
 
-        $domain
+        $domain,
+        $callStartDateFrom,
+        $callStartDateTo,
+
+
     ) {
-        //1) создает смарт процесс и сам задает  "entityTypeId" => 134,
-
-        //3) записывает стадии и направления ввиде одного объекта json связь portal-smart
 
 
         $portal = PortalController::getPortal($domain);
         Log::info('portal', ['portal' => $portal]);
+        $resultCallings = [];
         try {
             //CATEGORIES
             $webhookRestKey = $portal['data']['C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
+            $actionUrl = '/voximplant.statistic.get.json';
+            $url = $hook . $actionUrl;
+            do {
+                // Отправляем запрос на другой сервер
+                $response = Http::get($url, [
+                    "FILTER" => [
+                        ">CALL_DURATION" => 60,
+                        ">CALL_START_DATE" => $callStartDateFrom,
+                        "<CALL_START_DATE" =>  $callStartDateTo
+                        // PORTAL_USER_ID
+                    ]
+                ]);
 
+                // Проверяем, получили ли мы успешный ответ
+                if ($response->successful()) {
+                    // Декодируем JSON-ответ (если он JSON)
+                    $data = $response->json();
+
+                    // Проверяем, что результат не равен 0 и не является пустым массивом
+                    if ($response['result'] && !empty($response['result'])) {
+                        // Делаем что-то с полученными данными
+                        // Например, вы можете их обработать или сохранить
+                        // и затем продолжить цикл или выйти из него, в зависимости от вашей логики
+
+                        foreach ($response['result'] as $call) {
+                            array_push($resultCallings, $call);
+                        }
+                    } else {
+                        // Ждем некоторое время перед следующим запросом
+                        sleep(5); // Например, ждем 5 секунд
+                    }
+                } else {
+                    return APIOnlineController::getResponse(
+                        1,
+                        'error callings',
+                        ['result' => $resultCallings]
+                    );
+                }
+            } while (empty($response['result'])); // Продолжаем цикл, пока условие не выполнится
+        } catch (\Throwable $th) {
+            return APIOnlineController::getResponse(
+                1,
+                'error callings '. $th->getMessage(),
+                ['result' => $resultCallings]
+            );
+        }
+        return APIOnlineController::getResponse(
+            0,
+            'error callings',
+            ['result' => $resultCallings]
+        );
 
         // BX24.callMethod(
         //     'batch',
