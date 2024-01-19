@@ -520,7 +520,8 @@ class APIBitrixController extends Controller
         return APIOnlineController::getResponse(
             0,
             'error callings',
-            ['result' => $resultCallings, 'response' => $response]
+            ['result' => $resultCallings, 'response' => $response, 
+            'callStartDateFrom' => $callStartDateFrom, 'callStartDateTo' => $callStartDateTo]
         );
 
         // BX24.callMethod(
