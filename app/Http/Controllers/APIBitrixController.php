@@ -479,7 +479,7 @@ class APIBitrixController extends Controller
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
             $actionUrl = '/voximplant.statistic.get.json';
             $url = $hook . $actionUrl;
-            do {
+            // do {
                 // Отправляем запрос на другой сервер
                 $response = Http::get($url, [
                     "FILTER" => [
@@ -491,9 +491,9 @@ class APIBitrixController extends Controller
                 ]);
 
                 // Проверяем, получили ли мы успешный ответ
-                if ($response->successful()) {
+          
                     // Декодируем JSON-ответ (если он JSON)
-                    $data = $response->json();
+                    // $data = $response->json();
 
                     // Проверяем, что результат не равен 0 и не является пустым массивом
                     if ($response['result'] && !empty($response['result'])) {
@@ -508,25 +508,19 @@ class APIBitrixController extends Controller
                         // Ждем некоторое время перед следующим запросом
                         sleep(5); // Например, ждем 5 секунд
                     }
-                } else {
-                    return APIOnlineController::getResponse(
-                        1,
-                        'error callings',
-                        ['result' => $resultCallings]
-                    );
-                }
-            } while (empty($response['result'])); // Продолжаем цикл, пока условие не выполнится
+          
+            // } while (empty($response['result'])); // Продолжаем цикл, пока условие не выполнится
         } catch (\Throwable $th) {
             return APIOnlineController::getResponse(
                 1,
                 'error callings '. $th->getMessage(),
-                ['result' => $resultCallings]
+                ['result' => $resultCallings, 'response' => $response]
             );
         }
         return APIOnlineController::getResponse(
             0,
             'error callings',
-            ['result' => $resultCallings]
+            ['result' => $resultCallings, 'response' => $response]
         );
 
         // BX24.callMethod(
