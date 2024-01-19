@@ -489,7 +489,7 @@ class APIBitrixController extends Controller
                     // PORTAL_USER_ID
                 ]
             ]);
-
+            Log::info('response', ['response' => $response]);
             // Проверяем, получили ли мы успешный ответ
 
             // Декодируем JSON-ответ (если он JSON)
