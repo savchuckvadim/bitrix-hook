@@ -459,5 +459,44 @@ class APIBitrixController extends Controller
         }
     }
 
-    
+    public function getBatch(
+
+
+        $domain
+    ) {
+        //1) создает смарт процесс и сам задает  "entityTypeId" => 134,
+
+        //3) записывает стадии и направления ввиде одного объекта json связь portal-smart
+
+
+        $portal = PortalController::getPortal($domain);
+        Log::info('portal', ['portal' => $portal]);
+        try {
+            //CATEGORIES
+            $webhookRestKey = $portal['data']['C_REST_WEB_HOOK_URL'];
+            $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
+
+        // BX24.callMethod(
+        //     'batch',
+        //     {
+        //         'halt': 0,
+        //         'cmd': {
+        //             'user': 'user.get?ID=1',
+        //             'first_lead': 'crm.lead.add?fields[TITLE]=Test Title',
+        //             'user_by_name': 'user.search?NAME=Test2',
+        //             'user_lead': 'crm.lead.add?fields[TITLE]=Test Assigned&fields[ASSIGNED_BY_ID]=$result[user_by_name][0][ID]',
+        //         }
+        //     },
+        //     function(result)
+        //     {
+        //         console.log(result.answer);
+        //     }
+        // );
+
+
+    }
 }

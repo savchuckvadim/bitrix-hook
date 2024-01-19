@@ -102,7 +102,10 @@ Route::post('/taskfields', function (Request $request) {
 
 Route::post('/calling', function (Request $request) {
     Log::info('calling ', ['request ' => $request->all()]);
-    $domain = env('APRIL_BITRIX_DOMAIN');
+    $domain = $request['domain'];
+    $filters = $request['filters'];
+    $callStartDateFrom = $filters['callStartDateFrom'];
+    $callStartDateTo = $filters['callStartDateTo'];
     $secret = env('APRIL_WEB_HOOK');
     $restVersion = env('APRIL_BITRIX_REST_VERSION');
     $durationTop = $request['durationTop'];
@@ -119,8 +122,8 @@ Route::post('/calling', function (Request $request) {
         $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/voximplant.statistic.get.json', [
             "FILTER" => [
                 ">CALL_DURATION" => 60,
-                ">CALL_START_DATE" => "2023-12-01T00:00:00+00:00",
-                // "<CALL_START_DATE" =>  "2024-08-23T00:00:00+00:00"
+                ">CALL_START_DATE" => $callStartDateFrom,
+                "<CALL_START_DATE" =>  $callStartDateTo
                 // PORTAL_USER_ID
             ]
         ]);
@@ -419,18 +422,18 @@ Route::post('/update/smart/', function (Request $request) {
         // $smartGetData =  [
         //     'id' => $currentSmartId,
         //     'entityTypeId' => env('BITRIX_SMART_MAIN_ID'),
-            // 'fields' => [
-            //     'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
-            //     'RESPONSIBLE_ID' => $responsibleId,
-            //     'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
-            //     'CHANGED_BY' => $createdId, //- постановщик;
-            //     'CREATED_BY' => $createdId, //- постановщик;
-            //     'CREATED_DATE' => $nowDate, // - дата создания;
-            //     'DEADLINE' => $moscowTime, //- крайний срок;
-            //     'UF_CRM_TASK' => ['T9c_' . $crm],
-            //     'ALLOW_CHANGE_DEADLINE' => 'N',
-            //     'DESCRIPTION' => $description
-            // ]
+        // 'fields' => [
+        //     'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
+        //     'RESPONSIBLE_ID' => $responsibleId,
+        //     'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
+        //     'CHANGED_BY' => $createdId, //- постановщик;
+        //     'CREATED_BY' => $createdId, //- постановщик;
+        //     'CREATED_DATE' => $nowDate, // - дата создания;
+        //     'DEADLINE' => $moscowTime, //- крайний срок;
+        //     'UF_CRM_TASK' => ['T9c_' . $crm],
+        //     'ALLOW_CHANGE_DEADLINE' => 'N',
+        //     'DESCRIPTION' => $description
+        // ]
         // ];
 
         // $responseGetData = Http::get($url, $smartGetData);
@@ -458,7 +461,7 @@ Route::post('/update/smart/', function (Request $request) {
                 "ufCrm_6_1702453779" => $createdId,
                 "ufCrm_6_1702652862" => $responsibleId,
                 "ufCrm_6_1700645937" => $name,
-                
+
                 "stageId" => 'DT156_14:NEW',
 
 
