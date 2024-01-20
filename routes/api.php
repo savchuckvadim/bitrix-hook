@@ -515,7 +515,7 @@ Route::get('/placement', function (Request $request) {
 
 
 
-Route::get('/bind', function (Request $request) {
+Route::post('/bind', function (Request $request) {
     //     http://portal.bitrix24.com/rest/placement.bind/?access_token=sode3flffcmv500fuagrprhllx3soi72
     // 	&PLACEMENT=CRM_CONTACT_LIST_MENU
     // 	&HANDLER=http%3A%2F%2Fwww.applicationhost.com%2Fplacement%2F
@@ -548,7 +548,7 @@ Route::get('/bind', function (Request $request) {
 });
 
 
-Route::get('/taskevent', function (Request $request) {
+Route::post('/taskevent', function (Request $request) {
     //     http://portal.bitrix24.com/rest/placement.bind/?access_token=sode3flffcmv500fuagrprhllx3soi72
     // 	&PLACEMENT=CRM_CONTACT_LIST_MENU
     // 	&HANDLER=http%3A%2F%2Fwww.applicationhost.com%2Fplacement%2F
@@ -560,6 +560,7 @@ Route::get('/taskevent', function (Request $request) {
     // $portal = PortalController::getPortal($domain);
     // Log::info('portal', ['portal' => $portal]);
     // $resultCallings = [];
+    Log::info('taskevent', ['request' => $request->all()]);
     try {
         //CATEGORIES
         // $webhookRestKey = $portal['data']['C_REST_WEB_HOOK_URL'];
@@ -568,6 +569,7 @@ Route::get('/taskevent', function (Request $request) {
         // $url = $hook . $actionUrl;
         Log::info('taskevent', ['request' => $request->all()]);
     } catch (\Throwable $th) {
+        Log::info('taskevent', ['request' => $request->all()]);
         return APIOnlineController::getError(
 
             'error callings ' . $th->getMessage(),
