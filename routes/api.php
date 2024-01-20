@@ -591,10 +591,10 @@ Route::post('/taskevent', function (Request $request) {
                 ],
             ],
         ];
-        $headers = [
-            'Authorization' => 'Basic ' . base64_encode($member_id . ':' . $application_token),
-        ];
-        $response = Http::post($hook, $data, $headers);
+        // $headers = [
+        //     'Authorization' => 'Basic ' . base64_encode($member_id . ':' . $application_token),
+        // ];
+        $response = Http::get($hook, $data);
         Log::info('taskevent', ['response' => $response]);
         return $response;
     } catch (\Throwable $th) {
