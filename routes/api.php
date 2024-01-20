@@ -557,17 +557,39 @@ Route::post('/taskevent', function (Request $request) {
     // {
     // 	"result": true
     // }
-    // $portal = PortalController::getPortal($domain);
-    // Log::info('portal', ['portal' => $portal]);
-    // $resultCallings = [];
+    $actionUrl = '/placement.bind.json';
+    $domain = $request['auth']['domain'];
+    $portal = PortalController::getPortal($domain);
+    Log::info('portal', ['portal' => $portal]);
+
     Log::info('taskevent', ['request' => $request->all()]);
     try {
-        //CATEGORIES
-        // $webhookRestKey = $portal['data']['C_REST_WEB_HOOK_URL'];
-        // $hook = 'https://' . $domain  . '/' . $webhookRestKey;
-        // $actionUrl = '/voximplant.statistic.get.json';
-        // $url = $hook . $actionUrl;
-        Log::info('taskevent', ['request' => $request->all()]);
+
+        $webhookRestKey = $portal['data']['C_REST_WEB_HOOK_URL'];
+        $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+
+        $url = $hook . $actionUrl;
+        $data = [
+            'PLACEMENT' => 'TASK_VIEW_SIDEBAR',
+            'HANDLER' => 'https://april-server/test/placement.php',
+            'LANG_ALL' => [
+                'en' => [
+                    'TITLE' => 'Get Offer app',
+                    'DESCRIPTION' => 'App helps Garant employees prepare commercial documents and collect sales funnel statistics',
+                    'GROUP_NAME' => 'Garant',
+                ],
+                'ru' => [
+                    'TITLE' => 'КП Гарант',
+                    'DESCRIPTION' => 'Приложение помогает сотрудникам Гарант составлять коммерческие документы и собирать статистику воронки продаж',
+                    'GROUP_NAME' => 'Гарант',
+                ],
+            ],
+        ];
+
+        $response = Http::get($url, $data);
+        Log::info('taskevent', ['response' => $response]);
+        return $response;
+       
     } catch (\Throwable $th) {
         Log::info('taskevent', ['request' => $request->all()]);
         return APIOnlineController::getError(
