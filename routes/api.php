@@ -381,7 +381,7 @@ Route::post('/update/smart/', function (Request $request) {
 
         //portal and keys
         $portal = PortalController::getPortal($domain);
-        Log::info('portal', ['portal' => $portal]);
+       
         $portal = $portal['data'];
         Log::info('portalData', ['portal' => $portal]);
 
@@ -525,7 +525,7 @@ Route::post('/bind', function (Request $request) {
     // 	"result": true
     // }
     // $portal = PortalController::getPortal($domain);
-    // Log::info('portal', ['portal' => $portal]);
+    //
     // $resultCallings = [];
     try {
         //CATEGORIES
@@ -559,8 +559,14 @@ Route::post('/taskevent', function (Request $request) {
     // }
     $actionUrl = '/placement.bind.json';
     $domain = $request['auth']['domain'];
+    $member_id = $request['auth']['member_id'];
+    $application_token = $request['auth']['application_token'];
+    
     $portal = PortalController::getPortal($domain);
-    Log::info('portal', ['portal' => $portal]);
+
+    
+    $hook = 'https://' . $domain;
+    $handler = 'https://april-server/test/placement.php';
 
     Log::info('taskevent', ['request' => $request->all()]);
     try {
@@ -570,7 +576,7 @@ Route::post('/taskevent', function (Request $request) {
 
         $url = $hook . $actionUrl;
         $data = [
-            'PLACEMENT' => 'TASK_VIEW_SIDEBAR',
+            'PLACEMENT' => 'CRM_ACTIVITY_LIST_MENU',
             'HANDLER' => 'https://april-server/test/placement.php',
             'LANG_ALL' => [
                 'en' => [
@@ -585,8 +591,10 @@ Route::post('/taskevent', function (Request $request) {
                 ],
             ],
         ];
-
-        $response = Http::get($url, $data);
+        $headers = [
+            'Authorization' => 'Basic ' . base64_encode($member_id . ':' . $application_token),
+        ];
+        $response = Http::get($url, $data, $headers);
         Log::info('taskevent', ['response' => $response]);
         return $response;
        

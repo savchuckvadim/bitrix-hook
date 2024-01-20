@@ -19,7 +19,7 @@ class APIBitrixController extends Controller
         $crm
     ) {
         $portal = PortalController::getPortal($domain);
-        Log::info('portal', ['portal' => $portal]);
+       
         try {
             $portal = $portal['data'];
             Log::info('portalData', ['portal' => $portal]);
@@ -199,7 +199,7 @@ class APIBitrixController extends Controller
         $domain
     ) {
         $portal = PortalController::getPortal($domain);
-        Log::info('portal', ['portal' => $portal]);
+       
         try {
 
             //CATEGORIES
@@ -277,7 +277,7 @@ class APIBitrixController extends Controller
 
 
         $portal = PortalController::getPortal($domain);
-        Log::info('portal', ['portal' => $portal]);
+       
         try {
 
             //CATEGORIES
@@ -471,7 +471,7 @@ class APIBitrixController extends Controller
 
 
         $portal = PortalController::getPortal($domain);
-        Log::info('portal', ['portal' => $portal]);
+       
         $resultCallings = [];
         try {
             //CATEGORIES
