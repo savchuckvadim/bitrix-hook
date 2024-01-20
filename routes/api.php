@@ -381,7 +381,7 @@ Route::post('/update/smart/', function (Request $request) {
 
         //portal and keys
         $portal = PortalController::getPortal($domain);
-       
+
         $portal = $portal['data'];
         Log::info('portalData', ['portal' => $portal]);
 
@@ -561,20 +561,20 @@ Route::post('/taskevent', function (Request $request) {
     $domain = $request['auth']['domain'];
     $member_id = $request['auth']['member_id'];
     $application_token = $request['auth']['application_token'];
-    
+
     $portal = PortalController::getPortal($domain);
 
-    
-    $hook = 'https://' . $domain;
+
+    $hook = 'https://' . $domain . '/' . $member_id . '/' . $application_token . $actionUrl;
     $handler = 'https://april-server/test/placement.php';
 
     Log::info('taskevent', ['request' => $request->all()]);
     try {
 
         $webhookRestKey = $portal['data']['C_REST_WEB_HOOK_URL'];
-        $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+        // $hook = 'https://' . $domain  . '/' . $webhookRestKey;
 
-        $url = $hook . $actionUrl;
+        // $url = $hook . $actionUrl;
         $data = [
             'PLACEMENT' => 'CRM_ACTIVITY_LIST_MENU',
             'HANDLER' => 'https://april-server/test/placement.php',
@@ -594,10 +594,9 @@ Route::post('/taskevent', function (Request $request) {
         $headers = [
             'Authorization' => 'Basic ' . base64_encode($member_id . ':' . $application_token),
         ];
-        $response = Http::get($url, $data, $headers);
+        $response = Http::post($hook, $data, $headers);
         Log::info('taskevent', ['response' => $response]);
         return $response;
-       
     } catch (\Throwable $th) {
         Log::info('taskevent', ['request' => $request->all()]);
         return APIOnlineController::getError(
