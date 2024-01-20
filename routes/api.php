@@ -110,7 +110,7 @@ Route::post('/calling', function (Request $request) {
     $restVersion = env('APRIL_BITRIX_REST_VERSION');
     $durationTop = $request['durationTop'];
 
-    return APIBitrixController::getCalling($domain, $callStartDateFrom, $callStartDateTo );
+    return APIBitrixController::getCalling($domain, $callStartDateFrom, $callStartDateTo);
     // Log::info('Environment Variables', [
     //     'BITRIX_DOMAIN' => $domain,
     //     'BITRIX_REST_VERSION' => $restVersion,
@@ -510,4 +510,72 @@ Route::post('/placement', function (Request $request) {
 Route::get('/placement', function (Request $request) {
     $controller = new ReactAppController;
     return $controller->index();
+});
+
+
+
+
+Route::get('/bind', function (Request $request) {
+    //     http://portal.bitrix24.com/rest/placement.bind/?access_token=sode3flffcmv500fuagrprhllx3soi72
+    // 	&PLACEMENT=CRM_CONTACT_LIST_MENU
+    // 	&HANDLER=http%3A%2F%2Fwww.applicationhost.com%2Fplacement%2F
+    // 	&TITLE=Тестовое приложение
+    // HTTP/1.1 200 OK
+    // {
+    // 	"result": true
+    // }
+    // $portal = PortalController::getPortal($domain);
+    // Log::info('portal', ['portal' => $portal]);
+    // $resultCallings = [];
+    try {
+        //CATEGORIES
+        // $webhookRestKey = $portal['data']['C_REST_WEB_HOOK_URL'];
+        // $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+        // $actionUrl = '/voximplant.statistic.get.json';
+        // $url = $hook . $actionUrl;
+        Log::info('bind', ['bind' => $request->all()]);
+    } catch (\Throwable $th) {
+        return APIOnlineController::getError(
+
+            'error callings ' . $th->getMessage(),
+            [
+                // 'result' => $resultCallings,
+
+                'error callings ' . $th->getMessage(),
+            ]
+        );
+    }
+});
+
+
+Route::get('/taskevent', function (Request $request) {
+    //     http://portal.bitrix24.com/rest/placement.bind/?access_token=sode3flffcmv500fuagrprhllx3soi72
+    // 	&PLACEMENT=CRM_CONTACT_LIST_MENU
+    // 	&HANDLER=http%3A%2F%2Fwww.applicationhost.com%2Fplacement%2F
+    // 	&TITLE=Тестовое приложение
+    // HTTP/1.1 200 OK
+    // {
+    // 	"result": true
+    // }
+    // $portal = PortalController::getPortal($domain);
+    // Log::info('portal', ['portal' => $portal]);
+    // $resultCallings = [];
+    try {
+        //CATEGORIES
+        // $webhookRestKey = $portal['data']['C_REST_WEB_HOOK_URL'];
+        // $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+        // $actionUrl = '/voximplant.statistic.get.json';
+        // $url = $hook . $actionUrl;
+        Log::info('taskevent', ['request' => $request->all()]);
+    } catch (\Throwable $th) {
+        return APIOnlineController::getError(
+
+            'error callings ' . $th->getMessage(),
+            [
+                // 'result' => $resultCallings,
+
+                'error callings ' . $th->getMessage(),
+            ]
+        );
+    }
 });

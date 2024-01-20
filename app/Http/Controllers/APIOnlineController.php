@@ -64,4 +64,21 @@ class APIOnlineController extends Controller
             'data' => $data
         ]);
     }
+
+    public static function getSuccess($data){
+
+        return response([
+            'resultCode' => 0,
+            'message' => 'success',
+            'data' => $data
+        ]);
+    }
+    public static function getError($message, $data){
+
+        return response([
+            'resultCode' => 1,
+            'message' => $message,
+            'data' => $data
+        ]);
+    }
 }
