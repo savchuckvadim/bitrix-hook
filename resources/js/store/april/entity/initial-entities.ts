@@ -24,7 +24,8 @@ export const allEntities = [
                 url: 'portals',
                 method: API_METHOD.GET
             }
-        }
+        },
+        relations: [1, 11, 12, 13, 14],
 
     },
     {
@@ -37,31 +38,7 @@ export const allEntities = [
                 url: 'template',
                 method: API_METHOD.GET
             },
-            relations: [
-                {
-                    id: 2,
-                    item: {
-                        name: 'field',
-                        title: 'Свойство',
-                        type: ENTITY_QUANTITY.ENTITY,
-                        get: {
-                            url: 'field',
-                            method: API_METHOD.GET
-                        }
-
-                    },
-                    items: {
-                        name: 'fields',
-                        title: 'Свойства',
-                        type: ENTITY_QUANTITY.ENTITIES,
-                        get: {
-                            url: 'fields',
-                            method: API_METHOD.GET
-                        }
-
-                    },
-                }
-            ]
+            
 
         },
         items: {
@@ -74,7 +51,9 @@ export const allEntities = [
             }
 
         },
-
+        relations: [
+            2, 10,
+        ]
     },
     {
         id: 2,
@@ -86,31 +65,7 @@ export const allEntities = [
                 url: 'field',
                 method: API_METHOD.GET
             },
-            relations: [
-                {
-                    id: 2,
-                    item: {
-                        name: 'item',
-                        title: 'Элемент свойства',
-                        type: ENTITY_QUANTITY.ENTITY,
-                        get: {
-                            url: 'item',
-                            method: API_METHOD.GET
-                        }
-
-                    },
-                    items: {
-                        name: 'items',
-                        title: 'Свойства',
-                        type: ENTITY_QUANTITY.ENTITIES,
-                        get: {
-                            url: 'items',
-                            method: API_METHOD.GET
-                        }
-
-                    },
-                }
-            ]
+           
 
         },
         items: {
@@ -123,7 +78,10 @@ export const allEntities = [
             }
 
         },
+        relations: [
+            3
 
+        ]
 
     },
     {
@@ -185,7 +143,8 @@ export const allEntities = [
             get: {
                 url: 'provider',
                 method: API_METHOD.GET
-            }
+            },
+           
 
         },
         items: {
@@ -198,7 +157,9 @@ export const allEntities = [
             }
 
         },
-
+        relations: [
+            6
+        ]
 
 
     },
@@ -212,77 +173,7 @@ export const allEntities = [
                 url: 'rq',
                 method: API_METHOD.GET
             },
-            relations: [
-                {
-                    id: 0,
-                    item: {
-                        name: 'logo',
-                        title: 'Логотип',
-                        type: ENTITY_QUANTITY.ENTITY,
-                        get: {
-                            url: 'logo',
-                            method: API_METHOD.GET
-                        }
-    
-                    },
-                    items: {
-                        name: 'logos',
-                        title: 'Логотипы',
-                        type: ENTITY_QUANTITY.ENTITIES,
-                        get: {
-                            url: 'logos',
-                            method: API_METHOD.GET
-                        }
-    
-                    },
-                },
-                {
-                    id: 1,
-                    item: {
-                        name: 'signature',
-                        title: 'Подпись',
-                        type: ENTITY_QUANTITY.ENTITY,
-                        get: {
-                            url: 'signature',
-                            method: API_METHOD.GET
-                        }
-    
-                    },
-                    items: {
-                        name: 'signatures',
-                        title: 'Подписи',
-                        type: ENTITY_QUANTITY.ENTITIES,
-                        get: {
-                            url: 'signatures',
-                            method: API_METHOD.GET
-                        }
-    
-                    },
-                },
-                {
-                    id: 1,
-                    item: {
-                        name: 'stamp',
-                        title: 'Печать',
-                        type: ENTITY_QUANTITY.ENTITY,
-                        get: {
-                            url: 'stamp',
-                            method: API_METHOD.GET
-                        }
-    
-                    },
-                    items: {
-                        name: 'stamps',
-                        title: 'Печати',
-                        type: ENTITY_QUANTITY.ENTITIES,
-                        get: {
-                            url: 'stamps',
-                            method: API_METHOD.GET
-                        }
-    
-                    },
-                }
-            ]
+            
 
         },
         items: {
@@ -295,7 +186,10 @@ export const allEntities = [
             }
 
         },
-        
+        relations: [
+            7, 8, 9
+        ]
+
 
 
 
@@ -368,6 +262,152 @@ export const allEntities = [
             }
 
         },
-    }
+    },
+    {
+        id: 10,
+        item: {
+            name: 'counter',
+            title: 'Счетчик',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'counter',
+                method: API_METHOD.GET
+            }
 
+        },
+        items: {
+            name: 'counters',
+            title: 'Счетчики',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'counters',
+                method: API_METHOD.GET
+            }
+
+        },
+    },
+    {
+        id: 11,
+        item: {
+            name: 'timezone',
+            title: 'Часовой пояс',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'timezone',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'timezones',
+            title: 'Часовые пояса',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'timezones',
+                method: API_METHOD.GET
+            }
+
+        },
+    },
+    {
+        id: 12,
+        item: {
+            name: 'callingGroup',
+            title: 'Группа задач со звонками',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'callingGroup',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'callingGroups',
+            title: 'Группы задач со звонками',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'callingGroups',
+                method: API_METHOD.GET
+            }
+
+        },
+    },
+    {
+        id: 13,
+        item: {
+            name: 'smart',
+            title: 'Смарт процесс',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'smart',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'smarts',
+            title: 'Смарт процессы',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'smarts',
+                method: API_METHOD.GET
+            }
+
+        },
+    },
+    {
+       
+        id: 13,
+        item: {
+            name: 'departament',
+            title: 'Целевой отдел компании',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'departament',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'departaments',
+            title: 'Целевые отделы компании',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'departaments',
+                method: API_METHOD.GET
+            }
+
+        },
+    },
+    {
+         
+        id: 14,
+        item: {
+            name: 'bitrixlist',
+            title: 'Универсальные списки Битрикс',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'bitrixlist',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'bitrixlists',
+            title: 'Универсальные списки Битрикс',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'bitrixlists',
+                method: API_METHOD.GET
+            }
+
+        },
+    }
 ]
+
+export const getRouteDataById =(id:number) =>{
+   return allEntities.find(routeData => routeData.id == id)
+}
+
+
+

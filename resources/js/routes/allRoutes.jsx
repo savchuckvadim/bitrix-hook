@@ -175,9 +175,11 @@ import EntityContainer from "../components/April/Entity/EntityContainer";
 import { ENTITY_QUANTITY } from "../types/entity/entity-types";
 import { allEntities } from "../store/april/entity/initial-entities";
 import SettingsContainer from "../components/April/Settings/SettingsContainer";
+import { generateRoutes } from "./generateRoutes";
 
 
-const authProtectedRoutes = [
+const authProtectedRoutes = 
+[
   //Index Main
   {
     path: "/",
@@ -329,7 +331,7 @@ const authProtectedRoutes = [
   { path: "/pages-pricing", component: <PagesPricing /> },
 ];
 
-//April
+// April
 allEntities.forEach(entity => {
   [entity.item, entity.items].forEach(entityType => {
 
@@ -400,7 +402,8 @@ allEntities.forEach(entity => {
 
   })
 })
-
+const aprilRoutes = generateRoutes(0); // Начало с id 0
+aprilRoutes.map(route => authProtectedRoutes.push(route))
 authProtectedRoutes.push(
 
 
