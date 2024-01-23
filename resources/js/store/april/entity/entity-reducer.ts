@@ -110,11 +110,11 @@ export const updateEntities = (token = null, entityName: string) => async (dispa
 
 }
 export const getEntities = (url: string, method: string, collectionName: string, data: any = null) => async (dispatch: AppDispatchType, getState: GetStateType) => {
-
+    
     if (url) {
         const collection = await onlineAPI.service(url, API_METHOD.GET, collectionName, null)
 
-
+        
         if (collection) {
             dispatch(entityActions.setEntityItems(collection))
         } else {
@@ -127,7 +127,7 @@ export const getEntities = (url: string, method: string, collectionName: string,
 
 }
 export const getEntityItem = (url: string, entityName: string, entityId: number) => async (dispatch: AppDispatchType, getState: GetStateType) => {
-
+    
     if (url) {
         const fullUrl = `${url}/${entityId}`
         const item = await onlineAPI.service(fullUrl, API_METHOD.GET, entityName, null)
@@ -146,7 +146,7 @@ export const getEntityItem = (url: string, entityName: string, entityId: number)
 }
 export const setOrupdateEntityItem = (history: (url: string) => void, currentUrl: string, url: string, entityName: string, data: number) => async (dispatch: AppDispatchType, getState: GetStateType) => {
 
-    debugger
+    
     if (url) {
         const apiData = data
         let targetUrl = currentUrl

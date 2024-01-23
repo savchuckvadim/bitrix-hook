@@ -94,7 +94,7 @@ export const hookAPI = {
         try {
             
             const response = await online[method](url, data)
-            debugger
+            
             if (response && response.data) {
                 if (response.data.resultCode === 0) {
                     result = response.data[model]

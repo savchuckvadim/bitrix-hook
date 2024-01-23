@@ -10,7 +10,7 @@ import EntityItem from "./EntityItem"
 import EntityItemAdd from "./EntityItemAdd"
 import { getInitialValues } from "../../../../utils/entity-utils/entity-util"
 import { useFormik } from "formik"
-import { appendFormData } from "../../../../utils/entity-utils/form-util"
+import { appendFormData, getFormik } from "../../../../utils/entity-utils/form-util"
 
 
 const mapState = (state) => {
@@ -46,75 +46,50 @@ const EntityItemContainer = ({
     // const [currentItems, setCurrentItems] = useState(items)
     const [isCreating, setIsCreating] = useState(router.params.entityId === 'add')
     const [creatingData, setCreating] = useState(creating)
-    const [files, setFiles] = useState([]);
+    const [formik, setFormik] = useState(null)
+
     useEffect(() => {
         const isCurrentCreating = router.params.entityId === 'add'
             || (router.params.entityChildrenId
                 && router.params.entityChildrenId === 'add')
         if (router.params.entityId) {
-            
-            !isCurrentCreating 
+
+            !isCurrentCreating
                 ? getEntityItem(itemUrl, entityName, Number(router.params.entityId))
                 : getInitialEntityData(itemUrl, router, router.location.pathname, router.navigate)
         }
         setIsCreating(isCurrentCreating)
+
+
+        // setHandleFile(handleFileChange)
+
+
+
     }, [router.location.pathname])
 
-    useEffect(() => {
 
+    useEffect(() => {
         setCreating(creating)
     }, [creating])
 
-    let dataInitialValues = null
-    if (current) {
-        
-        dataInitialValues = current
-    }
-    else if (creating.formData) {
-        
-        dataInitialValues =  getInitialValues(creating.formData)
-    }
+    // const validation = getFormik(router, creating, itemUrl, current, setOrupdateEntityItem)
 
-    
-    // Form validation 
-    const validation = useFormik({
-        // enableReinitialize : use this flag when initial values needs to be changed
-        enableReinitialize: true,
+    // // setFormik(validation)
 
-        initialValues: {
-            ...dataInitialValues
-        },
+    // // Form validation 
+    // // const validation = getFormik(router, creating, itemUrl, current, setOrupdateEntityItem)
+    // const handleFileChange = (event, inputName, formik) => {
+    //     // Добавляем все выбранные файлы в массив
+    //     // setFiles([...files, ...event.target.files]);
+    //     // Обновляем стейт Formik (необязательно)
+    //     formik.setFieldValue(inputName, event.target.files);
+    // };
+    // setFormik(validation)
+    // setHandleFile(handleFileChange)
 
 
-        onSubmit: (values) => {
-            console.log("values", values);
-            const formData = new FormData();
-
-
-            for (const key in values) {
-                appendFormData(formData, key, values[key]);
-            }
-            console.log("formData", formData.values());
-
-
-            for (let [key, value] of formData.entries()) {
-                console.log(key, value);
-            }
-
-            setOrupdateEntityItem(router.navigate, router.location.pathname, itemUrl, itemUrl, formData)
-
-        }
-
-    });
-    const handleFileChange = (event, inputName) => {
-        // Добавляем все выбранные файлы в массив
-        // setFiles([...files, ...event.target.files]);
-        // Обновляем стейт Formik (необязательно)
-        validation.setFieldValue(inputName, event.target.files);
-    };
-    
     return !isCreating ? <EntityItem
-    validation={validation}
+        // validation={validation}
         router={router}
         entity={current}
         entityName={entityName}
@@ -124,7 +99,7 @@ const EntityItemContainer = ({
 
     />
         : creatingData.formData && <EntityItemAdd
-            validation={validation}
+            // validation={validation}
             router={router}
             creating={creatingData}
             relation={relation}
@@ -135,7 +110,7 @@ const EntityItemContainer = ({
             getInitialRelationEntity={getInitialRelationEntity}
             setRelation={setRelation}
             addRelation={addRelation}
-            handleFileChange={handleFileChange}
+            // handleFileChange={handleFileChange}
 
         />
 

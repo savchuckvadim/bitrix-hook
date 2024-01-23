@@ -26,14 +26,16 @@ const mapState = (state, own) => {
 
 
 const EntityContainer = ({
-    router, type, itemUrl, itemsUrl, entityName, entityTitle,
+    router, type,
+    itemUrl, itemsUrl,
+    entityName, entityTitle,
 }) => {
 
 
     
 
     return <EntityPage name={entityTitle}>
-        {type === ENTITY_QUANTITY.ENTITIES 
+        {type === ENTITY_QUANTITY.ENTITIES
             ? <EntityItemsContainer
                 router={router}
                 itemUrl={itemUrl}
@@ -42,9 +44,9 @@ const EntityContainer = ({
                 entityTitle={entityTitle}
             />
             : <EntityItemContainer
-            router={router}
-            entityName={entityName}
-            itemUrl={itemUrl}
+                router={router}
+                entityName={entityName}
+                itemUrl={itemUrl}
             />
 
         }

@@ -38,7 +38,7 @@ export const allEntities = [
                 url: 'template',
                 method: API_METHOD.GET
             },
-            
+
 
         },
         items: {
@@ -52,7 +52,7 @@ export const allEntities = [
 
         },
         relations: [
-            2, 10,
+            2, 5, 10,
         ]
     },
     {
@@ -65,7 +65,7 @@ export const allEntities = [
                 url: 'field',
                 method: API_METHOD.GET
             },
-           
+
 
         },
         items: {
@@ -144,7 +144,7 @@ export const allEntities = [
                 url: 'provider',
                 method: API_METHOD.GET
             },
-           
+
 
         },
         items: {
@@ -173,7 +173,7 @@ export const allEntities = [
                 url: 'rq',
                 method: API_METHOD.GET
             },
-            
+
 
         },
         items: {
@@ -356,7 +356,7 @@ export const allEntities = [
         },
     },
     {
-       
+
         id: 13,
         item: {
             name: 'departament',
@@ -380,7 +380,7 @@ export const allEntities = [
         },
     },
     {
-         
+
         id: 14,
         item: {
             name: 'bitrixlist',
@@ -405,8 +405,8 @@ export const allEntities = [
     }
 ]
 
-export const getRouteDataById =(id:number) =>{
-   return allEntities.find(routeData => routeData.id == id)
+export const getRouteDataById = (id: number) => {
+    return allEntities.find(routeData => routeData.id == id)
 }
 
 

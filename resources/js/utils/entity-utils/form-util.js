@@ -1,3 +1,6 @@
+import { useFormik } from "formik";
+import { getInitialValues } from "./entity-util";
+
 export const appendFormData = (formData, key, value) => {
     if (value instanceof File) {
         // Если значение - файл, добавляем его
@@ -39,6 +42,64 @@ export const appendFormData = (formData, key, value) => {
         // Для всех остальных типов данных просто добавляем их в formData
         formData.append(key, value);
     }
-    
+
     return formData;
 };
+
+
+export const getFormik = (router, creating, itemUrl, current, setOrupdateEntityItem) => {
+    let dataInitialValues = null
+    if (current) {
+
+        dataInitialValues = current
+    }
+    else if (creating && creating.formData) {
+
+        dataInitialValues = getInitialValues(creating.formData)
+    }
+
+
+    // Form validation 
+    const validation = useFormik({
+        // enableReinitialize : use this flag when initial values needs to be changed
+        enableReinitialize: true,
+
+        initialValues: {
+            ...dataInitialValues
+        },
+
+
+        onSubmit: (values) => {
+            console.log("values", values);
+            const formData = new FormData();
+
+
+            for (const key in values) {
+                appendFormData(formData, key, values[key]);
+            }
+            console.log("formData", formData.values());
+
+
+            for (let [key, value] of formData.entries()) {
+                console.log(key, value);
+            }
+
+            setOrupdateEntityItem(router.navigate, router.location.pathname, itemUrl, itemUrl, formData)
+
+        }
+
+    });
+
+    return validation;
+}
+
+// export const getHandleFileChange = (formik) => {
+//     const handleFileChange = (event, inputName) => {
+//         // Добавляем все выбранные файлы в массив
+//         // setFiles([...files, ...event.target.files]);
+//         // Обновляем стейт Formik (необязательно)
+//         formik.setFieldValue(inputName, event.target.files);
+//     };
+//     return handleFileChange
+
+// }

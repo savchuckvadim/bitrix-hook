@@ -61,11 +61,14 @@ const EntityItemsContainer = ({
     // const [currentItems, setCurrentItems] = useState(items)
 
     useEffect(() => {
-
+        
         getEntities(router.location.pathname, API_METHOD.GET, entityName, null)
     }, [router.location.pathname])
 
+  
 
+
+    
 
     return <EntityItems
         router={router}

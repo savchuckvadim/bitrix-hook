@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useFormik } from "formik";
+import React from "react";
+
 import * as Yup from "yup";
 import {
     Card,
@@ -19,20 +19,26 @@ import Breadcrumb from "../../../Common/Breadcrumb";
 import { getInitialValues } from "../../../../utils/entity-utils/entity-util";
 import EntityItemDynamicInput from "./Item/FieldItemDynamicInputs";
 import RelationAdd from "./Item/RelationAdd";
+import { getFormik } from "../../../../utils/entity-utils/form-util";
 
 
 const EntityItemAdd = ({
-    validation,
+    // validation,
     router, creating, relation, entityName, itemUrl,
     isFromRelation = false, relationIndex,
     setOrupdateEntityItem, getInitialRelationEntity, setRelation, addRelation,
-    handleFileChange,
+    // handleFileChange,
 }) => {
 
     //meta title
     document.title = entityName + " | Skote React + Laravel 10 Admin And Dashboard Template";
 
+    const validation = getFormik(router, creating, itemUrl, null, setOrupdateEntityItem)
 
+    const handleFileChange = (event, inputName, formik) => {
+
+        formik.setFieldValue(inputName, event.target.files);
+    };
     
 
     
@@ -85,7 +91,7 @@ const EntityItemAdd = ({
                             </Row>
                         )
                     })}
-                    {relations.map((relation, relationIndex) => {
+                    {/* {relations.map((relation, relationIndex) => {
                         return relation.groups.map(relationGroup => {
                             let firstField = relationGroup.fields[0]
                             
@@ -116,7 +122,7 @@ const EntityItemAdd = ({
                             </Row>
                         })
 
-                    })}
+                    })} */}
 
                 </div>
 
@@ -132,33 +138,9 @@ const EntityItemAdd = ({
     
     return (
         <React.Fragment>
-            {relation && <RelationAdd
-                validation={validation}
-                relation={relation}
-                router={router}
-                creating={relation}
-
-                entityName={entityName}
-                itemUrl={itemUrl}
-                setOrupdateEntityItem={setOrupdateEntityItem}
-                getInitialRelationEntity={getInitialRelationEntity}
-                setRelation={setRelation}
-                addRelation={addRelation}
-                handleFileChange={handleFileChange}
-
-            />}
-            {/* <div className="page-content"> */}
-            {/* <Container fluid={true} className="mt-0">
-
-                    <Breadcrumb title="Forms" breadcrumbItem="Form Layouts" /> */}
+           
             <Row>
-
-
                 <Col xl={6}>
-                    {/* <Card>
-                                <CardBody>
-                                    <CardTitle className="mb-4">{entityName}</CardTitle> */}
-
                     <Form
 
                         onSubmit={validation.handleSubmit}>
@@ -171,12 +153,10 @@ const EntityItemAdd = ({
 
                     </Form>
 
-                    {/* </CardBody>
-                            </Card> */}
+
                 </Col>
             </Row>
-            {/* </Container> */}
-            {/* </div> */}
+
         </React.Fragment>
     )
 }

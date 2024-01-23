@@ -17,12 +17,13 @@ import {
 
 import Breadcrumb from "../../../Common/Breadcrumb";
 import TypeEntityItemDynamicInput from "./Item/TypeItemDynamicInputs";
+import { getFormik } from "../../../../utils/entity-utils/form-util";
 
 
-const EntityItem = ({ 
-    router, 
-    validation,
-    entity, entityName, itemUrl, 
+const EntityItem = ({
+    router,
+    // validation,
+    entity, entityName, itemUrl,
     setOrupdateEntityItem, deleteEntityItem }) => {
 
     //meta title
@@ -30,42 +31,13 @@ const EntityItem = ({
 
 
     // Form validation 
-    // const validation = useFormik({
-    //     // enableReinitialize : use this flag when initial values needs to be changed
-    //     enableReinitialize: true,
-
-    //     initialValues: {
-    //         ...entity
-    //     },
-    //     // validationSchema: Yup.object({
-    //     //     firstname: Yup.string().required("Please Enter Your First Name"),
-    //     //     lastname: Yup.string().required("Please Enter Your Last Name"),
-    //     //     city: Yup.string().required("Please Enter Your City"),
-    //     //     state: Yup.string().required("Please Enter Your State"),
-    //     //     zip: Yup.string().required("Please Enter Your Zip"),
-    //     // }),
-    //     onSubmit: (values) => {
-    //         console.log("values", values);
-
-
-
-    //         setOrupdateEntityItem(router.navigate, router.location.pathname, 'portal', 'portal', {
-    //             number: values.number,
-    //             clientId: values.C_REST_CLIENT_ID,
-    //             clientSecret: values.C_REST_CLIENT_SECRET,
-    //             hook: values.C_REST_WEB_HOOK_URL,
-    //             domain: values.domain,
-    //             key: values.key
-    //         })
-    //         console.log("values", values);
-    //     }
-    // });
+    const validation = getFormik(router, null, itemUrl, entity, setOrupdateEntityItem)
 
     const getItems = (entity) => {
         let result = []
 
         for (const key in entity) {
-            
+
 
             if (entity.hasOwnProperty(key)) {
                 const value = entity[key];
@@ -82,24 +54,12 @@ const EntityItem = ({
                         >
                             {key}
                         </Label>
-                        {/* <Col sm={9}>
-                        <Input
-                            type="text"
-                            className="form-control"
-                            id="horizontal-firstname-Input"
-                            placeholder={key}
-                            name={key}
-                            onChange={validation.handleChange}
-                            onBlur={validation.handleBlur}
-                            value={validation.values[key] || ""}
 
+                        <TypeEntityItemDynamicInput
+                            field={value}
+                            fieldName={key}
+                            validation={validation}
                         />
-                    </Col> */}
-                        <TypeEntityItemDynamicInput 
-                        field={value}
-                        fieldName={key}
-                        validation={validation}
-                         />
                     </Row>
                 )
             }
@@ -114,7 +74,7 @@ const EntityItem = ({
         deleteEntityItem(router.navigate, itemUrl, entityName, entity.id)
     }
 
-    
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -148,82 +108,7 @@ const EntityItem = ({
                                                 Delete
                                             </Button>
                                         </div>
-                                        {/* <Row className="mb-4">
-                                            <Label
-                                                htmlFor="horizontal-firstname-Input"
-                                                className="col-sm-3 col-form-label"
-                                            >
-                                                First name
-                                            </Label>
-                                            <Col sm={9}>
-                                                <Input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="horizontal-firstname-Input"
-                                                    placeholder="Enter Your"
-                                                />
-                                            </Col>
-                                        </Row>
-                                        <Row className="mb-4">
-                                            <Label
-                                                htmlFor="horizontal-email-Input"
-                                                className="col-sm-3 col-form-label"
-                                            >
-                                                Email
-                                            </Label>
-                                            <Col sm={9}>
-                                                <Input
-                                                    type="email"
-                                                    className="form-control"
-                                                    id="horizontal-email-Input"
-                                                    placeholder="Enter Your Email ID"
-                                                />
-                                            </Col>
-                                        </Row>
-                                        <Row className="mb-4">
-                                            <Label
-                                                htmlFor="horizontal-password-Input"
-                                                className="col-sm-3 col-form-label"
-                                            >
-                                                Password
-                                            </Label>
-                                            <Col sm={9}>
-                                                <Input
-                                                    type="password"
-                                                    className="form-control"
-                                                    id="horizontal-password-Input"
-                                                    placeholder="Enter Your Password"
-                                                />
-                                            </Col>
-                                        </Row>
-
-                                        <Row className="justify-content-end">
-                                            <Col sm={9}>
-                                                <div className="form-check mb-4">
-                                                    <Input
-                                                        type="checkbox"
-                                                        className="form-check-Input"
-                                                        id="horizontal-customCheck"
-                                                    />
-                                                    <Label
-                                                        className="form-check-label"
-                                                        htmlFor="horizontal-customCheck"
-                                                    >
-                                                        Remember me
-                                                    </Label>
-                                                </div>
-
-                                                <div>
-                                                    <Button
-                                                        type="submit"
-                                                        color="primary"
-                                                        className="w-md"
-                                                    >
-                                                        Submit
-                                                    </Button>
-                                                </div>
-                                            </Col>
-                                        </Row> */}
+                              
                                     </Form>
 
                                 </CardBody>

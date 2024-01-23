@@ -1,4 +1,4 @@
-import { EntityFormField, FormikInitialValues, InitialEntityData } from "../../types/entity/entity-types";
+import { FormikInitialValues, InitialEntityData } from "../../types/entity/entity-types";
 
 
 export const getInitialValues = (initialData: InitialEntityData) => {
@@ -13,38 +13,48 @@ export const getInitialValues = (initialData: InitialEntityData) => {
 
         group.fields && group.fields.length && group.fields.map(field => {
 
-            if (field.type !== 'entity') {
+            if (field.type !== 'entity' && field.type !== 'select') {
                 resultInitialData[field.apiName] = ''
+            } else if (field.type === 'select') {
+                //@ts-ignore
+                if (field.initialValue.id) {
+                    //@ts-ignore
+                    resultInitialData[field.apiName] = field.initialValue.id
+                } else {
+                    resultInitialData[field.apiName] = field.initialValue
+
+                }
+
             }
 
         })
-        resultInitialData.relations = {}
+        // resultInitialData.relations = {}
 
-        group.relations && group.relations.length && group.relations.map((relation, relationIndex) => {
-
-
-
-            relation.groups.map(rltnGroup => {
-                resultInitialData.relations[relation.apiName] = []
-                // resultInitialData.relations[rltnGroup.groupName][relation.apiName] = []
-
-                resultInitialData.relations[relation.apiName][relationIndex] = {}
-                rltnGroup.fields && rltnGroup.fields.length && rltnGroup.fields.map(fld => {
-                    resultInitialData.relations[relation.apiName][relationIndex][fld.apiName] = ''
+        // group.relations && group.relations.length && group.relations.map((relation, relationIndex) => {
 
 
-                })
 
-                // resultInitialData.relations = [...resultInitialData.relations]
-                // resultInitialData.relations[relationIndex][relation.apiName] = getInitialValues(relation)
+        //     relation.groups.map(rltnGroup => {
+        //         resultInitialData.relations[relation.apiName] = []
+        //         // resultInitialData.relations[rltnGroup.groupName][relation.apiName] = []
+
+        //         resultInitialData.relations[relation.apiName][relationIndex] = {}
+        //         rltnGroup.fields && rltnGroup.fields.length && rltnGroup.fields.map(fld => {
+        //             resultInitialData.relations[relation.apiName][relationIndex][fld.apiName] = ''
 
 
-            })
-        })
+        //         })
+
+        //         // resultInitialData.relations = [...resultInitialData.relations]
+        //         // resultInitialData.relations[relationIndex][relation.apiName] = getInitialValues(relation)
+
+
+        //     })
+        // })
 
     })
 
-    
+
     return resultInitialData
 
 
@@ -108,7 +118,7 @@ export const getInitialValues = (initialData: InitialEntityData) => {
 
 //     })
 
-//     
+//
 //     return resultInitialData
 
 

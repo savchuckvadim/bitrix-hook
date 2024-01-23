@@ -2,8 +2,8 @@ import { Button, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Inpu
 import { EntityFormField } from "../../../../../types/entity/entity-types";
 import { FormikProps } from "formik";
 import { GetInitialRelationFunction } from "../../../../../store/april/entity/entity-reducer";
-import { useState } from "react";
-import Select from "react-select";
+
+
 type DynamicInputProps = {
     field: EntityFormField
     validation: any
@@ -17,7 +17,7 @@ type DynamicInputProps = {
     relationApiName: undefined | string
     getInitialRelationEntity: GetInitialRelationFunction
     addRelation: (groupName: string, relationIndex: number) => void
-    handleFileChange: (event: any, inputName: string) => void
+    handleFileChange: (event: any, inputName: string, validation:any) => void
 
 }
 const EntityItemDynamicInput = ({
@@ -111,7 +111,7 @@ const EntityItemDynamicInput = ({
                             className="form-control"
                         >
                             {field.items?.map(item => (
-                                <option value={item.name}>{item.title}</option>
+                                <option value={item.id}>{item.title}</option>
 
                             ))}
                         </select>
@@ -175,7 +175,7 @@ const EntityItemDynamicInput = ({
                     <Label htmlFor="formFile" className="form-label">{field['title']}</Label>
                     <Input
                         name={fieldFormName}
-                        onChange={(e) => handleFileChange(e, fieldFormName)}
+                        onChange={(e) => handleFileChange(e, fieldFormName, validation)}
                         onBlur={validation.handleBlur}
                         className="form-control"
                         type="file" id="formFile"

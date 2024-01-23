@@ -16,7 +16,7 @@ import {
 //Import Breadcrumb
 import Breadcrumb from "../../../Common/Breadcrumb";
 import EntityItemsFilter from "./Items/ItemsFilter";
-
+import './EntityItems.scss'
 
 
 
@@ -34,7 +34,7 @@ const EntityItems = ({ entityName, entityTitle, items, itemUrl, router, tableHea
 
     const createNewEntityItem = () => {
         const initialUrl = router.location.pathname
-
+        
         getInitialEntityData(itemUrl, router, router.location.pathname, router.navigate)
     }
 
@@ -67,17 +67,28 @@ const EntityItems = ({ entityName, entityTitle, items, itemUrl, router, tableHea
                                                 </thead>
                                                 <tbody>
                                                     {currentItems.map(entity => {
-                                                        return <tr key={`${entityName}-row-${entity.id}`}>
+                                                        return <tr
+                                                            onClick={() => {
+                                                                
+                                                                router.navigate(`/${itemUrl}/${entity.id}`)
+                                                            }}
+                                                            className={`entities-item-link`}
+                                                            key={`${entityName}-row-${entity.id}`}>
                                                             {entity.items.map((prop, i) => {
                                                                 if (prop.name === 'id' || i === 0) {
-                                                                    return <th key={`first-cell-${i}`} scope="row">{prop.value}</th>;
+                                                                    return <th
+
+                                                                        key={`first-cell-${i}`} scope="row">{prop.value}
+                                                                    </th>;
+
+
                                                                 } else if ((typeof prop.value === 'object' || Array.isArray(prop.value)) && prop.value !== null) {
                                                                     // Пропускаем элементы, чьё значение - объект или массив
-                                                                    
+
                                                                     return <th key={`first-cell-${i}`} scope="row">{'object'}</th>;
                                                                 } else if (prop.value === null) {
                                                                     // Пропускаем элементы, чьё значение - объект или массив
-                                                                    
+
                                                                     return <th key={`first-cell-${i}`} scope="row">{''}</th>;
                                                                 } else {
                                                                     return <td key={`${prop.value}-cell-${i}`}>{prop.value}</td>;
@@ -86,6 +97,7 @@ const EntityItems = ({ entityName, entityTitle, items, itemUrl, router, tableHea
                                                             <td>
                                                                 <button type="button" className="btn btn-light btn-sm"
                                                                     onClick={() => {
+
                                                                         router.navigate(`/${itemUrl}/${entity.id}`)
                                                                     }}
                                                                 >View</button>

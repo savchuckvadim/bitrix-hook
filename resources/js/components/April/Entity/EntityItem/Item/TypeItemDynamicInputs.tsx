@@ -39,8 +39,10 @@ const TypeEntityItemDynamicInput = ({
     // `relations.${relationApiName}.${relationIndex}.${name}`
     // const fieldFormName = relationApiName && (isRelation || isFromRelation) ? getRelationFieldName(field['apiName']) : field['apiName']
     if (Array.isArray(field)) {
+        
         input = <NavLink to={`${fieldName}`}>{fieldName}</NavLink>
     } else if (typeof field === 'object' && field !== null) {
+        
         input = <NavLink to={`${fieldName}`}>{fieldName}</NavLink>
     } else {
         
