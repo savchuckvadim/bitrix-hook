@@ -15,8 +15,6 @@ import {
 
 } from "reactstrap";
 
-import Breadcrumb from "../../../Common/Breadcrumb";
-import { getInitialValues } from "../../../../utils/entity-utils/entity-util";
 import EntityItemDynamicInput from "./Item/FieldItemDynamicInputs";
 import RelationAdd from "./Item/RelationAdd";
 import { getFormik } from "../../../../utils/entity-utils/form-util";

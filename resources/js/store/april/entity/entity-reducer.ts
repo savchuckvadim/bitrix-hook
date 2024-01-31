@@ -110,11 +110,11 @@ export const updateEntities = (token = null, entityName: string) => async (dispa
 
 }
 export const getEntities = (url: string, method: string, collectionName: string, data: any = null) => async (dispatch: AppDispatchType, getState: GetStateType) => {
-    
+
     if (url) {
         const collection = await onlineAPI.service(url, API_METHOD.GET, collectionName, null)
 
-        
+
         if (collection) {
             dispatch(entityActions.setEntityItems(collection))
         } else {
@@ -127,12 +127,12 @@ export const getEntities = (url: string, method: string, collectionName: string,
 
 }
 export const getEntityItem = (url: string, entityName: string, entityId: number) => async (dispatch: AppDispatchType, getState: GetStateType) => {
-    
+
     if (url) {
         const fullUrl = `${url}/${entityId}`
         const item = await onlineAPI.service(fullUrl, API_METHOD.GET, entityName, null)
 
-        
+
         if (item) {
             dispatch(entityActions.setEntityItem(item))
         } else {
@@ -146,7 +146,7 @@ export const getEntityItem = (url: string, entityName: string, entityId: number)
 }
 export const setOrupdateEntityItem = (history: (url: string) => void, currentUrl: string, url: string, entityName: string, data: number) => async (dispatch: AppDispatchType, getState: GetStateType) => {
 
-    
+
     if (url) {
         const apiData = data
         let targetUrl = currentUrl
@@ -190,52 +190,57 @@ export const setOrupdateEntityItem = (history: (url: string) => void, currentUrl
 
 }
 export const getInitialEntityData = (url: string, router: any, currentUrl: string, history: (url: string) => void) => async (dispatch: AppDispatchType, getState: GetStateType) => {
-    
+    // parentEntityId //entityId
     const entityState = getState().entity as EntityStateType
     let cretingEntity = entityState.creating.formData
 
     if (url) {
         let fullUrl = `initial${currentUrl}`
+        let targetUrl = currentUrl
         if (fullUrl.endsWith("/add")) {
             fullUrl = fullUrl.slice(0, -4); // Обрезать последние 4 символа ("/add")
         }
         if (fullUrl.endsWith("s")) {
-            fullUrl = fullUrl.slice(0, -1); // Обрезать последние 4 символа ("/add")
+            targetUrl = targetUrl.slice(0, -1);
+            targetUrl = `${targetUrl}/add`
+            fullUrl = fullUrl.slice(0, -1); // Обрезать последние 1 символа ("s")
         }
         if (fullUrl.endsWith("s/")) {
-            fullUrl = fullUrl.slice(0, -2); // Обрезать последние 4 символа ("/add")
+            targetUrl = targetUrl.slice(0, -2);
+            targetUrl = `${targetUrl}/add`
+            fullUrl = fullUrl.slice(0, -2); // Обрезать последние 2 символа ("s/")
         }
-        let targetUrl = `/${url}/add`
-        let targetRoot = `/${url}/add`
+
+        // let targetRoot = `/${url}/add`
         
-        if (router) {
-            if (router.params && router.params.entityId) {
-                //значит инициализируется создание дочерней сущности
-                let itemCurrentUrl = currentUrl
-                if (itemCurrentUrl.endsWith('s')) {
-                    itemCurrentUrl = itemCurrentUrl.slice(0, -1);
-                }
-                if (!router.params.entityChildrenId
-                    && !itemCurrentUrl.endsWith('add')
-                    && !itemCurrentUrl.endsWith('add/')
-                ) {
-                    targetUrl = `${itemCurrentUrl}/add`
-                    targetRoot = `${itemCurrentUrl}/add`
-                } else {
-                    targetUrl = `${itemCurrentUrl}`
-                    targetRoot = `${itemCurrentUrl}`
-                }
-                
-                // fullUrl = `initial${itemCurrentUrl}`
+        // if (router) {
+            // if (router.params && router.params.entityId) {
+            //     //значит инициализируется создание дочерней сущности
+            //     let itemCurrentUrl = currentUrl
+            //     if (itemCurrentUrl.endsWith('s')) {
+            //         itemCurrentUrl = itemCurrentUrl.slice(0, -1);
+            //     }
+            //     if (!router.params.entityChildrenId
+            //         && !itemCurrentUrl.endsWith('add')
+            //         && !itemCurrentUrl.endsWith('add/')
+            //     ) {
+            //         targetUrl = `${itemCurrentUrl}/add`
+            //         targetRoot = `${itemCurrentUrl}/add`
+            //     } else {
+            //         targetUrl = `${itemCurrentUrl}`
+            //         targetRoot = `${itemCurrentUrl}`
+            //     }
 
-                
+            //     // fullUrl = `initial${itemCurrentUrl}`
 
-            }
 
-        }
+
+            // }
+
+        // }
 
         dispatch(entityActions.setFetchingInitialAdd())
-        
+
         if (!cretingEntity) {
             cretingEntity = await onlineAPI.service(fullUrl, API_METHOD.GET, 'initial', null) as InitialEntityData | null
             if (cretingEntity) {
@@ -246,13 +251,13 @@ export const getInitialEntityData = (url: string, router: any, currentUrl: strin
             }
         }
 
-        
-
 
         
-        if (currentUrl !== targetRoot) {
 
-            
+
+        if (currentUrl !== targetUrl) {
+
+
             router.navigate(targetUrl, { replace: true })
         }
 

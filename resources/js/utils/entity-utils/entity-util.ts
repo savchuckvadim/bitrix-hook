@@ -16,8 +16,10 @@ export const getInitialValues = (initialData: InitialEntityData) => {
             if (field.type !== 'entity' && field.type !== 'select') {
                 resultInitialData[field.apiName] = ''
             } else if (field.type === 'select') {
+                
+                
                 //@ts-ignore
-                if (field.initialValue.id) {
+                if (field.initialValue && field.initialValue.id) {
                     //@ts-ignore
                     resultInitialData[field.apiName] = field.initialValue.id
                 } else {
