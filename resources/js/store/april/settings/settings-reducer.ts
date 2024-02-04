@@ -27,6 +27,22 @@ const initialState = {
             name: 'update dev',
             type: DEPLOY_TYPE.DEV
         },
+        {
+            name: 'REPORT test',
+            type: DEPLOY_TYPE.REPORT_TEST
+        },
+        {
+            name: 'REPORT client',
+            type: DEPLOY_TYPE.REPORT_CLIENT
+        },
+        {
+            name: 'CALLING test',
+            type: DEPLOY_TYPE.CALLING_TEST
+        },
+        {
+            name: 'CALLING client',
+            type: DEPLOY_TYPE.CALLING_CLIENT
+        },
     ]
 
 }

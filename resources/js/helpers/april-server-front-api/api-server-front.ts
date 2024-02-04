@@ -63,5 +63,9 @@ export enum DEPLOY_TYPE {
     CLIENT = 'client',
     PUBLIC = 'public',
     TEST = 'test',
-    DEV = 'dev'
+    DEV = 'dev',
+    REPORT_CLIENT = 'report/client',
+    REPORT_TEST = 'report/test',
+    CALLING_CLIENT = 'calling/client',
+    CALLING_TEST = 'calling/test',
 } 
