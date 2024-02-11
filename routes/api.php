@@ -197,6 +197,7 @@ Route::post('/lists', function (Request $request) {
     }
 });
 
+Route::post('/smart/categories', function (Request $request) {
 
 
 Route::post('/smart', function (Request $request) {
@@ -305,7 +306,6 @@ Route::post('/smart', function (Request $request) {
 
 
 
-Route::post('/smart/categories', function (Request $request) {
 
 
     // entityTypeId - id смарт процесса как сущности
