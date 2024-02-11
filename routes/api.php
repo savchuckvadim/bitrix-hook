@@ -200,6 +200,23 @@ Route::post('/lists', function (Request $request) {
 Route::post('/smart/categories', function (Request $request) {
 
 
+
+    // entityTypeId - id смарт процесса как сущности
+    // domain for get keys
+
+    // companyId	UF_CRM_6_1697099643
+    $document_id = $request['document_id'];
+    $ownerType = $request['ownerType'];   // L C D T9c
+    $auth = $request['auth'];
+    $domain = $auth['domain'];
+
+    Log::info('REQUEST', $request->all());
+    Log::info('domain', ['domain' => $domain]);
+
+
+    return APIBitrixController::getSmartStages($domain);
+});
+
 Route::post('/smart', function (Request $request) {
 
     // companyId	UF_CRM_6_1697099643
@@ -303,26 +320,6 @@ Route::post('/smart', function (Request $request) {
     }
 });
 
-
-
-
-
-
-    // entityTypeId - id смарт процесса как сущности
-    // domain for get keys
-
-    // companyId	UF_CRM_6_1697099643
-    $document_id = $request['document_id'];
-    $ownerType = $request['ownerType'];   // L C D T9c
-    $auth = $request['auth'];
-    $domain = $auth['domain'];
-
-    Log::info('REQUEST', $request->all());
-    Log::info('domain', ['domain' => $domain]);
-
-
-    return APIBitrixController::getSmartStages($domain);
-});
 
 Route::post('/install/smart/', function (Request $request) {
 
