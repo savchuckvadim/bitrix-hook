@@ -209,7 +209,7 @@ class APIBitrixController extends Controller
             $methodSmart = '/crm.category.list.json';
             $url = $hook . $methodSmart;
             // $entityId = env('APRIL_BITRIX_SMART_MAIN_ID');
-            $entityId = 156;
+            $entityId = 162;
             $hookCategoriesData = ['entityTypeId' => $entityId];
 
             // Возвращение ответа клиенту в формате JSON
