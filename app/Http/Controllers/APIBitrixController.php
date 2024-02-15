@@ -37,7 +37,7 @@ class APIBitrixController extends Controller
 
             $smartId = 'T9c_';
             if (isset($portal['bitrixSmart']) && isset($portal['bitrixSmart']['crm'])) {
-                $smartId =  $portal['bitrixCallingTasksGroup']['crm'] . '_';
+                $smartId =  $portal['bitrixSmart']['crm'] . '_';
             }
             $crmItems = [$smartId  . $crm, 'C_' . $companyId];
 
@@ -82,7 +82,7 @@ class APIBitrixController extends Controller
 
             $moscowTime = $deadline;
             if ($domain === 'alfacentr.bitrix24.ru') {
-                $crmItems = [$smartId  . $crm];
+                $crmItems = [$smartId . ''  . '' . $crm];
                 $nowDate = now();
                 $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
                 $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
