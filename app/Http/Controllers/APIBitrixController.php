@@ -39,7 +39,7 @@ class APIBitrixController extends Controller
             if (isset($portal['bitrixSmart']) && isset($portal['bitrixSmart']['crm'])) {
                 $smartId =  $portal['bitrixSmart']['crm'] . '_';
             }
-            $crmItems = [$smartId  . $crm, 'C_' . $companyId];
+            $crmItems = [$smartId  . $crm, 'CO_' . $companyId];
 
 
             //company and contacts
