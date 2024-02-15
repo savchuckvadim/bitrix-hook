@@ -22,9 +22,24 @@ class APIBitrixController extends Controller
         Log::info('portal', ['portal' => $portal]);
         try {
             $portal = $portal['data'];
+
+
+
+
             Log::info('portalData', ['portal' => $portal]);
             $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+
+            $callingTaskGroupId = env('BITRIX_CALLING_GROUP_ID');
+            if (isset($portal['bitrixCallingTasksGroup']) && isset($portal['bitrixCallingTasksGroup']['bitrixId'])) {
+                $callingTaskGroupId =  $portal['bitrixCallingTasksGroup']['bitrixId'];
+            }
+
+            $smartId = 'T9c_';
+            if (isset($portal['bitrixSmart']) && isset($portal['bitrixSmart']['crm'])) {
+                $smartId =  $portal['bitrixCallingTasksGroup']['crm'] . '_';
+            }
+            $crmItems = [$smartId  . $crm, 'C_' . $companyId];
 
 
             //company and contacts
@@ -65,24 +80,28 @@ class APIBitrixController extends Controller
             $methodTask = '/tasks.task.add.json';
             $url = $hook . $methodTask;
 
-            $nowDate = now();
-            $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
-            $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
-            $moscowTime = $moscowTime->format('Y-m-d H:i:s');
-            Log::info('novosibirskTime', ['novosibirskTime' => $novosibirskTime]);
-            Log::info('moscowTime', ['moscowTime' => $moscowTime]);
+            $moscowTime = $deadline;
+            if ($domain === 'alfacentr.bitrix24.ru') {
+                $crmItems = [$smartId  . $crm];
+                $nowDate = now();
+                $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
+                $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
+                $moscowTime = $moscowTime->format('Y-m-d H:i:s');
+            }
+
+
 
 
             $taskData =  [
                 'fields' => [
                     'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
                     'RESPONSIBLE_ID' => $responsibleId,
-                    'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
+                    'GROUP_ID' => $callingTaskGroupId,
                     'CHANGED_BY' => $createdId, //- постановщик;
                     'CREATED_BY' => $createdId, //- постановщик;
                     'CREATED_DATE' => $nowDate, // - дата создания;
                     'DEADLINE' => $moscowTime, //- крайний срок;
-                    'UF_CRM_TASK' => ['T9c_' . $crm],
+                    'UF_CRM_TASK' => $crmItems,
                     'ALLOW_CHANGE_DEADLINE' => 'N',
                     'DESCRIPTION' => $description
                 ]
