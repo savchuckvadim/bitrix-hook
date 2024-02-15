@@ -81,9 +81,10 @@ class APIBitrixController extends Controller
             $url = $hook . $methodTask;
 
             $moscowTime = $deadline;
+            $nowDate = now();
             if ($domain === 'alfacentr.bitrix24.ru') {
                 $crmItems = [$smartId . ''  . '' . $crm];
-                $nowDate = now();
+                
                 $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
                 $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
                 $moscowTime = $moscowTime->format('Y-m-d H:i:s');
