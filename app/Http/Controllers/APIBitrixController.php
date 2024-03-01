@@ -76,11 +76,14 @@ class APIBitrixController extends Controller
                 }
 
                 $emails = '';
-                foreach ($contact["EMAIL"] as $email) {
-                    if (isset($email["VALUE"])) {
-                        $emails = $emails .  $email["VALUE"] . "   ";
+                if(isset($contact["EMAIL"])){
+                    foreach ($contact["EMAIL"] as $email) {
+                        if (isset($email["VALUE"])) {
+                            $emails = $emails .  $email["VALUE"] . "   ";
+                        }
                     }
                 }
+           
 
 
                 $contactsNameString =  $contact["NAME"] . " " . $contact["SECOND_NAME"] . " " . $contact["SECOND_NAME"];
