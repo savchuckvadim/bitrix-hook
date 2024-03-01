@@ -19,7 +19,7 @@ class APIBitrixController extends Controller
         $crm
     ) {
         $portal = PortalController::getPortal($domain);
-        Log::info('portal', ['portal' => $portal]);
+      
         try {
             $portal = $portal['data'];
 
@@ -196,6 +196,7 @@ class APIBitrixController extends Controller
                 'line'      => $th->getLine(),
                 'trace'     => $th->getTraceAsString(),
             ]);
+            Log::info('error', ['error' => $th->getMessage()]);
             return APIOnlineController::getResponse(1, $th->getMessage(), null);
         }
     }
@@ -215,11 +216,18 @@ class APIBitrixController extends Controller
         ];
 
         $select = [
-            'ID'
+            'ID',
+            'TITLE',
+            'MARK',
+            'STATUS',
+            'GROUP_ID',
+            'STAGE_ID',
+            'RESPONSIBLE_ID'
+
         ];
         $getTaskData = [
             'filter' => $filter,
-            // 'select' => $select,
+            'select' => $select,
 
         ];
         $responseData = Http::get($url, $getTaskData);
