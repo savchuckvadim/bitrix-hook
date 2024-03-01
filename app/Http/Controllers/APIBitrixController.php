@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
+//TODO создать конструктор класса который принимает domain и хранит в себе всяческие хук урлы
 class APIBitrixController extends Controller
 {
     public function createTask(
@@ -19,7 +20,11 @@ class APIBitrixController extends Controller
         $crm
     ) {
         $portal = PortalController::getPortal($domain);
-      
+
+        //TODO
+        //type - cold warm presentation hot
+
+
         try {
             $portal = $portal['data'];
 
@@ -182,9 +187,9 @@ class APIBitrixController extends Controller
             $crmForCurrent = [$smartId . ''  . '' . $crm];
 
             $currentTasksIds = $this->getCurrentTasksIds($hook, $callingTaskGroupId, $crmForCurrent,  $responsibleId);
+            $this->completeTask($hook, $currentTasksIds);
 
-
-
+            // updateSmart($hook, $smartTypeId, $smartId, $description)
 
 
 
@@ -231,11 +236,14 @@ class APIBitrixController extends Controller
 
         ];
         $responseData = Http::get($url, $getTaskData);
+
         if (isset($responseData['result'])) {
             if (isset($responseData['result']['tasks'])) {
-                $resultIds = $responseData['result']['tasks'];
-                foreach ($resultIds  as $key =>  $task) {
-                    Log::info('current_tasks', ['task_' . $key => $task]);
+                $resultTasks = $responseData['result']['tasks'];
+                foreach ($resultTasks  as $key =>  $task) {
+                    if (isset($task['id'])) {
+                        array_push($resultTasks, $task['id']);
+                    }
                 }
             }
         }
@@ -243,24 +251,81 @@ class APIBitrixController extends Controller
         return $resultIds;
     }
 
-    protected function completeCurrentTasks($portal)
+    protected function completeTask($hook, $taskIds)
     {
-        $methodGet = 'tasks.task.list';
+
         $methodUpdate = 'tasks.task.update';
         $methodComplete = 'tasks.task.complete';
 
-        // for get
-        $filter = [
-            'GROUP_ID' => '',
-            'UF_CRM_TASK' => '',
-            'GROUP_ID' => '',
-            'GROUP_ID' => '',
-            'GROUP_ID' => '',
-        ];
-        $select = [
-            'ID'
-        ];
+        $batchCommands = [];
+
+        foreach ($taskIds as $taskId) {
+            $batchCommands['cmd']['updateTask_' . $taskId] = $methodUpdate . '?taskId=' . $taskId . '&fields[MARK]=P';
+            $batchCommands['cmd']['completeTask_' . $taskId] = $methodComplete . '?taskId=' . $taskId;
+        }
+
+        $response = Http::post($hook . 'batch', $batchCommands);
+
+        // Обработка ответа от API
+        if ($response->successful()) {
+            $responseData = $response->json();
+            // Логика обработки успешного ответа
+        } else {
+            // Обработка ошибок
+            $errorData = $response->body();
+            // Логика обработки ошибки
+        }
+
+        return $responseData ?? $errorData;
     }
+
+    protected function updateSmart($hook, $smartTypeId, $smartId, $comment)
+    {
+        $methodFields = 'crm.item.fields';
+        $getFieldsUrl = $hook . $methodFields;
+        $fieldsData = [
+            'entityTypeId' => $smartTypeId
+        ];
+        $commentFieldCode = null;
+        $fieldsResponse = Http::get($getFieldsUrl,  $fieldsData);
+
+        if (!empty($fieldsResponse['result'])) {
+            foreach ($fieldsResponse['result'] as $fieldCode => $fieldDetails) {
+                if ($fieldDetails['title'] === 'Комментарий' || $fieldDetails['formLabel'] === 'Комментарий') {
+                    $commentFieldCode = $fieldCode; // Код поля "Комментарий"
+                    break;
+                }
+            }
+        }
+
+        $methodUpdate = 'crm.item.update';
+
+        $updateData = [
+            'entityTypeId' => $smartTypeId,
+            'id' => $smartId,
+            'fields' => [
+                $commentFieldCode => $comment,
+            ]
+        ];
+
+        $updtSmartUrl = $hook . $methodUpdate;
+        $smartUpdateResponse = Http::get($updtSmartUrl,  $updateData);
+        if ($smartUpdateResponse) {
+            if (isset($smartUpdateResponse['result'])) {
+                Log::info('current_tasks', [$smartUpdateResponse['result']]);
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
 
     public static function createOrUpdateSmart(
         $domain,
