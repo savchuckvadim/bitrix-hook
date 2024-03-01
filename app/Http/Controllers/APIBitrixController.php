@@ -187,6 +187,7 @@ class APIBitrixController extends Controller
             $crmForCurrent = [$smartId . ''  . '' . $crm];
 
             $currentTasksIds = $this->getCurrentTasksIds($hook, $callingTaskGroupId, $crmForCurrent,  $responsibleId);
+            Log::info('currentTasksIds', [$currentTasksIds]);
             $this->completeTask($hook, $currentTasksIds);
 
             // updateSmart($hook, $smartTypeId, $smartId, $description)
@@ -275,7 +276,8 @@ class APIBitrixController extends Controller
             $errorData = $response->body();
             // Логика обработки ошибки
         }
-
+        $res = $responseData ?? $errorData;
+        Log::info('currentTasksIds', ['res' => $res]);
         return $responseData ?? $errorData;
     }
 
