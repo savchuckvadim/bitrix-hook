@@ -243,11 +243,12 @@ class APIBitrixController extends Controller
                 Log::info('tasks', [$responseData['result']]);
                 $resultTasks = $responseData['result']['tasks'];
                 foreach ($resultTasks  as $key =>  $task) {
-                    // if (isset($task['id'])) {
-                    //     array_push($resultTasks, $task['id']);
-                    // }
-                    Log::info('task', [$task]);
-                    array_push($resultTasks, $task);
+                    if (isset($task['id'])) {
+                        Log::info('task', ['taskId' => $task['id']]);
+                        array_push($resultIds, $task['id']);
+                    }
+                 
+                    // array_push($resultTasks, $task);
                 }
             }
         }
