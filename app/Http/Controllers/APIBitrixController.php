@@ -76,14 +76,14 @@ class APIBitrixController extends Controller
                 }
 
                 $emails = '';
-                if(isset($contact["EMAIL"])){
+                if (isset($contact["EMAIL"])) {
                     foreach ($contact["EMAIL"] as $email) {
                         if (isset($email["VALUE"])) {
                             $emails = $emails .  $email["VALUE"] . "   ";
                         }
                     }
                 }
-           
+
 
 
                 $contactsNameString =  $contact["NAME"] . " " . $contact["SECOND_NAME"] . " " . $contact["SECOND_NAME"];
@@ -132,8 +132,8 @@ class APIBitrixController extends Controller
 
             $companyPhones = '';
 
-            $companyTitleString = '[B]' . $company['result']['TITLE'] . '[/B]';
-            $description =  $companyTitleString . '[BR] ' . 'Контакты компании: ' . $contactsTable . '[BR]';
+            $companyTitleString = '[B][COLOR=#1fbde3]' . $company['result']['TITLE'] . '[/COLOR][/B]';
+            $description =  $companyTitleString . '\n' . 'Контакты компании: ' . $contactsTable;
             $description = $description . '' . $cmpnPhonesEmailsList;
 
             //task
