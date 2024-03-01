@@ -182,7 +182,7 @@ class APIBitrixController extends Controller
             $crmForCurrent = [$smartId . ''  . '' . $crm];
 
             $currentTasksIds = $this->getCurrentTasksIds($hook, $callingTaskGroupId, $crmForCurrent,  $responsibleId);
-            Log::info('current_tasks', ['currentTasksIds' => $currentTasksIds]);
+
 
 
 
@@ -224,9 +224,14 @@ class APIBitrixController extends Controller
         ];
         $responseData = Http::get($url, $getTaskData);
         if (isset($responseData['result'])) {
-            $resultIds = $responseData['result'];
+            if (isset($responseData['result']['tasks'])) {
+                $resultIds = $responseData['result']['tasks'];
+                foreach ($resultIds  as $key =>  $task) {
+                    Log::info('current_tasks', ['task_' . $key => $task]);
+                }
+            }
         }
-        echo $resultIds;
+
         return $resultIds;
     }
 
