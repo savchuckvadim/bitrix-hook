@@ -240,11 +240,14 @@ class APIBitrixController extends Controller
 
         if (isset($responseData['result'])) {
             if (isset($responseData['result']['tasks'])) {
+                Log::info('tasks', [$responseData['result']]);
                 $resultTasks = $responseData['result']['tasks'];
                 foreach ($resultTasks  as $key =>  $task) {
-                    if (isset($task['id'])) {
-                        array_push($resultTasks, $task['id']);
-                    }
+                    // if (isset($task['id'])) {
+                    //     array_push($resultTasks, $task['id']);
+                    // }
+                    Log::info('task', [$task]);
+                    array_push($resultTasks, $task);
                 }
             }
         }
@@ -277,7 +280,7 @@ class APIBitrixController extends Controller
             // Логика обработки ошибки
         }
         $res = $responseData ?? $errorData;
-        Log::info('currentTasksIds', ['res' => $res]);
+        Log::info('res', ['res' => $res]);
         return $responseData ?? $errorData;
     }
 
