@@ -44,7 +44,19 @@ class APIBitrixController extends Controller
             if (isset($portal['bitrixSmart']) && isset($portal['bitrixSmart']['crm'])) {
                 $smartId =  $portal['bitrixSmart']['crm'] . '_';
             }
+
+            $crmForCurrent = [$smartId . ''  . '' . $crm];
+
+            $currentTasksIds = $this->getCurrentTasksIds($hook, $callingTaskGroupId, $crmForCurrent,  $responsibleId);
+            Log::info('currentTasksIds', [$currentTasksIds]);
+            $this->completeTask($hook, $currentTasksIds);
+
+
+
+
             $crmItems = [$smartId  . $crm, 'CO_' . $companyId];
+
+
 
 
             //company and contacts
@@ -184,11 +196,7 @@ class APIBitrixController extends Controller
 
 
 
-            $crmForCurrent = [$smartId . ''  . '' . $crm];
 
-            $currentTasksIds = $this->getCurrentTasksIds($hook, $callingTaskGroupId, $crmForCurrent,  $responsibleId);
-            Log::info('currentTasksIds', [$currentTasksIds]);
-            $this->completeTask($hook, $currentTasksIds);
 
             // updateSmart($hook, $smartTypeId, $smartId, $description)
 
@@ -247,7 +255,7 @@ class APIBitrixController extends Controller
                         Log::info('task', ['taskId' => $task['id']]);
                         array_push($resultIds, $task['id']);
                     }
-                 
+
                     // array_push($resultTasks, $task);
                 }
             }
