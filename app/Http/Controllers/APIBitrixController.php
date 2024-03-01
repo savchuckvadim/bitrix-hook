@@ -196,11 +196,11 @@ class APIBitrixController extends Controller
 
 
             //TODO
-            // $crmForCurrent = [$smartId . ''  . '' . $crm];
+            $crmForCurrent = [$smartId . ''  . '' . $crm];
 
-            // $currentTasksIds = $this->getCurrentTasksIds($hook, $callingTaskGroupId, $crmForCurrent,  $responsibleId);
-            // Log::info('currentTasksIds', [$currentTasksIds]);
-            // $this->completeTask($hook, $currentTasksIds);
+            $currentTasksIds = $this->getCurrentTasksIds($hook, $callingTaskGroupId, $crmForCurrent,  $responsibleId);
+            Log::info('currentTasksIds', [$currentTasksIds]);
+            $this->completeTask($hook, $currentTasksIds);
 
 
 
@@ -283,7 +283,7 @@ class APIBitrixController extends Controller
             $batchCommands['cmd']['updateTask_' . $taskId] = $methodUpdate . '?taskId=' . $taskId . '&fields[MARK]=P';
             $batchCommands['cmd']['completeTask_' . $taskId] = $methodComplete . '?taskId=' . $taskId;
         }
-
+        Log::info('batchCommands', [$batchCommands]);
         $response = Http::get($hook . 'batch', $batchCommands);
 
         // Обработка ответа от API
