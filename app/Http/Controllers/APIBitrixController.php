@@ -264,7 +264,7 @@ class APIBitrixController extends Controller
             $batchCommands['cmd']['completeTask_' . $taskId] = $methodComplete . '?taskId=' . $taskId;
         }
 
-        $response = Http::post($hook . 'batch', $batchCommands);
+        $response = Http::get($hook . 'batch', $batchCommands);
 
         // Обработка ответа от API
         if ($response->successful()) {
