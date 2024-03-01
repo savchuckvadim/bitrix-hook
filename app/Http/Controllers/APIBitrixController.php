@@ -45,7 +45,7 @@ class APIBitrixController extends Controller
                 $smartId =  $portal['bitrixSmart']['crm'] . '_';
             }
 
-          
+
 
 
 
@@ -121,28 +121,32 @@ class APIBitrixController extends Controller
 
 
             //company phones description
-            $cmpnPhonesEmailsList = '[LIST]';
+            $cmpnPhonesEmailsList = '';
             if (isset($company['result'])) {
-                if (isset($company['result']['PHONE']) && isset($company['result']['EMAIL'])) {
+                $cmpnPhonesEmailsList = '[LIST]';
+                if (isset($company['result']['PHONE'])) {
                     $companyPhones = $company['result']['PHONE'];
-                    $companyEmails = $company['result']['EMAIL'];
-
-
                     $cmpnyListContent = '';
 
                     foreach ($companyPhones as $phone) {
                         $cmpnyListContent = $cmpnyListContent . '[*]' .  $phone["VALUE"] . "   ";
                     }
 
+                    if (isset($company['result']['EMAIL'])) {
 
-                    foreach ($companyEmails as $email) {
-                        if (isset($email["VALUE"])) {
-                            $cmpnyListContent = $cmpnyListContent . '[*]' .  $email["VALUE"] . "   ";
+                        $companyEmails = $company['result']['EMAIL'];
+
+                        foreach ($companyEmails as $email) {
+                            if (isset($email["VALUE"])) {
+                                $cmpnyListContent = $cmpnyListContent . '[*]' .  $email["VALUE"] . "   ";
+                            }
                         }
                     }
+
+                    $cmpnPhonesEmailsList = '[LIST]' . $cmpnyListContent . '[/LIST]';
                 }
             }
-            $cmpnPhonesEmailsList = '[LIST]' . $cmpnyListContent . '[/LIST]';
+
 
 
 
