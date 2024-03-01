@@ -68,39 +68,44 @@ class APIBitrixController extends Controller
             $contactsString = '';
             $contactsTable = '[TABLE]';
             $contactRows = '';
-            foreach ($contacts['result'] as  $contact) {
-                $contactRow = '[TR]';
-                $contactPhones = '';
-                foreach ($contact["PHONE"] as $phone) {
-                    $contactPhones = $contactPhones .  $phone["VALUE"] . "   ";
-                }
-
-                $emails = '';
-                if (isset($contact["EMAIL"])) {
-                    foreach ($contact["EMAIL"] as $email) {
-                        if (isset($email["VALUE"])) {
-                            $emails = $emails .  $email["VALUE"] . "   ";
+            if (isset($contacts['result'])) {
+                foreach ($contacts['result'] as  $contact) {
+                    $contactRow = '[TR]';
+                    $contactPhones = '';
+                    if (isset($contact["PHONE"])) {
+                        foreach ($contact["PHONE"] as $phone) {
+                            $contactPhones = $contactPhones .  $phone["VALUE"] . "   ";
                         }
                     }
+
+                    $emails = '';
+                    if (isset($contact["EMAIL"])) {
+                        foreach ($contact["EMAIL"] as $email) {
+                            if (isset($email["VALUE"])) {
+                                $emails = $emails .  $email["VALUE"] . "   ";
+                            }
+                        }
+                    }
+
+
+
+                    $contactsNameString =  $contact["NAME"] . " " . $contact["SECOND_NAME"] . " " . $contact["SECOND_NAME"];
+                    $contactsFirstCell = ' [TD]' . $contactsNameString . '[/TD]';
+                    $contactsPhonesCell = ' [TD]' . $contactPhones . '[/TD]';
+                    $contactsEmailsCell = ' [TD]' . $emails . '[/TD]';
+
+
+
+                    $contactRow = '[TR]' . $contactsFirstCell . ''  . $contactsPhonesCell . $contactsEmailsCell . '[/TR]';
+                    $contactRows = $contactRows . $contactRow;
                 }
 
 
 
-                $contactsNameString =  $contact["NAME"] . " " . $contact["SECOND_NAME"] . " " . $contact["SECOND_NAME"];
-                $contactsFirstCell = ' [TD]' . $contactsNameString . '[/TD]';
-                $contactsPhonesCell = ' [TD]' . $contactPhones . '[/TD]';
-                $contactsEmailsCell = ' [TD]' . $emails . '[/TD]';
 
-
-
-                $contactRow = '[TR]' . $contactsFirstCell . ''  . $contactsPhonesCell . $contactsEmailsCell . '[/TR]';
-                $contactRows = $contactRows . $contactRow;
+                $contactsTable = '[TABLE]' . $contactRows . '[/TABLE]';
             }
 
-
-
-
-            $contactsTable = '[TABLE]' . $contactRows . '[/TABLE]';
 
             //company phones description
             $cmpnPhonesEmailsList = '[LIST]';
