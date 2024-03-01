@@ -226,6 +226,7 @@ class APIBitrixController extends Controller
             'GROUP_ID' => $callingTaskGroupId,
             'UF_CRM_TASK' => $crmForCurrent,
             'RESPONSIBLE_ID' => $responsibleId,
+            '!=STATUS' => 5, // Исключаем задачи со статусом "завершена"
 
         ];
 
@@ -290,7 +291,7 @@ class APIBitrixController extends Controller
         }
         $res = $responseData ?? $errorData;
         Log::info('res', ['res' => $res]);
-        return $responseData ?? $errorData;
+        return $res;
     }
 
     protected function updateSmart($hook, $smartTypeId, $smartId, $comment)
