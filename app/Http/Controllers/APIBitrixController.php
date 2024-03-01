@@ -219,14 +219,14 @@ class APIBitrixController extends Controller
         ];
         $getTaskData = [
             'filter' => $filter,
-            'select' => $select,
+            // 'select' => $select,
 
         ];
         $responseData = Http::get($url, $getTaskData);
         if (isset($responseData['result'])) {
             $resultIds = $responseData['result'];
         }
-
+        echo $resultIds;
         return $resultIds;
     }
 
