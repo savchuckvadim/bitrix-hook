@@ -55,25 +55,35 @@ class APIBitrixController extends Controller
             ];
             $getCompanyData = [
                 'ID'  => $companyId,
-                'select' => ["TITLE"],
+                'select' => ["TITLE", "PHONE", "EMAIL"],
             ];
 
             $contacts = Http::get($url,  $contactsData);
             $url = $hook . $methodCompany;
             $company = Http::get($url,  $getCompanyData);
 
-            $contactsString = '';
 
+            $contactsString = '';
+            $contactsTable = '[TABLE]';
+            $contactRows = '';
             foreach ($contacts['result'] as  $contact) {
+                $contactRow = '[TR]';
                 $contactPhones = '';
                 foreach ($contact["PHONE"] as $phone) {
                     $contactPhones = $contactPhones .  $phone["VALUE"] . "   ";
                 }
-                $contactsString = $contactsString . "<p>" . $contact["NAME"] . " " . $contact["SECOND_NAME"] . " " . $contact["SECOND_NAME"] . "  "  .  $contactPhones . "</p>";
+                $contactsNameString =  $contact["NAME"] . " " . $contact["SECOND_NAME"] . " " . $contact["SECOND_NAME"];
+                $contactsFirstCell = ' [TD]' . $contactsNameString . '[/TD]';
+                $contactsPhonesCell = ' [TD]' . $contactPhones . '[/TD]';
+                $contactRow = '[TR]' . $contactsFirstCell . ''  . $contactsPhonesCell . '[/TR]';
+                $contactRows = $contactRows . $contactRow;
             }
+            $contactsTable = '[TABLE]' . $contactRows . '[/TABLE]';
 
-            $companyTitleString = $company['result']['TITLE'];
-            $description =  '<p>' . $companyTitleString . '</p>' . '<p> Контакты компании: </p>' . $contactsString;
+            $companyPhones = '';
+
+            $companyTitleString = '[B]' . $company['result']['TITLE'] . '[/B]';
+            $description =  $companyTitleString . ' ' . 'Контакты компании: ' . $contactsTable;
 
 
             //task
@@ -84,7 +94,7 @@ class APIBitrixController extends Controller
             $nowDate = now();
             if ($domain === 'alfacentr.bitrix24.ru') {
                 $crmItems = [$smartId . ''  . '' . $crm];
-                
+
                 $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
                 $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
                 $moscowTime = $moscowTime->format('Y-m-d H:i:s');
@@ -111,7 +121,7 @@ class APIBitrixController extends Controller
 
             $responseData = Http::get($url, $taskData);
 
-            Log::info('SUCCESS RESPONSE TASK', ['createdTask' => $responseData]);
+
             return APIOnlineController::getResponse(0, 'success', ['createdTask' => $responseData]);
         } catch (\Throwable $th) {
             Log::error('ERROR: Exception caught', [
