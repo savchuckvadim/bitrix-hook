@@ -134,7 +134,7 @@ class APIBitrixController extends Controller
 
             $companyTitleString = '[B][COLOR=#1fbde3]' . $company['result']['TITLE'] . '[/COLOR][/B]';
             $description =  $companyTitleString . '
-            ' . 'Контакты компании: ' . $contactsTable;
+            ' . '[LEFT][B]Контакты компании: [/B][/LEFT]' . $contactsTable;
             $description = $description . '' . $cmpnPhonesEmailsList;
 
             //task
