@@ -58,8 +58,8 @@ Route::post('/task', function (Request $request) {
     $deadline = $request['deadline'];
     $name = $request['name'];
     $crm = $request['crm'];
-
-    return APIBitrixController::createTask($domain, $companyId, $createdId, $responsibleId, $deadline, $name, $crm);
+    $controller = new APIBitrixController();
+    return $controller->createTask($domain, $companyId, $createdId, $responsibleId, $deadline, $name, $crm);
 });
 
 

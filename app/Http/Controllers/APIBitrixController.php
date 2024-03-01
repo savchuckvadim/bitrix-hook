@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class APIBitrixController extends Controller
 {
-    public static function createTask(
+    public function createTask(
         $domain,
         $companyId,
         $createdId,
@@ -26,7 +26,7 @@ class APIBitrixController extends Controller
 
 
 
-            Log::info('portalData', ['portal' => $portal]);
+
             $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
 
@@ -178,6 +178,16 @@ class APIBitrixController extends Controller
             $responseData = Http::get($url, $taskData);
 
 
+
+            $crmForCurrent = [$smartId . ''  . '' . $crm];
+
+            $currentTasksIds = $this->getCurrentTasksIds($hook, $callingTaskGroupId, $crmForCurrent,  $responsibleId);
+            Log::info('current_tasks', ['currentTasksIds' => $currentTasksIds]);
+
+
+
+
+
             return APIOnlineController::getResponse(0, 'success', ['createdTask' => $responseData]);
         } catch (\Throwable $th) {
             Log::error('ERROR: Exception caught', [
@@ -189,6 +199,56 @@ class APIBitrixController extends Controller
             return APIOnlineController::getResponse(1, $th->getMessage(), null);
         }
     }
+
+    protected function getCurrentTasksIds($hook, $callingTaskGroupId, $crmForCurrent, $responsibleId)
+    {
+        $resultIds = [];
+        $methodGet = '/tasks.task.list';
+        $url = $hook . $methodGet;
+
+        // for get
+        $filter = [
+            'GROUP_ID' => $callingTaskGroupId,
+            'UF_CRM_TASK' => $crmForCurrent,
+            'RESPONSIBLE_ID' => $responsibleId,
+
+        ];
+
+        $select = [
+            'ID'
+        ];
+        $getTaskData = [
+            'filter' => $filter,
+            'select' => $select,
+
+        ];
+        $responseData = Http::get($url, $getTaskData);
+        if (isset($responseData['result'])) {
+            $resultIds = $responseData['result'];
+        }
+
+        return $resultIds;
+    }
+
+    protected function completeCurrentTasks($portal)
+    {
+        $methodGet = 'tasks.task.list';
+        $methodUpdate = 'tasks.task.update';
+        $methodComplete = 'tasks.task.complete';
+
+        // for get
+        $filter = [
+            'GROUP_ID' => '',
+            'UF_CRM_TASK' => '',
+            'GROUP_ID' => '',
+            'GROUP_ID' => '',
+            'GROUP_ID' => '',
+        ];
+        $select = [
+            'ID'
+        ];
+    }
+
     public static function createOrUpdateSmart(
         $domain,
         $companyId,
