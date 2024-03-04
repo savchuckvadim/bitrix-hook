@@ -49,9 +49,9 @@ class APIBitrixController extends Controller
             //TODO
             $crmForCurrent = [$smartId . ''  . '' . $crm];
 
-            $currentTasksIds = $this->getCurrentTasksIds($hook, $callingTaskGroupId, $crmForCurrent,  $responsibleId);
-            Log::info('currentTasksIds', [$currentTasksIds]);
-            $this->completeTask($hook, $currentTasksIds);
+            // $currentTasksIds = $this->getCurrentTasksIds($hook, $callingTaskGroupId, $crmForCurrent,  $responsibleId);
+            // Log::info('currentTasksIds', [$currentTasksIds]);
+            // $this->completeTask($hook, $currentTasksIds);
 
 
 
