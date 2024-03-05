@@ -39,6 +39,10 @@ Route::get('front', [App\Http\Controllers\HomeController::class, 'index']);
 
 
 Route::post('/task', function (Request $request) {
+    $type = null;
+    if(isset($request['type'])){
+        $type = $request['type'];
+    }
 
     $created = $request['created'];
     $responsible = $request['responsible'];
@@ -59,7 +63,7 @@ Route::post('/task', function (Request $request) {
     $name = $request['name'];
     $crm = $request['crm'];
     $controller = new APIBitrixController();
-    return $controller->createTask($domain, $companyId, $createdId, $responsibleId, $deadline, $name, $crm);
+    return $controller->createTask($type, $domain, $companyId, $createdId, $responsibleId, $deadline, $name, $crm);
 });
 
 

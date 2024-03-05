@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 class APIBitrixController extends Controller
 {
     public function createTask(
+        $type,
         $domain,
         $companyId,
         $createdId,
@@ -23,6 +24,18 @@ class APIBitrixController extends Controller
 
         //TODO
         //type - cold warm presentation hot
+        $stringType = 'Холодный обзвон  ';
+
+        if ($type) {
+            if ($type === 'warm') {
+                $stringType = 'Звонок запланирован  ';
+            } else   if ($type === 'presentation') {
+                $stringType = 'Презентация запланирована  ';
+            }
+        }
+
+
+
 
 
         try {
@@ -43,6 +56,9 @@ class APIBitrixController extends Controller
             $smartId = 'T9c_';
             if (isset($portal['bitrixSmart']) && isset($portal['bitrixSmart']['crm'])) {
                 $smartId =  $portal['bitrixSmart']['crm'] . '_';
+            }
+            if (!$crm) {
+                $crm = $this->getSmartItem($hook, $smartId, $companyId, $responsibleId);
             }
 
 
@@ -179,11 +195,12 @@ class APIBitrixController extends Controller
             }
 
 
+            $taskTitle = $stringType . $name . '  ' . $deadline;
 
 
             $taskData =  [
                 'fields' => [
-                    'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
+                    'TITLE' => $taskTitle,
                     'RESPONSIBLE_ID' => $responsibleId,
                     'GROUP_ID' => $callingTaskGroupId,
                     'CHANGED_BY' => $createdId, //- постановщик;
@@ -339,7 +356,26 @@ class APIBitrixController extends Controller
     }
 
 
+    protected function getSmartItem($hook, $smartTypeId, $companyId, $userId)
+    {
+        $method = '/crm.item.listjson';
+        $url = $hook . $method;
+        $data =  [
+            'FILTER' => [
+                "!=stageId" => ["DT132_17:SUCCESS"],
+                // "=assignedById" => $userId,
+                'company_id' => $companyId,
 
+            ],
+            // 'select' => ["ID"],
+        ];
+        $response = Http::get($url, $data);
+        if (isset($response['result']) && !empty($response['result'])) {
+            return $response['result'][0];
+        } else {
+            return null;
+        }
+    }
 
 
 
@@ -406,8 +442,7 @@ class APIBitrixController extends Controller
             $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
             $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
             $moscowTime = $moscowTime->format('Y-m-d H:i:s');
-            Log::info('novosibirskTime', ['novosibirskTime' => $novosibirskTime]);
-            Log::info('moscowTime', ['moscowTime' => $moscowTime]);
+
 
 
             $taskData =  [
