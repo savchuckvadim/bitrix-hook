@@ -225,7 +225,7 @@ class APIBitrixController extends Controller
 
 
 
-            return APIOnlineController::getResponse(0, 'success', ['createdTask' => $responseData]);
+            return APIOnlineController::getResponse(0, 'success', ['createdTask' => $responseData, 'taskData' => $taskData]);
         } catch (\Throwable $th) {
             Log::error('ERROR: Exception caught', [
                 'message'   => $th->getMessage(),
