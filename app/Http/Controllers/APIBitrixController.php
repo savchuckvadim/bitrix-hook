@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\CreateBitrixCallingTaskJob;
+use App\Services\BitrixCallingTaskService;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -10,7 +13,8 @@ use Illuminate\Support\Facades\Log;
 //TODO создать конструктор класса который принимает domain и хранит в себе всяческие хук урлы
 class APIBitrixController extends Controller
 {
-    public function createTask(
+
+    public function createColdTask(
         $type,
         $domain,
         $companyId,
@@ -18,7 +22,8 @@ class APIBitrixController extends Controller
         $responsibleId,
         $deadline,
         $name,
-        $crm
+        $crm,
+
     ) {
         $portal = PortalController::getPortal($domain);
 
@@ -26,27 +31,45 @@ class APIBitrixController extends Controller
         //type - cold warm presentation hot
         $stringType = 'Холодный обзвон  ';
 
-        if ($type) {
-            if ($type === 'warm') {
-                $stringType = 'Звонок запланирован  ';
-            } else   if ($type === 'presentation') {
-                $stringType = 'Презентация запланирована  ';
-            }
-        }
+        // if ($type) {
+        //     if ($type === 'warm') {
+        //         $stringType = 'Звонок запланирован  ';
+        //     } else   if ($type === 'presentation') {
+        //         $stringType = 'Презентация запланирована  ';
+        //     }
+        // }
 
-
+        $gettedSmart = null;
 
 
 
         try {
             $portal = $portal['data'];
-
-
+            $smart = $portal['bitrixSmart'];
 
 
 
             $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+
+            $currentSmartItem = null;
+
+
+            //SMART
+            // $categoriesStages = $this->getCurrentSmartStages(
+            //     $hook,
+            //     $smart
+            // );
+            // $smartFields = $this->getCurrentSmartFields(
+            //     $hook,
+            //     $smart
+            // );
+
+
+
+
+
+
 
             $callingTaskGroupId = env('BITRIX_CALLING_GROUP_ID');
             if (isset($portal['bitrixCallingTasksGroup']) && isset($portal['bitrixCallingTasksGroup']['bitrixId'])) {
@@ -57,18 +80,39 @@ class APIBitrixController extends Controller
             if (isset($portal['bitrixSmart']) && isset($portal['bitrixSmart']['crm'])) {
                 $smartId =  $portal['bitrixSmart']['crm'] . '_';
             }
-            if (!$crm) {
-                $crm = $this->getSmartItem($hook, $smartId, $companyId, $responsibleId);
+
+            if (!$crm) { //если
+                $getSmartItemId = $this->getSmartItem($hook, $smart, $companyId, $responsibleId);
+                $gettedSmart =  $getSmartItemId;
+                if ($getSmartItemId) {
+                    $crm = $getSmartItemId['id'];
+                    $currentSmartItem =  $getSmartItemId;
+                }
+
+                // return APIOnlineController::getResponse(0, 'success', ['crm' => $crm]);
             }
+
+            // if (!$currentSmartItem) {
+            //     $newSmart = $this->createSmartItem(
+            //         $hook,
+            //         $smart,
+            //         $smartFields,
+            //         $companyId,
+            //         $responsibleId,
+            //         // $companyName
+            //     );
+            //     if ($newSmart && isset($newSmart['item'])) {
+            //         $currentSmartItem  = $newSmart['item'];
+            //     }
+            // }
 
 
             //TODO
             $crmForCurrent = [$smartId . ''  . '' . $crm];
 
             $currentTasksIds = $this->getCurrentTasksIds($hook, $callingTaskGroupId, $crmForCurrent,  $responsibleId);
-            Log::info('currentTasksIds', [$currentTasksIds]);
+      
             $this->completeTask($hook, $currentTasksIds);
-
 
 
             $crmItems = [$smartId  . $crm, 'CO_' . $companyId];
@@ -144,7 +188,7 @@ class APIBitrixController extends Controller
             //company phones description
             $cmpnPhonesEmailsList = '';
             if (isset($company['result'])) {
-                $cmpnPhonesEmailsList = '[LIST]';
+                $cmpnPhonesEmailsList = '';
                 if (isset($company['result']['PHONE'])) {
                     $companyPhones = $company['result']['PHONE'];
                     $cmpnyListContent = '';
@@ -175,7 +219,7 @@ class APIBitrixController extends Controller
 
             $companyPhones = '';
 
-            $companyTitleString = '[B][COLOR=#1fbde3]' . $company['result']['TITLE'] . '[/COLOR][/B]';
+            $companyTitleString = '[B][COLOR=#0070c0]' . $company['result']['TITLE'] . '[/COLOR][/B]';
             $description =  $companyTitleString . '
             ' . '[LEFT][B]Контакты компании: [/B][/LEFT]' . $contactsTable;
             $description = $description . '' . $cmpnPhonesEmailsList;
@@ -215,28 +259,83 @@ class APIBitrixController extends Controller
 
 
             $responseData = Http::get($url, $taskData);
-
-
+            $createdTask = null;
+            if (isset($responseData['result']) && !empty($responseData['result'])) {
+                $createdTask = $responseData['result'];
+            }
 
 
 
 
             // updateSmart($hook, $smartTypeId, $smartId, $description)
+            // $updatedCompany = $this->updateCompany($hook, $responsibleId,  $companyId, $moscowTime,  $type);
+            // $updatedSmart = $this->updateSmartItem(
+            //     $domain,
+            //     $hook,
+            //     $smart, //data from back
+            //     $currentSmartItem,
+            //     $type
+            // );
 
+            return APIOnlineController::getResponse(
+                0,
+                'success',
+                [
+                    'createdTask' => $createdTask,
+                    // 'smartFields' => $smartFields,
+                    // 'updatedCompany' => $updatedCompany,
+                    // 'updatedSmart' => $updatedSmart,
+                    'currentSmartItem' => $currentSmartItem,
+                    '$gettedSmart' => $gettedSmart,
 
-
-            return APIOnlineController::getResponse(0, 'success', ['createdTask' => $responseData, 'taskData' => $taskData]);
+                ]
+            );
         } catch (\Throwable $th) {
-            Log::error('ERROR: Exception caught', [
+            $errorMessages =  [
                 'message'   => $th->getMessage(),
                 'file'      => $th->getFile(),
                 'line'      => $th->getLine(),
                 'trace'     => $th->getTraceAsString(),
-            ]);
+            ];
+            Log::error('ERROR: Exception caught',  $errorMessages);
             Log::info('error', ['error' => $th->getMessage()]);
-            return APIOnlineController::getResponse(1, $th->getMessage(), null);
+            return APIOnlineController::getResponse(1, $th->getMessage(),  $errorMessages);
         }
     }
+
+
+    public function createTask(
+        $type,
+        $domain,
+        $companyId,
+        $createdId,
+        $responsibleId,
+        $deadline,
+        $name,
+        $comment,
+        // $crm,
+        $currentBitrixSmart,
+        $sale,
+
+
+    ) {
+        dispatch(new CreateBitrixCallingTaskJob(
+            $type,
+            $domain,
+            $companyId,
+            $createdId,
+            $responsibleId,
+            $deadline,
+            $name,
+            $comment,
+            // $crm,
+            $currentBitrixSmart,
+            $sale,
+        ));
+
+        return APIOnlineController::getSuccess(true);
+    }
+
 
     protected function getCurrentTasksIds($hook, $callingTaskGroupId, $crmForCurrent, $responsibleId)
     {
@@ -301,7 +400,7 @@ class APIBitrixController extends Controller
             $batchCommands['cmd']['completeTask_' . $taskId] = $methodComplete . '?taskId=' . $taskId;
         }
         Log::info('batchCommands', [$batchCommands]);
-        $response = Http::post($hook . 'batch', $batchCommands);
+        $response = Http::post($hook . '/batch', $batchCommands);
 
         // Обработка ответа от API
         if ($response->successful()) {
@@ -355,25 +454,76 @@ class APIBitrixController extends Controller
         }
     }
 
-
-    protected function getSmartItem($hook, $smartTypeId, $companyId, $userId)
+    protected function updateCompany($hook, $responsibleId, $companyId, $deadline, $type)
     {
-        $method = '/crm.item.listjson';
+
+        // UF_CRM_1696580389 - запланировать звонок
+        // UF_CRM_1709798145 менеджер по продажам Гарант
+        // UF_CRM_1697117364 запланировать презентацию
+        //
+        $method = '/crm.company.update.json';
+        $result = null;
+        $callField = 'UF_CRM_1696580389';
+        if ($type == 'presentation') {
+            $callField = 'UF_CRM_1697117364';
+        }
+
+        $fields = [
+            $callField => $deadline,
+            'UF_CRM_1709798145' => $responsibleId
+        ];
+
+        $getUrl = $hook . $method;
+        $fieldsData = [
+            'id' => $companyId,
+            'fields' => $fields
+        ];
+
+        $response = Http::get($getUrl,  $fieldsData);
+        if ($response) {
+            if (isset($response['result'])) {
+                $result =  $response['result'];
+            } else if (isset($response['error_description'])) {
+                $result =  $response['error_description'];
+            }
+        }
+
+        return $result;
+    }
+
+
+
+
+
+    protected function getSmartItem($hook, $smart, $companyId, $userId)
+    {
+
+        // result stageId: "DT162_26:UC_R7UBSZ"
+        //
+
+        $method = '/crm.item.list.json';
         $url = $hook . $method;
         $data =  [
-            'FILTER' => [
-                "!=stageId" => ["DT132_17:SUCCESS"],
-                // "=assignedById" => $userId,
-                'company_id' => $companyId,
+            'entityTypeId' => $smart['crmId'],
+            'filter' => [
+                "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
+                "=assignedById" => $userId,
+                'COMPANY_ID' => $companyId,
 
             ],
             // 'select' => ["ID"],
         ];
         $response = Http::get($url, $data);
         if (isset($response['result']) && !empty($response['result'])) {
-            return $response['result'][0];
+            if (isset($response['result']['items']) && !empty($response['result']['items'])) {
+                return $response['result']['items'][0];
+            }
         } else {
-            return null;
+            $err = null;
+            if (isset($response['error_description'])) {
+                $err = $response['error_description'];
+            }
+            return   $err;
         }
     }
 
@@ -382,99 +532,384 @@ class APIBitrixController extends Controller
 
 
 
-
-
-    public static function createOrUpdateSmart(
-        $domain,
-        $companyId,
-        $createdId,
-        $responsibleId,
-        $deadline,
-        $name,
-        $crm
+    protected function getCurrentSmartStages(
+        $hook,
+        $smart
     ) {
 
-        try {
-            $portal = PortalController::getPortal($domain,);
-            $webhookRestKey = $portal[' C_REST_WEB_HOOK_URL'];
-            $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+
+        //CATEGORY
+        // entityTypeId: 162
+        // id: 28
+        // isDefault: "N"
+        // name: "Холодный обзвон"
+        // sort: 200
+
+        // CATEGORY_ID: "26"
+        // COLOR: "#e7d35d"
+        // ENTITY_ID: "DYNAMIC_162_STAGE_26"
+        // ID: "740"
+        // NAME: "Теплый прозвон"
+        // NAME_INIT: ""
+        // SEMANTICS: null
+        // SORT: "300"
+        // STATUS_ID: "DT162_26:UC_Q5V5H0"
+        // SYSTEM: "N"
+
+        $resultCategories = [];
+
+        // try {
 
 
-            //company and contacts
-            $methodContacts = '/crm.contact.list.json';
-            $methodCompany = '/crm.company.get.json';
-            $url = $hook . $methodContacts;
-            $contactsData =  [
-                'FILTER' => [
-                    'COMPANY_ID' => $companyId,
+        $methodSmart = '/crm.category.list.json';
+        $url = $hook . $methodSmart;
+        // $entityId = env('APRIL_BITRIX_SMART_MAIN_ID');
+        $entityId = $smart['crmId'];
+        $hookCategoriesData = ['entityTypeId' => $entityId];
 
-                ],
-                'select' => ["ID", "NAME", "LAST_NAME", "SECOND_NAME", "TYPE_ID", "SOURCE_ID", "PHONE", "EMAIL", "COMMENTS"],
-            ];
-            $getCompanyData = [
-                'ID'  => $companyId,
-                'select' => ["TITLE"],
-            ];
+        // Возвращение ответа клиенту в формате JSON
 
-            $contacts = Http::get($url,  $contactsData);
-            $url = $hook . $methodCompany;
-            $company = Http::get($url,  $getCompanyData);
+        $smartCategoriesResponse = Http::get($url, $hookCategoriesData);
+        $bitrixResponse = $smartCategoriesResponse->json();
 
-            $contactsString = '';
 
-            foreach ($contacts['result'] as  $contact) {
-                $contactPhones = '';
-                foreach ($contact["PHONE"] as $phone) {
-                    $contactPhones = $contactPhones .  $phone["VALUE"] . "   ";
-                }
-                $contactsString = $contactsString . "<p>" . $contact["NAME"] . " " . $contact["SECOND_NAME"] . " " . $contact["SECOND_NAME"] . "  "  .  $contactPhones . "</p>";
+        if (isset($smartCategoriesResponse['result'])) {
+            $categories = $smartCategoriesResponse['result']['categories'];
+
+            //STAGES
+
+            foreach ($categories as $category) {
+
+
+                $stageMethod = '/crm.status.list.json';
+                $url = $hook . $stageMethod;
+                $hookStagesData = [
+                    'entityTypeId' => $entityId,
+                    'entityId' => 'STATUS',
+                    'categoryId' => $category['id'],
+                    'filter' => ['ENTITY_ID' => 'DYNAMIC_' . $entityId . '_STAGE_' . $category['id']],
+
+
+                ];
+
+
+
+
+
+                $stagesResponse = Http::get($url, $hookStagesData);
+                $stages = $stagesResponse['result'];
+
+                $resultCategory =
+                    [
+                        'category' => $category,
+                        'stages' => $stages
+                    ];
+                array_push($resultCategories, $resultCategory);
+
+                // foreach ($stages as $stage) {
+                //     $resultstageData = [
+                //         // 'category' => [
+                //         //     'id' => $category['id'],
+                //         //     'name' => $category['name'],
+                //         // ],
+                //         'id' => $stage['ID'],
+                //         'entityId' => $stage['ENTITY_ID'],
+                //         'statusId' => $stage['STATUS_ID'],
+                //         'title' => $stage['NAME'],
+                //         'nameInit' => $stage['NAME_INIT'],
+
+                //     ];
+                // }
             }
-
-            $companyTitleString = $company['result']['TITLE'];
-            $description =  '<p>' . $companyTitleString . '</p>' . '<p> Контакты компании: </p>' . $contactsString;
-
-
-            //task
-            $methodTask = '/tasks.task.add.json';
-            $url = $hook . $methodTask;
-
-            $nowDate = now();
-            $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
-            $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
-            $moscowTime = $moscowTime->format('Y-m-d H:i:s');
-
-
-
-            $taskData =  [
-                'fields' => [
-                    'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
-                    'RESPONSIBLE_ID' => $responsibleId,
-                    'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
-                    'CHANGED_BY' => $createdId, //- постановщик;
-                    'CREATED_BY' => $createdId, //- постановщик;
-                    'CREATED_DATE' => $nowDate, // - дата создания;
-                    'DEADLINE' => $moscowTime, //- крайний срок;
-                    'UF_CRM_TASK' => ['T9c_' . $crm],
-                    'ALLOW_CHANGE_DEADLINE' => 'N',
-                    'DESCRIPTION' => $description
-                ]
-            ];
-
-
-            $responseData = Http::get($url, $taskData);
-
-            Log::info('SUCCESS RESPONSE TASK', ['createdTask' => $responseData]);
-            return APIOnlineController::getResponse(0, 'success', ['createdTask' => $responseData]);
-        } catch (\Throwable $th) {
-            Log::error('ERROR: Exception caught', [
-                'message'   => $th->getMessage(),
-                'file'      => $th->getFile(),
-                'line'      => $th->getLine(),
-                'trace'     => $th->getTraceAsString(),
-            ]);
-            return APIOnlineController::getResponse(1, $th->getMessage(), null);
         }
+        return $resultCategories;
+
+
+        //     return APIOnlineController::getResponse(0, 'success', ['Smart-Categories' => $bitrixResponse]);
+        // } catch (\Throwable $th) {
+        //     Log::error('ERROR: Exception caught', [
+        //         'message'   => $th->getMessage(),
+        //         'file'      => $th->getFile(),
+        //         'line'      => $th->getLine(),
+        //         'trace'     => $th->getTraceAsString(),
+        //     ]);
+        //     return APIOnlineController::getResponse(1, $th->getMessage(), null);
+        // }
     }
+    protected function getCurrentSmartFields(
+        $hook,
+        $smart
+    ) {
+
+
+
+        $resulFields = [];
+
+        // try {
+
+
+        $methodSmart = '/crm.item.fields.json';
+        $url = $hook . $methodSmart;
+
+        $entityId = $smart['crmId'];
+        $data = ['entityTypeId' => $entityId, 'select' => ['title']];
+
+        // Возвращение ответа клиенту в формате JSON
+
+        $smartFieldsResponse = Http::get($url, $data);
+        $bitrixResponse = $smartFieldsResponse->json();
+
+
+        if (isset($smartFieldsResponse['result'])) {
+            $resultFields = $smartFieldsResponse['result']['fields'];
+        }
+        return $resultFields;
+    }
+
+    protected function getFormatedSmartFieldId($smartId)
+    {
+
+        $originalString = $smartId;
+
+        // Преобразуем строку в нижний регистр
+        $lowerCaseString = strtolower($originalString);
+
+        // Удаляем 'uf_' и используем регулярное выражение для изменения порядка элементов
+        $transformedString = preg_replace_callback('/^(uf_)(crm_)(\d+_)(\d+)$/', function ($matches) {
+            // Собираем строку в новом формате: 'ufCrm' + номер + '_' + timestamp
+            return $matches[1] . ucfirst($matches[2]) . $matches[3] . $matches[4];
+        }, $lowerCaseString);
+
+        return $transformedString;
+    }
+
+
+
+
+
+    protected function createSmartItem(
+        $hook,
+        $smart,
+        $companyId,
+        $responsibleId,
+    ) {
+        $resulFields = [];
+        $fieldsData = [];
+        $fields = $this->getCurrentSmartFields(
+            $hook,
+            $smart
+        );
+        foreach ($fields as $key => $field) {
+            $resultField = '';
+            // if ($field['upperName'] === 'TITLE') {
+            //     $fieldsData[$field['upperName']] = 'Company Name';
+            // } else 
+
+            if ($field['title'] === 'companyId') {
+                $fieldId = $this->getFormatedSmartFieldId($field['upperName']);
+                $fieldsData[$fieldId] = $companyId;
+            }
+        }
+        $fieldsData['ufCrm7_1698134405'] = $companyId;
+        $fieldsData['assigned_by_id'] = $responsibleId;
+        $fieldsData['company_id'] = $companyId;
+
+
+        $methodSmart = '/crm.item.add.json';
+        $url = $hook . $methodSmart;
+
+        $entityId = $smart['crmId'];
+        $data = [
+            'entityTypeId' => $entityId,
+            'fields' =>  $fieldsData
+
+        ];
+
+        // Возвращение ответа клиенту в формате JSON
+
+        $smartFieldsResponse = Http::get($url, $data);
+        $bitrixResponse = $smartFieldsResponse->json();
+
+
+        if (isset($smartFieldsResponse['result'])) {
+            $resultFields = $smartFieldsResponse['result'];
+        }
+        return $resultFields;
+    }
+
+    protected function updateSmartItem(
+        $domain,
+        $hook,
+        $smart, //data from back
+        $smartItemFromBitrix,
+        $type,
+        $deadline,
+        $callName,
+        $comment,
+
+        // $fields,
+        // $companyId,
+        // $responsibleId,
+    ) {
+        $result = null;
+
+        $methodSmart = '/crm.item.update.json';
+        $url = $hook . $methodSmart;
+        $entityId = $smart['crmId'];
+        //         stageId: 
+
+        //дата следующего звонка smart
+        // UF_CRM_6_1709907693 - alfa
+        // UF_CRM_10_1709907744 - april
+
+
+        //комментарии smart
+        //UF_CRM_6_1709907513 - alfa
+        // UF_CRM_10_1709883918 - april
+
+
+        //название обзвона - тема
+        // UF_CRM_6_1709907816 - alfa
+        // UF_CRM_10_1709907850 - april
+        $stagesForWarm = [
+            // april
+            'DT162_26:NEW',
+            'DT162_26:PREPARATION',
+            'DT162_26:FAIL',
+            'DT162_28:NEW',
+            'DT162_28:UC_J1ADFR',
+            'DT162_28:PREPARATION',
+            'DT162_28:UC_BDM2F0',
+            'DT162_28:SUCCESS',
+            'DT162_28:FAIL',
+
+            //presentation
+            'DT162_26:UC_Q5V5H0',
+
+            //alfa
+            'DT156_12:NEW',
+            'DT156_12:CLIENT',
+            'DT156_12:UC_E4BPCB',
+            'DT156_12:UC_Y52JIL',
+            'DT156_12:UC_02ZP1T',
+            'DT156_12:FAIL',
+            'DT156_14:NEW',
+            'DT156_14:UC_TS7I14',
+            'DT156_14:UC_8Q85WS',
+            'DT156_14:PREPARATION',
+            'DT156_14:CLIENT',
+            'DT156_14:SUCCESS',
+            'DT156_14:FAIL',
+
+
+            //presentation
+            'DT156_12:UC_LEWVV8',
+
+
+        ];
+
+        $stageId = null;
+        $fields = null;
+        $smartItemId = null;
+        $targetStageId = 'DT162_26:NEW';
+
+        $lastCallDateField = 'ufCrm10_1709907744';
+        $commentField = 'ufCrm10_1709883918';
+        $callThemeField = 'ufCrm10_1709907850';
+
+
+        if ($domain == 'alfacentr.bitrix24.ru') {
+            $lastCallDateField = 'ufCrm6_1709907693';
+            $commentField = 'ufCrm6_1709907513';
+            $callThemeField = 'ufCrm6_1709907816';
+        }
+
+
+
+        if (isset($smartItemFromBitrix['stageId'])) {
+            $stageId =  $smartItemFromBitrix['stageId'];
+        }
+
+        if (isset($smartItemFromBitrix['id'])) {
+            $smartItemId =  $smartItemFromBitrix['id'];
+        }
+
+
+        if ($type == 'warm') {
+
+            if ($domain == 'april-garant.bitrix24.ru') {
+                $targetStageId = 'DT162_26:UC_Q5V5H0'; //теплый прозвон
+            } else  if ($domain == 'alfacentr.bitrix24.ru') {
+                $targetStageId = 'DT156_12:UC_LEWVV8'; //звонок согласован
+            }
+        } else if ($type == 'presentation') {
+
+            if ($domain == 'april-garant.bitrix24.ru') {
+                $targetStageId = 'DT162_26:UC_NFZKDU'; //презентация запланирована
+            } else  if ($domain == 'alfacentr.bitrix24.ru') {
+                $targetStageId = 'DT156_12:UC_29HBRD'; //презентация согласована
+            }
+        }
+
+
+        // Получение текущих комментариев из $smartItemFromBitrix
+        $currentComments = $smartItemFromBitrix[$commentField] ?? [];
+
+        // Добавление нового комментария к существующим
+        $currentComments[] = $comment;
+
+        $fields = [
+            $lastCallDateField => $deadline,
+            $commentField =>  $currentComments,
+            $callThemeField => $callName,
+        ];
+
+        if (in_array($stageId, $stagesForWarm)) {
+
+            $fields = [
+                'stageId' =>   $targetStageId,
+                $lastCallDateField => $deadline,
+                $commentField => $currentComments,
+                $callThemeField => $callName
+            ];
+        }
+        $data = [
+            'entityTypeId' => $entityId,
+            'id' =>  $smartItemId,
+            'fields' => $fields
+
+
+        ];
+
+        $smartFieldsResponse = Http::get($url, $data);
+        $bitrixResponse = $smartFieldsResponse->json();
+
+
+        if (isset($smartFieldsResponse['result'])) {
+            $result = $smartFieldsResponse['result'];
+        } else  if (isset($smartFieldsResponse['error_description'])) {
+            $result = $smartFieldsResponse['error_description'];
+        }
+
+
+        // Возвращение ответа клиенту в формате JSON
+
+        $testingResult = [
+            $domain,
+            $stageId,
+            $smart, //data from back
+            $smartItemFromBitrix,
+            $type,
+            $targetStageId,
+            $fields,
+            'bitrixResult' => $result
+
+        ];
+
+        return $testingResult;
+    }
+
+
     public static function getSmartStages(
         $domain
     ) {
@@ -836,5 +1271,65 @@ class APIBitrixController extends Controller
         // );
 
 
+    }
+
+
+
+    //calling front
+    public function getSmartItemCallingFront(
+        $domain,
+        $companyId,
+        $userId,
+    ) {
+
+        $smartItem = null;
+
+
+        try {
+            $portal = PortalController::getPortal($domain);
+            $gettedSmart = null;
+            $portal = $portal['data'];
+            $smart = $portal['bitrixSmart'];
+            $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+            $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+            $method = '/crm.item.list.json';
+            $url = $hook . $method;
+            $data =  [
+                'entityTypeId' => $smart['crmId'],
+                'filter' => [
+
+                    "=assignedById" => $userId,
+                    '=company_id' => $companyId,
+
+                ],
+
+            ];
+            $response = Http::get($url, $data);
+            if (isset($response['result']) && !empty($response['result'])) {
+                if (isset($response['result']['items']) && !empty($response['result']['items'])) {
+                    // Перебираем все элементы, чтобы найти самый свежий
+                    $latestTime = new DateTime('@0'); // Дата очень давно, чтобы любое сравнение было больше
+                    foreach ($response['result']['items'] as $item) {
+                        $itemTime = new DateTime($item['updatedTime']);
+                        if ($itemTime > $latestTime) {
+                            $latestTime = $itemTime;
+                            $smartItem = $item; // Обновляем, если нашли более свежий элемент
+                        }
+                    }
+                }
+            }
+
+            return APIOnlineController::getSuccess($smartItem);
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR: Exception caught',  $errorMessages);
+            Log::info('error', ['error' => $th->getMessage()]);
+            return APIOnlineController::getError($th->getMessage(),  $errorMessages);
+        }
     }
 }

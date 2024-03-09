@@ -39,15 +39,29 @@ Route::get('front', [App\Http\Controllers\HomeController::class, 'index']);
 
 
 Route::post('/task', function (Request $request) {
+
+    //from cold
+    // https://april-hook.ru/api/task?
+    // company_id={{companyId}}&
+    // deadline={{Запланировать звонок}}&
+    // responsible={{Ответственный}}&
+    // created={{Постановщик ХО}}&
+    // name={{Обзвон}}&
+    // crm={{ID}}
+    $comment = null;
+    $smart = null;
+    $sale = null;
+
+
     $type = null;
-    if(isset($request['type'])){
+    if (isset($request['type'])) {
         $type = $request['type'];
     }
 
     $created = $request['created'];
     $responsible = $request['responsible'];
 
-    Log::info('LOG', $request->all());
+    // Log::info('LOG', $request->all());
 
     $partsCreated = explode("_", $created);
     $partsResponsible = explode("_", $responsible);
@@ -60,12 +74,101 @@ Route::post('/task', function (Request $request) {
     $companyId = $request['company_id'];
 
     $deadline = $request['deadline'];
-    $name = $request['name'];
     $crm = $request['crm'];
+    $name = $request['name'];
+    //only from front calling
+    // if (
+    //     isset($request['comment'])
+    //     && isset($request['smart'])
+    //     && isset($request['smart'])
+    // ) {
+    //     $comment = $request['comment'];
+    //     $smart = $request['smart'];
+    //     $sale = $request['sale'];
+    // }
+
+
     $controller = new APIBitrixController();
-    return $controller->createTask($type, $domain, $companyId, $createdId, $responsibleId, $deadline, $name, $crm);
+    return $controller->createColdTask(
+        $type,
+        $domain,
+        $companyId,
+        $createdId,
+        $responsibleId,
+        $deadline,
+        $name,
+        // $comment,
+        $crm,
+        // $smart,
+        // $sale
+    );
 });
 
+Route::post('/task/warm', function (Request $request) {
+
+    //from cold
+    // https://april-hook.ru/api/task?
+    // company_id={{companyId}}&
+    // deadline={{Запланировать звонок}}&
+    // responsible={{Ответственный}}&
+    // created={{Постановщик ХО}}&
+    // name={{Обзвон}}&
+    // crm={{ID}}
+    $comment = null;
+    $smart = null;
+    $sale = null;
+
+
+    $type = null;
+    if (isset($request['type'])) {
+        $type = $request['type'];
+    }
+
+    $created = $request['created'];
+    $responsible = $request['responsible'];
+
+    // Log::info('LOG', $request->all());
+
+    $partsCreated = explode("_", $created);
+    $partsResponsible = explode("_", $responsible);
+    $createdId = $partsCreated[1];
+    $responsibleId = $partsResponsible[1];
+
+
+    $auth = $request['auth'];
+    $domain = $auth['domain'];
+    $companyId = $request['company_id'];
+
+    $deadline = $request['deadline'];
+
+    $name = $request['name'];
+    //only from front calling
+    if (
+        isset($request['comment'])
+        && isset($request['smart'])
+        && isset($request['smart'])
+    ) {
+        $comment = $request['comment'];
+        $smart = $request['smart'];
+        $sale = $request['sale'];
+    }
+
+
+    $controller = new APIBitrixController();
+    return $controller->createTask(
+        $type,
+        $domain,
+        $companyId,
+        $createdId,
+        $responsibleId,
+        $deadline,
+        $name,
+        $comment,
+        // $crm,
+        $smart,
+        $sale
+    );
+});
 
 
 Route::post('/taskfields', function (Request $request) {
@@ -150,6 +253,30 @@ Route::post('/calling', function (Request $request) {
     //     ]);
     // }
 });
+
+
+
+//FONTEND CALLINGS
+
+Route::post('/smart/item', function (Request $request) {
+
+    $companyId = $request['companyId'];
+    $userId = $request['userId'];
+
+    $domain = $request['domain'];
+
+
+    $controller = new APIBitrixController();
+    return $controller->getSmartItemCallingFront(
+        $domain,
+        $companyId,
+        $userId,
+    );
+});
+
+
+
+
 Route::post('/lists', function (Request $request) {
 
     $domain = env('APRIL_BITRIX_DOMAIN');
