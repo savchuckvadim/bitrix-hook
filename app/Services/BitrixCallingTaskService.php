@@ -622,7 +622,7 @@ class BitrixCallingTaskService
             $stageId = 'DT156_14:SUCCESS';
         } else {
             // Если ни одно из сочетаний не найдено, $newId останется неизменным или каким-то другим значением по умолчанию
-            $stageId = $stageId; // или любое другое значение по умолчанию
+            $stageId = 'DT162_28:SUCCESS'; // или любое другое значение по умолчанию
         }
 
         if ($isCanChange) {
