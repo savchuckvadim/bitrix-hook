@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\CreateBitrixCallingTaskJob;
 use App\Services\BitrixCallingTaskService;
+use App\Services\BitrixCallingTaskFailService;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
@@ -111,7 +112,7 @@ class APIBitrixController extends Controller
             $crmForCurrent = [$smartId . ''  . '' . $crm];
 
             $currentTasksIds = $this->getCurrentTasksIds($hook, $callingTaskGroupId, $crmForCurrent,  $responsibleId);
-      
+
             $this->completeTask($hook, $currentTasksIds);
 
 
@@ -334,6 +335,27 @@ class APIBitrixController extends Controller
         ));
 
         return APIOnlineController::getSuccess(true);
+    }
+
+    public function failTask(
+
+        $domain,
+        $companyId,
+        $responsibleId,
+        $currentBitrixSmart
+
+
+
+    ) {
+        $service = new BitrixCallingTaskFailService(
+            $domain,
+            $companyId,
+            $responsibleId,
+            $currentBitrixSmart
+        );
+
+        $failTask = $service->failTask();
+        return  $failTask;
     }
 
 

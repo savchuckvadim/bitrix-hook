@@ -37,6 +37,7 @@ Route::post('/reset-password', [APIController::class, 'reset_pass']);
 Route::get('front', [App\Http\Controllers\HomeController::class, 'index']);
 
 
+//FONTEND CALLINGS
 
 Route::post('/task', function (Request $request) {
 
@@ -146,6 +147,102 @@ Route::post('/task/warm', function (Request $request) {
     if (
         isset($request['comment'])
         && isset($request['smart'])
+        && isset($request['sale'])
+    ) {
+        $comment = $request['comment'];
+        $smart = $request['smart'];
+        $sale = $request['sale'];
+    }
+
+
+    $controller = new APIBitrixController();
+    return $controller->createTask(
+        $type,
+        $domain,
+        $companyId,
+        $createdId,
+        $responsibleId,
+        $deadline,
+        $name,
+        $comment,
+        // $crm,
+        $smart,
+        $sale
+    );
+});
+
+
+Route::post('/task/fail', function (Request $request) {
+
+
+
+    $smart = null;
+ 
+    $responsible = $request['responsible'];
+    $partsResponsible = explode("_", $responsible);
+ 
+    $responsibleId = $partsResponsible[1];
+
+
+    $auth = $request['auth'];
+    $domain = $auth['domain'];
+    $companyId = $request['company_id'];
+
+
+
+
+    if (isset($request['smart'])) {
+
+        $smart = $request['smart'];
+ 
+    }
+
+
+    $controller = new APIBitrixController();
+    return $controller->failTask(
+        $domain,
+        $companyId,
+        $responsibleId,
+        $smart,
+
+    );
+});
+
+Route::post('/presentation/done', function (Request $request) {
+
+
+    $comment = null;
+    $smart = null;
+    $sale = null;
+
+
+    $type = null;
+    if (isset($request['type'])) {
+        $type = $request['type'];
+    }
+
+    $created = $request['created'];
+    $responsible = $request['responsible'];
+
+    // Log::info('LOG', $request->all());
+
+    $partsCreated = explode("_", $created);
+    $partsResponsible = explode("_", $responsible);
+    $createdId = $partsCreated[1];
+    $responsibleId = $partsResponsible[1];
+
+
+    $auth = $request['auth'];
+    $domain = $auth['domain'];
+    $companyId = $request['company_id'];
+
+    $deadline = $request['deadline'];
+
+    $name = $request['name'];
+    //only from front calling
+    if (
+        isset($request['comment'])
+        && isset($request['smart'])
         && isset($request['smart'])
     ) {
         $comment = $request['comment'];
@@ -169,6 +266,9 @@ Route::post('/task/warm', function (Request $request) {
         $sale
     );
 });
+
+
+
 
 
 Route::post('/taskfields', function (Request $request) {
@@ -256,7 +356,6 @@ Route::post('/calling', function (Request $request) {
 
 
 
-//FONTEND CALLINGS
 
 Route::post('/smart/item', function (Request $request) {
 
