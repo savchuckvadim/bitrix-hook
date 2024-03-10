@@ -334,7 +334,7 @@ class BitrixCallingTaskFailService
             // $callThemeField => $callName,
         ];
 
-        if (in_array($stageId, $stagesForWarm)) {
+        // if (in_array($stageId, $stagesForWarm)) {
             $isCanChange = true;
             $fields = [
                 'stageId' =>   $targetStageId,
@@ -342,7 +342,7 @@ class BitrixCallingTaskFailService
                 // $commentField => $currentComments,
                 // $callThemeField => $callName
             ];
-        }
+        // }
         $data = [
             'entityTypeId' => $entityId,
             'id' =>  $smartItemId,
