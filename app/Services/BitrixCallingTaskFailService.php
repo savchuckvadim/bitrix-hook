@@ -312,13 +312,19 @@ class BitrixCallingTaskFailService
         if (isset($smartItemFromBitrix['id'])) {
             $smartItemId =  $smartItemFromBitrix['id'];
         }
+        $parts = explode(':', $stageId);
 
+        // Заменяем вторую часть на 'FAIL'
+        $parts[1] = 'FAIL';
+        
+        // Собираем строку обратно
+        $targetStageId = implode(':', $parts);
 
-        if ($domain == 'april-garant.bitrix24.ru') {
-            $targetStageId = 'DT162_26:FAIL'; //отказ
-        } else  if ($domain == 'alfacentr.bitrix24.ru') {
-            $targetStageId = 'DT156_14:FAIL'; //отказ
-        }
+        // if ($domain == 'april-garant.bitrix24.ru') {
+        //     $targetStageId = 'DT162_26:FAIL'; //отказ
+        // } else  if ($domain == 'alfacentr.bitrix24.ru') {
+        //     $targetStageId = 'DT156_14:FAIL'; //отказ
+        // }
 
 
 
