@@ -290,7 +290,7 @@ class BitrixCallingTaskFailService
         $stageId = null;
         $fields = null;
         $smartItemId = null;
-        $targetStageId = 'DT162_28:FAIL';
+        $targetStageId = 'DT162_26:FAIL';
 
         // $lastCallDateField = 'ufCrm10_1709907744';
         // $commentField = 'ufCrm10_1709883918';
@@ -315,7 +315,7 @@ class BitrixCallingTaskFailService
 
 
         if ($domain == 'april-garant.bitrix24.ru') {
-            $targetStageId = 'DT162_28:FAIL'; //отказ
+            $targetStageId = 'DT162_26:FAIL'; //отказ
         } else  if ($domain == 'alfacentr.bitrix24.ru') {
             $targetStageId = 'DT156_14:FAIL'; //отказ
         }
