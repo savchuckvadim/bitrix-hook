@@ -523,7 +523,7 @@ class BitrixCallingTaskService
     }
     protected function preUpdateSmartItemStage($smartItemFromBitrix)
     {
-        $isCanChange = false;
+        $isCanChange = true;
 
         $hook = $this->hook;
         $smart = $this->aprilSmartData;
