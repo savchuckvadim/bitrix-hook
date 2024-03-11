@@ -109,14 +109,14 @@ class BitrixCallingTaskPresentationDoneService
                 }
             }
             if ($this->currentBitrixSmart) {
-                if (array_key_exists('UF_CRM_10_1709111529', $this->currentBitrixSmart)) {
+                if (array_key_exists('ufCrm10_1709111529', $this->currentBitrixSmart)) {
 
                     // /april count
-                    $currentSmartCount = (int)$this->currentBitrixSmart['UF_CRM_10_1709111529'] + 1;
-                    $this->currentBitrixSmart['UF_CRM_10_1709111529'] = $currentSmartCount;
+                    $currentSmartCount = (int)$this->currentBitrixSmart['ufCrm10_1709111529'] + 1;
+                    $this->currentBitrixSmart['ufCrm10_1709111529'] = $currentSmartCount;
 
                     $smartFields = [
-                        'UF_CRM_10_1709111529' => $currentSmartCount
+                        'ufCrm10_1709111529' => $currentSmartCount
                     ];
                 } else if (array_key_exists('UF_CRM_6_1709894507', $this->currentBitrixSmart)) {
 
@@ -277,9 +277,7 @@ class BitrixCallingTaskPresentationDoneService
         $data = [
             'entityTypeId' => $entityId,
             'id' =>  $smartItemId,
-            'fields' => [
-                'ufCrm10_1709111529' => 10
-            ]
+            'fields' => $smartFields
 
 
         ];
@@ -304,8 +302,8 @@ class BitrixCallingTaskPresentationDoneService
             $smartItemFromBitrix,
             // $type,
             $targetStageId,
-            $fields,
-            'isCanChange' => $isCanChange,
+            $data,
+            // 'isCanChange' => $isCanChange,
             'bitrixResult' => $result
 
         ];
