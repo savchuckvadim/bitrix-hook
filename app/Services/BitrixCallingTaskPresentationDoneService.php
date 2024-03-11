@@ -278,7 +278,7 @@ class BitrixCallingTaskPresentationDoneService
             'entityTypeId' => $entityId,
             'id' =>  $smartItemId,
             'fields' => [
-                'UF_CRM_10_1709111529' => 10
+                'ufCrm10_1709111529' => 10
             ]
 
 
