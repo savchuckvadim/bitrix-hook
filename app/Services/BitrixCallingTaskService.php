@@ -454,7 +454,7 @@ class BitrixCallingTaskService
             $batchCommands['cmd']['updateTask_' . $taskId] = $methodUpdate . '?taskId=' . $taskId . '&fields[MARK]=P';
             $batchCommands['cmd']['completeTask_' . $taskId] = $methodComplete . '?taskId=' . $taskId;
         }
-        Log::info('batchCommands', [$batchCommands]);
+       
         $response = Http::post($hook . '/batch', $batchCommands);
 
         // Обработка ответа от API
@@ -467,7 +467,7 @@ class BitrixCallingTaskService
             // Логика обработки ошибки
         }
         $res = $responseData ?? $errorData;
-        Log::info('res', ['res' => $res]);
+      
         return $res;
     }
 
@@ -927,7 +927,7 @@ class BitrixCallingTaskService
                 $result =  $response['error_description'];
             }
         }
-
+        Log::info('fieldsData', ['fieldsData' => $fieldsData]);
         return $result;
     }
 }
