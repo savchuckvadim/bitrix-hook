@@ -277,7 +277,9 @@ class BitrixCallingTaskPresentationDoneService
         $data = [
             'entityTypeId' => $entityId,
             'id' =>  $smartItemId,
-            'fields' => $smartFields
+            'fields' => [
+                'UF_CRM_10_1709111529' => 10
+            ]
 
 
         ];
