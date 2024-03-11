@@ -24,7 +24,7 @@ class APIBitrixController extends Controller
         $responsibleId,
         $deadline,
         $name,
-        $crm,
+        // $crm,
     ) {
         $service = new BitrixCallingColdTaskService(
             $domain,
@@ -32,7 +32,7 @@ class APIBitrixController extends Controller
             $responsibleId,
             $deadline,
             $name,
-            $crm, 
+            // $crm, 
         );
         return $service->initialCold();
     }

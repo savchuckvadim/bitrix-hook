@@ -241,7 +241,7 @@ Route::post('/cold/smart/init', function (Request $request) {
         $companyId = $request['company_id'];
 
         $deadline = $request['deadline'];
-        $crm = $request['crm'];
+        // $crm = $request['crm'];
         $name = $request['name'];
         //only from front calling
         // if (
@@ -260,7 +260,7 @@ Route::post('/cold/smart/init', function (Request $request) {
                 $responsibleId,
                 $deadline,
                 $name,
-                $crm,
+                // $crm,
             ]
 
         ]);
@@ -275,7 +275,7 @@ Route::post('/cold/smart/init', function (Request $request) {
             $deadline,
             $name,
             // $comment,
-            $crm,
+            // $crm,
             // $smart,
             // $sale
         );
