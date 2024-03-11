@@ -86,6 +86,7 @@ class BitrixCallingTaskPresentationDoneService
         $currentCompanyCount = 0;
         $currentSmartCount = 0;
         $currentSmartItem  = $this->currentBitrixSmart;
+        $smartFields = [];
         try {
 
             if ($currentSmartItem && isset($currentSmartItem) && isset($currentSmartItem['id'])) {
@@ -113,11 +114,20 @@ class BitrixCallingTaskPresentationDoneService
                     // /april count
                     $currentSmartCount = (int)$this->currentBitrixSmart['UF_CRM_10_1709111529'] + 1;
                     $this->currentBitrixSmart['UF_CRM_10_1709111529'] = $currentSmartCount;
+
+                    $smartFields = [
+                        'UF_CRM_10_1709111529' => $currentSmartCount
+                    ];
                 } else if (array_key_exists('UF_CRM_6_1709894507', $this->currentBitrixSmart)) {
 
                     //alfa count
                     $currentSmartCount =    (int)$this->currentBitrixSmart['UF_CRM_6_1709894507'] + 1;
                     $this->currentBitrixSmart['UF_CRM_6_1709894507'] = $currentSmartCount;
+
+
+                    $smartFields = [
+                        'UF_CRM_6_1709894507' => $currentSmartCount
+                    ];
                 }
             }
 
@@ -125,7 +135,7 @@ class BitrixCallingTaskPresentationDoneService
             $currentSmartItem  = $this->currentBitrixSmart;
 
             $updatedCompany = $this->updateCompany($this->company);
-            $updatedSmart = $this->updateSmartItem($currentSmartItem);
+            $updatedSmart = $this->updateSmartItem($currentSmartItem, $smartFields);
 
             return APIOnlineController::getResponse(
                 0,
@@ -168,7 +178,7 @@ class BitrixCallingTaskPresentationDoneService
 
     //smart
 
-    protected function updateSmartItem($smartItemFromBitrix)
+    protected function updateSmartItem($smartItemFromBitrix, $smartFields)
     {
         $isCanChange = false;
 
@@ -267,7 +277,7 @@ class BitrixCallingTaskPresentationDoneService
         $data = [
             'entityTypeId' => $entityId,
             'id' =>  $smartItemId,
-            'fields' => $smartItemFromBitrix
+            'fields' => $smartFields
 
 
         ];
