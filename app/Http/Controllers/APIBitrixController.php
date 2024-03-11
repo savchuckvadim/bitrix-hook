@@ -427,11 +427,11 @@ class APIBitrixController extends Controller
 
         if (isset($responseData['result'])) {
             if (isset($responseData['result']['tasks'])) {
-                Log::info('tasks', [$responseData['result']]);
+                // Log::info('tasks', [$responseData['result']]);
                 $resultTasks = $responseData['result']['tasks'];
                 foreach ($resultTasks  as $key =>  $task) {
                     if (isset($task['id'])) {
-                        Log::info('task', ['taskId' => $task['id']]);
+                        // Log::info('task', ['taskId' => $task['id']]);
                         array_push($resultIds, $task['id']);
                     }
 
@@ -455,7 +455,7 @@ class APIBitrixController extends Controller
             $batchCommands['cmd']['updateTask_' . $taskId] = $methodUpdate . '?taskId=' . $taskId . '&fields[MARK]=P';
             $batchCommands['cmd']['completeTask_' . $taskId] = $methodComplete . '?taskId=' . $taskId;
         }
-        Log::info('batchCommands', [$batchCommands]);
+        Log::info('Cold batch batchCommands', [$batchCommands]);
         $response = Http::post($hook . '/batch', $batchCommands);
 
         // Обработка ответа от API
