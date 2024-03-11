@@ -225,14 +225,14 @@ Route::post('/cold/smart/init', function (Request $request) {
     //     $type = $request['type'];
     // }
 
-    $created = $request['created'];
+    // $created = $request['created'];
     $responsible = $request['responsible'];
 
     // Log::info('LOG', $request->all());
 
-    $partsCreated = explode("_", $created);
+    // $partsCreated = explode("_", $created);
     $partsResponsible = explode("_", $responsible);
-    $createdId = $partsCreated[1];
+    // $createdId = $partsCreated[1];
     $responsibleId = $partsResponsible[1];
 
 
