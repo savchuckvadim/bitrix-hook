@@ -136,7 +136,7 @@ class BitrixCallingTaskService
         try {
 
             if ($this->isNeedCreateSmart) {
-                $newSmart = $this->createSmartItem(
+                $newSmart = $this->createSmartItemWarm(
                     $this->hook,
                     $this->aprilSmartData,
                     $this->companyId,
@@ -152,22 +152,22 @@ class BitrixCallingTaskService
             //TODO
             $crmForCurrent = [$this->smartCrmId . ''  . '' . $currentSmartItemId];
 
-            $currentTasksIds = $this->getCurrentTasksIds(
+            $currentTasksIds = $this->getCurrentTasksIdsWarm(
                 $crmForCurrent
             );
             // Log::info('currentTasksIds', [$currentTasksIds]);
-            $this->completeTask($this->hook, $currentTasksIds);
+            $this->completeTaskWarm($this->hook, $currentTasksIds);
 
 
 
-            $createdTask = $this->createTask($currentSmartItemId);
+            $createdTask = $this->createTaskWarm($currentSmartItemId);
 
 
             // updateSmart($hook, $smartTypeId, $smartId, $description)
-            $updatedCompany = $this->updateCompany();
+            $updatedCompany = $this->updateCompanyWarm();
             
-            $updatedSmart = $this->preUpdateSmartItemStage($currentSmartItem);
-            $updatedSmart = $this->updateSmartItem($currentSmartItem);
+            $updatedSmart = $this->preUpdateSmartItemStageWarm($currentSmartItem);
+            $updatedSmart = $this->updateSmartItemWarm($currentSmartItem);
 
             Log::info('updatedCompany', ['updatedCompany' => $updatedCompany]);
 
@@ -206,7 +206,7 @@ class BitrixCallingTaskService
 
 
     //task
-    protected function createTask($currentSmartItemId)
+    protected function createTaskWarm($currentSmartItemId)
     {
         $companyId = $this->companyId;
         $createdId = $this->createdId;
@@ -386,7 +386,7 @@ class BitrixCallingTaskService
         }
     }
 
-    protected function getCurrentTasksIds($crmForCurrent)
+    protected function getCurrentTasksIdsWarm($crmForCurrent)
     {
         $hook = $this->hook;
         $responsibleId = $this->responsibleId;
@@ -442,7 +442,7 @@ class BitrixCallingTaskService
         return $resultIds;
     }
 
-    protected function completeTask($hook, $taskIds)
+    protected function completeTaskWarm($hook, $taskIds)
     {
 
         $methodUpdate = 'tasks.task.update';
@@ -474,7 +474,7 @@ class BitrixCallingTaskService
 
 
     //smart
-    protected function createSmartItem()
+    protected function createSmartItemWarm()
     {
         $hook = $this->hook;
         $companyId  = $this->companyId;
@@ -523,7 +523,7 @@ class BitrixCallingTaskService
         }
         return $resultFields;
     }
-    protected function preUpdateSmartItemStage($smartItemFromBitrix)
+    protected function preUpdateSmartItemStageWarm($smartItemFromBitrix)
     {
         $isCanChange = true;
 
@@ -665,7 +665,7 @@ class BitrixCallingTaskService
             return $testingResult;
         }
     }
-    protected function updateSmartItem($smartItemFromBitrix)
+    protected function updateSmartItemWarm($smartItemFromBitrix)
     {
         $isCanChange = false;
 
@@ -887,7 +887,7 @@ class BitrixCallingTaskService
     }
 
     //company
-    protected function updateCompany()
+    protected function updateCompanyWarm()
     {
 
         $hook = $this->hook;
