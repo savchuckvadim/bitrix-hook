@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\CreateBitrixCallingTaskJob;
+use App\Services\BitrixCallingColdTaskService;
 use App\Services\BitrixCallingTaskService;
 use App\Services\BitrixCallingTaskFailService;
 use App\Services\BitrixCallingTaskPresentationDoneService;
@@ -15,6 +16,27 @@ use Illuminate\Support\Facades\Log;
 //TODO создать конструктор класса который принимает domain и хранит в себе всяческие хук урлы
 class APIBitrixController extends Controller
 {
+
+
+    public function initialCold(
+        $domain,
+        $companyId,
+        $responsibleId,
+        $deadline,
+        $name,
+        $crm,
+    ) {
+        $service = new BitrixCallingColdTaskService(
+            $domain,
+            $companyId,
+            $responsibleId,
+            $deadline,
+            $name,
+            $crm, 
+        );
+        return $service->initialCold();
+    }
+
 
     public function createColdTask(
         $type,
@@ -472,6 +494,12 @@ class APIBitrixController extends Controller
         return $res;
     }
 
+
+
+
+
+
+
     protected function updateSmart($hook, $smartTypeId, $smartId, $comment)
     {
         $methodFields = 'crm.item.fields';
@@ -547,10 +575,6 @@ class APIBitrixController extends Controller
         return $result;
     }
 
-
-
-
-
     protected function getSmartItem($hook, $smart, $companyId, $userId)
     {
 
@@ -582,10 +606,6 @@ class APIBitrixController extends Controller
             return   $err;
         }
     }
-
-
-
-
 
 
     protected function getCurrentSmartStages(
