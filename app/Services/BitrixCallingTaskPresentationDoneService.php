@@ -93,19 +93,27 @@ class BitrixCallingTaskPresentationDoneService
             }
 
             if ($this->company) {
-                if (isset($this->company['UF_CRM_1709807026'])) {
-                    $currentCompanyCount = $this->company['UF_CRM_1709807026'] + 1;
+                if (array_key_exists('UF_CRM_1709807026', $this->company)) {
+                    if (!$this->company['UF_CRM_1709807026']) {
+                        $this->company['UF_CRM_1709807026'] = 1;
+                    } else {
+                        $currentCompanyCount = (int)$this->company['UF_CRM_1709807026'] + 1;
+                    }
+
                     $this->company['UF_CRM_1709807026'] = $currentCompanyCount;
-                    $this->company['UF_CRM_1696211878'] = 'Y';
+                    if (array_key_exists('UF_CRM_1696211878', $this->company)) {
+
+                        $this->company['UF_CRM_1696211878'] = 'Y';
+                    }
                 }
             }
             if ($this->currentBitrixSmart) {
-                if (isset($this->currentBitrixSmart['UF_CRM_10_1709111529'])) {
+                if (array_key_exists('UF_CRM_10_1709111529', $this->currentBitrixSmart)) {
 
                     // /april count
                     $currentSmartCount = $this->currentBitrixSmart['UF_CRM_10_1709111529'] + 1;
                     $this->currentBitrixSmart['UF_CRM_1709807026'] = $currentSmartCount;
-                } else if (isset($this->currentBitrixSmart['UF_CRM_6_1709894507'])) {
+                } else if (array_key_exists('UF_CRM_6_1709894507', $this->currentBitrixSmart)) {
 
                     //alfa count
                     $currentSmartCount = $this->currentBitrixSmart['UF_CRM_6_1709894507'] + 1;
@@ -255,7 +263,7 @@ class BitrixCallingTaskPresentationDoneService
         }
         $parts = explode(':', $stageId);
 
-   
+
         $data = [
             'entityTypeId' => $entityId,
             'id' =>  $smartItemId,
@@ -295,7 +303,7 @@ class BitrixCallingTaskPresentationDoneService
 
 
 
- 
+
     //company
 
     protected function updateCompany($company)
@@ -336,6 +344,6 @@ class BitrixCallingTaskPresentationDoneService
         return [
             'updcompanyBitrixResult' => $result,
             'company' => $company
-        ] ;
+        ];
     }
 }
