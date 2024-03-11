@@ -278,7 +278,12 @@ class APIBitrixController extends Controller
             //     $currentSmartItem,
             //     $type
             // );
+            Log::error('COLD RESPONSE: Exception caught',  [
+                'createdTask' => $createdTask,
+                'currentSmartItem' => $currentSmartItem,
+                'gettedSmart' => $gettedSmart,
 
+            ]);
             return APIOnlineController::getResponse(
                 0,
                 'success',
@@ -299,8 +304,8 @@ class APIBitrixController extends Controller
                 'line'      => $th->getLine(),
                 'trace'     => $th->getTraceAsString(),
             ];
-            Log::error('ERROR: Exception caught',  $errorMessages);
-            Log::info('error', ['error' => $th->getMessage()]);
+            Log::error('ERROR COLD: Exception caught',  $errorMessages);
+            Log::info('error COLD', ['error' => $th->getMessage()]);
             return APIOnlineController::getResponse(1, $th->getMessage(),  $errorMessages);
         }
     }
