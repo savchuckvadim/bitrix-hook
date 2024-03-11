@@ -112,9 +112,9 @@ class APIBitrixController extends Controller
             //TODO
             $crmForCurrent = [$smartId . ''  . '' . $crm];
 
-            $currentTasksIds = $this->getCurrentTasksIds($hook, $callingTaskGroupId, $crmForCurrent,  $responsibleId);
+            // $currentTasksIds = $this->getCurrentTasksIds($hook, $callingTaskGroupId, $crmForCurrent,  $responsibleId);
 
-            $this->completeTask($hook, $currentTasksIds);
+            // $this->completeTask($hook, $currentTasksIds);
 
 
             $crmItems = [$smartId  . $crm, 'CO_' . $companyId];
