@@ -299,14 +299,14 @@ Route::post('/cold/test', function (Request $request) {
     ]);
 });
 
-Route::get('/cold/test', function (Request $request) {
-    Log::info('TEST INITIAL COLD', [
-        'cold/test' => 'success'
+// Route::get('/cold/test', function (Request $request) {
+//     Log::info('TEST INITIAL COLD', [
+//         'cold/test' => 'success'
 
-    ]);
+//     ]);
 
-    echo 'it is cool';
-});
+//     echo 'it is cool';
+// });
 
 
 
