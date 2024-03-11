@@ -168,6 +168,8 @@ class BitrixCallingTaskService
             
             $updatedSmart = $this->preUpdateSmartItemStage($currentSmartItem);
             $updatedSmart = $this->updateSmartItem($currentSmartItem);
+            
+            Log::info('updatedCompany', ['updatedCompany' => $updatedCompany]);
 
             return APIOnlineController::getResponse(
                 0,
