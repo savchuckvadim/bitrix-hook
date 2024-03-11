@@ -333,6 +333,9 @@ class BitrixCallingTaskPresentationDoneService
             }
         }
 
-        return $result;
+        return [
+            'updcompanyBitrixResult' => $result,
+            'company' => $company
+        ] ;
     }
 }
