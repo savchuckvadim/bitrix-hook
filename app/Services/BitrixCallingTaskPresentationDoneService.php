@@ -94,11 +94,11 @@ class BitrixCallingTaskPresentationDoneService
 
             if ($this->company) {
                 if (array_key_exists('UF_CRM_1709807026', $this->company)) {
-                    if ($this->company['UF_CRM_1709807026'] == null || $this->company['UF_CRM_1709807026'] == 0 || $this->company['UF_CRM_1709807026'] == "0") {
-                        $this->company['UF_CRM_1709807026'] = 1;
-                    } else {
+                    // if ($this->company['UF_CRM_1709807026'] == null || $this->company['UF_CRM_1709807026'] == 0 || $this->company['UF_CRM_1709807026'] == "0") {
+                    //     $this->company['UF_CRM_1709807026'] = 1;
+                    // } else {
                         $currentCompanyCount = (int)$this->company['UF_CRM_1709807026'] + 1;
-                    }
+                    // }
 
                     $this->company['UF_CRM_1709807026'] = $currentCompanyCount;
                     if (array_key_exists('UF_CRM_1696211878', $this->company)) {
