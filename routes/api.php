@@ -177,10 +177,10 @@ Route::post('/task/fail', function (Request $request) {
 
 
     $smart = null;
- 
+
     $responsible = $request['responsible'];
     $partsResponsible = explode("_", $responsible);
- 
+
     $responsibleId = $partsResponsible[1];
 
 
@@ -194,7 +194,6 @@ Route::post('/task/fail', function (Request $request) {
     if (isset($request['smart'])) {
 
         $smart = $request['smart'];
- 
     }
 
 
@@ -211,59 +210,46 @@ Route::post('/task/fail', function (Request $request) {
 Route::post('/presentation/done', function (Request $request) {
 
 
-    $comment = null;
+    $company = null;
     $smart = null;
-    $sale = null;
+    $placement = null;
 
 
-    $type = null;
-    if (isset($request['type'])) {
-        $type = $request['type'];
-    }
+    // $created = $request['created'];
+    // $responsible = $request['responsible'];
 
-    $created = $request['created'];
-    $responsible = $request['responsible'];
+    // // Log::info('LOG', $request->all());
 
-    // Log::info('LOG', $request->all());
-
-    $partsCreated = explode("_", $created);
-    $partsResponsible = explode("_", $responsible);
-    $createdId = $partsCreated[1];
-    $responsibleId = $partsResponsible[1];
+    // $partsCreated = explode("_", $created);
+    // $partsResponsible = explode("_", $responsible);
+    // $createdId = $partsCreated[1];
+    // $responsibleId = $partsResponsible[1];
 
 
     $auth = $request['auth'];
     $domain = $auth['domain'];
     $companyId = $request['company_id'];
 
-    $deadline = $request['deadline'];
 
-    $name = $request['name'];
     //only from front calling
     if (
-        isset($request['comment'])
+        isset($request['placement'])
         && isset($request['smart'])
-        && isset($request['smart'])
+        && isset($request['company'])
     ) {
-        $comment = $request['comment'];
+        $placement = $request['placement'];
         $smart = $request['smart'];
-        $sale = $request['sale'];
+        $company = $request['company'];
     }
 
 
     $controller = new APIBitrixController();
-    return $controller->createTask(
-        $type,
+    return $controller->presentationDone(
         $domain,
         $companyId,
-        $createdId,
-        $responsibleId,
-        $deadline,
-        $name,
-        $comment,
-        // $crm,
+        $placement,
+        $company,
         $smart,
-        $sale
     );
 });
 
