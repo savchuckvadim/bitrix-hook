@@ -97,7 +97,7 @@ class BitrixCallingTaskPresentationDoneService
                     // if ($this->company['UF_CRM_1709807026'] == null || $this->company['UF_CRM_1709807026'] == 0 || $this->company['UF_CRM_1709807026'] == "0") {
                     //     $this->company['UF_CRM_1709807026'] = 1;
                     // } else {
-                        $currentCompanyCount = (int)$this->company['UF_CRM_1709807026'] + 1;
+                    $currentCompanyCount = (int)$this->company['UF_CRM_1709807026'] + 1;
                     // }
 
                     $this->company['UF_CRM_1709807026'] = $currentCompanyCount;
@@ -111,13 +111,13 @@ class BitrixCallingTaskPresentationDoneService
                 if (array_key_exists('UF_CRM_10_1709111529', $this->currentBitrixSmart)) {
 
                     // /april count
-                    $currentSmartCount = $this->currentBitrixSmart['UF_CRM_10_1709111529'] + 1;
+                    $currentSmartCount = (int)$this->currentBitrixSmart['UF_CRM_10_1709111529'] + 1;
                     $this->currentBitrixSmart['UF_CRM_10_1709111529'] = $currentSmartCount;
                 } else if (array_key_exists('UF_CRM_6_1709894507', $this->currentBitrixSmart)) {
 
                     //alfa count
-                    $currentSmartCount = $this->currentBitrixSmart['UF_CRM_6_1709894507'] + 1;
-                    $this->currentBitrixSmart['UF_CRM_1709807026'] = $currentSmartCount;
+                    $currentSmartCount =    (int)$this->currentBitrixSmart['UF_CRM_6_1709894507'] + 1;
+                    $this->currentBitrixSmart['UF_CRM_6_1709894507'] = $currentSmartCount;
                 }
             }
 
