@@ -340,7 +340,7 @@ class APIBitrixController extends Controller
             $sale,
         ));
 
-        return APIOnlineController::getSuccess(true);
+        return APIOnlineController::getSuccess(false);
     }
 
     public function failTask(
