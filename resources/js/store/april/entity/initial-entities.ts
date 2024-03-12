@@ -264,6 +264,29 @@ export const allEntities = [
         },
     },
     {
+        id: 15,
+        item: {
+            name: 'qr',
+            title: 'qr',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'qr',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'qrs',
+            title: 'qrs',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'qrs',
+                method: API_METHOD.GET
+            }
+
+        },
+    },
+    {
         id: 10,
         item: {
             name: 'counter',
