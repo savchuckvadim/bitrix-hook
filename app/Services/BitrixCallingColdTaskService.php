@@ -249,7 +249,8 @@ class BitrixCallingColdTaskService
 
         $resulFields = [];
         $fieldsData = [];
-
+        $fieldsData['categoryId'] = $this->categoryId;
+        $fieldsData['stageId'] = $this->stageId;
         $fieldsData['ufCrm7_1698134405'] = $companyId;
         $fieldsData['assigned_by_id'] = $responsibleId;
         $fieldsData['company_id'] = $companyId;
