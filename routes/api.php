@@ -253,17 +253,7 @@ Route::post('/cold/smart/init', function (Request $request) {
         //     $smart = $request['smart'];
         //     $sale = $request['sale'];
         // }
-        Log::info('INITIAL COLD', [
-            'cold/smart/init' => [
-                $domain,
-                $companyId,
-                $responsibleId,
-                $deadline,
-                $name,
-                // $crm,
-            ]
-
-        ]);
+       
 
         $controller = new APIBitrixController();
         return $controller->initialCold(

@@ -26,6 +26,17 @@ class APIBitrixController extends Controller
         $name,
         // $crm,
     ) {
+        Log::info('INITIAL COLD', [
+            'APIBitrixController' => [
+                $domain,
+                $companyId,
+                $responsibleId,
+                $deadline,
+                $name,
+                // $crm,
+            ]
+
+        ]);
         $service = new BitrixCallingColdTaskService(
             $domain,
             $companyId,
