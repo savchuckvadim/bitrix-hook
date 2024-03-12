@@ -354,8 +354,8 @@ class BitrixCallingColdTaskService
         $data = [
             'id' => $smartId,
             'entityTypeId' => $entityId,
-            'categoryId' => $this->categoryId,
-            'stageId' => $this->stageId,
+            'category_id' => $this->categoryId,
+            'stage_id' => $this->stageId,
             'fields' =>  $fieldsData
 
         ];
