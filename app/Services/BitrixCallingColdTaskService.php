@@ -132,6 +132,7 @@ class BitrixCallingColdTaskService
                 }
             } else {
                 $currentSmart = $this->createSmartItemCold();
+                $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
             }
             Log::info('SUCCESS INITIAL COLD', [
                 'updated smart' => $currentSmart,
@@ -249,8 +250,8 @@ class BitrixCallingColdTaskService
 
         $resulFields = [];
         $fieldsData = [];
-        $fieldsData['category_id'] = $this->categoryId;
-        $fieldsData['stage_id'] = $this->stageId;
+        // $fieldsData['category_id'] = $this->categoryId;
+        // $fieldsData['stage_id'] = $this->stageId;
         $fieldsData['ufCrm7_1698134405'] = $companyId;
         $fieldsData['assigned_by_id'] = $responsibleId;
         $fieldsData['company_id'] = $companyId;
