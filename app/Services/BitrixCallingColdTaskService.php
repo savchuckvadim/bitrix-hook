@@ -249,8 +249,8 @@ class BitrixCallingColdTaskService
 
         $resulFields = [];
         $fieldsData = [];
-        $fieldsData['categoryId'] = $this->categoryId;
-        $fieldsData['stageId'] = $this->stageId;
+        $fieldsData['category_id'] = $this->categoryId;
+        $fieldsData['stage_id'] = $this->stageId;
         $fieldsData['ufCrm7_1698134405'] = $companyId;
         $fieldsData['assigned_by_id'] = $responsibleId;
         $fieldsData['company_id'] = $companyId;
@@ -267,8 +267,6 @@ class BitrixCallingColdTaskService
         $entityId = $smart['crmId'];
         $data = [
             'entityTypeId' => $entityId,
-            'categoryId' => $this->categoryId,
-            'stageId' => $this->stageId,
             'fields' =>  $fieldsData
 
         ];
