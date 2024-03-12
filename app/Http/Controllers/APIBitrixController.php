@@ -26,26 +26,26 @@ class APIBitrixController extends Controller
         $name,
         // $crm,
     ) {
-        Log::info('INITIAL COLD', [
-            'APIBitrixController' => [
+        try {
+            $service = new BitrixCallingColdTaskService(
                 $domain,
                 $companyId,
                 $responsibleId,
                 $deadline,
                 $name,
-                // $crm,
-            ]
-
-        ]);
-        $service = new BitrixCallingColdTaskService(
-            $domain,
-            $companyId,
-            $responsibleId,
-            $deadline,
-            $name,
-            // $crm, 
-        );
-        return $service->initialCold();
+                // $crm, 
+            );
+            return $service->initialCold();
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR COLD APIBitrixController: Exception caught',  $errorMessages);
+            Log::info('error COLD APIBitrixController', ['error' => $th->getMessage()]);
+        }
     }
 
 

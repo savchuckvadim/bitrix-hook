@@ -122,6 +122,17 @@ class BitrixCallingColdTaskService
 
     public function initialCold()
     {
+        Log::info('INITIAL COLD', [
+            'BitrixCallingColdTaskService' => [
+                $this->domain,
+                $this->companyId,
+                $this->responsibleId,
+                $this->deadline,
+                $this->name,
+                // $crm,
+            ]
+
+        ]);
         try {
             $updatedCompany = $this->updateCompanyCold();
             $currentSmart = $this->getSmartItem();
