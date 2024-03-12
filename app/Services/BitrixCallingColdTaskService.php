@@ -122,17 +122,7 @@ class BitrixCallingColdTaskService
 
     public function initialCold()
     {
-        Log::info('INITIAL COLD', [
-            'BitrixCallingColdTaskService' => [
-                $this->domain,
-                $this->companyId,
-                $this->responsibleId,
-                $this->deadline,
-                $this->name,
-                // $crm,
-            ]
 
-        ]);
         try {
             $updatedCompany = $this->updateCompanyCold();
             $currentSmart = $this->getSmartItem();
@@ -148,8 +138,6 @@ class BitrixCallingColdTaskService
                 'updated company' => $updatedCompany
             ]);
             return APIOnlineController::getSuccess($currentSmart);
-
-            
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
@@ -372,7 +360,10 @@ class BitrixCallingColdTaskService
 
         ];
 
-        // Возвращение ответа клиенту в формате JSON
+        Log::info('INITIAL COLD', [
+            'updateSmartItemCold' => $data
+
+        ]);
 
         $smartFieldsResponse = Http::get($url, $data);
         $bitrixResponse = $smartFieldsResponse->json();
