@@ -25,6 +25,7 @@ class APIBitrixController extends Controller
         $responsibleId,
         $deadline,
         $name,
+        $smartId
         // $crm,
     ) {
         try {
@@ -35,6 +36,7 @@ class APIBitrixController extends Controller
                 $responsibleId,
                 $deadline,
                 $name,
+                $smartId
                 // $crm, 
             );
             return $service->initialCold();

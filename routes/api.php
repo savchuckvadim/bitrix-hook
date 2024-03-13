@@ -219,13 +219,18 @@ Route::post('/cold/smart/init', function (Request $request) {
     $smart = null;
     $sale = null;
     $createdId =  null;
-
+    $smartId =  null;
     try {
         if (isset($request['created'])) {
             $created = $request['created'];
             $partsCreated = explode("_", $created);
             $createdId = $partsCreated[1];
         }
+
+        if (isset($request['smart_id'])) {
+            $smartId = $request['smart_id'];
+        }
+       
        
         $responsible = $request['responsible'];
         $partsResponsible = explode("_", $responsible);
@@ -261,6 +266,7 @@ Route::post('/cold/smart/init', function (Request $request) {
             $responsibleId,
             $deadline,
             $name,
+            $smartId,
             // $comment,
             // $crm,
             // $smart,

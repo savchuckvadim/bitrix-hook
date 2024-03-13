@@ -26,7 +26,7 @@ class BitrixCallingColdTaskService
     protected $deadline;
     protected $name;
     // protected $comment;
-    // protected $crm;
+    protected $smartId;
     protected $currentBitrixSmart;
     // protected $sale;
     protected $taskTitle;
@@ -48,6 +48,7 @@ class BitrixCallingColdTaskService
         $responsibleId,
         $deadline,
         $name,
+        $smartId
         // $comment,
         // $crm,
         // $currentBitrixSmart,
@@ -67,7 +68,8 @@ class BitrixCallingColdTaskService
         $this->companyId = $companyId;
         $this->createdId = $createdId;
         $this->responsibleId = $responsibleId;
-
+        $this->smartId = $smartId;
+        
         $this->name = $name;
 
         $stringType = 'Холодный обзвон  ';
@@ -126,6 +128,9 @@ class BitrixCallingColdTaskService
     {
 
         try {
+            // if(!$this->smartId){
+
+            // }
             $updatedCompany = $this->updateCompanyCold();
             $currentSmart = $this->getSmartItem();
             if ($currentSmart) {
@@ -136,6 +141,9 @@ class BitrixCallingColdTaskService
                 $currentSmart = $this->createSmartItemCold();
                 $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
             }
+
+
+
             Log::info('SUCCESS INITIAL COLD', [
                 'updated smart' => $currentSmart,
                 'updated company' => $updatedCompany
@@ -348,7 +356,7 @@ class BitrixCallingColdTaskService
         $fieldsData[$this->lastCallDateFieldCold] = $this->deadline; //дата холодного следующего
         $fieldsData[$this->callThemeField] = $this->name;      //тема следующего звонка
         $fieldsData[$this->callThemeFieldCold] = $this->name;  //тема холодного звонка
-        
+
         if($this->createdId){
             $fieldsData[$this->createdFieldCold] = $this->createdId;  //тема холодного звонка
 
