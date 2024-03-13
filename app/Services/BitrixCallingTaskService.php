@@ -165,7 +165,7 @@ class BitrixCallingTaskService
 
             // updateSmart($hook, $smartTypeId, $smartId, $description)
             $updatedCompany = $this->updateCompanyWarm();
-            
+
             $updatedSmart = $this->preUpdateSmartItemStageWarm($currentSmartItem);
             $updatedSmart = $this->updateSmartItemWarm($currentSmartItem);
 
@@ -430,7 +430,7 @@ class BitrixCallingTaskService
                 $resultTasks = $responseData['result']['tasks'];
                 foreach ($resultTasks  as $key =>  $task) {
                     if (isset($task['id'])) {
-                      
+
                         array_push($resultIds, $task['id']);
                     }
 
@@ -454,7 +454,7 @@ class BitrixCallingTaskService
             $batchCommands['cmd']['updateTask_' . $taskId] = $methodUpdate . '?taskId=' . $taskId . '&fields[MARK]=P';
             $batchCommands['cmd']['completeTask_' . $taskId] = $methodComplete . '?taskId=' . $taskId;
         }
-       
+
         $response = Http::post($hook . '/batch', $batchCommands);
 
         // Обработка ответа от API
@@ -467,7 +467,7 @@ class BitrixCallingTaskService
             // Логика обработки ошибки
         }
         $res = $responseData ?? $errorData;
-      
+
         return $res;
     }
 
@@ -740,7 +740,7 @@ class BitrixCallingTaskService
         $fields = null;
         $smartItemId = null;
         $targetStageId = 'DT162_26:NEW';
-
+        $categoryId = 26;
         $lastCallDateField = 'ufCrm10_1709907744';
         $commentField = 'ufCrm10_1709883918';
         $callThemeField = 'ufCrm10_1709907850';
@@ -780,6 +780,15 @@ class BitrixCallingTaskService
         }
 
 
+        if ($domain == 'april-garant.bitrix24.ru') {
+            $categoryId = 26;
+        } else  if ($domain == 'alfacentr.bitrix24.ru') {
+            $categoryId = 12;
+        }
+
+
+
+
         // Получение текущих комментариев из $smartItemFromBitrix
         $currentComments = $smartItemFromBitrix[$commentField] ?? [];
 
@@ -795,6 +804,7 @@ class BitrixCallingTaskService
         if (in_array($stageId, $stagesForWarm)) {
             $isCanChange = true;
             $fields = [
+                'categoryId' =>   $categoryId,
                 'stageId' =>   $targetStageId,
                 $lastCallDateField => $deadline,
                 $commentField => $currentComments,
