@@ -111,14 +111,6 @@ class APIBitrixController extends Controller
         //type - cold warm presentation hot
         $stringType = 'Холодный обзвон  ';
 
-        // if ($type) {
-        //     if ($type === 'warm') {
-        //         $stringType = 'Звонок запланирован  ';
-        //     } else   if ($type === 'presentation') {
-        //         $stringType = 'Презентация запланирована  ';
-        //     }
-        // }
-
         $gettedSmart = null;
 
 
@@ -159,30 +151,6 @@ class APIBitrixController extends Controller
             }
             $crmForCurrent = [$smartId . ''  . '' . $crm];
 
-            // $currentTasksIds = $this->getCurrentTasksIds(
-            //     $hook, 
-            //     $callingTaskGroupId, 
-            //     $crmForCurrent, 
-            //     $responsibleId
-            // );
-            // // Log::info('currentTasksIds', [$currentTasksIds]);
-            // $this->completeTask($hook, $currentTasksIds);
-
-
-            // if (!$currentSmartItem) {
-            //     $newSmart = $this->createSmartItem(
-            //         $hook,
-            //         $smart,
-            //         $smartFields,
-            //         $companyId,
-            //         $responsibleId,
-            //         // $companyName
-            //     );
-            //     if ($newSmart && isset($newSmart['item'])) {
-            //         $currentSmartItem  = $newSmart['item'];
-            //     }
-            // }
-
 
             //TODO
             $crmForCurrent = [$smartId . ''  . '' . $crm];
@@ -213,10 +181,14 @@ class APIBitrixController extends Controller
                 'select' => ["TITLE", "PHONE", "EMAIL"],
             ];
 
-            $contacts = Http::get($url,  $contactsData);
+            $contactsResponse = Http::get($url,  $contactsData);
             $url = $hook . $methodCompany;
-            $company = Http::get($url,  $getCompanyData);
+            $companyResponse = Http::get($url,  $getCompanyData);
+            $company = $companyResponse->json();
 
+
+            $contacts = $contactsResponse->json();
+       
 
 
             //contacts description
@@ -335,7 +307,8 @@ class APIBitrixController extends Controller
             ];
 
 
-            $responseData = Http::get($url, $taskData);
+            $response = Http::get($url, $taskData);
+            $responseData = $response->json();
             $createdTask = null;
             if (isset($responseData['result']) && !empty($responseData['result'])) {
                 $createdTask = $responseData['result'];
