@@ -29,6 +29,42 @@ class APIBitrixController extends Controller
         // $crm,
     ) {
         try {
+            $portal = PortalController::getPortal($domain);
+            $portal = $portal['data'];
+            $smart = $portal['bitrixSmart'];
+
+
+
+            $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+            $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+            $callingTaskGroupId = env('BITRIX_CALLING_GROUP_ID');
+            if (isset($portal['bitrixCallingTasksGroup']) && isset($portal['bitrixCallingTasksGroup']['bitrixId'])) {
+                $callingTaskGroupId =  $portal['bitrixCallingTasksGroup']['bitrixId'];
+            }
+
+
+            if (!$smartId) { //если
+                $getSmartItemId = $this->getSmartItem($hook, $smart, $companyId, $responsibleId);
+                // $gettedSmart =  $getSmartItemId;
+                if ($getSmartItemId) {
+                    $smartId = $getSmartItemId['id'];
+                    // $currentSmartItem =  $getSmartItemId;
+                }
+
+                // return APIOnlineController::getResponse(0, 'success', ['crm' => $crm]);
+            }
+            $crmForCurrent = [$smartId . ''  . '' . $smartId];
+
+            $currentTasksIds = $this->getCurrentTasksIds(
+                $hook,
+                $callingTaskGroupId,
+                $crmForCurrent,
+                $responsibleId
+            );
+            // Log::info('currentTasksIds', [$currentTasksIds]);
+            $this->completeTask($hook, $currentTasksIds);
+
+
             $service = new BitrixCallingColdTaskService(
                 $domain,
                 $companyId,
@@ -94,7 +130,7 @@ class APIBitrixController extends Controller
             $currentSmartItem = null;
 
 
-     
+
 
             $callingTaskGroupId = env('BITRIX_CALLING_GROUP_ID');
             if (isset($portal['bitrixCallingTasksGroup']) && isset($portal['bitrixCallingTasksGroup']['bitrixId'])) {
@@ -118,14 +154,14 @@ class APIBitrixController extends Controller
             }
             $crmForCurrent = [$smartId . ''  . '' . $crm];
 
-            $currentTasksIds = $this->getCurrentTasksIds(
-                $hook, 
-                $callingTaskGroupId, 
-                $crmForCurrent, 
-                $responsibleId
-            );
-            // Log::info('currentTasksIds', [$currentTasksIds]);
-            $this->completeTask($hook, $currentTasksIds);
+            // $currentTasksIds = $this->getCurrentTasksIds(
+            //     $hook, 
+            //     $callingTaskGroupId, 
+            //     $crmForCurrent, 
+            //     $responsibleId
+            // );
+            // // Log::info('currentTasksIds', [$currentTasksIds]);
+            // $this->completeTask($hook, $currentTasksIds);
 
 
             // if (!$currentSmartItem) {
@@ -428,12 +464,11 @@ class APIBitrixController extends Controller
 
 
     protected function getCurrentTasksIds(
-        $hook, 
-        $callingTaskGroupId, 
-        $crmForCurrent, 
+        $hook,
+        $callingTaskGroupId,
+        $crmForCurrent,
         $responsibleId
-        )
-    {
+    ) {
         $resultIds = [];
         $methodGet = '/tasks.task.list';
         $url = $hook . $methodGet;
