@@ -214,7 +214,17 @@ Route::post('/cold/smart/init', function (Request $request) {
     // responsible={{Ответственный}}&
     // created={{Постановщик ХО}}&
     // name={{Обзвон}}&
-    // crm={{ID}}
+    // crm={{ID}} || null
+
+
+    //from company
+    https://april-hook.ru/api/cold/smart/init?
+    // created={=Template:Parameter2}&
+    // responsible={=Template:Parameter3}&
+    // deadline={=Template:Parameter1}&
+    // name={=Template:Parameter4}&
+    // id={{ID}}
+    // &company_id={{Компания}}
     $comment = null;
     $smart = null;
     $sale = null;

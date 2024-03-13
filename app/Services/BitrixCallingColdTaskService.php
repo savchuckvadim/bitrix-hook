@@ -139,7 +139,7 @@ class BitrixCallingColdTaskService
                 }
             } else {
                 $currentSmart = $this->createSmartItemCold();
-                $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
+                // $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
             }
 
 
