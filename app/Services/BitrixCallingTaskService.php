@@ -746,11 +746,11 @@ class BitrixCallingTaskService
         $callThemeField = 'ufCrm10_1709907850';
 
 
-        if ($domain == 'alfacentr.bitrix24.ru') {
-            $lastCallDateField = 'ufCrm6_1709907693';
-            $commentField = 'ufCrm6_1709907513';
-            $callThemeField = 'ufCrm6_1709907816';
-        }
+        // if ($domain == 'alfacentr.bitrix24.ru') {
+        //     $lastCallDateField = 'ufCrm6_1709907693';
+        //     $commentField = 'ufCrm6_1709907513';
+        //     $callThemeField = 'ufCrm6_1709907816';
+        // }
 
 
 
