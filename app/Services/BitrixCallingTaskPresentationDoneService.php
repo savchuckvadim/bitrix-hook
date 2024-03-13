@@ -119,6 +119,15 @@ class BitrixCallingTaskPresentationDoneService
                     }
                 }
             }
+
+
+            if (!$this->currentBitrixSmart) {
+                $this->currentBitrixSmart =  $this->createSmartItemDone();
+            }
+
+
+
+
             if ($this->currentBitrixSmart) {
                 if (array_key_exists('ufCrm10_1709111529', $this->currentBitrixSmart)) {
 
@@ -144,9 +153,7 @@ class BitrixCallingTaskPresentationDoneService
 
 
             // $currentSmartItem  = $this->currentBitrixSmart;
-            if (!$this->currentBitrixSmart) {
-                $this->currentBitrixSmart =  $this->createSmartItemDone();
-            }
+
 
             $updatedCompany = $this->updateCompany($this->company);
             $updatedSmart = $this->updateSmartItem($this->currentBitrixSmart, $smartFields);
