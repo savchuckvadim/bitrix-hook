@@ -536,7 +536,7 @@ class APIBitrixController extends Controller
             $batchCommands['cmd']['updateTask_' . $taskId] = $methodUpdate . '?taskId=' . $taskId . '&fields[MARK]=P';
             $batchCommands['cmd']['completeTask_' . $taskId] = $methodComplete . '?taskId=' . $taskId;
         }
-        Log::info('Cold batch batchCommands', [$batchCommands]);
+  
         $response = Http::post($hook . '/batch', $batchCommands);
 
         // Обработка ответа от API

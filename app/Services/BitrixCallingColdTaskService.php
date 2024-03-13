@@ -68,7 +68,7 @@ class BitrixCallingColdTaskService
         $this->companyId = $companyId;
         $this->createdId = $createdId;
         $this->responsibleId = $responsibleId;
-        $this->smartId = $smartId;
+        $this->smartId = $smartId;  //может быть null
         
         $this->name = $name;
 
@@ -281,7 +281,7 @@ class BitrixCallingColdTaskService
             'fields' =>  $fieldsData
 
         ];
-
+        Log::info('createSmartItemCold', [$data]);
         // Возвращение ответа клиенту в формате JSON
 
         $smartFieldsResponse = Http::get($url, $data);

@@ -153,21 +153,34 @@ Route::post('/task', function (Request $request) {
     $smart = null;
     $sale = null;
 
-
+    $createdId = null;
+    $responsibleId = null;
     $type = null;
     if (isset($request['type'])) {
         $type = $request['type'];
     }
 
-    $created = $request['created'];
-    $responsible = $request['responsible'];
+    if (isset($request['created'])) {
+
+        $created = $request['created'];
+        $partsCreated = explode("_", $created);
+        $createdId = $partsCreated[1];
+    }
+
+    if (isset($request['responsible'])) {
+
+        $responsible = $request['responsible'];
+        $partsResponsible = explode("_", $responsible);
+        $responsibleId = $partsResponsible[1];
+    }
+
+
+
 
     // Log::info('LOG', $request->all());
 
-    $partsCreated = explode("_", $created);
-    $partsResponsible = explode("_", $responsible);
-    $createdId = $partsCreated[1];
-    $responsibleId = $partsResponsible[1];
+
+
 
 
     $auth = $request['auth'];
@@ -218,7 +231,7 @@ Route::post('/cold/smart/init', function (Request $request) {
 
 
     //from company
-    https://april-hook.ru/api/cold/smart/init?
+    https: //april-hook.ru/api/cold/smart/init?
     // created={=Template:Parameter2}&
     // responsible={=Template:Parameter3}&
     // deadline={=Template:Parameter1}&
@@ -240,8 +253,8 @@ Route::post('/cold/smart/init', function (Request $request) {
         if (isset($request['smart_id'])) {
             $smartId = $request['smart_id'];
         }
-       
-       
+
+
         $responsible = $request['responsible'];
         $partsResponsible = explode("_", $responsible);
 
@@ -333,11 +346,10 @@ Route::post('/presentation/done', function (Request $request) {
         $company = $request['company'];
     }
 
-    if(isset($request['responsibleId'])){
+    if (isset($request['responsibleId'])) {
         $responsible = $request['responsibleId'];
         $partsResponsible = explode("_", $responsible);
         $responsibleId = $partsResponsible[1];
-
     }
 
     $controller = new APIBitrixController();
