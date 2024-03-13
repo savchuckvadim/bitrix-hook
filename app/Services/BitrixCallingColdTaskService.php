@@ -198,14 +198,15 @@ class BitrixCallingColdTaskService
             // 'select' => ["ID"],
         ];
         $response = Http::get($url, $data);
-        if (isset($response['result']) && !empty($response['result'])) {
-            if (isset($response['result']['items']) && !empty($response['result']['items'])) {
-                $currentSmart =  $response['result']['items'][0];
+        $responseData = $response->json();
+        if (isset($responseData['result']) && !empty($responseData['result'])) {
+            if (isset($responseData['result']['items']) && !empty($responseData['result']['items'])) {
+                $currentSmart =  $responseData['result']['items'][0];
             }
         } else {
             $err = null;
-            if (isset($response['error_description'])) {
-                $err = $response['error_description'];
+            if (isset($responseData['error_description'])) {
+                $err = $responseData['error_description'];
             }
             return   $err;
         }
@@ -486,10 +487,11 @@ class BitrixCallingColdTaskService
 
         $response = Http::get($getUrl,  $fieldsData);
         if ($response) {
-            if (isset($response['result'])) {
-                $result =  $response['result'];
-            } else if (isset($response['error_description'])) {
-                $result =  $response['error_description'];
+            $responseData = $response->json();
+            if (isset($responseData['result'])) {
+                $result =  $responseData['result'];
+            } else if (isset($responseData['error_description'])) {
+                $result =  $responseData['error_description'];
             }
         }
         Log::info('fieldsData', ['fieldsData' => $fieldsData]);

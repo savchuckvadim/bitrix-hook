@@ -790,10 +790,11 @@ class BitrixCallingTaskService
 
         $response = Http::get($getUrl,  $fieldsData);
         if ($response) {
-            if (isset($response['result'])) {
-                $result =  $response['result'];
-            } else if (isset($response['error_description'])) {
-                $result =  $response['error_description'];
+            $responseData = $response->json();
+            if (isset($responseData['result'])) {
+                $result =  $responseData['result'];
+            } else if (isset($responseData['error_description'])) {
+                $result =  $responseData['error_description'];
             }
         }
         Log::info('fieldsData', ['fieldsData' => $fieldsData]);

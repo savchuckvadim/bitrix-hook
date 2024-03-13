@@ -624,10 +624,11 @@ class APIBitrixController extends Controller
 
         $response = Http::get($getUrl,  $fieldsData);
         if ($response) {
-            if (isset($response['result'])) {
-                $result =  $response['result'];
-            } else if (isset($response['error_description'])) {
-                $result =  $response['error_description'];
+            $responseData = $response->json();
+            if (isset($responseData['result'])) {
+                $result =  $responseData['result'];
+            } else if (isset($responseData['error_description'])) {
+                $result =  $responseData['error_description'];
             }
         }
 
@@ -653,14 +654,15 @@ class APIBitrixController extends Controller
             // 'select' => ["ID"],
         ];
         $response = Http::get($url, $data);
-        if (isset($response['result']) && !empty($response['result'])) {
-            if (isset($response['result']['items']) && !empty($response['result']['items'])) {
-                return $response['result']['items'][0];
+        $responseData = $response->json();
+        if (isset($responseData['result']) && !empty($responseData['result'])) {
+            if (isset($responseData['result']['items']) && !empty($responseData['result']['items'])) {
+                return $responseData['result']['items'][0];
             }
         } else {
             $err = null;
-            if (isset($response['error_description'])) {
-                $err = $response['error_description'];
+            if (isset($responseData['error_description'])) {
+                $err = $responseData['error_description'];
             }
             return   $err;
         }
@@ -1342,10 +1344,10 @@ class APIBitrixController extends Controller
                     "start" => $next // Передаем значение "next" в запросе
                 ]);
                 Log::info('response', ['response' => $response]);
-
-                if (isset($response['result']) && !empty($response['result'])) {
+                $responseData = $response->json();
+                if (isset($responseData['result']) && !empty($responseData['result'])) {
                     // Добавляем полученные звонки к общему списку
-                    $resultCallings = array_merge($resultCallings, $response['result']);
+                    $resultCallings = array_merge($resultCallings, $responseData['result']);
                     if (isset($response['next'])) {
                         // Получаем значение "next" из ответа
                         $next = $response['next'];
@@ -1440,11 +1442,12 @@ class APIBitrixController extends Controller
 
             ];
             $response = Http::get($url, $data);
-            if (isset($response['result']) && !empty($response['result'])) {
-                if (isset($response['result']['items']) && !empty($response['result']['items'])) {
+            $responseData = $response->json();
+            if (isset($responseData['result']) && !empty($responseData['result'])) {
+                if (isset($responseData['result']['items']) && !empty($responseData['result']['items'])) {
                     // Перебираем все элементы, чтобы найти самый свежий
                     $latestTime = new DateTime('@0'); // Дата очень давно, чтобы любое сравнение было больше
-                    foreach ($response['result']['items'] as $item) {
+                    foreach ($responseData['result']['items'] as $item) {
                         $itemTime = new DateTime($item['updatedTime']);
                         if ($itemTime > $latestTime) {
                             $latestTime = $itemTime;
