@@ -444,6 +444,7 @@ class APIBitrixController extends Controller
 
         $domain,
         $companyId,
+        $responsibleId,
         $placement,
         $company,
         $smart,
@@ -453,6 +454,7 @@ class APIBitrixController extends Controller
         $service = new BitrixCallingTaskPresentationDoneService(
             $domain,
             $companyId,
+            $responsibleId,
             $placement,
             $company,
             $smart,

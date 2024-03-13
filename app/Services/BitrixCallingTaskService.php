@@ -166,7 +166,7 @@ class BitrixCallingTaskService
             // updateSmart($hook, $smartTypeId, $smartId, $description)
             $updatedCompany = $this->updateCompanyWarm();
 
-            $updatedSmart = $this->preUpdateSmartItemStageWarm($currentSmartItem);
+            // $updatedSmart = $this->preUpdateSmartItemStageWarm($currentSmartItem);
             $updatedSmart = $this->updateSmartItemWarm($currentSmartItem);
 
             Log::info('updatedCompany', ['updatedCompany' => $updatedCompany]);
@@ -523,148 +523,7 @@ class BitrixCallingTaskService
         }
         return $resultFields;
     }
-    protected function preUpdateSmartItemStageWarm($smartItemFromBitrix)
-    {
-        $isCanChange = true;
 
-        $hook = $this->hook;
-        $smart = $this->aprilSmartData;
-
-        $result = null;
-
-        $methodSmart = '/crm.item.update.json';
-        $url = $hook . $methodSmart;
-        $entityId = $smart['crmId'];
-        //         stageId: 
-
-        //дата следующего звонка smart
-        // UF_CRM_6_1709907693 - alfa
-        // UF_CRM_10_1709907744 - april
-
-
-        //комментарии smart
-        //UF_CRM_6_1709907513 - alfa
-        // UF_CRM_10_1709883918 - april
-
-
-        //название обзвона - тема
-        // UF_CRM_6_1709907816 - alfa
-        // UF_CRM_10_1709907850 - april
-        $stagesForWarm = [
-            // april
-            'DT162_26:NEW',
-            'DT162_26:PREPARATION',
-            'DT162_26:FAIL',
-
-            'DT162_28:NEW',
-            'DT162_28:UC_J1ADFR',
-            'DT162_28:PREPARATION',
-            'DT162_28:UC_BDM2F0',
-            'DT162_28:SUCCESS',
-            'DT162_28:FAIL',
-
-            //presentation
-            'DT162_26:UC_Q5V5H0',
-
-            //alfa
-            'DT156_12:NEW',
-            'DT156_12:CLIENT',
-            'DT156_12:UC_E4BPCB',
-            'DT156_12:UC_Y52JIL',
-            'DT156_12:UC_02ZP1T',
-            'DT156_12:FAIL',
-
-            'DT156_14:NEW',
-            'DT156_14:UC_TS7I14',
-            'DT156_14:UC_8Q85WS',
-            'DT156_14:PREPARATION',
-            'DT156_14:CLIENT',
-            'DT156_14:SUCCESS',
-            'DT156_14:FAIL',
-
-
-            //presentation
-            'DT156_12:UC_LEWVV8',
-
-
-        ];
-
-        $stageId = null;
-        $fields = null;
-        $smartItemId = null;
-        $targetStageId = 'DT162_26:NEW';
-
-        // $lastCallDateField = 'ufCrm10_1709907744';
-        // $commentField = 'ufCrm10_1709883918';
-        // $callThemeField = 'ufCrm10_1709907850';
-
-
-        // if ($domain == 'alfacentr.bitrix24.ru') {
-        //     $lastCallDateField = 'ufCrm6_1709907693';
-        //     $commentField = 'ufCrm6_1709907513';
-        //     $callThemeField = 'ufCrm6_1709907816';
-        // }
-
-
-        $isCanChange = false;
-        if (isset($smartItemFromBitrix['stageId'])) {
-            $stageId =  $smartItemFromBitrix['stageId'];
-        }
-
-        if (isset($smartItemFromBitrix['id'])) {
-            $smartItemId =  $smartItemFromBitrix['id'];
-        }
-
-
-        if (strpos($stageId, 'DT162_28') !== false) {
-            $isCanChange = true;
-            $stageId = 'DT162_28:SUCCESS';
-        } elseif (strpos($stageId, 'DT156_14') !== false) {
-            $isCanChange = true;
-            $stageId = 'DT156_14:SUCCESS';
-        } else {
-            // Если ни одно из сочетаний не найдено, $newId останется неизменным или каким-то другим значением по умолчанию
-            $stageId = 'DT162_28:SUCCESS'; // или любое другое значение по умолчанию
-        }
-
-        if ($isCanChange) {
-            $fields = [
-                'stageId' =>   $targetStageId,
-                // $lastCallDateField => $deadline,
-                // $commentField => $currentComments,
-                // $callThemeField => $callName
-            ];
-            // }
-            $data = [
-                'entityTypeId' => $entityId,
-                'id' =>  $smartItemId,
-                'fields' => $fields
-
-
-            ];
-
-            $smartFieldsResponse = Http::get($url, $data);
-            // $bitrixResponse = $smartFieldsResponse->json();
-
-
-            if (isset($smartFieldsResponse['result'])) {
-                $result = $smartFieldsResponse['result'];
-            } else  if (isset($smartFieldsResponse['error_description'])) {
-                $result = $smartFieldsResponse['error_description'];
-            }
-
-
-            // Возвращение ответа клиенту в формате JSON
-
-            $testingResult = [
-
-                'bitrixResult' => $result
-
-            ];
-
-            return $testingResult;
-        }
-    }
     protected function updateSmartItemWarm($smartItemFromBitrix)
     {
         $isCanChange = false;

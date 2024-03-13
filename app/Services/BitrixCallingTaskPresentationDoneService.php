@@ -28,11 +28,16 @@ class BitrixCallingTaskPresentationDoneService
     protected $placement;
     protected $company;
     protected $currentBitrixSmart;
+    protected $responsibleId;
 
+
+    protected $categoryId;
+    protected $stageId;
 
     public function __construct(
         $domain,
         $companyId,
+        $responsibleId,
         $placement,
         $company,
         $smart
@@ -44,17 +49,23 @@ class BitrixCallingTaskPresentationDoneService
         $this->portal = $portal;
         $this->aprilSmartData = $portal['bitrixSmart'];
 
+        $categoryId = 26;
+        $stageId = 'DT162_26:CLIENT';
 
+        if ($domain === 'alfacentr.bitrix24.ru') {
+            $categoryId = 12;
+            $stageId = 'DT156_12:UC_DP0NEJ';
+        }
 
+        $this->categoryId = $categoryId;
+        $this->stageId = $stageId;
+        //alfa pre done DT156_12:UC_DP0NEJ 12
         $this->domain = $domain;
         $this->companyId = $companyId;
-
         $this->placement = $placement;
-
         $this->company = $company;
-
         $this->currentBitrixSmart = $smart;
-
+        $this->$responsibleId = $responsibleId;
 
 
 
@@ -132,10 +143,13 @@ class BitrixCallingTaskPresentationDoneService
             }
 
 
-            $currentSmartItem  = $this->currentBitrixSmart;
+            // $currentSmartItem  = $this->currentBitrixSmart;
+            if (!$this->currentBitrixSmart) {
+                $this->currentBitrixSmart =  $this->createSmartItemDone();
+            }
 
             $updatedCompany = $this->updateCompany($this->company);
-            $updatedSmart = $this->updateSmartItem($currentSmartItem, $smartFields);
+            $updatedSmart = $this->updateSmartItem($this->currentBitrixSmart, $smartFields);
 
             return APIOnlineController::getResponse(
                 0,
@@ -177,6 +191,51 @@ class BitrixCallingTaskPresentationDoneService
 
 
     //smart
+    protected function createSmartItemDone()
+    {
+        $methodSmart = '/crm.item.add.json';
+        $url = $this->hook . $methodSmart;
+
+        $companyId  = $this->companyId;
+        $responsibleId  = $this->responsibleId;
+        $smart  = $this->aprilSmartData;
+
+
+        $resulFields = [];
+        $fieldsData = [];
+        $fieldsData['categoryId'] = $this->categoryId;
+        $fieldsData['stageId'] = $this->stageId;
+        $fieldsData['ufCrm7_1698134405'] = $companyId;
+        $fieldsData['assigned_by_id'] = $responsibleId;
+        $fieldsData['company_id'] = $companyId;
+        // $fieldsData[$this->lastCallDateField] = $this->deadline;  //дата звонка следующего
+        // $fieldsData[$this->lastCallDateFieldCold] = $this->deadline; //дата холодного следующего
+        // $fieldsData[$this->callThemeField] = $this->name;      //тема следующего звонка
+        // $fieldsData[$this->callThemeFieldCold] = $this->name;  //тема холодного звонка
+
+
+
+
+
+
+        $entityId = $smart['crmId'];
+        $data = [
+            'entityTypeId' => $entityId,
+            'fields' =>  $fieldsData
+
+        ];
+
+        // Возвращение ответа клиенту в формате JSON
+
+        $smartFieldsResponse = Http::get($url, $data);
+        $bitrixResponse = $smartFieldsResponse->json();
+
+
+        if (isset($smartFieldsResponse['result'])) {
+            $resultFields = $smartFieldsResponse['result'];
+        }
+        return $resultFields;
+    }
 
     protected function updateSmartItem($smartItemFromBitrix, $smartFields)
     {

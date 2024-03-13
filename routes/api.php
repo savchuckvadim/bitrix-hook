@@ -310,7 +310,7 @@ Route::post('/presentation/done', function (Request $request) {
     $auth = $request['auth'];
     $domain = $auth['domain'];
     $companyId = $request['company_id'];
-
+    $responsibleId = null;
 
     //only from front calling
     if (
@@ -323,11 +323,18 @@ Route::post('/presentation/done', function (Request $request) {
         $company = $request['company'];
     }
 
+    if(isset($request['responsibleId'])){
+        $responsible = $request['responsibleId'];
+        $partsResponsible = explode("_", $responsible);
+        $responsibleId = $partsResponsible[1];
+
+    }
 
     $controller = new APIBitrixController();
     return $controller->presentationDone(
         $domain,
         $companyId,
+        $responsibleId,
         $placement,
         $company,
         $smart,
