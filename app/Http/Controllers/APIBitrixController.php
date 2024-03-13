@@ -43,6 +43,11 @@ class APIBitrixController extends Controller
             }
 
 
+            $smartBitrixId = 'T9c_';
+            if (isset($portal['bitrixSmart']) && isset($portal['bitrixSmart']['crm'])) {
+                $smartBitrixId =  $portal['bitrixSmart']['crm'] . '_';
+            }
+
             if (!$smartId) { //если
                 $getSmartItemId = $this->getSmartItem($hook, $smart, $companyId, $responsibleId);
                 // $gettedSmart =  $getSmartItemId;
@@ -53,7 +58,7 @@ class APIBitrixController extends Controller
 
                 // return APIOnlineController::getResponse(0, 'success', ['crm' => $crm]);
             }
-            $crmForCurrent = [$smartId . ''  . '' . $smartId];
+            $crmForCurrent = [$smartBitrixId . ''  . '' . $smartId];
 
             $currentTasksIds = $this->getCurrentTasksIds(
                 $hook,
