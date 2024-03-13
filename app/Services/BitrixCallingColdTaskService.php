@@ -132,7 +132,18 @@ class BitrixCallingColdTaskService
 
             // }
             $updatedCompany = $this->updateCompanyCold();
+
+            Log::info('COLD first updatedCompany', [
+                'updatedCompany' => $updatedCompany,
+             
+            ]);
+
+
             $currentSmart = $this->getSmartItem();
+            Log::info('COLD first getSmartItem', [
+                'currentSmart' => $currentSmart,
+             
+            ]);
             if ($currentSmart) {
                 if (isset($currentSmart['id'])) {
                     $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
@@ -285,7 +296,7 @@ class BitrixCallingColdTaskService
             'fields' =>  $fieldsData
 
         ];
-        Log::info('createSmartItemCold', [$data]);
+        Log::info('create Smart Item Cold', [$data]);
         // Возвращение ответа клиенту в формате JSON
 
         $smartFieldsResponse = Http::get($url, $data);
