@@ -630,152 +630,152 @@ Route::post('/install/smart/', function (Request $request) {
 
 
 
-Route::post('/update/smart/', function (Request $request) {
+// Route::post('/update/smart/', function (Request $request) {
 
-    $auth = $request['auth'];
-    $domain = $auth['domain'];
-
-
-    $created = $request['created'];
-    $responsible = $request['responsible'];
-
-    Log::info('LOG', $request->all());
-
-    $partsCreated = explode("_", $created);
-    $partsResponsible = explode("_", $responsible);
-    $createdId = $partsCreated[1];
-    $responsibleId = $partsResponsible[1];
+//     $auth = $request['auth'];
+//     $domain = $auth['domain'];
 
 
-    $auth = $request['auth'];
-    $domain = $auth['domain'];
-    $crm = $request['document_id'][2];
-    // $companyId = $request['company_id'];
+//     $created = $request['created'];
+//     $responsible = $request['responsible'];
 
-    $deadline = $request['deadline'];
-    $name = $request['name'];
-    $currentSmartId = $request['id'];
-    $logData = [
-        'crm' => $crm,
-        'currentSmartId' => $currentSmartId,
-        'domain' => $domain,
-        'deadline' => $deadline,
-        'createdId' => $createdId,
-        'responsibleId' => $responsibleId,
-        'name' => $name,
-    ];
+//     Log::info('LOG', $request->all());
 
-    // Log::info('REQUEST', $request->all());
-    Log::info('REQUEST DATA', $logData);
-
-    try {
+//     $partsCreated = explode("_", $created);
+//     $partsResponsible = explode("_", $responsible);
+//     $createdId = $partsCreated[1];
+//     $responsibleId = $partsResponsible[1];
 
 
-        // APIBitrixController::getSmartStages($domain);
+//     $auth = $request['auth'];
+//     $domain = $auth['domain'];
+//     $crm = $request['document_id'][2];
+//     // $companyId = $request['company_id'];
 
-        //portal and keys
-        $portal = PortalController::getPortal($domain);
-        Log::info('portal', ['portal' => $portal]);
-        $portal = $portal['data'];
-        Log::info('portalData', ['portal' => $portal]);
+//     $deadline = $request['deadline'];
+//     $name = $request['name'];
+//     $currentSmartId = $request['id'];
+//     $logData = [
+//         'crm' => $crm,
+//         'currentSmartId' => $currentSmartId,
+//         'domain' => $domain,
+//         'deadline' => $deadline,
+//         'createdId' => $createdId,
+//         'responsibleId' => $responsibleId,
+//         'name' => $name,
+//     ];
 
-        //base hook
-        $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
-        $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+//     // Log::info('REQUEST', $request->all());
+//     Log::info('REQUEST DATA', $logData);
 
-
-
-        //user and time
-        $createdTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
-        $methodGetUser = '/user.get.json';
-        $url = $hook . $methodGetUser;
-        $userData = [
-            'id' => $createdId
-        ];
-        $userResponse =  $responseData = Http::get($url, $userData);
-        Log::info('RESPONSIBLE', ['userResponse' => $userResponse]);
-        // if ($userResponse && $userResponse['result'] && $userResponse['result'][0]) {
-        //     $userTimeZone =  $userResponse['result'][0]['TIME_ZONE'];
-        //     if ($userTimeZone) {
-        //         $createdTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, $userTimeZone);
-        //     }
-        // }
-
-        // $nowDate = now();
-        // $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
-        $moscowTime = $createdTime->setTimezone('Europe/Moscow');
-        $moscowTime = $moscowTime->format('Y-m-d H:i:s');
-        Log::info('novosibirskTime', ['novosibirskTime' => $createdTime]);
-        Log::info('moscowTime', ['moscowTime' => $moscowTime]);
+//     try {
 
 
-        //smart update
+//         // APIBitrixController::getSmartStages($domain);
 
-        //get smart
-        //  $methodSmartUpdate = '/crm.item.update.json';
-        // $methodSmartGet = '/crm.item.get.json';
-        // $url = $hook . $methodSmartGet;
-        // $smartGetData =  [
-        //     'id' => $currentSmartId,
-        //     'entityTypeId' => env('BITRIX_SMART_MAIN_ID'),
-        // 'fields' => [
-        //     'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
-        //     'RESPONSIBLE_ID' => $responsibleId,
-        //     'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
-        //     'CHANGED_BY' => $createdId, //- постановщик;
-        //     'CREATED_BY' => $createdId, //- постановщик;
-        //     'CREATED_DATE' => $nowDate, // - дата создания;
-        //     'DEADLINE' => $moscowTime, //- крайний срок;
-        //     'UF_CRM_TASK' => ['T9c_' . $crm],
-        //     'ALLOW_CHANGE_DEADLINE' => 'N',
-        //     'DESCRIPTION' => $description
-        // ]
-        // ];
+//         //portal and keys
+//         $portal = PortalController::getPortal($domain);
+//         Log::info('portal', ['portal' => $portal]);
+//         $portal = $portal['data'];
+//         Log::info('portalData', ['portal' => $portal]);
 
-        // $responseGetData = Http::get($url, $smartGetData);
-        // Log::info('responseGetData', ['responseGetData' => $responseGetData]);
-
-        //update smart
-        //  $methodSmartUpdate = '/crm.item.update.json';
-        $methodSmartUpdate = '/crm.item.update.json';
-        $url = $hook . $methodSmartUpdate;
-        $smartUpdateData =  [
-            'id' => $currentSmartId,
-            'entityTypeId' => env('BITRIX_SMART_MAIN_ID'),
-            'fields' => [
-                // 'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
-                'assignedById' => $responsibleId,
-                // 'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
-                // 'CHANGED_BY' => $createdId, //- постановщик;
-                // 'CREATED_BY' => $createdId, //- постановщик;
-                // 'CREATED_DATE' => $nowDate, // - дата создания;
-                // 'DEADLINE' => $moscowTime, //- крайний срок;
-                // 'UF_CRM_TASK' => ['T9c_' . $crm],
-                // 'ALLOW_CHANGE_DEADLINE' => 'N',
-                // 'DESCRIPTION' => $description
-                "ufCrm_1696580389" => $deadline,
-                "ufCrm_6_1702453779" => $createdId,
-                "ufCrm_6_1702652862" => $responsibleId,
-                "ufCrm_6_1700645937" => $name,
-
-                "stageId" => 'DT156_14:NEW',
+//         //base hook
+//         $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+//         $hook = 'https://' . $domain  . '/' . $webhookRestKey;
 
 
-            ]
-        ];
 
-        $responseData = Http::get($url, $smartUpdateData);
-        Log::info('responseData', ['responseData' => $responseData]);
-    } catch (\Throwable $th) {
-        Log::error('ERROR: Exception caught', [
-            'message'   => $th->getMessage(),
-            'file'      => $th->getFile(),
-            'line'      => $th->getLine(),
-            'trace'     => $th->getTraceAsString(),
-        ]);
-        return APIOnlineController::getResponse(1, $th->getMessage(), null);
-    }
-});
+//         //user and time
+//         $createdTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
+//         $methodGetUser = '/user.get.json';
+//         $url = $hook . $methodGetUser;
+//         $userData = [
+//             'id' => $createdId
+//         ];
+//         $userResponse =  $responseData = Http::get($url, $userData);
+//         Log::info('RESPONSIBLE', ['userResponse' => $userResponse]);
+//         // if ($userResponse && $userResponse['result'] && $userResponse['result'][0]) {
+//         //     $userTimeZone =  $userResponse['result'][0]['TIME_ZONE'];
+//         //     if ($userTimeZone) {
+//         //         $createdTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, $userTimeZone);
+//         //     }
+//         // }
+
+//         // $nowDate = now();
+//         // $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
+//         $moscowTime = $createdTime->setTimezone('Europe/Moscow');
+//         $moscowTime = $moscowTime->format('Y-m-d H:i:s');
+//         Log::info('novosibirskTime', ['novosibirskTime' => $createdTime]);
+//         Log::info('moscowTime', ['moscowTime' => $moscowTime]);
+
+
+//         //smart update
+
+//         //get smart
+//         //  $methodSmartUpdate = '/crm.item.update.json';
+//         // $methodSmartGet = '/crm.item.get.json';
+//         // $url = $hook . $methodSmartGet;
+//         // $smartGetData =  [
+//         //     'id' => $currentSmartId,
+//         //     'entityTypeId' => env('BITRIX_SMART_MAIN_ID'),
+//         // 'fields' => [
+//         //     'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
+//         //     'RESPONSIBLE_ID' => $responsibleId,
+//         //     'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
+//         //     'CHANGED_BY' => $createdId, //- постановщик;
+//         //     'CREATED_BY' => $createdId, //- постановщик;
+//         //     'CREATED_DATE' => $nowDate, // - дата создания;
+//         //     'DEADLINE' => $moscowTime, //- крайний срок;
+//         //     'UF_CRM_TASK' => ['T9c_' . $crm],
+//         //     'ALLOW_CHANGE_DEADLINE' => 'N',
+//         //     'DESCRIPTION' => $description
+//         // ]
+//         // ];
+
+//         // $responseGetData = Http::get($url, $smartGetData);
+//         // Log::info('responseGetData', ['responseGetData' => $responseGetData]);
+
+//         //update smart
+//         //  $methodSmartUpdate = '/crm.item.update.json';
+//         $methodSmartUpdate = '/crm.item.update.json';
+//         $url = $hook . $methodSmartUpdate;
+//         $smartUpdateData =  [
+//             'id' => $currentSmartId,
+//             'entityTypeId' => env('BITRIX_SMART_MAIN_ID'),
+//             'fields' => [
+//                 // 'TITLE' => 'Холодный обзвон  ' . $name . '  ' . $deadline,
+//                 'assignedById' => $responsibleId,
+//                 // 'GROUP_ID' => env('BITRIX_CALLING_GROUP_ID'),
+//                 // 'CHANGED_BY' => $createdId, //- постановщик;
+//                 // 'CREATED_BY' => $createdId, //- постановщик;
+//                 // 'CREATED_DATE' => $nowDate, // - дата создания;
+//                 // 'DEADLINE' => $moscowTime, //- крайний срок;
+//                 // 'UF_CRM_TASK' => ['T9c_' . $crm],
+//                 // 'ALLOW_CHANGE_DEADLINE' => 'N',
+//                 // 'DESCRIPTION' => $description
+//                 "ufCrm_1696580389" => $deadline,
+//                 "ufCrm_6_1702453779" => $createdId,
+//                 "ufCrm_6_1702652862" => $responsibleId,
+//                 "ufCrm_6_1700645937" => $name,
+
+//                 "stageId" => 'DT156_14:NEW',
+
+
+//             ]
+//         ];
+
+//         $responseData = Http::get($url, $smartUpdateData);
+//         Log::info('responseData', ['responseData' => $responseData]);
+//     } catch (\Throwable $th) {
+//         Log::error('ERROR: Exception caught', [
+//             'message'   => $th->getMessage(),
+//             'file'      => $th->getFile(),
+//             'line'      => $th->getLine(),
+//             'trace'     => $th->getTraceAsString(),
+//         ]);
+//         return APIOnlineController::getResponse(1, $th->getMessage(), null);
+//     }
+// });
 
 
 

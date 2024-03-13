@@ -94,21 +94,7 @@ class APIBitrixController extends Controller
             $currentSmartItem = null;
 
 
-            //SMART
-            // $categoriesStages = $this->getCurrentSmartStages(
-            //     $hook,
-            //     $smart
-            // );
-            // $smartFields = $this->getCurrentSmartFields(
-            //     $hook,
-            //     $smart
-            // );
-
-
-
-
-
-
+     
 
             $callingTaskGroupId = env('BITRIX_CALLING_GROUP_ID');
             if (isset($portal['bitrixCallingTasksGroup']) && isset($portal['bitrixCallingTasksGroup']['bitrixId'])) {
@@ -130,6 +116,17 @@ class APIBitrixController extends Controller
 
                 // return APIOnlineController::getResponse(0, 'success', ['crm' => $crm]);
             }
+            $crmForCurrent = [$smartId . ''  . '' . $crm];
+
+            $currentTasksIds = $this->getCurrentTasksIds(
+                $hook, 
+                $callingTaskGroupId, 
+                $crmForCurrent, 
+                $responsibleId
+            );
+            // Log::info('currentTasksIds', [$currentTasksIds]);
+            $this->completeTask($hook, $currentTasksIds);
+
 
             // if (!$currentSmartItem) {
             //     $newSmart = $this->createSmartItem(
@@ -430,7 +427,12 @@ class APIBitrixController extends Controller
 
 
 
-    protected function getCurrentTasksIds($hook, $callingTaskGroupId, $crmForCurrent, $responsibleId)
+    protected function getCurrentTasksIds(
+        $hook, 
+        $callingTaskGroupId, 
+        $crmForCurrent, 
+        $responsibleId
+        )
     {
         $resultIds = [];
         $methodGet = '/tasks.task.list';
