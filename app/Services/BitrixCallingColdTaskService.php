@@ -21,7 +21,7 @@ class BitrixCallingColdTaskService
     // protected $type;
     protected $domain;
     protected $companyId;
-    // protected $createdId;
+    protected $createdId;
     protected $responsibleId;
     protected $deadline;
     protected $name;
@@ -38,11 +38,13 @@ class BitrixCallingColdTaskService
     protected $lastCallDateFieldCold = 'ufCrm10_1701270138';
     protected $callThemeFieldCold = 'ufCrm10_1703491835';
 
+
+    protected $createdFieldCold = 'ufCrm6_1702453779';
     public function __construct(
         // $type,
         $domain,
         $companyId,
-        // $createdId,
+        $createdId,
         $responsibleId,
         $deadline,
         $name,
@@ -63,7 +65,7 @@ class BitrixCallingColdTaskService
         // $this->type = $type;
         $this->domain = $domain;
         $this->companyId = $companyId;
-        // $this->createdId = $createdId;
+        $this->createdId = $createdId;
         $this->responsibleId = $responsibleId;
 
         $this->name = $name;
@@ -98,8 +100,8 @@ class BitrixCallingColdTaskService
 
 
         if ($domain == 'alfacentr.bitrix24.ru') {
-            $this->lastCallDateField = 'ufCrm6_1709907693';
-            $this->callThemeField = 'ufCrm6_1709907816';
+            // $this->lastCallDateField = 'ufCrm6_1709907693';
+            // $this->callThemeField = 'ufCrm6_1709907816';
             $this->lastCallDateFieldCold = 'ufCrm6_1709907693';
             $this->callThemeFieldCold = 'ufCrm6_1700645937';
             $this->categoryId = 14;
@@ -327,7 +329,7 @@ class BitrixCallingColdTaskService
         //     $stageId = 'DT156_14:NEW';
         // }
 
-
+        // UF_CRM_6_1702453779 alfacenter Постановщик ХО - smart field
 
         $companyId  = $this->companyId;
         $responsibleId  = $this->responsibleId;
@@ -346,7 +348,12 @@ class BitrixCallingColdTaskService
         $fieldsData[$this->lastCallDateFieldCold] = $this->deadline; //дата холодного следующего
         $fieldsData[$this->callThemeField] = $this->name;      //тема следующего звонка
         $fieldsData[$this->callThemeFieldCold] = $this->name;  //тема холодного звонка
+        
+        if($this->createdId){
+            $fieldsData[$this->createdFieldCold] = $this->createdId;  //тема холодного звонка
 
+        }
+       
 
 
 
@@ -356,7 +363,7 @@ class BitrixCallingColdTaskService
         $data = [
             'id' => $smartId,
             'entityTypeId' => $entityId,
-           
+
             'fields' =>  $fieldsData
 
         ];

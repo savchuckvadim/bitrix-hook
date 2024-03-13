@@ -21,6 +21,7 @@ class APIBitrixController extends Controller
     public function initialCold(
         $domain,
         $companyId,
+        $createdId,
         $responsibleId,
         $deadline,
         $name,
@@ -30,6 +31,7 @@ class APIBitrixController extends Controller
             $service = new BitrixCallingColdTaskService(
                 $domain,
                 $companyId,
+                $createdId,
                 $responsibleId,
                 $deadline,
                 $name,

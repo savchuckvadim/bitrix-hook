@@ -218,21 +218,18 @@ Route::post('/cold/smart/init', function (Request $request) {
     $comment = null;
     $smart = null;
     $sale = null;
+    $createdId =  null;
 
     try {
-        // $type = null;
-        // if (isset($request['type'])) {
-        //     $type = $request['type'];
-        // }
-
-        // $created = $request['created'];
+        if (isset($request['created'])) {
+            $created = $request['created'];
+            $partsCreated = explode("_", $created);
+            $createdId = $partsCreated[1];
+        }
+       
         $responsible = $request['responsible'];
-
-        // Log::info('LOG', $request->all());
-
-        // $partsCreated = explode("_", $created);
         $partsResponsible = explode("_", $responsible);
-        // $createdId = $partsCreated[1];
+
         $responsibleId = $partsResponsible[1];
 
 
@@ -253,14 +250,14 @@ Route::post('/cold/smart/init', function (Request $request) {
         //     $smart = $request['smart'];
         //     $sale = $request['sale'];
         // }
-       
+
 
         $controller = new APIBitrixController();
         return $controller->initialCold(
             // $type,
             $domain,
             $companyId,
-            // $createdId,
+            $createdId,
             $responsibleId,
             $deadline,
             $name,
@@ -280,23 +277,6 @@ Route::post('/cold/smart/init', function (Request $request) {
         Log::info('error COLD', ['error' => $th->getMessage()]);
     }
 });
-
-
-Route::post('/cold/test', function (Request $request) {
-    Log::info('TEST INITIAL COLD', [
-        'cold/test' => 'success'
-
-    ]);
-});
-
-// Route::get('/cold/test', function (Request $request) {
-//     Log::info('TEST INITIAL COLD', [
-//         'cold/test' => 'success'
-
-//     ]);
-
-//     echo 'it is cool';
-// });
 
 
 
