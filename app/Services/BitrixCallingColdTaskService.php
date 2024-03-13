@@ -104,8 +104,8 @@ class BitrixCallingColdTaskService
         if ($domain == 'alfacentr.bitrix24.ru') {
             // $this->lastCallDateField = 'ufCrm6_1709907693';
             // $this->callThemeField = 'ufCrm6_1709907816';
-            $this->lastCallDateFieldCold = 'ufCrm6_1709907693';
-            $this->callThemeFieldCold = 'ufCrm6_1700645937';
+            // $this->lastCallDateFieldCold = 'ufCrm6_1709907693';
+            // $this->callThemeFieldCold = 'ufCrm6_1700645937';
             $this->categoryId = 14;
             $this->stageId = 'DT156_14:NEW';
         }
