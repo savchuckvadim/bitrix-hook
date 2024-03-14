@@ -113,12 +113,12 @@ class BitrixCallingColdTaskService
 
         $targetDeadLine = $deadline;
         $nowDate = now();
-        if ($domain === 'alfacentr.bitrix24.ru') {
+        // if ($domain === 'alfacentr.bitrix24.ru') {
 
-            $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
-            $targetDeadLine = $novosibirskTime->setTimezone('Europe/Moscow');
-            $targetDeadLine = $targetDeadLine->format('Y-m-d H:i:s');
-        }
+        //     $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
+        //     $targetDeadLine = $novosibirskTime->setTimezone('Europe/Moscow');
+        //     $targetDeadLine = $targetDeadLine->format('Y-m-d H:i:s');
+        // }
         $this->deadline = $targetDeadLine;
         $this->taskTitle = $stringType . $name . '  ' . $deadline;
     }

@@ -231,7 +231,7 @@ Route::post('/cold/smart/init', function (Request $request) {
 
 
     //from company
-    https: //april-hook.ru/api/cold/smart/init?
+    // https: //april-hook.ru/api/cold/smart/init?
     // created={=Template:Parameter2}&
     // responsible={=Template:Parameter3}&
     // deadline={=Template:Parameter1}&
