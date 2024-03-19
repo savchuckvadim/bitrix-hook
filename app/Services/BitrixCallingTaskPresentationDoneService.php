@@ -28,7 +28,7 @@ class BitrixCallingTaskPresentationDoneService
     protected $placement;
     protected $company;
     protected $currentBitrixSmart;
-    protected $responsibleId;
+    // protected $responsibleId;
     protected $assignedById;
 
     protected $categoryId;
@@ -65,7 +65,7 @@ class BitrixCallingTaskPresentationDoneService
         $this->placement = $placement;
         $this->company = $company;
         $this->currentBitrixSmart = $smart;
-        $this->$responsibleId = $responsibleId;
+        // $this->$responsibleId = $responsibleId;
         $this->assignedById = $responsibleId;
         Log::info('DONE_SERVICE', ['come data' => [
             'domain' =>   $domain,
@@ -176,7 +176,7 @@ class BitrixCallingTaskPresentationDoneService
                     'updatedCompany' => $updatedCompany,
                     'updatedSmart' => $updatedSmart,
                     'currentSmartItem' => $currentSmartItem,
-                    'responsibleId' =>  $this->responsibleId,
+                   
                     'assignedById' =>   $this->assignedById,
                     'currentBitrixSmart' => $this->currentBitrixSmart,
                     // 'sale' => $this->sale,
@@ -214,7 +214,7 @@ class BitrixCallingTaskPresentationDoneService
         $url = $this->hook . $methodSmart;
 
         $companyId  = $this->companyId;
-        $responsibleId  = $this->responsibleId;
+        $responsibleId  = $this->assignedById;
         $smart  = $this->aprilSmartData;
 
 
@@ -412,7 +412,7 @@ class BitrixCallingTaskPresentationDoneService
         $method = '/crm.company.update.json';
         $result = null;
 
-        $this->company['UF_CRM_1709798145'] = $this->responsibleId;
+        $this->company['UF_CRM_1709798145'] = $this->assignedById;
         if (array_key_exists('UF_CRM_1709807026', $this->company)) {
             // if ($this->company['UF_CRM_1709807026'] == null || $this->company['UF_CRM_1709807026'] == 0 || $this->company['UF_CRM_1709807026'] == "0") {
             //     $this->company['UF_CRM_1709807026'] = 1;
