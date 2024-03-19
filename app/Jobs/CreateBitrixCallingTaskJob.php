@@ -26,7 +26,7 @@ class CreateBitrixCallingTaskJob implements ShouldQueue
     // protected $crm;
     protected $currentBitrixSmart;
     protected $sale;
-    protected $isOnemore;
+    protected $isOneMoreJob;
     
     /**
      * Create a new job instance.
@@ -43,7 +43,7 @@ class CreateBitrixCallingTaskJob implements ShouldQueue
         // $crm,
         $currentBitrixSmart,
         $sale,
-        $isOnemore,
+        $isOneMore,
     ) {
         $this->type = $type;
         $this->domain = $domain;
@@ -56,7 +56,7 @@ class CreateBitrixCallingTaskJob implements ShouldQueue
         // $this->crm = $crm;
         $this->currentBitrixSmart = $currentBitrixSmart;
         $this->sale = $sale;
-        $this->isOnemore = $isOnemore;
+        $this->isOneMoreJob = $isOneMore;
     }
 
     /**
@@ -75,7 +75,7 @@ class CreateBitrixCallingTaskJob implements ShouldQueue
             $this->comment,
             $this->currentBitrixSmart,
             $this->sale,
-            $this->isOnemore
+            $this->isOneMoreJob
         );
         $service->createCallingTaskItem();
     }

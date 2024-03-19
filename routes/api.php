@@ -51,7 +51,7 @@ Route::post('/task/warm', function (Request $request) {
     $comment = null;
     $smart = null;
     $sale = null;
-    $isOnemore = $request['$isOnemore'];
+    $isOneMore = $request['$isOneMore'];
 
     $type = null;
     if (isset($request['type'])) {
@@ -101,7 +101,7 @@ Route::post('/task/warm', function (Request $request) {
         // $crm,
         $smart,
         $sale,
-        $isOnemore
+        $isOneMore
     );
 });
 
