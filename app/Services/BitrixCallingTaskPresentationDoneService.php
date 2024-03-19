@@ -159,7 +159,9 @@ class BitrixCallingTaskPresentationDoneService
                     ];
                 }
             }
-
+            $smartFields = [
+                'ufCrm10_1709111529' => $currentSmartCount
+            ];
 
             // $currentSmartItem  = $this->currentBitrixSmart;
 
@@ -376,8 +378,8 @@ class BitrixCallingTaskPresentationDoneService
             $domain,
             $stageId,
             $smart, //data from back
-            $smartItemFromBitrix,
-           '$smartFields for update' => $smartFields,
+            '$smartItemFromBitrix' => $smartItemFromBitrix,
+            '$smartFields for update' => $smartFields,
             $targetStageId,
             $data,
             // 'isCanChange' => $isCanChange,
