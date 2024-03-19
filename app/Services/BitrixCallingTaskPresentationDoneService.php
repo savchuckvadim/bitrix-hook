@@ -100,9 +100,9 @@ class BitrixCallingTaskPresentationDoneService
         $smartFields = [];
         try {
 
-            if ($currentSmartItem && isset($currentSmartItem) && isset($currentSmartItem['id'])) {
-                $currentSmartItemId = $currentSmartItem['id'];
-            }
+            // if ($currentSmartItem && isset($currentSmartItem) && isset($currentSmartItem['id'])) {
+            //     $currentSmartItemId = $currentSmartItem['id'];
+            // }
 
             if ($this->company) {
                 $this->company['UF_CRM_1709798145'] = $this->responsibleId;
@@ -120,7 +120,7 @@ class BitrixCallingTaskPresentationDoneService
                     }
                 }
             }
-
+            $updatedCompany = $this->updateCompany($this->company);
 
             if (!$this->currentBitrixSmart) {
                 $this->currentBitrixSmart =  $this->createSmartItemDone();
@@ -156,7 +156,7 @@ class BitrixCallingTaskPresentationDoneService
             // $currentSmartItem  = $this->currentBitrixSmart;
 
 
-            $updatedCompany = $this->updateCompany($this->company);
+
             $updatedSmart = $this->updateSmartItem($this->currentBitrixSmart, $smartFields);
 
             return APIOnlineController::getResponse(
