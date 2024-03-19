@@ -335,21 +335,14 @@ Route::post('/presentation/done', function (Request $request) {
     $companyId = $request['company_id'];
     // $responsibleId = null;
 
-    //only from front calling
-    if (
-        isset($request['placement'])
-        && isset($request['smart'])
-        && isset($request['company'])
-    ) {
-        $placement = $request['placement'];
-        $smart = $request['smart'];
-        $company = $request['company'];
-    }
+    $placement = $request['placement'];
+    $smart = $request['smart'];
+    $company = $request['company'];
 
     // if (isset($request['responsibleId'])) {
-        $responsible = $request['responsibleId'];
-        $partsResponsible = explode("_", $responsible);
-        $responsibleId = $partsResponsible[1];
+    $responsible = $request['responsibleId'];
+    $partsResponsible = explode("_", $responsible);
+    $responsibleId = $partsResponsible[1];
     // }
 
     $controller = new APIBitrixController();

@@ -433,8 +433,21 @@ class APIBitrixController extends Controller
             $smart
         );
 
-        $failTask = $service->presentationDone();
-        return  $failTask;
+        $failTask = $service->done();
+        // return  $failTask;
+
+        return APIOnlineController::getSuccess(
+            ['comeData' => [
+                $domain,
+                $companyId,
+                $responsibleId,
+                $placement,
+                $company,
+                $smart 
+            ],
+            'resultData' => $failTask 
+            ]
+        );
     }
 
 

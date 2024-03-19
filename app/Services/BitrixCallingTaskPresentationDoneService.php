@@ -89,7 +89,7 @@ class BitrixCallingTaskPresentationDoneService
         $this->smartCrmId =  $smartId;
     }
 
-    public function presentationDone()
+    public function done()
     {
 
 
@@ -120,7 +120,7 @@ class BitrixCallingTaskPresentationDoneService
                     }
                 }
             }
-            $updatedCompany = $this->updateCompany($this->company);
+            $updatedCompany = $this->updateCompanyDone($this->company);
 
             if (!$this->currentBitrixSmart) {
                 $this->currentBitrixSmart =  $this->createSmartItemDone();
@@ -157,7 +157,7 @@ class BitrixCallingTaskPresentationDoneService
 
 
 
-            $updatedSmart = $this->updateSmartItem($this->currentBitrixSmart, $smartFields);
+            $updatedSmart = $this->updateSmartItemDone($this->currentBitrixSmart, $smartFields);
 
             return APIOnlineController::getResponse(
                 0,
@@ -245,7 +245,7 @@ class BitrixCallingTaskPresentationDoneService
         return $resultFields;
     }
 
-    protected function updateSmartItem($smartItemFromBitrix, $smartFields)
+    protected function updateSmartItemDone($smartItemFromBitrix, $smartFields)
     {
         $isCanChange = false;
 
@@ -383,7 +383,7 @@ class BitrixCallingTaskPresentationDoneService
 
     //company
 
-    protected function updateCompany($company)
+    protected function updateCompanyDone($company)
     {
 
         // компании count
@@ -402,7 +402,22 @@ class BitrixCallingTaskPresentationDoneService
 
         $method = '/crm.company.update.json';
         $result = null;
+      
+            $this->company['UF_CRM_1709798145'] = $this->responsibleId;
+            if (array_key_exists('UF_CRM_1709807026', $this->company)) {
+                // if ($this->company['UF_CRM_1709807026'] == null || $this->company['UF_CRM_1709807026'] == 0 || $this->company['UF_CRM_1709807026'] == "0") {
+                //     $this->company['UF_CRM_1709807026'] = 1;
+                // } else {
+                $currentCompanyCount = (int)$this->company['UF_CRM_1709807026'] + 1;   //количество презентаций
+                // }
 
+                $this->company['UF_CRM_1709807026'] = $currentCompanyCount;
+                if (array_key_exists('UF_CRM_1696211878', $this->company)) {
+
+                    $this->company['UF_CRM_1696211878'] = 'Y';  //презентация проведена
+                }
+            }
+      
         $getUrl = $hook . $method;
         $fieldsData = [
             'id' => $companyId,
