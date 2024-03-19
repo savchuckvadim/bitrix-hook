@@ -188,7 +188,7 @@ class APIBitrixController extends Controller
 
 
             $contacts = $contactsResponse->json();
-       
+
 
 
             //contacts description
@@ -437,15 +437,16 @@ class APIBitrixController extends Controller
         // return  $failTask;
 
         return APIOnlineController::getSuccess(
-            ['comeData' => [
-                $domain,
-                $companyId,
-                $responsibleId,
-                $placement,
-                $company,
-                $smart 
-            ],
-            'resultData' => $failTask 
+            [
+                'comeData' => [
+                    'domain' =>   $domain,
+                    'companyId' =>   $companyId,
+                    'responsibleId' =>   $responsibleId,
+                    'placement' =>   $placement,
+                    'company' =>   $company,
+                    'smart' =>   $smart
+                ],
+                'resultData' => $failTask
             ]
         );
     }
@@ -522,7 +523,7 @@ class APIBitrixController extends Controller
             $batchCommands['cmd']['updateTask_' . $taskId] = $methodUpdate . '?taskId=' . $taskId . '&fields[MARK]=P';
             $batchCommands['cmd']['completeTask_' . $taskId] = $methodComplete . '?taskId=' . $taskId;
         }
-  
+
         $response = Http::post($hook . '/batch', $batchCommands);
 
         // Обработка ответа от API
