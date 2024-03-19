@@ -29,6 +29,8 @@ class BitrixCallingTaskService
     // protected $crm;
     protected $currentBitrixSmart;
     protected $sale;
+    protected $isOnemore;
+    
     protected $taskTitle;
 
     public function __construct(
@@ -43,6 +45,7 @@ class BitrixCallingTaskService
         // $crm,
         $currentBitrixSmart,
         $sale,
+        $isOnemore
     ) {
 
         $portal = PortalController::getPortal($domain);
@@ -62,7 +65,8 @@ class BitrixCallingTaskService
         // $this->crm = $crm;
         $this->currentBitrixSmart = $currentBitrixSmart;
         $this->sale = $sale;
-
+        $this->isOnemore = $isOnemore;
+        
         $stringType = 'Холодный обзвон  ';
 
         if ($type) {
@@ -152,12 +156,15 @@ class BitrixCallingTaskService
             //TODO
             $crmForCurrent = [$this->smartCrmId . ''  . '' . $currentSmartItemId];
 
-            $currentTasksIds = $this->getCurrentTasksIdsWarm(
-                $crmForCurrent
-            );
-            // Log::info('currentTasksIds', [$currentTasksIds]);
-            $this->completeTaskWarm($this->hook, $currentTasksIds);
-
+            if(!$this->isOnemore){
+                $currentTasksIds = $this->getCurrentTasksIdsWarm(
+                    $crmForCurrent
+                );
+              
+                $this->completeTaskWarm($this->hook, $currentTasksIds);
+    
+            }
+ 
 
 
             $createdTask = $this->createTaskWarm($currentSmartItemId);

@@ -371,6 +371,7 @@ class APIBitrixController extends Controller
         // $crm,
         $currentBitrixSmart,
         $sale,
+        $isOnemore
 
 
     ) {
@@ -386,6 +387,7 @@ class APIBitrixController extends Controller
             // $crm,
             $currentBitrixSmart,
             $sale,
+            $isOnemore
         ));
 
         return APIOnlineController::getSuccess(false);
