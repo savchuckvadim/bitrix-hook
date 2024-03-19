@@ -164,7 +164,7 @@ class BitrixCallingTaskService
                 $this->completeTaskWarm($this->hook, $currentTasksIds);
     
             }
- 
+            Log::info('isOnemore', ['isOnemore' => $this->isOnemore]);
 
 
             $createdTask = $this->createTaskWarm($currentSmartItemId);
@@ -176,7 +176,7 @@ class BitrixCallingTaskService
             // $updatedSmart = $this->preUpdateSmartItemStageWarm($currentSmartItem);
             $updatedSmart = $this->updateSmartItemWarm($currentSmartItem);
 
-            Log::info('updatedCompany', ['updatedCompany' => $updatedCompany]);
+          
 
             return APIOnlineController::getResponse(
                 0,
@@ -804,7 +804,7 @@ class BitrixCallingTaskService
                 $result =  $responseData['error_description'];
             }
         }
-        Log::info('fieldsData', ['fieldsData' => $fieldsData]);
+  
         return $result;
     }
 }
