@@ -252,7 +252,9 @@ class BitrixCallingTaskPresentationDoneService
 
 
         if (isset($smartFieldsResponse['result'])) {
-            $resultFields = $smartFieldsResponse['result'];
+            if (isset($smartFieldsResponse['result']['item'])) {
+                $resultFields = $smartFieldsResponse['result']['item'];
+            }
         }
         return $resultFields;
     }
