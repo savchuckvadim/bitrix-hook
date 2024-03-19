@@ -22,6 +22,8 @@ class BitrixCallingTaskFailService
     protected $currentBitrixSmart;
 
 
+    protected $isNeedCreateSmart;
+
     public function __construct(
         $domain,
         $companyId,
@@ -66,6 +68,27 @@ class BitrixCallingTaskFailService
         }
 
         $this->smartCrmId =  $smartId;
+
+        $isNeedCreateSmart = false;
+        if (!$currentBitrixSmart) { //если не пришло смарта - он вообще не существует и надо создавать
+            $isNeedCreateSmart = true;
+        } else { //смарт с фронта пришел
+            if (isset($currentBitrixSmart['stageId'])) {
+                if ($currentBitrixSmart['stageId'] == 'DT162_26:SUCCESS' || $currentBitrixSmart['stageId'] === 'DT156_14:SUCCESS') {
+                    $isNeedCreateSmart = true;
+                    //пришел завершенный смарт
+                    // if ($sale) {
+                    //     if (isset($sale['isCreateNewSale'])) {
+                    //         if ($sale['isCreateNewSale']) {
+                    //             $isNeedCreateSmart = true;
+                    //         }
+                    //     }
+                    // }
+                }
+            }
+        }
+
+        $this->isNeedCreateSmart =  $isNeedCreateSmart;
     }
 
     public function failTask()
@@ -75,6 +98,19 @@ class BitrixCallingTaskFailService
         $currentSmartItemId = '';
 
         try {
+            if ($this->isNeedCreateSmart) {
+                $newSmart = $this->createSmartItem(
+                    $this->hook,
+                    $this->aprilSmartData,
+                    $this->companyId,
+                    $this->responsibleId,
+                    // $companyName
+                );
+                if ($newSmart && isset($newSmart['item'])) {
+                    $this->currentBitrixSmart = $newSmart;
+                    $currentSmartItem  = $newSmart['item'];
+                }
+            }
 
             if ($currentSmartItem && isset($currentSmartItem) && isset($currentSmartItem['id'])) {
                 $currentSmartItemId = $currentSmartItem['id'];
@@ -219,6 +255,46 @@ class BitrixCallingTaskFailService
 
     //smart
 
+    protected function createSmartItem()
+    {
+        $hook = $this->hook;
+        $companyId  = $this->companyId;
+        $responsibleId  = $this->responsibleId;
+        $smart  = $this->aprilSmartData;
+
+
+        $resulFields = [];
+        $fieldsData = [];
+
+
+        $fieldsData['ufCrm7_1698134405'] = $companyId;
+        $fieldsData['assigned_by_id'] = $responsibleId;
+        $fieldsData['company_id'] = $companyId;
+
+
+        $methodSmart = '/crm.item.add.json';
+        $url = $hook . $methodSmart;
+
+        $entityId = $smart['crmId'];
+        $data = [
+            'entityTypeId' => $entityId,
+            'fields' =>  $fieldsData
+
+        ];
+
+        // Возвращение ответа клиенту в формате JSON
+
+        $smartFieldsResponse = Http::get($url, $data);
+        $bitrixResponse = $smartFieldsResponse->json();
+
+
+        if (isset($smartFieldsResponse['result'])) {
+            $resultFields = $smartFieldsResponse['result'];
+        }
+        return $resultFields;
+    }
+
+
     protected function updateSmartItem($smartItemFromBitrix)
     {
         $isCanChange = false;
@@ -248,44 +324,44 @@ class BitrixCallingTaskFailService
         //название обзвона - тема
         // UF_CRM_6_1709907816 - alfa
         // UF_CRM_10_1709907850 - april
-        $stagesForWarm = [
-            // april
-            'DT162_26:NEW',
-            'DT162_26:PREPARATION',
-            'DT162_26:FAIL',
+        // $stagesForWarm = [
+        //     // april
+        //     'DT162_26:NEW',
+        //     'DT162_26:PREPARATION',
+        //     'DT162_26:FAIL',
 
-            'DT162_28:NEW',
-            'DT162_28:UC_J1ADFR',
-            'DT162_28:PREPARATION',
-            'DT162_28:UC_BDM2F0',
-            'DT162_28:SUCCESS',
-            'DT162_28:FAIL',
+        //     'DT162_28:NEW',
+        //     'DT162_28:UC_J1ADFR',
+        //     'DT162_28:PREPARATION',
+        //     'DT162_28:UC_BDM2F0',
+        //     'DT162_28:SUCCESS',
+        //     'DT162_28:FAIL',
 
-            //presentation
-            'DT162_26:UC_Q5V5H0',
+        //     //presentation
+        //     'DT162_26:UC_Q5V5H0',
 
-            //alfa
-            'DT156_12:NEW',
-            'DT156_12:CLIENT',
-            'DT156_12:UC_E4BPCB',
-            'DT156_12:UC_Y52JIL',
-            'DT156_12:UC_02ZP1T',
-            'DT156_12:FAIL',
+        //     //alfa
+        //     'DT156_12:NEW',
+        //     'DT156_12:CLIENT',
+        //     'DT156_12:UC_E4BPCB',
+        //     'DT156_12:UC_Y52JIL',
+        //     'DT156_12:UC_02ZP1T',
+        //     'DT156_12:FAIL',
 
-            'DT156_14:NEW',
-            'DT156_14:UC_TS7I14',
-            'DT156_14:UC_8Q85WS',
-            'DT156_14:PREPARATION',
-            'DT156_14:CLIENT',
-            'DT156_14:SUCCESS',
-            'DT156_14:FAIL',
-
-
-            //presentation
-            'DT156_12:UC_LEWVV8',
+        //     'DT156_14:NEW',
+        //     'DT156_14:UC_TS7I14',
+        //     'DT156_14:UC_8Q85WS',
+        //     'DT156_14:PREPARATION',
+        //     'DT156_14:CLIENT',
+        //     'DT156_14:SUCCESS',
+        //     'DT156_14:FAIL',
 
 
-        ];
+        //     //presentation
+        //     'DT156_12:UC_LEWVV8',
+
+
+        // ];
 
         $stageId = null;
         $fields = null;

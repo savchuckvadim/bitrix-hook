@@ -105,17 +105,18 @@ class BitrixCallingTaskPresentationDoneService
             }
 
             if ($this->company) {
+                $this->company['UF_CRM_1709798145'] = $this->responsibleId;
                 if (array_key_exists('UF_CRM_1709807026', $this->company)) {
                     // if ($this->company['UF_CRM_1709807026'] == null || $this->company['UF_CRM_1709807026'] == 0 || $this->company['UF_CRM_1709807026'] == "0") {
                     //     $this->company['UF_CRM_1709807026'] = 1;
                     // } else {
-                    $currentCompanyCount = (int)$this->company['UF_CRM_1709807026'] + 1;
+                    $currentCompanyCount = (int)$this->company['UF_CRM_1709807026'] + 1;   //количество презентаций
                     // }
 
                     $this->company['UF_CRM_1709807026'] = $currentCompanyCount;
                     if (array_key_exists('UF_CRM_1696211878', $this->company)) {
 
-                        $this->company['UF_CRM_1696211878'] = 'Y';
+                        $this->company['UF_CRM_1696211878'] = 'Y';  //презентация проведена
                     }
                 }
             }
