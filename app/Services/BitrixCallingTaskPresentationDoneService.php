@@ -164,11 +164,11 @@ class BitrixCallingTaskPresentationDoneService
                 'success',
                 [
                     'companyCount' => 0,
-                    'smartCout' => 0,
+                    'smartCount' => 0,
                     'updatedCompany' => $updatedCompany,
                     'updatedSmart' => $updatedSmart,
                     'currentSmartItem' => $currentSmartItem,
-                    // '$gettedSmart' => $gettedSmart,
+                    'responsibleId' =>  $this->responsibleId,
                     'currentBitrixSmart' => $this->currentBitrixSmart,
                     // 'sale' => $this->sale,
 

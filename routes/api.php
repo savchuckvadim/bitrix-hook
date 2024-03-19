@@ -346,11 +346,11 @@ Route::post('/presentation/done', function (Request $request) {
         $company = $request['company'];
     }
 
-    if (isset($request['responsibleId'])) {
+    // if (isset($request['responsibleId'])) {
         $responsible = $request['responsibleId'];
         $partsResponsible = explode("_", $responsible);
         $responsibleId = $partsResponsible[1];
-    }
+    // }
 
     $controller = new APIBitrixController();
     return $controller->presentationDone(

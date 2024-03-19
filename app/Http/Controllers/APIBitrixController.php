@@ -420,7 +420,7 @@ class APIBitrixController extends Controller
         $responsibleId,
         $placement,
         $company,
-        $smart,
+        $smart
 
 
     ) {
@@ -430,7 +430,7 @@ class APIBitrixController extends Controller
             $responsibleId,
             $placement,
             $company,
-            $smart,
+            $smart
         );
 
         $failTask = $service->presentationDone();
