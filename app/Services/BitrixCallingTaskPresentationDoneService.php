@@ -71,7 +71,7 @@ class BitrixCallingTaskPresentationDoneService
             'domain' =>   $domain,
             'companyId' =>   $companyId,
             'responsibleId' =>   $responsibleId,
-      
+
             'placement' =>   $placement,
             'company' =>   $company,
             'smart' =>   $smart
@@ -155,7 +155,7 @@ class BitrixCallingTaskPresentationDoneService
 
 
                     $smartFields = [
-                        'UF_CRM_6_1709894507' => $currentSmartCount
+                        'ufCrm6_1709894507' => $currentSmartCount
                     ];
                 }
             }
@@ -176,7 +176,7 @@ class BitrixCallingTaskPresentationDoneService
                     'updatedCompany' => $updatedCompany,
                     'updatedSmart' => $updatedSmart,
                     'currentSmartItem' => $currentSmartItem,
-                   
+
                     'assignedById' =>   $this->assignedById,
                     'currentBitrixSmart' => $this->currentBitrixSmart,
                     // 'sale' => $this->sale,
@@ -225,6 +225,7 @@ class BitrixCallingTaskPresentationDoneService
         $fieldsData['ufCrm7_1698134405'] = $companyId;
         $fieldsData['assigned_by_id'] = $responsibleId;
         $fieldsData['company_id'] = $companyId;
+        $fieldsData['ufCrm10_1709111529'] = 0;
         // $fieldsData[$this->lastCallDateField] = $this->deadline;  //дата звонка следующего
         // $fieldsData[$this->lastCallDateFieldCold] = $this->deadline; //дата холодного следующего
         // $fieldsData[$this->callThemeField] = $this->name;      //тема следующего звонка
