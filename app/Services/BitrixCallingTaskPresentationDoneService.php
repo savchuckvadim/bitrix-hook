@@ -29,7 +29,7 @@ class BitrixCallingTaskPresentationDoneService
     protected $company;
     protected $currentBitrixSmart;
     protected $responsibleId;
-
+    protected $assignedById;
 
     protected $categoryId;
     protected $stageId;
@@ -66,11 +66,12 @@ class BitrixCallingTaskPresentationDoneService
         $this->company = $company;
         $this->currentBitrixSmart = $smart;
         $this->$responsibleId = $responsibleId;
-
+        $this->assignedById = $responsibleId;
         Log::info('DONE_SERVICE', ['come data' => [
             'domain' =>   $domain,
             'companyId' =>   $companyId,
             'responsibleId' =>   $responsibleId,
+      
             'placement' =>   $placement,
             'company' =>   $company,
             'smart' =>   $smart
@@ -112,7 +113,7 @@ class BitrixCallingTaskPresentationDoneService
             // }
 
             if ($this->company) {
-                $this->company['UF_CRM_1709798145'] = $this->responsibleId;
+                $this->company['UF_CRM_1709798145'] = $this->assignedById;
                 if (array_key_exists('UF_CRM_1709807026', $this->company)) {
                     // if ($this->company['UF_CRM_1709807026'] == null || $this->company['UF_CRM_1709807026'] == 0 || $this->company['UF_CRM_1709807026'] == "0") {
                     //     $this->company['UF_CRM_1709807026'] = 1;
@@ -176,7 +177,7 @@ class BitrixCallingTaskPresentationDoneService
                     'updatedSmart' => $updatedSmart,
                     'currentSmartItem' => $currentSmartItem,
                     'responsibleId' =>  $this->responsibleId,
-                    // 'comeResponsibleId' =>  $responsibleId,
+                    'assignedById' =>   $this->assignedById,
                     'currentBitrixSmart' => $this->currentBitrixSmart,
                     // 'sale' => $this->sale,
 
