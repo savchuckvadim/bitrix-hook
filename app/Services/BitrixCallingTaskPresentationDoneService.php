@@ -377,7 +377,7 @@ class BitrixCallingTaskPresentationDoneService
             $stageId,
             $smart, //data from back
             $smartItemFromBitrix,
-            // $type,
+            $smartFields,
             $targetStageId,
             $data,
             // 'isCanChange' => $isCanChange,
