@@ -333,7 +333,7 @@ Route::post('/presentation/done', function (Request $request) {
     $auth = $request['auth'];
     $domain = $auth['domain'];
     $companyId = $request['company_id'];
-    $responsibleId = null;
+    // $responsibleId = null;
 
     //only from front calling
     if (
