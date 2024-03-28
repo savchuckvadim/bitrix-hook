@@ -67,15 +67,15 @@ class BitrixCallingTaskPresentationDoneService
         $this->currentBitrixSmart = $smart;
         // $this->$responsibleId = $responsibleId;
         $this->assignedById = $responsibleId;
-        Log::info('DONE_SERVICE', ['come data' => [
-            'domain' =>   $domain,
-            'companyId' =>   $companyId,
-            'responsibleId' =>   $responsibleId,
+        // Log::info('DONE_SERVICE', ['come data' => [
+        //     'domain' =>   $domain,
+        //     'companyId' =>   $companyId,
+        //     'responsibleId' =>   $responsibleId,
 
-            'placement' =>   $placement,
-            'company' =>   $company,
-            'smart' =>   $smart
-        ]]);
+        //     'placement' =>   $placement,
+        //     'company' =>   $company,
+        //     'smart' =>   $smart
+        // ]]);
 
 
         $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];

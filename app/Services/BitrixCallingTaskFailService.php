@@ -206,11 +206,11 @@ class BitrixCallingTaskFailService
 
         if (isset($responseData['result'])) {
             if (isset($responseData['result']['tasks'])) {
-                Log::info('tasks', [$responseData['result']]);
+                // Log::info('tasks', [$responseData['result']]);
                 $resultTasks = $responseData['result']['tasks'];
                 foreach ($resultTasks  as $key =>  $task) {
                     if (isset($task['id'])) {
-                        Log::info('task', ['taskId' => $task['id']]);
+                        // Log::info('task', ['taskId' => $task['id']]);
                         array_push($resultIds, $task['id']);
                     }
 

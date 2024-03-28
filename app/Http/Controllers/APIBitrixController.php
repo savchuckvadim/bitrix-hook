@@ -538,7 +538,7 @@ class APIBitrixController extends Controller
             // Логика обработки ошибки
         }
         $res = $responseData ?? $errorData;
-        Log::info('res', ['res' => $res]);
+        // Log::info('res', ['res' => $res]);
         return $res;
     }
 
@@ -581,7 +581,7 @@ class APIBitrixController extends Controller
         $smartUpdateResponse = Http::get($updtSmartUrl,  $updateData);
         if ($smartUpdateResponse) {
             if (isset($smartUpdateResponse['result'])) {
-                Log::info('current_tasks', [$smartUpdateResponse['result']]);
+                // Log::info('current_tasks', [$smartUpdateResponse['result']]);
             }
         }
     }
@@ -1040,7 +1040,7 @@ class APIBitrixController extends Controller
         $domain
     ) {
         $portal = PortalController::getPortal($domain);
-        Log::info('portal', ['portal' => $portal]);
+        // Log::info('portal', ['portal' => $portal]);
         try {
 
             //CATEGORIES
@@ -1057,13 +1057,13 @@ class APIBitrixController extends Controller
 
             $smartCategoriesResponse = Http::get($url, $hookCategoriesData);
             $bitrixResponse = $smartCategoriesResponse->json();
-            Log::info('SUCCESS RESPONSE SMART CATEGORIES', ['categories' => $bitrixResponse]);
+            // Log::info('SUCCESS RESPONSE SMART CATEGORIES', ['categories' => $bitrixResponse]);
             $categories = $smartCategoriesResponse['result']['categories'];
 
             //STAGES
 
             foreach ($categories as $category) {
-                Log::info('category', ['category' => $category]);
+                // Log::info('category', ['category' => $category]);
                 $hook = 'https://' . $domain  . '/' . $webhookRestKey;
                 $stageMethod = '/crm.status.list.json';
                 $url = $hook . $stageMethod;
@@ -1076,10 +1076,10 @@ class APIBitrixController extends Controller
                 ];
 
 
-                Log::info('hookStagesData', ['hookStagesData' => $hookStagesData]);
+                // Log::info('hookStagesData', ['hookStagesData' => $hookStagesData]);
                 $stagesResponse = Http::get($url, $hookStagesData);
                 $stages = $stagesResponse['result'];
-                Log::info('stages', ['stages' => $stages]);
+                // Log::info('stages', ['stages' => $stages]);
                 foreach ($stages as $stage) {
                     $resultstageData = [
                         // 'category' => [
@@ -1093,7 +1093,7 @@ class APIBitrixController extends Controller
                         'nameInit' => $stage['NAME_INIT'],
 
                     ];
-                    Log::info('STAGE', [$stage['NAME'] => $stage]);
+                    // Log::info('STAGE', [$stage['NAME'] => $stage]);
                 }
             }
 
@@ -1118,7 +1118,7 @@ class APIBitrixController extends Controller
 
 
         $portal = PortalController::getPortal($domain);
-        Log::info('portal', ['portal' => $portal]);
+        // Log::info('portal', ['portal' => $portal]);
         try {
 
             //CATEGORIES
@@ -1179,9 +1179,9 @@ class APIBitrixController extends Controller
             $bitrixResponseCategory2 = $smartCategoriesResponse2->json();
             $category1Id = $bitrixResponseCategory1['result']['category']['id'];
             $category2Id = $bitrixResponseCategory2['result']['category']['id'];
-            Log::info('SUCCESS SMART INSTALL', ['smart' => $bitrixResponse]);
-            Log::info('SUCCESS CATEGORY INSTALL', ['category1Id' => $category1Id]);
-            Log::info('SUCCESS CATEGORY INSTALL', ['category2Id' => $category2Id]);
+            // Log::info('SUCCESS SMART INSTALL', ['smart' => $bitrixResponse]);
+            // Log::info('SUCCESS CATEGORY INSTALL', ['category1Id' => $category1Id]);
+            // Log::info('SUCCESS CATEGORY INSTALL', ['category2Id' => $category2Id]);
             //STAGES
             //2) использует "entityTypeId" и category1Id  чтобы создать стадии
             $currentstagesMethod = '/crm.status.list.json';
@@ -1195,10 +1195,10 @@ class APIBitrixController extends Controller
             ];
 
 
-            Log::info('CURRENT STAGES GET 134', ['currentStagesResponse' => $hookCurrentStagesData]);
+            // Log::info('CURRENT STAGES GET 134', ['currentStagesResponse' => $hookCurrentStagesData]);
             $currentStagesResponse = Http::get($url, $hookCurrentStagesData);
             $currentStages = $currentStagesResponse['result'];
-            Log::info('CURRENT STAGES GET 134', ['currentStages' => $currentStages]);
+            // Log::info('CURRENT STAGES GET 134', ['currentStages' => $currentStages]);
 
 
 
@@ -1237,9 +1237,9 @@ class APIBitrixController extends Controller
                 $NEW_STAGE_STATUS_ID = 'DT134_' . $category1Id . ':' . $callStage['name'];
                 $isExist = false;
                 foreach ($currentStages as $index => $currentStage) {
-                    Log::info('currentStage ITERABLE', ['STAGE STATUS ID' => $currentStage['STATUS_ID']]);
+                    // Log::info('currentStage ITERABLE', ['STAGE STATUS ID' => $currentStage['STATUS_ID']]);
                     if ($currentStage['STATUS_ID'] === $NEW_STAGE_STATUS_ID) {
-                        Log::info('EQUAL STAGE', ['EQUAL STAGE' => $currentStage['STATUS_ID']]);
+                        // Log::info('EQUAL STAGE', ['EQUAL STAGE' => $currentStage['STATUS_ID']]);
                         $isExist = $currentStage['ID'];
                     }
                 }
@@ -1281,7 +1281,7 @@ class APIBitrixController extends Controller
                 }
                 $smartStageResponse = Http::get($url, $hookStagesDataCalls);
                 $bitrixResponseStage = $smartStageResponse->json();
-                Log::info('SUCCESS SMART INSTALL', ['stage_response' => $bitrixResponseStage]);
+                // Log::info('SUCCESS SMART INSTALL', ['stage_response' => $bitrixResponseStage]);
             }
 
 
@@ -1312,7 +1312,7 @@ class APIBitrixController extends Controller
 
 
         $portal = PortalController::getPortal($domain);
-        Log::info('portal', ['portal' => $portal]);
+        // Log::info('portal', ['portal' => $portal]);
         $resultCallings = [];
         try {
             //CATEGORIES
@@ -1332,7 +1332,7 @@ class APIBitrixController extends Controller
                     ],
                     "start" => $next // Передаем значение "next" в запросе
                 ]);
-                Log::info('response', ['response' => $response]);
+                // Log::info('response', ['response' => $response]);
                 $responseData = $response->json();
                 if (isset($responseData['result']) && !empty($responseData['result'])) {
                     // Добавляем полученные звонки к общему списку

@@ -133,17 +133,17 @@ class BitrixCallingColdTaskService
             // }
             $updatedCompany = $this->updateCompanyCold();
 
-            Log::info('COLD first updatedCompany', [
-                'updatedCompany' => $updatedCompany,
+            // Log::info('COLD first updatedCompany', [
+            //     'updatedCompany' => $updatedCompany,
              
-            ]);
+            // ]);
 
 
             $currentSmart = $this->getSmartItem();
-            Log::info('COLD first getSmartItem', [
-                'currentSmart' => $currentSmart,
+            // Log::info('COLD first getSmartItem', [
+            //     'currentSmart' => $currentSmart,
              
-            ]);
+            // ]);
             if ($currentSmart) {
                 if (isset($currentSmart['id'])) {
                     $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
@@ -155,10 +155,10 @@ class BitrixCallingColdTaskService
 
 
 
-            Log::info('SUCCESS INITIAL COLD', [
-                'updated smart' => $currentSmart,
-                'updated company' => $updatedCompany
-            ]);
+            // Log::info('SUCCESS INITIAL COLD', [
+            //     'updated smart' => $currentSmart,
+            //     'updated company' => $updatedCompany
+            // ]);
             return APIOnlineController::getSuccess($currentSmart);
         } catch (\Throwable $th) {
             $errorMessages =  [
@@ -297,7 +297,7 @@ class BitrixCallingColdTaskService
             'fields' =>  $fieldsData
 
         ];
-        Log::info('create Smart Item Cold', [$data]);
+        // Log::info('create Smart Item Cold', [$data]);
         // Возвращение ответа клиенту в формате JSON
 
         $smartFieldsResponse = Http::get($url, $data);

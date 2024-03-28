@@ -240,7 +240,7 @@ Route::post('/coldlead/smart/init', function (Request $request) {
     // id={{ID}}
     // &company_id={{Компания}}
     Log::info('COLD FROM LEAD', ['log' => 'from bitrix']);
- 
+    Log::info('COLD FROM LEAD', ['log' => $request->all()]);
     // $comment = null;
     // $smart = null;
     // $sale = null;
@@ -562,11 +562,11 @@ Route::post('/lists', function (Request $request) {
     $secret = env('APRIL_WEB_HOOK');
     $restVersion = env('APRIL_BITRIX_REST_VERSION');
 
-    Log::info('Environment Variables', [
-        'BITRIX_DOMAIN' => $domain,
-        'BITRIX_REST_VERSION' => $restVersion,
-        'WEB_HOOK' => $secret
-    ]);
+    // Log::info('Environment Variables', [
+    //     'BITRIX_DOMAIN' => $domain,
+    //     'BITRIX_REST_VERSION' => $restVersion,
+    //     'WEB_HOOK' => $secret
+    // ]);
 
 
     try {
@@ -576,7 +576,7 @@ Route::post('/lists', function (Request $request) {
             'IBLOCK_ID' => '86',
 
         ]);
-        Log::info('listsfields ', ['listsfields ' => $listsfields['result']]);
+        // Log::info('listsfields ', ['listsfields ' => $listsfields['result']]);
         $response = Http::get('https://' . $domain . '/rest/' . $restVersion . '/' . $secret . '/lists.element.get.json', [
             'IBLOCK_TYPE_ID' => 'lists',
             'IBLOCK_ID' => '86',
@@ -587,7 +587,7 @@ Route::post('/lists', function (Request $request) {
 
 
         ]);
-        Log::info('response ', ['response ' => $response]);
+        // Log::info('response ', ['response ' => $response]);
 
         return  response([
             'result' => ['response' => $response['result'], 'listsfields' => $listsfields['result']],
@@ -620,8 +620,8 @@ Route::post('/smart/categories', function (Request $request) {
     $auth = $request['auth'];
     $domain = $auth['domain'];
 
-    Log::info('REQUEST', $request->all());
-    Log::info('domain', ['domain' => $domain]);
+    // Log::info('REQUEST', $request->all());
+    // Log::info('domain', ['domain' => $domain]);
 
 
     return APIBitrixController::getSmartStages($domain);
@@ -671,8 +671,8 @@ Route::post('/smart', function (Request $request) {
 
 
             ]);
-            Log::info('COMPANY ', ['getCompany ' => $getCompany]);
-            Log::info('COMPANY ', ['company_id ' => $company_id]);
+            // Log::info('COMPANY ', ['getCompany ' => $getCompany]);
+            // Log::info('COMPANY ', ['company_id ' => $company_id]);
 
 
             //SMART STATUS
@@ -695,15 +695,15 @@ Route::post('/smart', function (Request $request) {
                 ]
 
             ]);
-            Log::info('SMART ', ['trySmart ' => $responsetrySmart]);
+            // Log::info('SMART ', ['trySmart ' => $responsetrySmart]);
             if ($responsetrySmart) {
                 if ($responsetrySmart['result']) {
                     if ($responsetrySmart['result']['items']) {
-                        Log::info('SMART ', ['ITEMS ' => $responsetrySmart['result']['items']]);
-                        Log::info('SMART ', ['TOTAL ' => $responsetrySmart['result']['total']]);
+                        // Log::info('SMART ', ['ITEMS ' => $responsetrySmart['result']['items']]);
+                        // Log::info('SMART ', ['TOTAL ' => $responsetrySmart['result']['total']]);
                         if ($responsetrySmart['result']['items'][0]) {
                             $smart = $responsetrySmart['result']['items'][0];
-                            Log::info('SMART ', ['trySmart ' => $smart]);
+                            // Log::info('SMART ', ['trySmart ' => $smart]);
                         }
                     }
                 }

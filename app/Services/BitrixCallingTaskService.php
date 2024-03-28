@@ -164,7 +164,7 @@ class BitrixCallingTaskService
                 $this->completeTaskWarm($this->hook, $currentTasksIds);
     
             }
-            Log::info('isOneMoreService', ['isOneMoreService' => $this->isOneMoreService]);
+            // Log::info('isOneMoreService', ['isOneMoreService' => $this->isOneMoreService]);
 
 
             $createdTask = $this->createTaskWarm($currentSmartItemId);
