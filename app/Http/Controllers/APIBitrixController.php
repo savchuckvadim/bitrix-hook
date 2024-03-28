@@ -188,8 +188,8 @@ class APIBitrixController extends Controller
             sleep($randomNumber);
             $contactsResponse = Http::get($url,  $contactsData);
             $url = $hook . $methodCompany;
-            $randomNumber = rand(1);
-            sleep($randomNumber);
+           
+            sleep(2);
             $companyResponse = Http::get($url,  $getCompanyData);
             $company = $companyResponse->json();
 

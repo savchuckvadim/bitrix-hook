@@ -149,8 +149,8 @@ class BitrixCallingColdTaskService
             //     'currentSmart' => $currentSmart,
 
             // ]);
-            $randomNumber = rand(1);
-            sleep($randomNumber);
+       
+            sleep(1);
             if ($currentSmart) {
                 if (isset($currentSmart['id'])) {
                     $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
