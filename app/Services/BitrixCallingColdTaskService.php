@@ -112,7 +112,7 @@ class BitrixCallingColdTaskService
 
 
         $targetDeadLine = $deadline;
-        $nowDate = now();
+        // $nowDate = now();
         // if ($domain === 'alfacentr.bitrix24.ru') {
 
         //     $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
@@ -157,17 +157,17 @@ class BitrixCallingColdTaskService
                 // $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
             }
 
-            if (isset($currentSmart['id'])) {
-                $crmForCurrent = [$this->smartId . ''  . '' . $currentSmart['id']];
-                $currentTasksIds = $this->getCurrentTasksIds(
-                    $this->hook,
-                    $this->callingGroupId,
-                    $crmForCurrent,
-                    $this->responsibleId
-                );
-                // Log::info('currentTasksIds', [$currentTasksIds]);
-                $this->completeTask($this->hook, $currentTasksIds);
-            }
+            // if (isset($currentSmart['id'])) {
+            //     $crmForCurrent = [$this->smartId . ''  . '' . $currentSmart['id']];
+            //     $currentTasksIds = $this->getCurrentTasksIds(
+            //         $this->hook,
+            //         $this->callingGroupId,
+            //         $crmForCurrent,
+            //         $this->responsibleId
+            //     );
+            //     // Log::info('currentTasksIds', [$currentTasksIds]);
+            //     $this->completeTask($this->hook, $currentTasksIds);
+            // }
 
 
             // Log::info('SUCCESS INITIAL COLD', [
