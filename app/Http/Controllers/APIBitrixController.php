@@ -35,7 +35,7 @@ class APIBitrixController extends Controller
             $portal = $portal['data'];
             $smart = $portal['bitrixSmart'];
 
-            Log::info('portal COLD APIBitrixController', ['portal' => $portal]);
+            // Log::info('portal COLD APIBitrixController', ['portal' => $portal]);
 
             $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
@@ -863,7 +863,7 @@ class APIBitrixController extends Controller
             $resultFields = $smartFieldsResponse['result'];
         }else if(isset($smartFieldsResponse['error'])  && isset($smartFieldsResponse['error_description'])){
             Log::info('INITIAL COLD BTX ERROR', [
-                'btx error' => $smartFieldsResponse['error'],
+                // 'btx error' => $smartFieldsResponse['error'],
                 'dscrp' => $smartFieldsResponse['error_description']
     
             ]);
