@@ -134,6 +134,8 @@ class BitrixCallingColdTaskService
             // if(!$this->smartId){
 
             // }
+            $randomNumber = rand(1, 10);
+            sleep($randomNumber);
             $updatedCompany = $this->updateCompanyCold();
 
             // Log::info('COLD first updatedCompany', [
@@ -147,7 +149,8 @@ class BitrixCallingColdTaskService
             //     'currentSmart' => $currentSmart,
 
             // ]);
-            sleep(1);
+            $randomNumber = rand(1);
+            sleep($randomNumber);
             if ($currentSmart) {
                 if (isset($currentSmart['id'])) {
                     $currentSmart = $this->updateSmartItemCold($currentSmart['id']);

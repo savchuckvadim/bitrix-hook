@@ -140,7 +140,8 @@ class APIBitrixController extends Controller
             if (isset($portal['bitrixSmart']) && isset($portal['bitrixSmart']['crm'])) {
                 $smartId =  $portal['bitrixSmart']['crm'] . '_';
             }
-
+            $randomNumber = rand(1, 3);
+            sleep($randomNumber);
             if (!$crm) { //если
                 $getSmartItemId = $this->getSmartItem($hook, $smart, $companyId, $responsibleId);
                 $gettedSmart =  $getSmartItemId;
@@ -183,8 +184,12 @@ class APIBitrixController extends Controller
                 'select' => ["TITLE", "PHONE", "EMAIL"],
             ];
 
+            $randomNumber = rand(1, 3);
+            sleep($randomNumber);
             $contactsResponse = Http::get($url,  $contactsData);
             $url = $hook . $methodCompany;
+            $randomNumber = rand(1);
+            sleep($randomNumber);
             $companyResponse = Http::get($url,  $getCompanyData);
             $company = $companyResponse->json();
 
