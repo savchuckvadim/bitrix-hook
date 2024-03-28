@@ -30,47 +30,6 @@ class APIBitrixController extends Controller
         // $crm,
     ) {
         try {
-            // Log::info('domain COLD APIBitrixController', ['domain' => $domain]);
-            // $portal = PortalController::getPortal($domain);
-            // $portal = $portal['data'];
-            // $smart = $portal['bitrixSmart'];
-
-            // // Log::info('portal COLD APIBitrixController', ['portal' => $portal]);
-
-            // $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
-            // $hook = 'https://' . $domain  . '/' . $webhookRestKey;
-            // $callingTaskGroupId = env('BITRIX_CALLING_GROUP_ID');
-            // if (isset($portal['bitrixCallingTasksGroup']) && isset($portal['bitrixCallingTasksGroup']['bitrixId'])) {
-            //     $callingTaskGroupId =  $portal['bitrixCallingTasksGroup']['bitrixId'];
-            // }
-
-
-            // $smartBitrixId = 'T9c_';
-            // if (isset($portal['bitrixSmart']) && isset($portal['bitrixSmart']['crm'])) {
-            //     $smartBitrixId =  $portal['bitrixSmart']['crm'] . '_';
-            // }
-
-            // if (!$smartId) { //если
-            //     $getSmartItemId = $this->getSmartItem($hook, $smart, $companyId, $responsibleId);
-            //     // $gettedSmart =  $getSmartItemId;
-            //     if ($getSmartItemId) {
-            //         $smartId = $getSmartItemId['id'];
-            //         // $currentSmartItem =  $getSmartItemId;
-            //     }
-
-            //     // return APIOnlineController::getResponse(0, 'success', ['crm' => $crm]);
-            // }
-            // $crmForCurrent = [$smartBitrixId . ''  . '' . $smartId];
-
-            // $currentTasksIds = $this->getCurrentTasksIds(
-            //     $hook,
-            //     $callingTaskGroupId,
-            //     $crmForCurrent,
-            //     $responsibleId
-            // );
-            // // Log::info('currentTasksIds', [$currentTasksIds]);
-            // $this->completeTask($hook, $currentTasksIds);
-
 
             $service = new BitrixCallingColdTaskService(
                 $domain,
@@ -333,12 +292,12 @@ class APIBitrixController extends Controller
             //     $currentSmartItem,
             //     $type
             // );
-            Log::error('COLD RESPONSE: Exception caught',  [
-                'createdTask' => $createdTask,
-                'currentSmartItem' => $currentSmartItem,
-                'gettedSmart' => $gettedSmart,
+            // Log::error('COLD RESPONSE: Exception caught',  [
+            //     'createdTask' => $createdTask,
+            //     'currentSmartItem' => $currentSmartItem,
+            //     'gettedSmart' => $gettedSmart,
 
-            ]);
+            // ]);
             return APIOnlineController::getResponse(
                 0,
                 'success',
