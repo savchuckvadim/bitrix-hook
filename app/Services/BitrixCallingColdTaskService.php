@@ -438,7 +438,7 @@ class BitrixCallingColdTaskService
             $fieldsData['company_id'] = $companyId;
         }
         if ($leadId) {
-            $fieldsData['lead_id'] = $companyId;
+            $fieldsData['lead_id'] = $leadId;
             $fieldsData['ufCrm7_1697129037'] = $leadId;
         }
 
