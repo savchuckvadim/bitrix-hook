@@ -443,10 +443,10 @@ class BitrixCallingTaskFailService
         $bitrixResponse = $smartFieldsResponse->json();
 
 
-        if (isset($smartFieldsResponse['result'])) {
-            $result = $smartFieldsResponse['result'];
-        } else  if (isset($smartFieldsResponse['error_description'])) {
-            $result = $smartFieldsResponse['error_description'];
+        if (isset($bitrixResponse['result'])) {
+            $result = $bitrixResponse['result'];
+        } else  if (isset($bitrixResponse['error_description'])) {
+            $result = $bitrixResponse['error_description'];
         }
 
 
