@@ -149,7 +149,7 @@ class BitrixCallingColdTaskService
             //     'currentSmart' => $currentSmart,
 
             // ]);
-       
+
             sleep(1);
             if ($currentSmart) {
                 if (isset($currentSmart['id'])) {
@@ -524,10 +524,12 @@ class BitrixCallingColdTaskService
             if (isset($responseData['result'])) {
                 $result =  $responseData['result'];
             } else if (isset($responseData['error_description'])) {
-                $result =  $responseData['error_description'];
+
+                $result =  null;
+                Log::error('BTX ERROR updateCompanyCold', ['fieldsData' => $responseData['error_description']]);
             }
         }
-        Log::info('fieldsData', ['fieldsData' => $fieldsData]);
+
         return $result;
     }
 

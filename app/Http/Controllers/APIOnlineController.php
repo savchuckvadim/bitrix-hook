@@ -20,9 +20,7 @@ class APIOnlineController extends Controller
                 $requestData
             );
 
-            Log::error('API ONLINE: portalResponse', [
-                $portalResponse
-            ]);
+           
             if ($portalResponse->successful()) {
                 $data = $portalResponse->json();
                 if ($data['resultCode'] == 0 && $data[$dataname]) {
@@ -32,7 +30,9 @@ class APIOnlineController extends Controller
                         'data' => $data[$dataname],
                     ];
                 } else {
-
+                    Log::error('API ONLINE: portalResponse', [
+                        $portalResponse
+                    ]);
                     return [
                         'resultCode' => 1,
                         'message' => 'HOOK: invalid data',
@@ -40,6 +40,9 @@ class APIOnlineController extends Controller
                     ];
                 }
             } else {
+                Log::error('API ONLINE: portalResponse', [
+                    $portalResponse
+                ]);
                 return [
                     'resultCode' => 1,
                     'message' => 'ONLINE: Ошибка при запросе к API.',

@@ -30,7 +30,7 @@ class BitrixCallingTaskService
     protected $currentBitrixSmart;
     protected $sale;
     protected $isOneMoreService;
-    
+
     protected $taskTitle;
 
     public function __construct(
@@ -66,7 +66,7 @@ class BitrixCallingTaskService
         $this->currentBitrixSmart = $currentBitrixSmart;
         $this->sale = $sale;
         $this->isOneMoreService = $isOnemoreJob;
-        
+
         $stringType = 'Холодный обзвон  ';
 
         if ($type) {
@@ -156,13 +156,12 @@ class BitrixCallingTaskService
             //TODO
             $crmForCurrent = [$this->smartCrmId . ''  . '' . $currentSmartItemId];
 
-            if(!$this->isOneMoreService){
+            if (!$this->isOneMoreService) {
                 $currentTasksIds = $this->getCurrentTasksIdsWarm(
                     $crmForCurrent
                 );
-              
+
                 $this->completeTaskWarm($this->hook, $currentTasksIds);
-    
             }
             // Log::info('isOneMoreService', ['isOneMoreService' => $this->isOneMoreService]);
 
@@ -176,7 +175,7 @@ class BitrixCallingTaskService
             // $updatedSmart = $this->preUpdateSmartItemStageWarm($currentSmartItem);
             $updatedSmart = $this->updateSmartItemWarm($currentSmartItem);
 
-          
+
 
             return APIOnlineController::getResponse(
                 0,
@@ -525,13 +524,13 @@ class BitrixCallingTaskService
         $bitrixResponse = $smartFieldsResponse->json();
 
 
-             if (isset($smartFieldsResponse['result'])) {
+        if (isset($smartFieldsResponse['result'])) {
             $resultFields = $smartFieldsResponse['result'];
-        }else if(isset($smartFieldsResponse['error'])  && isset($smartFieldsResponse['error_description'])){
+        } else if (isset($smartFieldsResponse['error'])  && isset($smartFieldsResponse['error_description'])) {
             Log::info('INITIAL COLD BTX ERROR', [
                 // 'btx error' => $smartFieldsResponse['error'],
                 'dscrp' => $smartFieldsResponse['error_description']
-    
+
             ]);
         }
         return $resultFields;
@@ -807,10 +806,11 @@ class BitrixCallingTaskService
             if (isset($responseData['result'])) {
                 $result =  $responseData['result'];
             } else if (isset($responseData['error_description'])) {
-                $result =  $responseData['error_description'];
+                $result =  null;
+                Log::error('BTX ERROR updateCompanyCold', ['fieldsData' => $responseData['error_description']]);
             }
         }
-  
+
         return $result;
     }
 }
