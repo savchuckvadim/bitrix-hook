@@ -138,34 +138,37 @@ class BitrixCallingColdTaskService
 
             // Log::info('COLD first updatedCompany', [
             //     'updatedCompany' => $updatedCompany,
-             
+
             // ]);
 
 
             $currentSmart = $this->getSmartItem();
             // Log::info('COLD first getSmartItem', [
             //     'currentSmart' => $currentSmart,
-             
+
             // ]);
+            sleep(1);
             if ($currentSmart) {
                 if (isset($currentSmart['id'])) {
                     $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
                 }
-
             } else {
                 $currentSmart = $this->createSmartItemCold();
                 // $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
             }
 
-            $crmForCurrent = [$this->smartId . ''  . '' . $currentSmart['id']];
-            $currentTasksIds = $this->getCurrentTasksIds(
-                $this->hook,
-                $this->callingGroupId,
-                $crmForCurrent,
-                $this->responsibleId
-            );
-            // Log::info('currentTasksIds', [$currentTasksIds]);
-            $this->completeTask($this->hook, $currentTasksIds);
+            if (isset($currentSmart['id'])) {
+                $crmForCurrent = [$this->smartId . ''  . '' . $currentSmart['id']];
+                $currentTasksIds = $this->getCurrentTasksIds(
+                    $this->hook,
+                    $this->callingGroupId,
+                    $crmForCurrent,
+                    $this->responsibleId
+                );
+                // Log::info('currentTasksIds', [$currentTasksIds]);
+                $this->completeTask($this->hook, $currentTasksIds);
+            }
+
 
             // Log::info('SUCCESS INITIAL COLD', [
             //     'updated smart' => $currentSmart,
@@ -216,7 +219,7 @@ class BitrixCallingColdTaskService
                 $currentSmart =  $responseData['result']['items'][0];
             }
         } else {
-           
+
             if (isset($responseData['error_description'])) {
                 Log::error('getSmartItem', [
                     'message'   => $responseData['error_description'],
@@ -224,7 +227,6 @@ class BitrixCallingColdTaskService
 
                 ]);
             }
-         
         }
         return $currentSmart;
     }
@@ -320,13 +322,13 @@ class BitrixCallingColdTaskService
         $bitrixResponse = $smartFieldsResponse->json();
 
         $resultFields = null;
-             if (isset($smartFieldsResponse['result'])) {
+        if (isset($smartFieldsResponse['result'])) {
             $resultFields = $smartFieldsResponse['result'];
-        }else if(isset($smartFieldsResponse['error'])  && isset($smartFieldsResponse['error_description'])){
+        } else if (isset($smartFieldsResponse['error'])  && isset($smartFieldsResponse['error_description'])) {
             Log::info('INITIAL COLD BTX ERROR', [
                 // 'btx error' => $smartFieldsResponse['error'],
                 'dscrp' => $smartFieldsResponse['error_description']
-    
+
             ]);
         }
         return $resultFields;
@@ -426,13 +428,13 @@ class BitrixCallingColdTaskService
         $bitrixResponse = $smartFieldsResponse->json();
 
         $resultFields = null;
-             if (isset($smartFieldsResponse['result'])) {
+        if (isset($smartFieldsResponse['result'])) {
             $resultFields = $smartFieldsResponse['result'];
-        }else if(isset($smartFieldsResponse['error'])  && isset($smartFieldsResponse['error_description'])){
+        } else if (isset($smartFieldsResponse['error'])  && isset($smartFieldsResponse['error_description'])) {
             Log::info('INITIAL COLD BTX ERROR', [
                 // 'btx error' => $smartFieldsResponse['error'],
                 'dscrp' => $smartFieldsResponse['error_description']
-    
+
             ]);
         }
         return $resultFields;
@@ -612,8 +614,6 @@ class BitrixCallingColdTaskService
         // Log::info('res', ['res' => $res]);
         return $res;
     }
-
-
 }
 
 
