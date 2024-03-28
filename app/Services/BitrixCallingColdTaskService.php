@@ -343,7 +343,7 @@ class BitrixCallingColdTaskService
             $fieldsData['company_id'] = $companyId;
         }
         if ($leadId) {
-            $fieldsData['lead_id'] = $leadId;
+            $fieldsData['parentId1'] = $leadId;
             $fieldsData['ufCrm7_1697129037'] = $leadId;
         }
 
@@ -438,7 +438,7 @@ class BitrixCallingColdTaskService
             $fieldsData['company_id'] = $companyId;
         }
         if ($leadId) {
-            $fieldsData['lead_id'] = $leadId;
+            $fieldsData['parentId1'] = $leadId;
             $fieldsData['ufCrm7_1697129037'] = $leadId;
         }
 
