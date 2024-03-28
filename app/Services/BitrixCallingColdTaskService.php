@@ -140,14 +140,14 @@ class BitrixCallingColdTaskService
             // }
             $randomNumber = rand(1, 10);
             sleep($randomNumber);
-
+            Log::info('COLD companyId', ['log' => $this->companyId]);
             if ($this->companyId) {
 
                 $updatedCompany = $this->updateCompanyCold();
             }
 
-
-            //todo
+            Log::info('COLD leadId', ['log' => $this->leadId]);
+           
             if ($this->leadId) {
 
                 $updatedLead = $this->updateLeadCold();
@@ -252,6 +252,7 @@ class BitrixCallingColdTaskService
 
         $response = Http::get($url, $data);
         $responseData = $response->json();
+        Log::info('COLD getSmartItem', ['responseData' => $responseData]);
         if (isset($responseData['result']) && !empty($responseData['result'])) {
             if (isset($responseData['result']['items']) && !empty($responseData['result']['items'])) {
                 $currentSmart =  $responseData['result']['items'][0];
@@ -509,8 +510,8 @@ class BitrixCallingColdTaskService
         $bitrixResponse = $smartFieldsResponse->json();
 
 
-        if (isset($smartFieldsResponse['result'])) {
-            $resultFields = $smartFieldsResponse['result']['fields'];
+        if (isset($bitrixResponse['result'])) {
+            $resultFields = $bitrixResponse['result']['fields'];
         }
         return $resultFields;
     }
