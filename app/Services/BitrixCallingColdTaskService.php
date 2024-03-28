@@ -253,7 +253,7 @@ class BitrixCallingColdTaskService
 
         $response = Http::get($url, $data);
         $responseData = $response->json();
-        Log::info('COLD getSmartItem', ['responseData' => $responseData]);
+      
         if (isset($responseData['result']) && !empty($responseData['result'])) {
             if (isset($responseData['result']['items']) && !empty($responseData['result']['items'])) {
                 $currentSmart =  $responseData['result']['items'][0];
@@ -372,7 +372,7 @@ class BitrixCallingColdTaskService
 
         $smartFieldsResponse = Http::get($url, $data);
         $bitrixResponse = $smartFieldsResponse->json();
-
+        Log::info('COLD Create SmartItem', ['bitrixResponse' => $bitrixResponse]);
         $resultFields = null;
         if (isset($bitrixResponse['result'])) {
             $resultFields = $bitrixResponse['result'];
@@ -438,6 +438,7 @@ class BitrixCallingColdTaskService
             $fieldsData['company_id'] = $companyId;
         }
         if ($leadId) {
+            $fieldsData['lead_id'] = $companyId;
             $fieldsData['ufCrm7_1697129037'] = $leadId;
         }
 
@@ -473,7 +474,7 @@ class BitrixCallingColdTaskService
 
         $smartFieldsResponse = Http::get($url, $data);
         $bitrixResponse = $smartFieldsResponse->json();
-
+        Log::info('COLD Updt SmartItem', ['bitrixResponse' => $bitrixResponse]);
         $resultFields = null;
         if (isset($bitrixResponse['result'])) {
             $resultFields = $smartFieldsResponse['result'];
