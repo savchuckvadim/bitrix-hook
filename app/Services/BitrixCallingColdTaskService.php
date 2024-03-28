@@ -303,9 +303,15 @@ class BitrixCallingColdTaskService
         $smartFieldsResponse = Http::get($url, $data);
         $bitrixResponse = $smartFieldsResponse->json();
 
-
-        if (isset($smartFieldsResponse['result'])) {
+        $resultFields = null;
+             if (isset($smartFieldsResponse['result'])) {
             $resultFields = $smartFieldsResponse['result'];
+        }else if(isset($smartFieldsResponse['error'])  && isset($smartFieldsResponse['error_description'])){
+            Log::info('INITIAL COLD BTX ERROR', [
+                'btx error' => $smartFieldsResponse['error'],
+                'dscrp' => $smartFieldsResponse['error_description']
+    
+            ]);
         }
         return $resultFields;
     }
@@ -403,9 +409,21 @@ class BitrixCallingColdTaskService
         $smartFieldsResponse = Http::get($url, $data);
         $bitrixResponse = $smartFieldsResponse->json();
 
-
-        if (isset($smartFieldsResponse['result'])) {
+        $resultFields = null;
+             if (isset($smartFieldsResponse['result'])) {
             $resultFields = $smartFieldsResponse['result'];
+        }else if(isset($smartFieldsResponse['error'])  && isset($smartFieldsResponse['error_description'])){
+            Log::info('INITIAL COLD BTX ERROR', [
+                'btx error' => $smartFieldsResponse['error'],
+                'dscrp' => $smartFieldsResponse['error_description']
+    
+            ]);
+        }else if(isset($smartFieldsResponse['error'])  && isset($smartFieldsResponse['error_description'])){
+            Log::info('INITIAL COLD BTX ERROR', [
+                'btx error' => $smartFieldsResponse['error'],
+                'dscrp' => $smartFieldsResponse['error_description']
+    
+            ]);
         }
         return $resultFields;
     }

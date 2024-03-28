@@ -787,7 +787,7 @@ class APIBitrixController extends Controller
         $smartFieldsResponse = Http::get($url, $data);
         $bitrixResponse = $smartFieldsResponse->json();
 
-
+        $resultFields = null;
         if (isset($smartFieldsResponse['result'])) {
             $resultFields = $smartFieldsResponse['result']['fields'];
         }
@@ -859,8 +859,14 @@ class APIBitrixController extends Controller
         $bitrixResponse = $smartFieldsResponse->json();
 
 
-        if (isset($smartFieldsResponse['result'])) {
+             if (isset($smartFieldsResponse['result'])) {
             $resultFields = $smartFieldsResponse['result'];
+        }else if(isset($smartFieldsResponse['error'])  && isset($smartFieldsResponse['error_description'])){
+            Log::info('INITIAL COLD BTX ERROR', [
+                'btx error' => $smartFieldsResponse['error'],
+                'dscrp' => $smartFieldsResponse['error_description']
+    
+            ]);
         }
         return $resultFields;
     }

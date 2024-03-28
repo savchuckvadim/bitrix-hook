@@ -288,8 +288,14 @@ class BitrixCallingTaskFailService
         $bitrixResponse = $smartFieldsResponse->json();
 
 
-        if (isset($smartFieldsResponse['result'])) {
+             if (isset($smartFieldsResponse['result'])) {
             $resultFields = $smartFieldsResponse['result'];
+        }else if(isset($smartFieldsResponse['error'])  && isset($smartFieldsResponse['error_description'])){
+            Log::info('INITIAL COLD BTX ERROR', [
+                'btx error' => $smartFieldsResponse['error'],
+                'dscrp' => $smartFieldsResponse['error_description']
+    
+            ]);
         }
         return $resultFields;
     }
