@@ -241,6 +241,7 @@ class BitrixCallingColdTaskService
                 'filter' => [
                     "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
                     "=assignedById" => $userId,
+                    
                     "=%ufCrm7_1697129081" => '%' . $leadId . '%',
 
                 ],
@@ -342,6 +343,7 @@ class BitrixCallingColdTaskService
             $fieldsData['company_id'] = $companyId;
         }
         if ($leadId) {
+            $fieldsData['lead_id'] = $leadId;
             $fieldsData['ufCrm7_1697129037'] = $leadId;
         }
 

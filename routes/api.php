@@ -241,7 +241,7 @@ Route::post('/coldlead/smart/init', function (Request $request) {
     // &company_id={{Компания}}
 
     Log::info('COLD FROM LEAD', ['log' => 'from bitrix']);
-    // Log::info('COLD FROM LEAD', ['log' => $request->all()]);
+    Log::info('COLD FROM LEAD', ['log' => $request->all()]);
     $comment = null;
     $smart = null;
     $sale = null;
@@ -290,7 +290,7 @@ Route::post('/coldlead/smart/init', function (Request $request) {
         //     $smart = $request['smart'];
         //     $sale = $request['sale'];
         // }
-
+        Log::info('COLD FROM LEAD', ['log' => $leadId]);
 
         $controller = new APIBitrixController();
         return $controller->initialCold(
