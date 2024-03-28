@@ -30,46 +30,46 @@ class APIBitrixController extends Controller
         // $crm,
     ) {
         try {
-            Log::info('domain COLD APIBitrixController', ['domain' => $domain]);
-            $portal = PortalController::getPortal($domain);
-            $portal = $portal['data'];
-            $smart = $portal['bitrixSmart'];
+            // Log::info('domain COLD APIBitrixController', ['domain' => $domain]);
+            // $portal = PortalController::getPortal($domain);
+            // $portal = $portal['data'];
+            // $smart = $portal['bitrixSmart'];
 
-            // Log::info('portal COLD APIBitrixController', ['portal' => $portal]);
+            // // Log::info('portal COLD APIBitrixController', ['portal' => $portal]);
 
-            $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
-            $hook = 'https://' . $domain  . '/' . $webhookRestKey;
-            $callingTaskGroupId = env('BITRIX_CALLING_GROUP_ID');
-            if (isset($portal['bitrixCallingTasksGroup']) && isset($portal['bitrixCallingTasksGroup']['bitrixId'])) {
-                $callingTaskGroupId =  $portal['bitrixCallingTasksGroup']['bitrixId'];
-            }
+            // $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+            // $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+            // $callingTaskGroupId = env('BITRIX_CALLING_GROUP_ID');
+            // if (isset($portal['bitrixCallingTasksGroup']) && isset($portal['bitrixCallingTasksGroup']['bitrixId'])) {
+            //     $callingTaskGroupId =  $portal['bitrixCallingTasksGroup']['bitrixId'];
+            // }
 
 
-            $smartBitrixId = 'T9c_';
-            if (isset($portal['bitrixSmart']) && isset($portal['bitrixSmart']['crm'])) {
-                $smartBitrixId =  $portal['bitrixSmart']['crm'] . '_';
-            }
+            // $smartBitrixId = 'T9c_';
+            // if (isset($portal['bitrixSmart']) && isset($portal['bitrixSmart']['crm'])) {
+            //     $smartBitrixId =  $portal['bitrixSmart']['crm'] . '_';
+            // }
 
-            if (!$smartId) { //если
-                $getSmartItemId = $this->getSmartItem($hook, $smart, $companyId, $responsibleId);
-                // $gettedSmart =  $getSmartItemId;
-                if ($getSmartItemId) {
-                    $smartId = $getSmartItemId['id'];
-                    // $currentSmartItem =  $getSmartItemId;
-                }
+            // if (!$smartId) { //если
+            //     $getSmartItemId = $this->getSmartItem($hook, $smart, $companyId, $responsibleId);
+            //     // $gettedSmart =  $getSmartItemId;
+            //     if ($getSmartItemId) {
+            //         $smartId = $getSmartItemId['id'];
+            //         // $currentSmartItem =  $getSmartItemId;
+            //     }
 
-                // return APIOnlineController::getResponse(0, 'success', ['crm' => $crm]);
-            }
-            $crmForCurrent = [$smartBitrixId . ''  . '' . $smartId];
+            //     // return APIOnlineController::getResponse(0, 'success', ['crm' => $crm]);
+            // }
+            // $crmForCurrent = [$smartBitrixId . ''  . '' . $smartId];
 
-            $currentTasksIds = $this->getCurrentTasksIds(
-                $hook,
-                $callingTaskGroupId,
-                $crmForCurrent,
-                $responsibleId
-            );
-            // Log::info('currentTasksIds', [$currentTasksIds]);
-            $this->completeTask($hook, $currentTasksIds);
+            // $currentTasksIds = $this->getCurrentTasksIds(
+            //     $hook,
+            //     $callingTaskGroupId,
+            //     $crmForCurrent,
+            //     $responsibleId
+            // );
+            // // Log::info('currentTasksIds', [$currentTasksIds]);
+            // $this->completeTask($hook, $currentTasksIds);
 
 
             $service = new BitrixCallingColdTaskService(
@@ -584,6 +584,15 @@ class APIBitrixController extends Controller
         if ($smartUpdateResponse) {
             if (isset($smartUpdateResponse['result'])) {
                 // Log::info('current_tasks', [$smartUpdateResponse['result']]);
+            } else {
+                if (isset($smartUpdateResponse['error'])) {
+
+                    Log::error('getSmartItem', [
+                        'message'   => $smartUpdateResponse['error_description'],
+                        'file'      => $smartUpdateResponse['error'],
+
+                    ]);
+                }
             }
         }
     }
@@ -653,7 +662,11 @@ class APIBitrixController extends Controller
         } else {
             $err = null;
             if (isset($responseData['error_description'])) {
-                $err = $responseData['error_description'];
+                Log::error('getSmartItem', [
+                    'message'   => $responseData['error_description'],
+                    'file'      => $responseData['error'],
+
+                ]);
             }
             return   $err;
         }
@@ -859,13 +872,13 @@ class APIBitrixController extends Controller
         $bitrixResponse = $smartFieldsResponse->json();
 
 
-             if (isset($smartFieldsResponse['result'])) {
+        if (isset($smartFieldsResponse['result'])) {
             $resultFields = $smartFieldsResponse['result'];
-        }else if(isset($smartFieldsResponse['error'])  && isset($smartFieldsResponse['error_description'])){
+        } else if (isset($smartFieldsResponse['error'])  && isset($smartFieldsResponse['error_description'])) {
             Log::info('INITIAL COLD BTX ERROR', [
                 // 'btx error' => $smartFieldsResponse['error'],
                 'dscrp' => $smartFieldsResponse['error_description']
-    
+
             ]);
         }
         return $resultFields;

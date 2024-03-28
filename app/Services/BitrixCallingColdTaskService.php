@@ -128,6 +128,9 @@ class BitrixCallingColdTaskService
     {
 
         try {
+
+
+
             // if(!$this->smartId){
 
             // }
@@ -148,12 +151,21 @@ class BitrixCallingColdTaskService
                 if (isset($currentSmart['id'])) {
                     $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
                 }
+
             } else {
                 $currentSmart = $this->createSmartItemCold();
                 // $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
             }
 
-
+            $crmForCurrent = [$this->smartId . ''  . '' . $currentSmart['id']];
+            $currentTasksIds = $this->getCurrentTasksIds(
+                $this->hook,
+                $this->callingGroupId,
+                $crmForCurrent,
+                $this->responsibleId
+            );
+            // Log::info('currentTasksIds', [$currentTasksIds]);
+            $this->completeTask($this->hook, $currentTasksIds);
 
             // Log::info('SUCCESS INITIAL COLD', [
             //     'updated smart' => $currentSmart,
@@ -204,11 +216,15 @@ class BitrixCallingColdTaskService
                 $currentSmart =  $responseData['result']['items'][0];
             }
         } else {
-            $err = null;
+           
             if (isset($responseData['error_description'])) {
-                $err = $responseData['error_description'];
+                Log::error('getSmartItem', [
+                    'message'   => $responseData['error_description'],
+                    'file'      => $responseData['error'],
+
+                ]);
             }
-            return   $err;
+         
         }
         return $currentSmart;
     }
@@ -509,6 +525,95 @@ class BitrixCallingColdTaskService
         Log::info('fieldsData', ['fieldsData' => $fieldsData]);
         return $result;
     }
+
+
+
+
+    //tasks for complete
+    protected function getCurrentTasksIds(
+        $hook,
+        $callingTaskGroupId,
+        $crmForCurrent,
+        $responsibleId
+    ) {
+        $resultIds = [];
+        $methodGet = '/tasks.task.list';
+        $url = $hook . $methodGet;
+
+        // for get
+        $filter = [
+            'GROUP_ID' => $callingTaskGroupId,
+            'UF_CRM_TASK' => $crmForCurrent,
+            'RESPONSIBLE_ID' => $responsibleId,
+            '!=STATUS' => 5, // Исключаем задачи со статусом "завершена"
+
+        ];
+
+        $select = [
+            'ID',
+            'TITLE',
+            'MARK',
+            'STATUS',
+            'GROUP_ID',
+            'STAGE_ID',
+            'RESPONSIBLE_ID'
+
+        ];
+        $getTaskData = [
+            'filter' => $filter,
+            'select' => $select,
+
+        ];
+        $responseData = Http::get($url, $getTaskData);
+
+        if (isset($responseData['result'])) {
+            if (isset($responseData['result']['tasks'])) {
+                // Log::info('tasks', [$responseData['result']]);
+                $resultTasks = $responseData['result']['tasks'];
+                foreach ($resultTasks  as $key =>  $task) {
+                    if (isset($task['id'])) {
+                        // Log::info('task', ['taskId' => $task['id']]);
+                        array_push($resultIds, $task['id']);
+                    }
+
+                    // array_push($resultTasks, $task);
+                }
+            }
+        }
+
+        return $resultIds;
+    }
+
+    protected function completeTask($hook, $taskIds)
+    {
+
+        $methodUpdate = 'tasks.task.update';
+        $methodComplete = 'tasks.task.complete';
+
+        $batchCommands = [];
+
+        foreach ($taskIds as $taskId) {
+            $batchCommands['cmd']['updateTask_' . $taskId] = $methodUpdate . '?taskId=' . $taskId . '&fields[MARK]=P';
+            $batchCommands['cmd']['completeTask_' . $taskId] = $methodComplete . '?taskId=' . $taskId;
+        }
+
+        $response = Http::post($hook . '/batch', $batchCommands);
+
+        // Обработка ответа от API
+        if ($response->successful()) {
+            $responseData = $response->json();
+            // Логика обработки успешного ответа
+        } else {
+            // Обработка ошибок
+            $errorData = $response->body();
+            // Логика обработки ошибки
+        }
+        $res = $responseData ?? $errorData;
+        // Log::info('res', ['res' => $res]);
+        return $res;
+    }
+
+
 }
 
 
