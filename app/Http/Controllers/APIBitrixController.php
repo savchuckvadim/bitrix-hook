@@ -21,6 +21,7 @@ class APIBitrixController extends Controller
     public function initialCold(
         $domain,
         $companyId,
+        $leadId,
         $createdId,
         $responsibleId,
         $deadline,
@@ -33,7 +34,7 @@ class APIBitrixController extends Controller
             $portal = $portal['data'];
             $smart = $portal['bitrixSmart'];
 
-
+            Log::info('portal COLD APIBitrixController', ['error' => $portal]);
 
             $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;

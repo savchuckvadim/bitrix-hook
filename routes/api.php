@@ -239,75 +239,80 @@ Route::post('/coldlead/smart/init', function (Request $request) {
     // name={=Template:Parameter4}&
     // id={{ID}}
     // &company_id={{Компания}}
+
     Log::info('COLD FROM LEAD', ['log' => 'from bitrix']);
     Log::info('COLD FROM LEAD', ['log' => $request->all()]);
-    // $comment = null;
-    // $smart = null;
-    // $sale = null;
-    // $createdId =  null;
-    // $smartId =  null;
-    // try {
-    //     if (isset($request['created'])) {
-    //         $created = $request['created'];
-    //         $partsCreated = explode("_", $created);
-    //         $createdId = $partsCreated[1];
-    //     }
+    $comment = null;
+    $smart = null;
+    $sale = null;
+    $createdId =  null;
+    $smartId =  null;
 
-    //     if (isset($request['smart_id'])) {
-    //         $smartId = $request['smart_id'];
-    //     }
+    // lidId UF_CRM_7_1697129037
+    // lidIds UF_CRM_7_1697129081
+    try {
+        if (isset($request['created'])) {
+            $created = $request['created'];
+            $partsCreated = explode("_", $created);
+            $createdId = $partsCreated[1];
+        }
 
-
-    //     $responsible = $request['responsible'];
-    //     $partsResponsible = explode("_", $responsible);
-
-    //     $responsibleId = $partsResponsible[1];
+        if (isset($request['smart_id'])) {
+            $smartId = $request['smart_id'];
+        }
 
 
-    //     $auth = $request['auth'];
-    //     $domain = $auth['domain'];
-    //     $companyId = $request['company_id'];
+        $responsible = $request['responsible'];
+        $partsResponsible = explode("_", $responsible);
 
-    //     $deadline = $request['deadline'];
-    //     // $crm = $request['crm'];
-    //     $name = $request['name'];
-    //     //only from front calling
-    //     // if (
-    //     //     isset($request['comment'])
-    //     //     && isset($request['smart'])
-    //     //     && isset($request['smart'])
-    //     // ) {
-    //     //     $comment = $request['comment'];
-    //     //     $smart = $request['smart'];
-    //     //     $sale = $request['sale'];
-    //     // }
+        $responsibleId = $partsResponsible[1];
 
 
-    //     $controller = new APIBitrixController();
-    //     return $controller->initialCold(
-    //         // $type,
-    //         $domain,
-    //         $companyId,
-    //         $createdId,
-    //         $responsibleId,
-    //         $deadline,
-    //         $name,
-    //         $smartId,
-    //         // $comment,
-    //         // $crm,
-    //         // $smart,
-    //         // $sale
-    //     );
-    // } catch (\Throwable $th) {
-    //     $errorMessages =  [
-    //         'message'   => $th->getMessage(),
-    //         'file'      => $th->getFile(),
-    //         'line'      => $th->getLine(),
-    //         'trace'     => $th->getTraceAsString(),
-    //     ];
-    //     Log::error('ROUTE ERROR COLD: Exception caught',  $errorMessages);
-    //     Log::info('error COLD', ['error' => $th->getMessage()]);
-    // }
+        $auth = $request['auth'];
+        $domain = $auth['domain'];
+        $companyId = $request['company_id'];
+        $leadId = $request['lead_id'];
+        $deadline = $request['deadline'];
+        // $crm = $request['crm'];
+        $name = $request['name'];
+        //only from front calling
+        // if (
+        //     isset($request['comment'])
+        //     && isset($request['smart'])
+        //     && isset($request['smart'])
+        // ) {
+        //     $comment = $request['comment'];
+        //     $smart = $request['smart'];
+        //     $sale = $request['sale'];
+        // }
+
+
+        $controller = new APIBitrixController();
+        return $controller->initialCold(
+            // $type,
+            $domain,
+            $companyId,
+            $leadId,
+            $createdId,
+            $responsibleId,
+            $deadline,
+            $name,
+            $smartId,
+            // $comment,
+            // $crm,
+            // $smart,
+            // $sale
+        );
+    } catch (\Throwable $th) {
+        $errorMessages =  [
+            'message'   => $th->getMessage(),
+            'file'      => $th->getFile(),
+            'line'      => $th->getLine(),
+            'trace'     => $th->getTraceAsString(),
+        ];
+        Log::error('ROUTE ERROR COLD: Exception caught',  $errorMessages);
+        Log::info('error COLD', ['error' => $th->getMessage()]);
+    }
 });
 
 Route::post('/cold/smart/init', function (Request $request) {
@@ -335,6 +340,7 @@ Route::post('/cold/smart/init', function (Request $request) {
     $sale = null;
     $createdId =  null;
     $smartId =  null;
+    $leadId = null;
     try {
         if (isset($request['created'])) {
             $created = $request['created'];
@@ -357,6 +363,10 @@ Route::post('/cold/smart/init', function (Request $request) {
         $domain = $auth['domain'];
         $companyId = $request['company_id'];
 
+        if (isset($request['lead_id'])) {
+            $leadId = $request['lead_id'];
+        }
+
         $deadline = $request['deadline'];
         // $crm = $request['crm'];
         $name = $request['name'];
@@ -377,6 +387,7 @@ Route::post('/cold/smart/init', function (Request $request) {
             // $type,
             $domain,
             $companyId,
+            $leadId,
             $createdId,
             $responsibleId,
             $deadline,
