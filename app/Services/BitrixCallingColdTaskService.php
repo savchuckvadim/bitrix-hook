@@ -241,7 +241,7 @@ class BitrixCallingColdTaskService
                 'filter' => [
                     "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
                     "=assignedById" => $userId,
-                    "=%UF_CRM_7_1697129081" => '%' . $leadId . '%',
+                    "=%ufCrm7_1697129081" => '%' . $leadId . '%',
 
                 ],
                 // 'select' => ["ID"],
