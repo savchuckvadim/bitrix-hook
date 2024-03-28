@@ -19,6 +19,9 @@ class APIOnlineController extends Controller
                 $requestData
             );
 
+            Log::error('API ONLINE: portalResponse', [
+                $portalResponse
+            ]);
             if ($portalResponse->successful()) {
                 $data = $portalResponse->json();
                 if ($data['resultCode'] == 0 && $data[$dataname]) {
@@ -39,7 +42,7 @@ class APIOnlineController extends Controller
                 return [
                     'resultCode' => 1,
                     'message' => 'ONLINE: Ошибка при запросе к API.',
-                    
+
                 ];
             }
         } catch (\Throwable $th) {
@@ -56,7 +59,8 @@ class APIOnlineController extends Controller
         }
     }
 
-    public static function getResponse($resultCode, $message, $data){
+    public static function getResponse($resultCode, $message, $data)
+    {
 
         return response([
             'resultCode' => $resultCode,
@@ -65,7 +69,8 @@ class APIOnlineController extends Controller
         ]);
     }
 
-    public static function getSuccess($data){
+    public static function getSuccess($data)
+    {
 
         return response([
             'resultCode' => 0,
@@ -73,7 +78,8 @@ class APIOnlineController extends Controller
             'data' => $data
         ]);
     }
-    public static function getError($message, $data){
+    public static function getError($message, $data)
+    {
 
         return response([
             'resultCode' => 1,
