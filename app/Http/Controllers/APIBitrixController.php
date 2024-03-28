@@ -30,11 +30,12 @@ class APIBitrixController extends Controller
         // $crm,
     ) {
         try {
+            Log::info('domain COLD APIBitrixController', ['domain' => $domain]);
             $portal = PortalController::getPortal($domain);
             $portal = $portal['data'];
             $smart = $portal['bitrixSmart'];
 
-            Log::info('portal COLD APIBitrixController', ['error' => $portal]);
+            Log::info('portal COLD APIBitrixController', ['portal' => $portal]);
 
             $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
