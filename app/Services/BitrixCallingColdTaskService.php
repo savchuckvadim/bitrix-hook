@@ -21,6 +21,7 @@ class BitrixCallingColdTaskService
     // protected $type;
     protected $domain;
     protected $companyId;
+    protected $leadId;
     protected $createdId;
     protected $responsibleId;
     protected $deadline;
@@ -44,6 +45,7 @@ class BitrixCallingColdTaskService
         // $type,
         $domain,
         $companyId,
+        $leadId,
         $createdId,
         $responsibleId,
         $deadline,
@@ -66,6 +68,8 @@ class BitrixCallingColdTaskService
         // $this->type = $type;
         $this->domain = $domain;
         $this->companyId = $companyId;
+        $this->leadId = $leadId;
+
         $this->createdId = $createdId;
         $this->responsibleId = $responsibleId;
         $this->smartId = $smartId;  //может быть null
@@ -136,7 +140,18 @@ class BitrixCallingColdTaskService
             // }
             $randomNumber = rand(1, 10);
             sleep($randomNumber);
-            $updatedCompany = $this->updateCompanyCold();
+
+            if ($this->companyId) {
+
+                $updatedCompany = $this->updateCompanyCold();
+            }
+
+
+            //todo
+            if ($this->leadId) {
+
+                $updatedLead = $this->updateLeadCold();
+            }
 
             // Log::info('COLD first updatedCompany', [
             //     'updatedCompany' => $updatedCompany,
@@ -196,6 +211,9 @@ class BitrixCallingColdTaskService
 
     )
     {
+        // lidIds UF_CRM_7_1697129081
+        $leadId  = $this->leadId;
+
         $companyId = $this->companyId;
         $userId = $this->responsibleId;
         $smart = $this->aprilSmartData;
@@ -205,16 +223,33 @@ class BitrixCallingColdTaskService
 
         $method = '/crm.item.list.json';
         $url = $this->hook . $method;
-        $data =  [
-            'entityTypeId' => $smart['crmId'],
-            'filter' => [
-                "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
-                "=assignedById" => $userId,
-                'COMPANY_ID' => $companyId,
+        if ($companyId) {
+            $data =  [
+                'entityTypeId' => $smart['crmId'],
+                'filter' => [
+                    "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
+                    "=assignedById" => $userId,
+                    'COMPANY_ID' => $companyId,
 
-            ],
-            // 'select' => ["ID"],
-        ];
+                ],
+                // 'select' => ["ID"],
+            ];
+        }
+        if ($leadId) {
+            $data =  [
+                'entityTypeId' => $smart['crmId'],
+                'filter' => [
+                    "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
+                    "=assignedById" => $userId,
+                    "=%UF_CRM_7_1697129081" => '%' . $leadId . '%',
+
+                ],
+                // 'select' => ["ID"],
+            ];
+        }
+
+
+
         $response = Http::get($url, $data);
         $responseData = $response->json();
         if (isset($responseData['result']) && !empty($responseData['result'])) {
@@ -290,14 +325,25 @@ class BitrixCallingColdTaskService
         $responsibleId  = $this->responsibleId;
         $smart  = $this->aprilSmartData;
 
+        $leadId  = $this->leadId;
+
 
         $resulFields = [];
         $fieldsData = [];
         $fieldsData['categoryId'] = $this->categoryId;
         $fieldsData['stageId'] = $this->stageId;
-        $fieldsData['ufCrm7_1698134405'] = $companyId;
+        // $fieldsData['ufCrm7_1698134405'] = $companyId;
         $fieldsData['assigned_by_id'] = $responsibleId;
-        $fieldsData['companyId'] = $companyId;
+        // $fieldsData['companyId'] = $companyId;
+
+        if ($companyId) {
+            $fieldsData['ufCrm7_1698134405'] = $companyId;
+            $fieldsData['company_id'] = $companyId;
+        }
+        if ($leadId) {
+            $fieldsData['ufCrm7_1697129037'] = $leadId;
+        }
+
         $fieldsData[$this->lastCallDateField] = $this->deadline;  //дата звонка следующего
         $fieldsData[$this->lastCallDateFieldCold] = $this->deadline; //дата холодного следующего
         $fieldsData[$this->callThemeField] = $this->name;      //тема следующего звонка
@@ -362,29 +408,13 @@ class BitrixCallingColdTaskService
         // Постановщик ХО UF_CRM_6_1702453779
         // Ответственный ХО UF_CRM_6_1702652862
 
-        // $categoryId = 28;
-        // $stageId = 'DT162_28:NEW';
 
-        // $lastCallDateField = 'ufCrm10_1709907744';
-        // $callThemeField = 'ufCrm10_1709907850';
-        // $lastCallDateFieldCold = 'ufCrm10_1701270138';
-        // $callThemeFieldCold = 'ufCrm10_1703491835';
-
-        // if ($this->domain == 'alfacentr.bitrix24.ru') {
-        //     $lastCallDateField = 'ufCrm6_1709907693';
-        //     $callThemeField = 'ufCrm6_1709907816';
-        //     $lastCallDateFieldCold = 'ufCrm6_1709907693';
-        //     $callThemeFieldCold = 'ufCrm6_1700645937';
-
-        //     $categoryId = 14;
-        //     $stageId = 'DT156_14:NEW';
-        // }
-
-        // UF_CRM_6_1702453779 alfacenter Постановщик ХО - smart field
-        // UF_CRM_6_1702652862   alfacenter Ответственный ХО - smart field
+        //lead
+        //leadId UF_CRM_7_1697129037
 
 
         $companyId  = $this->companyId;
+        $leadId  = $this->leadId;
         $responsibleId  = $this->responsibleId;
         $smart  = $this->aprilSmartData;
 
@@ -394,10 +424,19 @@ class BitrixCallingColdTaskService
 
         $fieldsData['categoryId'] = $this->categoryId;
         $fieldsData['stageId'] = $this->stageId;
-        $fieldsData['ufCrm7_1698134405'] = $companyId;
+
         $fieldsData['ufCrm6_1702652862'] = $responsibleId; // alfacenter Ответственный ХО 
         $fieldsData['assigned_by_id'] = $responsibleId;
-        $fieldsData['company_id'] = $companyId;
+
+        if ($companyId) {
+            $fieldsData['ufCrm7_1698134405'] = $companyId;
+            $fieldsData['company_id'] = $companyId;
+        }
+        if ($leadId) {
+            $fieldsData['ufCrm7_1697129037'] = $leadId;
+        }
+
+
         $fieldsData[$this->lastCallDateField] = $this->deadline;  //дата звонка следующего
         $fieldsData[$this->lastCallDateFieldCold] = $this->deadline; //дата холодного следующего
         $fieldsData[$this->callThemeField] = $this->name;      //тема следующего звонка
@@ -491,7 +530,7 @@ class BitrixCallingColdTaskService
         return $transformedString;
     }
 
-    //company
+    // company
     protected function updateCompanyCold()
     {
 
@@ -527,6 +566,53 @@ class BitrixCallingColdTaskService
 
                 $result =  null;
                 Log::error('BTX ERROR updateCompanyCold', ['fieldsData' => $responseData['error_description']]);
+            }
+        }
+
+        return $result;
+    }
+
+
+    //lead
+
+    protected function updateLeadCold()
+    {
+
+        $hook = $this->hook;
+        $responsibleId = $this->responsibleId;
+
+
+
+
+        //
+        $method = '/crm.lead.update.json';
+        $result = null;
+
+
+        $fields = [
+            'ASSIGNED_BY_ID' => $responsibleId
+        ];
+
+        $getUrl = $hook . $method;
+        $fieldsData = [
+            'id' => $this->leadId,
+            'fields' => $fields
+        ];
+
+        $response = Http::get($getUrl,  $fieldsData);
+        if ($response) {
+            $responseData = $response->json();
+            if (isset($responseData['result'])) {
+                $result =  $responseData['result'];
+            } else if (isset($responseData['error_description'])) {
+
+                $result =  null;
+                Log::error(
+                    'BTX ERROR updateLeadCold',
+                    [
+                        'fieldsData' => $responseData['error_description']
+                    ]
+                );
             }
         }
 

@@ -270,7 +270,12 @@ Route::post('/coldlead/smart/init', function (Request $request) {
 
         $auth = $request['auth'];
         $domain = $auth['domain'];
-        $companyId = $request['company_id'];
+        $companyId = null;
+        if (isset($request['company_id'])) {
+
+            $companyId = $request['company_id'];
+        }
+
         $leadId = $request['lead_id'];
         $deadline = $request['deadline'];
         // $crm = $request['crm'];

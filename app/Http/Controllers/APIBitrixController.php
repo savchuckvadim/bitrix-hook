@@ -34,6 +34,7 @@ class APIBitrixController extends Controller
             $service = new BitrixCallingColdTaskService(
                 $domain,
                 $companyId,
+                $leadId,
                 $createdId,
                 $responsibleId,
                 $deadline,
