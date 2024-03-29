@@ -342,7 +342,21 @@ class APIBitrixController extends Controller
 
 
     ) {
-        dispatch(new CreateBitrixCallingTaskJob(
+        // dispatch(new CreateBitrixCallingTaskJob(
+        //     $type,
+        //     $domain,
+        //     $companyId,
+        //     $createdId,
+        //     $responsibleId,
+        //     $deadline,
+        //     $name,
+        //     $comment,
+        //     // $crm,
+        //     $currentBitrixSmart,
+        //     $sale,
+        //     $isOneMore
+        // ));
+        $service = new BitrixCallingTaskService(
             $type,
             $domain,
             $companyId,
@@ -351,13 +365,12 @@ class APIBitrixController extends Controller
             $deadline,
             $name,
             $comment,
-            // $crm,
             $currentBitrixSmart,
             $sale,
             $isOneMore
-        ));
-
-        return APIOnlineController::getSuccess(false);
+        );
+       return $service->createCallingTaskItem();
+        // return APIOnlineController::getSuccess(false);
     }
 
     public function failTask(
