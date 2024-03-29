@@ -258,7 +258,7 @@ class BitrixCallingColdTaskService
         // $responseData = $response->json();
         $responseData = APIBitrixController::getBitrixRespone($response, 'cold: getSmartItem');
         if (isset($responseData)) {
-            if (isset($responseData['items'])) {
+            if (!empty($responseData['items'])) {
                 $currentSmart =  $responseData['items'][0];
             }
         }
@@ -368,11 +368,16 @@ class BitrixCallingColdTaskService
         $smartFieldsResponse = Http::get($url, $data);
         // $bitrixResponse = $smartFieldsResponse->json();
         $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'cold: createSmartItemCold');
-        Log::info('COLD createSmartItemCold', ['createSmartItemCold' => $responseData]);
+        // Log::info('COLD createSmartItemCold', ['createSmartItemCold' => $responseData]);
         // $resultFields = null;
         // if (isset($responseData)) {
         $resultFields = $responseData;
         // }
+        Log::channel('telegram')->error('APRIL_HOOK', [
+            'btrx createSmartItemCold' => $resultFields,
+
+        ]);
+
         return $resultFields;
     }
 
@@ -459,7 +464,7 @@ class BitrixCallingColdTaskService
         //     'updateSmartItemCold' => $data
 
         // ]);
-       
+
         $smartFieldsResponse = Http::get($url, $data);
         // $bitrixResponse = $smartFieldsResponse->json();
         // Log::info('COLD Updt SmartItem', ['bitrixResponse' => $bitrixResponse]);
@@ -467,7 +472,7 @@ class BitrixCallingColdTaskService
 
         $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'cold: updateSmartItemCold');
         // if (isset($bitrixResponse['result'])) {
-            $resultFields = $responseData;
+        $resultFields = $responseData;
         // } 
         // else if (isset($bitrixResponse['error'])  && isset($bitrixResponse['error_description'])) {
         //     Log::info('INITIAL COLD BTX ERROR', [
@@ -556,7 +561,7 @@ class BitrixCallingColdTaskService
 
         $response = Http::get($getUrl,  $fieldsData);
         $responseData = APIBitrixController::getBitrixRespone($response, 'cold: updateCompanyCold');
-       
+
         $result =  $responseData;
         // if ($response) {
         //     $responseData = $response->json();
@@ -601,7 +606,7 @@ class BitrixCallingColdTaskService
 
         $response = Http::get($getUrl,  $fieldsData);
         $responseData = APIBitrixController::getBitrixRespone($response, 'cold: updateLeadCold');
-       
+
         $result =  $responseData;
 
 
@@ -663,22 +668,22 @@ class BitrixCallingColdTaskService
 
         ];
         $response = Http::get($url, $getTaskData);
-     
-        $responseData = APIBitrixController::getBitrixRespone($response, 'cold: getCurrentTasksIds');
-       
-        // if (isset($responseData['result'])) {
-            if (isset($responseData['tasks'])) {
-                // Log::info('tasks', [$responseData['result']]);
-                $resultTasks = $responseData['tasks'];
-                foreach ($resultTasks  as $key =>  $task) {
-                    if (isset($task['id'])) {
-                        // Log::info('task', ['taskId' => $task['id']]);
-                        array_push($resultIds, $task['id']);
-                    }
 
-                    // array_push($resultTasks, $task);
+        $responseData = APIBitrixController::getBitrixRespone($response, 'cold: getCurrentTasksIds');
+
+        // if (isset($responseData['result'])) {
+        if (isset($responseData['tasks'])) {
+            // Log::info('tasks', [$responseData['result']]);
+            $resultTasks = $responseData['tasks'];
+            foreach ($resultTasks  as $key =>  $task) {
+                if (isset($task['id'])) {
+                    // Log::info('task', ['taskId' => $task['id']]);
+                    array_push($resultIds, $task['id']);
                 }
+
+                // array_push($resultTasks, $task);
             }
+        }
         // }
 
         return $resultIds;

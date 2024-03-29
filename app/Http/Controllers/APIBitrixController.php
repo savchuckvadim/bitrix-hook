@@ -1466,13 +1466,13 @@ class APIBitrixController extends Controller
         if ($response) {
             if (isset($response['result'])) {
 
-                Log::info('success btrx response', [
-                    'BTRX_RESPONSE_SUCCESS' => [
-                        'result' => $response['result'],
+                // Log::info('success btrx response', [
+                //     'BTRX_RESPONSE_SUCCESS' => [
+                //         'result' => $response['result'],
 
-                    ]
+                //     ]
 
-                ]);
+                // ]);
                 return $response['result'];
             } else {
                 if (isset($response['error_description'])) {
