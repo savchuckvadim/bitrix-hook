@@ -1459,4 +1459,41 @@ class APIBitrixController extends Controller
             return APIOnlineController::getError($th->getMessage(),  $errorMessages);
         }
     }
+
+    protected function getBitrixRespone($bitrixResponse, $method)
+    {
+        $response =  $bitrixResponse->json();
+        if ($response) {
+            if (isset($response['result'])) {
+
+                Log::info('success btrx response', [
+                    'BTRX_RESPONSE_SUCCESS' => [
+                        'result' => $response['result'],
+
+                    ]
+
+                ]);
+                return $response['result'];
+            } else {
+                if (isset($response['error_description'])) {
+                    Log::channel('telegram')->error('APRIL_HOOK', [
+                        $method => [
+                            'btrx error' => $response['error'],
+                            'btrx response' => $response['error_description']
+                        ]
+                    ]);
+
+
+                    Log::info('error', [
+                        $method => [
+                            'btrx error' => $response['error'],
+                            'btrx response' => $response['error_description']
+                        ]
+
+                    ]);
+                    return null;
+                }
+            }
+        }
+    }
 }
