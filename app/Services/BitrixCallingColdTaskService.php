@@ -139,7 +139,7 @@ class BitrixCallingColdTaskService
             // if(!$this->smartId){
 
             // }
-            $randomNumber = rand(1, 10);
+            $randomNumber = rand(1, 5);
             sleep($randomNumber);
             Log::info('COLD companyId', ['log' => $this->companyId]);
             if ($this->companyId) {
@@ -153,6 +153,8 @@ class BitrixCallingColdTaskService
 
                 $updatedLead = $this->updateLeadCold();
             }
+
+            Log::info('COLD updatedLead', ['updatedLead' => $updatedLead]);
 
             // Log::info('COLD first updatedCompany', [
             //     'updatedCompany' => $updatedCompany,
@@ -203,7 +205,7 @@ class BitrixCallingColdTaskService
             ];
             Log::error('ERROR COLD: Exception caught',  $errorMessages);
             Log::info('error COLD', ['error' => $th->getMessage()]);
-            return APIOnlineController::getResponse(1, $th->getMessage(),  $errorMessages);
+            return APIOnlineController::getError($th->getMessage(),  $errorMessages);
         }
     }
 
@@ -366,7 +368,7 @@ class BitrixCallingColdTaskService
         $smartFieldsResponse = Http::get($url, $data);
         // $bitrixResponse = $smartFieldsResponse->json();
         $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'cold: createSmartItemCold');
-
+        Log::info('COLD createSmartItemCold', ['createSmartItemCold' => $responseData]);
         // $resultFields = null;
         // if (isset($responseData)) {
         $resultFields = $responseData;

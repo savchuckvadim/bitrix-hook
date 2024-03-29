@@ -20,7 +20,7 @@ class APIOnlineController extends Controller
                 $requestData
             );
 
-           
+
             if ($portalResponse->successful()) {
                 $data = $portalResponse->json();
                 if ($data['resultCode'] == 0 && $data[$dataname]) {
@@ -50,7 +50,7 @@ class APIOnlineController extends Controller
                 ];
             }
         } catch (\Throwable $th) {
-            Log::error('API ONLINE: Exception caught', [
+            Log::error('APRIL_HOOK: API ONLINE: Exception caught', [
                 'message'   => $th->getMessage(),
                 'file'      => $th->getFile(),
                 'line'      => $th->getLine(),
@@ -84,7 +84,12 @@ class APIOnlineController extends Controller
     }
     public static function getError($message, $data)
     {
-
+        Log::channel('telegram')->error('APRIL_HOOK', [
+            'APRIL_HOOK' => [
+                '$message' => $message,
+                $data
+            ]
+        ]);
         return response([
             'resultCode' => 1,
             'message' => $message,
