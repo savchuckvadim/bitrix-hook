@@ -373,10 +373,10 @@ class BitrixCallingColdTaskService
         // if (isset($responseData)) {
         $resultFields = $responseData;
         // }
-        Log::channel('telegram')->error('APRIL_HOOK', [
-            'btrx createSmartItemCold' => $resultFields,
+        // Log::channel('telegram')->error('APRIL_HOOK', [
+        //     'btrx createSmartItemCold' => $resultFields,
 
-        ]);
+        // ]);
 
         return $resultFields;
     }
