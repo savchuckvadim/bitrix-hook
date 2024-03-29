@@ -1460,7 +1460,7 @@ class APIBitrixController extends Controller
         }
     }
 
-    protected function getBitrixRespone($bitrixResponse, $method)
+    static function getBitrixRespone($bitrixResponse, $method)
     {
         $response =  $bitrixResponse->json();
         if ($response) {
