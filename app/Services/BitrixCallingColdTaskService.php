@@ -133,12 +133,7 @@ class BitrixCallingColdTaskService
     {
 
         try {
-            Log::channel('telegram')->error('APRIL_HOOK', [
-                'initialCold' => [
-                    'domain' => $this->domain,
-  
-                ]
-            ]);
+
             $updatedCompany = null;
             $updatedLead = null;
             // if(!$this->smartId){
