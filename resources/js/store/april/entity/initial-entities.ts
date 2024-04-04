@@ -187,7 +187,7 @@ export const allEntities = [
 
         },
         relations: [
-            7, 8, 9, 15
+            7, 8, 9, 10, 15
         ]
 
 

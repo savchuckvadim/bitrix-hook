@@ -1,17 +1,18 @@
 import axios from "axios";
 import { ONLINE_API_KEY } from "../../secret/online-secret";
+import { IS_ONLINE_APRIL_DEV } from "../../constants/april";
 
 
-const IS_APRIL_DEV = true
+
 
 
 export const online = axios.create({
     withCredentials: true,
     // baseURL: 'https://april-online.ru/api',
     baseURL:
-    IS_APRIL_DEV 
-    ? 'http://localhost:5000/api'
-    : 'https://april-online.ru/api',
+    IS_ONLINE_APRIL_DEV 
+    ? 'http://localhost:5000/api/admin'
+    : 'https://april-online.ru/api/admin',
     headers: {
         // 'content-type': 'application/json',
         // 'content-type': undefined,

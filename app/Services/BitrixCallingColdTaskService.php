@@ -134,8 +134,8 @@ class BitrixCallingColdTaskService
 
         try {
 
-
-
+            $updatedCompany = null;
+            $updatedLead = null;
             // if(!$this->smartId){
 
             // }
