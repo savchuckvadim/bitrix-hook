@@ -226,6 +226,26 @@ class APIBitrixController extends Controller
 
                     $cmpnPhonesEmailsList = '[LIST]' . $cmpnyListContent . '[/LIST]';
                 }
+
+
+
+
+
+
+
+
+
+
+
+                $companyPhones = '';
+
+                $companyTitleString = '[B][COLOR=#0070c0]' . $company['result']['TITLE'] . '[/COLOR][/B]';
+                $description =  $companyTitleString . '
+                ' . '[LEFT][B]Контакты компании: [/B][/LEFT]' . $contactsTable;
+                $description = $description . '' . $cmpnPhonesEmailsList;
+
+
+
             }
 
 
@@ -233,12 +253,7 @@ class APIBitrixController extends Controller
 
 
 
-            $companyPhones = '';
-
-            $companyTitleString = '[B][COLOR=#0070c0]' . $company['result']['TITLE'] . '[/COLOR][/B]';
-            $description =  $companyTitleString . '
-            ' . '[LEFT][B]Контакты компании: [/B][/LEFT]' . $contactsTable;
-            $description = $description . '' . $cmpnPhonesEmailsList;
+  
 
             //task
             $methodTask = '/tasks.task.add.json';
