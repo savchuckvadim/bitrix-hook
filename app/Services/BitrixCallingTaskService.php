@@ -22,7 +22,7 @@ class BitrixCallingTaskService
     protected $domain;
     protected $companyId;
     protected $leadId;
-    
+
     protected $createdId;
     protected $responsibleId;
     protected $deadline;
@@ -34,6 +34,13 @@ class BitrixCallingTaskService
     protected $isOneMoreService;
 
     protected $taskTitle;
+
+    protected $categoryId = 28;
+    protected $stageId = 'DT162_28:NEW';
+    protected $lastCallDateFieldCold = 'ufCrm10_1701270138';
+    protected $callThemeFieldCold = 'ufCrm10_1703491835';
+
+
 
     public function __construct(
         $type,
@@ -61,7 +68,7 @@ class BitrixCallingTaskService
         $this->domain = $domain;
         $this->companyId = $companyId;
         $this->leadId = $leadId;
-        
+
         $this->createdId = $createdId;
         $this->responsibleId = $responsibleId;
 
@@ -135,6 +142,32 @@ class BitrixCallingTaskService
         }
         $this->deadline = $targetDeadLine;
         $this->taskTitle = $stringType . $name . '  ' . $deadline;
+
+        if ($domain == 'alfacentr.bitrix24.ru') {
+            // DT156_12:UC_LEWVV8	Звонок согласован
+            // DT156_12:UC_29HBRD	Презентация согласована
+            if ($type === 'warm') {
+                $this->categoryId = 12;
+                $this->stageId = 'DT156_12:UC_LEWVV8';
+            } else   if ($type === 'presentation') {
+
+                $this->categoryId = 12;
+                $this->stageId = 'DT156_12:UC_29HBRD';
+            }
+        } else    if ($domain == 'april-garant.bitrix24.ru') {
+
+            // DT162_26:UC_Q5V5H0	Теплый прозвон
+            // DT162_26:UC_NFZKDU	Презентация запланирована
+
+            if ($type === 'warm') {
+                $this->categoryId = 26;
+                $this->stageId = 'DT162_26:UC_Q5V5H0';
+            } else   if ($type === 'presentation') {
+
+                $this->categoryId = 26;
+                $this->stageId = 'DT162_26:UC_NFZKDU';
+            }
+        }
     }
 
     public function createCallingTaskItem()
@@ -220,24 +253,28 @@ class BitrixCallingTaskService
     protected function createTaskWarm($currentSmartItemId)
     {
         $companyId = $this->companyId;
+        $leadId = $this->leadId;
         $createdId = $this->createdId;
         $crm = $currentSmartItemId;
 
         $createdTask = null;
+        $description = '';
         try {
 
             $crmForCurrent = [$this->smartCrmId . ''  . '' . $crm];
-            $crmItems = [$this->smartCrmId . $crm, 'CO_' . $companyId];
+            $crmItems = [$this->smartCrmId . $crm];
 
 
+            if ($companyId) {
+                array_push($crmItems, 'CO_' . $companyId);
+            }
+
+            if ($leadId) {
+                array_push($crmItems, 'L_' . $leadId);
+            }
 
 
-
-            $crmItems = [$this->smartCrmId . $crm, 'CO_' . $companyId];
-
-
-
-
+         
             //company and contacts
             $methodContacts = '/crm.contact.list.json';
             $methodCompany = '/crm.company.get.json';
@@ -328,29 +365,29 @@ class BitrixCallingTaskService
 
                     $cmpnPhonesEmailsList = '[LIST]' . $cmpnyListContent . '[/LIST]';
                 }
-            }
 
 
 
 
 
 
-            $companyPhones = '';
 
-            $companyTitleString = '[B][COLOR=#0070c0]' . $company['result']['TITLE'] . '[/COLOR][/B]';
-            $description =  $companyTitleString . '
+                $companyPhones = '';
+
+                $companyTitleString = '[B][COLOR=#0070c0]' . $company['result']['TITLE'] . '[/COLOR][/B]';
+                $description =  $companyTitleString . '
             ' . '[LEFT][B]Контакты компании: [/B][/LEFT]' . $contactsTable;
-            $description = $description . '' . $cmpnPhonesEmailsList;
-
+                $description = $description . '' . $cmpnPhonesEmailsList;
+            }
             //task
             $methodTask = '/tasks.task.add.json';
             $url = $this->hook . $methodTask;
 
             // $moscowTime = $deadline;
             $nowDate = now();
-            if ($this->domain === 'alfacentr.bitrix24.ru') {
-                $crmItems = [$this->smartCrmId . ''  . '' . $crm];
-            }
+            // if ($this->domain === 'alfacentr.bitrix24.ru') {
+            //     $crmItems = [$this->smartCrmId . ''  . '' . $crm];
+            // }
 
 
             // $taskTitle = $stringType . $name . '  ' . $deadline;
@@ -542,10 +579,6 @@ class BitrixCallingTaskService
 
         if (isset($smartFieldsResponse['result'])) {
             $resultFields = $smartFieldsResponse['result'];
-            Log::channel('telegram')->error('APRIL_HOOK', [
-                'createSmartItemWarm' => $resultFields
-            ]);
-
         } else if (isset($smartFieldsResponse['error'])  && isset($smartFieldsResponse['error_description'])) {
             Log::info('INITIAL COLD BTX ERROR', [
                 // 'btx error' => $smartFieldsResponse['error'],
@@ -573,6 +606,9 @@ class BitrixCallingTaskService
         $methodSmart = '/crm.item.update.json';
         $url = $hook . $methodSmart;
         $entityId = $smart['crmId'];
+
+        $categoryId = $this->categoryId;
+        $targetStageId = $this->stageId;
         //         stageId: 
 
         //дата следующего звонка smart
@@ -649,33 +685,33 @@ class BitrixCallingTaskService
             $stageId =  $smartItemFromBitrix['stageId'];
         }
 
-        if (isset($smartItemFromBitrix['id'])) {
-            $smartItemId =  $smartItemFromBitrix['id'];
-        }
+        // if (isset($smartItemFromBitrix['id'])) {
+        //     $smartItemId =  $smartItemFromBitrix['id'];
+        // }
 
 
-        if ($type == 'warm') {
+        // if ($type == 'warm') {
 
-            if ($domain == 'april-garant.bitrix24.ru') {
-                $targetStageId = 'DT162_26:UC_Q5V5H0'; //теплый прозвон
-            } else  if ($domain == 'alfacentr.bitrix24.ru') {
-                $targetStageId = 'DT156_12:UC_LEWVV8'; //звонок согласован
-            }
-        } else if ($type == 'presentation') {
+        //     if ($domain == 'april-garant.bitrix24.ru') {
+        //         $targetStageId = 'DT162_26:UC_Q5V5H0'; //теплый прозвон
+        //     } else  if ($domain == 'alfacentr.bitrix24.ru') {
+        //         $targetStageId = 'DT156_12:UC_LEWVV8'; //звонок согласован
+        //     }
+        // } else if ($type == 'presentation') {
 
-            if ($domain == 'april-garant.bitrix24.ru') {
-                $targetStageId = 'DT162_26:UC_NFZKDU'; //презентация запланирована
-            } else  if ($domain == 'alfacentr.bitrix24.ru') {
-                $targetStageId = 'DT156_12:UC_29HBRD'; //презентация согласована
-            }
-        }
+        //     if ($domain == 'april-garant.bitrix24.ru') {
+        //         $targetStageId = 'DT162_26:UC_NFZKDU'; //презентация запланирована
+        //     } else  if ($domain == 'alfacentr.bitrix24.ru') {
+        //         $targetStageId = 'DT156_12:UC_29HBRD'; //презентация согласована
+        //     }
+        // }
 
 
-        if ($domain == 'april-garant.bitrix24.ru') {
-            $categoryId = 26;
-        } else  if ($domain == 'alfacentr.bitrix24.ru') {
-            $categoryId = 12;
-        }
+        // if ($domain == 'april-garant.bitrix24.ru') {
+        //     $categoryId = 26;
+        // } else  if ($domain == 'alfacentr.bitrix24.ru') {
+        //     $categoryId = 12;
+        // }
 
 
 
