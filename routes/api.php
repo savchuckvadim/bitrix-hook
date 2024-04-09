@@ -815,10 +815,9 @@ Route::post('listener/lead/complete', function (Request $request) {
     // https://april-hook.ru/api/task?
     $companyId = null;
     $leadId = null;
-    if (isset($request['auth'])) {
-        if (isset($request['auth']['company_id'])) {
-            $companyId = $request['auth']['company_id'];
-        }
+
+    if (isset($request['company_id'])) {
+        $companyId = $request['company_id'];
     }
     if (isset($request['lead_id'])) {
         $leadId = $request['lead_id'];
