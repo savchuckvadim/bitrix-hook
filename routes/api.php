@@ -813,12 +813,23 @@ Route::post('listener/lead/complete', function (Request $request) {
 
     //from cold
     // https://april-hook.ru/api/task?
+    $companyId = null;
+    $leadId = null;
+    if (isset($request['auth'])) {
+        if (isset($request['auth']['company_id'])) {
+            $companyId = $request['auth']['company_id'];
+        }
+    }
+    if (isset($request['lead_id'])) {
+        $leadId = $request['lead_id'];
+    }
     Log::info('error COLD', ['lead/complete' => $request->all()]);
     try {
         Log::channel('telegram')->error(
-            'APRIL_HOOK',
+            'lead/complete',
             [
-                '/lead/complete' => $request['comapny_id']
+                'company_id' => $companyId,
+                'lead_id' => $leadId,
             ]
         );
     } catch (\Throwable $th) {
