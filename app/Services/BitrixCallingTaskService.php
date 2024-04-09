@@ -134,7 +134,7 @@ class BitrixCallingTaskService
 
         $targetDeadLine = $deadline;
         $nowDate = now();
-        if ($domain === 'alfacentr.bitrix24.ru') {
+        if ($domain == 'alfacentr.bitrix24.ru') {
 
             $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
             $targetDeadLine = $novosibirskTime->setTimezone('Europe/Moscow');
@@ -155,7 +155,7 @@ class BitrixCallingTaskService
 
                 $this->stageId = 'DT156_12:UC_29HBRD';
             }
-        } else    if ($domain == 'april-garant.bitrix24.ru') {
+        } else if ($domain == 'april-garant.bitrix24.ru') {
             $this->categoryId = 26;
             // DT162_26:UC_Q5V5H0	Теплый прозвон
             // DT162_26:UC_NFZKDU	Презентация запланирована
