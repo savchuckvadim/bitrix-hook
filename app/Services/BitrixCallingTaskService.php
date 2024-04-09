@@ -21,6 +21,8 @@ class BitrixCallingTaskService
     protected $type;
     protected $domain;
     protected $companyId;
+    protected $leadId;
+    
     protected $createdId;
     protected $responsibleId;
     protected $deadline;
@@ -37,6 +39,7 @@ class BitrixCallingTaskService
         $type,
         $domain,
         $companyId,
+        $leadId,
         $createdId,
         $responsibleId,
         $deadline,
@@ -57,6 +60,8 @@ class BitrixCallingTaskService
         $this->type = $type;
         $this->domain = $domain;
         $this->companyId = $companyId;
+        $this->leadId = $leadId;
+        
         $this->createdId = $createdId;
         $this->responsibleId = $responsibleId;
 
@@ -141,10 +146,10 @@ class BitrixCallingTaskService
 
             if ($this->isNeedCreateSmart) {
                 $newSmart = $this->createSmartItemWarm(
-                    $this->hook,
-                    $this->aprilSmartData,
-                    $this->companyId,
-                    $this->responsibleId,
+                    // $this->hook,
+                    // $this->aprilSmartData,
+                    // $this->companyId,
+                    // $this->responsibleId,
                     // $companyName
                 );
                 if ($newSmart && isset($newSmart['item'])) {
@@ -484,6 +489,7 @@ class BitrixCallingTaskService
     {
         $hook = $this->hook;
         $companyId  = $this->companyId;
+        $leadId  = $this->leadId;
         $responsibleId  = $this->responsibleId;
         $smart  = $this->aprilSmartData;
 
@@ -491,22 +497,32 @@ class BitrixCallingTaskService
         $resulFields = [];
         $fieldsData = [];
 
-        $fields = $this->getCurrentSmartFields();
-        foreach ($fields as $key => $field) {
-            $resultField = '';
-            // if ($field['upperName'] === 'TITLE') {
-            //     $fieldsData[$field['upperName']] = 'Company Name';
-            // } else 
+        // $fields = $this->getCurrentSmartFields();
+        // foreach ($fields as $key => $field) {
+        //     $resultField = '';
+        //     // if ($field['upperName'] === 'TITLE') {
+        //     //     $fieldsData[$field['upperName']] = 'Company Name';
+        //     // } else 
 
-            if ($field['title'] === 'companyId') {
-                $fieldId = $this->getFormatedSmartFieldId($field['upperName']);
-                $fieldsData[$fieldId] = $companyId;
-            }
-        }
-        $fieldsData['ufCrm7_1698134405'] = $companyId;
+        //     if ($field['title'] === 'companyId') {
+        //         $fieldId = $this->getFormatedSmartFieldId($field['upperName']);
+        //         $fieldsData[$fieldId] = $companyId;
+        //     }
+        // }
+        // $fieldsData['ufCrm7_1698134405'] = $companyId;
+        // $fieldsData['assigned_by_id'] = $responsibleId;
+        // $fieldsData['company_id'] = $companyId;
         $fieldsData['assigned_by_id'] = $responsibleId;
-        $fieldsData['company_id'] = $companyId;
+        // $fieldsData['companyId'] = $companyId;
 
+        if ($companyId) {
+            $fieldsData['ufCrm7_1698134405'] = $companyId;
+            $fieldsData['company_id'] = $companyId;
+        }
+        if ($leadId) {
+            $fieldsData['parentId1'] = $leadId;
+            $fieldsData['ufCrm7_1697129037'] = $leadId;
+        }
 
         $methodSmart = '/crm.item.add.json';
         $url = $hook . $methodSmart;
@@ -526,6 +542,10 @@ class BitrixCallingTaskService
 
         if (isset($smartFieldsResponse['result'])) {
             $resultFields = $smartFieldsResponse['result'];
+            Log::channel('telegram')->error('APRIL_HOOK', [
+                'createSmartItemWarm' => $resultFields
+            ]);
+
         } else if (isset($smartFieldsResponse['error'])  && isset($smartFieldsResponse['error_description'])) {
             Log::info('INITIAL COLD BTX ERROR', [
                 // 'btx error' => $smartFieldsResponse['error'],

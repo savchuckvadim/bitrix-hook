@@ -18,6 +18,7 @@ class CreateBitrixCallingTaskJob implements ShouldQueue
     protected $type;
     protected $domain;
     protected $companyId;
+    protected $leadId;
     protected $createdId;
     protected $responsibleId;
     protected $deadline;
@@ -35,6 +36,7 @@ class CreateBitrixCallingTaskJob implements ShouldQueue
         $type,
         $domain,
         $companyId,
+        $leadId,
         $createdId,
         $responsibleId,
         $deadline,
@@ -48,6 +50,8 @@ class CreateBitrixCallingTaskJob implements ShouldQueue
         $this->type = $type;
         $this->domain = $domain;
         $this->companyId = $companyId;
+        $this->leadId = $leadId;
+
         $this->createdId = $createdId;
         $this->responsibleId = $responsibleId;
         $this->deadline = $deadline;
@@ -68,6 +72,7 @@ class CreateBitrixCallingTaskJob implements ShouldQueue
             $this->type,
             $this->domain,
             $this->companyId,
+            $this->leadId,
             $this->createdId,
             $this->responsibleId,
             $this->deadline,

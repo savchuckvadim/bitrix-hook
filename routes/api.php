@@ -48,14 +48,30 @@ Route::post('/task/warm', function (Request $request) {
     // created={{Постановщик ХО}}&
     // name={{Обзвон}}&
     // crm={{ID}}
+    //smart
+    //placement
     $comment = null;
     $smart = null;
     $sale = null;
     $isOneMore = $request['isOneMore'];
-
+    $companyId = null;
+    $leadId = null;
     $type = null;
     if (isset($request['type'])) {
         $type = $request['type'];
+    }
+    if (isset($request['placement'])) {
+        if (isset($request['placement']['placement']) && isset($request['placement']['options']['ID'])) {
+            $type = $request['placement']['placement'];
+            $currentEntityId = $request['placement']['options']['ID'];
+
+            if (strpos($type, "LEAD") !== false) {
+                $leadId = $currentEntityId;
+            } else if (strpos($type, "COMPANY") !== false) {
+
+                $companyId = $currentEntityId;
+            }
+        }
     }
 
     $created = $request['created'];
@@ -93,6 +109,7 @@ Route::post('/task/warm', function (Request $request) {
         $type,
         $domain,
         $companyId,
+        $leadId,
         $createdId,
         $responsibleId,
         $deadline,
