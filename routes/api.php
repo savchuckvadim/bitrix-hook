@@ -271,10 +271,9 @@ Route::post('/coldlead/smart/init', function (Request $request) {
         if (isset($request['created'])) {
             $created = $request['created'];
             $partsCreated = explode("_", $created);
-            if(isset($partsCreated[1])){
+            if (isset($partsCreated[1])) {
                 $createdId = $partsCreated[1];
             }
-          
         }
 
         if (isset($request['smart_id'])) {
@@ -284,22 +283,21 @@ Route::post('/coldlead/smart/init', function (Request $request) {
         if (isset($request['responsible'])) {
             $responsible = $request['responsible'];
             $partsResponsible = explode("_", $responsible);
-            if(isset($partsResponsible[1])){
+            if (isset($partsResponsible[1])) {
                 $responsibleId = $partsResponsible[1];
-            }else{
+            } else {
                 Log::channel('telegram')->error('APRIL_HOOK', [
-                  
-                        'coldlead/smart/init' => 'no responsiblie',
-                        ' $responsible' =>  $responsible
-                        // 'btrx response' => $response['error_description']
-                    
+
+                    'coldlead/smart/init' => 'no responsiblie',
+                    ' $responsible' =>  $responsible
+                    // 'btrx response' => $response['error_description']
+
                 ]);
             }
-          
         }
-       
 
-        
+
+
 
 
         $auth = $request['auth'];
@@ -808,6 +806,31 @@ Route::post('/install/smart/', function (Request $request) {
 
 
 
+
+
+//EVENTS
+Route::post('listener/lead/complete', function (Request $request) {
+
+    //from cold
+    // https://april-hook.ru/api/task?
+    try {
+        Log::channel('telegram')->error(
+            'APRIL_HOOK',
+            [
+                '/lead/complete' => $request->all()
+            ]
+        );
+    } catch (\Throwable $th) {
+        $errorMessages =  [
+            'message'   => $th->getMessage(),
+            'file'      => $th->getFile(),
+            'line'      => $th->getLine(),
+            'trace'     => $th->getTraceAsString(),
+        ];
+        Log::error('ROUTE ERROR COLD: Exception caught',  $errorMessages);
+        Log::info('error COLD', ['error' => $th->getMessage()]);
+    }
+});
 
 // Route::post('/update/smart/', function (Request $request) {
 
