@@ -209,11 +209,10 @@ class BitrixCallingTaskService
 
 
             // updateSmart($hook, $smartTypeId, $smartId, $description)
-            if($this->companyId){
+            if ($this->companyId) {
                 $updatedCompany = $this->updateCompanyWarm();
-
             }
-         
+
 
             // $updatedSmart = $this->preUpdateSmartItemStageWarm($currentSmartItem);
             $updatedSmart = $this->updateSmartItemWarm($currentSmartItem);
@@ -621,7 +620,7 @@ class BitrixCallingTaskService
         Log::channel('telegram')->error('APRIL_HOOK', [
             'updateSmartItemWarm' => [
                 'come item' => $smartItemFromBitrix,
-                
+
             ]
         ]);
         //         stageId: 
@@ -733,7 +732,7 @@ class BitrixCallingTaskService
         Log::channel('telegram')->error('APRIL_HOOK', [
             'updateSmartItemWarm' => [
                 'data for update' => $data,
-                
+
             ]
         ]);
         $smartFieldsResponse = Http::get($url, $data);
@@ -764,7 +763,7 @@ class BitrixCallingTaskService
         Log::channel('telegram')->error('APRIL_HOOK', [
             'updateSmartItemWarm testingResult' => [
                 'testingResult' => $testingResult,
-                
+
             ]
         ]);
         return $testingResult;
