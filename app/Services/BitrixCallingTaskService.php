@@ -38,8 +38,8 @@ class BitrixCallingTaskService
     protected $categoryId = 28;
     protected $stageId = 'DT162_28:NEW';
     protected $lastCallDateFieldCold = 'ufCrm10_1701270138';
+    protected $commentField = 'ufCrm10_1709883918';
     protected $callThemeFieldCold = 'ufCrm10_1703491835';
-
 
 
     public function __construct(
@@ -609,6 +609,9 @@ class BitrixCallingTaskService
 
         $categoryId = $this->categoryId;
         $targetStageId = $this->stageId;
+        $lastCallDateField = $this->lastCallDateFieldCold;
+        $commentField =  $this->commentField;
+        $callThemeField =  $this->callThemeFieldCold;
         //         stageId: 
 
         //дата следующего звонка smart
@@ -666,11 +669,8 @@ class BitrixCallingTaskService
         $stageId = null;
         $fields = null;
         $smartItemId = null;
-        $targetStageId = 'DT162_26:NEW';
-        $categoryId = 26;
-        $lastCallDateField = 'ufCrm10_1709907744';
-        $commentField = 'ufCrm10_1709883918';
-        $callThemeField = 'ufCrm10_1709907850';
+
+      
 
 
         // if ($domain == 'alfacentr.bitrix24.ru') {
@@ -684,36 +684,6 @@ class BitrixCallingTaskService
         if (isset($smartItemFromBitrix['stageId'])) {
             $stageId =  $smartItemFromBitrix['stageId'];
         }
-
-        // if (isset($smartItemFromBitrix['id'])) {
-        //     $smartItemId =  $smartItemFromBitrix['id'];
-        // }
-
-
-        // if ($type == 'warm') {
-
-        //     if ($domain == 'april-garant.bitrix24.ru') {
-        //         $targetStageId = 'DT162_26:UC_Q5V5H0'; //теплый прозвон
-        //     } else  if ($domain == 'alfacentr.bitrix24.ru') {
-        //         $targetStageId = 'DT156_12:UC_LEWVV8'; //звонок согласован
-        //     }
-        // } else if ($type == 'presentation') {
-
-        //     if ($domain == 'april-garant.bitrix24.ru') {
-        //         $targetStageId = 'DT162_26:UC_NFZKDU'; //презентация запланирована
-        //     } else  if ($domain == 'alfacentr.bitrix24.ru') {
-        //         $targetStageId = 'DT156_12:UC_29HBRD'; //презентация согласована
-        //     }
-        // }
-
-
-        // if ($domain == 'april-garant.bitrix24.ru') {
-        //     $categoryId = 26;
-        // } else  if ($domain == 'alfacentr.bitrix24.ru') {
-        //     $categoryId = 12;
-        // }
-
-
 
 
         // Получение текущих комментариев из $smartItemFromBitrix
