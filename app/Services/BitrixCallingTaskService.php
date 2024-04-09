@@ -730,7 +730,12 @@ class BitrixCallingTaskService
 
 
         ];
-
+        Log::channel('telegram')->error('APRIL_HOOK', [
+            'updateSmartItemWarm' => [
+                'data for update' => $data,
+                
+            ]
+        ]);
         $smartFieldsResponse = Http::get($url, $data);
         $bitrixResponse = $smartFieldsResponse->json();
 
@@ -756,7 +761,12 @@ class BitrixCallingTaskService
             'bitrixResult' => $result
 
         ];
-
+        Log::channel('telegram')->error('APRIL_HOOK', [
+            'updateSmartItemWarm testingResult' => [
+                'testingResult' => $testingResult,
+                
+            ]
+        ]);
         return $testingResult;
     }
 
