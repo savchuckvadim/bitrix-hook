@@ -209,7 +209,11 @@ class BitrixCallingTaskService
 
 
             // updateSmart($hook, $smartTypeId, $smartId, $description)
-            $updatedCompany = $this->updateCompanyWarm();
+            if($this->companyId){
+                $updatedCompany = $this->updateCompanyWarm();
+
+            }
+         
 
             // $updatedSmart = $this->preUpdateSmartItemStageWarm($currentSmartItem);
             $updatedSmart = $this->updateSmartItemWarm($currentSmartItem);
