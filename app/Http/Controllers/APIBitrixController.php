@@ -148,7 +148,7 @@ class APIBitrixController extends Controller
             sleep($randomNumber);
             $contactsResponse = Http::get($url,  $contactsData);
             $url = $hook . $methodCompany;
-           
+
             sleep(2);
             $companyResponse = Http::get($url,  $getCompanyData);
             $company = $companyResponse->json();
@@ -243,9 +243,6 @@ class APIBitrixController extends Controller
                 $description =  $companyTitleString . '
                 ' . '[LEFT][B]Контакты компании: [/B][/LEFT]' . $contactsTable;
                 $description = $description . '' . $cmpnPhonesEmailsList;
-
-
-
             }
 
 
@@ -253,7 +250,7 @@ class APIBitrixController extends Controller
 
 
 
-  
+
 
             //task
             $methodTask = '/tasks.task.add.json';
@@ -384,7 +381,7 @@ class APIBitrixController extends Controller
         //     $sale,
         //     $isOneMore
         // );
-    //    return $service->createCallingTaskItem();
+        //    return $service->createCallingTaskItem();
         return APIOnlineController::getSuccess(false);
     }
 
@@ -1472,6 +1469,104 @@ class APIBitrixController extends Controller
             Log::error('ERROR: Exception caught',  $errorMessages);
             Log::info('error', ['error' => $th->getMessage()]);
             return APIOnlineController::getError($th->getMessage(),  $errorMessages);
+        }
+    }
+    public function getSmartItemCallingFrontFromLead(
+        $domain,
+        $leadId,
+        // $companyId,
+        $userId,
+    ) {
+        try {
+            $currentSmart = $this->getSearchSmartItemFrontFromCompanyOrLead($domain, $leadId, null, $userId);
+
+
+            return APIOnlineController::getSuccess($currentSmart);
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR: Exception caught',  $errorMessages);
+            Log::info('error', ['error' => $th->getMessage()]);
+            return APIOnlineController::getError($th->getMessage(),  $errorMessages);
+        }
+    }
+
+    public function getSearchSmartItemFrontFromCompanyOrLead(
+        $domain,
+        $leadId,
+        $companyId,
+        $userId,
+    ) {
+        $resultSmartItem = null;
+        try {
+            $portal = PortalController::getPortal($domain);
+            if (isset($portal) && isset($portal['data'])) {
+
+                $portal = $portal['data'];
+                $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+                $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+
+
+                $smart = $portal['bitrixSmart'];
+                // result stageId: "DT162_26:UC_R7UBSZ"
+                //         $getSmartItem = $this->getSmartItem($hook, $smart, $companyId, $responsibleId);
+                $currentSmart = null;
+
+                $method = '/crm.item.list.json';
+                $url = $hook . $method;
+                if ($companyId) {
+                    $data =  [
+                        'entityTypeId' => $smart['crmId'],
+                        'filter' => [
+                            // "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
+                            "=assignedById" => $userId,
+                            'COMPANY_ID' => $companyId,
+
+                        ],
+                        // 'select' => ["ID"],
+                    ];
+                }
+                if ($leadId) {
+                    $data =  [
+                        'entityTypeId' => $smart['crmId'],
+                        'filter' => [
+                            "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
+                            "=assignedById" => $userId,
+
+                            "=%ufCrm7_1697129081" => '%' . $leadId . '%',
+
+                        ],
+                        // 'select' => ["ID"],
+                    ];
+                }
+
+
+
+                $response = Http::get($url, $data);
+                // $responseData = $response->json();
+                $responseData = APIBitrixController::getBitrixRespone($response, 'cold: getSmartItem');
+                if (isset($responseData)) {
+                    if (!empty($responseData['items'])) {
+                        $currentSmart =  $responseData['items'][0];
+                    }
+                }
+                $resultSmartItem = $currentSmart;
+                return $resultSmartItem;
+            }
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR: getSearchSmartItemFrontFromCompanyOrLead',  $errorMessages);
+
+            return $resultSmartItem;
         }
     }
 

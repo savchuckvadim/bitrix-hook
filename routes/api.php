@@ -570,6 +570,22 @@ Route::post('/smart/item', function (Request $request) {
 });
 
 
+//TODO smart/item/fromlead -> return smart from lead relation
+Route::post('smart/item/fromlead', function (Request $request) {
+
+    $leadId = $request->input('leadId');
+    $userId = $request->input('userId');
+    $domain = $request->input('domain');
+
+
+
+    $controller = new APIBitrixController();
+    return $controller->getSmartItemCallingFrontFromLead(
+        $domain,
+        $leadId,
+        $userId,
+    );
+});
 
 
 Route::post('/lists', function (Request $request) {

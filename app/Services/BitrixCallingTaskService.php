@@ -67,7 +67,7 @@ class BitrixCallingTaskService
         $this->sale = $sale;
         $this->isOneMoreService = $isOnemoreJob;
 
-        $stringType = 'Холодный обзвон  ';
+        $stringType = 'Звонок запланирован  ';
 
         if ($type) {
             if ($type === 'warm') {
