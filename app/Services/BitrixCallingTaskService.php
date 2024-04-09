@@ -169,6 +169,15 @@ class BitrixCallingTaskService
                 $this->stageId = 'DT162_26:UC_NFZKDU';
             }
         }
+        
+        Log::channel('telegram')->error('APRIL_HOOK', [
+            'APRIL_HOOK' => [
+                '$type' => $type,
+                '$domain' => $domain,
+                'stageId' => $this->stageId,
+                'categoryId' => $this->categoryId,
+            ]
+        ]);
     }
 
     public function createCallingTaskItem()
