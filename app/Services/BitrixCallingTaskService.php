@@ -146,25 +146,26 @@ class BitrixCallingTaskService
         if ($domain == 'alfacentr.bitrix24.ru') {
             // DT156_12:UC_LEWVV8	Звонок согласован
             // DT156_12:UC_29HBRD	Презентация согласована
+            $this->categoryId = 12;
             if ($type === 'warm') {
-                $this->categoryId = 12;
+
                 $this->stageId = 'DT156_12:UC_LEWVV8';
             } else   if ($type === 'presentation') {
 
-                $this->categoryId = 12;
+
                 $this->stageId = 'DT156_12:UC_29HBRD';
             }
         } else    if ($domain == 'april-garant.bitrix24.ru') {
-
+            $this->categoryId = 26;
             // DT162_26:UC_Q5V5H0	Теплый прозвон
             // DT162_26:UC_NFZKDU	Презентация запланирована
 
             if ($type === 'warm') {
-                $this->categoryId = 26;
+
                 $this->stageId = 'DT162_26:UC_Q5V5H0';
             } else   if ($type === 'presentation') {
 
-                $this->categoryId = 26;
+
                 $this->stageId = 'DT162_26:UC_NFZKDU';
             }
         }
@@ -274,7 +275,7 @@ class BitrixCallingTaskService
             }
 
 
-         
+
             //company and contacts
             $methodContacts = '/crm.contact.list.json';
             $methodCompany = '/crm.company.get.json';
@@ -670,7 +671,7 @@ class BitrixCallingTaskService
         $fields = null;
         $smartItemId = null;
 
-      
+
 
 
         // if ($domain == 'alfacentr.bitrix24.ru') {
@@ -678,6 +679,9 @@ class BitrixCallingTaskService
         //     $commentField = 'ufCrm6_1709907513';
         //     $callThemeField = 'ufCrm6_1709907816';
         // }
+        if (isset($smartItemFromBitrix['id'])) {
+            $smartItemId =  $smartItemFromBitrix['id'];
+        }
 
 
 
