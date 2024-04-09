@@ -271,18 +271,35 @@ Route::post('/coldlead/smart/init', function (Request $request) {
         if (isset($request['created'])) {
             $created = $request['created'];
             $partsCreated = explode("_", $created);
-            $createdId = $partsCreated[1];
+            if(isset($partsCreated[1])){
+                $createdId = $partsCreated[1];
+            }
+          
         }
 
         if (isset($request['smart_id'])) {
             $smartId = $request['smart_id'];
         }
 
+        if (isset($request['responsible'])) {
+            $responsible = $request['responsible'];
+            $partsResponsible = explode("_", $responsible);
+            if(isset($partsResponsible[1])){
+                $responsibleId = $partsResponsible[1];
+            }else{
+                Log::channel('telegram')->error('APRIL_HOOK', [
+                  
+                        'coldlead/smart/init' => 'no responsiblie',
+                        ' $responsible' =>  $responsible
+                        // 'btrx response' => $response['error_description']
+                    
+                ]);
+            }
+          
+        }
+       
 
-        $responsible = $request['responsible'];
-        $partsResponsible = explode("_", $responsible);
-
-        $responsibleId = $partsResponsible[1];
+        
 
 
         $auth = $request['auth'];
