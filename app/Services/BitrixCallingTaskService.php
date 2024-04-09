@@ -619,7 +619,11 @@ class BitrixCallingTaskService
 
         Log::channel('telegram')->error('APRIL_HOOK', [
             'updateSmartItemWarm' => [
-                'come item' => $smartItemFromBitrix,
+                'categoryId' => $this->categoryId,
+                'targetStageId' => $this->stageId,
+                'lastCallDateField' => $this->lastCallDateFieldCold,
+                'commentField' =>  $this->commentField,
+                'callThemeField' =>  $this->callThemeFieldCold,
 
             ]
         ]);
