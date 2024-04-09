@@ -62,12 +62,12 @@ Route::post('/task/warm', function (Request $request) {
     }
     if (isset($request['placement'])) {
         if (isset($request['placement']['placement']) && isset($request['placement']['options']['ID'])) {
-            $type = $request['placement']['placement'];
+            $placementType = $request['placement']['placement'];
             $currentEntityId = $request['placement']['options']['ID'];
 
-            if (strpos($type, "LEAD") !== false) {
+            if (strpos($placementType, "LEAD") !== false) {
                 $leadId = $currentEntityId;
-            } else if (strpos($type, "COMPANY") !== false) {
+            } else if (strpos($placementType, "COMPANY") !== false) {
 
                 $companyId = $currentEntityId;
             }
