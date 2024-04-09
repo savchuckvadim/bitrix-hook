@@ -813,11 +813,12 @@ Route::post('listener/lead/complete', function (Request $request) {
 
     //from cold
     // https://april-hook.ru/api/task?
+    Log::info('error COLD', ['lead/complete' => $request->json()]);
     try {
         Log::channel('telegram')->error(
             'APRIL_HOOK',
             [
-                '/lead/complete' => $request->all()
+                '/lead/complete' => $request['comapny_id']
             ]
         );
     } catch (\Throwable $th) {
