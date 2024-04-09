@@ -203,7 +203,18 @@ class BitrixCallingTaskService
 
             //TODO
             $crmForCurrent = [$this->smartCrmId . ''  . '' . $currentSmartItemId];
+            // $crmItems = [$this->smartCrmId . $crm];
 
+
+            if ($this->companyId) {
+                array_push($crmForCurrent, 'CO_' . $this->companyId);
+            }
+
+            if ($this->leadId) {
+                array_push($crmForCurrent, 'L_' . $this->leadId);
+            }
+
+            
             if (!$this->isOneMoreService) {
                 $currentTasksIds = $this->getCurrentTasksIdsWarm(
                     $crmForCurrent
