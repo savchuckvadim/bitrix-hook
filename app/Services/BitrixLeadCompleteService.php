@@ -113,15 +113,7 @@ class BitrixLeadCompleteService
             $this->targetStageId = 'DT162_26:PREPARATION';
         }
 
-        Log::channel('telegram')->error(
-            'lead/complete',
-            [
-                'domain' => $domain,
-                'leadId' => $leadId,
-                'companyId' => $companyId,
-                'responsibleId' => $responsibleId,
-            ]
-        );
+  
     }
 
     public function leadComplete()
@@ -165,7 +157,13 @@ class BitrixLeadCompleteService
 
                     //сращиваем из двух смартов один
                     $resultMergedSmart = $this->mergeSmarts($smartFromLead, $smartFromCompany, $this->leadId);
+                    Log::channel('telegram')->error(
+                        'lead/complete',
+                        [
+                            'resultMergedSmart' => $resultMergedSmart,
 
+                        ]
+                    );
                     //обновляем обновленный смарт по компании
                     if (isset($resultMergedSmart['id'])) {
                         $resultSmart = BitrixGeneralService::updateSmartItem(
