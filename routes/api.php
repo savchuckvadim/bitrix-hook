@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\APIController;
 use App\Http\Controllers\APIOnlineController;
+use App\Http\Controllers\BitrixHookController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\ReactAppController;
 use Illuminate\Support\Carbon;
@@ -570,6 +571,14 @@ Route::post('listener/lead/complete', function (Request $request) {
     // https://april-hook.ru/api/task?
     $companyId = null;
     $leadId = null;
+    $responsibleId  = null;
+    $domain = null;
+    if (isset($request['auth'])) {
+        if (isset($request['auth']['domain'])) {
+            $domain = $request['auth']['domain'];
+        }
+    }
+
 
     if (isset($request['company_id'])) {
         //при соединении к существующей или созданиии новой компании
@@ -580,38 +589,15 @@ Route::post('listener/lead/complete', function (Request $request) {
         $leadId = $request['lead_id'];
     }
 
-    //Создание новой компании из лида или присоеднинение к существующей
-    // взять два смарт процесса по лиду и по компании
-    // если нет ни одного
-    // если есть только по лиду -> засунуть в него компанию - передвинуть в работа с компанией если был на предыдущей стадии или в отказе
-    // если есть только компании -> засунуть в него лид
-
-    //если есть оба
-    //их id равны - значит это один и тотже - передвинуть в работа с компанией если был на предыдущей стадии или в отказе
-    // если их id разные перенести из лидовского смарта количество презентаций комментарии в смарт по компании
-    //если у смарта по лиду более высокая стадия перенести в нее
-
-
-
-    Log::info('error COLD', ['lead/complete' => $request->all()]);
-    try {
-        Log::channel('telegram')->error(
-            'lead/complete',
-            [
-                'company_id' => $companyId,
-                'lead_id' => $leadId,
-            ]
-        );
-    } catch (\Throwable $th) {
-        $errorMessages =  [
-            'message'   => $th->getMessage(),
-            'file'      => $th->getFile(),
-            'line'      => $th->getLine(),
-            'trace'     => $th->getTraceAsString(),
-        ];
-        Log::error('ROUTE ERROR COLD: Exception caught',  $errorMessages);
-        Log::info('error COLD', ['error' => $th->getMessage()]);
+    if (isset($request['responsible'])) {
+        $responsibleId = $request['responsible'];
     }
+
+    //Создание новой компании из лида или присоеднинение к существующей
+
+
+    return  BitrixHookController::leadComplete($domain, $responsibleId, $companyId, $leadId);
+ 
 });
 
 // .......................................................................
