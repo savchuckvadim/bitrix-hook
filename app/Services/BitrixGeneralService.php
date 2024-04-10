@@ -113,7 +113,7 @@ class BitrixGeneralService
         Log::channel('telegram')->error(
             'lead/complete updateSmartItem',
             [
-                'data' => $data,
+                'fieldsData' => $fieldsData,
 
             ]
         );
@@ -122,6 +122,13 @@ class BitrixGeneralService
 
         $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: updateSmartItemCold');
         $resultFields = $responseData;
+        Log::channel('telegram')->error(
+            'lead/complete updateSmartItem',
+            [
+                'resultFields' => $resultFields,
+
+            ]
+        );
 
         return $resultFields;
     }
