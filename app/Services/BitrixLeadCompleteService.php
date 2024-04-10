@@ -274,7 +274,7 @@ class BitrixLeadCompleteService
 
     private function mergeSmarts($smartFromLead, $smartFromCompany, $leadId)
     {
-        $fieldsData = $smartFromCompany;
+        $fieldsData = [];
         $updatedPresentationCount = 0;
         $categoryId = $this->targetCategoryId;
         $stageId =  null;
