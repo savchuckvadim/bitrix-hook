@@ -590,14 +590,17 @@ Route::post('listener/lead/complete', function (Request $request) {
     }
 
     if (isset($request['responsible'])) {
-        $responsibleId = $request['responsible'];
-    }
 
+        $responsible = $request['responsible'];
+        $partsResponsible = explode("_", $responsible);
+        if (!empty($partsResponsible)) {
+            $responsibleId = $partsResponsible[1];
+        }
+    }
     //Создание новой компании из лида или присоеднинение к существующей
 
 
-    return  BitrixHookController::leadComplete($domain, $responsibleId, $companyId, $leadId);
- 
+    return  BitrixHookController::leadComplete($domain, $companyId, $leadId, $responsibleId);
 });
 
 // .......................................................................
