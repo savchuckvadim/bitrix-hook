@@ -159,20 +159,28 @@ class BitrixLeadCompleteService
                     $resultMergedSmart = $this->mergeSmarts($smartFromLead, $smartFromCompany, $this->leadId);
 
                     //обновляем обновленный смарт по компании
-                    $resultSmart = BitrixGeneralService::updateSmartItem(
-                        $this->hook,
-                        $this->smartEntityTypeId,
-                        $this->smartCrmId,
-                        $resultMergedSmart
+                    if(isset($resultMergedSmart['id'])){
+                        $resultSmart = BitrixGeneralService::updateSmartItem(
+                            $this->hook,
+                            $this->smartEntityTypeId,
+                            $resultMergedSmart['id'],
+                            $resultMergedSmart
+    
+                        );
 
-                    );
+                    }
+                
                     //удаляем смарт который был по лиду
-                    BitrixGeneralService::deleteSmartItem(
-                        $this->hook,
-                        $this->smartEntityTypeId,
-                        $this->smartCrmId,
+                    if(isset($smartFromLead['id'])){
+                        BitrixGeneralService::deleteSmartItem(
+                            $this->hook,
+                            $this->smartEntityTypeId,
+                            $smartFromLead['id'],
+    
+                        );
 
-                    );
+                    }
+              
                 } else if (!$smartFromCompany) { //если смарт по лиду есть + по Компании НЕТ 
 
                     //добавить в смарт по лиду компанию //переместить в target stage
@@ -183,14 +191,15 @@ class BitrixLeadCompleteService
                     }
                     $updatingLeadSmart['stageId'] = $this->targetStageId;
                     $updatingLeadSmart['categoryId'] = $this->targetCategoryId;
-
+                    if(isset($updatingLeadSmart['id'])){
                     $resultSmart =   BitrixGeneralService::updateSmartItem(
                         $this->hook,
                         $this->smartEntityTypeId,
-                        $this->smartCrmId,
+                        $updatingLeadSmart['id'],
                         $updatingLeadSmart
 
                     );
+                }
                 }
             } else if (!$smartFromLead) { //если смарта по лиду нет
                 if ($smartFromCompany) { //если смарта по лиду нет + по Компании есть 
@@ -204,14 +213,15 @@ class BitrixLeadCompleteService
                     $updatingCompanySmart['stageId'] = $this->targetStageId;
                     $updatingCompanySmart['categoryId'] = $this->targetCategoryId;
 
-
+                    if(isset($updatingCompanySmart['id'])){
                     $resultSmart =    BitrixGeneralService::updateSmartItem(
                         $this->hook,
                         $this->smartEntityTypeId,
-                        $this->smartCrmId,
+                        $updatingCompanySmart['id'],
                         $updatingCompanySmart
 
                     );
+                }
                 } else if (!$smartFromCompany) { //если смарт по лиду нет + по Компании НЕТ 
 
                     //создать смарт
