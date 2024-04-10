@@ -189,7 +189,7 @@ class BitrixLeadCompleteService
                 } else if (!$smartFromCompany) { //если смарт по лиду есть + по Компании НЕТ 
 
                     //добавить в смарт по лиду компанию //переместить в target stage
-                    $updatingLeadSmart = $smartFromLead;
+                    $updatingLeadSmart = [];// $smartFromLead;
                     if ($this->companyId) {
                         $updatingLeadSmart['ufCrm7_1698134405'] = $this->companyId;
                         $updatingLeadSmart['company_id'] = $this->companyId;
@@ -210,7 +210,7 @@ class BitrixLeadCompleteService
                 if ($smartFromCompany) { //если смарта по лиду нет + по Компании есть 
 
                     //записываем в смарт данные о лиде
-                    $updatingCompanySmart = $smartFromCompany;
+                    $updatingCompanySmart = [];
                     if ($this->leadId) {
                         $updatingCompanySmart['parentId1'] = $this->leadId;
                         $updatingCompanySmart['ufCrm7_1697129037'] = $this->leadId;
