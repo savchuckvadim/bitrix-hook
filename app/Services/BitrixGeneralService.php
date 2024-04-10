@@ -110,25 +110,13 @@ class BitrixGeneralService
 
         ];
 
-        Log::channel('telegram')->error(
-            'lead/complete updateSmartItem',
-            [
-                'fieldsData' => $fieldsData,
-
-            ]
-        );
+     
 
         $smartFieldsResponse = Http::get($url, $data);
 
         $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: updateSmartItemCold');
         $resultFields = $responseData;
-        Log::channel('telegram')->error(
-            'lead/complete updateSmartItem',
-            [
-                'resultFields' => $resultFields,
-
-            ]
-        );
+ 
 
         return $resultFields;
     }
@@ -147,13 +135,19 @@ class BitrixGeneralService
 
         ];
 
-  
+      
 
         $smartFieldsResponse = Http::get($url, $data);
 
-        $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'cold: updateSmartItemCold');
+        $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: deleteSmartItem');
         $resultFields = $responseData;
+        Log::channel('telegram')->info(
+            'lead/complete deleteSmartItem',
+            [
+                'responseData' => $responseData,
 
+            ]
+        );
         return $resultFields;
     }
 
