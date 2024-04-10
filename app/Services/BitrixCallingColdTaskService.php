@@ -163,10 +163,10 @@ class BitrixCallingColdTaskService
 
 
             $currentSmart = $this->getSmartItem();
-            Log::info('COLD first getSmartItem', [
-                'currentSmart' => $currentSmart,
+            // Log::info('COLD first getSmartItem', [
+            //     'currentSmart' => $currentSmart,
 
-            ]);
+            // ]);
 
             sleep(1);
             if ($currentSmart) {

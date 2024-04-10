@@ -87,7 +87,7 @@ class APIBitrixController extends Controller
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
 
             $currentSmartItem = null;
-
+            $description = '';
 
 
 

@@ -37,7 +37,48 @@ Route::post('/reset-password', [APIController::class, 'reset_pass']);
 Route::get('front', [App\Http\Controllers\HomeController::class, 'index']);
 
 
-//FONTEND CALLINGS
+//FONTEND CALLINGS...........................................................................
+
+//для фронта звонки
+// при инициализации фронта из компании запрашивает привязанный по компании-сотруднику 
+
+Route::post('/smart/item', function (Request $request) {
+
+    $companyId = $request['companyId'];
+    $userId = $request['userId'];
+
+    $domain = $request['domain'];
+
+
+    $controller = new APIBitrixController();
+    return $controller->getSmartItemCallingFront(
+        $domain,
+        $companyId,
+        $userId,
+    );
+});
+
+
+// при инициализации фронта из лида запрашивает привязанный по лиду-сотруднику
+Route::post('smart/item/fromlead', function (Request $request) {
+
+
+
+    $leadId = $request->input('leadId');
+    $userId = $request->input('userId');
+    $domain = $request->input('domain');
+
+
+
+    $controller = new APIBitrixController();
+    return $controller->getSmartItemCallingFrontFromLead(
+        $domain,
+        $leadId,
+        $userId,
+    );
+});
+
+//создание теплого звонка из
 Route::post('/task/warm', function (Request $request) {
 
     //from cold
@@ -122,9 +163,63 @@ Route::post('/task/warm', function (Request $request) {
     );
 });
 
+// презентация проведена
+Route::post('/presentation/done', function (Request $request) {
+
+
+    $company = null;
+    $smart = null;
+    $placement = null;
+
+
+    // $created = $request['created'];
+    // $responsible = $request['responsible'];
+
+    // // Log::info('LOG', $request->all());
+
+    // $partsCreated = explode("_", $created);
+    // $partsResponsible = explode("_", $responsible);
+    // $createdId = $partsCreated[1];
+    // $responsibleId = $partsResponsible[1];
+    Log::channel('telegram')->error('APRIL_HOOK', [
+        'presentation Done' => $request->body(),
+
+    ]);
+
+    $auth = $request['auth'];
+    $domain = $auth['domain'];
+    $companyId = $request['company_id'];
+    // $responsibleId = null;
+
+    $placement = $request['placement'];
+    $smart = $request['smart'];
+    $company = $request['company'];
+
+    // if (isset($request['responsibleId'])) {
+    $responsible = $request['responsibleId'];
+    $partsResponsible = explode("_", $responsible);
+    $responsibleId = $partsResponsible[1];
+    // }
+
+    $controller = new APIBitrixController();
+    return $controller->presentationDone(
+        $domain,
+        $companyId,
+        $responsibleId,
+        $placement,
+        $company,
+        $smart,
+    );
+});
+
+
+//Отказ
 Route::post('/task/fail', function (Request $request) {
 
+    Log::channel('telegram')->error('APRIL_HOOK', [
+        'task/fail' => $request->body(),
 
+    ]);
 
     $smart = null;
 
@@ -157,85 +252,13 @@ Route::post('/task/fail', function (Request $request) {
     );
 });
 
-Route::post('/task', function (Request $request) {
 
-    //from cold
-    // https://april-hook.ru/api/task?
-    // company_id={{companyId}}&
-    // deadline={{Запланировать звонок}}&
-    // responsible={{Ответственный}}&
-    // created={{Постановщик ХО}}&
-    // name={{Обзвон}}&
-    // crm={{ID}}
-    $comment = null;
-    $smart = null;
-    $sale = null;
-
-    $createdId = null;
-    $responsibleId = null;
-    $type = null;
-    if (isset($request['type'])) {
-        $type = $request['type'];
-    }
-
-    if (isset($request['created'])) {
-
-        $created = $request['created'];
-        $partsCreated = explode("_", $created);
-        $createdId = $partsCreated[1];
-    }
-
-    if (isset($request['responsible'])) {
-
-        $responsible = $request['responsible'];
-        $partsResponsible = explode("_", $responsible);
-        $responsibleId = $partsResponsible[1];
-    }
+// ..........................................................................................
 
 
 
-
-    // Log::info('LOG', $request->all());
-
-
-
-
-
-    $auth = $request['auth'];
-    $domain = $auth['domain'];
-    $companyId = $request['company_id'];
-
-    $deadline = $request['deadline'];
-    $crm = $request['crm'];
-    $name = $request['name'];
-    //only from front calling
-    // if (
-    //     isset($request['comment'])
-    //     && isset($request['smart'])
-    //     && isset($request['smart'])
-    // ) {
-    //     $comment = $request['comment'];
-    //     $smart = $request['smart'];
-    //     $sale = $request['sale'];
-    // }
-
-
-    $controller = new APIBitrixController();
-    return $controller->createColdTask(
-        $type,
-        $domain,
-        $companyId,
-        $createdId,
-        $responsibleId,
-        $deadline,
-        $name,
-        // $comment,
-        $crm,
-        // $smart,
-        // $sale
-    );
-});
-
+// Бизнес процесс битрикс ............................................
+// инициализация холодного звонка из Лид
 Route::post('/coldlead/smart/init', function (Request $request) {
 
     //from cold
@@ -264,9 +287,14 @@ Route::post('/coldlead/smart/init', function (Request $request) {
     $sale = null;
     $createdId =  null;
     $smartId =  null;
-
+    $responsibleId = null;
     // lidId UF_CRM_7_1697129037
     // lidIds UF_CRM_7_1697129081
+    Log::channel('telegram')->error('APRIL_HOOK', [
+
+        'coldlead/smart/init' => $request->all()
+
+    ]);
     try {
         if (isset($request['created'])) {
             $created = $request['created'];
@@ -352,6 +380,7 @@ Route::post('/coldlead/smart/init', function (Request $request) {
     }
 });
 
+// инициализация холодного звонка из Компании
 Route::post('/cold/smart/init', function (Request $request) {
 
     //from cold
@@ -447,54 +476,145 @@ Route::post('/cold/smart/init', function (Request $request) {
     }
 });
 
+//создание задачи hook из Битрикс смарт-процессов когда карточка процесса 
+//передвинута предыдущими хуками в категори ХЗ Запланироватьзвонок
 
+Route::post('/task', function (Request $request) {
 
-
-Route::post('/presentation/done', function (Request $request) {
-
-
-    $company = null;
+    //from cold
+    // https://april-hook.ru/api/task?
+    // company_id={{companyId}}&
+    // deadline={{Запланировать звонок}}&
+    // responsible={{Ответственный}}&
+    // created={{Постановщик ХО}}&
+    // name={{Обзвон}}&
+    // crm={{ID}}
+    $comment = null;
     $smart = null;
-    $placement = null;
+    $sale = null;
+
+    $createdId = null;
+    $responsibleId = null;
+    $type = null;
+    if (isset($request['type'])) {
+        $type = $request['type'];
+    }
+
+    if (isset($request['created'])) {
+
+        $created = $request['created'];
+        $partsCreated = explode("_", $created);
+        $createdId = $partsCreated[1];
+    }
+
+    if (isset($request['responsible'])) {
+
+        $responsible = $request['responsible'];
+        $partsResponsible = explode("_", $responsible);
+        $responsibleId = $partsResponsible[1];
+    }
 
 
-    // $created = $request['created'];
-    // $responsible = $request['responsible'];
 
-    // // Log::info('LOG', $request->all());
 
-    // $partsCreated = explode("_", $created);
-    // $partsResponsible = explode("_", $responsible);
-    // $createdId = $partsCreated[1];
-    // $responsibleId = $partsResponsible[1];
+    // Log::info('LOG', $request->all());
+
+
+
 
 
     $auth = $request['auth'];
     $domain = $auth['domain'];
     $companyId = $request['company_id'];
-    // $responsibleId = null;
 
-    $placement = $request['placement'];
-    $smart = $request['smart'];
-    $company = $request['company'];
-
-    // if (isset($request['responsibleId'])) {
-    $responsible = $request['responsibleId'];
-    $partsResponsible = explode("_", $responsible);
-    $responsibleId = $partsResponsible[1];
+    $deadline = $request['deadline'];
+    $crm = $request['crm'];
+    $name = $request['name'];
+    //only from front calling
+    // if (
+    //     isset($request['comment'])
+    //     && isset($request['smart'])
+    //     && isset($request['smart'])
+    // ) {
+    //     $comment = $request['comment'];
+    //     $smart = $request['smart'];
+    //     $sale = $request['sale'];
     // }
 
+
     $controller = new APIBitrixController();
-    return $controller->presentationDone(
+    return $controller->createColdTask(
+        $type,
         $domain,
         $companyId,
+        $createdId,
         $responsibleId,
-        $placement,
-        $company,
-        $smart,
+        $deadline,
+        $name,
+        // $comment,
+        $crm,
+        // $smart,
+        // $sale
     );
 });
 
+//....................................................................
+
+
+
+//BITRIX EVENTS........................................................
+//завершение лида
+Route::post('listener/lead/complete', function (Request $request) {
+
+    //from cold
+    // https://april-hook.ru/api/task?
+    $companyId = null;
+    $leadId = null;
+
+    if (isset($request['company_id'])) {
+        //при соединении к существующей или созданиии новой компании
+        //полюбому будет company_id
+        $companyId = $request['company_id'];
+    }
+    if (isset($request['lead_id'])) {
+        $leadId = $request['lead_id'];
+    }
+
+    //Создание новой компании из лида или присоеднинение к существующей
+    // взять два смарт процесса по лиду и по компании
+    // если нет ни одного
+    // если есть только по лиду -> засунуть в него компанию - передвинуть в работа с компанией если был на предыдущей стадии или в отказе
+    // если есть только компании -> засунуть в него лид
+
+    //если есть оба
+    //их id равны - значит это один и тотже - передвинуть в работа с компанией если был на предыдущей стадии или в отказе
+    // если их id разные перенести из лидовского смарта количество презентаций комментарии в смарт по компании
+    //если у смарта по лиду более высокая стадия перенести в нее
+
+
+
+    Log::info('error COLD', ['lead/complete' => $request->all()]);
+    try {
+        Log::channel('telegram')->error(
+            'lead/complete',
+            [
+                'company_id' => $companyId,
+                'lead_id' => $leadId,
+            ]
+        );
+    } catch (\Throwable $th) {
+        $errorMessages =  [
+            'message'   => $th->getMessage(),
+            'file'      => $th->getFile(),
+            'line'      => $th->getLine(),
+            'trace'     => $th->getTraceAsString(),
+        ];
+        Log::error('ROUTE ERROR COLD: Exception caught',  $errorMessages);
+        Log::info('error COLD', ['error' => $th->getMessage()]);
+    }
+});
+
+// .......................................................................
 
 
 
@@ -585,39 +705,6 @@ Route::post('/calling', function (Request $request) {
 
 
 
-Route::post('/smart/item', function (Request $request) {
-
-    $companyId = $request['companyId'];
-    $userId = $request['userId'];
-
-    $domain = $request['domain'];
-
-
-    $controller = new APIBitrixController();
-    return $controller->getSmartItemCallingFront(
-        $domain,
-        $companyId,
-        $userId,
-    );
-});
-
-
-//TODO smart/item/fromlead -> return smart from lead relation
-Route::post('smart/item/fromlead', function (Request $request) {
-
-    $leadId = $request->input('leadId');
-    $userId = $request->input('userId');
-    $domain = $request->input('domain');
-
-
-
-    $controller = new APIBitrixController();
-    return $controller->getSmartItemCallingFrontFromLead(
-        $domain,
-        $leadId,
-        $userId,
-    );
-});
 
 
 Route::post('/lists', function (Request $request) {
@@ -808,40 +895,7 @@ Route::post('/install/smart/', function (Request $request) {
 
 
 
-//EVENTS
-Route::post('listener/lead/complete', function (Request $request) {
 
-    //from cold
-    // https://april-hook.ru/api/task?
-    $companyId = null;
-    $leadId = null;
-
-    if (isset($request['company_id'])) {
-        $companyId = $request['company_id'];
-    }
-    if (isset($request['lead_id'])) {
-        $leadId = $request['lead_id'];
-    }
-    Log::info('error COLD', ['lead/complete' => $request->all()]);
-    try {
-        Log::channel('telegram')->error(
-            'lead/complete',
-            [
-                'company_id' => $companyId,
-                'lead_id' => $leadId,
-            ]
-        );
-    } catch (\Throwable $th) {
-        $errorMessages =  [
-            'message'   => $th->getMessage(),
-            'file'      => $th->getFile(),
-            'line'      => $th->getLine(),
-            'trace'     => $th->getTraceAsString(),
-        ];
-        Log::error('ROUTE ERROR COLD: Exception caught',  $errorMessages);
-        Log::info('error COLD', ['error' => $th->getMessage()]);
-    }
-});
 
 // Route::post('/update/smart/', function (Request $request) {
 
