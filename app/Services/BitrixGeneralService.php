@@ -57,7 +57,7 @@ class BitrixGeneralService
 
         $response = Http::get($url, $data);
         // $responseData = $response->json();
-        $responseData = APIBitrixController::getBitrixRespone($response, 'cold: getSmartItem');
+        $responseData = APIBitrixController::getBitrixRespone($response, 'general service: getSmartItem');
         if (isset($responseData)) {
             if (!empty($responseData['items'])) {
                 $currentSmart =  $responseData['items'][0];

@@ -14,22 +14,13 @@ class BitrixLeadCompleteService
     protected $callingGroupId;
     protected $smartCrmId;
     protected $smartEntityTypeId;
-    // protected $isNeedCreateSmart;
 
-    // protected $type;
+
     protected $domain;
     protected $companyId;
     protected $leadId;
-
-    // protected $createdId;
     protected $responsibleId;
-    // protected $deadline;
-    // protected $name;
-    // protected $comment;
-    // protected $crm;
-    // protected $currentBitrixSmart;
-    // protected $sale;
-    // protected $isOneMoreService;
+
 
     protected $taskTitle;
 
@@ -61,7 +52,14 @@ class BitrixLeadCompleteService
                 $portal = $portal['data'];
 
                 $this->portal = $portal;
-                $this->aprilSmartData = $portal['bitrixSmart'];
+                if (isset($portal['bitrixSmart'])) {
+                    $this->aprilSmartData = $portal['bitrixSmart'];
+                }
+
+                if (isset($portal['bitrixSmart']['crmId'])) {
+                    $this->smartEntityTypeId = $portal['bitrixSmart']['crmId'];
+                }
+
 
 
 
@@ -114,6 +112,16 @@ class BitrixLeadCompleteService
             $this->targetCategoryId = 26;
             $this->targetStageId = 'DT162_26:PREPARATION';
         }
+
+        Log::channel('telegram')->error(
+            'lead/complete',
+            [
+                'domain' => $domain,
+                'leadId' => $leadId,
+                'companyId' => $companyId,
+                'responsibleId' => $responsibleId,
+            ]
+        );
     }
 
     public function leadComplete()
@@ -159,28 +167,25 @@ class BitrixLeadCompleteService
                     $resultMergedSmart = $this->mergeSmarts($smartFromLead, $smartFromCompany, $this->leadId);
 
                     //обновляем обновленный смарт по компании
-                    if(isset($resultMergedSmart['id'])){
+                    if (isset($resultMergedSmart['id'])) {
                         $resultSmart = BitrixGeneralService::updateSmartItem(
                             $this->hook,
                             $this->smartEntityTypeId,
                             $resultMergedSmart['id'],
                             $resultMergedSmart
-    
-                        );
 
+                        );
                     }
-                
+
                     //удаляем смарт который был по лиду
-                    if(isset($smartFromLead['id'])){
+                    if (isset($smartFromLead['id'])) {
                         BitrixGeneralService::deleteSmartItem(
                             $this->hook,
                             $this->smartEntityTypeId,
                             $smartFromLead['id'],
-    
-                        );
 
+                        );
                     }
-              
                 } else if (!$smartFromCompany) { //если смарт по лиду есть + по Компании НЕТ 
 
                     //добавить в смарт по лиду компанию //переместить в target stage
@@ -191,15 +196,15 @@ class BitrixLeadCompleteService
                     }
                     $updatingLeadSmart['stageId'] = $this->targetStageId;
                     $updatingLeadSmart['categoryId'] = $this->targetCategoryId;
-                    if(isset($updatingLeadSmart['id'])){
-                    $resultSmart =   BitrixGeneralService::updateSmartItem(
-                        $this->hook,
-                        $this->smartEntityTypeId,
-                        $updatingLeadSmart['id'],
-                        $updatingLeadSmart
+                    if (isset($updatingLeadSmart['id'])) {
+                        $resultSmart =   BitrixGeneralService::updateSmartItem(
+                            $this->hook,
+                            $this->smartEntityTypeId,
+                            $updatingLeadSmart['id'],
+                            $updatingLeadSmart
 
-                    );
-                }
+                        );
+                    }
                 }
             } else if (!$smartFromLead) { //если смарта по лиду нет
                 if ($smartFromCompany) { //если смарта по лиду нет + по Компании есть 
@@ -213,15 +218,15 @@ class BitrixLeadCompleteService
                     $updatingCompanySmart['stageId'] = $this->targetStageId;
                     $updatingCompanySmart['categoryId'] = $this->targetCategoryId;
 
-                    if(isset($updatingCompanySmart['id'])){
-                    $resultSmart =    BitrixGeneralService::updateSmartItem(
-                        $this->hook,
-                        $this->smartEntityTypeId,
-                        $updatingCompanySmart['id'],
-                        $updatingCompanySmart
+                    if (isset($updatingCompanySmart['id'])) {
+                        $resultSmart =    BitrixGeneralService::updateSmartItem(
+                            $this->hook,
+                            $this->smartEntityTypeId,
+                            $updatingCompanySmart['id'],
+                            $updatingCompanySmart
 
-                    );
-                }
+                        );
+                    }
                 } else if (!$smartFromCompany) { //если смарт по лиду нет + по Компании НЕТ 
 
                     //создать смарт
@@ -267,7 +272,7 @@ class BitrixLeadCompleteService
     }
 
 
-    protected function mergeSmarts($smartFromLead, $smartFromCompany, $leadId)
+    private function mergeSmarts($smartFromLead, $smartFromCompany, $leadId)
     {
         $fieldsData = $smartFromCompany;
         $updatedPresentationCount = 0;
@@ -330,7 +335,7 @@ class BitrixLeadCompleteService
         return $fieldsData;
     }
 
-    protected function isCanChangeStageFromLeadToCompanySmart(
+    private function isCanChangeStageFromLeadToCompanySmart(
         $currentSmartStageIdLead,
         $currentSmartStageIdCompany
     ) {
@@ -406,23 +411,4 @@ class BitrixLeadCompleteService
 
 
 
-        //проведено презентаций smart
-        // UF_CRM_10_1709111529 - april
-        // 	UF_CRM_6_1709894507 - alfa
-        // компании 
-        // UF_CRM_1709807026
-
-
-        //дата следующего звонка smart
-        // UF_CRM_6_1709907693 - alfa
-        // UF_CRM_10_1709907744 - april
-
-
-        //комментарии smart
-        //UF_CRM_6_1709907513 - alfa
-        // UF_CRM_10_1709883918 - april
-
-
-        //название обзвона - тема
-        // UF_CRM_6_1709907816 - alfa
-        // UF_CRM_10_1709907850 - april
+      

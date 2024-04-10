@@ -453,15 +453,7 @@ class BitrixHookController extends Controller
         $responsibleId,
     ) {
         try {
-        Log::channel('telegram')->error(
-            'lead/complete',
-            [
-                'domain' => $domain,
-                'leadId' => $leadId,
-                'companyId' => $companyId,
-                'responsibleId' => $responsibleId,
-            ]
-        );
+    
             $service = new BitrixLeadCompleteService(
                 $domain,
                 $companyId,
