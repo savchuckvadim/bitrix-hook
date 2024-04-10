@@ -167,11 +167,11 @@ class BitrixLeadCompleteService
                         ]
                     );
                     //обновляем обновленный смарт по компании
-                    if (isset($resultMergedSmart['id'])) {
+                    if (isset($smartFromCompany['id'])) {
                         $resultSmart = BitrixGeneralService::updateSmartItem(
                             $this->hook,
                             $this->smartEntityTypeId,
-                            $resultMergedSmart['id'],
+                            $smartFromCompany['id'],
                             $resultMergedSmart
 
                         );
