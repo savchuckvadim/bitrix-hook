@@ -90,7 +90,7 @@ class BitrixGeneralService
 
         $smartFieldsResponse = Http::get($url, $data);
 
-        $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'cold: updateSmartItemCold');
+        $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: createSmartItem');
         $resultFields = $responseData;
 
         return $resultFields;

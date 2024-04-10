@@ -149,7 +149,15 @@ class BitrixLeadCompleteService
 
 
 
-
+            Log::channel('telegram')->error(
+                'lead/complete updateSmartItem',
+                [
+                    'smartFromLead' => $smartFromLead,
+                    'smartFromCompany' => $smartFromCompany,
+    
+                ]
+            );
+    
 
 
             if ($smartFromLead) { //если смарт по лиду есть
