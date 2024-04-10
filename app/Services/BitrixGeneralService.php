@@ -101,7 +101,7 @@ class BitrixGeneralService
  
         $methodSmart = '/crm.item.update.json';
         $url = $hook . $methodSmart;
-
+  
         $data = [
             'id' => $smartId,
             'entityTypeId' => $entityId,
@@ -110,11 +110,17 @@ class BitrixGeneralService
 
         ];
 
-  
+        Log::channel('telegram')->error(
+            'lead/complete updateSmartItem',
+            [
+                'data' => $data,
+
+            ]
+        );
 
         $smartFieldsResponse = Http::get($url, $data);
 
-        $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'cold: updateSmartItemCold');
+        $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: updateSmartItemCold');
         $resultFields = $responseData;
 
         return $resultFields;
