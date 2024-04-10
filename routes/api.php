@@ -182,10 +182,10 @@ Route::post('/presentation/done', function (Request $request) {
     // $partsResponsible = explode("_", $responsible);
     // $createdId = $partsCreated[1];
     // $responsibleId = $partsResponsible[1];
-    Log::channel('telegram')->error('APRIL_HOOK', [
-        'presentation Done' => $request->body(),
+    // Log::channel('telegram')->error('APRIL_HOOK', [
+    //     'presentation Done' => $request->body(),
 
-    ]);
+    // ]);
 
     $auth = $request['auth'];
     $domain = $auth['domain'];
