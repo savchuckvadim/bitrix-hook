@@ -142,7 +142,7 @@ class BitrixLeadCompleteService
             $smartFromCompany = BitrixGeneralService::getSmartItem(
                 $this->hook,
                 null, //lidId ? from lead
-                $this->leadId, //companyId ? from lead
+                $this->companyId, //companyId ? from lead
                 $this->responsibleId,
                 $this->aprilSmartData, //april smart data
             );
