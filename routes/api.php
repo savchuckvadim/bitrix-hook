@@ -883,8 +883,10 @@ Route::post('/install/smart/', function (Request $request) {
 
 
 Route::post('/test/', function (Request $request) {
-
- 
+    $data = $request->all();
+    Log::channel('telegram')->error('APRIL_HOOK CALL TEST', [
+        'updateSmartItemWarm' => $data
+    ]);
 
 
     return APIOnlineController::getSuccess(['result' => true]);
