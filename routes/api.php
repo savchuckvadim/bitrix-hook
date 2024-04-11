@@ -882,6 +882,14 @@ Route::post('/install/smart/', function (Request $request) {
 
 
 
+Route::post('/test/', function (Request $request) {
+
+ 
+
+
+    return APIOnlineController::getSuccess(['result' => true]);
+});
+
 
 
 
