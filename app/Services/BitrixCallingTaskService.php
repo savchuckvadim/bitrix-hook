@@ -37,11 +37,14 @@ class BitrixCallingTaskService
 
     protected $categoryId = 28;
     protected $stageId = 'DT162_28:NEW';
-    protected $lastCallDateFieldCold = 'ufCrm10_1701270138';
+ 
     protected $commentField = 'ufCrm10_1709883918';
-    protected $callThemeFieldCold = 'ufCrm10_1703491835';
-
-
+    protected $lastCallDateField = 'ufCrm10_1709907744';
+    protected $callThemeField = 'ufCrm10_1709907850';
+     //дата следующего звонка
+     // тема следующего звонка
+    // protected $lastCallDateFieldCold = 'ufCrm10_1701270138';
+    // protected $callThemeFieldCold = 'ufCrm10_1703491835';
     public function __construct(
         $type,
         $domain,
@@ -170,14 +173,14 @@ class BitrixCallingTaskService
             }
         }
         
-        Log::channel('telegram')->error('APRIL_HOOK', [
-            'APRIL_HOOK' => [
-                '$type' => $type,
-                '$domain' => $domain,
-                'stageId' => $this->stageId,
-                'categoryId' => $this->categoryId,
-            ]
-        ]);
+        // Log::channel('telegram')->error('APRIL_HOOK', [
+        //     'APRIL_HOOK' => [
+        //         '$type' => $type,
+        //         '$domain' => $domain,
+        //         'stageId' => $this->stageId,
+        //         'categoryId' => $this->categoryId,
+        //     ]
+        // ]);
     }
 
     public function createCallingTaskItem()
@@ -633,20 +636,20 @@ class BitrixCallingTaskService
 
         $categoryId = $this->categoryId;
         $targetStageId = $this->stageId;
-        $lastCallDateField = $this->lastCallDateFieldCold;
+        $lastCallDateField = $this->lastCallDateField;
         $commentField =  $this->commentField;
-        $callThemeField =  $this->callThemeFieldCold;
+        $callThemeField =  $this->callThemeField;
 
-        Log::channel('telegram')->error('APRIL_HOOK', [
-            'updateSmartItemWarm' => [
-                'categoryId' => $this->categoryId,
-                'targetStageId' => $this->stageId,
-                'lastCallDateField' => $this->lastCallDateFieldCold,
-                'commentField' =>  $this->commentField,
-                'callThemeField' =>  $this->callThemeFieldCold,
+        // Log::channel('telegram')->error('APRIL_HOOK', [
+        //     'updateSmartItemWarm' => [
+        //         'categoryId' => $this->categoryId,
+        //         'targetStageId' => $this->stageId,
+        //         'lastCallDateField' => $this->lastCallDateField,
+        //         'commentField' =>  $this->commentField,
+        //         'callThemeField' =>  $this->callThemeField,
 
-            ]
-        ]);
+        //     ]
+        // ]);
         //         stageId: 
 
         //дата следующего звонка smart
@@ -753,12 +756,12 @@ class BitrixCallingTaskService
 
 
         ];
-        Log::channel('telegram')->error('APRIL_HOOK', [
-            'updateSmartItemWarm' => [
-                'data for update' => $data,
+        // Log::channel('telegram')->error('APRIL_HOOK', [
+        //     'updateSmartItemWarm' => [
+        //         'data for update' => $data,
 
-            ]
-        ]);
+        //     ]
+        // ]);
         $smartFieldsResponse = Http::get($url, $data);
         $bitrixResponse = $smartFieldsResponse->json();
 
