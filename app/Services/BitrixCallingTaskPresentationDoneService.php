@@ -64,18 +64,18 @@ class BitrixCallingTaskPresentationDoneService
         $categoryId = 26;
         $stageId = 'DT162_26:CLIENT';
         $nowDate = now();
-        $presDate = Carbon::createFromFormat('d.m.Y H:i:s', $nowDate, 'Europe/Moscow');
-        $this->presentationDate = $presDate->format('Y-m-d H:i:s');
+        $presDate = $nowDate->timeZone('Europe/Moscow');
+
 
 
         if ($domain === 'alfacentr.bitrix24.ru') {
             $categoryId = 12;
             $stageId = 'DT156_12:UC_DP0NEJ';
-          
-        
+            $presDate = $nowDate->timeZone('Asia/Novosibirsk');
         }
-
         
+        $this->presentationDate = $presDate->format('Y-m-d H:i:s');
+
 
         $this->categoryId = $categoryId;
         $this->stageId = $stageId;
