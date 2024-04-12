@@ -481,7 +481,7 @@ class BitrixCallingTaskPresentationDoneService
             // }
         }
 
-        $company['TITLE'] = '' . $presentationDate . '';
+
 
 
 
