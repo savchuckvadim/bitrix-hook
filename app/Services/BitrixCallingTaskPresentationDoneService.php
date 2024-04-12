@@ -457,7 +457,7 @@ class BitrixCallingTaskPresentationDoneService
         }
         $utcDate = new DateTime("now", new DateTimeZone('UTC'));
         $presentationDate = $utcDate->format('Y-m-d H:i:s');
-        if (array_key_exists('UF_CRM_1712909962', $this->company)) {  //дата последней презентации
+        // if (array_key_exists('UF_CRM_1712909962', $this->company)) {  //дата последней презентации
             Log::channel('telegram')->error('APRIL_HOOK', [
                 $method => [
                     'UF_CRM_1712909962' => $presentationDate,
@@ -465,12 +465,12 @@ class BitrixCallingTaskPresentationDoneService
                 ]
             ]);
             $this->company['UF_CRM_1712909962'] = $presentationDate;
-        }
+        // }
 
 
 
         if ($this->isUnplannedPresentation) {
-            if (array_key_exists('UF_CRM_1697117364', $this->company)) {  // запланировать презентацию - изменение этого поля даст команду битрикс записать KPI что през была запланирована
+            // if (array_key_exists('UF_CRM_1697117364', $this->company)) {  // запланировать презентацию - изменение этого поля даст команду битрикс записать KPI что през была запланирована
                 Log::channel('telegram')->error('APRIL_HOOK', [
                     $method => [
                        
@@ -478,7 +478,7 @@ class BitrixCallingTaskPresentationDoneService
                     ]
                 ]);
                 $this->company['UF_CRM_1697117364'] = $presentationDate;
-            }
+            // }
         }
 
     
