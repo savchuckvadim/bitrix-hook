@@ -218,7 +218,7 @@ Route::post('/presentation/done', function (Request $request) {
 Route::post('/task/fail', function (Request $request) {
 
     Log::channel('telegram')->error('APRIL_HOOK', [
-        'task/fail' => $request->body(),
+        'task/fail' => $request,
 
     ]);
 
