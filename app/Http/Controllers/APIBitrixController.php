@@ -416,7 +416,8 @@ class APIBitrixController extends Controller
         $responsibleId,
         $placement,
         $company,
-        $smart
+        $smart,
+        $isUnplannedPresentation
 
 
     ) {
@@ -426,7 +427,8 @@ class APIBitrixController extends Controller
             $responsibleId,
             $placement,
             $company,
-            $smart
+            $smart,
+            $isUnplannedPresentation
         );
 
         $failTask = $service->done();

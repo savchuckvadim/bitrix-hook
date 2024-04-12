@@ -10,8 +10,16 @@ use Illuminate\Support\Facades\Log;
 //проведено презентаций smart
 // UF_CRM_10_1709111529 - april
 // 	UF_CRM_6_1709894507 - alfa
+
+//UF_CRM_10_1712908536 - дата последней презентации
+
+
 // компании 
-// UF_CRM_1709807026
+// UF_CRM_1709807026 - количество проведенных презентаций
+// UF_CRM_1709798145 - ответственный гарант
+// UF_CRM_1696211878 - презентация проведена
+// UF_CRM_1712909962 - дата последней презентации
+// UF_CRM_1697117364 - запланировать презентацию - изменение этого поля даст команду битрикс записать KPI что през была запланирована
 
 //презентация проведена - bool
 // UF_CRM_1696211878
@@ -33,6 +41,9 @@ class BitrixCallingTaskPresentationDoneService
 
     protected $categoryId;
     protected $stageId;
+    protected $isUnplannedPresentation;
+    protected $presentationDate;
+
 
     public function __construct(
         $domain,
@@ -40,7 +51,8 @@ class BitrixCallingTaskPresentationDoneService
         $responsibleId,
         $placement,
         $company,
-        $smart
+        $smart,
+        $isUnplannedPresentation
 
     ) {
 
@@ -55,7 +67,12 @@ class BitrixCallingTaskPresentationDoneService
         if ($domain === 'alfacentr.bitrix24.ru') {
             $categoryId = 12;
             $stageId = 'DT156_12:UC_DP0NEJ';
+            date_default_timezone_set('Asia/Novosibirsk');
+        }else{
+            date_default_timezone_set('Europe/Moscow');
         }
+
+        $this->presentationDate = date("d.m.Y H:i:s");
 
         $this->categoryId = $categoryId;
         $this->stageId = $stageId;
@@ -67,6 +84,7 @@ class BitrixCallingTaskPresentationDoneService
         $this->currentBitrixSmart = $smart;
         // $this->$responsibleId = $responsibleId;
         $this->assignedById = $responsibleId;
+        $this->isUnplannedPresentation = $isUnplannedPresentation;
         // Log::info('DONE_SERVICE', ['come data' => [
         //     'domain' =>   $domain,
         //     'companyId' =>   $companyId,
@@ -426,10 +444,23 @@ class BitrixCallingTaskPresentationDoneService
             // }
 
             $this->company['UF_CRM_1709807026'] = $currentCompanyCount;
-            if (array_key_exists('UF_CRM_1696211878', $this->company)) {
+            if (array_key_exists('UF_CRM_1696211878', $this->company)) {  //презентация проведена
 
-                $this->company['UF_CRM_1696211878'] = 'Y';  //презентация проведена
+                $this->company['UF_CRM_1696211878'] = 'Y'; 
             }
+
+            if (array_key_exists('UF_CRM_1712909962', $this->company)) {  //дата последней презентации
+
+                $this->company['UF_CRM_1712909962'] = $this->presentationDate;  
+            }
+            if($this->isUnplannedPresentation){
+                if (array_key_exists('UF_CRM_1697117364', $this->company)) {  // запланировать презентацию - изменение этого поля даст команду битрикс записать KPI что през была запланирована
+
+                    $this->company['UF_CRM_1697117364'] = $this->presentationDate;  
+                }
+
+            }
+
         }
 
         $getUrl = $hook . $method;

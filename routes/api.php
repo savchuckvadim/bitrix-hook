@@ -171,8 +171,9 @@ Route::post('/presentation/done', function (Request $request) {
     $company = null;
     $smart = null;
     $placement = null;
-
-
+    $companyId  = null;
+    $isUnplannedPresentation = false;
+    $responsibleId = null;
     // $created = $request['created'];
     // $responsible = $request['responsible'];
 
@@ -186,21 +187,37 @@ Route::post('/presentation/done', function (Request $request) {
     //     'presentation Done' => $request->body(),
 
     // ]);
+    if (isset($request['auth'])) {
+        $auth = $request['auth'];
+        if (isset($request['auth'])) {
+            $domain = $auth['domain'];
+        }
+    }
 
-    $auth = $request['auth'];
-    $domain = $auth['domain'];
-    $companyId = $request['company_id'];
-    // $responsibleId = null;
+    if (isset($request['company_id'])) {
+        $companyId = $request['company_id'];
+    }
 
-    $placement = $request['placement'];
-    $smart = $request['smart'];
-    $company = $request['company'];
 
-    // if (isset($request['responsibleId'])) {
-    $responsible = $request['responsibleId'];
-    $partsResponsible = explode("_", $responsible);
-    $responsibleId = $partsResponsible[1];
-    // }
+    if (isset($request['placement'])) {
+        $placement = $request['placement'];
+    }
+    if (isset($request['smart'])) {
+        $smart = $request['smart'];
+    }
+    if (isset($request['company'])) {
+        $company = $request['company'];
+    }
+    if (isset($request['isUnplannedPresentation'])) {
+        $isUnplannedPresentation = $request['isUnplannedPresentation'];
+    }
+
+    if (isset($request['responsibleId'])) {
+        $responsible = $request['responsibleId'];
+        $partsResponsible = explode("_", $responsible);
+        $responsibleId = $partsResponsible[1];
+    }
+
 
     $controller = new APIBitrixController();
     return $controller->presentationDone(
@@ -210,6 +227,7 @@ Route::post('/presentation/done', function (Request $request) {
         $placement,
         $company,
         $smart,
+        $isUnplannedPresentation,
     );
 });
 
@@ -217,10 +235,7 @@ Route::post('/presentation/done', function (Request $request) {
 //Отказ
 Route::post('/task/fail', function (Request $request) {
 
-    Log::channel('telegram')->error('APRIL_HOOK', [
-        'task/fail' => $request,
 
-    ]);
 
     $smart = null;
 
