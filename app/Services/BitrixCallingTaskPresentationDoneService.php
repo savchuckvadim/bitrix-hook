@@ -68,7 +68,7 @@ class BitrixCallingTaskPresentationDoneService
             $categoryId = 12;
             $stageId = 'DT156_12:UC_DP0NEJ';
             date_default_timezone_set('Asia/Novosibirsk');
-        }else{
+        } else {
             date_default_timezone_set('Europe/Moscow');
         }
 
@@ -444,24 +444,35 @@ class BitrixCallingTaskPresentationDoneService
             // }
 
             $this->company['UF_CRM_1709807026'] = $currentCompanyCount;
-            if (array_key_exists('UF_CRM_1696211878', $this->company)) {  //презентация проведена
-
-                $this->company['UF_CRM_1696211878'] = 'Y'; 
-            }
-
-            if (array_key_exists('UF_CRM_1712909962', $this->company)) {  //дата последней презентации
-
-                $this->company['UF_CRM_1712909962'] = $this->presentationDate;  
-            }
-            if($this->isUnplannedPresentation){
-                if (array_key_exists('UF_CRM_1697117364', $this->company)) {  // запланировать презентацию - изменение этого поля даст команду битрикс записать KPI что през была запланирована
-
-                    $this->company['UF_CRM_1697117364'] = $this->presentationDate;  
-                }
-
-            }
-
         }
+
+        if (array_key_exists('UF_CRM_1696211878', $this->company)) {  //презентация проведена
+
+            $this->company['UF_CRM_1696211878'] = 'Y';
+        }
+
+        if (array_key_exists('UF_CRM_1712909962', $this->company)) {  //дата последней презентации
+
+            $this->company['UF_CRM_1712909962'] = $this->presentationDate;
+        }
+
+
+
+        if ($this->isUnplannedPresentation) {
+            if (array_key_exists('UF_CRM_1697117364', $this->company)) {  // запланировать презентацию - изменение этого поля даст команду битрикс записать KPI что през была запланирована
+
+                $this->company['UF_CRM_1697117364'] = $this->presentationDate;
+            }
+        }
+
+        Log::channel('telegram')->error('APRIL_HOOK', [
+            $method => [
+                'UF_CRM_1712909962' => $this->presentationDate,
+                'UF_CRM_1697117364' => $this->presentationDate,
+            ]
+        ]);
+
+
 
         $getUrl = $hook . $method;
         $fieldsData = [
