@@ -136,7 +136,7 @@ class BitrixCallingTaskService
 
 
         $targetDeadLine = $deadline;
-        $nowDate = now();
+  
         if ($domain == 'alfacentr.bitrix24.ru') {
 
             $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');

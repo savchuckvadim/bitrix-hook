@@ -66,7 +66,7 @@ class BitrixCallingTaskPresentationDoneService
         $nowDate = now();
         $presDate = $nowDate->timeZone('Europe/Moscow');
 
-
+        $timeStart = time();//tomorrow
 
         if ($domain === 'alfacentr.bitrix24.ru') {
             $categoryId = 12;
@@ -74,7 +74,7 @@ class BitrixCallingTaskPresentationDoneService
             $presDate = $nowDate->timeZone('Asia/Novosibirsk');
         }
 
-        $this->presentationDate = $presDate->format('Y-m-d H:i:s');
+        $this->presentationDate = date("Y-m-d H:i:s", $timeStart);
 
 
         $this->categoryId = $categoryId;
