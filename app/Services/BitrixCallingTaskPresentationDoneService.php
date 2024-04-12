@@ -68,7 +68,7 @@ class BitrixCallingTaskPresentationDoneService
         $nowDate = now();
         $presDate = $nowDate->timeZone('Europe/Moscow');
 
-        $timeStart = time(); //tomorrow
+        // $timeStart = time(); //tomorrow
 
         if ($domain === 'alfacentr.bitrix24.ru') {
             $categoryId = 12;
@@ -76,7 +76,8 @@ class BitrixCallingTaskPresentationDoneService
             $presDate = $nowDate->timeZone('Asia/Novosibirsk');
         }
 
-        $this->presentationDate = date("Y-m-d H:i:s", $timeStart);
+        // $this->presentationDate = date("Y-m-d H:i:s", $timeStart);
+        $this->presentationDate  = $presDate->format('Y-m-d H:i:s');
 
 
         $this->categoryId = $categoryId;
@@ -180,10 +181,17 @@ class BitrixCallingTaskPresentationDoneService
                     $smartFields = [
                         'ufCrm6_1709894507' => $currentSmartCount
                     ];
+
+                    
+                    $smartFields = [
+                        'ufCrm6_1709894507' => $currentSmartCount
+                    ];
                 }
+
+
             }
             $smartFields = [
-                'ufCrm10_1709111529' => $currentSmartCount
+                'ufCrm10_1712908536' => $this->presentationDate
             ];
 
             // $currentSmartItem  = $this->currentBitrixSmart;
@@ -420,7 +428,7 @@ class BitrixCallingTaskPresentationDoneService
 
     //company
 
-    protected function updateCompanyDone($company)
+    protected function updateCompanyDone()
     {
 
         // компании count
