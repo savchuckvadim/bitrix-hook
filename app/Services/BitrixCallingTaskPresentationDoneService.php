@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\PortalController;
 use Carbon\Carbon;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 //проведено презентаций smart
@@ -453,15 +455,16 @@ class BitrixCallingTaskPresentationDoneService
 
             $this->company['UF_CRM_1696211878'] = 'Y';
         }
-
+        $utcDate = new DateTime("now", new DateTimeZone('UTC'));
+        $presentationDate = $utcDate->format('Y-m-d H:i:s');
         if (array_key_exists('UF_CRM_1712909962', $this->company)) {  //дата последней презентации
             Log::channel('telegram')->error('APRIL_HOOK', [
                 $method => [
-                    'UF_CRM_1712909962' => $this->presentationDate,
+                    'UF_CRM_1712909962' => $presentationDate,
                   
                 ]
             ]);
-            $this->company['UF_CRM_1712909962'] = $this->presentationDate;
+            $this->company['UF_CRM_1712909962'] = $presentationDate;
         }
 
 
@@ -471,10 +474,10 @@ class BitrixCallingTaskPresentationDoneService
                 Log::channel('telegram')->error('APRIL_HOOK', [
                     $method => [
                        
-                        'UF_CRM_1697117364' => $this->presentationDate,
+                        'UF_CRM_1697117364' => $presentationDate,
                     ]
                 ]);
-                $this->company['UF_CRM_1697117364'] = $this->presentationDate;
+                $this->company['UF_CRM_1697117364'] = $presentationDate;
             }
         }
 
