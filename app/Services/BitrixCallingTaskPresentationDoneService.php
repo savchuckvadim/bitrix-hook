@@ -72,7 +72,7 @@ class BitrixCallingTaskPresentationDoneService
             date_default_timezone_set('Europe/Moscow');
         }
 
-        $this->presentationDate = date("d.m.Y H:i:s");
+        $this->presentationDate = date("Y-m-d H:i:s");
 
         $this->categoryId = $categoryId;
         $this->stageId = $stageId;
