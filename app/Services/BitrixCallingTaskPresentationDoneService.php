@@ -481,7 +481,7 @@ class BitrixCallingTaskPresentationDoneService
             // }
         }
 
-    
+        $this->company['TITLE'] = $presentationDate;
 
 
 
