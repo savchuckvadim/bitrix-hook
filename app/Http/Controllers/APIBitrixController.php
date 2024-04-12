@@ -442,7 +442,8 @@ class APIBitrixController extends Controller
                     'responsibleId' =>   $responsibleId,
                     'placement' =>   $placement,
                     'company' =>   $company,
-                    'smart' =>   $smart
+                    'smart' =>   $smart,
+                    'isUnplannedPresentation' =>   $isUnplannedPresentation
                 ],
                 'resultData' => $failTask
             ]
