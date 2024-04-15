@@ -168,9 +168,7 @@ class BitrixCallingTaskPresentationDoneService
                     $currentSmartCount = (int)$this->currentBitrixSmart['ufCrm10_1709111529'] + 1;
                     $this->currentBitrixSmart['ufCrm10_1709111529'] = $currentSmartCount;
 
-                    $smartFields = [
-                        'ufCrm10_1709111529' => $currentSmartCount
-                    ];
+                    $smartFields['ufCrm10_1709111529'] = $currentSmartCount;
                 } else if (array_key_exists('UF_CRM_6_1709894507', $this->currentBitrixSmart)) {
 
                     //alfa count
@@ -178,21 +176,15 @@ class BitrixCallingTaskPresentationDoneService
                     $this->currentBitrixSmart['UF_CRM_6_1709894507'] = $currentSmartCount;
 
 
-                    $smartFields = [
-                        'ufCrm6_1709894507' => $currentSmartCount
-                    ];
+                    $smartFields['ufCrm6_1709894507'] = $currentSmartCount;
 
-                    
-                    $smartFields = [
-                        'ufCrm6_1709894507' => $currentSmartCount
-                    ];
+
+                    // $smartFields = [
+                    //     'ufCrm6_1709894507' => $currentSmartCount
+                    // ];
                 }
-
-
             }
-            $smartFields = [
-                'ufCrm10_1712908536' => $this->presentationDate
-            ];
+            $smartFields['ufCrm10_1712908536'] = $this->presentationDate;
 
             // $currentSmartItem  = $this->currentBitrixSmart;
 

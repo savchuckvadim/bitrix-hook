@@ -213,9 +213,10 @@ Route::post('/presentation/done', function (Request $request) {
     }
 
     if (isset($request['responsibleId'])) {
-        $responsible = $request['responsibleId'];
-        $partsResponsible = explode("_", $responsible);
-        $responsibleId = $partsResponsible[1];
+        // $responsible = $request['responsibleId'];
+        // $partsResponsible = explode("_", $responsible);
+        // $responsibleId = $partsResponsible[1];
+        $responsibleId =  $request['responsibleId'];
     }
 
 
