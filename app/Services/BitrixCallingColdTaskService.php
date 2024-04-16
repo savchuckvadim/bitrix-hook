@@ -59,7 +59,8 @@ class BitrixCallingColdTaskService
     ) {
 
 
-
+        $randomNumber = rand(1, 3);
+        sleep($randomNumber);
         $portal = PortalController::getPortal($domain);
         $portal = $portal['data'];
         $this->portal = $portal;
