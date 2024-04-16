@@ -140,7 +140,7 @@ class BitrixCallingColdTaskService
             // if(!$this->smartId){
 
             // }
-            $randomNumber = rand(1, 5);
+            $randomNumber = rand(1, 3);
             sleep($randomNumber);
             Log::info('COLD companyId', ['log' => $this->companyId]);
             if ($this->companyId) {
