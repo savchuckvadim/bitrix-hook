@@ -494,11 +494,12 @@ class BitrixCallingTaskPresentationDoneService
         $response = Http::get($getUrl,  $fieldsData);
         if ($response) {
             $responseData = $response->json();
+            Log::channel('telegram')->info('updateCompanyDone', ['test done' => $responseData]);
             if (isset($responseData['result'])) {
                 $result =  $responseData['result'];
             } else if (isset($responseData['error_description'])) {
                 $result =  null;
-                Log::error('BTX ERROR updateCompanyCold', ['fieldsData' => $responseData['error_description']]);
+                Log::error('BTX ERROR updateCompanyDone', ['fieldsData' => $responseData['error_description']]);
             }
         }
 

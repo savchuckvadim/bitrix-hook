@@ -274,6 +274,10 @@ Route::post('/task/fail', function (Request $request) {
 
 
 // Бизнес процесс битрикс ............................................
+//........................................ Инициация холодного обзвона 
+//.........................................Из Лидов Компаний Смарт-процессов
+//.........................................Во время инициализации холодного звонка должен проверяться существует или нет смарт
+//.........................................Передвигать смарт в ХО
 // инициализация холодного звонка из Лид
 Route::post('/coldlead/smart/init', function (Request $request) {
 
@@ -306,11 +310,11 @@ Route::post('/coldlead/smart/init', function (Request $request) {
     $responsibleId = null;
     // lidId UF_CRM_7_1697129037
     // lidIds UF_CRM_7_1697129081
-    Log::channel('telegram')->error('APRIL_HOOK', [
+    // Log::channel('telegram')->error('APRIL_HOOK', [
 
-        'coldlead/smart/init' => $request->all()
+    //     'coldlead/smart/init' => $request->all()
 
-    ]);
+    // ]);
     try {
         if (isset($request['created'])) {
             $created = $request['created'];
@@ -492,19 +496,32 @@ Route::post('/cold/smart/init', function (Request $request) {
     }
 });
 
+
+
+
+
+
 //создание задачи hook из Битрикс смарт-процессов когда карточка процесса 
 //передвинута предыдущими хуками в категори ХЗ Запланироватьзвонок
 
 Route::post('/task', function (Request $request) {
 
+
+    // создает задачу холодного обзвона
+    // вызывается из смарт-процесса
+    // у смарт процесса может быть Компания, Лид, Сделка
+
     //from cold
     // https://april-hook.ru/api/task?
-    // company_id={{companyId}}&
-    // deadline={{Запланировать звонок}}&
+    // company_id={{companyId}}&          может быть null
+    // deadline={{Дата холодного обзвона}}&
     // responsible={{Ответственный}}&
-    // created={{Постановщик ХО}}&
-    // name={{Обзвон}}&
-    // crm={{ID}}
+    // created=user_107&
+    // name={{Название Холодного обзвона}}&
+    // crm={{ID}}&  -- id элемента смарт процесса из которого пришел вызов
+    // lid_id={{Лид}}                      может быть null
+
+
     $comment = null;
     $smart = null;
     $sale = null;
@@ -512,6 +529,11 @@ Route::post('/task', function (Request $request) {
     $createdId = null;
     $responsibleId = null;
     $type = null;
+
+    $companyId = null;
+    $leadId = null;
+
+
     if (isset($request['type'])) {
         $type = $request['type'];
     }
@@ -541,7 +563,15 @@ Route::post('/task', function (Request $request) {
 
     $auth = $request['auth'];
     $domain = $auth['domain'];
-    $companyId = $request['company_id'];
+
+    if(!empty($request['company_id'])){
+        $companyId = $request['company_id'];
+
+    }
+    if(!empty($request['lid_id'])){
+        $leadId = $request['lid_id'];
+
+    }
 
     $deadline = $request['deadline'];
     $crm = $request['crm'];
@@ -563,6 +593,7 @@ Route::post('/task', function (Request $request) {
         $type,
         $domain,
         $companyId,
+        $leadId,
         $createdId,
         $responsibleId,
         $deadline,

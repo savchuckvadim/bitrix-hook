@@ -59,7 +59,7 @@ class APIBitrixController extends Controller
     public function createColdTask(
         $type,
         $domain,
-        $companyId,
+        $companyId,  //todo may be null
         $createdId,
         $responsibleId,
         $deadline,
@@ -67,6 +67,7 @@ class APIBitrixController extends Controller
         $crm,
 
     ) {
+        sleep(1);
         $portal = PortalController::getPortal($domain);
 
         //TODO

@@ -103,6 +103,8 @@ const JobData = () => {
             location: "India"
         },
     ];
+
+    
     return (
         <React.Fragment>
             <Row>

@@ -408,43 +408,43 @@ class BitrixHookController extends Controller
     }
 
 
-    public function presentationDone(
+    // public function presentationDone(
 
-        $domain,
-        $companyId,
-        $responsibleId,
-        $placement,
-        $company,
-        $smart
+    //     $domain,
+    //     $companyId,
+    //     $responsibleId,
+    //     $placement,
+    //     $company,
+    //     $smart
 
 
-    ) {
-        $service = new BitrixCallingTaskPresentationDoneService(
-            $domain,
-            $companyId,
-            $responsibleId,
-            $placement,
-            $company,
-            $smart
-        );
+    // ) {
+    //     $service = new BitrixCallingTaskPresentationDoneService(
+    //         $domain,
+    //         $companyId,
+    //         $responsibleId,
+    //         $placement,
+    //         $company,
+    //         $smart
+    //     );
 
-        $failTask = $service->done();
-        // return  $failTask;
+    //     $failTask = $service->done();
+    //     // return  $failTask;
 
-        return APIOnlineController::getSuccess(
-            [
-                'comeData' => [
-                    'domain' =>   $domain,
-                    'companyId' =>   $companyId,
-                    'responsibleId' =>   $responsibleId,
-                    'placement' =>   $placement,
-                    'company' =>   $company,
-                    'smart' =>   $smart
-                ],
-                'resultData' => $failTask
-            ]
-        );
-    }
+    //     return APIOnlineController::getSuccess(
+    //         [
+    //             'comeData' => [
+    //                 'domain' =>   $domain,
+    //                 'companyId' =>   $companyId,
+    //                 'responsibleId' =>   $responsibleId,
+    //                 'placement' =>   $placement,
+    //                 'company' =>   $company,
+    //                 'smart' =>   $smart
+    //             ],
+    //             'resultData' => $failTask
+    //         ]
+    //     );
+    // }
 
     public static function leadComplete(
         $domain,
