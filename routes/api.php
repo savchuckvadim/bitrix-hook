@@ -217,7 +217,15 @@ Route::post('/presentation/done', function (Request $request) {
         $partsResponsible = explode("_", $responsible);
         $responsibleId = $partsResponsible[1];
     }
-
+    // Log::channel('telegram')->error('APRIL_HOOK', [
+    // 'done' => [
+    //         'domain' => $domain,
+    //         'companyId' => $companyId,
+    //         'placement' => $placement,
+    //         'smart' => $smart,
+    //         'smart' => $smart,
+    //     ]
+    // ]);
 
     $controller = new APIBitrixController();
     return $controller->presentationDone(
@@ -421,6 +429,7 @@ Route::post('/cold/smart/init', function (Request $request) {
     // name={=Template:Parameter4}&
     // id={{ID}}
     // &company_id={{Компания}}
+
     $comment = null;
     $smart = null;
     $sale = null;
@@ -466,7 +475,15 @@ Route::post('/cold/smart/init', function (Request $request) {
         //     $smart = $request['smart'];
         //     $sale = $request['sale'];
         // }
-
+        Log::channel('telegram')->error('APRIL_HOOK', [
+            'done' => [
+                'domain' => $domain,
+                'deadline' => $deadline,
+                'name' => $name,
+                'companyId' => $companyId,
+                'responsibleId' => $responsibleId,
+            ]
+        ]);
 
         $controller = new APIBitrixController();
         return $controller->initialCold(
@@ -564,13 +581,11 @@ Route::post('/task', function (Request $request) {
     $auth = $request['auth'];
     $domain = $auth['domain'];
 
-    if(!empty($request['company_id'])){
+    if (!empty($request['company_id'])) {
         $companyId = $request['company_id'];
-
     }
-    if(!empty($request['lid_id'])){
+    if (!empty($request['lid_id'])) {
         $leadId = $request['lid_id'];
-
     }
 
     $deadline = $request['deadline'];
