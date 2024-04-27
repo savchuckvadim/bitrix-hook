@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Log;
 
 class BitrixGeneralService
 {
- 
 
+    //smart
     static function getSmartItem(
         $hook,
         $leadId, //lidId ? from lead
@@ -68,7 +68,7 @@ class BitrixGeneralService
     }
 
 
-    //smart
+
     static function createSmartItem(
         $hook,
         $entityId,
@@ -86,7 +86,7 @@ class BitrixGeneralService
 
         ];
 
-  
+
 
         $smartFieldsResponse = Http::get($url, $data);
 
@@ -98,10 +98,10 @@ class BitrixGeneralService
 
     static function updateSmartItem($hook, $entityId, $smartId, $fieldsData)
     {
- 
+
         $methodSmart = '/crm.item.update.json';
         $url = $hook . $methodSmart;
-  
+
         $data = [
             'id' => $smartId,
             'entityTypeId' => $entityId,
@@ -110,13 +110,13 @@ class BitrixGeneralService
 
         ];
 
-     
+
 
         $smartFieldsResponse = Http::get($url, $data);
 
         $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: updateSmartItemCold');
         $resultFields = $responseData;
- 
+
 
         return $resultFields;
     }
@@ -135,7 +135,7 @@ class BitrixGeneralService
 
         ];
 
-      
+
 
         $smartFieldsResponse = Http::get($url, $data);
 
@@ -151,8 +151,288 @@ class BitrixGeneralService
         return $resultFields;
     }
 
+    //task
+    protected function createTask(
+        $parentMethod,
+        $hook,
+        $companyId,
+        $leadId,
+        $deadline,
+        $createdId,
+        $currentSmartItemId,
+        $smartCrmId,
+        $taskTitle,
+        $responsibleId,
+        $callingGroupId,
 
+    ) {
+        //company and contacts
+        $methodCompany = '/crm.company.get.json';
+        $methodContacts = '/crm.contact.list.json';
+        $methodTask = '/tasks.task.add.json';
+
+
+        $nowDate = now();
+        $crm = $currentSmartItemId;
+
+        $createdTask = null;
+        $description = '';
+        try {
+
+            $crmForCurrent = [$smartCrmId . ''  . '' . $crm];
+            $crmItems = [$smartCrmId . $crm];
+
+
+            if ($companyId) {
+                array_push($crmItems, 'CO_' . $companyId);
+            }
+
+            if ($leadId) {
+                array_push($crmItems, 'L_' . $leadId);
+            }
+
+
+
+
+            $url = $hook . $methodContacts;
+            $contactsData =  [
+                'FILTER' => [
+                    'COMPANY_ID' => $companyId,
+
+                ],
+                'select' => ["ID", "NAME", "LAST_NAME", "SECOND_NAME", "TYPE_ID", "SOURCE_ID", "PHONE", "EMAIL", "COMMENTS"],
+            ];
+            $getCompanyData = [
+                'ID'  => $companyId,
+                'select' => ["TITLE", "PHONE", "EMAIL"],
+            ];
+
+            $contacts = Http::get($url,  $contactsData);
+
+
+            $url = $hook . $methodCompany;
+            $company = Http::get($url,  $getCompanyData);
+
+
+
+            //contacts description
+            $contactsString = '';
+            $contactsTable = '[TABLE]';
+            $contactRows = '';
+            if (isset($contacts['result'])) {
+                foreach ($contacts['result'] as  $contact) {
+                    $contactRow = '[TR]';
+                    $contactPhones = '';
+                    if (isset($contact["PHONE"])) {
+                        foreach ($contact["PHONE"] as $phone) {
+                            $contactPhones = $contactPhones .  $phone["VALUE"] . "   ";
+                        }
+                    }
+
+                    $emails = '';
+                    if (isset($contact["EMAIL"])) {
+                        foreach ($contact["EMAIL"] as $email) {
+                            if (isset($email["VALUE"])) {
+                                $emails = $emails .  $email["VALUE"] . "   ";
+                            }
+                        }
+                    }
+
+
+
+                    $contactsNameString =  $contact["NAME"] . " " . $contact["SECOND_NAME"] . " " . $contact["SECOND_NAME"];
+                    $contactsFirstCell = ' [TD]' . $contactsNameString . '[/TD]';
+                    $contactsPhonesCell = ' [TD]' . $contactPhones . '[/TD]';
+                    $contactsEmailsCell = ' [TD]' . $emails . '[/TD]';
+
+
+
+                    $contactRow = '[TR]' . $contactsFirstCell . ''  . $contactsPhonesCell . $contactsEmailsCell . '[/TR]';
+                    $contactRows = $contactRows . $contactRow;
+                }
+
+
+
+
+                $contactsTable = '[TABLE]' . $contactRows . '[/TABLE]';
+            }
+
+
+            //company phones description
+            $cmpnPhonesEmailsList = '';
+            if (isset($company['result'])) {
+                $cmpnPhonesEmailsList = '';
+                if (isset($company['result']['PHONE'])) {
+                    $companyPhones = $company['result']['PHONE'];
+                    $cmpnyListContent = '';
+
+                    foreach ($companyPhones as $phone) {
+                        $cmpnyListContent = $cmpnyListContent . '[*]' .  $phone["VALUE"] . "   ";
+                    }
+
+                    if (isset($company['result']['EMAIL'])) {
+
+                        $companyEmails = $company['result']['EMAIL'];
+
+                        foreach ($companyEmails as $email) {
+                            if (isset($email["VALUE"])) {
+                                $cmpnyListContent = $cmpnyListContent . '[*]' .  $email["VALUE"] . "   ";
+                            }
+                        }
+                    }
+
+                    $cmpnPhonesEmailsList = '[LIST]' . $cmpnyListContent . '[/LIST]';
+                }
+
+
+
+
+
+
+
+                $companyPhones = '';
+
+                $companyTitleString = '[B][COLOR=#0070c0]' . $company['result']['TITLE'] . '[/COLOR][/B]';
+                $description =  $companyTitleString . '
+            ' . '[LEFT][B]Контакты компании: [/B][/LEFT]' . $contactsTable;
+                $description = $description . '' . $cmpnPhonesEmailsList;
+            }
+            //task
+
+            $url = $hook . $methodTask;
+
+            // $moscowTime = $deadline;
+
+            // if ($this->domain === 'alfacentr.bitrix24.ru') {
+            //     $crmItems = [$this->smartCrmId . ''  . '' . $crm];
+            // }
+
+
+            // $taskTitle = $stringType . $name . '  ' . $deadline;
+
+
+            $taskData =  [
+                'fields' => [
+                    'TITLE' => $taskTitle,
+                    'RESPONSIBLE_ID' => $responsibleId,
+                    'GROUP_ID' => $callingGroupId,
+                    'CHANGED_BY' => $createdId, //- постановщик;
+                    'CREATED_BY' => $createdId, //- постановщик;
+                    'CREATED_DATE' => $nowDate, // - дата создания;
+                    'DEADLINE' => $deadline, //- крайний срок;
+                    'UF_CRM_TASK' => $crmItems,
+                    'ALLOW_CHANGE_DEADLINE' => 'N',
+                    'DESCRIPTION' => $description
+                ]
+            ];
+
+
+            $responseData = Http::get($url, $taskData);
+            $createdTask =  APIBitrixController::getBitrixRespone($responseData, $parentMethod);
+            // if (isset($responseData['result']) && !empty($responseData['result'])) {
+            //     $createdTask = $responseData['result'];
+            // }
+
+            return $createdTask;
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR: Exception caught',  $errorMessages);
+            Log::info('error', ['error' => $th->getMessage()]);
+            Log::channel('telegram')->info(
+                'HOOK: general createTask from' . $parentMethod,
+                ['error' => $th->getMessage()]
+            );
+            return  $createdTask;
+        }
+    }
+
+    // protected function getCurrentTasksIdsWarm($crmForCurrent)
+    // {
+    //     $hook = $this->hook;
+    //     $responsibleId = $this->responsibleId;
+    //     $callingTaskGroupId = $this->callingGroupId;
+
+
+    //     $resultIds = [];
+
+    //     $methodGet = '/tasks.task.list';
+    //     $url = $hook . $methodGet;
+
+    //     // for get
+    //     $filter = [
+    //         'GROUP_ID' => $callingTaskGroupId,
+    //         'UF_CRM_TASK' => $crmForCurrent,
+    //         'RESPONSIBLE_ID' => $responsibleId,
+    //         '!=STATUS' => 5, // Исключаем задачи со статусом "завершена"
+
+    //     ];
+
+    //     $select = [
+    //         'ID',
+    //         'TITLE',
+    //         'MARK',
+    //         'STATUS',
+    //         'GROUP_ID',
+    //         'STAGE_ID',
+    //         'RESPONSIBLE_ID'
+
+    //     ];
+    //     $getTaskData = [
+    //         'filter' => $filter,
+    //         'select' => $select,
+
+    //     ];
+    //     $responseData = Http::get($url, $getTaskData);
+
+    //     if (isset($responseData['result'])) {
+    //         if (isset($responseData['result']['tasks'])) {
+    //             // Log::info('tasks', [$responseData['result']]);
+    //             $resultTasks = $responseData['result']['tasks'];
+    //             foreach ($resultTasks  as $key =>  $task) {
+    //                 if (isset($task['id'])) {
+
+    //                     array_push($resultIds, $task['id']);
+    //                 }
+
+    //                 // array_push($resultTasks, $task);
+    //             }
+    //         }
+    //     }
+
+    //     return $resultIds;
+    // }
+
+    // protected function completeTaskWarm($hook, $taskIds)
+    // {
+
+    //     $methodUpdate = 'tasks.task.update';
+    //     $methodComplete = 'tasks.task.complete';
+
+    //     $batchCommands = [];
+
+    //     foreach ($taskIds as $taskId) {
+    //         $batchCommands['cmd']['updateTask_' . $taskId] = $methodUpdate . '?taskId=' . $taskId . '&fields[MARK]=P';
+    //         $batchCommands['cmd']['completeTask_' . $taskId] = $methodComplete . '?taskId=' . $taskId;
+    //     }
+
+    //     $response = Http::post($hook . '/batch', $batchCommands);
+
+    //     // Обработка ответа от API
+    //     if ($response->successful()) {
+    //         $responseData = $response->json();
+    //         // Логика обработки успешного ответа
+    //     } else {
+    //         // Обработка ошибок
+    //         $errorData = $response->body();
+    //         // Логика обработки ошибки
+    //     }
+    //     $res = $responseData ?? $errorData;
+
+    //     return $res;
+    // }
 }
-
-
-

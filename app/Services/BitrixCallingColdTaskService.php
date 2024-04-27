@@ -10,6 +10,15 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class BitrixCallingColdTaskService
+
+
+// на данный момент содержит методы для initial cold
+// TOD оставить только метод initial cold
+// остальный перенести в General 
+// еще к cold относится непосредственно создание задачи
+// для него возможно не потребуется отдельный сервис так как для конструктора одни и те же параметры
+// но может лучше на будущее и разделить
+
 {
     protected $portal;
     protected $aprilSmartData;
@@ -35,6 +44,9 @@ class BitrixCallingColdTaskService
 
     protected $categoryId = 28;
     protected $stageId = 'DT162_28:NEW';
+
+
+    // TODO to DB
     protected $lastCallDateField = 'ufCrm10_1709907744';
     protected $callThemeField = 'ufCrm10_1709907850';
     protected $lastCallDateFieldCold = 'ufCrm10_1701270138';
