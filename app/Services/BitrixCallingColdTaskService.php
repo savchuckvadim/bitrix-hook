@@ -81,7 +81,15 @@ class BitrixCallingColdTaskService
         $stringType = 'Холодный обзвон  ';
 
 
-
+        // Log::channel('telegram')->error('APRIL_HOOK', [
+        //     'done' => [
+        //         'domain' => $domain,
+        //         'deadline' => $deadline,
+        //         'name' => $name,
+        //         'companyId' => $companyId,
+        //         'responsibleId' => $responsibleId,
+        //     ]
+        // ]);
 
 
 

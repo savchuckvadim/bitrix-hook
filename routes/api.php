@@ -475,15 +475,7 @@ Route::post('/cold/smart/init', function (Request $request) {
         //     $smart = $request['smart'];
         //     $sale = $request['sale'];
         // }
-        Log::channel('telegram')->error('APRIL_HOOK', [
-            'done' => [
-                'domain' => $domain,
-                'deadline' => $deadline,
-                'name' => $name,
-                'companyId' => $companyId,
-                'responsibleId' => $responsibleId,
-            ]
-        ]);
+  
 
         $controller = new APIBitrixController();
         return $controller->initialCold(
