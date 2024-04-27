@@ -90,20 +90,7 @@ class BitrixCallingColdTaskService
 
         $this->name = $name;
 
-        $stringType = 'Холодный обзвон  ';
-
-
-        // Log::channel('telegram')->error('APRIL_HOOK', [
-        //     'done' => [
-        //         'domain' => $domain,
-        //         'deadline' => $deadline,
-        //         'name' => $name,
-        //         'companyId' => $companyId,
-        //         'responsibleId' => $responsibleId,
-        //     ]
-        // ]);
-
-
+        $stringType = 'Холодный обзвон ';
 
 
         $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
@@ -168,7 +155,7 @@ class BitrixCallingColdTaskService
                 $updatedCompany = $this->updateCompanyCold();
             }
 
-            Log::info('COLD leadId', ['log' => $this->leadId]);
+         
 
             if ($this->leadId) {
 
@@ -738,6 +725,9 @@ class BitrixCallingColdTaskService
         // Log::info('res', ['res' => $res]);
         return $responseData;
     }
+
+
+
 }
 
 

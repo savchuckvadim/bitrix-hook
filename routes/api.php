@@ -593,7 +593,15 @@ Route::post('/task', function (Request $request) {
     //     $smart = $request['smart'];
     //     $sale = $request['sale'];
     // }
-
+     Log::channel('telegram')->error('APRIL_HOOK', [
+            'cold task create api' => [
+                'domain' => $domain,
+                'deadline' => $deadline,
+                'name' => $name,
+                'companyId' => $companyId,
+                'crm' => $crm,
+            ]
+        ]);
 
     $controller = new APIBitrixController();
     return $controller->createColdTask(

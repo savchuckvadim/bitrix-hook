@@ -12,7 +12,6 @@ use DateTime;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-//TODO создать конструктор класса который принимает domain и хранит в себе всяческие хук урлы
 class BitrixHookController extends Controller
 {
 
@@ -58,7 +57,8 @@ class BitrixHookController extends Controller
     public function createColdTask(
         $type,
         $domain,
-        $companyId,
+        $companyId,  //todo may be null
+        $leadId,
         $createdId,
         $responsibleId,
         $deadline,
@@ -66,6 +66,7 @@ class BitrixHookController extends Controller
         $crm,
 
     ) {
+        sleep(1);
         $portal = PortalController::getPortal($domain);
 
         //TODO
@@ -73,7 +74,18 @@ class BitrixHookController extends Controller
         $stringType = 'Холодный обзвон  ';
 
         $gettedSmart = null;
-
+        Log::channel('telegram')->error('APRIL_HOOK', [
+            'createColdTask' => [
+                'type' => $type,
+                'domain' => $domain,
+                'companyId' => $companyId,
+                'createdId' => $createdId,
+                'responsibleId' => $responsibleId,
+                'deadline' => $deadline,
+                'name' => $name,
+                'crm' => $crm,
+            ]
+        ]);
 
 
         try {
