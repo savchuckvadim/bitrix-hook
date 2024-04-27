@@ -603,7 +603,7 @@ Route::post('/task', function (Request $request) {
             ]
         ]);
 
-    $controller = new APIBitrixController();
+    $controller = new BitrixHookController();
     return $controller->createColdTask(
         $type,
         $domain,
