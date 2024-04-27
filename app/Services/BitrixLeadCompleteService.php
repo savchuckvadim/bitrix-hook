@@ -158,7 +158,7 @@ class BitrixLeadCompleteService
 
                     //сращиваем из двух смартов один
                     $resultMergedSmart = $this->mergeSmarts($smartFromLead, $smartFromCompany, $this->leadId);
-                    Log::channel('telegram')->error(
+                    Log::channel('telegram')->info(
                         'lead/complete updateSmartItem',
                         [
                             'resultMergedSmart' => $resultMergedSmart,

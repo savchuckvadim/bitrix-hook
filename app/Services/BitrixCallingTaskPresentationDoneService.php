@@ -142,7 +142,7 @@ class BitrixCallingTaskPresentationDoneService
                     // if ($this->company['UF_CRM_1709807026'] == null || $this->company['UF_CRM_1709807026'] == 0 || $this->company['UF_CRM_1709807026'] == "0") {
                     //     $this->company['UF_CRM_1709807026'] = 1;
                     // } else {
-                    $currentCompanyCount = (int)$this->company['UF_CRM_1709807026'] + 1;   //количество презентаций
+                    // $currentCompanyCount = (int)$this->company['UF_CRM_1709807026'] + 1;   //количество презентаций
                     // }
 
                     $this->company['UF_CRM_1709807026'] = $currentCompanyCount;
@@ -474,7 +474,7 @@ class BitrixCallingTaskPresentationDoneService
             Log::channel('telegram')->error('APRIL_HOOK', [
                 $method => [
 
-                    'UF_CRM_1697117364' => $presentationDate,
+                    'isUnplannedPresentation UF_CRM_1697117364' => $presentationDate,
                 ]
             ]);
             $company['UF_CRM_1697117364'] = $presentationDate;

@@ -425,6 +425,56 @@ export const allEntities = [
             }
 
         },
+        relations: [15],
+    },
+    {
+
+        id: 15,
+        item: {
+            name: 'bitrixlistfield',
+            title: 'Поле универсального списка Битрикс',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'bitrixlistfield',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'bitrixlistfields',
+            title: 'Поля универсального списка Битрикс',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'bitrixlistfields',
+                method: API_METHOD.GET
+            }
+
+        },
+        relations: [16],
+    },
+    {
+
+        id: 16,
+        item: {
+            name: 'bitrixfielditem',
+            title: 'Элемент Битрикс Филда',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'bitrixfielditem',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'bitrixfielditems',
+            title: 'Элемент Битрикс Филда',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'bitrixfielditems',
+                method: API_METHOD.GET
+            }
+
+        },
     }
 ]
 
