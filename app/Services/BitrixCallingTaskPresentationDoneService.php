@@ -145,11 +145,12 @@ class BitrixCallingTaskPresentationDoneService
                     // $currentCompanyCount = (int)$this->company['UF_CRM_1709807026'] + 1;   //количество презентаций
                     // }
 
-                    $this->company['UF_CRM_1709807026'] = $currentCompanyCount;
-                    if (array_key_exists('UF_CRM_1696211878', $this->company)) {
+                    // $this->company['UF_CRM_1709807026'] = $currentCompanyCount;
 
-                        $this->company['UF_CRM_1696211878'] = 'Y';  //презентация проведена
-                    }
+                }
+                if (array_key_exists('UF_CRM_1696211878', $this->company)) {
+
+                    $this->company['UF_CRM_1696211878'] = 'Y';  //презентация проведена
                 }
             }
             $updatedCompany = $this->updateCompanyDone($this->company);

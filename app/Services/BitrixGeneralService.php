@@ -152,18 +152,19 @@ class BitrixGeneralService
     }
 
     //task
-    protected function createTask(
+    static function createTask(
         $parentMethod,
         $hook,
         $companyId,
         $leadId,
-        $deadline,
-        $createdId,
-        $currentSmartItemId,
-        $smartCrmId,
-        $taskTitle,
-        $responsibleId,
-        $callingGroupId,
+        // $deadline,
+        // $createdId,
+        // $currentSmartItemId,
+        // $smartCrmId,
+        // $taskTitle,
+        // $responsibleId,
+        // $callingGroupId,
+        $taskData
 
     ) {
         //company and contacts
@@ -173,26 +174,13 @@ class BitrixGeneralService
 
 
         $nowDate = now();
-        $crm = $currentSmartItemId;
+        // $crm = $currentSmartItemId;
 
         $createdTask = null;
         $description = '';
         try {
 
-            $crmForCurrent = [$smartCrmId . ''  . '' . $crm];
-            $crmItems = [$smartCrmId . $crm];
-
-
-            if ($companyId) {
-                array_push($crmItems, 'CO_' . $companyId);
-            }
-
-            if ($leadId) {
-                array_push($crmItems, 'L_' . $leadId);
-            }
-
-
-
+   
 
             $url = $hook . $methodContacts;
             $contactsData =  [
@@ -296,42 +284,14 @@ class BitrixGeneralService
                 $description =  $companyTitleString . '
             ' . '[LEFT][B]Контакты компании: [/B][/LEFT]' . $contactsTable;
                 $description = $description . '' . $cmpnPhonesEmailsList;
+                $taskData['DESCRIPTION'] = $description;
             }
             //task
-
+            
             $url = $hook . $methodTask;
-
-            // $moscowTime = $deadline;
-
-            // if ($this->domain === 'alfacentr.bitrix24.ru') {
-            //     $crmItems = [$this->smartCrmId . ''  . '' . $crm];
-            // }
-
-
-            // $taskTitle = $stringType . $name . '  ' . $deadline;
-
-
-            $taskData =  [
-                'fields' => [
-                    'TITLE' => $taskTitle,
-                    'RESPONSIBLE_ID' => $responsibleId,
-                    'GROUP_ID' => $callingGroupId,
-                    'CHANGED_BY' => $createdId, //- постановщик;
-                    'CREATED_BY' => $createdId, //- постановщик;
-                    'CREATED_DATE' => $nowDate, // - дата создания;
-                    'DEADLINE' => $deadline, //- крайний срок;
-                    'UF_CRM_TASK' => $crmItems,
-                    'ALLOW_CHANGE_DEADLINE' => 'N',
-                    'DESCRIPTION' => $description
-                ]
-            ];
-
 
             $responseData = Http::get($url, $taskData);
             $createdTask =  APIBitrixController::getBitrixRespone($responseData, $parentMethod);
-            // if (isset($responseData['result']) && !empty($responseData['result'])) {
-            //     $createdTask = $responseData['result'];
-            // }
 
             return $createdTask;
         } catch (\Throwable $th) {

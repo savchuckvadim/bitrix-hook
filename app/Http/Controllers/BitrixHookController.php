@@ -6,6 +6,7 @@ use App\Jobs\CreateBitrixCallingTaskJob;
 use App\Services\BitrixCallingColdTaskService;
 use App\Services\BitrixCallingTaskFailService;
 use App\Services\BitrixCallingTaskPresentationDoneService;
+use App\Services\BitrixGeneralService;
 use App\Services\BitrixLeadCompleteService;
 use Carbon\Carbon;
 use DateTime;
@@ -74,18 +75,18 @@ class BitrixHookController extends Controller
         $stringType = 'Холодный обзвон  ';
 
         $gettedSmart = null;
-        Log::channel('telegram')->error('APRIL_HOOK', [
-            'createColdTask' => [
-                'type' => $type,
-                'domain' => $domain,
-                'companyId' => $companyId,
-                'createdId' => $createdId,
-                'responsibleId' => $responsibleId,
-                'deadline' => $deadline,
-                'name' => $name,
-                'crm' => $crm,
-            ]
-        ]);
+        // Log::channel('telegram')->error('APRIL_HOOK', [
+        //     'createColdTask' => [
+        //         'type' => $type,
+        //         'domain' => $domain,
+        //         'companyId' => $companyId,
+        //         'createdId' => $createdId,
+        //         'responsibleId' => $responsibleId,
+        //         'deadline' => $deadline,
+        //         'name' => $name,
+        //         'crm' => $crm,
+        //     ]
+        // ]);
 
 
         try {
@@ -102,16 +103,22 @@ class BitrixHookController extends Controller
 
 
 
-            $callingTaskGroupId = env('BITRIX_CALLING_GROUP_ID');
+            //TODO get smart data for tasks
+
+            $callingTaskGroupId = null;
             if (isset($portal['bitrixCallingTasksGroup']) && isset($portal['bitrixCallingTasksGroup']['bitrixId'])) {
                 $callingTaskGroupId =  $portal['bitrixCallingTasksGroup']['bitrixId'];
             }
 
-            $smartId = 'T9c_';
+            $smartId = ''; //'T9c_'
             if (isset($portal['bitrixSmart']) && isset($portal['bitrixSmart']['crm'])) {
                 $smartId =  $portal['bitrixSmart']['crm'] . '_';
             }
             $randomNumber = rand(1, 3);
+
+
+
+
             sleep($randomNumber);
             if (!$crm) { //если
                 $getSmartItemId = $this->getSmartItem($hook, $smart, $companyId, $responsibleId);
@@ -123,149 +130,8 @@ class BitrixHookController extends Controller
 
                 // return APIOnlineController::getResponse(0, 'success', ['crm' => $crm]);
             }
-            $crmForCurrent = [$smartId . ''  . '' . $crm];
-
-
-            //TODO
-            $crmForCurrent = [$smartId . ''  . '' . $crm];
-
-            // $currentTasksIds = $this->getCurrentTasksIds($hook, $callingTaskGroupId, $crmForCurrent,  $responsibleId);
-
-            // $this->completeTask($hook, $currentTasksIds);
-
 
             $crmItems = [$smartId  . $crm, 'CO_' . $companyId];
-
-
-
-
-            //company and contacts
-            $methodContacts = '/crm.contact.list.json';
-            $methodCompany = '/crm.company.get.json';
-            $url = $hook . $methodContacts;
-            $contactsData =  [
-                'FILTER' => [
-                    'COMPANY_ID' => $companyId,
-
-                ],
-                'select' => ["ID", "NAME", "LAST_NAME", "SECOND_NAME", "TYPE_ID", "SOURCE_ID", "PHONE", "EMAIL", "COMMENTS"],
-            ];
-            $getCompanyData = [
-                'ID'  => $companyId,
-                'select' => ["TITLE", "PHONE", "EMAIL"],
-            ];
-
-            $randomNumber = rand(1, 3);
-            sleep($randomNumber);
-            $contactsResponse = Http::get($url,  $contactsData);
-            $url = $hook . $methodCompany;
-
-            sleep(2);
-            $companyResponse = Http::get($url,  $getCompanyData);
-            $company = $companyResponse->json();
-
-
-            $contacts = $contactsResponse->json();
-
-
-
-            //contacts description
-            $contactsString = '';
-            $contactsTable = '[TABLE]';
-            $contactRows = '';
-            if (isset($contacts['result'])) {
-                foreach ($contacts['result'] as  $contact) {
-                    $contactRow = '[TR]';
-                    $contactPhones = '';
-                    if (isset($contact["PHONE"])) {
-                        foreach ($contact["PHONE"] as $phone) {
-                            $contactPhones = $contactPhones .  $phone["VALUE"] . "   ";
-                        }
-                    }
-
-                    $emails = '';
-                    if (isset($contact["EMAIL"])) {
-                        foreach ($contact["EMAIL"] as $email) {
-                            if (isset($email["VALUE"])) {
-                                $emails = $emails .  $email["VALUE"] . "   ";
-                            }
-                        }
-                    }
-
-
-
-                    $contactsNameString =  $contact["NAME"] . " " . $contact["SECOND_NAME"] . " " . $contact["SECOND_NAME"];
-                    $contactsFirstCell = ' [TD]' . $contactsNameString . '[/TD]';
-                    $contactsPhonesCell = ' [TD]' . $contactPhones . '[/TD]';
-                    $contactsEmailsCell = ' [TD]' . $emails . '[/TD]';
-
-
-
-                    $contactRow = '[TR]' . $contactsFirstCell . ''  . $contactsPhonesCell . $contactsEmailsCell . '[/TR]';
-                    $contactRows = $contactRows . $contactRow;
-                }
-
-
-
-
-                $contactsTable = '[TABLE]' . $contactRows . '[/TABLE]';
-            }
-
-
-            //company phones description
-            $cmpnPhonesEmailsList = '';
-            if (isset($company['result'])) {
-                $cmpnPhonesEmailsList = '';
-                if (isset($company['result']['PHONE'])) {
-                    $companyPhones = $company['result']['PHONE'];
-                    $cmpnyListContent = '';
-
-                    foreach ($companyPhones as $phone) {
-                        $cmpnyListContent = $cmpnyListContent . '[*]' .  $phone["VALUE"] . "   ";
-                    }
-
-                    if (isset($company['result']['EMAIL'])) {
-
-                        $companyEmails = $company['result']['EMAIL'];
-
-                        foreach ($companyEmails as $email) {
-                            if (isset($email["VALUE"])) {
-                                $cmpnyListContent = $cmpnyListContent . '[*]' .  $email["VALUE"] . "   ";
-                            }
-                        }
-                    }
-
-                    $cmpnPhonesEmailsList = '[LIST]' . $cmpnyListContent . '[/LIST]';
-                }
-
-
-
-
-
-
-
-
-
-
-
-                $companyPhones = '';
-
-                $companyTitleString = '[B][COLOR=#0070c0]' . $company['result']['TITLE'] . '[/COLOR][/B]';
-                $description =  $companyTitleString . '
-                ' . '[LEFT][B]Контакты компании: [/B][/LEFT]' . $contactsTable;
-                $description = $description . '' . $cmpnPhonesEmailsList;
-            }
-
-
-
-
-
-
-
-
-            //task
-            $methodTask = '/tasks.task.add.json';
-            $url = $hook . $methodTask;
 
             $moscowTime = $deadline;
             $nowDate = now();
@@ -292,44 +158,25 @@ class BitrixHookController extends Controller
                     'DEADLINE' => $moscowTime, //- крайний срок;
                     'UF_CRM_TASK' => $crmItems,
                     'ALLOW_CHANGE_DEADLINE' => 'N',
-                    'DESCRIPTION' => $description
+                    // 'DESCRIPTION' => $description
                 ]
             ];
 
+            $createdTask = BitrixGeneralService::createTask(
+                'BitrixHookController create cold task',
+                $hook,
+                $companyId,
+                $leadId,
+                $crmItems,
+                $taskData
+            );
 
-            $response = Http::get($url, $taskData);
-            $responseData = $response->json();
-            $createdTask = null;
-            if (isset($responseData['result']) && !empty($responseData['result'])) {
-                $createdTask = $responseData['result'];
-            }
-
-
-
-
-            // updateSmart($hook, $smartTypeId, $smartId, $description)
-            // $updatedCompany = $this->updateCompany($hook, $responsibleId,  $companyId, $moscowTime,  $type);
-            // $updatedSmart = $this->updateSmartItem(
-            //     $domain,
-            //     $hook,
-            //     $smart, //data from back
-            //     $currentSmartItem,
-            //     $type
-            // );
-            // Log::error('COLD RESPONSE: Exception caught',  [
-            //     'createdTask' => $createdTask,
-            //     'currentSmartItem' => $currentSmartItem,
-            //     'gettedSmart' => $gettedSmart,
-
-            // ]);
             return APIOnlineController::getResponse(
                 0,
                 'success',
                 [
                     'createdTask' => $createdTask,
-                    // 'smartFields' => $smartFields,
-                    // 'updatedCompany' => $updatedCompany,
-                    // 'updatedSmart' => $updatedSmart,
+
                     'currentSmartItem' => $currentSmartItem,
                     '$gettedSmart' => $gettedSmart,
 
@@ -465,7 +312,7 @@ class BitrixHookController extends Controller
         $responsibleId,
     ) {
         try {
-    
+
             $service = new BitrixLeadCompleteService(
                 $domain,
                 $companyId,
