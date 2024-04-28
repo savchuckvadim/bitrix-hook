@@ -478,6 +478,10 @@ Route::post('/cold/smart/init', function (Request $request) {
           Log::channel('telegram')->error('APRIL_HOOK', [
               
                     'deadline' => $deadline,
+                    'название обзвона' => $name,
+                    'companyId' => $companyId,
+                    'domain' => $domain,
+                    'responsibleId' => $responsibleId,
                     // 'btrx response' => $response['error_description']
                 
             ]);
