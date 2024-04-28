@@ -437,6 +437,17 @@ Route::post('/cold/smart/init', function (Request $request) {
     $smartId =  null;
     $leadId = null;
     try {
+        Log::channel('telegram')->error('APRIL_HOOK', [
+              
+            'deadline' => $request['deadline'],
+            // 'название обзвона' => $name,
+            // 'companyId' => $companyId,
+            // 'domain' => $domain,
+            // 'responsibleId' => $responsibleId,
+            // 'btrx response' => $response['error_description']
+        
+    ]);
+
         if (isset($request['created'])) {
             $created = $request['created'];
             $partsCreated = explode("_", $created);
@@ -479,16 +490,7 @@ Route::post('/cold/smart/init', function (Request $request) {
         //     $smart = $request['smart'];
         //     $sale = $request['sale'];
         // }
-          Log::channel('telegram')->error('APRIL_HOOK', [
-              
-                    'deadline' => $deadline,
-                    // 'название обзвона' => $name,
-                    'companyId' => $companyId,
-                    // 'domain' => $domain,
-                    // 'responsibleId' => $responsibleId,
-                    // 'btrx response' => $response['error_description']
-                
-            ]);
+   
 
         $controller = new APIBitrixController();
         return $controller->initialCold(
