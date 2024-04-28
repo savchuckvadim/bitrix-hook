@@ -464,7 +464,11 @@ Route::post('/cold/smart/init', function (Request $request) {
 
         $deadline = $request['deadline'];
         // $crm = $request['crm'];
-        $name = $request['name'];
+        if (isset($request['name'])) {
+            $name = $request['name'];
+        }
+
+        // $name = $request['name'];
         //only from front calling
         // if (
         //     isset($request['comment'])
@@ -478,7 +482,7 @@ Route::post('/cold/smart/init', function (Request $request) {
           Log::channel('telegram')->error('APRIL_HOOK', [
               
                     'deadline' => $deadline,
-                    'название обзвона' => $name,
+                    // 'название обзвона' => $name,
                     'companyId' => $companyId,
                     // 'domain' => $domain,
                     // 'responsibleId' => $responsibleId,
