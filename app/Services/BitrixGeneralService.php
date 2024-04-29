@@ -200,11 +200,6 @@ class BitrixGeneralService
 
             $url = $hook . $methodCompany;
             $company = Http::get($url,  $getCompanyData);
-            Log::channel('telegram')->info('APRIL_HOOK create task', [
-
-                'url ' => $url
-
-            ]);
 
 
             //contacts description
@@ -247,7 +242,7 @@ class BitrixGeneralService
 
 
                 $contactsTable = '[TABLE]' . $contactRows . '[/TABLE]';
-                $description = $contactsTable;
+              
             }
 
 
@@ -255,11 +250,7 @@ class BitrixGeneralService
             $cmpnPhonesEmailsList = '';
 
             if (isset($company['result'])) {
-                Log::channel('telegram')->info('APRIL_HOOK create task', [
-
-                    'company' => '$company[\'result\']'
-
-                ]);
+         
                 $cmpnPhonesEmailsList = '';
                 if (isset($company['result']['PHONE'])) {
                     $companyPhones = $company['result']['PHONE'];
@@ -297,13 +288,9 @@ class BitrixGeneralService
                 $description = $description . '' . $cmpnPhonesEmailsList;
 
 
-                Log::channel('telegram')->info('APRIL_HOOK create task', [
-
-                    'description' => $description
-
-                ]);
+              
             }
-            $taskData['fields']['DESCRIPTION'] = '$description';
+            $taskData['fields']['DESCRIPTION'] = $description;
             //task
 
             $url = $hook . $methodTask;
