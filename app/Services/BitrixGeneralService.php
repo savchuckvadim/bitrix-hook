@@ -257,7 +257,7 @@ class BitrixGeneralService
             if (isset($company['result'])) {
                 Log::channel('telegram')->info('APRIL_HOOK create task', [
 
-                    'company' => $company['result']
+                    'company' => '$company[\'result\']'
 
                 ]);
                 $cmpnPhonesEmailsList = '';
@@ -296,7 +296,7 @@ class BitrixGeneralService
             ' . '[LEFT][B]Контакты компании: [/B][/LEFT]' . $contactsTable;
                 $description = $description . '' . $cmpnPhonesEmailsList;
             }
-            $taskData['DESCRIPTION'] = $description;
+            $taskData['DESCRIPTION'] = '$description';
             //task
 
             $url = $hook . $methodTask;
