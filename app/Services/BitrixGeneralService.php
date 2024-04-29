@@ -248,6 +248,11 @@ class BitrixGeneralService
 
             //company phones description
             $cmpnPhonesEmailsList = '';
+            Log::channel('telegram')->info('APRIL_HOOK create task', [
+               
+                    'company' => $company
+              
+            ]);
             if (isset($company['result'])) {
                 $cmpnPhonesEmailsList = '';
                 if (isset($company['result']['PHONE'])) {
