@@ -303,7 +303,7 @@ class BitrixGeneralService
 
                 ]);
             }
-            $taskData['DESCRIPTION'] = '$description';
+            $taskData['fields']['DESCRIPTION'] = '$description';
             //task
 
             $url = $hook . $methodTask;
