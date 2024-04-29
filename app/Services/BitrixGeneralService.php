@@ -243,6 +243,7 @@ class BitrixGeneralService
 
 
                 $contactsTable = '[TABLE]' . $contactRows . '[/TABLE]';
+                $description = $contactsTable;
             }
 
 
@@ -289,8 +290,9 @@ class BitrixGeneralService
                 $description =  $companyTitleString . '
             ' . '[LEFT][B]Контакты компании: [/B][/LEFT]' . $contactsTable;
                 $description = $description . '' . $cmpnPhonesEmailsList;
-                $taskData['DESCRIPTION'] = $description;
+               
             }
+            $taskData['DESCRIPTION'] = $description;
             //task
             
             $url = $hook . $methodTask;
