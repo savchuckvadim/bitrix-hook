@@ -167,7 +167,7 @@ class BitrixHookController extends Controller
                 $hook,
                 $companyId,
                 $leadId,
-                $crmItems,
+                // $crmItems,
                 $taskData
             );
 
