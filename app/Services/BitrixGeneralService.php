@@ -295,6 +295,13 @@ class BitrixGeneralService
                 $description =  $companyTitleString . '
             ' . '[LEFT][B]Контакты компании: [/B][/LEFT]' . $contactsTable;
                 $description = $description . '' . $cmpnPhonesEmailsList;
+
+
+                Log::channel('telegram')->info('APRIL_HOOK create task', [
+
+                    'description' => $description
+
+                ]);
             }
             $taskData['DESCRIPTION'] = '$description';
             //task
