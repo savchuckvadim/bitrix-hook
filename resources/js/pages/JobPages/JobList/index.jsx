@@ -332,7 +332,7 @@ function JobList() {
         ],
         []
     );
-    debugger
+    
     return (
         <React.Fragment>
             <DeleteModal

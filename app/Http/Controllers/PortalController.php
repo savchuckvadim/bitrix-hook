@@ -18,13 +18,14 @@ class PortalController extends Controller
             // return APIOnlineController::getResponse($portalsRespone['resultCode'], $portalsRespone['message'], $portalsRespone['data']);
             return $portalsRespone;
         } catch (\Throwable $th) {
-            Log::error('API ONLINE: Exception caught', [
+            $errorData = [
                 'message'   => $th->getMessage(),
                 'file'      => $th->getFile(),
                 'line'      => $th->getLine(),
                 'trace'     => $th->getTraceAsString(),
-            ]);
-            return APIOnlineController::getResponse(1, $th->getMessage(), null);
+            ];
+            Log::error('API ONLINE: Exception caught', $errorData);
+            return APIOnlineController::getError($th->getMessage(), $errorData);
         }
     }
 }

@@ -153,7 +153,18 @@ export const setOrupdateEntityItem = (history: (url: string) => void, currentUrl
         let method = API_METHOD.POST
         if (targetUrl) {
             if (targetUrl.endsWith("/add")) {
+
                 targetUrl = targetUrl.slice(0, -4);
+
+                // if (targetUrl.endsWith("ies")) {
+                //     // Удаляем 'ies' и добавляем 'y'
+                //     targetUrl = targetUrl.slice(0, -3) + "y";
+                // } else if (targetUrl.endsWith("s")) {
+                //     // Удаление окончания 's' для обычного множественного числа, например 'lists' -> 'list'
+                //     targetUrl = targetUrl.slice(0, -1);
+                // }
+
+
             } else {
                 //update
 
@@ -199,7 +210,17 @@ export const getInitialEntityData = (url: string, router: any, currentUrl: strin
         let targetUrl = currentUrl
         if (fullUrl.endsWith("/add")) {
             fullUrl = fullUrl.slice(0, -4); // Обрезать последние 4 символа ("/add")
+
+
+
         }
+        if (fullUrl.endsWith("ies")) {
+            // Удаляем 'ies' и добавляем 'y'
+            fullUrl = fullUrl.slice(0, -3) + "y";
+            targetUrl = targetUrl.slice(0, -3) + "y" ;
+            targetUrl = `${targetUrl}/add`
+        }
+
         if (fullUrl.endsWith("s")) {
             targetUrl = targetUrl.slice(0, -1);
             targetUrl = `${targetUrl}/add`
@@ -212,35 +233,35 @@ export const getInitialEntityData = (url: string, router: any, currentUrl: strin
         }
 
         // let targetRoot = `/${url}/add`
-        
+
         // if (router) {
-            // if (router.params && router.params.entityId) {
-            //     //значит инициализируется создание дочерней сущности
-            //     let itemCurrentUrl = currentUrl
-            //     if (itemCurrentUrl.endsWith('s')) {
-            //         itemCurrentUrl = itemCurrentUrl.slice(0, -1);
-            //     }
-            //     if (!router.params.entityChildrenId
-            //         && !itemCurrentUrl.endsWith('add')
-            //         && !itemCurrentUrl.endsWith('add/')
-            //     ) {
-            //         targetUrl = `${itemCurrentUrl}/add`
-            //         targetRoot = `${itemCurrentUrl}/add`
-            //     } else {
-            //         targetUrl = `${itemCurrentUrl}`
-            //         targetRoot = `${itemCurrentUrl}`
-            //     }
+        // if (router.params && router.params.entityId) {
+        //     //значит инициализируется создание дочерней сущности
+        //     let itemCurrentUrl = currentUrl
+        //     if (itemCurrentUrl.endsWith('s')) {
+        //         itemCurrentUrl = itemCurrentUrl.slice(0, -1);
+        //     }
+        //     if (!router.params.entityChildrenId
+        //         && !itemCurrentUrl.endsWith('add')
+        //         && !itemCurrentUrl.endsWith('add/')
+        //     ) {
+        //         targetUrl = `${itemCurrentUrl}/add`
+        //         targetRoot = `${itemCurrentUrl}/add`
+        //     } else {
+        //         targetUrl = `${itemCurrentUrl}`
+        //         targetRoot = `${itemCurrentUrl}`
+        //     }
 
-            //     // fullUrl = `initial${itemCurrentUrl}`
+        //     // fullUrl = `initial${itemCurrentUrl}`
 
 
 
-            // }
+        // }
 
         // }
 
         dispatch(entityActions.setFetchingInitialAdd())
-
+        
         if (!cretingEntity) {
             cretingEntity = await onlineAPI.service(fullUrl, API_METHOD.GET, 'initial', null) as InitialEntityData | null
             if (cretingEntity) {
@@ -252,7 +273,7 @@ export const getInitialEntityData = (url: string, router: any, currentUrl: strin
         }
 
 
-        
+
 
 
         if (currentUrl !== targetUrl) {

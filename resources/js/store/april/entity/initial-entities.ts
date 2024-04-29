@@ -25,7 +25,7 @@ export const allEntities = [
                 method: API_METHOD.GET
             }
         },
-        relations: [1, 11, 12, 13, 14],
+        relations: [1, 11, 12, 13, 14, 19, 20, 21],
 
     },
     {
@@ -377,6 +377,7 @@ export const allEntities = [
             }
 
         },
+        relations: [15, 17],
     },
     {
 
@@ -431,21 +432,21 @@ export const allEntities = [
 
         id: 15,
         item: {
-            name: 'bitrixlistfield',
-            title: 'Поле универсального списка Битрикс',
+            name: 'bitrixfield',
+            title: 'Поле Битрикс',
             type: ENTITY_QUANTITY.ENTITY,
             get: {
-                url: 'bitrixlistfield',
+                url: 'bitrixfield',
                 method: API_METHOD.GET
             }
 
         },
         items: {
-            name: 'bitrixlistfields',
-            title: 'Поля универсального списка Битрикс',
+            name: 'bitrixfields',
+            title: 'Поля  Битрикс',
             type: ENTITY_QUANTITY.ENTITIES,
             get: {
-                url: 'bitrixlistfields',
+                url: 'bitrixfields',
                 method: API_METHOD.GET
             }
 
@@ -475,6 +476,133 @@ export const allEntities = [
             }
 
         },
+    },
+    {
+
+        id: 17,
+        item: {
+            name: 'category',
+            title: 'Воронки, Категории в различных сущностях содержат стадии',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'category',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'categories',
+            title: 'Воронки, Категории в различных сущностях содержат стадии',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'categories',
+                method: API_METHOD.GET
+            }
+
+        },
+        relations: [18],
+
+    },
+    {
+        id: 18,
+        item: {
+            name: 'stage',
+            title: 'Воронки, Категории в различных сущностях содержат стадии',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'stage',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'stages',
+            title: 'Воронки, Категории в различных сущностях содержат стадии',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'stages',
+                method: API_METHOD.GET
+            }
+
+        },
+
+    },
+
+    {
+        id: 19,
+        item: {
+            name: 'deal',
+            title: 'Обобщаящая связи модель Сделок',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'deal',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'deals',
+            title: 'Обобщаящая связи модель Сделок',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'deals',
+                method: API_METHOD.GET
+            }
+
+        },
+        relations: [15, 17],
+
+    },
+
+    {
+        id: 20,
+        item: {
+            name: 'company',
+            title: 'Обобщаящая связи модель Компания',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'company',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'companies',
+            title: 'Обобщаящая связи модель Компания',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'companies',
+                method: API_METHOD.GET
+            }
+
+        },
+        relations: [15],
+
+    },
+    {
+        id: 20,
+        item: {
+            name: 'lead',
+            title: 'Обобщаящая связи модель LEAD',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'lead',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'leads',
+            title: 'Обобщаящая связи модель LEAD',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'leads',
+                method: API_METHOD.GET
+            }
+
+        },
+        relations: [15, 17],
+
     }
 ]
 
