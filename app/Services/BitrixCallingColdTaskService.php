@@ -180,6 +180,7 @@ class BitrixCallingColdTaskService
                 }
                 // }
             }
+            $targetStageId = 'DT158_13:NEW';
             $this->categoryId = $targetCategoryId;
             $this->stageId = $targetStageId;
 
