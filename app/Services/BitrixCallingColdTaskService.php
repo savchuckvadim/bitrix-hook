@@ -139,44 +139,44 @@ class BitrixCallingColdTaskService
 
 
             if (!empty($portal['smarts'])) {
-                foreach ($portal['smarts'][0] as $smart) {
+                // foreach ($portal['smarts'] as $smart) {
+                $smart = $portal['smarts'][0];
+                if (!empty($smart['categories'])) {
+                    foreach ($smart['categories'] as $category) {
 
-                    if (!empty($smart['categories'])) {
-                        foreach ($smart['categories'] as $category) {
+                        if ($category && !empty($category['code'])) {
 
-                            if ($category && !empty($category['code'])) {
+                            if ($category['code'] == 'cold') {
 
-                                if ($category['code'] == 'cold') {
-
-                                    $targetCategoryId = $category['bitrixId'];
-                                    if (!empty($category['stages'])) {
-                                        foreach ($category['stages'] as $stage) {
-                                            if ($stage['code'] == 'new') {
-                                                $targetStageId = $stage['bitrixId'];
-                                            }
+                                $targetCategoryId = $category['bitrixId'];
+                                if (!empty($category['stages'])) {
+                                    foreach ($category['stages'] as $stage) {
+                                        if ($stage['code'] == 'new') {
+                                            $targetStageId = $stage['bitrixId'];
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                    if (!empty($smart['bitrixfields'])) {
+                }
+                if (!empty($smart['bitrixfields'])) {
 
-                        foreach ($smart['bitrixfields'] as $field) {
-                            if ($field && !empty($field['code'])) {
-                                if ($field['code'] == 'xo_call_name') {
-                                    $callThemeFieldCold = $field['bitrixCamelId'];
-                                }else if ($field['code'] == 'xo_deadline') {
-                                    $lastCallDateFieldCold = $field['bitrixCamelId'];
-                                }else if ($field['code'] == 'next_call_date') {
-                                    $lastCallDateField = $field['bitrixCamelId'];
-                                }else if ($field['code'] == 'next_call_name') {
-                                    $callThemeField = $field['bitrixCamelId'];
-                                }
+                    foreach ($smart['bitrixfields'] as $field) {
+                        if ($field && !empty($field['code'])) {
+                            if ($field['code'] == 'xo_call_name') {
+                                $callThemeFieldCold = $field['bitrixCamelId'];
+                            } else if ($field['code'] == 'xo_deadline') {
+                                $lastCallDateFieldCold = $field['bitrixCamelId'];
+                            } else if ($field['code'] == 'next_call_date') {
+                                $lastCallDateField = $field['bitrixCamelId'];
+                            } else if ($field['code'] == 'next_call_name') {
+                                $callThemeField = $field['bitrixCamelId'];
                             }
                         }
                     }
                 }
+                // }
             }
             $this->categoryId = $targetCategoryId;
             $this->stageId = $targetStageId;
@@ -186,15 +186,16 @@ class BitrixCallingColdTaskService
             $this->lastCallDateFieldCold = $lastCallDateFieldCold;
             $this->callThemeFieldCold = $callThemeFieldCold;
             Log::channel('telegram')->info(
-                'HOOK: portal data' , [
+                'HOOK: portal data',
+                [
                     'stageId' => $targetStageId,
                     'lastCallDateField' => $lastCallDateField,
                     'callThemeField' => $callThemeField,
                     'lastCallDateFieldCold' => $lastCallDateFieldCold,
                     'callThemeFieldCold' => $callThemeFieldCold,
 
-                ]);
-                
+                ]
+            );
         }
         $targetDeadLine = $deadline;
         // $nowDate = now();
