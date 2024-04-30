@@ -71,9 +71,16 @@ class BitrixCallingColdTaskService
     ) {
 
 
-        $randomNumber = rand(1, 3);
+        $randomNumber = rand(1, 2);
         sleep($randomNumber);
         $portal = PortalController::getPortal($domain);
+
+        Log::channel('telegram')->info('APRIL_HOOK', [
+            'portal'   => $portal
+
+
+        ]);
+
         $portal = $portal['data'];
         $this->portal = $portal;
         $this->aprilSmartData = $portal['bitrixSmart'];
@@ -155,7 +162,7 @@ class BitrixCallingColdTaskService
                 $updatedCompany = $this->updateCompanyCold();
             }
 
-         
+
 
             if ($this->leadId) {
 
@@ -725,9 +732,6 @@ class BitrixCallingColdTaskService
         // Log::info('res', ['res' => $res]);
         return $responseData;
     }
-
-
-
 }
 
 
