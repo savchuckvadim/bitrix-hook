@@ -74,7 +74,11 @@ class BitrixCallingColdTaskService
         $randomNumber = rand(1, 2);
         sleep($randomNumber);
         $portal = PortalController::getPortal($domain);
+        Log::info('getPortal portal ', [
 
+            'portal' => $portal,
+
+        ]);
         Log::channel('telegram')->info('APRIL_HOOK', [
             'portal'   => $portal
 
