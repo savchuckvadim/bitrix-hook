@@ -186,7 +186,8 @@ class BitrixCallingColdTaskService
 
             $this->lastCallDateField = $lastCallDateField;
             $this->callThemeField = $callThemeField;
-            $this->lastCallDateFieldCold = $lastCallDateFieldCold;
+            // $this->lastCallDateFieldCold = $lastCallDateFieldCold;
+            $this->lastCallDateFieldCold =  'ufCrm10_1701270138'; 
             $this->callThemeFieldCold = $callThemeFieldCold;
             Log::channel('telegram')->info(
                 'HOOK: portal data',
