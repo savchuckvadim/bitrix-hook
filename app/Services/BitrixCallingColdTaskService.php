@@ -128,7 +128,7 @@ class BitrixCallingColdTaskService
 
             // $this->categoryId = 14;
             // $this->stageId = 'DT156_14:NEW';
-
+            $smartEntityId = null;
             $targetCategoryId = null;
             $targetStageId = null;
 
@@ -141,6 +141,8 @@ class BitrixCallingColdTaskService
             if (!empty($portal['smarts'])) {
                 // foreach ($portal['smarts'] as $smart) {
                 $smart = $portal['smarts'][0];
+                $smartForStageId = $smart['forStage'];
+
                 if (!empty($smart['categories'])) {
                     foreach ($smart['categories'] as $category) {
 
@@ -152,7 +154,7 @@ class BitrixCallingColdTaskService
                                 if (!empty($category['stages'])) {
                                     foreach ($category['stages'] as $stage) {
                                         if ($stage['code'] == 'new') {
-                                            $targetStageId = $stage['bitrixId'];
+                                            $targetStageId = $smartForStageId . ':' . $stage['bitrixId'];
                                         }
                                     }
                                 }
