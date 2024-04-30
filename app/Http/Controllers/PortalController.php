@@ -19,11 +19,7 @@ class PortalController extends Controller
                 'portal' => $portalsRespone,
     
             ]);
-            Log::channel('telegram')->info('APRIL_HOOK', [
-                'portal'   => $portalsRespone
-    
-    
-            ]);
+      
             // return APIOnlineController::getResponse($portalsRespone['resultCode'], $portalsRespone['message'], $portalsRespone['data']);
             return $portalsRespone;
         } catch (\Throwable $th) {

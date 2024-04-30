@@ -74,7 +74,7 @@ class BitrixCallingColdTaskService
         $randomNumber = rand(1, 2);
         sleep($randomNumber);
         $portal = PortalController::getPortal($domain);
-     
+
 
         $portal = $portal['data'];
         $this->portal = $portal;
@@ -124,8 +124,42 @@ class BitrixCallingColdTaskService
             $this->categoryId = 14;
             $this->stageId = 'DT156_14:NEW';
         }
+        if ($domain == 'april-dev.bitrix24.ru') {
+            // $this->lastCallDateField = 'ufCrm6_1709907693';
+            // $this->callThemeField = 'ufCrm6_1709907816';
+            // $this->lastCallDateFieldCold = 'ufCrm6_1709907693';
+            // $this->callThemeFieldCold = 'ufCrm6_1700645937';
+            // $this->categoryId = 14;
+            // $this->stageId = 'DT156_14:NEW';
 
+            $targetCategoryId = null;
+            $targetStageId = null;
+            if (!empty(['bitrixSmart']['smarts'])) {
+                foreach ($portal['bitrixSmart']['smarts'][0] as $smart) {
+                    if (!empty($smart['categories'])) {
+                        foreach ($smart['categories'] as $category) {
 
+                            if ($category && !empty($category['code'])) {
+
+                                if ($category['code'] == 'cold') {
+
+                                    $targetCategoryId = $category['bitrixId'];
+                                    if (!empty($category['stages'])) {
+                                        foreach ($category['stages'] as $stage) {
+                                            if ($stage['code'] == 'new') {
+                                                $targetStageId = $stage['bitrixId'];
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            $this->categoryId = $targetCategoryId;
+            $this->stageId = $targetStageId;
+        }
         $targetDeadLine = $deadline;
         // $nowDate = now();
         // if ($domain === 'alfacentr.bitrix24.ru') {
