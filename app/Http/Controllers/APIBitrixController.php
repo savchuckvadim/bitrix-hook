@@ -70,9 +70,6 @@ class APIBitrixController extends Controller
     }
 
 
-    
- 
-
     public function createTask(
         $type,
         $domain,

@@ -132,16 +132,14 @@ class BitrixCallingColdTaskService
             $targetCategoryId = null;
             $targetStageId = null;
 
-            $lastCallDateField = 'ufCrm6_1709907693';
-            $callThemeField = 'ufCrm6_1709907816';
-            $lastCallDateFieldCold = 'ufCrm6_1709907693';
-            $callThemeFieldCold = 'ufCrm6_1700645937';
+            $lastCallDateField = '';
+            $callThemeField = '';
+            $lastCallDateFieldCold = '';
+            $callThemeFieldCold = '';
 
 
             if (!empty($portal['smarts'])) {
                 foreach ($portal['smarts'][0] as $smart) {
-
-
 
                     if (!empty($smart['categories'])) {
                         foreach ($smart['categories'] as $category) {
@@ -187,6 +185,16 @@ class BitrixCallingColdTaskService
             $this->callThemeField = $callThemeField;
             $this->lastCallDateFieldCold = $lastCallDateFieldCold;
             $this->callThemeFieldCold = $callThemeFieldCold;
+            Log::channel('telegram')->info(
+                'HOOK: portal data' , [
+                    'stageId' => $targetStageId,
+                    'lastCallDateField' => $lastCallDateField,
+                    'callThemeField' => $callThemeField,
+                    'lastCallDateFieldCold' => $lastCallDateFieldCold,
+                    'callThemeFieldCold' => $callThemeFieldCold,
+
+                ]);
+                
         }
         $targetDeadLine = $deadline;
         // $nowDate = now();
