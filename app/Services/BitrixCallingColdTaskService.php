@@ -154,7 +154,7 @@ class BitrixCallingColdTaskService
                                 if (!empty($category['stages'])) {
                                     foreach ($category['stages'] as $stage) {
                                         if ($stage['code'] == 'new') {
-                                            $targetStageId = $smartForStageId . ':' . $stage['bitrixId'];
+                                            $targetStageId = $smartForStageId .'_'. $category['bitrixId']. ':' . $stage['bitrixId'];
                                         }
                                     }
                                 }
