@@ -125,17 +125,24 @@ class BitrixCallingColdTaskService
             $this->stageId = 'DT156_14:NEW';
         }
         if ($domain == 'april-dev.bitrix24.ru') {
-            // $this->lastCallDateField = 'ufCrm6_1709907693';
-            // $this->callThemeField = 'ufCrm6_1709907816';
-            // $this->lastCallDateFieldCold = 'ufCrm6_1709907693';
-            // $this->callThemeFieldCold = 'ufCrm6_1700645937';
+
             // $this->categoryId = 14;
             // $this->stageId = 'DT156_14:NEW';
 
             $targetCategoryId = null;
             $targetStageId = null;
+
+            $lastCallDateField = 'ufCrm6_1709907693';
+            $callThemeField = 'ufCrm6_1709907816';
+            $lastCallDateFieldCold = 'ufCrm6_1709907693';
+            $callThemeFieldCold = 'ufCrm6_1700645937';
+
+
             if (!empty($portal['smarts'])) {
                 foreach ($portal['smarts'][0] as $smart) {
+
+
+
                     if (!empty($smart['categories'])) {
                         foreach ($smart['categories'] as $category) {
 
@@ -155,10 +162,31 @@ class BitrixCallingColdTaskService
                             }
                         }
                     }
+                    if (!empty($smart['bitrixfields'])) {
+
+                        foreach ($smart['bitrixfields'] as $field) {
+                            if ($field && !empty($field['code'])) {
+                                if ($field['code'] == 'xo_call_name') {
+                                    $callThemeFieldCold = $field['bitrixCamelId'];
+                                }else if ($field['code'] == 'xo_deadline') {
+                                    $lastCallDateFieldCold = $field['bitrixCamelId'];
+                                }else if ($field['code'] == 'next_call_date') {
+                                    $lastCallDateField = $field['bitrixCamelId'];
+                                }else if ($field['code'] == 'next_call_name') {
+                                    $callThemeField = $field['bitrixCamelId'];
+                                }
+                            }
+                        }
+                    }
                 }
             }
             $this->categoryId = $targetCategoryId;
             $this->stageId = $targetStageId;
+
+            $this->lastCallDateField = $lastCallDateField;
+            $this->callThemeField = $callThemeField;
+            $this->lastCallDateFieldCold = $lastCallDateFieldCold;
+            $this->callThemeFieldCold = $callThemeFieldCold;
         }
         $targetDeadLine = $deadline;
         // $nowDate = now();
