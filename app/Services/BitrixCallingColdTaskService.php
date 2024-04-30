@@ -154,7 +154,7 @@ class BitrixCallingColdTaskService
                                 if (!empty($category['stages'])) {
                                     foreach ($category['stages'] as $stage) {
                                         if ($stage['code'] == 'new') {
-                                            $targetStageId = $smartForStageId .'_'. $category['bitrixId']. ':' . $stage['bitrixId'];
+                                            $targetStageId = $smartForStageId . $category['bitrixId']. ':' . $stage['bitrixId'];
                                         }
                                     }
                                 }
@@ -180,7 +180,7 @@ class BitrixCallingColdTaskService
                 }
                 // }
             }
-            $targetStageId = 'DT158_13:NEW';
+            // $targetStageId = 'DT158_13:NEW';
             $this->categoryId = $targetCategoryId;
             $this->stageId = $targetStageId;
 
