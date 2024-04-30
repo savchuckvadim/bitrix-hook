@@ -134,8 +134,8 @@ class BitrixCallingColdTaskService
 
             $targetCategoryId = null;
             $targetStageId = null;
-            if (!empty(['bitrixSmart']['smarts'])) {
-                foreach ($portal['bitrixSmart']['smarts'][0] as $smart) {
+            if (!empty($portal['smarts'])) {
+                foreach ($portal['smarts'][0] as $smart) {
                     if (!empty($smart['categories'])) {
                         foreach ($smart['categories'] as $category) {
 
