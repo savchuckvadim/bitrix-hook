@@ -524,33 +524,33 @@ Route::post('/cold/smart/init', function (Request $request) {
 
 
 //test activity hook
-Route::post('/activity', function (Request $request) {
-    $requestData = $request->all();
-    $domain = $requestData['auth']['domain'];
-    $activityId = $requestData['data']['FIELDS'];
-    $portal = PortalController::getPortal($domain);
+// Route::post('/activity', function (Request $request) {
+//     $requestData = $request->all();
+//     $domain = $requestData['auth']['domain'];
+//     $activityId = $requestData['data']['FIELDS'];
+//     $portal = PortalController::getPortal($domain);
 
-    $portal = $portal['data'];
+//     $portal = $portal['data'];
 
-    $smart = $portal['bitrixSmart'];
+//     $smart = $portal['bitrixSmart'];
 
-    $method = 'crm.activity.get';
-    // $method = 'crm.enum.activitytype';
+//     $method = 'crm.activity.get';
+//     // $method = 'crm.enum.activitytype';
     
 
-    $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
-    $hook = 'https://' . $domain  . '/' . $webhookRestKey. '/'. $method;
-    $smartFieldsResponse = Http::get($hook, $activityId);
-    $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'activityTest');
+//     $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+//     $hook = 'https://' . $domain  . '/' . $webhookRestKey. '/'. $method;
+//     $smartFieldsResponse = Http::get($hook, $activityId);
+//     $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'activityTest');
 
 
-    Log::channel('telegram')->error('APRIL_HOOK', [
-        'activity' => [
-            'responseData' => $responseData,
+//     Log::channel('telegram')->error('APRIL_HOOK', [
+//         'activity' => [
+//             'responseData' => $responseData,
 
-        ]
-    ]);
-});
+//         ]
+//     ]);
+// });
 
 
 //создание задачи ХО hook из Битрикс смарт-процессов когда карточка процесса 
