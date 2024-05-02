@@ -437,16 +437,16 @@ Route::post('/cold/smart/init', function (Request $request) {
     $smartId =  null;
     $leadId = null;
     try {
-    //     Log::channel('telegram')->error('APRIL_HOOK', [
-              
-    //         'deadline' => $request['deadline'],
-    //         // 'название обзвона' => $name,
-    //         // 'companyId' => $companyId,
-    //         // 'domain' => $domain,
-    //         // 'responsibleId' => $responsibleId,
-    //         // 'btrx response' => $response['error_description']
-        
-    // ]);
+        //     Log::channel('telegram')->error('APRIL_HOOK', [
+
+        //         'deadline' => $request['deadline'],
+        //         // 'название обзвона' => $name,
+        //         // 'companyId' => $companyId,
+        //         // 'domain' => $domain,
+        //         // 'responsibleId' => $responsibleId,
+        //         // 'btrx response' => $response['error_description']
+
+        // ]);
 
         if (isset($request['created'])) {
             $created = $request['created'];
@@ -490,7 +490,7 @@ Route::post('/cold/smart/init', function (Request $request) {
         //     $smart = $request['smart'];
         //     $sale = $request['sale'];
         // }
-   
+
 
         $controller = new APIBitrixController();
         return $controller->initialCold(
@@ -525,18 +525,29 @@ Route::post('/cold/smart/init', function (Request $request) {
 
 //test activity hook
 Route::post('/activity', function (Request $request) {
-
-
     $requestData = $request->all();
-    
-     Log::channel('telegram')->error('APRIL_HOOK', [
-            'activity' => [
-                'request' => $requestData,
+    $domain = $requestData['auth']['domain'];
+    $activityId = $requestData['data']['FIELDS'];
+    $portal = PortalController::getPortal($domain);
 
-            ]
-        ]);
+    $portal = $portal['data'];
+
+    $smart = $portal['bitrixSmart'];
+
+    $method = 'crm.activity.get';
+
+    $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+    $hook = 'https://' . $domain  . '/' . $webhookRestKey. '/'. $method;
+    $smartFieldsResponse = Http::get($hook, $activityId);
+    $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'activityTest');
 
 
+    Log::channel('telegram')->error('APRIL_HOOK', [
+        'activity' => [
+            'responseData' => $responseData,
+
+        ]
+    ]);
 });
 
 
@@ -623,15 +634,15 @@ Route::post('/task', function (Request $request) {
     //     $smart = $request['smart'];
     //     $sale = $request['sale'];
     // }
-     Log::channel('telegram')->error('APRIL_HOOK', [
-            'cold task create api' => [
-                'domain' => $domain,
-                'deadline' => $deadline,
-                'name' => $name,
-                'companyId' => $companyId,
-                'crm' => $crm,
-            ]
-        ]);
+    Log::channel('telegram')->error('APRIL_HOOK', [
+        'cold task create api' => [
+            'domain' => $domain,
+            'deadline' => $deadline,
+            'name' => $name,
+            'companyId' => $companyId,
+            'crm' => $crm,
+        ]
+    ]);
 
     $controller = new BitrixHookController();
     return $controller->createColdTask(
