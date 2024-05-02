@@ -189,17 +189,17 @@ class BitrixCallingColdTaskService
             $this->lastCallDateFieldCold = $lastCallDateFieldCold;
             // $this->lastCallDateFieldCold =  'ufCrm10_1701270138'; 
             $this->callThemeFieldCold = $callThemeFieldCold;
-            Log::channel('telegram')->info(
-                'HOOK: portal data',
-                [
-                    'stageId' => $targetStageId,
-                    'lastCallDateField' => $lastCallDateField,
-                    'callThemeField' => $callThemeField,
-                    'lastCallDateFieldCold' => $lastCallDateFieldCold,
-                    'callThemeFieldCold' => $callThemeFieldCold,
+            // Log::channel('telegram')->info(
+            //     'HOOK: portal data',
+            //     [
+            //         'stageId' => $targetStageId,
+            //         'lastCallDateField' => $lastCallDateField,
+            //         'callThemeField' => $callThemeField,
+            //         'lastCallDateFieldCold' => $lastCallDateFieldCold,
+            //         'callThemeFieldCold' => $callThemeFieldCold,
 
-                ]
-            );
+            //     ]
+            // );
         }
         $targetDeadLine = $deadline;
         // $nowDate = now();

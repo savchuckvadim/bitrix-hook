@@ -523,6 +523,21 @@ Route::post('/cold/smart/init', function (Request $request) {
 
 
 
+//test activity hook
+Route::post('/activity', function (Request $request) {
+
+
+    $requestData = $request->all();
+    
+     Log::channel('telegram')->error('APRIL_HOOK', [
+            'activity' => [
+                'request' => $requestData,
+
+            ]
+        ]);
+
+
+});
 
 
 //создание задачи ХО hook из Битрикс смарт-процессов когда карточка процесса 
