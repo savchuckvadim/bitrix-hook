@@ -534,7 +534,9 @@ Route::post('/activity', function (Request $request) {
 
     $smart = $portal['bitrixSmart'];
 
-    $method = 'crm.activity.get';
+    // $method = 'crm.activity.get';
+    $method = 'crm.enum.activitytype';
+    
 
     $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
     $hook = 'https://' . $domain  . '/' . $webhookRestKey. '/'. $method;
