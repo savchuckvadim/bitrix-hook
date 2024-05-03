@@ -52,10 +52,7 @@ class BitrixGeneralService
                 ];
             }
 
-            Log::channel('telegram')->error('APRIL_HOOK', [
-           
-                '$data' => $data
-            ]);
+      
             $response = Http::get($url, $data);
             // $responseData = $response->json();
             $responseData = APIBitrixController::getBitrixRespone($response, 'general service: getSmartItem');
@@ -123,7 +120,10 @@ class BitrixGeneralService
 
         ];
 
-
+        Log::channel('telegram')->error('APRIL_HOOK updateSmartItem', [
+           
+            '$data' => $data
+        ]);
 
         $smartFieldsResponse = Http::get($url, $data);
 

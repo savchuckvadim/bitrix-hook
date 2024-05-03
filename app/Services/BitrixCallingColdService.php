@@ -165,7 +165,7 @@ class BitrixCallingColdService
     {
 
         try {
-            Log::channel('telegram')->error('APRIL_HOOK data', ['entityType' => $this->entityType]);
+            // Log::channel('telegram')->error('APRIL_HOOK data', ['entityType' => $this->entityType]);
             $updatedCompany = null;
             $updatedLead = null;
             // if(!$this->smartId){
@@ -472,7 +472,7 @@ class BitrixCallingColdService
         $result = null;
         $fields = [
             'UF_CRM_1709798145' => $responsibleId,
-            // 'UF_CRM_10_170990774' => $this->deadline   //  - дата следующего звонка
+            'UF_CRM_10_170990774' => $this->deadline   //  - дата следующего звонка
         ];
 
 
