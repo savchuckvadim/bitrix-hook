@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\ColdCallJob;
 use App\Jobs\CreateBitrixCallingTaskJob;
+use App\Services\BitrixCallingColdService;
 use App\Services\BitrixCallingColdTaskService;
 use App\Services\BitrixCallingTaskFailService;
 use App\Services\BitrixCallingTaskPresentationDoneService;
@@ -115,13 +116,25 @@ class BitrixHookController extends Controller
                 'name' => $name,
 
             ];
-            dispatch(
-                new ColdCallJob(
-                    $data
+            // dispatch(
+            //     new ColdCallJob(
+            //         $data
 
-                )
-            );
-            return APIOnlineController::getSuccess(['result' => true]);
+            //     )
+            // );
+            $service = new BitrixCallingColdService($data);
+            $reult =  $service->getCold();
+            Log::channel('telegram')->error('APRIL_HOOK', [
+
+                'deadline' => $request['deadline'],
+                // 'название обзвона' => $name,
+                // 'companyId' => $companyId,
+                // 'domain' => $domain,
+                // 'responsibleId' => $responsibleId,
+                // 'btrx response' => $response['error_description']
+
+            ]);
+            return APIOnlineController::getSuccess(['result' => $reult]);
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
@@ -129,8 +142,7 @@ class BitrixHookController extends Controller
                 'line'      => $th->getLine(),
                 'trace'     => $th->getTraceAsString(),
             ];
-            Log::error('ERROR COLD APIBitrixController: Exception caught',  $errorMessages);
-            Log::info('error COLD APIBitrixController', ['error' => $th->getMessage()]);
+            Log::error('ERROR COLD BTX HOOK CONTROLLER: Exception caught',  $errorMessages);
         }
     }
 

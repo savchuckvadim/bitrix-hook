@@ -176,7 +176,7 @@ class BitrixCallingColdService
     }
 
 
-    public function initialCold()
+    public function getCold()
     {
 
         try {
