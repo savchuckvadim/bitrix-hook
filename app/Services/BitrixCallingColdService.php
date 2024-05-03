@@ -259,6 +259,14 @@ class BitrixCallingColdService
         } else if ($this->entityType == 'lead') {
             $leadId  = $this->entityId;
         }
+        Log::channel('telegram')->error('APRIL_HOOK', [
+
+            $this->hook,
+            $leadId, //lidId ? from lead
+            $companyId, //companyId ? from company
+            $userId,
+            $smart, //april smart data
+        ]);
 
 
         $currentSmart = BitrixGeneralService::getSmartItem(
@@ -534,7 +542,7 @@ class BitrixCallingColdService
                 $leadId  = $this->entityId;
             }
             $taskService = new BitrixTaskService();
-            
+
             $createdTask =  $taskService->createTask(
                 'cold',       //$type,   //cold warm presentation hot 
                 $this->stringType,

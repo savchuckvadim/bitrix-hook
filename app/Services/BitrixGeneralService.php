@@ -53,11 +53,7 @@ class BitrixGeneralService
             }
 
             Log::channel('telegram')->error('APRIL_HOOK', [
-                $hook,
-                $leadId, //lidId ? from lead
-                $companyId, //companyId ? from company
-                $userId,
-                $smart, //april smart data]);
+           
                 '$data' => $data
             ]);
             $response = Http::get($url, $data);
