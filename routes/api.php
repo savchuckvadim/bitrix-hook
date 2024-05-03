@@ -523,7 +523,6 @@ Route::post('/cold/smart/init', function (Request $request) {
 // новй холодный звонка из Откуда Угодно
 Route::post('cold', function (Request $request) {
 
-
     //from anywhere
     // https: //april-hook.ru/api/cold?
     // created={=Template:Parameter2}&
@@ -533,12 +532,6 @@ Route::post('cold', function (Request $request) {
     // entity_id={{ID}}
     // &entity_type=smart | company | lead
 
-    Log::channel('telegram')->error('APRIL_HOOK', [
-
-        'cold' =>'ping',
-
-
-    ]);
     $controller = new BitrixHookController();
     return $controller->getColdCall(
         $request
