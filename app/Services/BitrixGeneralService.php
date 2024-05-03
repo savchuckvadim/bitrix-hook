@@ -33,7 +33,7 @@ class BitrixGeneralService
                         "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
                         "=assignedById" => $userId,
                         'COMPANY_ID' => $companyId,
-    
+
                     ],
                     // 'select' => ["ID"],
                 ];
@@ -44,16 +44,22 @@ class BitrixGeneralService
                     'filter' => [
                         "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
                         "=assignedById" => $userId,
-    
+
                         "=%ufCrm7_1697129081" => '%' . $leadId . '%',
-    
+
                     ],
                     // 'select' => ["ID"],
                 ];
             }
-    
-    
-    
+
+            Log::channel('telegram')->error('APRIL_HOOK', [
+                $hook,
+                $leadId, //lidId ? from lead
+                $companyId, //companyId ? from company
+                $userId,
+                $smart, //april smart data]);
+                '$data' => $data
+            ]);
             $response = Http::get($url, $data);
             // $responseData = $response->json();
             $responseData = APIBitrixController::getBitrixRespone($response, 'general service: getSmartItem');
@@ -62,14 +68,11 @@ class BitrixGeneralService
                     $currentSmart =  $responseData['items'][0];
                 }
             }
-    
+
             return $currentSmart;
         } catch (\Throwable $th) {
             return $currentSmart;
         }
-       
-
-       
     }
 
 
@@ -83,30 +86,28 @@ class BitrixGeneralService
         try {
             $methodSmart = '/crm.item.add.json';
             $url = $hook . $methodSmart;
-    
-    
-    
+
+
+
             $data = [
                 'entityTypeId' => $entityId,
                 'fields' =>  $fieldsData
-    
+
             ];
-    
-    
-    
+
+
+
             $smartFieldsResponse = Http::get($url, $data);
-    
+
             $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: createSmartItem');
             $resultFields = $responseData;
-            if(isset($responseData['item'])){
+            if (isset($responseData['item'])) {
                 $resultFields = $responseData['item'];
             }
             return $resultFields;
         } catch (\Throwable $th) {
             return $resultFields;
         }
-
-
     }
 
     static function updateSmartItem($hook, $entityId, $smartId, $fieldsData)
@@ -130,7 +131,7 @@ class BitrixGeneralService
         $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: updateSmartItemCold');
         $resultFields = $responseData;
 
-        if(isset($responseData['item'])){
+        if (isset($responseData['item'])) {
             $resultFields = $responseData['item'];
         }
 
@@ -175,28 +176,26 @@ class BitrixGeneralService
         try {
             $methodSmart = '/crm.item.update.json';
             $url = $hook . $methodSmart;
-    
+
             $data = [
                 'id' => $companyId,
-    
+
                 'fields' =>  $fieldsData
-    
+
             ];
-    
-    
-    
+
+
+
             $smartFieldsResponse = Http::get($url, $data);
-    
+
             $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: updateSmartItemCold');
             $resultFields = $responseData;
-    
-    
+
+
             return $resultFields;
         } catch (\Throwable $th) {
             return $resultFields;
         }
-
-       
     }
 
 
@@ -209,28 +208,26 @@ class BitrixGeneralService
         try {
             $methodSmart = '/crm.lead.update.json';
             $url = $hook . $methodSmart;
-    
+
             $data = [
                 'id' => $leadId,
-    
+
                 'fields' =>  $fieldsData
-    
+
             ];
-    
-    
-    
+
+
+
             $resultLeadResponse = Http::get($url, $data);
-    
+
             $resultLeadData = APIBitrixController::getBitrixRespone($resultLeadResponse, 'general service: updateSmartItemCold');
             $resultLead = $resultLeadData;
-    
-    
+
+
             return $resultLead;
         } catch (\Throwable $th) {
             return $resultLead;
         }
-
-       
     }
     //task
     static function createTask(
@@ -323,7 +320,6 @@ class BitrixGeneralService
 
 
                 $contactsTable = '[TABLE]' . $contactRows . '[/TABLE]';
-              
             }
 
 
@@ -331,7 +327,7 @@ class BitrixGeneralService
             $cmpnPhonesEmailsList = '';
 
             if (isset($company['result'])) {
-         
+
                 $cmpnPhonesEmailsList = '';
                 if (isset($company['result']['PHONE'])) {
                     $companyPhones = $company['result']['PHONE'];
@@ -367,9 +363,6 @@ class BitrixGeneralService
                 $description =  $companyTitleString . '
             ' . '[LEFT][B]Контакты компании: [/B][/LEFT]' . $contactsTable;
                 $description = $description . '' . $cmpnPhonesEmailsList;
-
-
-              
             }
             $taskData['fields']['DESCRIPTION'] = $description;
             //task
