@@ -98,7 +98,9 @@ class BitrixGeneralService
     
             $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: createSmartItem');
             $resultFields = $responseData;
-    
+            if(isset($responseData['item'])){
+                $resultFields = $responseData['item'];
+            }
             return $resultFields;
         } catch (\Throwable $th) {
             return $resultFields;
@@ -128,6 +130,9 @@ class BitrixGeneralService
         $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: updateSmartItemCold');
         $resultFields = $responseData;
 
+        if(isset($responseData['item'])){
+            $resultFields = $responseData['item'];
+        }
 
         return $resultFields;
     }
