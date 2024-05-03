@@ -91,11 +91,11 @@ class BitrixHookController extends Controller
             $auth = $request['auth'];
             $domain = $auth['domain'];
             if (isset($request['entity_id'])) {
-                $entityTpe = $request['entity_id'];
+                $entityId = $request['entity_id'];
             }
 
             if (isset($request['entity_type'])) {
-                $entityId = $request['entity_type'];
+                $entityTpe  = $request['entity_type'];
             }
 
             $deadline = $request['deadline'];
@@ -118,7 +118,7 @@ class BitrixHookController extends Controller
             ];
             Log::channel('telegram')->error('APRIL_HOOK', [
 
-                'deadline' => $data,
+                'data' => $data,
 
 
             ]);
