@@ -212,11 +212,11 @@ class BitrixCallingColdService
                 $currentSmart = $this->updateSmartItemCold($this->entityId);
             }
 
-
+            Log::channel('telegram')->error('APRIL_HOOK', ['currentSmart' => $currentSmart]);
             if ($currentSmart && isset($currentSmart['id'])) {
                 // $randomNumber = rand(1, 2);
                 // sleep($randomNumber);
-                Log::channel('telegram')->error('APRIL_HOOK', ['currentSmart' => $currentSmart['id']]);
+                Log::channel('telegram')->error('APRIL_HOOK', ['currentSmart id' => $currentSmart['id']]);
                 $this->createColdTask($currentSmart['id']);
             }
 
