@@ -87,10 +87,10 @@ class BitrixGeneralService
                 'fields' =>  $fieldsData
 
             ];
-            Log::channel('telegram')->error('APRIL_HOOK createSmartItem', [
+            // Log::channel('telegram')->error('APRIL_HOOK createSmartItem', [
            
-                'createSmartItem data' => $data
-            ]);
+            //     'createSmartItem data' => $data
+            // ]);
 
 
             $smartFieldsResponse = Http::get($url, $data);
