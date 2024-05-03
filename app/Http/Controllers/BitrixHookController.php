@@ -116,6 +116,12 @@ class BitrixHookController extends Controller
                 'name' => $name,
 
             ];
+            Log::channel('telegram')->error('APRIL_HOOK', [
+
+                'deadline' => $data,
+
+
+            ]);
             // dispatch(
             //     new ColdCallJob(
             //         $data
@@ -124,16 +130,7 @@ class BitrixHookController extends Controller
             // );
             $service = new BitrixCallingColdService($data);
             $reult =  $service->getCold();
-            Log::channel('telegram')->error('APRIL_HOOK', [
-
-                'deadline' => $request['deadline'],
-                // 'название обзвона' => $name,
-                // 'companyId' => $companyId,
-                // 'domain' => $domain,
-                // 'responsibleId' => $responsibleId,
-                // 'btrx response' => $response['error_description']
-
-            ]);
+         
             return APIOnlineController::getSuccess(['result' => $reult]);
         } catch (\Throwable $th) {
             $errorMessages =  [
