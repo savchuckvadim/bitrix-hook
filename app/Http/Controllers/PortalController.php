@@ -14,11 +14,7 @@ class PortalController extends Controller
                 'domain' => $domain
             ];
             $portalsRespone = APIOnlineController::online('post', 'getportal', $requestPortalData, 'portal');
-            Log::info('getPortal portal ', [
-
-                'portal' => $portalsRespone,
-    
-            ]);
+        
       
             // return APIOnlineController::getResponse($portalsRespone['resultCode'], $portalsRespone['message'], $portalsRespone['data']);
             return $portalsRespone;

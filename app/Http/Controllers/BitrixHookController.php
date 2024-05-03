@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ColdCallJob;
 use App\Jobs\CreateBitrixCallingTaskJob;
 use App\Services\BitrixCallingColdTaskService;
 use App\Services\BitrixCallingTaskFailService;
@@ -10,6 +11,7 @@ use App\Services\BitrixGeneralService;
 use App\Services\BitrixLeadCompleteService;
 use Carbon\Carbon;
 use DateTime;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -55,7 +57,90 @@ class BitrixHookController extends Controller
     }
 
 
+    public function getColdCall(
+        Request $request
+    ) {
+        $createdId =  null;
+        $entityId =  null;
+        $entityType = null;
+        //     Log::channel('telegram')->error('APRIL_HOOK', [
+
+        //         'deadline' => $request['deadline'],
+        //         // 'название обзвона' => $name,
+        //         // 'companyId' => $companyId,
+        //         // 'domain' => $domain,
+        //         // 'responsibleId' => $responsibleId,
+        //         // 'btrx response' => $response['error_description']
+
+        // ]);
+        try {
+            if (isset($request['created'])) {
+                $created = $request['created'];
+                $partsCreated = explode("_", $created);
+                $createdId = $partsCreated[1];
+            }
+
+
+            $responsible = $request['responsible'];
+            $partsResponsible = explode("_", $responsible);
+
+            $responsibleId = $partsResponsible[1];
+
+
+            $auth = $request['auth'];
+            $domain = $auth['domain'];
+            if (isset($request['entity_id'])) {
+                $entityTpe = $request['entity_id'];
+            }
+
+            if (isset($request['entity_type'])) {
+                $entityId = $request['entity_type'];
+            }
+
+            $deadline = $request['deadline'];
+            // $crm = $request['crm'];
+            if (isset($request['name'])) {
+                $name = $request['name'];
+            }
+
+
+
+            $data = [
+                'domain' => $domain,
+                'entityType' => $entityType,
+                'entityId' => $entityId,
+                'responsible' => $responsibleId,
+                'created' => $createdId,
+                'deadline' => $deadline,
+                'name' => $name,
+
+            ];
+            dispatch(
+                new ColdCallJob(
+                    $data
+
+                )
+            );
+            return APIOnlineController::getSuccess(['result' => true]);
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR COLD APIBitrixController: Exception caught',  $errorMessages);
+            Log::info('error COLD APIBitrixController', ['error' => $th->getMessage()]);
+        }
+    }
+
+
     public function createColdTask(
+        //TODO DELETE
+        //перенесена в ColdService - после объединения хука в один
+        // и переездать на роут cold - для всех сущностей один
+        // все будет выполянть сервис и все находится будет там
+        // надо этот метод будет удалить
         $type,
         $domain,
         $companyId,  //todo may be null

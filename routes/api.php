@@ -520,6 +520,25 @@ Route::post('/cold/smart/init', function (Request $request) {
     }
 });
 
+// новй холодный звонка из Откуда Угодно
+Route::post('cold', function (Request $request) {
+
+
+    //from anywhere
+    // https: //april-hook.ru/api/cold?
+    // created={=Template:Parameter2}&
+    // responsible={=Template:Parameter3}&
+    // deadline={=Template:Parameter1}&
+    // name={=Template:Parameter4}&
+    // entity_id={{ID}}
+    // &entity_type=smart | company | lead
+
+
+    $controller = new BitrixHookController();
+    return $controller->getColdCall(
+        $request
+    );
+});
 
 
 
@@ -536,7 +555,7 @@ Route::post('/cold/smart/init', function (Request $request) {
 
 //     $method = 'crm.activity.get';
 //     // $method = 'crm.enum.activitytype';
-    
+
 
 //     $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
 //     $hook = 'https://' . $domain  . '/' . $webhookRestKey. '/'. $method;

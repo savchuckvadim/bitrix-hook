@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ColdCallJob;
 use App\Jobs\CreateBitrixCallingTaskJob;
 use App\Services\BitrixCallingColdTaskService;
 use App\Services\BitrixCallingTaskService;
@@ -68,6 +69,7 @@ class APIBitrixController extends Controller
             Log::info('error COLD APIBitrixController', ['error' => $th->getMessage()]);
         }
     }
+
 
 
     public function createTask(
