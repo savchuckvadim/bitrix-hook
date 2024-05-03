@@ -245,14 +245,7 @@ class BitrixCallingColdService
         } else if ($this->entityType == 'lead') {
             $leadId  = $this->entityId;
         }
-        Log::channel('telegram')->error('APRIL_HOOK', [
-
-            $this->hook,
-            $leadId, //lidId ? from lead
-            $companyId, //companyId ? from company
-            $userId,
-            $smart, //april smart data
-        ]);
+      
 
 
         $currentSmart = BitrixGeneralService::getSmartItem(
@@ -446,7 +439,13 @@ class BitrixCallingColdService
 
 
         $entityId = $smart['crmId'];
+        Log::channel('telegram')->error('APRIL_HOOK updateSmartItem', [
 
+            $this->hook,
+            $entityId,
+            $smartId,
+            $fieldsData
+        ]);
         $resultFields = BitrixGeneralService::updateSmartItem(
             $this->hook,
             $entityId,
