@@ -533,7 +533,12 @@ Route::post('cold', function (Request $request) {
     // entity_id={{ID}}
     // &entity_type=smart | company | lead
 
+    Log::channel('telegram')->error('APRIL_HOOK', [
 
+        'cold' =>'ping',
+
+
+    ]);
     $controller = new BitrixHookController();
     return $controller->getColdCall(
         $request
