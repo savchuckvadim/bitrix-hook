@@ -214,8 +214,9 @@ class BitrixCallingColdService
 
 
             if ($currentSmart && isset($currentSmart['id'])) {
-                $randomNumber = rand(1, 2);
-                sleep($randomNumber);
+                // $randomNumber = rand(1, 2);
+                // sleep($randomNumber);
+                Log::channel('telegram')->error('APRIL_HOOK', ['currentSmart' => $currentSmart['id']]);
                 $this->createColdTask($currentSmart['id']);
             }
 
@@ -477,7 +478,7 @@ class BitrixCallingColdService
         $result = null;
         $fields = [
             'UF_CRM_1709798145' => $responsibleId,
-            'UF_CRM_10_170990774' => $this->deadline   //  - дата следующего звонка
+            // 'UF_CRM_10_170990774' => $this->deadline   //  - дата следующего звонка
         ];
 
 
