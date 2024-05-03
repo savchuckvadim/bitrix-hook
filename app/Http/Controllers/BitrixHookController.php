@@ -62,6 +62,7 @@ class BitrixHookController extends Controller
         Request $request
     ) {
         $createdId =  null;
+        $responsibleId =  null;
         $entityId =  null;
         $entityType = null;
         //     Log::channel('telegram')->error('APRIL_HOOK', [
@@ -81,11 +82,13 @@ class BitrixHookController extends Controller
                 $createdId = $partsCreated[1];
             }
 
+            if (isset($request['responsible'])) {
+                $responsible = $request['responsible'];
+                $partsResponsible = explode("_", $responsible);
 
-            $responsible = $request['responsible'];
-            $partsResponsible = explode("_", $responsible);
+                $responsibleId = $partsResponsible[1];
+            }
 
-            $responsibleId = $partsResponsible[1];
 
 
             $auth = $request['auth'];
@@ -116,7 +119,7 @@ class BitrixHookController extends Controller
                 'name' => $name,
 
             ];
-      
+            
             // dispatch(
             //     new ColdCallJob(
             //         $data
@@ -125,7 +128,7 @@ class BitrixHookController extends Controller
             // );
             $service = new BitrixCallingColdService($data);
             $reult =  $service->getCold();
-         
+
             return APIOnlineController::getSuccess(['result' => $reult]);
         } catch (\Throwable $th) {
             $errorMessages =  [

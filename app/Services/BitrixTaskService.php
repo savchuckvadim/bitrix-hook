@@ -121,12 +121,7 @@ class BitrixTaskService
                     // 'DESCRIPTION' => $description
                 ]
             ];
-            Log::channel('telegram')->error('APRIL_HOOK', [
-
-                'taskData' => $taskData,
-
-
-            ]);
+          
             $createdTask = BitrixGeneralService::createTask(
                 'Bitrix Task Service create task',
                 $hook,

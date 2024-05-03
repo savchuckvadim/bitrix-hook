@@ -71,7 +71,7 @@ class BitrixCallingColdService
         $name = $data['name'];
 
 
-       
+
         sleep(1);
         $portal = PortalController::getPortal($domain);
 
@@ -199,7 +199,7 @@ class BitrixCallingColdService
 
             if ($this->entityType !== 'smart') {
                 $currentSmart = $this->getSmartItem();
-               
+
                 if ($currentSmart) {
                     if (isset($currentSmart['id'])) {
                         $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
@@ -211,15 +211,15 @@ class BitrixCallingColdService
             } else {
                 $currentSmart = $this->updateSmartItemCold($this->entityId);
             }
-        
 
-            if($currentSmart && isset($currentSmart['id'])){
+
+            if ($currentSmart && isset($currentSmart['id'])) {
                 $randomNumber = rand(1, 2);
                 sleep($randomNumber);
                 $this->createColdTask($currentSmart['id']);
             }
 
-        
+
 
 
 
@@ -533,6 +533,7 @@ class BitrixCallingColdService
                 $leadId  = $this->entityId;
             }
             $taskService = new BitrixTaskService();
+            Log::channel('telegram')->error('APRIL_HOOK', $this->portal);
             $createdTask =  $taskService->createTask(
                 'cold',       //$type,   //cold warm presentation hot 
                 $this->stringType,
@@ -559,6 +560,7 @@ class BitrixCallingColdService
             ];
             Log::error('ERROR COLD: createColdTask',  $errorMessages);
             Log::info('error COLD', ['error' => $th->getMessage()]);
+            Log::channel('telegram')->error('APRIL_HOOK', $errorMessages);
             return $createdTask;
         }
     }
