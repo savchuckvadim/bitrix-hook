@@ -95,7 +95,7 @@ class BitrixHookController extends Controller
             }
 
             if (isset($request['entity_type'])) {
-                $entityTpe  = $request['entity_type'];
+                $entityType  = $request['entity_type'];
             }
 
             $deadline = $request['deadline'];
