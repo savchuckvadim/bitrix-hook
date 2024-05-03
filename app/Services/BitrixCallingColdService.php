@@ -63,14 +63,14 @@ class BitrixCallingColdService
 
     ) {
         $domain = $data['domain'];
-        $entityType = $data['entityType'];
-        $entityId = $data['entityId'];
-        $responsibleId = $data['responsible'];
-        $createdId = $data['created'];
-        $deadline = $data['deadline'];
-        $name = $data['name'];
-
-
+        $this->entityType = $data['entityType'];
+        $this->entityId = $data['entityId'];
+        $this->responsibleId = $data['responsible'];
+        $this->createdId = $data['created'];
+        $this->deadline = $data['deadline'];
+        $this->name = $data['name'];
+        $this->stringType = 'Холодный обзвон  ';
+        // $this->entityType = $entityType;
 
         sleep(1);
         $portal = PortalController::getPortal($domain);
@@ -80,24 +80,8 @@ class BitrixCallingColdService
         $this->portal = $portal;
         $this->aprilSmartData = $portal['bitrixSmart'];
 
-
-        // $this->type = $type;
-        $this->domain = $domain;
-
-
-        $this->createdId = $createdId;
-        $this->responsibleId = $responsibleId;
-        // $this->smartId = $smartId;  //может быть null
-
-        $this->name = $name;
-
-        $this->stringType = 'Холодный обзвон  ';
-
-
         $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
         $this->hook = 'https://' . $domain  . '/' . $webhookRestKey;
-
-
 
         $smartId = ''; //T9c_
         if (isset($portal['bitrixSmart']) && isset($portal['bitrixSmart']['crm'])) {
@@ -172,7 +156,8 @@ class BitrixCallingColdService
         $this->callThemeFieldCold = $callThemeFieldCold;
 
 
-        $this->deadline =  $deadline;
+      
+       
     }
 
 
@@ -180,7 +165,7 @@ class BitrixCallingColdService
     {
 
         try {
-
+            Log::channel('telegram')->error('APRIL_HOOK data', ['entityType' => $this->entityType]);
             $updatedCompany = null;
             $updatedLead = null;
             // if(!$this->smartId){
