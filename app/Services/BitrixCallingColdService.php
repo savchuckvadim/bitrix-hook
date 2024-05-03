@@ -192,6 +192,7 @@ class BitrixCallingColdService
                 } else {
                     $currentSmart = $this->createSmartItemCold();
                     // $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
+                    Log::channel('telegram')->error('APRIL_HOOK createSmartItemCold', ['currentSmart' => $currentSmart]);
                 }
             } else {
                 $currentSmart = $this->updateSmartItemCold($this->entityId);
