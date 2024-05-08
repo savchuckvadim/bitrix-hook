@@ -90,9 +90,9 @@ class BitrixCallingColdService
 
         $this->smartCrmId =  $smartId;
 
-        Log::error('APRIL_HOOK portal', ['$portal' => $portal['company']]);
+        Log::error('APRIL_HOOK portal', ['$portal' => $portal]);
 
-        Log::channel('telegram')->error('APRIL_HOOK portal', ['$portal' => $portal['company']]);
+        // Log::channel('telegram')->error('APRIL_HOOK portal', ['$portal' => $portal['company']]);
 
 
         $smartEntityId = null;
@@ -472,7 +472,7 @@ class BitrixCallingColdService
             'UF_CRM_10_170990774' => $this->deadline   //  - дата следующего звонка
         ];
 
-        Log::channel('telegram')->error('APRIL_HOOK portal', ['$portal' => $portal['company']]);
+        // Log::channel('telegram')->error('APRIL_HOOK portal', ['$portal' => $portal['company']]);
 
         $result =  BitrixGeneralService::updateCompany($hook, $companyId, $fields);
 
