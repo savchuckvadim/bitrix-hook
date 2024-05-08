@@ -90,7 +90,7 @@ class BitrixCallingColdService
 
         $this->smartCrmId =  $smartId;
 
-        Log::error('APRIL_HOOK portal', ['$portal.smarts' => $portal['smarts']]);
+        Log::error('APRIL_HOOK portal', ['$portal.company' => $portal['company']]);
 
         // Log::channel('telegram')->error('APRIL_HOOK portal', ['$portal' => $portal['company']]);
 
