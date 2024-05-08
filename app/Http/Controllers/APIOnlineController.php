@@ -35,7 +35,7 @@ class APIOnlineController extends Controller
                     Log::error('API ONLINE: portalResponse', [
                         $portalResponse
                     ]);
-                    Log::channel('telegram')->error('APRIL_HOOK portalResponse ERROR',['portalResponse' => $portalResponse]);
+                    Log::channel('telegram')->error('APRIL_HOOK online ERROR',['online Response' => $portalResponse]);
 
                     return [
                         'resultCode' => 1,

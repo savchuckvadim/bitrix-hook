@@ -14,7 +14,6 @@ class PortalController extends Controller
                 'domain' => $domain
             ];
             $portalsRespone = APIOnlineController::online('post', 'getportal', $requestPortalData, 'portal');
-            Log::channel('telegram')->error('APRIL_HOOK portal',['portalsRespone' => $portalsRespone]);
 
       
             // return APIOnlineController::getResponse($portalsRespone['resultCode'], $portalsRespone['message'], $portalsRespone['data']);
