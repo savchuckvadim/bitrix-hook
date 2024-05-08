@@ -74,7 +74,7 @@ class BitrixCallingColdService
 
         Log::channel('telegram')->error('APRIL_HOOK domain',['$entityId' => $this->entityId]);
         $portal = PortalController::getPortal($domain);
-        Log::channel('telegram')->error('APRIL_HOOK domain',['portal' => $portal]);
+       
 
 
         $portal = $portal['data'];
@@ -132,6 +132,7 @@ class BitrixCallingColdService
             if (!empty($smart['bitrixfields'])) {
 
                 foreach ($smart['bitrixfields'] as $field) {
+                    Log::channel('telegram')->error('APRIL_HOOK bitrixfields',['field' => $field]);
                     if ($field && !empty($field['code'])) {
                         if ($field['code'] == 'xo_call_name') {
                             $callThemeFieldCold = $field['bitrixCamelId'];
