@@ -395,7 +395,8 @@ class BitrixCallingColdService
         //lead
         //leadId UF_CRM_7_1697129037
 
-
+        $companyId  = null;
+        $leadId  = null;
         if ($this->entityType == 'company') {
 
             $companyId  = $this->entityId;
