@@ -161,7 +161,6 @@ class BitrixHookController extends Controller
     ) {
         sleep(1);
         $portal = PortalController::getPortal($domain);
-        Log::channel('telegram')->error('APRIL_HOOK domain',['portal' => $portal]);
 
         //TODO
         //type - cold warm presentation hot
@@ -186,7 +185,6 @@ class BitrixHookController extends Controller
             $portal = $portal['data'];
             $smart = $portal['bitrixSmart'];
 
-            Log::channel('telegram')->error('APRIL_HOOK domain',['smart' => $smart]);
 
 
             $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
