@@ -132,7 +132,7 @@ class BitrixCallingColdService
             if (!empty($smart['bitrixfields'])) {
 
                 foreach ($smart['bitrixfields'] as $field) {
-                    Log::channel('telegram')->error('APRIL_HOOK bitrixfields',['field' => $field]);
+                   
                     if ($field && !empty($field['code'])) {
                         if ($field['code'] == 'xo_call_name') {
                             $callThemeFieldCold = $field['bitrixCamelId'];
