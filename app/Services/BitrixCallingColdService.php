@@ -74,7 +74,6 @@ class BitrixCallingColdService
 
         sleep(1);
         $portal = PortalController::getPortal($domain);
-        Log::channel('telegram')->error('APRIL_HOOK portal', $portal);
 
 
         $portal = $portal['data'];
