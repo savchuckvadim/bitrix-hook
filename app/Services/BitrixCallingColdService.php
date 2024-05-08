@@ -73,7 +73,7 @@ class BitrixCallingColdService
         // $this->entityType = $entityType;
 
         $portal = PortalController::getPortal($domain);
-       
+
 
 
         $portal = $portal['data'];
@@ -90,8 +90,9 @@ class BitrixCallingColdService
 
         $this->smartCrmId =  $smartId;
 
+        Log::error('APRIL_HOOK portal', ['$portal' => $portal['company']]);
 
-
+        Log::channel('telegram')->error('APRIL_HOOK portal', ['$portal' => $portal['company']]);
 
 
         $smartEntityId = null;
@@ -131,7 +132,7 @@ class BitrixCallingColdService
             if (!empty($smart['bitrixfields'])) {
 
                 foreach ($smart['bitrixfields'] as $field) {
-                   
+
                     if ($field && !empty($field['code'])) {
                         if ($field['code'] == 'xo_call_name') {
                             $callThemeFieldCold = $field['bitrixCamelId'];
@@ -155,10 +156,6 @@ class BitrixCallingColdService
         $this->callThemeField = $callThemeField;
         $this->lastCallDateFieldCold = $lastCallDateFieldCold;
         $this->callThemeFieldCold = $callThemeFieldCold;
-
-
-      
-       
     }
 
 
@@ -246,7 +243,7 @@ class BitrixCallingColdService
         } else if ($this->entityType == 'lead') {
             $leadId  = $this->entityId;
         }
-      
+
 
 
         $currentSmart = BitrixGeneralService::getSmartItem(
@@ -475,7 +472,7 @@ class BitrixCallingColdService
             'UF_CRM_10_170990774' => $this->deadline   //  - дата следующего звонка
         ];
 
-        Log::channel('telegram')->error('APRIL_HOOK portal',['$portal' => $portal['company']]);
+        Log::channel('telegram')->error('APRIL_HOOK portal', ['$portal' => $portal['company']]);
 
         $result =  BitrixGeneralService::updateCompany($hook, $companyId, $fields);
 
