@@ -72,7 +72,6 @@ class BitrixCallingColdService
         $this->stringType = 'Холодный обзвон  ';
         // $this->entityType = $entityType;
 
-        Log::channel('telegram')->error('APRIL_HOOK truct',['$data' => $data]);
         $portal = PortalController::getPortal($domain);
        
 
@@ -178,7 +177,7 @@ class BitrixCallingColdService
             // Log::info('COLD companyId', ['log' => $this->companyId]);
             if ($this->entityType == 'company') {
 
-                $updatedCompany = $this->updateCompanyCold($this->entityId);
+                $updatedCompany = $this->updateCompanyCold($this->entityId, $this->portal);
             } else if ($this->entityType == 'lead') {
                 $updatedLead = $this->updateLeadCold($this->entityId);
             }
@@ -461,7 +460,7 @@ class BitrixCallingColdService
 
 
     // company
-    protected function updateCompanyCold($companyId)
+    protected function updateCompanyCold($companyId, $portal)
     {
 
         $hook = $this->hook;
@@ -476,6 +475,7 @@ class BitrixCallingColdService
             'UF_CRM_10_170990774' => $this->deadline   //  - дата следующего звонка
         ];
 
+        Log::channel('telegram')->error('APRIL_HOOK portal',['$portal' => $portal['company']]);
 
         $result =  BitrixGeneralService::updateCompany($hook, $companyId, $fields);
 
