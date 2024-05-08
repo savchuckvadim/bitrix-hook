@@ -72,7 +72,7 @@ class BitrixCallingColdService
         $this->stringType = 'Холодный обзвон  ';
         // $this->entityType = $entityType;
 
-        Log::channel('telegram')->error('APRIL_HOOK domain',['$entityId' => $this->entityId]);
+        Log::channel('telegram')->error('APRIL_HOOK truct',['$data' => $data]);
         $portal = PortalController::getPortal($domain);
        
 
