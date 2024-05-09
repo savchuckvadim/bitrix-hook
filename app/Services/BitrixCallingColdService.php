@@ -184,7 +184,7 @@ class BitrixCallingColdService
                             case 'op_mhistory':
                                 Log::channel('telegram')->error('APRIL_HOOK portal', ['op_mhistory' => $companyField['code']]);
 
-                                $fullFieldId = 'UF_CRM_' . $companyField['bitrixId'];  //UF_CRM_OP_HISTORY_MULTIPLE
+                                $fullFieldId = 'UF_CRM_' . $companyField['bitrixId'];  //UF_CRM_OP_MHISTORY
                                 $now = now();
                                 $stringComment = $now . 'ХО запланирован' . $data['name'] . ' на ' . $data['deadline'];
 
@@ -194,19 +194,19 @@ class BitrixCallingColdService
 
                                     '$currentBtxCompany fullFieldId' => $currentBtxCompany[$fullFieldId]
                                 ]);
-                                Log::channel('telegram')->error('APRIL_HOOK ', [
+                                // Log::channel('telegram')->error('APRIL_HOOK ', [
 
-                                    '$currentBtxCompany' => $currentBtxCompany
-                                ]);
+                                //     '$currentBtxCompany' => $currentBtxCompany
+                                // ]);
 
-                                Log::channel('telegram')->error('APRIL_HOOK ', [
+                                // Log::channel('telegram')->error('APRIL_HOOK ', [
 
-                                    '$currentBtxCompany UF_CRM_OP_MHISTORY' => $currentBtxCompany['UF_CRM_OP_MHISTORY']
-                                ]);
+                                //     '$currentBtxCompany UF_CRM_OP_MHISTORY' => $currentBtxCompany['UF_CRM_OP_MHISTORY']
+                                // ]);
                                 
 
                                 if (!empty($currentBtxCompany)) {
-                                    if (isset($currentBtxCompany[$fullFieldId])) {
+                                    // if (isset($currentBtxCompany[$fullFieldId])) {
 
                                         $currentComments = $currentBtxCompany[$fullFieldId];
 
@@ -215,7 +215,7 @@ class BitrixCallingColdService
                                         } else {
                                             $currentComments = $currentComments . ' | ' . $stringComment;
                                         }
-                                    }
+                                    // }
                                 }
 
 
@@ -237,7 +237,7 @@ class BitrixCallingColdService
                                 //     'UF_CRM_' . $companyField['bitrixId'] => 'test comment string'
                                 // ];
                                 $resultEntityFields[$fullFieldId] =  $currentComments;
-                                // Log::channel('telegram')->error('APRIL_HOOK', ['currentComments' => $currentComments]);
+                                Log::channel('telegram')->error('APRIL_HOOK', ['currentComments' => $currentComments]);
 
                                 break;
 
@@ -643,6 +643,7 @@ class BitrixCallingColdService
             'UF_CRM_10_170990774' => $this->deadline,   //  - дата следующего звонка
             ...$this->entityFieldsUpdatingContent
         ];
+        Log::channel('telegram')->error('APRIL_HOOK updateCompanyCold', ['fields' => $fields]);
 
         // Log::channel('telegram')->error('APRIL_HOOK portal', ['$portal' => $portal['company']]);
 
