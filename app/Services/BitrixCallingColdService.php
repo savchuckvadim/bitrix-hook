@@ -336,7 +336,7 @@ class BitrixCallingColdService
             // Log::info('COLD companyId', ['log' => $this->companyId]);
             if ($this->entityType == 'company') {
 
-                $updatedCompany = $this->updateCompanyCold($this->entityId, $this->portal);
+                $updatedCompany = $this->updateCompanyCold($this->entityId);
             } else if ($this->entityType == 'lead') {
                 $updatedLead = $this->updateLeadCold($this->entityId);
             }
@@ -598,7 +598,7 @@ class BitrixCallingColdService
 
 
     // company
-    protected function updateCompanyCold($companyId, $portal)
+    protected function updateCompanyCold($companyId)
     {
 
         $hook = $this->hook;
@@ -634,7 +634,8 @@ class BitrixCallingColdService
 
 
         $fields = [
-            'ASSIGNED_BY_ID' => $responsibleId
+            'ASSIGNED_BY_ID' => $responsibleId,
+            ...$this->entityFieldsUpdatingContent
         ];
 
 
