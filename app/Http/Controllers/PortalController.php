@@ -18,6 +18,9 @@ class PortalController extends Controller
             $cacheKey = 'portal_' . $domain;
             $cachedPortalData = Cache::get($cacheKey);
             if ($cachedPortalData) {
+
+                Log::channel('telegram')->info('APRIL_HOOK Cache', ['cachedPortalData' => $cachedPortalData]);
+
                 $result = $cachedPortalData;
             } else {
                 $result = APIOnlineController::online('post', 'getportal', $requestPortalData, 'portal');
