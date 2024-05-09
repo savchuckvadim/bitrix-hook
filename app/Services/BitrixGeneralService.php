@@ -173,7 +173,7 @@ class BitrixGeneralService
     {
         $resultFields = null;
         try {
-            $methodSmart = '/crm.item.update.json';
+            $methodSmart = '/crm.company.update.json';
             $url = $hook . $methodSmart;
 
             $data = [

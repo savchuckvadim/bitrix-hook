@@ -202,7 +202,7 @@ class BitrixCallingColdService
         }
 
 
-        
+
 
 
         $smartEntityId = null;
@@ -292,7 +292,7 @@ class BitrixCallingColdService
 
             if ($this->entityType !== 'smart') {
                 $currentSmart = $this->getSmartItem();
-                // Log::channel('telegram')->error('APRIL_HOOK getSmartItem', ['currentSmart' => $currentSmart]);
+                Log::channel('telegram')->error('APRIL_HOOK getSmartItem', ['currentSmart' => $currentSmart]);
                 if ($currentSmart) {
                     if (isset($currentSmart['id'])) {
                         $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
@@ -583,7 +583,6 @@ class BitrixCallingColdService
             'UF_CRM_10_170990774' => $this->deadline,   //  - дата следующего звонка
             ...$this->entityFieldsUpdatingContent
         ];
-        Log::channel('telegram')->error('APRIL_HOOK updateCompanyCold', ['$fields' => $fields]);
 
         // Log::channel('telegram')->error('APRIL_HOOK portal', ['$portal' => $portal['company']]);
 
