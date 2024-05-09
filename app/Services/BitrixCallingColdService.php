@@ -99,11 +99,15 @@ class BitrixCallingColdService
 
         $currentBtxCompany = null;
 
-        if (!empty($this->entityType)) {
-            if ($this->entityType == 'company') {
+        if (!empty($data['entityType'])) {
+            if ($data['entityType'] == 'company') {
+
+
+                Log::error('APRIL_HOOK entityType', ['entityType' => $data['entityType']]);
+
                 $currentBtxCompany = BitrixGeneralService::getCompany(
                     $this->hook,
-                    $this->entityId
+                    $data['entityId']
 
                 );
 
@@ -324,7 +328,6 @@ class BitrixCallingColdService
 
             if ($this->entityType !== 'smart') {
                 $currentSmart = $this->getSmartItem();
-                Log::channel('telegram')->error('APRIL_HOOK getSmartItem', ['currentSmart' => $currentSmart]);
                 if ($currentSmart) {
                     if (isset($currentSmart['id'])) {
                         $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
