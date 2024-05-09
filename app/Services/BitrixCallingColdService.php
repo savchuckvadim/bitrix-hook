@@ -137,38 +137,47 @@ class BitrixCallingColdService
                         switch ($companyField['code']) {
                             case 'xo_name':
                             case 'call_next_name':
-                                $currentEntityField = [
-                                    'UF_CRM_' . $companyField['bitrixId'] => $data['name']
-                                ];
+                                // $currentEntityField = [
+                                //     'UF_CRM_' . $companyField['bitrixId'] => $data['name']
+                                // ];
+                                $resultEntityFields['UF_CRM_' . $companyField['bitrixId']] = $data['name'];
                                 break;
                             case 'xo_date':
                             case 'call_next_date':
                             case 'call_last_date':
-                                $currentEntityField = [
-                                    'UF_CRM_' . $companyField['bitrixId'] => $data['deadline']
-                                ];
+                                // $currentEntityField = [
+                                //     'UF_CRM_' . $companyField['bitrixId'] => $data['deadline']
+                                // ];
+                                $resultEntityFields['UF_CRM_' . $companyField['bitrixId']] = $data['deadline'];
+
                                 break;
 
                             case 'xo_responsible':
                             case 'manager_op':
 
-                                $currentEntityField = [
-                                    'UF_CRM_' . $companyField['bitrixId'] => $data['responsible']
-                                ];
+                                // $currentEntityField = [
+                                //     'UF_CRM_' . $companyField['bitrixId'] => $data['responsible']
+                                // ];
+                                $resultEntityFields['UF_CRM_' . $companyField['bitrixId']] = $data['responsible'];
+
                                 break;
 
                             case 'xo_created':
 
-                                $currentEntityField = [
-                                    'UF_CRM_' . $companyField['bitrixId'] => $data['created']
-                                ];
+                                // $currentEntityField = [
+                                //     'UF_CRM_' . $companyField['bitrixId'] => $data['created']
+                                // ];
+                                $resultEntityFields['UF_CRM_' . $companyField['bitrixId']] = $data['created'];
+
                                 break;
 
                             case 'op_history':
                             case 'op_history_multiple':
-                                $currentEntityField = [
-                                    'UF_CRM_' . $companyField['bitrixId'] => 'test comment string'
-                                ];
+                                // $currentEntityField = [
+                                //     'UF_CRM_' . $companyField['bitrixId'] => 'test comment string'
+                                // ];
+                                $resultEntityFields['UF_CRM_' . $companyField['bitrixId']] = 'test comment string';
+
                                 break;
 
 
@@ -179,10 +188,10 @@ class BitrixCallingColdService
                         }
                         Log::channel('telegram')->error('APRIL_HOOK data', ['currentEntityField' => $currentEntityField]);
 
-                        if (!empty($currentEntityField)) {
+                        // if (!empty($currentEntityField)) {
 
-                            array_push($resultEntityFields, $currentEntityField);
-                        }
+                        //     array_push($resultEntityFields, $currentEntityField);
+                        // }
                     }
                 }
             }
@@ -193,6 +202,7 @@ class BitrixCallingColdService
         }
 
 
+        
 
 
         $smartEntityId = null;
