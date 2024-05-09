@@ -218,7 +218,8 @@ class BitrixCallingColdService
                                             }
                                             
                                         } else {
-                                            $currentComments = $currentComments  .'\\n'.' | ' . $stringComment;
+                                            $currentComments = $currentComments  .' 
+                                            | ' . $stringComment;
                                         }
                                     // }
                                 }
