@@ -184,11 +184,8 @@ class BitrixGeneralService
 
             ];
 
-            Log::channel('telegram')->error('APRIL_HOOK updateCompany', ['data' => $data]);
-
             $smartFieldsResponse = Http::get($url, $data);
-
-            $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: updateSmartItemCold');
+            $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: updateCompany');
             $resultFields = $responseData;
 
 
@@ -198,6 +195,29 @@ class BitrixGeneralService
         }
     }
 
+    static function getCompany($hook, $companyId)
+    {
+        $resultFields = null;
+        try {
+            $methodSmart = '/crm.company.get.json';
+            $url = $hook . $methodSmart;
+
+            $data = [
+                'id' => $companyId,
+
+
+            ];
+
+
+            $smartFieldsResponse = Http::get($url, $data);
+            $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: getCompany');
+            $resultFields = $responseData;
+
+            return $resultFields;
+        } catch (\Throwable $th) {
+            return $resultFields;
+        }
+    }
 
 
     //lead

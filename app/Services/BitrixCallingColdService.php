@@ -93,21 +93,30 @@ class BitrixCallingColdService
 
         $this->smartCrmId =  $smartId;
 
-        Log::error('APRIL_HOOK portal', ['$portal.lead' => $portal['lead']['bitrixfields']]); // массив fields
-        Log::error('APRIL_HOOK portal', ['$portal.company' => $portal['company']['bitrixfields']]); // массив fields
+
+
+
+
+        $currentBtxCompany = null;
+        $currentStringComments = '';
+        $currentArrayComments = [];
+        if(!empty($this->entityType)){
+            if($this->entityType == 'company'){
+                $currentBtxCompany = BitrixGeneralService::getCompany(
+                    $this->hook,
+                    $this->entityId
+
+                );
+                Log::error('APRIL_HOOK portal', ['currentBtxCompany' => $currentBtxCompany]); // массив fields
+
+
+            }
+        }
+        // Log::error('APRIL_HOOK portal', ['$portal.lead' => $portal['lead']['bitrixfields']]); // массив fields
+        // Log::error('APRIL_HOOK portal', ['$portal.company' => $portal['company']['bitrixfields']]); // массив fields
 
         // Log::channel('telegram')->error('APRIL_HOOK portal', ['$portal' => $portal['company']]);
-        // xo_name
-        // xo_date
-        // xo_responsible
-        // xo_created
-        //manager_op
-        // call_next_date
-        // call_next_name
-        //call_last_date
-        //op_history
-
-        //op_history_multiple
+ 
         $fieldsCodes = [
             'xo_name',
             'xo_date',
