@@ -111,7 +111,6 @@ class BitrixCallingColdService
 
                 );
 
-                Log::error('APRIL_HOOK portal', ['currentBtxCompany' => $currentBtxCompany]); // массив fields
 
 
             }
@@ -207,13 +206,24 @@ class BitrixCallingColdService
                                 }
 
 
+                                Log::channel('telegram')->error('APRIL_HOOK ', [
 
+                                    '$fullFieldId' => $fullFieldId
+                                ]);
 
+                                Log::channel('telegram')->error('APRIL_HOOK ', [
+
+                                    '$currentComments' => $currentComments
+                                ]);
+                                Log::channel('telegram')->error('APRIL_HOOK ', [
+
+                                    '$currentBtxCompany' => $currentBtxCompany[$fullFieldId]
+                                ]);
 
                                 // $currentEntityField = [
                                 //     'UF_CRM_' . $companyField['bitrixId'] => 'test comment string'
                                 // ];
-                                $resultEntityFields['UF_CRM_' . $companyField['bitrixId']] =  $currentComments;
+                                $resultEntityFields[$fullFieldId] =  $currentComments;
                                 // Log::channel('telegram')->error('APRIL_HOOK', ['currentComments' => $currentComments]);
 
                                 break;
