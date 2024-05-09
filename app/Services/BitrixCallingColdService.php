@@ -186,6 +186,7 @@ class BitrixCallingColdService
 
                             case 'op_history':
                             case 'op_history_multiple':
+                                $fullFieldId = 'UF_CRM_' . $companyField['bitrixId'];  //UF_CRM_OP_HISTORY_MULTIPLE
                                 $now = now();
                                 $stringComment = $now . 'ХО запланирован' . $data['name'] . ' на ' . $data['deadline'];
 
@@ -193,9 +194,9 @@ class BitrixCallingColdService
 
 
                                 if (!empty($currentBtxCompany)) {
-                                    if (isset($currentBtxCompany[$companyField['bitrixId']])) {
-                                        $fieldBtxId = 'UF_CRM_' . $companyField['bitrixId'];
-                                        $currentComments = $currentBtxCompany[$fieldBtxId];
+                                    if (isset($currentBtxCompany[$fullFieldId])) {
+                                      
+                                        $currentComments = $currentBtxCompany[$fullFieldId];
 
                                         if ($companyField['code'] == 'op_history_multiple') {
                                             array_push($currentComments, $stringComment);
@@ -213,7 +214,7 @@ class BitrixCallingColdService
                                 //     'UF_CRM_' . $companyField['bitrixId'] => 'test comment string'
                                 // ];
                                 $resultEntityFields['UF_CRM_' . $companyField['bitrixId']] =  $currentComments;
-                                Log::channel('telegram')->error('APRIL_HOOK', ['currentComments' => $currentComments]);
+                                // Log::channel('telegram')->error('APRIL_HOOK', ['currentComments' => $currentComments]);
 
                                 break;
 
