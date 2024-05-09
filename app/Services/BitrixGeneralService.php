@@ -97,6 +97,12 @@ class BitrixGeneralService
 
             $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: createSmartItem');
             $resultFields = $responseData;
+            Log::channel('telegram')->error('APRIL_HOOK createSmartItem', [
+
+                'resultFields' => $resultFields
+            ]);
+
+
             if (isset($responseData['item'])) {
                 $resultFields = $responseData['item'];
             }
@@ -120,7 +126,7 @@ class BitrixGeneralService
 
         ];
 
-        
+
 
         $smartFieldsResponse = Http::get($url, $data);
 
@@ -192,29 +198,6 @@ class BitrixGeneralService
         }
     }
 
-    static function getCompany($hook, $companyId)
-    {
-        $resultFields = null;
-        try {
-            $methodSmart = '/crm.company.get.json';
-            $url = $hook . $methodSmart;
-
-            $data = [
-                'id' => $companyId,
-
-
-            ];
-
-
-            $smartFieldsResponse = Http::get($url, $data);
-            $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: getCompany');
-            $resultFields = $responseData;
-
-            return $resultFields;
-        } catch (\Throwable $th) {
-            return $resultFields;
-        }
-    }
 
 
     //lead
@@ -246,6 +229,36 @@ class BitrixGeneralService
             return $resultLead;
         }
     }
+
+
+    // general simple entity
+    static function getEntity($hook, $entityType, $entityId)
+    {
+        $resultFields = null;
+        try {
+            $methodSmart = '/crm.' . $entityType . '.get.json';
+            $url = $hook . $methodSmart;
+
+            $data = [
+                'id' => $entityId,
+
+
+            ];
+
+
+            $smartFieldsResponse = Http::get($url, $data);
+            $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: getEntity' . $entityType . ' hook: ' . $hook);
+            $resultFields = $responseData;
+
+            return $resultFields;
+        } catch (\Throwable $th) {
+            return $resultFields;
+        }
+    }
+
+
+
+
     //task
     static function createTask(
         $parentMethod,

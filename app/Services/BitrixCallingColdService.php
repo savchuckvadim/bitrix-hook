@@ -98,6 +98,7 @@ class BitrixCallingColdService
 
 
         $currentBtxCompany = null;
+        $currentBtxEntity = null;
         Log::error('APRIL_HOOK entityType', ['entityType' => $data['entityType']]);
         if (!empty($data['entityType'])) {
             if ($data['entityType'] == 'company') {
@@ -105,8 +106,20 @@ class BitrixCallingColdService
 
 
 
-                $currentBtxCompany = BitrixGeneralService::getCompany(
+                $currentBtxEntity = BitrixGeneralService::getEntity(
                     $this->hook,
+                    'company',
+                    $data['entityId']
+
+                );
+            } else    if ($data['entityType'] == 'company') {
+
+
+
+
+                $currentBtxEntity = BitrixGeneralService::getEntity(
+                    $this->hook,
+                    'lead',
                     $data['entityId']
 
                 );
@@ -137,19 +150,19 @@ class BitrixCallingColdService
         if (!empty($portal[$data['entityType']])) {
             if (!empty($portal[$data['entityType']]['bitrixfields'])) {
                 $currentEntityField = [];
-                $entityBtxFields = $portal['company']['bitrixfields'];
+                $entityBtxFields = $portal[$data['entityId']]['bitrixfields'];
 
-                foreach ($entityBtxFields as $companyField) {
+                foreach ($entityBtxFields as $pField) {
 
 
-                    if (!empty($companyField['code'])) {
-                        switch ($companyField['code']) {
+                    if (!empty($pField['code'])) {
+                        switch ($pField['code']) {
                             case 'xo_name':
                             case 'call_next_name':
                                 // $currentEntityField = [
                                 //     'UF_CRM_' . $companyField['bitrixId'] => $data['name']
                                 // ];
-                                $resultEntityFields['UF_CRM_' . $companyField['bitrixId']] = $data['name'];
+                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $data['name'];
                                 break;
                             case 'xo_date':
                             case 'call_next_date':
@@ -157,7 +170,7 @@ class BitrixCallingColdService
                                 // $currentEntityField = [
                                 //     'UF_CRM_' . $companyField['bitrixId'] => $data['deadline']
                                 // ];
-                                $resultEntityFields['UF_CRM_' . $companyField['bitrixId']] = $data['deadline'];
+                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $data['deadline'];
 
                                 break;
 
@@ -167,7 +180,7 @@ class BitrixCallingColdService
                                 // $currentEntityField = [
                                 //     'UF_CRM_' . $companyField['bitrixId'] => $data['responsible']
                                 // ];
-                                $resultEntityFields['UF_CRM_' . $companyField['bitrixId']] = $data['responsible'];
+                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $data['responsible'];
 
                                 break;
 
@@ -176,36 +189,35 @@ class BitrixCallingColdService
                                 // $currentEntityField = [
                                 //     'UF_CRM_' . $companyField['bitrixId'] => $data['created']
                                 // ];
-                                $resultEntityFields['UF_CRM_' . $companyField['bitrixId']] = $data['created'];
+                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $data['created'];
 
                                 break;
 
                             case 'op_history':
-                            // case 'op_mhistory':
+                                // case 'op_mhistory':
 
-                                $fullFieldId = 'UF_CRM_' . $companyField['bitrixId'];  //UF_CRM_OP_MHISTORY
+                                $fullFieldId = 'UF_CRM_' . $pField['bitrixId'];  //UF_CRM_OP_MHISTORY
                                 $now = now();
                                 $stringComment = $now . ' ХО запланирован ' . $data['name'] . ' на ' . $data['deadline'];
 
                                 $currentComments = '';
-                          
 
-                                if (!empty($currentBtxCompany)) {
+
+                                if (!empty($currentBtxEntity)) {
                                     // if (isset($currentBtxCompany[$fullFieldId])) {
 
-                                        $currentComments = $currentBtxCompany[$fullFieldId];
+                                    $currentComments = $currentBtxEntity[$fullFieldId];
 
-                                        if ($companyField['code'] == 'op_mhistory') {
-                                            if(!empty($currentComments)){
-                                                array_push($currentComments, $stringComment);
-                                            }else{
-                                                $currentComments = $stringComment;
-                                            }
-                                            
+                                    if ($pField['code'] == 'op_mhistory') {
+                                        if (!empty($currentComments)) {
+                                            array_push($currentComments, $stringComment);
                                         } else {
-                                            $currentComments = $currentComments  .'
- | ' . $stringComment;
+                                            $currentComments = $stringComment;
                                         }
+                                    } else {
+                                        $currentComments = $currentComments  . '
+ | ' . $stringComment;
+                                    }
                                     // }
                                 }
 
@@ -346,7 +358,7 @@ class BitrixCallingColdService
             }
 
 
-          
+
 
 
 
