@@ -177,12 +177,13 @@ class BitrixCallingColdService
                     }
 
                     if(!empty($currentEntityField)){
-                        array_push($resultEntityFields ,$currentEntityField);
+                        array_push($resultEntityFields, $currentEntityField);
                     }
 
                 }
             }
         }
+        Log::channel('telegram')->error('APRIL_HOOK resultEntityFields', ['$resultEntityFields' => $resultEntityFields]);
 
         $smartEntityId = null;
         $targetCategoryId = null;
