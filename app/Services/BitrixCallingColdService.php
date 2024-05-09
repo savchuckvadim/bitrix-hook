@@ -211,7 +211,12 @@ class BitrixCallingColdService
                                         $currentComments = $currentBtxCompany[$fullFieldId];
 
                                         if ($companyField['code'] == 'op_mhistory') {
-                                            array_push($currentComments, $stringComment);
+                                            if(!empty($currentComments)){
+                                                array_push($currentComments, $stringComment);
+                                            }else{
+                                                $currentComments = $stringComment;
+                                            }
+                                            
                                         } else {
                                             $currentComments = $currentComments . ' | ' . $stringComment;
                                         }
