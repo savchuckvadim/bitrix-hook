@@ -101,29 +101,13 @@ class BitrixCallingColdService
         $currentBtxEntity = null;
         Log::error('APRIL_HOOK entityType', ['entityType' => $data['entityType']]);
         if (!empty($data['entityType'])) {
-            if ($data['entityType'] == 'company') {
 
+            $currentBtxEntity = BitrixGeneralService::getEntity(
+                $this->hook,
+                $data['entityType'],
+                $data['entityId']
 
-
-
-                $currentBtxEntity = BitrixGeneralService::getEntity(
-                    $this->hook,
-                    'company',
-                    $data['entityId']
-
-                );
-            } else    if ($data['entityType'] == 'company') {
-
-
-
-
-                $currentBtxEntity = BitrixGeneralService::getEntity(
-                    $this->hook,
-                    'lead',
-                    $data['entityId']
-
-                );
-            }
+            );
         }
         // Log::error('APRIL_HOOK portal', ['$portal.lead' => $portal['company']['bitrixfields']]); // массив fields
         // Log::error('APRIL_HOOK portal', ['$portal.company' => $portal['company']['bitrixfields']]); // массив fields
