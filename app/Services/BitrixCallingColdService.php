@@ -189,7 +189,11 @@ class BitrixCallingColdService
                                 $stringComment = $now . 'ХО запланирован' . $data['name'] . ' на ' . $data['deadline'];
 
                                 $currentComments = '';
+                                Log::channel('telegram')->error('APRIL_HOOK fullFieldId', ['fullFieldId' => $fullFieldId]);
+                                Log::channel('telegram')->error('APRIL_HOOK ', [
 
+                                    '$currentBtxCompany fullFieldId' => $currentBtxCompany[$fullFieldId]
+                                ]);
 
                                 if (!empty($currentBtxCompany)) {
                                     if (isset($currentBtxCompany[$fullFieldId])) {
@@ -205,15 +209,15 @@ class BitrixCallingColdService
                                 }
 
 
-                                Log::channel('telegram')->error('APRIL_HOOK ', [
+                                // Log::channel('telegram')->error('APRIL_HOOK ', [
 
-                                    '$fullFieldId' => $fullFieldId
-                                ]);
+                                //     '$fullFieldId' => $fullFieldId
+                                // ]);
 
-                                Log::channel('telegram')->error('APRIL_HOOK ', [
+                                // Log::channel('telegram')->error('APRIL_HOOK ', [
 
-                                    '$currentComments' => $currentComments
-                                ]);
+                                //     '$currentComments' => $currentComments
+                                // ]);
                                 Log::channel('telegram')->error('APRIL_HOOK ', [
 
                                     '$currentBtxCompany' => $currentBtxCompany
