@@ -90,7 +90,8 @@ class BitrixCallingColdService
 
         $this->smartCrmId =  $smartId;
 
-        Log::error('APRIL_HOOK portal', ['$portal.lead' => $portal['lead']]); // массив fields
+        Log::error('APRIL_HOOK portal', ['$portal.lead' => $portal['lead']['bitrixfields']]); // массив fields
+        Log::error('APRIL_HOOK portal', ['$portal.company' => $portal['company']]); // массив fields
 
         // Log::channel('telegram')->error('APRIL_HOOK portal', ['$portal' => $portal['company']]);
         // xo_name
@@ -118,10 +119,7 @@ class BitrixCallingColdService
         ];
         $resultEntityFields = [];
 
-        $this->responsibleId = $data['responsible'];
-        $this->createdId = $data['created'];
-        $this->deadline = $data['deadline'];
-        $this->name = $data['name'];
+       
 
         $currentEntityField = [];
         if (!empty($portal['company'])) {
@@ -175,15 +173,16 @@ class BitrixCallingColdService
                             # code...
                             break;
                     }
+                    Log::channel('telegram')->error('APRIL_HOOK currentEntityField', ['$currentEntityField' => $currentEntityField]);
 
                     if(!empty($currentEntityField)){
+                        
                         array_push($resultEntityFields, $currentEntityField);
                     }
 
                 }
             }
         }
-        Log::channel('telegram')->error('APRIL_HOOK resultEntityFields', ['$resultEntityFields' => $resultEntityFields]);
 
         $smartEntityId = null;
         $targetCategoryId = null;
