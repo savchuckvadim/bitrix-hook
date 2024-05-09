@@ -181,8 +181,8 @@ class BitrixCallingColdService
                                 break;
 
                             case 'op_history':
-                            case 'op_history_multiple':
-                                Log::channel('telegram')->error('APRIL_HOOK portal', ['$op_history_multiple' => $companyField['code']]);
+                            case 'op_mhistory':
+                                Log::channel('telegram')->error('APRIL_HOOK portal', ['op_mhistory' => $companyField['code']]);
 
                                 $fullFieldId = 'UF_CRM_' . $companyField['bitrixId'];  //UF_CRM_OP_HISTORY_MULTIPLE
                                 $now = now();
@@ -201,7 +201,7 @@ class BitrixCallingColdService
 
                                 Log::channel('telegram')->error('APRIL_HOOK ', [
 
-                                    '$currentBtxCompany UF_CRM_OP_HISTORY_MULTIPLE' => $currentBtxCompany['UF_CRM_OP_HISTORY_MULTIPLE']
+                                    '$currentBtxCompany UF_CRM_OP_MHISTORY' => $currentBtxCompany['UF_CRM_OP_MHISTORY']
                                 ]);
                                 
 
@@ -210,7 +210,7 @@ class BitrixCallingColdService
 
                                         $currentComments = $currentBtxCompany[$fullFieldId];
 
-                                        if ($companyField['code'] == 'op_history_multiple') {
+                                        if ($companyField['code'] == 'op_mhistory') {
                                             array_push($currentComments, $stringComment);
                                         } else {
                                             $currentComments = $currentComments . ' | ' . $stringComment;
