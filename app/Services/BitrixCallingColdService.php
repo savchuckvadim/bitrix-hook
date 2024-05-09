@@ -98,12 +98,12 @@ class BitrixCallingColdService
 
 
         $currentBtxCompany = null;
-
+        Log::error('APRIL_HOOK entityType', ['entityType' => $data['entityType']]);
         if (!empty($data['entityType'])) {
             if ($data['entityType'] == 'company') {
 
 
-                Log::error('APRIL_HOOK entityType', ['entityType' => $data['entityType']]);
+               
 
                 $currentBtxCompany = BitrixGeneralService::getCompany(
                     $this->hook,
