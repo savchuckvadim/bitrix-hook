@@ -194,6 +194,16 @@ class BitrixCallingColdService
 
                                     '$currentBtxCompany fullFieldId' => $currentBtxCompany[$fullFieldId]
                                 ]);
+                                Log::channel('telegram')->error('APRIL_HOOK ', [
+
+                                    '$currentBtxCompany' => $currentBtxCompany
+                                ]);
+
+                                Log::channel('telegram')->error('APRIL_HOOK ', [
+
+                                    '$currentBtxCompany UF_CRM_OP_HISTORY_MULTIPLE' => $currentBtxCompany['UF_CRM_OP_HISTORY_MULTIPLE']
+                                ]);
+                                
 
                                 if (!empty($currentBtxCompany)) {
                                     if (isset($currentBtxCompany[$fullFieldId])) {
@@ -218,10 +228,10 @@ class BitrixCallingColdService
 
                                 //     '$currentComments' => $currentComments
                                 // ]);
-                                Log::channel('telegram')->error('APRIL_HOOK ', [
+                                // Log::channel('telegram')->error('APRIL_HOOK ', [
 
-                                    '$currentBtxCompany' => $currentBtxCompany
-                                ]);
+                                //     '$currentBtxCompany' => $currentBtxCompany
+                                // ]);
 
                                 // $currentEntityField = [
                                 //     'UF_CRM_' . $companyField['bitrixId'] => 'test comment string'
@@ -234,7 +244,7 @@ class BitrixCallingColdService
 
 
                             default:
-                                Log::channel('telegram')->error('APRIL_HOOK', ['default' => $companyField['code']]);
+                                // Log::channel('telegram')->error('APRIL_HOOK', ['default' => $companyField['code']]);
 
                                 break;
                         }
