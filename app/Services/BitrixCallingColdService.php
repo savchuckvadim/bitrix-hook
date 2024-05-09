@@ -90,10 +90,99 @@ class BitrixCallingColdService
 
         $this->smartCrmId =  $smartId;
 
-        Log::error('APRIL_HOOK portal', ['$portal.company' => $portal['company']]);
+        Log::error('APRIL_HOOK portal', ['$portal.lead' => $portal['lead']]); // массив fields
 
         // Log::channel('telegram')->error('APRIL_HOOK portal', ['$portal' => $portal['company']]);
+        // xo_name
+        // xo_date
+        // xo_responsible
+        // xo_created
+        //manager_op
+        // call_next_date
+        // call_next_name
+        //call_last_date
+        //op_history
 
+        //op_history_multiple
+        $fieldsCodes = [
+            'xo_name',
+            'xo_date',
+            'xo_responsible',
+            'xo_created',
+            'manager_op',
+            'call_next_date',
+            'call_next_name',
+            'call_last_date',
+            'op_history',
+            'op_history_multiple',
+        ];
+        $resultEntityFields = [];
+
+        $this->responsibleId = $data['responsible'];
+        $this->createdId = $data['created'];
+        $this->deadline = $data['deadline'];
+        $this->name = $data['name'];
+
+        $currentEntityField = [];
+        if (!empty($portal['company'])) {
+
+          
+
+            foreach ($portal['company'] as $companyField) {
+
+
+                if (!empty($companyField['code'])) {
+                    switch ($companyField['code']) {
+                        case 'xo_name':
+                        case 'call_next_name':
+                            $currentEntityField = [
+                                $companyField['bitrixId'] => $data['name']
+                            ];
+                            break;
+                        case 'xo_date':
+                        case 'call_next_date':
+                        case 'call_last_date':
+                            $currentEntityField = [
+                                $companyField['bitrixId'] => $data['deadline']
+                            ];
+                            break;
+
+                        case 'xo_responsible':
+                        case 'manager_op':
+
+                            $currentEntityField = [
+                                $companyField['bitrixId'] => $data['responsible']
+                            ];
+                            break;
+
+                        case 'xo_created':
+
+                            $currentEntityField = [
+                                $companyField['bitrixId'] => $data['created']
+                            ];
+                            break;
+
+                        case 'op_history':
+                        case 'op_history_multiple':
+                            $currentEntityField = [
+                                $companyField['bitrixId'] => 'test comment string'
+                            ];
+                            break;
+
+
+
+                        default:
+                            # code...
+                            break;
+                    }
+
+                    if(!empty($currentEntityField)){
+                        array_push($resultEntityFields ,$currentEntityField);
+                    }
+
+                }
+            }
+        }
 
         $smartEntityId = null;
         $targetCategoryId = null;
