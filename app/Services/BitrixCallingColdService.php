@@ -173,10 +173,12 @@ class BitrixCallingColdService
 
                             case 'op_history':
                             case 'op_history_multiple':
+                                $now = now();
+                                $stringComment = ' | ' . $now . 'ХО запланирован' . $data['name'] . ' на ' . $data['deadline'];
                                 // $currentEntityField = [
                                 //     'UF_CRM_' . $companyField['bitrixId'] => 'test comment string'
                                 // ];
-                                $resultEntityFields['UF_CRM_' . $companyField['bitrixId']] = 'test comment string';
+                                $resultEntityFields['UF_CRM_' . $companyField['bitrixId']] =  $stringComment;
 
                                 break;
 
@@ -186,7 +188,6 @@ class BitrixCallingColdService
                                 # code...
                                 break;
                         }
-                        Log::channel('telegram')->error('APRIL_HOOK data', ['currentEntityField' => $currentEntityField]);
 
                         // if (!empty($currentEntityField)) {
 
@@ -548,13 +549,13 @@ class BitrixCallingColdService
 
 
         $entityId = $smart['crmId'];
-        Log::channel('telegram')->error('APRIL_HOOK updateSmartItem', [
+        // Log::channel('telegram')->error('APRIL_HOOK updateSmartItem', [
 
-            $this->hook,
-            $entityId,
-            $smartId,
-            $fieldsData
-        ]);
+        //     $this->hook,
+        //     $entityId,
+        //     $smartId,
+        //     $fieldsData
+        // ]);
         $resultFields = BitrixGeneralService::updateSmartItem(
             $this->hook,
             $entityId,

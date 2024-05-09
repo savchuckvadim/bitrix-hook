@@ -52,7 +52,7 @@ class BitrixGeneralService
                 ];
             }
 
-      
+
             $response = Http::get($url, $data);
             // $responseData = $response->json();
             $responseData = APIBitrixController::getBitrixRespone($response, 'general service: getSmartItem');
@@ -88,7 +88,7 @@ class BitrixGeneralService
 
             ];
             // Log::channel('telegram')->error('APRIL_HOOK createSmartItem', [
-           
+
             //     'createSmartItem data' => $data
             // ]);
 
@@ -121,7 +121,7 @@ class BitrixGeneralService
         ];
 
         Log::channel('telegram')->error('APRIL_HOOK updateSmartItem', [
-           
+
             '$data' => $data
         ]);
 
@@ -179,11 +179,12 @@ class BitrixGeneralService
             $data = [
                 'id' => $companyId,
 
-                'fields' =>  $fieldsData
+                'fields' =>  $fieldsData,
+                'params' =>  ["REGISTER_SONET_EVENT" => "Y"]
 
             ];
 
-            Log::channel('telegram')->error('APRIL_HOOK updateCompany',['data' => $data]);
+            Log::channel('telegram')->error('APRIL_HOOK updateCompany', ['data' => $data]);
 
             $smartFieldsResponse = Http::get($url, $data);
 
