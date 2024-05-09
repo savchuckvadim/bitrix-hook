@@ -98,15 +98,15 @@ class BitrixCallingColdService
 
 
         $currentBtxCompany = null;
-        $currentStringComments = '';
-        $currentArrayComments = [];
-        if(!empty($this->entityType)){
-            if($this->entityType == 'company'){
+
+        if (!empty($this->entityType)) {
+            if ($this->entityType == 'company') {
                 $currentBtxCompany = BitrixGeneralService::getCompany(
                     $this->hook,
                     $this->entityId
 
                 );
+
                 Log::error('APRIL_HOOK portal', ['currentBtxCompany' => $currentBtxCompany]); // массив fields
 
 
@@ -116,7 +116,7 @@ class BitrixCallingColdService
         // Log::error('APRIL_HOOK portal', ['$portal.company' => $portal['company']['bitrixfields']]); // массив fields
 
         // Log::channel('telegram')->error('APRIL_HOOK portal', ['$portal' => $portal['company']]);
- 
+
         $fieldsCodes = [
             'xo_name',
             'xo_date',
@@ -183,11 +183,33 @@ class BitrixCallingColdService
                             case 'op_history':
                             case 'op_history_multiple':
                                 $now = now();
-                                $stringComment = ' | ' . $now . 'ХО запланирован' . $data['name'] . ' на ' . $data['deadline'];
+                                $stringComment = $now . 'ХО запланирован' . $data['name'] . ' на ' . $data['deadline'];
+
+                                $currentComments = '';
+
+
+                                if (!empty($currentBtxCompany)) {
+                                    if (isset($currentBtxCompany[$companyField['bitrixId']])) {
+                                        $fieldBtxId = 'UF_CRM_' . $companyField['bitrixId'];
+                                        $currentComments = $currentBtxCompany[$fieldBtxId];
+
+                                        if ($companyField['code'] == 'op_history_multiple') {
+                                            array_push($currentComments, $stringComment);
+                                        } else {
+                                            $currentComments += ' | ' . $stringComment;
+                                        }
+                                    }
+                                }
+
+
+
+
+
                                 // $currentEntityField = [
                                 //     'UF_CRM_' . $companyField['bitrixId'] => 'test comment string'
                                 // ];
-                                $resultEntityFields['UF_CRM_' . $companyField['bitrixId']] =  $stringComment;
+                                $resultEntityFields['UF_CRM_' . $companyField['bitrixId']] =  $currentComments;
+                                Log::channel('telegram')->error('APRIL_HOOK', ['currentComments' => $currentComments]);
 
                                 break;
 
