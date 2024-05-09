@@ -40,24 +40,24 @@ class BitrixTaskService
 
 
     ) {
-        Log::channel('telegram')->error(
-            'APRIL_HOOK Task Service',
-            [
-                $type,   //cold warm presentation hot  $stringType = 'Холодный обзвон ';
-                $stringType,
-                $portal,
-                $domain,
-                $hook,
-                $companyId,  //may be null
-                $leadId,     //may be null
-                $createdId,
-                $responsibleId,
-                $deadline,
-                $name,
-                $currentSmartItemId,
-                $isNeedCompleteOtherTasks,
-            ]
-        );
+        // Log::channel('telegram')->error(
+        //     'APRIL_HOOK Task Service',
+        //     [
+        //         $type,   //cold warm presentation hot  $stringType = 'Холодный обзвон ';
+        //         $stringType,
+        //         $portal,
+        //         $domain,
+        //         $hook,
+        //         $companyId,  //may be null
+        //         $leadId,     //may be null
+        //         $createdId,
+        //         $responsibleId,
+        //         $deadline,
+        //         $name,
+        //         $currentSmartItemId,
+        //         $isNeedCompleteOtherTasks,
+        //     ]
+        // );
 
         //TODO
         //type - cold warm presentation hot
@@ -139,15 +139,7 @@ class BitrixTaskService
                 ]
             ];
 
-            $createdTask = BitrixGeneralService::createTask(
-                'Bitrix Task Service create task',
-                $hook,
-                $companyId,
-                $leadId,
-                // $crmItems,
-                $taskData
-            );
-
+          
 
             if ($isNeedCompleteOtherTasks) {
                 $idsForComplete = $this->getCurrentTasksIds(
@@ -162,6 +154,14 @@ class BitrixTaskService
             }
 
 
+            $createdTask = BitrixGeneralService::createTask(
+                'Bitrix Task Service create task',
+                $hook,
+                $companyId,
+                $leadId,
+                // $crmItems,
+                $taskData
+            );
 
             return APIOnlineController::getResponse(
                 0,
