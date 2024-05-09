@@ -19,7 +19,7 @@ class PortalController extends Controller
             $cachedPortalData = Cache::get($cacheKey);
             if ($cachedPortalData) {
 
-                Log::channel('telegram')->info('APRIL_HOOK Cache', ['cachedPortalData' => $cachedPortalData]);
+                Log::info('APRIL_HOOK Cache', ['cachedPortalData' => $cachedPortalData]);
 
                 $result = $cachedPortalData;
             } else {

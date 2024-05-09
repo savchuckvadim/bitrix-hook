@@ -181,29 +181,14 @@ class BitrixCallingColdService
                                 break;
 
                             case 'op_history':
-                            case 'op_mhistory':
-                                Log::channel('telegram')->error('APRIL_HOOK portal', ['op_mhistory' => $companyField['code']]);
+                            // case 'op_mhistory':
 
                                 $fullFieldId = 'UF_CRM_' . $companyField['bitrixId'];  //UF_CRM_OP_MHISTORY
                                 $now = now();
                                 $stringComment = $now . ' ХО запланирован ' . $data['name'] . ' на ' . $data['deadline'];
 
                                 $currentComments = '';
-                                Log::channel('telegram')->error('APRIL_HOOK fullFieldId', ['fullFieldId' => $fullFieldId]);
-                                Log::channel('telegram')->error('APRIL_HOOK ', [
-
-                                    '$currentBtxCompany fullFieldId' => $currentBtxCompany[$fullFieldId]
-                                ]);
-                                // Log::channel('telegram')->error('APRIL_HOOK ', [
-
-                                //     '$currentBtxCompany' => $currentBtxCompany
-                                // ]);
-
-                                // Log::channel('telegram')->error('APRIL_HOOK ', [
-
-                                //     '$currentBtxCompany UF_CRM_OP_MHISTORY' => $currentBtxCompany['UF_CRM_OP_MHISTORY']
-                                // ]);
-                                
+                          
 
                                 if (!empty($currentBtxCompany)) {
                                     // if (isset($currentBtxCompany[$fullFieldId])) {
@@ -218,36 +203,16 @@ class BitrixCallingColdService
                                             }
                                             
                                         } else {
-                                            $currentComments = $currentComments  .' 
-                                            | ' . $stringComment;
+                                            $currentComments = $currentComments  .'
+ | ' . $stringComment;
                                         }
                                     // }
                                 }
 
 
-                                // Log::channel('telegram')->error('APRIL_HOOK ', [
-
-                                //     '$fullFieldId' => $fullFieldId
-                                // ]);
-
-                                // Log::channel('telegram')->error('APRIL_HOOK ', [
-
-                                //     '$currentComments' => $currentComments
-                                // ]);
-                                // Log::channel('telegram')->error('APRIL_HOOK ', [
-
-                                //     '$currentBtxCompany' => $currentBtxCompany
-                                // ]);
-
-                                // $currentEntityField = [
-                                //     'UF_CRM_' . $companyField['bitrixId'] => 'test comment string'
-                                // ];
                                 $resultEntityFields[$fullFieldId] =  $currentComments;
-                                Log::channel('telegram')->error('APRIL_HOOK', ['currentComments' => $currentComments]);
 
                                 break;
-
-
 
                             default:
                                 // Log::channel('telegram')->error('APRIL_HOOK', ['default' => $companyField['code']]);
@@ -346,17 +311,8 @@ class BitrixCallingColdService
             // if(!$this->smartId){
 
             // }
-            $randomNumber = rand(1, 2);
-            sleep($randomNumber);
-            // Log::info('COLD companyId', ['log' => $this->companyId]);
-            if ($this->entityType == 'company') {
-
-                $updatedCompany = $this->updateCompanyCold($this->entityId, $this->portal);
-            } else if ($this->entityType == 'lead') {
-                $updatedLead = $this->updateLeadCold($this->entityId);
-            }
-
-
+            // $randomNumber = rand(1, 2);
+            sleep(1);
             if ($this->entityType !== 'smart') {
                 $currentSmart = $this->getSmartItem();
                 if ($currentSmart) {
@@ -379,6 +335,18 @@ class BitrixCallingColdService
                 // Log::channel('telegram')->error('APRIL_HOOK', ['currentSmart id' => $currentSmart['id']]);
                 $this->createColdTask($currentSmart['id']);
             }
+
+            sleep(1);
+            // Log::info('COLD companyId', ['log' => $this->companyId]);
+            if ($this->entityType == 'company') {
+
+                $updatedCompany = $this->updateCompanyCold($this->entityId, $this->portal);
+            } else if ($this->entityType == 'lead') {
+                $updatedLead = $this->updateLeadCold($this->entityId);
+            }
+
+
+          
 
 
 
@@ -649,7 +617,6 @@ class BitrixCallingColdService
             'UF_CRM_10_170990774' => $this->deadline,   //  - дата следующего звонка
             ...$this->entityFieldsUpdatingContent
         ];
-        Log::channel('telegram')->error('APRIL_HOOK updateCompanyCold', ['fields' => $fields]);
 
         // Log::channel('telegram')->error('APRIL_HOOK portal', ['$portal' => $portal['company']]);
 
