@@ -134,8 +134,8 @@ class BitrixCallingColdService
 
 
 
-        if (!empty($portal['company'])) {
-            if (!empty($portal['company']['bitrixfields'])) {
+        if (!empty($portal[$data['entityType']])) {
+            if (!empty($portal[$data['entityType']]['bitrixfields'])) {
                 $currentEntityField = [];
                 $entityBtxFields = $portal['company']['bitrixfields'];
 
