@@ -138,14 +138,14 @@ class BitrixCallingColdService
                             case 'xo_name':
                             case 'call_next_name':
                                 $currentEntityField = [
-                                    'UF_CRM_' . $companyField['bitrixId'] => $data['name']
+                                    ['UF_CRM_' . $companyField['bitrixId']] => $data['name']
                                 ];
                                 break;
                             case 'xo_date':
                             case 'call_next_date':
                             case 'call_last_date':
                                 $currentEntityField = [
-                                    'UF_CRM_' . $companyField['bitrixId'] => $data['deadline']
+                                    ['UF_CRM_' . $companyField['bitrixId']] => $data['deadline']
                                 ];
                                 break;
 
@@ -177,6 +177,7 @@ class BitrixCallingColdService
                                 # code...
                                 break;
                         }
+                        Log::channel('telegram')->error('APRIL_HOOK data', ['currentEntityField' => $currentEntityField]);
 
                         if (!empty($currentEntityField)) {
 
