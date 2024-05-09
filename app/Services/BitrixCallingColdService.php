@@ -134,7 +134,8 @@ class BitrixCallingColdService
         if (!empty($portal[$data['entityType']])) {
             if (!empty($portal[$data['entityType']]['bitrixfields'])) {
                 $currentEntityField = [];
-                $entityBtxFields = $portal[$data['entityId']]['bitrixfields'];
+                $entityBtxFields = $portal[$data['entityType']]['bitrixfields'];
+                Log::channel('telegram')->error('APRIL_HOOK portal' . $data['entityType'], ['$entityBtxFields' => $entityBtxFields]);
 
                 foreach ($entityBtxFields as $pField) {
 
