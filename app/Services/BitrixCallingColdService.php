@@ -91,7 +91,7 @@ class BitrixCallingColdService
         $this->smartCrmId =  $smartId;
 
         Log::error('APRIL_HOOK portal', ['$portal.lead' => $portal['lead']['bitrixfields']]); // массив fields
-        Log::error('APRIL_HOOK portal', ['$portal.company' => $portal['company']]); // массив fields
+        Log::error('APRIL_HOOK portal', ['$portal.company' => $portal['company']['bitrixfields']]); // массив fields
 
         // Log::channel('telegram')->error('APRIL_HOOK portal', ['$portal' => $portal['company']]);
         // xo_name
@@ -119,67 +119,68 @@ class BitrixCallingColdService
         ];
         $resultEntityFields = [];
 
-       
+
 
         $currentEntityField = [];
         if (!empty($portal['company'])) {
+            if (!empty($portal['company']['bitrixfields'])) {
 
-          
+                $entityBtxFields = $portal['company']['bitrixfields'];
 
-            foreach ($portal['company'] as $companyField) {
-
-
-                if (!empty($companyField['code'])) {
-                    switch ($companyField['code']) {
-                        case 'xo_name':
-                        case 'call_next_name':
-                            $currentEntityField = [
-                                $companyField['bitrixId'] => $data['name']
-                            ];
-                            break;
-                        case 'xo_date':
-                        case 'call_next_date':
-                        case 'call_last_date':
-                            $currentEntityField = [
-                                $companyField['bitrixId'] => $data['deadline']
-                            ];
-                            break;
-
-                        case 'xo_responsible':
-                        case 'manager_op':
-
-                            $currentEntityField = [
-                                $companyField['bitrixId'] => $data['responsible']
-                            ];
-                            break;
-
-                        case 'xo_created':
-
-                            $currentEntityField = [
-                                $companyField['bitrixId'] => $data['created']
-                            ];
-                            break;
-
-                        case 'op_history':
-                        case 'op_history_multiple':
-                            $currentEntityField = [
-                                $companyField['bitrixId'] => 'test comment string'
-                            ];
-                            break;
+                foreach ($entityBtxFields as $companyField) {
 
 
+                    if (!empty($companyField['code'])) {
+                        switch ($companyField['code']) {
+                            case 'xo_name':
+                            case 'call_next_name':
+                                $currentEntityField = [
+                                    $companyField['bitrixId'] => $data['name']
+                                ];
+                                break;
+                            case 'xo_date':
+                            case 'call_next_date':
+                            case 'call_last_date':
+                                $currentEntityField = [
+                                    $companyField['bitrixId'] => $data['deadline']
+                                ];
+                                break;
 
-                        default:
-                            # code...
-                            break;
+                            case 'xo_responsible':
+                            case 'manager_op':
+
+                                $currentEntityField = [
+                                    $companyField['bitrixId'] => $data['responsible']
+                                ];
+                                break;
+
+                            case 'xo_created':
+
+                                $currentEntityField = [
+                                    $companyField['bitrixId'] => $data['created']
+                                ];
+                                break;
+
+                            case 'op_history':
+                            case 'op_history_multiple':
+                                $currentEntityField = [
+                                    $companyField['bitrixId'] => 'test comment string'
+                                ];
+                                break;
+
+
+
+                            default:
+                                # code...
+                                break;
+                        }
+                        Log::channel('telegram')->error('APRIL_HOOK currentEntityField', ['$currentEntityField' => $currentEntityField]);
+
+                        if (!empty($currentEntityField)) {
+
+                            array_push($resultEntityFields, $currentEntityField);
+                        }
                     }
-                    Log::channel('telegram')->error('APRIL_HOOK currentEntityField', ['$currentEntityField' => $currentEntityField]);
-
-                    if(!empty($currentEntityField)){
-                        
-                        array_push($resultEntityFields, $currentEntityField);
-                    }
-
                 }
             }
         }
