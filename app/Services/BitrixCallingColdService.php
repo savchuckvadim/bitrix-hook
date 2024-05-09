@@ -186,7 +186,7 @@ class BitrixCallingColdService
 
                                 $fullFieldId = 'UF_CRM_' . $companyField['bitrixId'];  //UF_CRM_OP_MHISTORY
                                 $now = now();
-                                $stringComment = $now . 'ХО запланирован' . $data['name'] . ' на ' . $data['deadline'];
+                                $stringComment = $now . ' ХО запланирован ' . $data['name'] . ' на ' . $data['deadline'];
 
                                 $currentComments = '';
                                 Log::channel('telegram')->error('APRIL_HOOK fullFieldId', ['fullFieldId' => $fullFieldId]);
