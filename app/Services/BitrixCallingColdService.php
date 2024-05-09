@@ -548,13 +548,13 @@ class BitrixCallingColdService
 
 
         $entityId = $smart['crmId'];
-        // Log::channel('telegram')->error('APRIL_HOOK updateSmartItem', [
+        Log::channel('telegram')->error('APRIL_HOOK updateSmartItem', [
 
-        //     $this->hook,
-        //     $entityId,
-        //     $smartId,
-        //     $fieldsData
-        // ]);
+            $this->hook,
+            $entityId,
+            $smartId,
+            $fieldsData
+        ]);
         $resultFields = BitrixGeneralService::updateSmartItem(
             $this->hook,
             $entityId,
