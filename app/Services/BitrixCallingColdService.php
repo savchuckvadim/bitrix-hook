@@ -200,7 +200,7 @@ class BitrixCallingColdService
                                         if ($companyField['code'] == 'op_history_multiple') {
                                             array_push($currentComments, $stringComment);
                                         } else {
-                                            $currentComments += ' | ' . $stringComment;
+                                            $currentComments = $currentComments. ' | ' . $stringComment;
                                         }
                                     }
                                 }
