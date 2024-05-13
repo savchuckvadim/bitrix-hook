@@ -533,7 +533,7 @@ Route::post('cold', function (Request $request) {
     // entity_id={{ID}}
     // &entity_type=smart | company | lead
     // isOlyDeal ??
-    Log::info('APRIL_HOOK', ['request' => $request->all()]);
+   
 
     $controller = new BitrixHookController();
     return $controller->getColdCall(
