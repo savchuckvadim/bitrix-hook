@@ -81,11 +81,11 @@ class BitrixCallingColdService
         $portal = PortalController::getPortal($domain);
 
 
-        if($domain === 'april-dev.bitrix24.ru' ){
+        if ($domain === 'april-dev.bitrix24.ru') {
             $this->isDealFlow = true;
         }
 
-        if($domain === 'gsr.bitrix24.ru' ){
+        if ($domain === 'gsr.bitrix24.ru') {
             $this->isSmartFlow = false;
             $this->isDealFlow = true;
         }
@@ -257,12 +257,12 @@ class BitrixCallingColdService
         if (!empty($portal['smarts'])) {
             // foreach ($portal['smarts'] as $smart) {
             $smart = null;
-            if(!empty($portal['smarts'])){
+            if (!empty($portal['smarts'])) {
 
                 foreach ($portal['smarts'] as $pSmart) {
-                  if($pSmart['group'] == 'sales'){
-                    $smart = $pSmart['group'];
-                  }
+                    if ($pSmart['group'] == 'sales') {
+                        $smart = $pSmart['group'];
+                    }
                 }
             }
             $smartForStageId = $smart['forStage'];
@@ -323,33 +323,37 @@ class BitrixCallingColdService
             // Log::channel('telegram')->error('APRIL_HOOK data', ['entityType' => $this->entityType]);
             $updatedCompany = null;
             $updatedLead = null;
+            $currentSmartId = null;
             // if(!$this->smartId){
 
             // }
             // $randomNumber = rand(1, 2);
             sleep(1);
-            if ($this->entityType !== 'smart') {
-                $currentSmart = $this->getSmartItem();
-                if ($currentSmart) {
-                    if (isset($currentSmart['id'])) {
-                        $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
+            if ($this->isSmartFlow) {
+                if ($this->entityType !== 'smart') {
+                    $currentSmart = $this->getSmartItem();
+                    if ($currentSmart) {
+                        if (isset($currentSmart['id'])) {
+                            $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
+                        }
+                    } else {
+                        $currentSmart = $this->createSmartItemCold();
+                        // $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
+                        // Log::channel('telegram')->error('APRIL_HOOK createSmartItemCold', ['currentSmart' => $currentSmart]);
                     }
                 } else {
-                    $currentSmart = $this->createSmartItemCold();
-                    // $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
-                    // Log::channel('telegram')->error('APRIL_HOOK createSmartItemCold', ['currentSmart' => $currentSmart]);
+                    $currentSmart = $this->updateSmartItemCold($this->entityId);
                 }
-            } else {
-                $currentSmart = $this->updateSmartItemCold($this->entityId);
+                sleep(1);
+                if ($currentSmart && isset($currentSmart['id'])) {
+                    $currentSmartId = $currentSmart['id'];
+                }
             }
-            sleep(1);
+
             // Log::channel('telegram')->error('APRIL_HOOK', ['currentSmart' => $currentSmart]);
-            $currentSmartId = null;;
-            if ($currentSmart && isset($currentSmart['id'])) {
-                $currentSmartId = $currentSmart['id'];
-                
-            }
-            $this->createColdTask($currentSmart['id']);
+
+
+            $this->createColdTask($currentSmartId);
             sleep(1);
             // Log::info('COLD companyId', ['log' => $this->companyId]);
             if ($this->entityType == 'company') {
@@ -358,12 +362,6 @@ class BitrixCallingColdService
             } else if ($this->entityType == 'lead') {
                 $updatedLead = $this->updateLeadCold($this->entityId);
             }
-
-
-
-
-
-
 
 
             return APIOnlineController::getSuccess($currentSmart);
