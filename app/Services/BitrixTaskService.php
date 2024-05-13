@@ -97,19 +97,22 @@ class BitrixTaskService
                 $smartId =  $portal['bitrixSmart']['crm'] . '_';
             }
 
-            if (!$currentSmartItemId) { //если
-                $getSmartItem = BitrixGeneralService::getSmartItem($hook, $leadId, $companyId, $responsibleId, $smart);
-                $gettedSmart =  $getSmartItem;
-                if ($getSmartItem) {
-                    $currentSmartItemId = $getSmartItem['id'];
-                    $currentSmartItem =  $getSmartItem;
-                }
+            // if (!$currentSmartItemId) { //если
+            //     $getSmartItem = BitrixGeneralService::getSmartItem($hook, $leadId, $companyId, $responsibleId, $smart);
+            //     $gettedSmart =  $getSmartItem;
+            //     if ($getSmartItem && !empty($getSmartItem['id'])) {
+            //         $currentSmartItemId = $getSmartItem['id'];
+            //         $currentSmartItem =  $getSmartItem;
+            //     }
 
-                // return APIOnlineController::getResponse(0, 'success', ['crm' => $crm]);
+            //     // return APIOnlineController::getResponse(0, 'success', ['crm' => $crm]);
+            // }
+
+            $crmItems = [...$tasksCrmRelations];
+
+            if ($currentSmartItemId) {
+                $crmItems = [$smartId  . $currentSmartItemId, ...$tasksCrmRelations];
             }
-
-            $crmItems = [$smartId  . $currentSmartItemId, ...$tasksCrmRelations];
-
             $moscowTime = $deadline;
             $nowDate = now();
             if ($domain === 'alfacentr.bitrix24.ru') {
@@ -139,7 +142,7 @@ class BitrixTaskService
                 ]
             ];
 
-          
+
 
             if ($isNeedCompleteOtherTasks) {
                 $idsForComplete = $this->getCurrentTasksIds(

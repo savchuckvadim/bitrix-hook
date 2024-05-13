@@ -60,6 +60,9 @@ class BitrixCallingColdService
 
     protected $entityFieldsUpdatingContent;
 
+    protected $isDealFlow = false;
+    protected $isSmartFlow = true;
+
     public function __construct(
 
         $data,
@@ -78,6 +81,14 @@ class BitrixCallingColdService
         $portal = PortalController::getPortal($domain);
 
 
+        if($domain === 'april-dev.bitrix24.ru' ){
+            $this->isDealFlow = true;
+        }
+
+        if($domain === 'gsr.bitrix24.ru' ){
+            $this->isSmartFlow = false;
+            $this->isDealFlow = true;
+        }
 
         $portal = $portal['data'];
         $this->portal = $portal;
@@ -245,7 +256,15 @@ class BitrixCallingColdService
 
         if (!empty($portal['smarts'])) {
             // foreach ($portal['smarts'] as $smart) {
-            $smart = $portal['smarts'][0];
+            $smart = null;
+            if(!empty($portal['smarts'])){
+
+                foreach ($portal['smarts'] as $pSmart) {
+                  if($pSmart['group'] == 'sales'){
+                    $smart = $pSmart['group'];
+                  }
+                }
+            }
             $smartForStageId = $smart['forStage'];
 
             if (!empty($smart['categories'])) {
@@ -325,13 +344,12 @@ class BitrixCallingColdService
             }
             sleep(1);
             // Log::channel('telegram')->error('APRIL_HOOK', ['currentSmart' => $currentSmart]);
+            $currentSmartId = null;;
             if ($currentSmart && isset($currentSmart['id'])) {
-                // $randomNumber = rand(1, 2);
-                // sleep($randomNumber);
-                // Log::channel('telegram')->error('APRIL_HOOK', ['currentSmart id' => $currentSmart['id']]);
-                $this->createColdTask($currentSmart['id']);
+                $currentSmartId = $currentSmart['id'];
+                
             }
-
+            $this->createColdTask($currentSmart['id']);
             sleep(1);
             // Log::info('COLD companyId', ['log' => $this->companyId]);
             if ($this->entityType == 'company') {
