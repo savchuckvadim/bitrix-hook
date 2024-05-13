@@ -2,11 +2,13 @@
 
 namespace App\Jobs;
 
+use App\Services\BitrixCallingColdService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class ColdCallJob implements ShouldQueue
 {
@@ -29,6 +31,8 @@ class ColdCallJob implements ShouldQueue
      */
     public function handle(): void
     {
-        //
+        Log::info("Processing job from Redis queue.");
+        $service = new BitrixCallingColdService($this->data);
+        $reult =  $service->getCold();
     }
 }

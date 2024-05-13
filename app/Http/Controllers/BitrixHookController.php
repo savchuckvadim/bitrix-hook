@@ -120,16 +120,19 @@ class BitrixHookController extends Controller
 
             ];
             
-            // dispatch(
-            //     new ColdCallJob(
-            //         $data
+            dispatch(
+                new ColdCallJob(
+                    $data
 
-            //     )
-            // );
-            $service = new BitrixCallingColdService($data);
-            $reult =  $service->getCold();
+                )
+            );
+            // $service = new BitrixCallingColdService($data);
+            // $reult =  $service->getCold();
 
-            return APIOnlineController::getSuccess(['result' => $reult]);
+            // return APIOnlineController::getSuccess(['result' => $reult]);
+
+            return APIOnlineController::getSuccess(['result' => 'job catch it!']);
+
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
