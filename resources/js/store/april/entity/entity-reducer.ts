@@ -204,7 +204,7 @@ export const getInitialEntityData = (url: string, router: any, currentUrl: strin
     // parentEntityId //entityId
     const entityState = getState().entity as EntityStateType
     let cretingEntity = entityState.creating.formData
-debugger
+
     if (url) {
         let fullUrl = `initial${currentUrl}`
         let targetUrl = currentUrl
@@ -261,7 +261,7 @@ debugger
         // }
 
         dispatch(entityActions.setFetchingInitialAdd())
-        debugger
+        
         if (!cretingEntity) {
             cretingEntity = await onlineAPI.service(fullUrl, API_METHOD.GET, 'initial', null) as InitialEntityData | null
             if (cretingEntity) {
@@ -274,7 +274,7 @@ debugger
 
 
 
-        debugger
+        
 
         if (currentUrl !== targetUrl) {
 

@@ -491,7 +491,7 @@ Route::post('/cold/smart/init', function (Request $request) {
         //     $sale = $request['sale'];
         // }
 
-        Log::channel('telegram')->error('APRIL_HOOK domain',['domain' => $domain]);
+        Log::channel('telegram')->error('APRIL_HOOK domain', ['domain' => $domain]);
 
         $controller = new APIBitrixController();
         return $controller->initialCold(
@@ -532,6 +532,8 @@ Route::post('cold', function (Request $request) {
     // name={=Template:Parameter4}&
     // entity_id={{ID}}
     // &entity_type=smart | company | lead
+    // isOlyDeal ??
+    Log::channel('telegram')->error('APRIL_HOOK', ['request' => $request->all()]);
 
     $controller = new BitrixHookController();
     return $controller->getColdCall(

@@ -19,8 +19,6 @@ class PortalController extends Controller
             $cachedPortalData = Cache::get($cacheKey);
             if ($cachedPortalData) {
 
-                Log::info('APRIL_HOOK Cache', ['cachedPortalData' => $cachedPortalData]);
-
                 $result = $cachedPortalData;
             } else {
                 $result = APIOnlineController::online('post', 'getportal', $requestPortalData, 'portal');

@@ -39,7 +39,7 @@ const EntityItemAdd = ({
     };
     
 
-    debugger
+    
 
 
     const getItems = (creatingEntity) => {
@@ -60,7 +60,7 @@ const EntityItemAdd = ({
                             
 
                         }
-                        debugger
+                        
                         return (
                             <Row className="mb-4">
                                 <Label
