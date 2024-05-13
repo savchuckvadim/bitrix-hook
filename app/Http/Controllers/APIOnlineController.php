@@ -23,7 +23,6 @@ class APIOnlineController extends Controller
 
             if ($portalResponse->successful()) {
                 $data = $portalResponse->json();
-                Log::channel('telegram')->error('APRIL_HOOK portalResponse data',['portal data' => $data]);
 
                 if ($data['resultCode'] == 0 && $data[$dataname]) {
                     return [

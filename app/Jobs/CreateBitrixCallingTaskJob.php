@@ -9,7 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Services\BitrixCallingTaskService;
-
+use Illuminate\Support\Facades\Log;
 
 class CreateBitrixCallingTaskJob implements ShouldQueue
 {
@@ -68,6 +68,7 @@ class CreateBitrixCallingTaskJob implements ShouldQueue
      */
     public function handle(): void
     {
+        Log::info("Processing job from Redis queue.");
         $service = new BitrixCallingTaskService(
             $this->type,
             $this->domain,

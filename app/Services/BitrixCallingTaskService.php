@@ -787,12 +787,12 @@ class BitrixCallingTaskService
             'bitrixResult' => $result
 
         ];
-        Log::channel('telegram')->error('APRIL_HOOK', [
-            'updateSmartItemWarm testingResult' => [
-                'testingResult' => $testingResult,
+        // Log::channel('telegram')->error('APRIL_HOOK', [
+        //     'updateSmartItemWarm testingResult' => [
+        //         'testingResult' => $testingResult,
 
-            ]
-        ]);
+        //     ]
+        // ]);
         return $testingResult;
     }
 
