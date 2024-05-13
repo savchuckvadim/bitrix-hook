@@ -630,9 +630,10 @@ class BitrixCallingColdService
             ...$this->entityFieldsUpdatingContent
         ];
 
-        // Log::channel('telegram')->error('APRIL_HOOK portal', ['$portal' => $portal['company']]);
+        Log::channel('telegram')->error('APRIL_HOOK updateCompany', ['$fields' => $fields]);
 
         $result =  BitrixGeneralService::updateCompany($hook, $companyId, $fields);
+        Log::channel('telegram')->error('APRIL_HOOK updateCompany', ['$result' => $result]);
 
         return $result;
     }
