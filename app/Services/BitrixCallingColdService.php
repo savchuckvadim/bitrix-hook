@@ -123,7 +123,7 @@ class BitrixCallingColdService
         // Log::error('APRIL_HOOK portal', ['$portal.lead' => $portal['company']['bitrixfields']]); // массив fields
         // Log::error('APRIL_HOOK portal', ['$portal.company' => $portal['company']['bitrixfields']]); // массив fields
 
-        // Log::channel('telegram')->error('APRIL_HOOK portal', ['$portal' => $portal['company']]);
+       
 
         $fieldsCodes = [
             'xo_name',
@@ -685,7 +685,7 @@ class BitrixCallingColdService
                 $leadId  = $this->entityId;
             }
             $taskService = new BitrixTaskService();
-
+            Log::channel('telegram')->error('APRIL_HOOK portal', ['$companyId' => $companyId]);
             $createdTask =  $taskService->createTask(
                 'cold',       //$type,   //cold warm presentation hot 
                 $this->stringType,
