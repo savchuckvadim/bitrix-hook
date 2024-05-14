@@ -664,18 +664,25 @@ class BitrixCallingColdService
             ['currentDeal' => $currentDeal]
         );
 
-
+        $fieldsData = [
+            'CATEGORY_ID' => $currentCategoryData['bitrixId'],
+            'STAGE_ID' => "C" . $currentCategoryData['bitrixId'] . ':' . $targetStageBtxId,
+            "COMPANY_ID" => $this->entityId
+        ];
 
 
         if (!$currentDealId) {
-            $fieldsData = [
-                'CATEGORY_ID' => $currentCategoryData['bitrixId'],
-                'STAGE_ID' => "C" . $currentCategoryData['bitrixId'] . ':' . $targetStageBtxId,
-                "COMPANY_ID" => $this->entityId
-            ];
+
 
 
             $currentDeal = BitrixDealService::setDeal(
+                $this->hook,
+                $fieldsData,
+                $currentCategoryData
+
+            );
+        } else {
+            $currentDeal = BitrixDealService::updateDeal(
                 $this->hook,
                 $fieldsData,
                 $currentCategoryData

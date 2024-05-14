@@ -125,16 +125,18 @@ class BitrixDealService
         }
     }
 
-    static function updateSmartItem($hook, $entityId, $smartId, $fieldsData)
+    static function updateDeal(
+        $hook, 
+        $dealId, 
+        $fieldsData
+        )
     {
 
-        $methodSmart = '/crm.item.update.json';
+        $methodSmart = '/crm.deal.update.json';
         $url = $hook . $methodSmart;
-
+        $resultFields = null;
         $data = [
-            'id' => $smartId,
-            'entityTypeId' => $entityId,
-
+            'id' => $dealId,
             'fields' =>  $fieldsData
 
         ];
