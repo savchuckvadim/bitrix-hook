@@ -98,8 +98,8 @@ class BitrixCallingColdService
             }
             
 
-            Log::info('APRIL_HOOK deals',
-            ['deals' => $portal]
+            Log::channel('telegram')->info('APRIL_HOOK deals',
+            ['deals' => $portal['deals']]
            );
 
         }
