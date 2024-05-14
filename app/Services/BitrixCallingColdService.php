@@ -89,24 +89,11 @@ class BitrixCallingColdService
             $this->isDealFlow = true;
 
             if (!empty($portal['deals'])) {
-                $this->portalDealData = $portal['deals'];
+                $this->portalDealData = $portal['bitrixDeal'];
             }
 
 
-            Log::info(
-                'APRIL_HOOK deals',
-                [
-                    'deals' => $portal['deals'],
-                    'bitrixDeal' => $portal['bitrixDeal']
-                ]
-            );
-            Log::info(
-                'APRIL_HOOK deals',
-                [
-                    'portal' => $portal,
-                   
-                ]
-            );
+           
         }
 
         if ($domain === 'gsr.bitrix24.ru') {
@@ -133,7 +120,6 @@ class BitrixCallingColdService
 
         $currentBtxCompany = null;
         $currentBtxEntity = null;
-        Log::error('APRIL_HOOK entityType', ['entityType' => $data['entityType']]);
         if (!empty($data['entityType'])) {
 
             $currentBtxEntity = BitrixGeneralService::getEntity(
@@ -650,6 +636,16 @@ class BitrixCallingColdService
 
     protected function getDealFlow()
     {
+
+        Log::channel('telegram')->info('COLD DEAL DATA', [
+            'data' => [
+                $this->hook,
+                null,
+                $this->entityId,
+                $this->responsibleId,
+                $this->portalDealData,
+            ]
+        ]);
         $currentDealId = BitrixDealService::getDealId(
             $this->hook,
             null,

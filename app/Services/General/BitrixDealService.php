@@ -26,7 +26,10 @@ class BitrixDealService
         try {
             $method = '/crm.deal.list.json';
             $url = $hook . $method;
-            $portalDealCategories =  $portalDeal->categories();
+            $portalDealCategories =  $portalDeal['categories'];
+            Log::channel('telegram')->info('COLD DEAL DATA', [
+                'portalDealCategories' => $portalDealCategories
+            ]);
             if ($companyId) {
                 $data =  [
              
