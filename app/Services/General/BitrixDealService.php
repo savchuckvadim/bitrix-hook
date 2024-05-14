@@ -72,6 +72,9 @@ class BitrixDealService
                     $currentDeal =  $currentDeal['items'][0];
                 }
             }
+            if (!empty($currentDeal['ID'])) {
+                $currentDeal =  $currentDeal['ID'];
+            }
             Log::channel('telegram')->info('COLD DEAL get currentDeal', [
                 'currentDeal' => $currentDeal
             ]);
