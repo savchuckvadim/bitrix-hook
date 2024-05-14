@@ -98,8 +98,8 @@ class BitrixCallingColdService
             }
             
 
-            Log::channel('telegram')->error('APRIL_HOOK updateCompany',
-            ['deals' => $portal['deals']]
+            Log::info('APRIL_HOOK deals',
+            ['deals' => $portal]
            );
 
         }
