@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Http\Controllers\APIBitrixController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\PortalController;
+use App\Services\General\BitrixDealService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -365,6 +366,17 @@ class BitrixCallingColdService
                 }
             }
 
+
+
+            if( $this->isDealFlow){
+
+         
+               $this->getDealFlow();
+                
+            }
+
+
+
             // Log::channel('telegram')->error('APRIL_HOOK', ['currentSmart' => $currentSmart]);
 
 
@@ -626,6 +638,18 @@ class BitrixCallingColdService
     }
 
 
+    // deal flow
+
+    protected function getDealFlow(){
+        $currentDealId = BitrixDealService::getDealId(
+            $this->hook,
+            null,
+            $this->entityId,
+            $this->responsibleId,
+            $this->portalDealData,
+
+        );
+    }
 
 
     // company
