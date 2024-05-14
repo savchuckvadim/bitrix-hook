@@ -110,8 +110,9 @@ export const updateEntities = (token = null, entityName: string) => async (dispa
 
 }
 export const getEntities = (url: string, method: string, collectionName: string, data: any = null) => async (dispatch: AppDispatchType, getState: GetStateType) => {
-
+    debugger
     if (url) {
+        debugger
         const collection = await onlineAPI.service(url, API_METHOD.GET, collectionName, null)
 
 

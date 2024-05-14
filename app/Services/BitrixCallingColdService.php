@@ -63,6 +63,8 @@ class BitrixCallingColdService
     protected $isDealFlow = false;
     protected $isSmartFlow = true;
 
+    protected $portalDealData = null;
+
     public function __construct(
 
         $data,
@@ -79,7 +81,8 @@ class BitrixCallingColdService
         // $this->entityType = $entityType;
 
         $portal = PortalController::getPortal($domain);
-
+        $portal = $portal['data'];
+        $this->portal = $portal;
 
         if ($domain === 'april-dev.bitrix24.ru') {
             $this->isDealFlow = true;
@@ -88,10 +91,19 @@ class BitrixCallingColdService
         if ($domain === 'gsr.bitrix24.ru') {
             $this->isSmartFlow = false;
             $this->isDealFlow = true;
+
+            if(!empty($portal['deals'])){
+                $this->portalDealData = $portal['deals'];
+            }
+            
+
+            Log::channel('telegram')->error('APRIL_HOOK updateCompany',
+            ['deals' => $portal['deals']]
+           );
+
         }
 
-        $portal = $portal['data'];
-        $this->portal = $portal;
+       
         $this->aprilSmartData = $portal['bitrixSmart'];
 
         $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
@@ -210,8 +222,7 @@ class BitrixCallingColdService
                                             $currentComments = $stringComment;
                                         }
                                     } else {
-                                        $currentComments = $currentComments  . '
- | ' . $stringComment;
+                                        $currentComments = $currentComments  . ' | ' . $stringComment;
                                     }
                                     // }
                                 }
@@ -313,6 +324,10 @@ class BitrixCallingColdService
         $this->callThemeField = $callThemeField;
         $this->lastCallDateFieldCold = $lastCallDateFieldCold;
         $this->callThemeFieldCold = $callThemeFieldCold;
+
+
+
+      
     }
 
 
@@ -630,10 +645,10 @@ class BitrixCallingColdService
             ...$this->entityFieldsUpdatingContent
         ];
 
-        Log::channel('telegram')->error('APRIL_HOOK updateCompany', ['$fields' => $fields]);
+        // Log::channel('telegram')->error('APRIL_HOOK updateCompany', ['$fields' => $fields]);
 
         $result =  BitrixGeneralService::updateCompany($hook, $companyId, $fields);
-        Log::channel('telegram')->error('APRIL_HOOK updateCompany', ['$result' => $result]);
+        // Log::channel('telegram')->error('APRIL_HOOK updateCompany', ['$result' => $result]);
 
         return $result;
     }
