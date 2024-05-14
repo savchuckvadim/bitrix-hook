@@ -639,48 +639,47 @@ class BitrixCallingColdService
     {
         $currentDeal = null;
         $currentDealId = null;
-        Log::channel('telegram')->info('COLD DEAL DATA', [
-            'data' => [
-                $this->hook,
-                null,
-                $this->entityId,
-                $this->responsibleId,
-                $this->portalDealData,
-            ]
-        ]);
+        $currentCategoryData =  BitrixDealService::getTargetCategoryData(
+            $this->portalDealData,
+            $this->currentDepartamentType,
+            'cold'
+        );
+        $targetStageBtxId =  BitrixDealService::getTargetStage(
+            $currentCategoryData,
+            'sales',
+            'cold'
+        );
+
         $currentDealId = BitrixDealService::getDealId(
             $this->hook,
             null,
             $this->entityId,
             $this->responsibleId,
             $this->portalDealData,
+            $currentCategoryData
 
-        );
-
-
-        $currentCategoryData =  BitrixDealService::getTargetCategoryData(
-            $this->portalDealData,
-            $this->currentDepartamentType,
-            'cold'
         );
         Log::channel('telegram')->error(
             'APRIL_HOOK getDealFlow',
-            ['currentCategoryData' => $currentCategoryData]
+            ['currentDeal' => $currentDeal]
         );
+
+
+
 
         if (!$currentDealId) {
             $fieldsData = [
+                'CATEGORY_ID' => $currentCategoryData['bitrixId'],
+                'STAGE_ID' => "C" . $currentCategoryData['bitrixId'] . ':' . $targetStageBtxId,
                 "COMPANY_ID" => $this->entityId
             ];
+
+
             $currentDeal = BitrixDealService::setDeal(
                 $this->hook,
-                $fieldsData
+                $fieldsData,
+                $currentCategoryData
 
-            );
-
-            Log::channel('telegram')->error(
-                'APRIL_HOOK getDealFlow',
-                ['currentDeal' => $currentDeal]
             );
         }
     }

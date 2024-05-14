@@ -18,27 +18,28 @@ class BitrixDealService
         $leadId, //lidId ? from lead
         $companyId, //companyId ? from company
         $userId,
-        $portalDeal, //april smart data
+        $portalDeal, //april deal data
+        $currentCategoryData //april deal category data
 
     ) {
         // lidIds UF_CRM_7_1697129081
-        $currentSmart = null;
+        $currentDeal = null;
+        
         try {
             $method = '/crm.deal.list.json';
             $url = $hook . $method;
             $portalDealCategories =  $portalDeal['categories'];
-            Log::channel('telegram')->info('COLD DEAL DATA', [
-                'portalDealCategories' => $portalDealCategories
-            ]);
+            $currentCategoryBtxId = $currentCategoryData['bitrixId'];
             if ($companyId) {
                 $data =  [
-             
+
                     'filter' => [
                         // "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
                         // "=assignedById" => $userId,
+                        "CATEGORY_ID" => $currentCategoryBtxId,
                         'COMPANY_ID' => $companyId,
                         "ASSIGNED_BY_ID" => $userId,
-                        // "!=STAGE_ID" => 
+                        "!=STAGE_ID" =>  ["C" . $currentCategoryBtxId . ":SUCCESS"]
 
                     ],
                     'select' => ["ID"],
@@ -53,7 +54,9 @@ class BitrixDealService
 
                         // "=%ufCrm7_1697129081" => '%' . $leadId . '%',
                         "ASSIGNED_BY_ID" => $userId,
-                        'LEAD_ID' => $leadId 
+                        'LEAD_ID' => $leadId,
+                        "CATEGORY_ID" => $currentCategoryBtxId,
+                        "!=STAGE_ID" =>  ["C" . $currentCategoryBtxId . ":SUCCESS"]
 
                     ],
                     'select' => ["ID"],
@@ -63,16 +66,18 @@ class BitrixDealService
 
             $response = Http::get($url, $data);
             // $responseData = $response->json();
-            $responseData = APIBitrixController::getBitrixRespone($response, 'general service: getSmartItem');
-            if (isset($responseData)) {
-                if (!empty($responseData['items'])) {
-                    $currentSmart =  $responseData['items'][0];
+            $currentDeal = APIBitrixController::getBitrixRespone($response, 'general service: getSmartItem');
+            if (isset($currentDeal)) {
+                if (!empty($currentDeal['items'])) {
+                    $currentDeal =  $currentDeal['items'][0];
                 }
             }
-           
-            return $currentSmart;
+            Log::channel('telegram')->info('COLD DEAL get currentDeal', [
+                'currentDeal' => $currentDeal
+            ]);
+            return $currentDeal;
         } catch (\Throwable $th) {
-            return $currentSmart;
+            return $currentDeal;
         }
     }
 
@@ -80,7 +85,8 @@ class BitrixDealService
 
     static function setDeal(
         $hook,
-        $fieldsData
+        $fieldsData,
+       
     ) {
         $responseData = null;
         try {
@@ -103,7 +109,7 @@ class BitrixDealService
             $smartFieldsResponse = Http::get($url, $data);
 
             $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: create Deal Item');
-           
+
             Log::channel('telegram')->error('APRIL_HOOK create deal', [
 
                 'result Deal' => $responseData
@@ -185,39 +191,46 @@ class BitrixDealService
         $portalDealData,
         $currentDepartamentType,
         $action, //cold warm done
-    ){
+    ) {
 
         $currentCategory = null;
         if (!empty($portalDealData['categories'])) {
 
             foreach ($portalDealData['categories'] as $category) {
 
-                if($currentDepartamentType === 'sales'){
+                if ($currentDepartamentType === 'sales') {
                     if ($category['code'] == 'sales_base') {
                     } else if ($category['code'] == 'sales_xo') {
                         $currentCategory = $category;
-
                     } else if ($category['code'] == 'sales_presentation') {
                     } else if ($category['code'] == 'tmc_base') {
                     }
-
                 }
-               
             }
         }
 
         return $currentCategory;
-
-
     }
 
-    protected function getTargetStage($portalDealCategories){
-        Log::channel('telegram')->error('APRIL_HOOK updateCompany',
-         ['portalDealCategories' => $portalDealCategories]
-        );
-
+    static function getTargetStage(
+        $currentCategoryData,
+        $group,
+        $action
         
-    }
+        )
+    {
+        $targetStageBtxId = null;
+        if (!empty($currentCategoryData['stages'])) {
 
-    
+            foreach ($currentCategoryData['stages'] as $stage) {
+
+                if ($action === 'cold') {
+                    if ($stage['code'] == 'cold_plan') {
+                        $targetStageBtxId = $stage['bitrixId'];
+                    } 
+                }
+            }
+        }
+        return $targetStageBtxId;
+    }
 }
