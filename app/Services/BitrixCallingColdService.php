@@ -100,7 +100,10 @@ class BitrixCallingColdService
 
             Log::channel('telegram')->info(
                 'APRIL_HOOK deals',
-                ['deals' => $portal['deals']]
+                [
+                    'deals' => $portal['deals'],
+                    'bitrixDeal' => $portal['bitrixDeal']
+                ]
             );
         }
 
@@ -367,7 +370,7 @@ class BitrixCallingColdService
 
 
 
-            if ($this->isDealFlow) {
+            if ($this->isDealFlow && $this->portalDealData) {
 
 
                 $this->getDealFlow();
