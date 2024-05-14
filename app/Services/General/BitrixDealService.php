@@ -145,7 +145,7 @@ class BitrixDealService
 
         $smartFieldsResponse = Http::get($url, $data);
 
-        $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: updateSmartItemCold');
+        $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: update deal');
         $resultFields = $responseData;
 
         if (isset($responseData['item'])) {

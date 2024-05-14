@@ -684,8 +684,9 @@ class BitrixCallingColdService
         } else {
             $currentDeal = BitrixDealService::updateDeal(
                 $this->hook,
+                $currentDealId,
                 $fieldsData,
-                $currentCategoryData
+
 
             );
         }
