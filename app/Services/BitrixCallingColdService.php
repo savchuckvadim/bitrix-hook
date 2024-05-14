@@ -93,18 +93,18 @@ class BitrixCallingColdService
             $this->isSmartFlow = false;
             $this->isDealFlow = true;
 
-            if(!empty($portal['deals'])){
+            if (!empty($portal['deals'])) {
                 $this->portalDealData = $portal['deals'];
             }
-            
 
-            Log::channel('telegram')->info('APRIL_HOOK deals',
-            ['deals' => $portal['deals']]
-           );
 
+            Log::channel('telegram')->info(
+                'APRIL_HOOK deals',
+                ['deals' => $portal['deals']]
+            );
         }
 
-       
+
         $this->aprilSmartData = $portal['bitrixSmart'];
 
         $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
@@ -136,7 +136,7 @@ class BitrixCallingColdService
         // Log::error('APRIL_HOOK portal', ['$portal.lead' => $portal['company']['bitrixfields']]); // массив fields
         // Log::error('APRIL_HOOK portal', ['$portal.company' => $portal['company']['bitrixfields']]); // массив fields
 
-       
+
 
         $fieldsCodes = [
             'xo_name',
@@ -325,10 +325,6 @@ class BitrixCallingColdService
         $this->callThemeField = $callThemeField;
         $this->lastCallDateFieldCold = $lastCallDateFieldCold;
         $this->callThemeFieldCold = $callThemeFieldCold;
-
-
-
-      
     }
 
 
@@ -339,7 +335,10 @@ class BitrixCallingColdService
             // Log::channel('telegram')->error('APRIL_HOOK data', ['entityType' => $this->entityType]);
             $updatedCompany = null;
             $updatedLead = null;
+            $currentSmart = null;
             $currentSmartId = null;
+            $currentDeal = null;
+            $currentDealId = null;
             // if(!$this->smartId){
 
             // }
@@ -368,11 +367,10 @@ class BitrixCallingColdService
 
 
 
-            if( $this->isDealFlow){
+            if ($this->isDealFlow) {
 
-         
-               $this->getDealFlow();
-                
+
+                $this->getDealFlow();
             }
 
 
@@ -391,7 +389,7 @@ class BitrixCallingColdService
             }
 
 
-            return APIOnlineController::getSuccess($currentSmart);
+            return APIOnlineController::getSuccess(['result' => 'success']);
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
@@ -640,7 +638,8 @@ class BitrixCallingColdService
 
     // deal flow
 
-    protected function getDealFlow(){
+    protected function getDealFlow()
+    {
         $currentDealId = BitrixDealService::getDealId(
             $this->hook,
             null,
