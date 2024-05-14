@@ -69,9 +69,7 @@ class BitrixDealService
                     $currentSmart =  $responseData['items'][0];
                 }
             }
-            Log::channel('telegram')->error('APRIL_HOOK updateCompany',
-            ['getDealId' => $responseData]
-           );
+           
             return $currentSmart;
         } catch (\Throwable $th) {
             return $currentSmart;
@@ -80,20 +78,19 @@ class BitrixDealService
 
 
 
-    static function createSmartItem(
+    static function setDeal(
         $hook,
-        $entityId,
         $fieldsData
     ) {
-        $resultFields = null;
+        $responseData = null;
         try {
-            $methodSmart = '/crm.item.add.json';
+            $methodSmart = '/crm.deal.add.json';
             $url = $hook . $methodSmart;
 
 
 
             $data = [
-                'entityTypeId' => $entityId,
+
                 'fields' =>  $fieldsData
 
             ];
@@ -105,20 +102,20 @@ class BitrixDealService
 
             $smartFieldsResponse = Http::get($url, $data);
 
-            $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: createSmartItem');
-            $resultFields = $responseData;
-            Log::channel('telegram')->error('APRIL_HOOK createSmartItem', [
+            $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: create Deal Item');
+           
+            Log::channel('telegram')->error('APRIL_HOOK create deal', [
 
-                'resultFields' => $resultFields
+                'result Deal' => $responseData
             ]);
 
 
             if (isset($responseData['item'])) {
-                $resultFields = $responseData['item'];
+                $responseData = $responseData['item'];
             }
-            return $resultFields;
+            return $responseData;
         } catch (\Throwable $th) {
-            return $resultFields;
+            return $responseData;
         }
     }
 
@@ -184,7 +181,32 @@ class BitrixDealService
 
     // utils
 
-    protected function getExceptionStages(){
+    static function getTargetCategoryData(
+        $portalDealData,
+        $currentDepartamentType,
+        $action, //cold warm done
+    ){
+
+        $currentCategory = null;
+        if (!empty($portalDealData['categories'])) {
+
+            foreach ($portalDealData['categories'] as $category) {
+
+                if($currentDepartamentType === 'sales'){
+                    if ($category['code'] == 'sales_base') {
+                    } else if ($category['code'] == 'sales_xo') {
+                        $currentCategory = $category;
+
+                    } else if ($category['code'] == 'sales_presentation') {
+                    } else if ($category['code'] == 'tmc_base') {
+                    }
+
+                }
+               
+            }
+        }
+
+        return $currentCategory;
 
 
     }
@@ -196,4 +218,6 @@ class BitrixDealService
 
         
     }
+
+    
 }

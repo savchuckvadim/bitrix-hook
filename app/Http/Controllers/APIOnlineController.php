@@ -31,7 +31,7 @@ class APIOnlineController extends Controller
                         'data' => $data[$dataname],
                     ];
                 } else {
-                    Log::error('API ONLINE: portalResponse', [
+                    Log::error('APRIL_HOOK: portal $dataname was not found !', [
                         $portalResponse
                     ]);
                     Log::channel('telegram')->error(

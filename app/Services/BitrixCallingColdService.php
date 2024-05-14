@@ -6,6 +6,7 @@ use App\Http\Controllers\APIBitrixController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\PortalController;
 use App\Services\General\BitrixDealService;
+use App\Services\General\BitrixDepartamentService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -66,6 +67,8 @@ class BitrixCallingColdService
 
     protected $portalDealData = null;
 
+    protected $currentDepartamentType = null;
+
     public function __construct(
 
         $data,
@@ -91,14 +94,10 @@ class BitrixCallingColdService
             if (!empty($portal['deals'])) {
                 $this->portalDealData = $portal['bitrixDeal'];
             }
-
-
-           
         }
 
         if ($domain === 'gsr.bitrix24.ru') {
             $this->isSmartFlow = false;
-          
         }
 
 
@@ -321,6 +320,8 @@ class BitrixCallingColdService
         $this->callThemeField = $callThemeField;
         $this->lastCallDateFieldCold = $lastCallDateFieldCold;
         $this->callThemeFieldCold = $callThemeFieldCold;
+
+        $this->currentDepartamentType = BitrixDepartamentService::getDepartamentTypeByUserId();
     }
 
 
@@ -636,7 +637,8 @@ class BitrixCallingColdService
 
     protected function getDealFlow()
     {
-
+        $currentDeal = null;
+        $currentDealId = null;
         Log::channel('telegram')->info('COLD DEAL DATA', [
             'data' => [
                 $this->hook,
@@ -654,6 +656,33 @@ class BitrixCallingColdService
             $this->portalDealData,
 
         );
+
+
+        $currentCategoryData =  BitrixDealService::getTargetCategoryData(
+            $this->portalDealData,
+            $this->currentDepartamentType,
+            'cold'
+        );
+        Log::channel('telegram')->error(
+            'APRIL_HOOK getDealFlow',
+            ['currentCategoryData' => $currentCategoryData]
+        );
+
+        if (!$currentDealId) {
+            $fieldsData = [
+                "COMPANY_ID" => $this->entityId
+            ];
+            $currentDeal = BitrixDealService::setDeal(
+                $this->hook,
+                $fieldsData
+
+            );
+
+            Log::channel('telegram')->error(
+                'APRIL_HOOK getDealFlow',
+                ['currentDeal' => $currentDeal]
+            );
+        }
     }
 
 
@@ -730,7 +759,8 @@ class BitrixCallingColdService
                 $leadId  = $this->entityId;
             }
             $taskService = new BitrixTaskService();
-            Log::channel('telegram')->error('APRIL_HOOK portal', ['$companyId' => $companyId]);
+
+
             $createdTask =  $taskService->createTask(
                 'cold',       //$type,   //cold warm presentation hot 
                 $this->stringType,

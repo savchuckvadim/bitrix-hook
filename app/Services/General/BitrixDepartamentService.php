@@ -9,8 +9,8 @@ class BitrixDepartamentService
 
     //smart
     static function getDepartamentTypeByUserId(
-        $hook,
-        $userId, //lidId ? from lead
+        // $hook,
+        // $userId, //lidId ? from lead
 
 
     ) {
