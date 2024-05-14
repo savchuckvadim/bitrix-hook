@@ -72,6 +72,9 @@ class BitrixDealService
                     $currentDeal =  $currentDeal['items'][0];
                 }
             }
+            if (!is_array($currentDeal)) {
+                $currentDeal =  $currentDeal[0];
+            }
             if (!empty($currentDeal['ID'])) {
                 $currentDeal =  $currentDeal['ID'];
             }
