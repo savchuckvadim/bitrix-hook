@@ -85,12 +85,7 @@ class BitrixCallingColdService
         $portal = $portal['data'];
         $this->portal = $portal;
 
-        if ($domain === 'april-dev.bitrix24.ru') {
-            $this->isDealFlow = true;
-        }
-
-        if ($domain === 'gsr.bitrix24.ru') {
-            $this->isSmartFlow = false;
+        if ($domain === 'april-dev.bitrix24.ru' || $domain === 'gsr.bitrix24.ru') {
             $this->isDealFlow = true;
 
             if (!empty($portal['deals'])) {
@@ -98,13 +93,25 @@ class BitrixCallingColdService
             }
 
 
-            Log::channel('telegram')->info(
+            Log::info(
                 'APRIL_HOOK deals',
                 [
                     'deals' => $portal['deals'],
                     'bitrixDeal' => $portal['bitrixDeal']
                 ]
             );
+            Log::info(
+                'APRIL_HOOK deals',
+                [
+                    'portal' => $portal,
+                   
+                ]
+            );
+        }
+
+        if ($domain === 'gsr.bitrix24.ru') {
+            $this->isSmartFlow = false;
+          
         }
 
 
