@@ -123,7 +123,7 @@ class BitrixHookController extends Controller
 
             ColdCallJob::dispatch(
                 $data
-            );
+            )->onQueue('high-priority');
             // $service = new BitrixCallingColdService($data);
             // $reult =  $service->getCold();
 

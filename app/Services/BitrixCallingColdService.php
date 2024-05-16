@@ -410,7 +410,7 @@ class BitrixCallingColdService
                 $this->responsibleId,
                 $this->entityId,
                 '$comment'
-            );
+            )->onQueue('low-priority');
             // BitrixListFlowService::getListsFlow(
             //     $this->hook,
             //     $this->bitrixLists,

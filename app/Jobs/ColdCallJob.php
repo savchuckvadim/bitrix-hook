@@ -17,7 +17,7 @@ class ColdCallJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public $queue = 'high-priority';
+ 
     protected $data;
 
     public function __construct(

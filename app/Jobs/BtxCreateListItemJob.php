@@ -17,7 +17,7 @@ class BtxCreateListItemJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public $queue = 'low-priority';
+  
     protected $hook;
     protected $bitrixLists;
     protected $eventType;
