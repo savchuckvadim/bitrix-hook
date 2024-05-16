@@ -32,7 +32,10 @@ class BitrixListService
                 'FIELDS' => $fields
             ];
 
+            Log::channel('telegram')->error('APRIL_HOOK list setItem', [
 
+                'data' => $data
+            ]);
             $response = Http::get($url, $data);
             // $responseData = $response->json();
             $responseData = APIBitrixController::getBitrixRespone($response, 'list service: setItem');

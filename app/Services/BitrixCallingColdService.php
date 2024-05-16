@@ -677,10 +677,7 @@ class BitrixCallingColdService
             $currentCategoryData
 
         );
-        Log::channel('telegram')->error(
-            'APRIL_HOOK getDealFlow',
-            ['currentDeal' => $currentDeal]
-        );
+        
 
         $fieldsData = [
             'CATEGORY_ID' => $currentCategoryData['bitrixId'],

@@ -116,10 +116,7 @@ class BitrixDealService
 
             $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: create Deal Item');
 
-            Log::channel('telegram')->error('APRIL_HOOK create deal', [
-
-                'result Deal' => $responseData
-            ]);
+           
 
 
             if (isset($responseData['item'])) {
