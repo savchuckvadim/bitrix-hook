@@ -231,7 +231,7 @@ class BitrixCallingColdService
                                     // if (isset($currentBtxCompany[$fullFieldId])) {
 
                                     $currentComments = $currentBtxEntity[$fullFieldId];
-                                 
+
                                     if ($pField['code'] == 'op_mhistory') {
                                         $currentComments = [];
                                         array_push($currentComments, $stringComment);
@@ -291,48 +291,59 @@ class BitrixCallingColdService
 
                 foreach ($portal['smarts'] as $pSmart) {
                     if ($pSmart['group'] == 'sales') {
-                        $smart = $pSmart['group'];
+                        $smart = $pSmart;
                     }
                 }
             }
-            $smartForStageId = $smart['forStage'];
+            if (!empty($smart)) {
+                $smartForStageId = $smart['forStage'];
 
-            if (!empty($smart['categories'])) {
-                foreach ($smart['categories'] as $category) {
+                if (!empty($smart['categories'])) {
+                    foreach ($smart['categories'] as $category) {
 
-                    if ($category && !empty($category['code'])) {
+                        if ($category && !empty($category['code'])) {
 
-                        if ($category['code'] == 'cold') {
+                            if ($category['code'] == 'cold') {
 
-                            $targetCategoryId = $category['bitrixId'];
-                            if (!empty($category['stages'])) {
-                                foreach ($category['stages'] as $stage) {
-                                    if ($stage['code'] == 'new') {
-                                        $targetStageId = $smartForStageId . $category['bitrixId'] . ':' . $stage['bitrixId'];
+                                $targetCategoryId = $category['bitrixId'];
+                                if (!empty($category['stages'])) {
+                                    foreach ($category['stages'] as $stage) {
+                                        if ($stage['code'] == 'new') {
+                                            $targetStageId = $smartForStageId . $category['bitrixId'] . ':' . $stage['bitrixId'];
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
-            if (!empty($smart['bitrixfields'])) {
+                if (!empty($smart['bitrixfields'])) {
 
-                foreach ($smart['bitrixfields'] as $field) {
+                    foreach ($smart['bitrixfields'] as $field) {
 
-                    if ($field && !empty($field['code'])) {
-                        if ($field['code'] == 'xo_call_name') {
-                            $callThemeFieldCold = $field['bitrixCamelId'];
-                        } else if ($field['code'] == 'xo_deadline') {
-                            $lastCallDateFieldCold = $field['bitrixCamelId'];
-                        } else if ($field['code'] == 'next_call_date') {
-                            $lastCallDateField = $field['bitrixCamelId'];
-                        } else if ($field['code'] == 'next_call_name') {
-                            $callThemeField = $field['bitrixCamelId'];
+                        if ($field && !empty($field['code'])) {
+                            if ($field['code'] == 'xo_call_name') {
+                                $callThemeFieldCold = $field['bitrixCamelId'];
+                            } else if ($field['code'] == 'xo_deadline') {
+                                $lastCallDateFieldCold = $field['bitrixCamelId'];
+                            } else if ($field['code'] == 'next_call_date') {
+                                $lastCallDateField = $field['bitrixCamelId'];
+                            } else if ($field['code'] == 'next_call_name') {
+                                $callThemeField = $field['bitrixCamelId'];
+                            }
                         }
                     }
                 }
+            } else {
+                Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
+                    'data' => [
+                        'message' => 'portal smart was not found 340',
+                        'smart' => $smart,
+                        'portal' => $portal
+                    ]
+                ]);
             }
+
             // }
         }
         // $targetStageId = 'DT158_13:NEW';
