@@ -876,7 +876,7 @@ class BitrixCallingColdService
             [
                 'code' => 'crm',
                 'name' => 'crm',
-                'value' => ['CO_' . $companyId],
+                'value' => ["0" => 'CO_' . $companyId],
             ],
 
             [
@@ -938,11 +938,8 @@ class BitrixCallingColdService
                             $btxItemId =>  $xoValue['list']['name']
                         ];
 
-                        $fieldsData[$btxId] =  $btxItemId ;
-                        // [
-                            
-                        //     $btxItemId =>  $xoValue['list']['name']
-                        // ];
+                        $fieldsData[$btxId] =  $btxItemId;
+
                       
                     }
                 }
