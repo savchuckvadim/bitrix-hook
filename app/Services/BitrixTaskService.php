@@ -72,7 +72,6 @@ class BitrixTaskService
         try {
 
             $smart = $portal['bitrixSmart'];
-            Log::channel('telegram')->error('APRIL_HOOK portal', ['$smart' => $smart]);
 
             $currentSmartItem = null;
             $description = '';

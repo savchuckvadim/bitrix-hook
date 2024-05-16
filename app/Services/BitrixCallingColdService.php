@@ -67,10 +67,15 @@ class BitrixCallingColdService
     protected $isSmartFlow = true;
 
     protected $portalDealData = null;
+    protected $portalCompanyData = null;
+
 
     protected $currentDepartamentType = null;
     protected $withLists = false;
     protected $bitrixLists = [];
+
+
+
     public function __construct(
 
         $data,
@@ -109,6 +114,11 @@ class BitrixCallingColdService
 
 
         $this->aprilSmartData = $portal['bitrixSmart'];
+        $this->portalCompanyData = $portal['company'];
+
+        
+
+
 
         $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
         $this->hook = 'https://' . $domain  . '/' . $webhookRestKey;
@@ -717,18 +727,35 @@ class BitrixCallingColdService
 
         $hook = $this->hook;
         $responsibleId = $this->responsibleId;
+        // $portalCompanyData = $this->portalCompanyData;
+        // if (!empty($portalCompanyData['bitrixfields'])) {
 
+        //     foreach ($portalCompanyData['bitrixfields'] as $field) {
+
+        //         if ($field && !empty($field['code'])) {
+        //             if ($field['code'] == 'xo_call_name') {
+        //                 $callThemeFieldCold = $field['bitrixCamelId'];
+        //             } else if ($field['code'] == 'xo_deadline') {
+        //                 $lastCallDateFieldCold = $field['bitrixCamelId'];
+        //             } else if ($field['code'] == 'next_call_date') {
+        //                 $lastCallDateField = $field['bitrixCamelId'];
+        //             } else if ($field['code'] == 'next_call_name') {
+        //                 $callThemeField = $field['bitrixCamelId'];
+        //             }
+        //         }
+        //     }
+        // }
 
         // UF_CRM_10_1709907744 - дата следующего звонка
 
         $result = null;
         $fields = [
-            'UF_CRM_1709798145' => $responsibleId,
-            'UF_CRM_10_170990774' => $this->deadline,   //  - дата следующего звонка
+            // 'UF_CRM_1709798145' => $responsibleId,
+            // 'UF_CRM_10_170990774' => $this->deadline,   //  - дата следующего звонка
             ...$this->entityFieldsUpdatingContent
         ];
 
-        // Log::channel('telegram')->error('APRIL_HOOK updateCompany', ['$fields' => $fields]);
+        Log::channel('telegram')->error('APRIL_HOOK updateCompany', ['$fields' => $fields]);
 
         $result =  BitrixGeneralService::updateCompany($hook, $companyId, $fields);
         // Log::channel('telegram')->error('APRIL_HOOK updateCompany', ['$result' => $result]);
