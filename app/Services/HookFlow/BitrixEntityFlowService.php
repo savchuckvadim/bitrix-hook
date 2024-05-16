@@ -54,7 +54,7 @@ class BitrixEntityFlowService
 
 
     // company
-    protected function updateCompanyCold($hook, $companyId, $fields)
+    static function updateCompanyCold($hook, $companyId, $fields)
     {
 
 
@@ -80,7 +80,7 @@ class BitrixEntityFlowService
 
     //lead
 
-    protected function updateLeadCold($hook, $leadId, $fields)
+    static function updateLeadCold($hook, $leadId, $fields)
     {
 
 

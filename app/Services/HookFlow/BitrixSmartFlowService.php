@@ -6,11 +6,7 @@ use App\Services\BitrixGeneralService;
 
 class BitrixSmartFlowService
 
-
-
-
 {
-
 
     public function __construct()
     {
@@ -88,7 +84,7 @@ class BitrixSmartFlowService
             $currentSmartId = $currentSmart['id'];
         }
     }
-    protected function getSmartItem(
+    static function getSmartItem(
         $hook,
         $responsibleId,
         $aprilSmartData,
@@ -127,7 +123,7 @@ class BitrixSmartFlowService
         return $currentSmart;
     }
 
-    protected function createSmartItemCold(
+    static function createSmartItemCold(
         $hook,
         $aprilSmartData,
         $entityType,
@@ -151,7 +147,7 @@ class BitrixSmartFlowService
         return $resultFields;
     }
 
-    protected function updateSmartItemCold(
+    static function updateSmartItemCold(
         $hook,
         $smartId,
         $aprilSmartData,

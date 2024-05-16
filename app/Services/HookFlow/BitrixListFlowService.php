@@ -154,7 +154,7 @@ class BitrixListFlowService
             );
         }
     }
-    protected function getBtxListCurrentData(
+    static function getBtxListCurrentData(
         $bitrixList,
         $code,
         $listCode
