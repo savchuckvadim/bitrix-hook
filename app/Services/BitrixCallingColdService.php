@@ -404,6 +404,7 @@ class BitrixCallingColdService
                 'plan',
                 $nowDate,
                 $this->stringType,
+                $this->deadline,
                 $this->createdId,
                 $this->responsibleId,
                 $this->responsibleId,
