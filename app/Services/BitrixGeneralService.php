@@ -186,13 +186,14 @@ class BitrixGeneralService
                 'params' =>  ["REGISTER_SONET_EVENT" => "Y"]
 
             ];
-            Log::info('HOOK UPDT COMPANY ', [
-                'data' => $data
-            ]);
+            
             $smartFieldsResponse = Http::get($url, $data);
             $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: updateCompany');
             $resultFields = $responseData;
-
+            Log::info('HOOK UPDT COMPANY ', [
+                'resultFields' => $resultFields,
+                'data' => $data
+            ]);
 
             return $resultFields;
         } catch (\Throwable $th) {

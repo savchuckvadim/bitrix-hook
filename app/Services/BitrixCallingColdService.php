@@ -218,7 +218,7 @@ class BitrixCallingColdService
                                 break;
 
                             case 'op_history':
-                                // case 'op_mhistory':
+                            case 'op_mhistory':
 
                                 $fullFieldId = 'UF_CRM_' . $pField['bitrixId'];  //UF_CRM_OP_MHISTORY
                                 $now = now();
@@ -230,8 +230,8 @@ class BitrixCallingColdService
                                 if (!empty($currentBtxEntity)) {
                                     // if (isset($currentBtxCompany[$fullFieldId])) {
 
-                                    $currentComments = $currentBtxEntity[$fullFieldId];
-
+                                    // $currentComments = $currentBtxEntity[$fullFieldId];
+                                    $currentComments = [];
                                     if ($pField['code'] == 'op_mhistory') {
                                         if (!empty($currentComments)) {
                                             array_push($currentComments, $stringComment);
@@ -372,14 +372,6 @@ class BitrixCallingColdService
 
 
             $this->createColdTask($currentSmartId);
-
-            // Log::info('COLD companyId', ['log' => $this->companyId]);
-            // if ($this->entityType == 'company') {
-
-            //     $updatedCompany = $this->updateCompanyCold($this->entityId);
-            // } else if ($this->entityType == 'lead') {
-            //     $updatedLead = $this->updateLeadCold($this->entityId);
-            // }
 
             BitrixEntityFlowService::flow(
                 $this->portal,
@@ -552,7 +544,7 @@ class BitrixCallingColdService
     }
 
 
-  
+
 
     //tasks for complete
 
@@ -608,8 +600,6 @@ class BitrixCallingColdService
             return $createdTask;
         }
     }
-
-
 }
 
 
