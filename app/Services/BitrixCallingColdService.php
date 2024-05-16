@@ -903,7 +903,7 @@ class BitrixCallingColdService
             ],
 
             [
-                'code' => 'op_status_in_work',
+                'code' => 'op_work_status',
                 'name' => 'Статус Работы',
                 'list' =>  [
                     'code' => 'op_status_in_work',
