@@ -66,7 +66,7 @@ class BitrixDealService
 
             $response = Http::get($url, $data);
             // $responseData = $response->json();
-            $currentDeal = APIBitrixController::getBitrixRespone($response, 'general service: getSmartItem');
+            $currentDeal = APIBitrixController::getBitrixRespone($response, 'general service: get deal');
             if (isset($currentDeal)) {
                 if (!empty($currentDeal['items'])) {
                     $currentDeal =  $currentDeal['items'][0];
@@ -78,9 +78,9 @@ class BitrixDealService
             if (!empty($currentDeal['ID'])) {
                 $currentDeal =  $currentDeal['ID'];
             }
-            Log::channel('telegram')->info('COLD DEAL get currentDeal', [
-                'currentDeal' => $currentDeal
-            ]);
+            // Log::channel('telegram')->info('COLD DEAL get currentDeal', [
+            //     'currentDeal' => $currentDeal
+            // ]);
             return $currentDeal;
         } catch (\Throwable $th) {
             return $currentDeal;

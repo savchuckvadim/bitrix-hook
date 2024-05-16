@@ -915,7 +915,9 @@ class BitrixCallingColdService
 
 
         foreach ($bitrixLists as $bitrixList) {
-            $fieldsData = [];
+            $fieldsData = [
+                'NAME' => $eventName
+            ];
             foreach ($xoFields as $xoValue) {
                 $currentDataField = [];
                 $btxId = $this->getBtxListCurrentData($bitrixList, $xoValue['code'], null);
