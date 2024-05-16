@@ -102,6 +102,22 @@ class BitrixSmartFlowService
 
         $currentSmart = null;
 
+        $excepStages = [
+            "DT162_26:SUCCESS",
+            "DT156_12:SUCCESS"
+        ];
+        if (!empty($aprilSmartData)) {
+
+            if (!empty($aprilSmartData['categories'])) {
+
+                foreach ($aprilSmartData['categories'] as $category) {
+                    if ($category['code'] == 'salesBase') {
+                        $successStageFullId = $category['forStage'] . '_' . $category['forStage']['crmId'] . ':SUCCESS';
+                        array_push($excepStages, $successStageFullId);
+                    }
+                }
+            }
+        }
 
         if ($entityType == 'company') {
 
@@ -110,7 +126,7 @@ class BitrixSmartFlowService
             $leadId  = $entityId;
         }
 
-        Log::channel('telegram')->error('APRIL_HOOK createSmartItemCold', [
+        Log::info('APRIL_HOOK createSmartItemCold', [
             '$hoo' =>  $hook,
             '$leadId' =>  $leadId,
             '$companyId' =>  $companyId,
@@ -124,6 +140,7 @@ class BitrixSmartFlowService
             $companyId, //companyId ? from company
             $userId,
             $smart, //april smart data
+            $excepStages
         );
 
 

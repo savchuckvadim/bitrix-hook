@@ -19,18 +19,23 @@ class BitrixGeneralService
         $companyId, //companyId ? from company
         $userId,
         $smart, //april smart data
+        $excepStages = null
 
     ) {
         // lidIds UF_CRM_7_1697129081
         $currentSmart = null;
+        if (!$excepStages) {
+            $excepStages  = ["DT162_26:SUCCESS", "DT156_12:SUCCESS"];
+        }
+
         try {
             $method = '/crm.item.list.json';
             $url = $hook . $method;
             if ($companyId) {
                 $data =  [
-                    'entityTypeId' => $smart['crmId'],
+                    'entityTypeId' => $smart['bitrixId'],
                     'filter' => [
-                        "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
+                        "!=stage_id" => $excepStages,
                         "=assignedById" => $userId,
                         'COMPANY_ID' => $companyId,
 
@@ -40,9 +45,9 @@ class BitrixGeneralService
             }
             if ($leadId) {
                 $data =  [
-                    'entityTypeId' => $smart['crmId'],
+                    'entityTypeId' => $smart['bitrixId'],
                     'filter' => [
-                        "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
+                        "!=stage_id" => $excepStages,
                         "=assignedById" => $userId,
 
                         "=%ufCrm7_1697129081" => '%' . $leadId . '%',
@@ -52,7 +57,13 @@ class BitrixGeneralService
                 ];
             }
 
-
+            Log::info('APRIL_HOOK BitrixGeneralService get smart', [
+                '$hoo' =>  $hook,
+                '$leadId' =>  $leadId,
+                '$companyId' =>  $companyId,
+                '$userI' =>  $userId,
+                '$smart' =>  $smart,
+            ]);
             $response = Http::get($url, $data);
             // $responseData = $response->json();
             $responseData = APIBitrixController::getBitrixRespone($response, 'general service: getSmartItem');
@@ -186,7 +197,7 @@ class BitrixGeneralService
                 'params' =>  ["REGISTER_SONET_EVENT" => "Y"]
 
             ];
-            
+
             $smartFieldsResponse = Http::get($url, $data);
             $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: updateCompany');
             $resultFields = $responseData;
