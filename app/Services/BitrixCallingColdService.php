@@ -369,7 +369,7 @@ class BitrixCallingColdService
                 $updatedLead = $this->updateLeadCold($this->entityId);
             }
 
-            if ($this->withLists) {
+            // if ($this->withLists) {
                 $this->getListsFlow(
                     $this->bitrixLists,
                     $this->deadline,
@@ -381,7 +381,7 @@ class BitrixCallingColdService
                     $this->entityId,
                     '$comment'
                 );
-            }
+            // }
 
             return APIOnlineController::getSuccess(['result' => 'success']);
         } catch (\Throwable $th) {
@@ -921,7 +921,10 @@ class BitrixCallingColdService
                 }
                 array_push($fieldsData, $currentDataField);
             }
-
+            Log::channel('telegram')->error('APRIL_HOOK list setItem', [
+                'bitrixId' =>  $bitrixList['bitrixId'],
+                'fieldsData' => $fieldsData
+            ]);
             BitrixListService::setItem(
                 $this->hook,
                 $bitrixList['bitrixId'],
