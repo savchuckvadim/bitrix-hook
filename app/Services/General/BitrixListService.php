@@ -28,7 +28,7 @@ class BitrixListService
             $data =  [
                 'IBLOCK_TYPE_ID' => 'lists',
                 'IBLOCK_ID' => $listBitrixId,
-                'ELEMENT_CODE' => 'element1',
+                // 'ELEMENT_CODE' => 'element1',
                 'FIELDS' => $fields
             ];
 
