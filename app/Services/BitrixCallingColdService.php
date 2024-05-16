@@ -938,10 +938,11 @@ class BitrixCallingColdService
                             $btxItemId =>  $xoValue['list']['name']
                         ];
 
-                        $fieldsData[$btxId] = [
+                        $fieldsData[$btxId] =  $btxItemId ;
+                        // [
                             
-                            $btxItemId =>  $xoValue['list']['name']
-                        ];
+                        //     $btxItemId =>  $xoValue['list']['name']
+                        // ];
                       
                     }
                 }
