@@ -160,13 +160,13 @@ class BitrixGeneralService
 
         $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: deleteSmartItem');
         $resultFields = $responseData;
-        Log::channel('telegram')->info(
-            'lead/complete deleteSmartItem',
-            [
-                'responseData' => $responseData,
+        // Log::channel('telegram')->info(
+        //     'lead/complete deleteSmartItem',
+        //     [
+        //         'responseData' => $responseData,
 
-            ]
-        );
+        //     ]
+        // );
         return $resultFields;
     }
 

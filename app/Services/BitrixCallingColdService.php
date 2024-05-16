@@ -97,6 +97,8 @@ class BitrixCallingColdService
                 $this->portalDealData = $portal['bitrixDeal'];
             }
             if (!empty($portal['bitrixLists'])) {
+                Log::error('APRIL_HOOK constr', ['$portal.bitrixLists' => $portal['bitrixLists']]); // массив fields
+
                 $this->bitrixLists = $portal['bitrixLists'];
             }
         }
@@ -368,19 +370,19 @@ class BitrixCallingColdService
             } else if ($this->entityType == 'lead') {
                 $updatedLead = $this->updateLeadCold($this->entityId);
             }
-
+            Log::info('COLD bitrixLists', ['bitrixLists' => $this->bitrixLists]);
             // if ($this->withLists) {
-                $this->getListsFlow(
-                    $this->bitrixLists,
-                    $this->deadline,
-                    $this->stringType,
-                    $this->deadline,
-                    $this->createdId,
-                    $this->responsibleId,
-                    $this->responsibleId,
-                    $this->entityId,
-                    '$comment'
-                );
+            $this->getListsFlow(
+                $this->bitrixLists,
+                $this->deadline,
+                $this->stringType,
+                $this->deadline,
+                $this->createdId,
+                $this->responsibleId,
+                $this->responsibleId,
+                $this->entityId,
+                '$comment'
+            );
             // }
 
             return APIOnlineController::getSuccess(['result' => 'success']);
@@ -397,6 +399,30 @@ class BitrixCallingColdService
         }
     }
 
+
+
+    //smart
+    protected function getSmartFlow()
+    {
+        if ($this->entityType !== 'smart') {
+            $currentSmart = $this->getSmartItem();
+            if ($currentSmart) {
+                if (isset($currentSmart['id'])) {
+                    $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
+                }
+            } else {
+                $currentSmart = $this->createSmartItemCold();
+                // $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
+                // Log::channel('telegram')->error('APRIL_HOOK createSmartItemCold', ['currentSmart' => $currentSmart]);
+            }
+        } else {
+            $currentSmart = $this->updateSmartItemCold($this->entityId);
+        }
+        sleep(1);
+        if ($currentSmart && isset($currentSmart['id'])) {
+            $currentSmartId = $currentSmart['id'];
+        }
+    }
     protected function getSmartItem(
         //data from april 
 
@@ -433,29 +459,6 @@ class BitrixCallingColdService
         return $currentSmart;
     }
 
-
-    //smart
-    protected function getSmartFlow()
-    {
-        if ($this->entityType !== 'smart') {
-            $currentSmart = $this->getSmartItem();
-            if ($currentSmart) {
-                if (isset($currentSmart['id'])) {
-                    $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
-                }
-            } else {
-                $currentSmart = $this->createSmartItemCold();
-                // $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
-                // Log::channel('telegram')->error('APRIL_HOOK createSmartItemCold', ['currentSmart' => $currentSmart]);
-            }
-        } else {
-            $currentSmart = $this->updateSmartItemCold($this->entityId);
-        }
-        sleep(1);
-        if ($currentSmart && isset($currentSmart['id'])) {
-            $currentSmartId = $currentSmart['id'];
-        }
-    }
     protected function createSmartItemCold()
     {
 
@@ -677,7 +680,7 @@ class BitrixCallingColdService
             $currentCategoryData
 
         );
-        
+
 
         $fieldsData = [
             'CATEGORY_ID' => $currentCategoryData['bitrixId'],
