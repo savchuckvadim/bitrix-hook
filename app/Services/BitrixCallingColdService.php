@@ -7,6 +7,7 @@ use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\PortalController;
 use App\Services\General\BitrixDealService;
 use App\Services\General\BitrixDepartamentService;
+use App\Services\General\BitrixListService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -903,26 +904,36 @@ class BitrixCallingColdService
 
         ];
 
-        $fieldsData = [];
-        foreach ($xoFields as $xoValue) {
-            $currentDataField = [];
-            $btxId = $this->getBtxListCurrentData($bitrixLists, $xoValue['code'], null);
-            if (!empty($xoValue)) {
-                if (!empty($xoValue['value'])) {
-                    $currentDataField[$btxId] = $xoValue['value'];
-                }
 
-                if (!empty($xoValue['list'])) {
-                    $btxItemId = $this->getBtxListCurrentData($bitrixLists, $xoValue['code'], $xoValue['list']['code']);
-                    $currentDataField[$btxId] = [
-                        $btxItemId =>  $xoValue['list']['name']
-                    ];
+        foreach ($bitrixLists as $bitrixList) {
+            $fieldsData = [];
+            foreach ($xoFields as $xoValue) {
+                $currentDataField = [];
+                $btxId = $this->getBtxListCurrentData($bitrixList, $xoValue['code'], null);
+                if (!empty($xoValue)) {
+                    if (!empty($xoValue['value'])) {
+                        $currentDataField[$btxId] = $xoValue['value'];
+                    }
+
+                    if (!empty($xoValue['list'])) {
+                        $btxItemId = $this->getBtxListCurrentData($bitrixList, $xoValue['code'], $xoValue['list']['code']);
+                        $currentDataField[$btxId] = [
+                            $btxItemId =>  $xoValue['list']['name']
+                        ];
+                    }
                 }
+                array_push($fieldsData, $currentDataField);
             }
+
+            BitrixListService::setItem(
+                $this->hook,
+                $bitrixList['bitrixId'],
+                $fieldsData
+            );
         }
     }
     protected function getBtxListCurrentData(
-        $bitrixLists,
+        $bitrixList,
         $code,
         $listCode
     ) {
@@ -930,31 +941,30 @@ class BitrixCallingColdService
             'fieldBtxId' => false,
             'fieldItemBtxId' => false,
         ];
-        if (!empty($bitrixLists)) { //every from portal
-
-            foreach ($bitrixLists as $bitrixList) {
-                if (!empty($bitrixList['bitrixfields'])) {
-
-                    $btxFields = $bitrixList['bitrixfields'];
-                    foreach ($btxFields as $btxField) {
-                        if ($btxField['code'] === $code) {
-                            $result['fieldBtxId'] = $btxField['bitrixId'];
-                        }
-                        if (!empty($btxField['bitrixfielditems'])) {
+        if (!empty($bitrixList)) { //every from portal
 
 
+            if (!empty($bitrixList['bitrixfields'])) {
 
-
-                            $btxFieldItems = $btxField['bitrixfielditems'];
+                $btxFields = $bitrixList['bitrixfields'];
+                foreach ($btxFields as $btxField) {
+                    if ($btxField['code'] === $code) {
+                        $result['fieldBtxId'] = $btxField['bitrixId'];
+                    }
+                    if (!empty($btxField['bitrixfielditems'])) {
 
 
 
-                            foreach ($btxFieldItems as $btxFieldItem) {
 
-                                if ($listCode) {
-                                    if ($btxFieldItem['code'] === $listCode) {
-                                        $result['fieldItemBtxId'] = $btxFieldItem['bitrixId'];
-                                    }
+                        $btxFieldItems = $btxField['bitrixfielditems'];
+
+
+
+                        foreach ($btxFieldItems as $btxFieldItem) {
+
+                            if ($listCode) {
+                                if ($btxFieldItem['code'] === $listCode) {
+                                    $result['fieldItemBtxId'] = $btxFieldItem['bitrixId'];
                                 }
                             }
                         }
