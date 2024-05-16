@@ -111,7 +111,7 @@ class BitrixSmartFlowService
             if (!empty($aprilSmartData['categories'])) {
 
                 foreach ($aprilSmartData['categories'] as $category) {
-                    if ($category['code'] == 'salesBase') {
+                    if ($category['code'] == 'sales_base') {
                        
                         $successStageFullId = $aprilSmartData['forStage'] . $category['bitrixId'] . ':SUCCESS';
                         array_push($excepStages, $successStageFullId);

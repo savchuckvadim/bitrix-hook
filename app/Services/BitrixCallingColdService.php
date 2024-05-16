@@ -302,12 +302,12 @@ class BitrixCallingColdService
 
                         if ($category && !empty($category['code'])) {
 
-                            if ($category['code'] == 'cold') {
+                            if ($category['code'] == 'sales_cold') {
 
                                 $targetCategoryId = $category['bitrixId'];
                                 if (!empty($category['stages'])) {
                                     foreach ($category['stages'] as $stage) {
-                                        if ($stage['code'] == 'new') {
+                                        if ($stage['code'] == 'cold_plan') {
                                             $targetStageId = $smartForStageId . $category['bitrixId'] . ':' . $stage['bitrixId'];
                                         }
                                     }
