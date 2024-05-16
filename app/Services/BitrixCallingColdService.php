@@ -230,14 +230,16 @@ class BitrixCallingColdService
                                 if (!empty($currentBtxEntity)) {
                                     // if (isset($currentBtxCompany[$fullFieldId])) {
 
-                                    // $currentComments = $currentBtxEntity[$fullFieldId];
-                                    $currentComments = [];
+                                    $currentComments = $currentBtxEntity[$fullFieldId];
+                                 
                                     if ($pField['code'] == 'op_mhistory') {
-                                        if (!empty($currentComments)) {
-                                            array_push($currentComments, $stringComment);
-                                        } else {
-                                            $currentComments = $stringComment;
-                                        }
+                                        $currentComments = [];
+                                        array_push($currentComments, $stringComment);
+                                        // if (!empty($currentComments)) {
+                                        //     array_push($currentComments, $stringComment);
+                                        // } else {
+                                        //     $currentComments = $stringComment;
+                                        // }
                                     } else {
                                         $currentComments = $currentComments  . ' | ' . $stringComment;
                                     }
