@@ -396,20 +396,20 @@ class BitrixCallingColdService
                 $this->entityFieldsUpdatingContent, //updting fields 
             );
             // if ($this->withLists) {
+                $nowDate = now();
             BtxCreateListItemJob::dispatch(
                 $this->hook,
                 $this->bitrixLists,
                 'xo',
                 'plan',
-                $this->deadline,
+                $nowDate,
                 $this->stringType,
-                $this->deadline,
                 $this->createdId,
                 $this->responsibleId,
                 $this->responsibleId,
                 $this->entityId,
                 '$comment'
-            )->onQueue('low-priority');
+            );
             // BitrixListFlowService::getListsFlow(
             //     $this->hook,
             //     $this->bitrixLists,
