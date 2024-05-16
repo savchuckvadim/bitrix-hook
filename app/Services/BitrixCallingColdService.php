@@ -903,7 +903,7 @@ class BitrixCallingColdService
             ],
 
             [
-                'code' => 'op_work_status',
+                'code' => 'op_status_in_work',
                 'name' => 'Статус Работы',
                 'list' =>  [
                     'code' => 'op_status_in_work',
@@ -920,15 +920,19 @@ class BitrixCallingColdService
             ];
             foreach ($xoFields as $xoValue) {
                 $currentDataField = [];
-                $btxId = $this->getBtxListCurrentData($bitrixList, $xoValue['code'], null);
+                $fieldCode = $bitrixList['group'].'_'.$bitrixList['type'].'_'. $xoValue['code'];
+                $btxId = $this->getBtxListCurrentData($bitrixList, $fieldCode, null);
                 if (!empty($xoValue)) {
+
+                    
+
                     if (!empty($xoValue['value'])) {
                         $fieldsData[$btxId] = $xoValue['value'];
                         $currentDataField[$btxId] = $xoValue['value'];
                     }
 
                     if (!empty($xoValue['list'])) {
-                        $btxItemId = $this->getBtxListCurrentData($bitrixList, $xoValue['code'], $xoValue['list']['code']);
+                        $btxItemId = $this->getBtxListCurrentData($bitrixList, $fieldCode, $xoValue['list']['code']);
                         $currentDataField[$btxId] = [
                             
                             $btxItemId =>  $xoValue['list']['name']
