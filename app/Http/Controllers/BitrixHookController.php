@@ -309,7 +309,7 @@ class BitrixHookController extends Controller
 
 
     ) {
-        dispatch(new CreateBitrixCallingTaskJob(
+        CreateBitrixCallingTaskJob::dispatch(
             $type,
             $domain,
             $companyId,
@@ -323,7 +323,7 @@ class BitrixHookController extends Controller
             $currentBitrixSmart,
             $sale,
             $isOneMore
-        ));
+        )->onQueue('high-priority');
         // $service = new BitrixCallingTaskService(
         //     $type,
         //     $domain,

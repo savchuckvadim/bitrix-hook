@@ -39,6 +39,7 @@ class BitrixSmartFlowService
         // $createdFieldCold,
 
     ) {
+        sleep(1);
         if ($entityType !== 'smart') {
             $currentSmart = BitrixSmartFlowService::getSmartItem(
                 $hook,

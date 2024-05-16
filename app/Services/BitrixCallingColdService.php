@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Http\Controllers\APIBitrixController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\PortalController;
+use App\Jobs\BtxCreateListItemJob;
 use App\Services\General\BitrixDealService;
 use App\Services\General\BitrixDepartamentService;
 use App\Services\General\BitrixListService;
@@ -316,7 +317,6 @@ class BitrixCallingColdService
                         }
                     }
                 }
-                Log::channel('telegram')->error('APRIL_HOOK data', ['entityType' => $this->entityType]);
                 if (!empty($smart['bitrixfields'])) {
 
                     foreach ($smart['bitrixfields'] as $field) {
@@ -374,7 +374,7 @@ class BitrixCallingColdService
 
             // }
             // $randomNumber = rand(1, 2);
-            sleep(1);
+
             if ($this->isSmartFlow) {
                 $this->getSmartFlow();
             }
@@ -396,7 +396,7 @@ class BitrixCallingColdService
                 $this->entityFieldsUpdatingContent, //updting fields 
             );
             // if ($this->withLists) {
-            BitrixListFlowService::getListsFlow(
+            BtxCreateListItemJob::dispatch(
                 $this->hook,
                 $this->bitrixLists,
                 'xo',
@@ -409,7 +409,21 @@ class BitrixCallingColdService
                 $this->responsibleId,
                 $this->entityId,
                 '$comment'
-            );
+            )->onQueue('low-priority');
+            // BitrixListFlowService::getListsFlow(
+            //     $this->hook,
+            //     $this->bitrixLists,
+            //     'xo',
+            //     'plan',
+            //     $this->deadline,
+            //     $this->stringType,
+            //     $this->deadline,
+            //     $this->createdId,
+            //     $this->responsibleId,
+            //     $this->responsibleId,
+            //     $this->entityId,
+            //     '$comment'
+            // );
             // }
 
             return APIOnlineController::getSuccess(['result' => 'success']);
