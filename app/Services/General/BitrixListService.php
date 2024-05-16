@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\General;
 
 use App\Http\Controllers\APIBitrixController;
 use App\Http\Controllers\APIOnlineController;

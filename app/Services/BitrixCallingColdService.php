@@ -68,7 +68,8 @@ class BitrixCallingColdService
     protected $portalDealData = null;
 
     protected $currentDepartamentType = null;
-
+    protected $withLists = false;
+    protected $bitrixLists = [];
     public function __construct(
 
         $data,
@@ -90,9 +91,12 @@ class BitrixCallingColdService
 
         if ($domain === 'april-dev.bitrix24.ru' || $domain === 'gsr.bitrix24.ru') {
             $this->isDealFlow = true;
-
+            $this->withLists = true;
             if (!empty($portal['deals'])) {
                 $this->portalDealData = $portal['bitrixDeal'];
+            }
+            if (!empty($portal['bitrixLists'])) {
+                $this->bitrixLists = $portal['bitrixLists'];
             }
         }
 
@@ -342,31 +346,10 @@ class BitrixCallingColdService
             // $randomNumber = rand(1, 2);
             sleep(1);
             if ($this->isSmartFlow) {
-                if ($this->entityType !== 'smart') {
-                    $currentSmart = $this->getSmartItem();
-                    if ($currentSmart) {
-                        if (isset($currentSmart['id'])) {
-                            $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
-                        }
-                    } else {
-                        $currentSmart = $this->createSmartItemCold();
-                        // $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
-                        // Log::channel('telegram')->error('APRIL_HOOK createSmartItemCold', ['currentSmart' => $currentSmart]);
-                    }
-                } else {
-                    $currentSmart = $this->updateSmartItemCold($this->entityId);
-                }
-                sleep(1);
-                if ($currentSmart && isset($currentSmart['id'])) {
-                    $currentSmartId = $currentSmart['id'];
-                }
+                $this->getSmartFlow();
             }
 
-
-
             if ($this->isDealFlow && $this->portalDealData) {
-
-
                 $this->getDealFlow();
             }
 
@@ -385,6 +368,19 @@ class BitrixCallingColdService
                 $updatedLead = $this->updateLeadCold($this->entityId);
             }
 
+            if ($this->withLists) {
+                $this->getListsFlow(
+                    $this->bitrixLists,
+                    $this->deadline,
+                    $this->stringType,
+                    $this->deadline,
+                    $this->createdId,
+                    $this->responsibleId,
+                    $this->responsibleId,
+                    $this->entityId,
+                    '$comment'
+                );
+            }
 
             return APIOnlineController::getSuccess(['result' => 'success']);
         } catch (\Throwable $th) {
@@ -438,6 +434,27 @@ class BitrixCallingColdService
 
 
     //smart
+    protected function getSmartFlow()
+    {
+        if ($this->entityType !== 'smart') {
+            $currentSmart = $this->getSmartItem();
+            if ($currentSmart) {
+                if (isset($currentSmart['id'])) {
+                    $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
+                }
+            } else {
+                $currentSmart = $this->createSmartItemCold();
+                // $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
+                // Log::channel('telegram')->error('APRIL_HOOK createSmartItemCold', ['currentSmart' => $currentSmart]);
+            }
+        } else {
+            $currentSmart = $this->updateSmartItemCold($this->entityId);
+        }
+        sleep(1);
+        if ($currentSmart && isset($currentSmart['id'])) {
+            $currentSmartId = $currentSmart['id'];
+        }
+    }
     protected function createSmartItemCold()
     {
 
@@ -796,6 +813,160 @@ class BitrixCallingColdService
             Log::info('error COLD', ['error' => $th->getMessage()]);
             Log::channel('telegram')->error('APRIL_HOOK', $errorMessages);
             return $createdTask;
+        }
+    }
+
+
+    //lists flow
+
+    protected function getListsFlow(
+        $bitrixLists,
+        $nowDate,
+        $eventName,
+        $deadline,
+        $created,
+        $responsible,
+        $suresponsible,
+        $companyId,
+        $comment,
+
+    ) {
+
+        $xoFields = [
+            [
+                'code' => 'event_date',
+                'name' => 'Дата',
+                'value' => $nowDate
+            ],
+            [
+                'code' => 'event_title',
+                'name' => 'Название',
+                'value' => $eventName
+            ],
+            [
+                'code' => 'plan_date',
+                'name' => 'Дата Следующей коммуникации',
+                'value' => $deadline
+            ],
+            [
+                'code' => 'author',
+                'name' => 'Автор',
+                'value' => $created,
+            ],
+            [
+                'code' => 'responsible',
+                'name' => 'Ответственный',
+                'value' => $responsible,
+            ],
+            [
+                'code' => 'su',
+                'name' => 'Соисполнитель',
+                'value' => $suresponsible,
+            ],
+            [
+                'code' => 'crm',
+                'name' => 'crm',
+                'value' => ['CO_' . $companyId],
+            ],
+
+            [
+                'code' => 'manager_comment',
+                'name' => 'Комментарий',
+                'value' => $comment,
+            ],
+            [
+                'code' => 'event_type',
+                'name' => 'Тип События',
+                'list' =>  [
+                    'code' => 'xo',
+                    'name' => 'Холодный звонок',
+
+                ],
+            ],
+            [
+                'code' => 'event_action',
+                'name' => 'Событие Действие',
+                'list' =>  [
+                    'code' => 'plan',
+                    'name' => 'Запланирован'
+                ],
+            ],
+
+            [
+                'code' => 'op_work_status',
+                'name' => 'Статус Работы',
+                'list' =>  [
+                    'code' => 'op_status_in_work',
+                    'name' => 'В работе'
+                ],
+            ]
+
+        ];
+
+        $fieldsData = [];
+        foreach ($xoFields as $xoValue) {
+            $currentDataField = [];
+            $btxId = $this->getBtxListCurrentData($bitrixLists, $xoValue['code'], null);
+            if (!empty($xoValue)) {
+                if (!empty($xoValue['value'])) {
+                    $currentDataField[$btxId] = $xoValue['value'];
+                }
+
+                if (!empty($xoValue['list'])) {
+                    $btxItemId = $this->getBtxListCurrentData($bitrixLists, $xoValue['code'], $xoValue['list']['code']);
+                    $currentDataField[$btxId] = [
+                        $btxItemId =>  $xoValue['list']['name']
+                    ];
+                }
+            }
+        }
+    }
+    protected function getBtxListCurrentData(
+        $bitrixLists,
+        $code,
+        $listCode
+    ) {
+        $result = [
+            'fieldBtxId' => false,
+            'fieldItemBtxId' => false,
+        ];
+        if (!empty($bitrixLists)) { //every from portal
+
+            foreach ($bitrixLists as $bitrixList) {
+                if (!empty($bitrixList['bitrixfields'])) {
+
+                    $btxFields = $bitrixList['bitrixfields'];
+                    foreach ($btxFields as $btxField) {
+                        if ($btxField['code'] === $code) {
+                            $result['fieldBtxId'] = $btxField['bitrixId'];
+                        }
+                        if (!empty($btxField['bitrixfielditems'])) {
+
+
+
+
+                            $btxFieldItems = $btxField['bitrixfielditems'];
+
+
+
+                            foreach ($btxFieldItems as $btxFieldItem) {
+
+                                if ($listCode) {
+                                    if ($btxFieldItem['code'] === $listCode) {
+                                        $result['fieldItemBtxId'] = $btxFieldItem['bitrixId'];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!$listCode) {
+            return $result['fieldBtxId'];
+        } else {
+            return $result['fieldItemBtxId'];
         }
     }
 }
