@@ -943,10 +943,7 @@ class BitrixCallingColdService
                 }
                 // array_push($fieldsData, $currentDataField);
             }
-            Log::channel('telegram')->error('APRIL_HOOK list setItem', [
-                'bitrixId' =>  $bitrixList['bitrixId'],
-                'fieldsData' => $fieldsData
-            ]);
+          
             BitrixListService::setItem(
                 $this->hook,
                 $bitrixList['bitrixId'],
@@ -970,6 +967,12 @@ class BitrixCallingColdService
 
                 $btxFields = $bitrixList['bitrixfields'];
                 foreach ($btxFields as $btxField) {
+
+                    Log::channel('telegram')->error('APRIL_HOOK list setItem', [
+                        'btxField' =>  $btxField,
+                        'code' => $code
+                    ]);
+
                     if ($btxField['code'] === $code) {
                         $result['fieldBtxId'] = $btxField['bitrixId'];
                     }
