@@ -3,6 +3,7 @@
 namespace App\Services\HookFlow;
 
 use App\Services\BitrixGeneralService;
+use Illuminate\Support\Facades\Log;
 
 class BitrixSmartFlowService
 
@@ -26,7 +27,7 @@ class BitrixSmartFlowService
         // $categoryId,
         // $stageId,
         // $createdId,
-        
+
         // $companyId,
         // $leadId,
         // $lastCallDateField,
@@ -66,7 +67,7 @@ class BitrixSmartFlowService
                     $fieldsData
                 );
                 // $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
-                // Log::channel('telegram')->error('APRIL_HOOK createSmartItemCold', ['currentSmart' => $currentSmart]);
+
             }
         } else {
             $currentSmart = BitrixSmartFlowService::updateSmartItemCold(
@@ -109,7 +110,13 @@ class BitrixSmartFlowService
             $leadId  = $entityId;
         }
 
-
+        Log::channel('telegram')->error('APRIL_HOOK createSmartItemCold', [
+            '$hoo' =>  $hook,
+            '$leadId' =>  $leadId,
+            '$companyId' =>  $companyId,
+            '$userI' =>  $userId,
+            '$smart' =>  $smart,
+        ]);
 
         $currentSmart = BitrixGeneralService::getSmartItem(
             $hook,
@@ -132,7 +139,7 @@ class BitrixSmartFlowService
 
     ) {
 
-       
+
 
         $entityId = $aprilSmartData['crmId'];
 
@@ -158,7 +165,7 @@ class BitrixSmartFlowService
 
 
         $entityId = $aprilSmartData['crmId'];
- 
+
         $resultFields = BitrixGeneralService::updateSmartItem(
             $hook,
             $entityId,

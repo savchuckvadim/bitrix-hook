@@ -106,7 +106,6 @@ class BitrixCallingColdService
                 $this->portalDealData = $portal['bitrixDeal'];
             }
             if (!empty($portal['bitrixLists'])) {
-                Log::error('APRIL_HOOK constr', ['$portal.bitrixLists' => $portal['bitrixLists']]); // массив fields
 
                 $this->bitrixLists = $portal['bitrixLists'];
             }
