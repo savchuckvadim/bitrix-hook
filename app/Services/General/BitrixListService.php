@@ -24,11 +24,11 @@ class BitrixListService
         try {
             $method = '/lists.element.add.json';
             $url = $hook . $method;
-
+            $nowDate = now();
             $data =  [
                 'IBLOCK_TYPE_ID' => 'lists',
                 'IBLOCK_ID' => $listBitrixId,
-                // 'ELEMENT_CODE' => 'element1',
+                'ELEMENT_CODE' => $listBitrixId. 'element1'.$nowDate,
                 'FIELDS' => $fields
             ];
 
