@@ -8,6 +8,10 @@ use App\Http\Controllers\PortalController;
 use App\Services\General\BitrixDealService;
 use App\Services\General\BitrixDepartamentService;
 use App\Services\General\BitrixListService;
+use App\Services\HookFlow\BitrixDealFlowService;
+use App\Services\HookFlow\BitrixEntityFlowService;
+use App\Services\HookFlow\BitrixListFlowService;
+use App\Services\HookFlow\BitrixSmartFlowService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -116,7 +120,7 @@ class BitrixCallingColdService
         $this->aprilSmartData = $portal['bitrixSmart'];
         $this->portalCompanyData = $portal['company'];
 
-        
+
 
 
 
@@ -367,23 +371,31 @@ class BitrixCallingColdService
             }
 
 
-
-            // Log::channel('telegram')->error('APRIL_HOOK', ['currentSmart' => $currentSmart]);
-
-
             $this->createColdTask($currentSmartId);
-            sleep(1);
-            // Log::info('COLD companyId', ['log' => $this->companyId]);
-            if ($this->entityType == 'company') {
 
-                $updatedCompany = $this->updateCompanyCold($this->entityId);
-            } else if ($this->entityType == 'lead') {
-                $updatedLead = $this->updateLeadCold($this->entityId);
-            }
-            Log::info('COLD bitrixLists', ['bitrixLists' => $this->bitrixLists]);
+            // Log::info('COLD companyId', ['log' => $this->companyId]);
+            // if ($this->entityType == 'company') {
+
+            //     $updatedCompany = $this->updateCompanyCold($this->entityId);
+            // } else if ($this->entityType == 'lead') {
+            //     $updatedLead = $this->updateLeadCold($this->entityId);
+            // }
+
+            BitrixEntityFlowService::flow(
+                $this->portal,
+                $this->hook,
+                $this->entityType,
+                $this->entityId,
+                'xo', // xo warm presentation,
+                'plan',  // plan done expired 
+                $this->entityFieldsUpdatingContent, //updting fields 
+            );
             // if ($this->withLists) {
-            $this->getListsFlow(
+            BitrixListFlowService::getListsFlow(
+                $this->hook,
                 $this->bitrixLists,
+                'xo',
+                'plan',
                 $this->deadline,
                 $this->stringType,
                 $this->deadline,
@@ -413,63 +425,6 @@ class BitrixCallingColdService
 
     //smart
     protected function getSmartFlow()
-    {
-        if ($this->entityType !== 'smart') {
-            $currentSmart = $this->getSmartItem();
-            if ($currentSmart) {
-                if (isset($currentSmart['id'])) {
-                    $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
-                }
-            } else {
-                $currentSmart = $this->createSmartItemCold();
-                // $currentSmart = $this->updateSmartItemCold($currentSmart['id']);
-                // Log::channel('telegram')->error('APRIL_HOOK createSmartItemCold', ['currentSmart' => $currentSmart]);
-            }
-        } else {
-            $currentSmart = $this->updateSmartItemCold($this->entityId);
-        }
-        sleep(1);
-        if ($currentSmart && isset($currentSmart['id'])) {
-            $currentSmartId = $currentSmart['id'];
-        }
-    }
-    protected function getSmartItem(
-        //data from april 
-
-    )
-    {
-        // lidIds UF_CRM_7_1697129081
-        $leadId  = null;
-
-        $companyId = null;
-        $userId = $this->responsibleId;
-        $smart = $this->aprilSmartData;
-
-        $currentSmart = null;
-
-
-        if ($this->entityType == 'company') {
-
-            $companyId  = $this->entityId;
-        } else if ($this->entityType == 'lead') {
-            $leadId  = $this->entityId;
-        }
-
-
-
-        $currentSmart = BitrixGeneralService::getSmartItem(
-            $this->hook,
-            $leadId, //lidId ? from lead
-            $companyId, //companyId ? from company
-            $userId,
-            $smart, //april smart data
-        );
-
-
-        return $currentSmart;
-    }
-
-    protected function createSmartItemCold()
     {
 
         // $methodSmart = '/crm.item.add.json';
@@ -564,160 +519,36 @@ class BitrixCallingColdService
 
         $entityId = $smart['crmId'];
 
-        $resultFields = BitrixGeneralService::createSmartItem(
+
+        return BitrixSmartFlowService::flow(
+            $this->aprilSmartData,
             $this->hook,
-            $entityId,
+            $this->entityType,
+            $this->entityId,
+            'xo', // xo warm presentation,
+            'plan',  // plan done expired 
+            $this->responsibleId,
             $fieldsData
         );
-
-
-
-        return $resultFields;
     }
 
-    protected function updateSmartItemCold($smartId)
-    {
-
-        $methodSmart = '/crm.item.update.json';
-        $url = $this->hook . $methodSmart;
-        //дата следующего звонка smart
-        // UF_CRM_6_1709907693 - alfa
-        // UF_CRM_10_1709907744 - april
-
-
-        //название обзвона общее - тема
-        // UF_CRM_6_1709907816 - alfa
-        // UF_CRM_10_1709907850 - april
-
-
-        // cold
-        // ..Дата холодного обзвона  UF_CRM_10_1701270138
-        // ..Название Холодного обзвона  UF_CRM_10_1703491835
-
-
-
-        //todo 
-        // Постановщик ХО UF_CRM_6_1702453779
-        // Ответственный ХО UF_CRM_6_1702652862
-
-
-        //lead
-        //leadId UF_CRM_7_1697129037
-
-        $companyId  = null;
-        $leadId  = null;
-        if ($this->entityType == 'company') {
-
-            $companyId  = $this->entityId;
-        } else if ($this->entityType == 'lead') {
-            $leadId  = $this->entityId;
-        }
-        $responsibleId  = $this->responsibleId;
-        $smart  = $this->aprilSmartData;
-
-
-        $resulFields = [];
-        $fieldsData = [];
-
-        $fieldsData['categoryId'] = $this->categoryId;
-        $fieldsData['stageId'] = $this->stageId;
-
-        $fieldsData['ufCrm6_1702652862'] = $responsibleId; // alfacenter Ответственный ХО 
-        $fieldsData['assigned_by_id'] = $responsibleId;
-
-        if ($companyId) {
-            $fieldsData['ufCrm7_1698134405'] = $companyId;
-            $fieldsData['company_id'] = $companyId;
-        }
-        if ($leadId) {
-            $fieldsData['parentId1'] = $leadId;
-            $fieldsData['ufCrm7_1697129037'] = $leadId;
-        }
-
-
-        $fieldsData[$this->lastCallDateField] = $this->deadline;  //дата звонка следующего
-        $fieldsData[$this->lastCallDateFieldCold] = $this->deadline; //дата холодного следующего
-        $fieldsData[$this->callThemeField] = $this->name;      //тема следующего звонка
-        $fieldsData[$this->callThemeFieldCold] = $this->name;  //тема холодного звонка
-
-        if ($this->createdId) {
-            $fieldsData[$this->createdFieldCold] = $this->createdId;  //Постановщик ХО - smart field
-
-        }
-
-
-        $entityId = $smart['crmId'];
-        // Log::channel('telegram')->error('APRIL_HOOK updateSmartItem', [
-
-        //     $this->hook,
-        //     $entityId,
-        //     $smartId,
-        //     $fieldsData
-        // ]);
-        $resultFields = BitrixGeneralService::updateSmartItem(
-            $this->hook,
-            $entityId,
-            $smartId,
-            $fieldsData
-        );
-        return $resultFields;
-    }
 
 
     // deal flow
 
     protected function getDealFlow()
     {
-        $currentDeal = null;
-        $currentDealId = null;
-        $currentCategoryData =  BitrixDealService::getTargetCategoryData(
+        BitrixDealFlowService::flow(
+            $this->hook,
             $this->portalDealData,
             $this->currentDepartamentType,
-            'cold'
-        );
-        $targetStageBtxId =  BitrixDealService::getTargetStage(
-            $currentCategoryData,
-            'sales',
-            'cold'
-        );
-
-        $currentDealId = BitrixDealService::getDealId(
-            $this->hook,
-            null,
+            $this->entityType,
             $this->entityId,
+            'xo', // xo warm presentation,
+            'plan',  // plan done expired 
             $this->responsibleId,
-            $this->portalDealData,
-            $currentCategoryData
-
+            '$fields'
         );
-
-
-        $fieldsData = [
-            'CATEGORY_ID' => $currentCategoryData['bitrixId'],
-            'STAGE_ID' => "C" . $currentCategoryData['bitrixId'] . ':' . $targetStageBtxId,
-            "COMPANY_ID" => $this->entityId
-        ];
-
-
-        if (!$currentDealId) {
-
-
-
-            $currentDeal = BitrixDealService::setDeal(
-                $this->hook,
-                $fieldsData,
-                $currentCategoryData
-
-            );
-        } else {
-            $currentDeal = BitrixDealService::updateDeal(
-                $this->hook,
-                $currentDealId,
-                $fieldsData,
-
-
-            );
-        }
     }
 
 
@@ -737,7 +568,7 @@ class BitrixCallingColdService
             ...$this->entityFieldsUpdatingContent
         ];
 
-        
+
 
         $result =  BitrixGeneralService::updateCompany($hook, $companyId, $fields);
         // Log::channel('telegram')->error('APRIL_HOOK updateCompany', ['$result' => $result]);
@@ -876,7 +707,7 @@ class BitrixCallingColdService
             [
                 'code' => 'crm',
                 'name' => 'crm',
-                'value' => ["0" => 'CO_' . $companyId],
+                'value' => ['n0' => 'CO_' . $companyId],
             ],
 
             [
@@ -920,11 +751,11 @@ class BitrixCallingColdService
             ];
             foreach ($xoFields as $xoValue) {
                 $currentDataField = [];
-                $fieldCode = $bitrixList['group'].'_'.$bitrixList['type'].'_'. $xoValue['code'];
+                $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $xoValue['code'];
                 $btxId = $this->getBtxListCurrentData($bitrixList, $fieldCode, null);
                 if (!empty($xoValue)) {
 
-                    
+
 
                     if (!empty($xoValue['value'])) {
                         $fieldsData[$btxId] = $xoValue['value'];
@@ -934,18 +765,16 @@ class BitrixCallingColdService
                     if (!empty($xoValue['list'])) {
                         $btxItemId = $this->getBtxListCurrentData($bitrixList, $fieldCode, $xoValue['list']['code']);
                         $currentDataField[$btxId] = [
-                            
+
                             $btxItemId =>  $xoValue['list']['name']
                         ];
 
                         $fieldsData[$btxId] =  $btxItemId;
-
-                      
                     }
                 }
                 // array_push($fieldsData, $currentDataField);
             }
-          
+
             BitrixListService::setItem(
                 $this->hook,
                 $bitrixList['bitrixId'],
@@ -970,11 +799,10 @@ class BitrixCallingColdService
                 $btxFields = $bitrixList['bitrixfields'];
                 foreach ($btxFields as $btxField) {
 
-                    
+
 
                     if ($btxField['code'] === $code) {
                         $result['fieldBtxId'] = $btxField['bitrixCamelId'];
-
                     }
                     if (!empty($btxField['bitrixfielditems'])) {
 
