@@ -121,19 +121,15 @@ class BitrixHookController extends Controller
             ];
             Log::channel('telegram')->error('APRIL_HOOK pre rerdis', ['$data' => $data]);
 
-            dispatch(
-                new ColdCallJob(
-                    $data
-
-                )
-            );
+            ColdCallJob::dispatch(
+                $data
+            )->onQueue('high-priority');
             // $service = new BitrixCallingColdService($data);
             // $reult =  $service->getCold();
 
             // return APIOnlineController::getSuccess(['result' => $reult]);
 
             return APIOnlineController::getSuccess(['result' => 'job catch it!']);
-
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
@@ -309,7 +305,7 @@ class BitrixHookController extends Controller
 
 
     ) {
-        CreateBitrixCallingTaskJob::dispatch(
+        dispatch(new CreateBitrixCallingTaskJob(
             $type,
             $domain,
             $companyId,
@@ -323,7 +319,7 @@ class BitrixHookController extends Controller
             $currentBitrixSmart,
             $sale,
             $isOneMore
-        )->onQueue('high-priority');
+        ));
         // $service = new BitrixCallingTaskService(
         //     $type,
         //     $domain,

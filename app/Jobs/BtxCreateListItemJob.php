@@ -79,9 +79,10 @@ class BtxCreateListItemJob implements ShouldQueue
             $this->deadline,
             $this->createdId,
             $this->responsibleId,
-            $this->responsibleId,
+            $this->suresponsibleId,
             $this->entityId,
             $this->comment
         );
+        
     }
 }
