@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class BtxCreateListItemJob implements ShouldQueue
 {
@@ -62,6 +63,12 @@ class BtxCreateListItemJob implements ShouldQueue
     {
         $randomNumber = 5;
         sleep($randomNumber);
+        Log::channel('telegram')->error('APRIL_HOOK', [
+           'BtxCreateListItemJob' => [
+                'randomNumber' => $randomNumber,
+         
+            ]
+        ]);
         BitrixListFlowService::getListsFlow(
             $this->hook,
             $this->bitrixLists,
