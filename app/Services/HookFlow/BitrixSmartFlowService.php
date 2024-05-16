@@ -112,7 +112,7 @@ class BitrixSmartFlowService
 
                 foreach ($aprilSmartData['categories'] as $category) {
                     if ($category['code'] == 'sales_base') {
-                       
+
                         $successStageFullId = $aprilSmartData['forStage'] . $category['bitrixId'] . ':SUCCESS';
                         array_push($excepStages, $successStageFullId);
                     }
@@ -127,7 +127,7 @@ class BitrixSmartFlowService
             $leadId  = $entityId;
         }
 
-      
+
 
         $currentSmart = BitrixGeneralService::getSmartItem(
             $hook,
@@ -154,7 +154,10 @@ class BitrixSmartFlowService
 
 
         $entityId = $aprilSmartData['bitrixId'];
-
+        Log::channel('telegram')->error('APRIL_HOOK createSmartItem', [
+            'createSmartItem fieldsData' => $fieldsData,
+            'entityId' => $entityId,
+        ]);
         $resultFields = BitrixGeneralService::createSmartItem(
             $hook,
             $entityId,

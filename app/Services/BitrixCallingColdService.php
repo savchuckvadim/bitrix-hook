@@ -316,6 +316,7 @@ class BitrixCallingColdService
                         }
                     }
                 }
+                Log::channel('telegram')->error('APRIL_HOOK data', ['entityType' => $this->entityType]);
                 if (!empty($smart['bitrixfields'])) {
 
                     foreach ($smart['bitrixfields'] as $field) {
@@ -528,7 +529,7 @@ class BitrixCallingColdService
             $this->aprilSmartData,
             $this->hook,
             $this->entityType,
-            $this->entityId,
+            $entityId,
             'xo', // xo warm presentation,
             'plan',  // plan done expired 
             $this->responsibleId,

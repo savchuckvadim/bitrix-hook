@@ -57,13 +57,7 @@ class BitrixGeneralService
                 ];
             }
 
-            Log::info('APRIL_HOOK BitrixGeneralService get smart', [
-                '$hoo' =>  $hook,
-                '$leadId' =>  $leadId,
-                '$companyId' =>  $companyId,
-                '$userI' =>  $userId,
-                '$smart' =>  $smart,
-            ]);
+           
             $response = Http::get($url, $data);
             // $responseData = $response->json();
             $responseData = APIBitrixController::getBitrixRespone($response, 'general service: getSmartItem');
@@ -72,10 +66,7 @@ class BitrixGeneralService
                     $currentSmart =  $responseData['items'][0];
                 }
             }
-            Log::info('APRIL_HOOK BitrixGeneralService get smart', [
-                '$currentSmart' =>  $currentSmart,
-      
-            ]);
+           
             return $currentSmart;
         } catch (\Throwable $th) {
             return $currentSmart;
