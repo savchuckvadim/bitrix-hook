@@ -923,17 +923,25 @@ class BitrixCallingColdService
                 $btxId = $this->getBtxListCurrentData($bitrixList, $xoValue['code'], null);
                 if (!empty($xoValue)) {
                     if (!empty($xoValue['value'])) {
+                        $fieldsData[$btxId] = $xoValue['value'];
                         $currentDataField[$btxId] = $xoValue['value'];
                     }
 
                     if (!empty($xoValue['list'])) {
                         $btxItemId = $this->getBtxListCurrentData($bitrixList, $xoValue['code'], $xoValue['list']['code']);
                         $currentDataField[$btxId] = [
+                            
                             $btxItemId =>  $xoValue['list']['name']
                         ];
+
+                        $fieldsData[$btxId] = [
+                            
+                            $btxItemId =>  $xoValue['list']['name']
+                        ];
+                      
                     }
                 }
-                array_push($fieldsData, $currentDataField);
+                // array_push($fieldsData, $currentDataField);
             }
             Log::channel('telegram')->error('APRIL_HOOK list setItem', [
                 'bitrixId' =>  $bitrixList['bitrixId'],
