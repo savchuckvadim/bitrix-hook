@@ -112,10 +112,7 @@ class BitrixSmartFlowService
 
                 foreach ($aprilSmartData['categories'] as $category) {
                     if ($category['code'] == 'salesBase') {
-                        Log::info('APRIL_HOOK BitrixGeneralService get smart', [
-                            'category' =>  $category,
-         
-                        ]);
+                       
                         $successStageFullId = $aprilSmartData['forStage'] . $category['bitrixId'] . ':SUCCESS';
                         array_push($excepStages, $successStageFullId);
                     }
@@ -156,7 +153,7 @@ class BitrixSmartFlowService
 
 
 
-        $entityId = $aprilSmartData['crmId'];
+        $entityId = $aprilSmartData['bitrixId'];
 
         $resultFields = BitrixGeneralService::createSmartItem(
             $hook,
@@ -179,7 +176,7 @@ class BitrixSmartFlowService
     ) {
 
 
-        $entityId = $aprilSmartData['crmId'];
+        $entityId = $aprilSmartData['bitrixId'];
 
         $resultFields = BitrixGeneralService::updateSmartItem(
             $hook,

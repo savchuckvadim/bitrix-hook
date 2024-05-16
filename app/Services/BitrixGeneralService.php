@@ -72,7 +72,10 @@ class BitrixGeneralService
                     $currentSmart =  $responseData['items'][0];
                 }
             }
-
+            Log::info('APRIL_HOOK BitrixGeneralService get smart', [
+                '$currentSmart' =>  $currentSmart,
+      
+            ]);
             return $currentSmart;
         } catch (\Throwable $th) {
             return $currentSmart;
