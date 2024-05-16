@@ -116,7 +116,7 @@ class BitrixSmartFlowService
                             'category' =>  $category,
          
                         ]);
-                        $successStageFullId = $category['forStage'] . $category['crmId'] . ':SUCCESS';
+                        $successStageFullId = $aprilSmartData['forStage'] . $category['bitrixId'] . ':SUCCESS';
                         array_push($excepStages, $successStageFullId);
                     }
                 }
