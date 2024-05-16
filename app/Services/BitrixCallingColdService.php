@@ -976,10 +976,7 @@ class BitrixCallingColdService
 
                     if ($btxField['code'] === $code) {
                         $result['fieldBtxId'] = $btxField['bitrixCamelId'];
-                        Log::channel('telegram')->error('APRIL_HOOK list setItem', [
-                            'btxField' =>  $btxField,
-                            'code' => $code
-                        ]);
+
                     }
                     if (!empty($btxField['bitrixfielditems'])) {
 

@@ -32,7 +32,7 @@ class BitrixListService
                 'FIELDS' => $fields
             ];
 
-            Log::channel('telegram')->error('APRIL_HOOK list setItem', [
+            Log::info('APRIL_HOOK list setItem', [
 
                 'data' => $data
             ]);
