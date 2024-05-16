@@ -726,25 +726,7 @@ class BitrixCallingColdService
     {
 
         $hook = $this->hook;
-        $responsibleId = $this->responsibleId;
-        // $portalCompanyData = $this->portalCompanyData;
-        // if (!empty($portalCompanyData['bitrixfields'])) {
 
-        //     foreach ($portalCompanyData['bitrixfields'] as $field) {
-
-        //         if ($field && !empty($field['code'])) {
-        //             if ($field['code'] == 'xo_call_name') {
-        //                 $callThemeFieldCold = $field['bitrixCamelId'];
-        //             } else if ($field['code'] == 'xo_deadline') {
-        //                 $lastCallDateFieldCold = $field['bitrixCamelId'];
-        //             } else if ($field['code'] == 'next_call_date') {
-        //                 $lastCallDateField = $field['bitrixCamelId'];
-        //             } else if ($field['code'] == 'next_call_name') {
-        //                 $callThemeField = $field['bitrixCamelId'];
-        //             }
-        //         }
-        //     }
-        // }
 
         // UF_CRM_10_1709907744 - дата следующего звонка
 
@@ -755,7 +737,7 @@ class BitrixCallingColdService
             ...$this->entityFieldsUpdatingContent
         ];
 
-        Log::channel('telegram')->error('APRIL_HOOK updateCompany', ['$fields' => $fields]);
+        
 
         $result =  BitrixGeneralService::updateCompany($hook, $companyId, $fields);
         // Log::channel('telegram')->error('APRIL_HOOK updateCompany', ['$result' => $result]);
