@@ -42,7 +42,7 @@ class Handler extends ExceptionHandler
     {
         if ($this->shouldReport($exception)) {
             if (
-                $exception instanceof HttpException &&  $exception->getStatusCode() > 399
+                $exception instanceof HttpException &&  $exception->getStatusCode() == 405
             ) {
                 // Получаем объект запроса
                 $request = Request::capture();
