@@ -42,19 +42,22 @@ class Handler extends ExceptionHandler
     {
         if ($this->shouldReport($exception)) {
             // if ( $exception instanceof HttpException &&  $exception->getStatusCode() == 405 ) {
-            if ($this->shouldReport($exception)) {
-                // Получаем объект запроса
-                $request = Request::capture();
 
-                // Формируем лог с дополнительной информацией
-                Log::cannel('telegram')->error('Error 500: ', [
-                    'exception' => $exception,
-                    'url' => $request->fullUrl(),
-                    'method' => $request->method(),
-                    'data' => $request->all(), // Выводит все данные запроса, кроме файлов
-                    'headers' => $request->headers->all() // Опционально, если нужны заголовки
-                ]);
-            }
+            // Получаем объект запроса
+            $request = Request::capture();
+
+            Log::cannel('telegram')->info('Error 500: ', [
+                'url' => $request->fullUrl(),
+            ]);
+            // Формируем лог с дополнительной информацией
+            Log::error('Error 500: ', [
+                'exception' => $exception,
+                'url' => $request->fullUrl(),
+                'method' => $request->method(),
+                'data' => $request->all(), // Выводит все данные запроса, кроме файлов
+                'headers' => $request->headers->all() // Опционально, если нужны заголовки
+            ]);
+            // }
         }
 
         parent::report($exception);
