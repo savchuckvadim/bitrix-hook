@@ -288,6 +288,8 @@ Route::post('/task/fail', function (Request $request) {
 // ............................... FULL CALING FRONT
 
 Route::post('/full', function (Request $request) {
+    $a = 5 + $c;
+    return $a;
 });
 
 
