@@ -41,9 +41,8 @@ class Handler extends ExceptionHandler
     public function report(Throwable $exception)
     {
         if ($this->shouldReport($exception)) {
-            if (
-                $exception instanceof HttpException &&  $exception->getStatusCode() == 405
-            ) {
+            // if ( $exception instanceof HttpException &&  $exception->getStatusCode() == 405 ) {
+            if ($this->shouldReport($exception)) {
                 // Получаем объект запроса
                 $request = Request::capture();
 
