@@ -288,9 +288,7 @@ Route::post('/task/fail', function (Request $request) {
 // ............................... FULL CALING FRONT
 
 Route::get('/full', function (Request $request) {
-    $a = 5;
-    throw new Exception("Test Exception for Logging");
-    return $a;
+  
 });
 
 

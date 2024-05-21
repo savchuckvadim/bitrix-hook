@@ -867,7 +867,7 @@ class BitrixCallingTaskService
         }
 
         $fields = [
-            $callField => $deadline,
+            $callField => 'Y',
             'UF_CRM_1709798145' => $responsibleId
         ];
 
