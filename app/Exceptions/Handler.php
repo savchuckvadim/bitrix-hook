@@ -42,14 +42,13 @@ class Handler extends ExceptionHandler
     {
         if ($this->shouldReport($exception)) {
             if (
-                $exception instanceof HttpException && (
-                    $exception->getStatusCode() > 399)
+                $exception instanceof HttpException &&  $exception->getStatusCode() > 399
             ) {
                 // Получаем объект запроса
                 $request = Request::capture();
 
                 // Формируем лог с дополнительной информацией
-                Log::error('Error 500: ', [
+                Log::cannel('telegram')->error('Error 500: ', [
                     'exception' => $exception,
                     'url' => $request->fullUrl(),
                     'method' => $request->method(),
