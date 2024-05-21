@@ -8,6 +8,7 @@ use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\BitrixHookController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\ReactAppController;
+use App\Models\Price;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -22,6 +23,9 @@ use Illuminate\Support\Facades\Log;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -145,7 +149,7 @@ Route::post('/task/warm', function (Request $request) {
         $sale = $request['sale'];
     }
 
-
+    Log::info('TEST', ['req' => $request->all()]);
     $controller = new APIBitrixController();
     return $controller->createTask(
         $type,
@@ -278,6 +282,21 @@ Route::post('/task/fail', function (Request $request) {
 
 
 // ..........................................................................................
+
+
+
+// ............................... FULL CALING FRONT
+
+Route::post('/full', function (Request $request) {
+});
+
+
+
+
+
+
+
+
 
 
 
@@ -533,7 +552,7 @@ Route::post('cold', function (Request $request) {
     // entity_id={{ID}}
     // &entity_type=smart | company | lead
     // isOlyDeal ??
-   
+
 
     $controller = new BitrixHookController();
     return $controller->getColdCall(
@@ -1197,6 +1216,59 @@ Route::get('/placement', function (Request $request) {
     $controller = new ReactAppController;
     return $controller->index();
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
