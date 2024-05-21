@@ -3,6 +3,9 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -26,5 +29,39 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+
+    /**
+     * Report or log an exception.
+     *
+     * @param  \Throwable  $exception
+     * @return void
+     */
+    public function report(Throwable $exception)
+    {
+        if ($this->shouldReport($exception)) {
+            if (
+                $exception instanceof HttpException && (
+                    $exception->getStatusCode() == 500 ||
+                    $exception->getStatusCode() == 400 ||
+                    $exception->getStatusCode() == 402 ||
+                    $exception->getStatusCode() == 404)
+            ) {
+                // Получаем объект запроса
+                $request = Request::capture();
+
+                // Формируем лог с дополнительной информацией
+                Log::error('Error 500: ', [
+                    'exception' => $exception,
+                    'url' => $request->fullUrl(),
+                    'method' => $request->method(),
+                    'data' => $request->all(), // Выводит все данные запроса, кроме файлов
+                    'headers' => $request->headers->all() // Опционально, если нужны заголовки
+                ]);
+            }
+        }
+
+        parent::report($exception);
     }
 }
