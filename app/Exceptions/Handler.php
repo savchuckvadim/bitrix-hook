@@ -35,31 +35,31 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Throwable  $exception
-     * @return void
+     *  $exception
+     * 
      */
-    public function report(Throwable $exception)
-    {
-        if ($this->shouldReport($exception)) {
-            // if ( $exception instanceof HttpException &&  $exception->getStatusCode() == 405 ) {
+    // public function report(Throwable $exception)
+    // {
+    //     if ($this->shouldReport($exception)) {
+    //         // if ( $exception instanceof HttpException &&  $exception->getStatusCode() == 405 ) {
 
-            // Получаем объект запроса
-            $request = Request::capture();
+    //         // Получаем объект запроса
+    //         $request = Request::capture();
 
-            Log::cannel('telegram')->info('Error 500: ', [
-                'url' => $request->fullUrl(),
-            ]);
-            // Формируем лог с дополнительной информацией
-            Log::error('Error 500: ', [
-                'exception' => $exception,
-                'url' => $request->fullUrl(),
-                'method' => $request->method(),
-                'data' => $request->all(), // Выводит все данные запроса, кроме файлов
-                'headers' => $request->headers->all() // Опционально, если нужны заголовки
-            ]);
-            // }
-        }
+    //         Log::cannel('telegram')->info('Error 500: ', [
+    //             'url' => $request->fullUrl(),
+    //         ]);
+    //         // Формируем лог с дополнительной информацией
+    //         Log::error('Error 500: ', [
+    //             'exception' => $exception,
+    //             'url' => $request->fullUrl(),
+    //             'method' => $request->method(),
+    //             'data' => $request->all(), // Выводит все данные запроса, кроме файлов
+    //             'headers' => $request->headers->all() // Опционально, если нужны заголовки
+    //         ]);
+    //         // }
+    //     }
 
-        parent::report($exception);
-    }
+    //     parent::report($exception);
+    // }
 }

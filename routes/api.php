@@ -287,9 +287,9 @@ Route::post('/task/fail', function (Request $request) {
 
 // ............................... FULL CALING FRONT
 
-Route::get('/full', function (Request $request) {
+// Route::get('/full', function (Request $request) {
   
-});
+// });
 
 
 
