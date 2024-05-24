@@ -83,7 +83,7 @@ class EventReportService
         $placement = $data['placement'];
 
         $entityType = null;
-        $entityId = null ;
+        $entityId = null;
 
         if (isset($placement)) {
             if (!empty($placement['placement'])) {
@@ -123,10 +123,10 @@ class EventReportService
         $this->plan = $data['plan'];
         $this->report = $data['report'];
         $this->isPlanned = $data['plan']['isPlanned'];
-        if(!empty($data['plan']['isPlanned']) && !empty($data['plan']['type']) && !empty($data['plan']['type']['current']) && !empty($data['plan']['type']['current']['code'])){
+        if (!empty($data['plan']['isPlanned']) && !empty($data['plan']['type']) && !empty($data['plan']['type']['current']) && !empty($data['plan']['type']['current']['code'])) {
             $this->currentPlanEventType = $data['plan']['type']['current']['code'];
         };
-        
+
         $this->isPresentationDone = $data['presentation']['isPresentationDone'];
 
 
@@ -465,7 +465,7 @@ class EventReportService
 
             // $this->createTask($currentSmartId);
 
-            $this->getEntityFlow();
+            $result = $this->getEntityFlow();
             // if ($this->withLists) {
             $nowDate = now();
             // BtxCreateListItemJob::dispatch(
@@ -498,7 +498,7 @@ class EventReportService
             // );
             // }
 
-            return APIOnlineController::getSuccess(['result' => 'success']);
+            return APIOnlineController::getSuccess(['result' => $result]);
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
@@ -517,23 +517,22 @@ class EventReportService
     protected function getEntityFlow()
     {
 
-        Log::info(
-            'HOOK event flow',
-            [
-                // 'plan' => $this->plan,
-                // 'report' => $this->report,
-                // 'presentation' => $this->presentation,
-                'isPlanned' => $this->isPlanned,
-                'isPresentationDone' => $this->isPresentationDone,
-                'isUnplannedPresentation' => $this->isUnplannedPresentation,
-                'currentReportEventType' => $this->currentReportEventType,
-                'currentPlanEventType' => $this->currentPlanEventType,
-               
-                
+        $data =   [
+            // 'plan' => $this->plan,
+            // 'report' => $this->report,
+            // 'presentation' => $this->presentation,
+            'isPlanned' => $this->isPlanned,
+            'isPresentationDone' => $this->isPresentationDone,
+            'isUnplannedPresentation' => $this->isUnplannedPresentation,
+            'currentReportEventType' => $this->currentReportEventType,
+            'currentPlanEventType' => $this->currentPlanEventType,
+            '$this->portalCompanyData' => $this->portalCompanyData
 
-            ]
 
-        );
+
+        ];
+
+        return $data;
         // BitrixEntityFlowService::flow(
         //     $this->portal,
         //     $this->hook,
