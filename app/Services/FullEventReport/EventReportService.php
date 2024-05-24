@@ -512,7 +512,7 @@ class EventReportService
     protected function getEntityFlow()
     {
 
-        Log::channel('telegram')->info(
+        Log::info(
             'HOOK event flow',
             [
                 // 'plan' => $this->plan,
