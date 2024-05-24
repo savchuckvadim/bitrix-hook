@@ -40,6 +40,7 @@ class EventReportService
     protected $plan;
     protected $presentation;
     protected $isPlanned;
+    protected $currentPlanEventType;
     protected $isPresentationDone;
     protected $isUnplannedPresentation;
     protected $currentReportEventType;
@@ -122,6 +123,10 @@ class EventReportService
         $this->plan = $data['plan'];
         $this->report = $data['report'];
         $this->isPlanned = $data['plan']['isPlanned'];
+        if(!empty($data['plan']['isPlanned']) && !empty($data['plan']['type']) && !empty($data['plan']['type']['current']) && !empty($data['plan']['type']['current']['code'])){
+            $this->currentPlanEventType = $data['plan']['type']['current']['code'];
+        };
+        
         $this->isPresentationDone = $data['presentation']['isPresentationDone'];
 
 
@@ -521,7 +526,9 @@ class EventReportService
                 'isPlanned' => $this->isPlanned,
                 'isPresentationDone' => $this->isPresentationDone,
                 'isUnplannedPresentation' => $this->isUnplannedPresentation,
-                'currentReportEventType' => $this->currentReportEventType
+                'currentReportEventType' => $this->currentReportEventType,
+                'currentPlanEventType' => $this->currentPlanEventType,
+               
                 
 
             ]
