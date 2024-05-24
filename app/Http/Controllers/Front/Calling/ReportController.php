@@ -57,13 +57,7 @@ class ReportController extends Controller
             if ($isFullData) {
                 $service = new EventReportService($data);
                 $result = $service->getCold();
-                return APIOnlineController::getSuccess(
-                    [
-                        'data' => $result
-
-                    ]
-
-                );
+                return $result;
             } else {
 
                 return APIOnlineController::getError(

@@ -515,9 +515,9 @@ class EventReportService
         Log::channel('telegram')->info(
             'HOOK event flow',
             [
-                'plan' => $this->plan,
-                'report' => $this->report,
-                'presentation' => $this->presentation,
+                // 'plan' => $this->plan,
+                // 'report' => $this->report,
+                // 'presentation' => $this->presentation,
                 'isPlanned' => $this->isPlanned,
                 'isPresentationDone' => $this->isPresentationDone,
                 'isUnplannedPresentation' => $this->isUnplannedPresentation,
