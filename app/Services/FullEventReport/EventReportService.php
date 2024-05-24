@@ -79,12 +79,9 @@ class EventReportService
 
     ) {
         $domain = $data['domain'];
-        $report = $data['report'];
-        $plan = $data['plan'];
         $placement = $data['placement'];
-        $currentTask = $data['currentTask'];
-        $this->entityType = $data['entityType'];
-        $this->entityId = $data['entityId'];
+
+
 
         if (isset($placement)) {
             if (!empty($placement['placement'])) {
@@ -116,8 +113,15 @@ class EventReportService
             }
         }
         $this->presentation = $data['presentation'];
+        $this->currentTask = $data['currentTask'];
+        $this->plan = $data['plan'];
+        $this->report = $data['report'];
         $this->isPlanned = $data['plan']['isPlanned'];
         $this->isPresentationDone = $data['presentation']['isPresentationDone'];
+
+
+
+
 
         $this->isUnplannedPresentation = false;
 
