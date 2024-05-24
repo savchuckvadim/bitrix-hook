@@ -559,21 +559,21 @@ class EventReportService
         foreach ($fields as $pField) {
             switch ($pField['code']) {
                 case 'call_last_date':
-                    $updatedFields[$pField['bitrixId']] = now();
+                    $updatedFields['UF_CRM_' . $pField['bitrixId']] = now();
                     break;
                 case 'manager_op':
-                    $updatedFields[$pField['bitrixId']] = 'user_1';
+                    $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
                     break;
                 case 'op_history':
-                    $updatedFields[$pField['bitrixId']] = 'history';
+                    $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'history';
                     break;
                 default:
                     # code...
                     break;
             }
         }
-         
-       return BitrixEntityFlowService::flow(
+
+        return BitrixEntityFlowService::flow(
             $this->portal,
             $this->hook,
             $this->entityType,
