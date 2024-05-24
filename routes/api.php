@@ -6,12 +6,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\APIController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\BitrixHookController;
+use App\Http\Controllers\Front\Calling\ReportController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\ReactAppController;
 use App\Models\Price;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use PhpParser\Node\Stmt\Return_;
 
 /*
 |--------------------------------------------------------------------------
@@ -288,9 +290,7 @@ Route::post('/task/fail', function (Request $request) {
 // ............................... FULL CALING FRONT
 
 Route::post('/full', function (Request $request) {
-    log::info('HOOK full', [
-        'rq' => $request->all()
-    ]);
+    return ReportController::eventReport($request);
 });
 
 
