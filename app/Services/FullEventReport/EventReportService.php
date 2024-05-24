@@ -559,7 +559,8 @@ class EventReportService
         foreach ($fields as $pField) {
             switch ($pField['code']) {
                 case 'call_last_date':
-                    $updatedFields['UF_CRM_' . $pField['bitrixId']] = now();
+                    $now = date('d.m.Y H:i:s');
+                    $updatedFields['UF_CRM_' . $pField['bitrixId']] = $now;
                     break;
                 case 'manager_op':
                     $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
