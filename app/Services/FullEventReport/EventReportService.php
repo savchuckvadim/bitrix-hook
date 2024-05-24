@@ -516,7 +516,35 @@ class EventReportService
     //smart
     protected function getEntityFlow()
     {
+        $fieldsPresentationCodes = [
+            'next_pres_plan_date', // ОП Дата назначенной презентации
+            'last_pres_plan_date', //ОП Дата последней назначенной презентации
+            'last_pres_done_date',  //ОП Дата последней проведенной презентации
+            'last_pres_plan_responsible',  //ОП Кто назначил последнюю заявку на презентацию
+            'last_pres_done_responsible',   //ОП Кто провел последнюю презентацию
+            'pres_count', //ОП Проведено презентаций
+            'pres_comments', //ОП Комментарии после презентаций
+            'call_last_date',
 
+        ];
+
+        $statusesCodes = [
+            'op_work_status', //Статус Работы
+            'op_fail_type', //тип отказа  ОП Неперспективная
+            'op_fail_reason', //причина отказа
+            'op_noresult_reason', //ОП Причины нерезультативности
+        ];
+        $generalSalesCode = [
+            'manager_op',  //Менеджер по продажам Гарант
+            'op_history',
+            'op_history_multiple',
+        ];
+
+        $failSalesCode = [
+            'op_fail_comments',  //ОП Комментарии после отказов
+
+        ];
+        $updatedFields = [];
         $data =   [
             // 'plan' => $this->plan,
             // 'report' => $this->report,
@@ -531,17 +559,33 @@ class EventReportService
 
 
         ];
-
+        $fields = $this->portalCompanyData['bitrixfields'];
+        foreach ($fields as $pField) {
+            switch ($pField['code']) {
+                case 'call_last_date':
+                    $updatedFields[$pField['bitrixId']] = now();
+                    break;
+                case 'manager_op':
+                    $updatedFields[$pField['bitrixId']] = 'user_1';
+                    break;
+                case 'op_history':
+                    $updatedFields[$pField['bitrixId']] = 'history';
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+        }
         return $data;
-        // BitrixEntityFlowService::flow(
-        //     $this->portal,
-        //     $this->hook,
-        //     $this->entityType,
-        //     $this->entityId,
-        //     'xo', // xo warm presentation,
-        //     'plan',  // plan done expired 
-        //     $this->entityFieldsUpdatingContent, //updting fields 
-        // );
+        BitrixEntityFlowService::flow(
+            $this->portal,
+            $this->hook,
+            $this->entityType,
+            $this->entityId,
+            'xo', // xo warm presentation,
+            'plan',  // plan done expired 
+            $updatedFields, //updting fields 
+        );
     }
 
     //smart
