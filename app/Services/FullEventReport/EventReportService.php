@@ -2,20 +2,16 @@
 
 namespace App\Services\FullEventReport;
 
-use App\Http\Controllers\APIBitrixController;
+
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\PortalController;
-use App\Jobs\BtxCreateListItemJob;
+
 use App\Services\BitrixGeneralService;
-use App\Services\General\BitrixDealService;
+
 use App\Services\General\BitrixDepartamentService;
-use App\Services\General\BitrixListService;
-use App\Services\HookFlow\BitrixDealFlowService;
 use App\Services\HookFlow\BitrixEntityFlowService;
-use App\Services\HookFlow\BitrixListFlowService;
-use App\Services\HookFlow\BitrixSmartFlowService;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Http;
+
 use Illuminate\Support\Facades\Log;
 
 class EventReportService
@@ -576,8 +572,8 @@ class EventReportService
                     break;
             }
         }
-        return $data;
-        BitrixEntityFlowService::flow(
+         
+       return BitrixEntityFlowService::flow(
             $this->portal,
             $this->hook,
             $this->entityType,
