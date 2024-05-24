@@ -255,7 +255,7 @@ class EventReportService
         if (!empty($portal[$entityType])) {
             if (!empty($portal[$entityType]['bitrixfields'])) {
                 $currentEntityField = [];
-                $entityBtxFields = $portal[$data['entityType']]['bitrixfields'];
+                $entityBtxFields = $portal[$entityType]['bitrixfields'];
 
                 foreach ($entityBtxFields as $pField) {
 

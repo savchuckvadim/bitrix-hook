@@ -82,7 +82,7 @@ class ReportController extends Controller
                     'task' => [
                         'message' => 'success'
                     ],
-                    'rq' => $request
+                    'rq' => $request->all()
 
                 ]
 
