@@ -252,104 +252,104 @@ class EventReportService
 
 
 
-        if (!empty($portal[$entityType])) {
-            if (!empty($portal[$entityType]['bitrixfields'])) {
-                $currentEntityField = [];
-                $entityBtxFields = $portal[$entityType]['bitrixfields'];
+        // if (!empty($portal[$entityType])) {
+        //     if (!empty($portal[$entityType]['bitrixfields'])) {
+        //         $currentEntityField = [];
+        //         $entityBtxFields = $portal[$entityType]['bitrixfields'];
 
-                foreach ($entityBtxFields as $pField) {
-
-
-                    if (!empty($pField['code'])) {
-                        switch ($pField['code']) {
-                            case 'xo_name':
-                            case 'call_next_name':
-                                // $currentEntityField = [
-                                //     'UF_CRM_' . $companyField['bitrixId'] => $data['name']
-                                // ];
-                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $data['name'];
-                                break;
-                            case 'xo_date':
-                            case 'call_next_date':
-                            case 'call_last_date':
-                                // $currentEntityField = [
-                                //     'UF_CRM_' . $companyField['bitrixId'] => $data['deadline']
-                                // ];
-                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $data['deadline'];
-
-                                break;
-
-                            case 'xo_responsible':
-                            case 'manager_op':
-
-                                // $currentEntityField = [
-                                //     'UF_CRM_' . $companyField['bitrixId'] => $data['responsible']
-                                // ];
-                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $data['responsible'];
-
-                                break;
-
-                            case 'xo_created':
-
-                                // $currentEntityField = [
-                                //     'UF_CRM_' . $companyField['bitrixId'] => $data['created']
-                                // ];
-                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $data['created'];
-
-                                break;
-
-                            case 'op_history':
-                            case 'op_mhistory':
-
-                                $fullFieldId = 'UF_CRM_' . $pField['bitrixId'];  //UF_CRM_OP_MHISTORY
-                                $now = now();
-                                $stringComment = $now . ' ХО запланирован ' . $data['name'] . ' на ' . $data['deadline'];
-
-                                $currentComments = '';
+        //         foreach ($entityBtxFields as $pField) {
 
 
-                                if (!empty($currentBtxEntity)) {
-                                    // if (isset($currentBtxCompany[$fullFieldId])) {
+        //             if (!empty($pField['code'])) {
+        //                 switch ($pField['code']) {
+        //                     case 'xo_name':
+        //                     case 'call_next_name':
+        //                         // $currentEntityField = [
+        //                         //     'UF_CRM_' . $companyField['bitrixId'] => $data['name']
+        //                         // ];
+        //                         $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $data['name'];
+        //                         break;
+        //                     case 'xo_date':
+        //                     case 'call_next_date':
+        //                     case 'call_last_date':
+        //                         // $currentEntityField = [
+        //                         //     'UF_CRM_' . $companyField['bitrixId'] => $data['deadline']
+        //                         // ];
+        //                         $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $data['deadline'];
 
-                                    $currentComments = $currentBtxEntity[$fullFieldId];
+        //                         break;
 
-                                    if ($pField['code'] == 'op_mhistory') {
-                                        $currentComments = [];
-                                        array_push($currentComments, $stringComment);
-                                        // if (!empty($currentComments)) {
-                                        //     array_push($currentComments, $stringComment);
-                                        // } else {
-                                        //     $currentComments = $stringComment;
-                                        // }
-                                    } else {
-                                        $currentComments = $currentComments  . ' | ' . $stringComment;
-                                    }
-                                    // }
-                                }
+        //                     case 'xo_responsible':
+        //                     case 'manager_op':
+
+        //                         // $currentEntityField = [
+        //                         //     'UF_CRM_' . $companyField['bitrixId'] => $data['responsible']
+        //                         // ];
+        //                         $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $data['responsible'];
+
+        //                         break;
+
+        //                     case 'xo_created':
+
+        //                         // $currentEntityField = [
+        //                         //     'UF_CRM_' . $companyField['bitrixId'] => $data['created']
+        //                         // ];
+        //                         $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $data['created'];
+
+        //                         break;
+
+        //                     case 'op_history':
+        //                     case 'op_mhistory':
+
+        //                         $fullFieldId = 'UF_CRM_' . $pField['bitrixId'];  //UF_CRM_OP_MHISTORY
+        //                         $now = now();
+        //                         $stringComment = $now . ' ХО запланирован ' . $data['name'] . ' на ' . $data['deadline'];
+
+        //                         $currentComments = '';
 
 
-                                $resultEntityFields[$fullFieldId] =  $currentComments;
+        //                         if (!empty($currentBtxEntity)) {
+        //                             // if (isset($currentBtxCompany[$fullFieldId])) {
 
-                                break;
+        //                             $currentComments = $currentBtxEntity[$fullFieldId];
 
-                            default:
-                                // Log::channel('telegram')->error('APRIL_HOOK', ['default' => $companyField['code']]);
+        //                             if ($pField['code'] == 'op_mhistory') {
+        //                                 $currentComments = [];
+        //                                 array_push($currentComments, $stringComment);
+        //                                 // if (!empty($currentComments)) {
+        //                                 //     array_push($currentComments, $stringComment);
+        //                                 // } else {
+        //                                 //     $currentComments = $stringComment;
+        //                                 // }
+        //                             } else {
+        //                                 $currentComments = $currentComments  . ' | ' . $stringComment;
+        //                             }
+        //                             // }
+        //                         }
 
-                                break;
-                        }
 
-                        // if (!empty($currentEntityField)) {
+        //                         $resultEntityFields[$fullFieldId] =  $currentComments;
 
-                        //     array_push($resultEntityFields, $currentEntityField);
-                        // }
-                    }
-                }
-            }
-        }
+        //                         break;
 
-        if (!empty($resultEntityFields)) {
-            $this->entityFieldsUpdatingContent = $resultEntityFields;
-        }
+        //                     default:
+        //                         // Log::channel('telegram')->error('APRIL_HOOK', ['default' => $companyField['code']]);
+
+        //                         break;
+        //                 }
+
+        //                 // if (!empty($currentEntityField)) {
+
+        //                 //     array_push($resultEntityFields, $currentEntityField);
+        //                 // }
+        //             }
+        //         }
+        //     }
+        // }
+
+        // if (!empty($resultEntityFields)) {
+        //     $this->entityFieldsUpdatingContent = $resultEntityFields;
+        // }
 
 
 
