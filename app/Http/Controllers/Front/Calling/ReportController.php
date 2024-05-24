@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front\Calling;
 use App\Http\Controllers\APIController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\Controller;
+use App\Services\FullEventReport\EventReportService;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -54,16 +55,17 @@ class ReportController extends Controller
                 $isFullData = false;
             }
             if ($isFullData) {
-
-
+                $service = new EventReportService($data);
+                $result = $service->getCold();
                 return APIOnlineController::getSuccess(
                     [
-                        'data' => $data
+                        'data' => $result
 
                     ]
 
                 );
             } else {
+
                 return APIOnlineController::getError(
                     'is not full data',
                     [
