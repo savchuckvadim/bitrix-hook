@@ -12,7 +12,15 @@ class ReportController extends Controller
     public static function eventReport(Request $request)
     {
         try {
-            $data = [];
+            $data = [
+                'currentTask' => null,
+                'report' => null,
+                'plan' => null,
+                'placement' => null,
+                'presentation' => null,
+                'domain' => null,
+
+            ];
             $isFullData = true;
 
             if (isset($request->currentTask)) {
@@ -40,8 +48,14 @@ class ReportController extends Controller
             } else {
                 $isFullData = false;
             }
-
+            if (isset($request->presentation)) {
+                $data['presentation'] = $request->presentation;
+            } else {
+                $isFullData = false;
+            }
             if ($isFullData) {
+
+
                 return APIOnlineController::getSuccess(
                     [
                         'data' => $data
