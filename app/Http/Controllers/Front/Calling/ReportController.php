@@ -69,7 +69,7 @@ class ReportController extends Controller
                 return APIOnlineController::getError(
                     'is not full data',
                     [
-                        'rq' => $request
+                        'rq' => $request->all()
 
                     ]
 

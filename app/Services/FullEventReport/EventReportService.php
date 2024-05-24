@@ -81,7 +81,8 @@ class EventReportService
         $domain = $data['domain'];
         $placement = $data['placement'];
 
-
+        $entityType = null;
+        $entityId = null ;
 
         if (isset($placement)) {
             if (!empty($placement['placement'])) {
@@ -91,12 +92,12 @@ class EventReportService
                             foreach ($placement['options']['CRM_BINDINGS'] as $crmBind) {
                                 if (!empty($crmBind['ENTITY_TYPE'])) {
                                     if ($crmBind['ENTITY_TYPE'] == 'LEAD') {
-                                        $this->entityType = 'lead';
-                                        $this->entityId = $crmBind['ENTITY_ID'];
+                                        $entityType = 'lead';
+                                        $entityId = $crmBind['ENTITY_ID'];
                                     }
                                     if ($crmBind['ENTITY_TYPE'] == 'COMPANY') {
-                                        $this->entityType = 'company';
-                                        $this->entityId = $crmBind['ENTITY_ID'];
+                                        $entityType = 'company';
+                                        $entityId = $crmBind['ENTITY_ID'];
                                         break;
                                     }
                                 }
@@ -104,14 +105,18 @@ class EventReportService
                         }
                     }
                 } else if (strpos($placement['placement'], 'COMPANY') !== false) {
-                    $this->entityType = 'company';
-                    $this->entityId = $placement['options']['ID'];
+                    $entityType = 'company';
+                    $entityId = $placement['options']['ID'];
                 } else if (strpos($placement['placement'], 'LEAD') !== false) {
-                    $this->entityType = 'lead';
-                    $this->entityId = $placement['options']['ID'];
+                    $entityType = 'lead';
+                    $entityId = $placement['options']['ID'];
                 }
             }
         }
+        $this->entityType = $entityType;
+
+        $this->entityId = $entityId;
+
         $this->presentation = $data['presentation'];
         $this->currentTask = $data['currentTask'];
         $this->plan = $data['plan'];
@@ -187,12 +192,12 @@ class EventReportService
 
         $currentBtxCompany = null;
         $currentBtxEntity = null;
-        if (!empty($data['entityType'])) {
+        if (!empty($entityType)) {
 
             $currentBtxEntity = BitrixGeneralService::getEntity(
                 $this->hook,
-                $data['entityType'],
-                $data['entityId']
+                $entityType,
+                $entityId
 
             );
         }
@@ -247,8 +252,8 @@ class EventReportService
 
 
 
-        if (!empty($portal[$data['entityType']])) {
-            if (!empty($portal[$data['entityType']]['bitrixfields'])) {
+        if (!empty($portal[$entityType])) {
+            if (!empty($portal[$entityType]['bitrixfields'])) {
                 $currentEntityField = [];
                 $entityBtxFields = $portal[$data['entityType']]['bitrixfields'];
 
@@ -413,7 +418,7 @@ class EventReportService
             } else {
                 Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
                     'data' => [
-                        'message' => 'portal smart was not found 340',
+                        'message' => 'portal smart was not found 420',
                         'smart' => $smart,
                         'portal' => $portal
                     ]
