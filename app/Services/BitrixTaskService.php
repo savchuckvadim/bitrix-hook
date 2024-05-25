@@ -37,6 +37,7 @@ class BitrixTaskService
         $name,
         $currentSmartItemId,
         $isNeedCompleteOtherTasks,
+        $currentTaskId = null
 
 
     ) {
@@ -61,7 +62,7 @@ class BitrixTaskService
 
         //TODO
         //type - cold warm presentation hot
-        if ($type == 'cold') {
+        if ($type == 'cold' || $type == 'xo') {
             $stringType = 'Холодный обзвон ';
         }
 
@@ -144,14 +145,21 @@ class BitrixTaskService
 
 
             if ($isNeedCompleteOtherTasks) {
-                $idsForComplete = $this->getCurrentTasksIds(
-                    $hook,
-                    $callingTaskGroupId,
-                    $crmItems,
-                    $responsibleId,
-                    true, //$isNeedCompleteOnlyTypeTasks
-                    $stringType
-                );
+                if(empty($currentTaskId)){
+                    $idsForComplete = $this->getCurrentTasksIds(
+                        $hook,
+                        $callingTaskGroupId,
+                        $crmItems,
+                        $responsibleId,
+                        true, //$isNeedCompleteOnlyTypeTasks
+                        $stringType
+                    );
+                }else{
+                    $idsForComplete = [
+                        $currentTaskId
+                    ];
+                }
+               
                 $this->completeTask($hook, $idsForComplete);
             }
 

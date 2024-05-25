@@ -7,7 +7,7 @@ use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\PortalController;
 
 use App\Services\BitrixGeneralService;
-
+use App\Services\BitrixTaskService;
 use App\Services\General\BitrixDepartamentService;
 use App\Services\HookFlow\BitrixEntityFlowService;
 use Carbon\Carbon;
@@ -47,6 +47,13 @@ class EventReportService
     protected $presentation;
     protected $isPlanned;
     protected $currentPlanEventType;
+    protected $currentPlanEventTypeName;
+
+    protected $planCreatedId;
+    protected $planResponsibleId;
+    protected $planDeadline;
+
+    protected $currentPlanEventName;
     protected $isPresentationDone;
     protected $isUnplannedPresentation;
     protected $currentReportEventType;
@@ -178,10 +185,23 @@ class EventReportService
         $this->isPlanned = $data['plan']['isPlanned'];
         if (!empty($data['plan']['isPlanned']) && !empty($data['plan']['type']) && !empty($data['plan']['type']['current']) && !empty($data['plan']['type']['current']['code'])) {
             $this->currentPlanEventType = $data['plan']['type']['current']['code'];
+            $this->currentPlanEventTypeName = $data['plan']['type']['current']['name'];
+            $this->currentPlanEventName = $data['plan']['name'];
         };
 
+        if (!empty($data['plan']['createdBy']) && !empty($data['plan']['createdBy']['ID']) ) {
+            $this->planCreatedId = $data['plan']['createdBy']['ID'];
+       
+        };
 
-
+        if (!empty($data['plan']['responsibility']) && !empty($data['plan']['responsibility']['ID']) ) {
+            $this->planResponsibleId = $data['plan']['responsibility']['ID'];
+       
+        };
+        if (!empty($data['plan']['deadline'])) {
+            $this->planDeadline = $data['plan']['deadline'];
+       
+        };
 
         $this->isPresentationDone = $data['presentation']['isPresentationDone'];
 
@@ -654,6 +674,10 @@ class EventReportService
 
     //todo 
     //get clod report fields
+    //get warm report fields
+    //get presentation report fields
+    //get other report fields
+    //get new event report fields
     protected function getReportFields(
         $updatedFields,
         $portalFields,
@@ -793,10 +817,7 @@ class EventReportService
         $fields[$fullFieldId] =  $currentComments;
         return $fields;
     }
-    //get warm report fields
-    //get presentation report fields
-    //get other report fields
-    //get new event report fields
+
 
 
     //get clod plan fields
@@ -804,7 +825,113 @@ class EventReportService
     //get presentation plan fields
     //get in_progress plan fields
     //get money_await plan fields
-    //get other plan fields
+    protected function getPlanFields(
+        $updatedFields,
+        $portalFields,
+
+
+    ) {
+        $isPresentationDone = $this->isPresentationDone;
+        $isUnplannedPresentation = $this->isUnplannedPresentation;
+        $isResult  = $this->isResult;
+        $isInWork  = $this->isInWork;
+        $isSuccessSale  = $this->isSuccessSale;
+        $reportEventType = $this->currentReportEventType;
+        $currentReportEventName = $this->currentReportEventName;
+
+        $resultStatus = 'Совершен';
+
+        if ($isInWork) {
+            $resultStatus = $resultStatus . ' в работе';
+        }
+
+
+        //general report fields 
+        foreach ($portalFields as $pField) {
+            switch ($pField['code']) {
+
+                case 'manager_op':
+                    $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+                    break;
+                case 'op_history':
+                case 'op_mhistory':
+                    $now = now();
+                    $stringComment = $now . ' ' . $currentReportEventName . ' ' . $resultStatus;
+                    $updatedFields = $this->getCommentsWithEntity($pField, $stringComment, $updatedFields);
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+        }
+
+        if ($reportEventType == 'xo') {
+
+            foreach ($portalFields as $pField) {
+                switch ($pField['code']) {
+                    case 'call_last_date':
+                        $now = date('d.m.Y H:i:s');
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = $now;
+                        break;
+
+                    default:
+                        # code...
+                        break;
+                }
+            }
+        } else  if ($reportEventType == 'warm') {
+            foreach ($portalFields as $pField) {
+                switch ($pField['code']) {
+                    case 'call_last_date':
+                        $now = date('d.m.Y H:i:s');
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = $now;
+                        break;
+                    case 'manager_op':
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+                        break;
+                }
+            }
+        } else if ($reportEventType == 'presentation') {
+            foreach ($portalFields as $pField) {
+                switch ($pField['code']) {
+
+                    case 'manager_op':
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+                        break;
+                }
+            }
+        } else if ($reportEventType == 'in_progress') {
+            foreach ($portalFields as $pField) {
+                switch ($pField['code']) {
+
+                    case 'manager_op':
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+                        break;
+                }
+            }
+        } else if ($reportEventType == 'money_await') {
+            foreach ($portalFields as $pField) {
+                switch ($pField['code']) {
+
+                    case 'manager_op':
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+                        break;
+                }
+            }
+        } else if ($reportEventType == 'other') {
+            foreach ($portalFields as $pField) {
+                switch ($pField['code']) {
+
+                    case 'manager_op':
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+                        break;
+                }
+            }
+        }
+
+        return $updatedFields;
+    }
+
 
 
     //get presentation done fields
@@ -952,49 +1079,56 @@ class EventReportService
 
 
 
-        //     try {
-        //         // Log::channel('telegram')->error('APRIL_HOOK', $this->portal);
-        //         $companyId  = null;
-        //         $leadId  = null;
-        //         if ($this->entityType == 'company') {
+        try {
+            // Log::channel('telegram')->error('APRIL_HOOK', $this->portal);
+            $companyId  = null;
+            $leadId  = null;
+            $currentTaskId = null;
+            if (!empty($this->currentTask)) {
+                if (!empty($this->currentTask['ID'])) {
+                    $currentTaskId = $this->currentTask['ID'];
+                }
+            }
 
-        //             $companyId  = $this->entityId;
-        //         } else if ($this->entityType == 'lead') {
-        //             $leadId  = $this->entityId;
-        //         }
-        //         $taskService = new BitrixTaskService();
+            if ($this->entityType == 'company') {
+
+                $companyId  = $this->entityId;
+            } else if ($this->entityType == 'lead') {
+                $leadId  = $this->entityId;
+            }
+            $taskService = new BitrixTaskService();
 
 
-        //         $createdTask =  $taskService->createTask(
-        //             'cold',       //$type,   //cold warm presentation hot 
-        //             $this->stringType,
-        //             $this->portal,
-        //             $this->domain,
-        //             $this->hook,
-        //             $companyId,  //may be null
-        //             $leadId,     //may be null
-        //             $this->createdId,
-        //             $this->responsibleId,
-        //             $this->deadline,
-        //             $this->name,
-        //             $currentSmartItemId,
-        //             true, //$isNeedCompleteOtherTasks
-        //         );
+            $createdTask =  $taskService->createTask(
+                $this->currentPlanEventType,       //$type,   //cold warm presentation hot 
+                $this->currentPlanEventTypeName,
+                $this->portal,
+                $this->domain,
+                $this->hook,
+                $companyId,  //may be null
+                $leadId,     //may be null
+                $this->planCreatedId,
+                $this->planResponsibleId,
+                $this->planDeadline,
+                $this->currentPlanEventName,
+                $currentSmartItemId,
+                true, //$isNeedCompleteOtherTasks
+                $currentTaskId
+            );
 
-        //         return $createdTask;
-        //     } catch (\Throwable $th) {
-        //         $errorMessages =  [
-        //             'message'   => $th->getMessage(),
-        //             'file'      => $th->getFile(),
-        //             'line'      => $th->getLine(),
-        //             'trace'     => $th->getTraceAsString(),
-        //         ];
-        //         Log::error('ERROR COLD: createColdTask',  $errorMessages);
-        //         Log::info('error COLD', ['error' => $th->getMessage()]);
-        //         Log::channel('telegram')->error('APRIL_HOOK', $errorMessages);
-        //         return $createdTask;
-        //     }
-        // }
+            return $createdTask;
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR COLD: createColdTask',  $errorMessages);
+            Log::info('error COLD', ['error' => $th->getMessage()]);
+            Log::channel('telegram')->error('APRIL_HOOK', $errorMessages);
+            return $createdTask;
+        }
     }
 }
 
