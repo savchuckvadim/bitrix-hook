@@ -41,24 +41,25 @@ class BitrixTaskService
 
 
     ) {
-        // Log::channel('telegram')->error(
-        //     'APRIL_HOOK Task Service',
-        //     [
-        //         $type,   //cold warm presentation hot  $stringType = 'Холодный обзвон ';
-        //         $stringType,
-        //         $portal,
-        //         $domain,
-        //         $hook,
-        //         $companyId,  //may be null
-        //         $leadId,     //may be null
-        //         $createdId,
-        //         $responsibleId,
-        //         $deadline,
-        //         $name,
-        //         $currentSmartItemId,
-        //         $isNeedCompleteOtherTasks,
-        //     ]
-        // );
+        Log::info(
+            'APRIL_HOOK Task Service',
+            [
+                $type,   //cold warm presentation hot  $stringType = 'Холодный обзвон ';
+                $stringType,
+                $portal,
+                $domain,
+                $hook,
+                $companyId,  //may be null
+                $leadId,     //may be null
+                $createdId,
+                $responsibleId,
+                $deadline,
+                $name,
+                $currentSmartItemId,
+                $isNeedCompleteOtherTasks,
+                $currentTaskId
+            ]
+        );
 
         //TODO
         //type - cold warm presentation hot
