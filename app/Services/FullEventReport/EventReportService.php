@@ -16,9 +16,6 @@ use Illuminate\Support\Facades\Log;
 
 class EventReportService
 
-
-
-
 {
     protected $portal;
     protected $aprilSmartData;
@@ -656,7 +653,7 @@ class EventReportService
         ]);
 
 
-        return BitrixEntityFlowService::flow(
+        BitrixEntityFlowService::flow(
             $this->portal,
             $this->hook,
             $this->entityType,
@@ -666,7 +663,7 @@ class EventReportService
             $updatedFields, //updting fields 
         );
 
-        $this->createTask(null);
+        return $this->createTask(null);
     }
 
 
