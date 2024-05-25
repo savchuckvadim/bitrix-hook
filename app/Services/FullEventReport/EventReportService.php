@@ -1081,8 +1081,8 @@ class EventReportService
             $leadId  = null;
             $currentTaskId = null;
             if (!empty($this->currentTask)) {
-                if (!empty($this->currentTask['ID'])) {
-                    $currentTaskId = $this->currentTask['ID'];
+                if (!empty($this->currentTask['id'])) {
+                    $currentTaskId = $this->currentTask['id'];
                 }
             }
 
