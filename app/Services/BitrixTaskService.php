@@ -44,20 +44,20 @@ class BitrixTaskService
         Log::info(
             'APRIL_HOOK Task Service',
             [
-                $type,   //cold warm presentation hot  $stringType = 'Холодный обзвон ';
-                $stringType,
-                $portal,
-                $domain,
-                $hook,
-                $companyId,  //may be null
-                $leadId,     //may be null
-                $createdId,
-                $responsibleId,
-                $deadline,
-                $name,
-                $currentSmartItemId,
-                $isNeedCompleteOtherTasks,
-                $currentTaskId
+                'type' => $type,   //cold warm presentation hot  $stringType = 'Холодный обзвон ';
+                'stringType' => $stringType,
+                // $portal,
+                'domain' => $domain,
+                // $hook,
+                'companyId' => $companyId,  //may be null
+                'leadId' => $leadId,     //may be null
+                'createdId' => $createdId,
+                'responsibleId' => $responsibleId,
+                'deadline' => $deadline,
+                'name' => $name,
+                'currentSmartItemId' => $currentSmartItemId,
+                'isNeedCompleteOtherTasks' => $isNeedCompleteOtherTasks,
+                'currentTaskId' => $currentTaskId
             ]
         );
 
@@ -146,7 +146,7 @@ class BitrixTaskService
 
 
             if ($isNeedCompleteOtherTasks) {
-                if(empty($currentTaskId)){
+                if (empty($currentTaskId)) {
                     $idsForComplete = $this->getCurrentTasksIds(
                         $hook,
                         $callingTaskGroupId,
@@ -155,12 +155,12 @@ class BitrixTaskService
                         true, //$isNeedCompleteOnlyTypeTasks
                         $stringType
                     );
-                }else{
+                } else {
                     $idsForComplete = [
                         $currentTaskId
                     ];
                 }
-               
+
                 $this->completeTask($hook, $idsForComplete);
             }
 
