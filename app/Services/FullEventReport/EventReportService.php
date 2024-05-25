@@ -189,18 +189,15 @@ class EventReportService
             $this->currentPlanEventName = $data['plan']['name'];
         };
 
-        if (!empty($data['plan']['createdBy']) && !empty($data['plan']['createdBy']['ID']) ) {
+        if (!empty($data['plan']['createdBy']) && !empty($data['plan']['createdBy']['ID'])) {
             $this->planCreatedId = $data['plan']['createdBy']['ID'];
-       
         };
 
-        if (!empty($data['plan']['responsibility']) && !empty($data['plan']['responsibility']['ID']) ) {
+        if (!empty($data['plan']['responsibility']) && !empty($data['plan']['responsibility']['ID'])) {
             $this->planResponsibleId = $data['plan']['responsibility']['ID'];
-       
         };
         if (!empty($data['plan']['deadline'])) {
             $this->planDeadline = $data['plan']['deadline'];
-       
         };
 
         $this->isPresentationDone = $data['presentation']['isPresentationDone'];
@@ -668,6 +665,8 @@ class EventReportService
             'plan',  // plan done expired 
             $updatedFields, //updting fields 
         );
+
+        $this->createTask(null);
     }
 
 
@@ -1071,7 +1070,7 @@ class EventReportService
     //tasks for complete
 
 
-    public function createTask(
+    protected function createTask(
         $currentSmartItemId
 
     ) {
