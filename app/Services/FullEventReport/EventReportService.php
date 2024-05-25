@@ -33,6 +33,16 @@ class EventReportService
     protected $entityId;
     protected $currentTask;
     protected $report;
+    protected $resultStatus;  // result noresult expired
+    protected $isResult = false;     //boolean
+    protected $workStatus;    //object with current {code:"setAside" id:1 name:"Отложено"}
+    protected $isInWork = false;  //boolean
+    protected $isFail = false;  //boolean
+    protected $isSuccessSale = false;  //boolean
+    protected $currentReportType;  //если есть текущая задача, то в ее названии будет
+    // Звонок Презентация, Звонок По решению, В оплате 
+    // или currentTask->eventType // xo 'presentation' in Work money_await
+
     protected $plan;
     protected $presentation;
     protected $isPlanned;
@@ -40,8 +50,10 @@ class EventReportService
     protected $isPresentationDone;
     protected $isUnplannedPresentation;
     protected $currentReportEventType;
+    protected $currentReportEventName;
 
 
+    protected $currentBtxEntity;
 
 
     protected $taskTitle;
@@ -67,6 +79,8 @@ class EventReportService
     protected $currentDepartamentType = null;
     protected $withLists = false;
     protected $bitrixLists = [];
+
+
 
 
 
@@ -115,13 +129,59 @@ class EventReportService
         $this->entityId = $entityId;
 
         $this->presentation = $data['presentation'];
+
+        // {isPresentationDone: true
+        // isUnplannedPresentation: false
+        // presentation: {companyCount: 0, smartCout: 0}
+        // companyCount: 0
+        // smartCout: 0}
+
         $this->currentTask = $data['currentTask'];
-        $this->plan = $data['plan'];
+        if (!empty($data['currentTask'])) {
+            if (!empty($data['currentTask']['eventType'])) {
+                $this->currentReportEventType = $data['currentTask']['eventType'];
+
+                switch ($data['currentTask']['eventType']) {
+                    case 'xo':
+                        $this->currentReportEventName = 'Холодный звонок';
+                        break;
+
+                    default:
+                        # code...
+                        break;
+                }
+            }
+        }
+
+
+
+
         $this->report = $data['report'];
+
+        $this->resultStatus = $data['report']['resultStatus'];
+        $this->workStatus  = $data['report']['workStatus'];
+
+        if ($data['report']['resultStatus'] === 'result') {
+            $this->isResult  = true;
+        }
+        if ($data['report']['workStatus']['current']['code'] === 'inJob' || $data['report']['workStatus']['current']['code'] === 'setAside') {
+            $this->isInWork = true;
+        } else  if ($data['report']['workStatus']['current']['code'] === 'fail') {
+            $this->isFail =  true;
+        } else  if ($data['report']['workStatus']['current']['code'] === 'success') {
+            $this->isSuccessSale =  true;
+        }
+
+
+
+        $this->plan = $data['plan'];
         $this->isPlanned = $data['plan']['isPlanned'];
         if (!empty($data['plan']['isPlanned']) && !empty($data['plan']['type']) && !empty($data['plan']['type']['current']) && !empty($data['plan']['type']['current']['code'])) {
             $this->currentPlanEventType = $data['plan']['type']['current']['code'];
         };
+
+
+
 
         $this->isPresentationDone = $data['presentation']['isPresentationDone'];
 
@@ -202,6 +262,7 @@ class EventReportService
 
             );
         }
+        $this->currentBtxEntity  = $currentBtxEntity;
         // Log::error('APRIL_HOOK portal', ['$portal.lead' => $portal['company']['bitrixfields']]); // массив fields
         // Log::error('APRIL_HOOK portal', ['$portal.company' => $portal['company']['bitrixfields']]); // массив fields
 
@@ -213,9 +274,9 @@ class EventReportService
             'call_last_date',  //ОП Дата последнего звонка
             'xo_created',
             'manager_op',
-            'call_next_date',
+            'call_next_date', //дата следующего план звонка
             'call_next_name',
-            'call_last_date',
+            'call_last_date', //дата последнего результативного звонка
 
         ];
 
@@ -509,7 +570,7 @@ class EventReportService
     }
 
 
-    //smart
+    //entity
     protected function getEntityFlow()
     {
         $fieldsPresentationCodes = [
@@ -540,7 +601,19 @@ class EventReportService
             'op_fail_comments',  //ОП Комментарии после отказов
 
         ];
-        $updatedFields = [];
+
+        $fieldsCallCodes = [
+            'call_next_date', //ОП Дата Следующего звонка
+            'call_next_name',    //ОП Тема Следующего звонка
+            'call_last_date',  //ОП Дата последнего звонка
+            'xo_created',
+            'manager_op',
+            'call_next_date',
+            'call_next_name',
+            'call_last_date',
+
+        ];
+
         $data =   [
             // 'plan' => $this->plan,
             // 'report' => $this->report,
@@ -556,23 +629,15 @@ class EventReportService
 
         ];
         $fields = $this->portalCompanyData['bitrixfields'];
-        foreach ($fields as $pField) {
-            switch ($pField['code']) {
-                case 'call_last_date':
-                    $now = date('d.m.Y H:i:s');
-                    $updatedFields['UF_CRM_' . $pField['bitrixId']] = $now;
-                    break;
-                case 'manager_op':
-                    $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-                    break;
-                case 'op_history':
-                    $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'history';
-                    break;
-                default:
-                    # code...
-                    break;
-            }
-        }
+        $updatedFields = $this->getReportFields(
+            [],
+            $fields
+        );
+
+        Log::info('TEST ENTITY FIELDS', [
+            'updatedFields' => $updatedFields
+        ]);
+
 
         return BitrixEntityFlowService::flow(
             $this->portal,
@@ -584,6 +649,166 @@ class EventReportService
             $updatedFields, //updting fields 
         );
     }
+
+
+
+    //todo 
+    //get clod report fields
+    protected function getReportFields(
+        $updatedFields,
+        $portalFields,
+
+
+    ) {
+        $isPresentationDone = $this->isPresentationDone;
+        $isUnplannedPresentation = $this->isUnplannedPresentation;
+        $isResult  = $this->isResult;
+        $isInWork  = $this->isInWork;
+        $isSuccessSale  = $this->isSuccessSale;
+        $reportEventType = $this->currentReportEventType;
+        $currentReportEventName = $this->currentReportEventName;
+
+        $resultStatus = 'Совершен';
+
+        if ($isInWork) {
+            $resultStatus = $resultStatus . ' в работе';
+        }
+
+
+        //general report fields 
+        foreach ($portalFields as $pField) {
+            switch ($pField['code']) {
+
+                case 'manager_op':
+                    $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+                    break;
+                case 'op_history':
+                case 'op_mhistory':
+                    $now = now();
+                    $stringComment = $now . ' ' . $currentReportEventName . ' ' . $resultStatus;
+                    $updatedFields = $this->getCommentsWithEntity($pField, $stringComment, $updatedFields);
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+        }
+
+        if ($reportEventType == 'xo') {
+
+            foreach ($portalFields as $pField) {
+                switch ($pField['code']) {
+                    case 'call_last_date':
+                        $now = date('d.m.Y H:i:s');
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = $now;
+                        break;
+
+                    default:
+                        # code...
+                        break;
+                }
+            }
+        } else  if ($reportEventType == 'warm') {
+            foreach ($portalFields as $pField) {
+                switch ($pField['code']) {
+                    case 'call_last_date':
+                        $now = date('d.m.Y H:i:s');
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = $now;
+                        break;
+                    case 'manager_op':
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+                        break;
+                }
+            }
+        } else if ($reportEventType == 'presentation') {
+            foreach ($portalFields as $pField) {
+                switch ($pField['code']) {
+
+                    case 'manager_op':
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+                        break;
+                }
+            }
+        } else if ($reportEventType == 'in_progress') {
+            foreach ($portalFields as $pField) {
+                switch ($pField['code']) {
+
+                    case 'manager_op':
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+                        break;
+                }
+            }
+        } else if ($reportEventType == 'money_await') {
+            foreach ($portalFields as $pField) {
+                switch ($pField['code']) {
+
+                    case 'manager_op':
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+                        break;
+                }
+            }
+        } else if ($reportEventType == 'other') {
+            foreach ($portalFields as $pField) {
+                switch ($pField['code']) {
+
+                    case 'manager_op':
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+                        break;
+                }
+            }
+        }
+
+        return $updatedFields;
+    }
+
+    protected function getCommentsWithEntity($pField, $stringComment, $fields)
+    {
+        $fullFieldId = 'UF_CRM_' . $pField['bitrixId'];  //UF_CRM_OP_MHISTORY
+        // $now = now();
+        // $stringComment = $now . ' ХО запланирован ' . $data['name'] . ' на ' . $data['deadline'];
+
+        $currentComments = '';
+        $currentBtxEntity = $this->currentBtxEntity;
+
+        if (!empty($currentBtxEntity)) {
+            // if (isset($currentBtxCompany[$fullFieldId])) {
+
+            $currentComments = $currentBtxEntity[$fullFieldId];
+
+            if ($pField['code'] == 'op_mhistory') {
+                $currentComments = [];
+                array_push($currentComments, $stringComment);
+                // if (!empty($currentComments)) {
+                //     array_push($currentComments, $stringComment);
+                // } else {
+                //     $currentComments = $stringComment;
+                // }
+            } else {
+                $currentComments = $currentComments  . ' | ' . $stringComment;
+            }
+            // }
+        }
+
+
+        $fields[$fullFieldId] =  $currentComments;
+        return $fields;
+    }
+    //get warm report fields
+    //get presentation report fields
+    //get other report fields
+    //get new event report fields
+
+
+    //get clod plan fields
+    //get warm plan fields
+    //get presentation plan fields
+    //get in_progress plan fields
+    //get money_await plan fields
+    //get other plan fields
+
+
+    //get presentation done fields
+    //get statuses fields
 
     //smart
     protected function getSmartFlow()
