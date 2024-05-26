@@ -41,25 +41,7 @@ class BitrixTaskService
 
 
     ) {
-        Log::info(
-            'APRIL_HOOK Task Service',
-            [
-                'type' => $type,   //cold warm presentation hot  $stringType = 'Холодный обзвон ';
-                'stringType' => $stringType,
-                // $portal,
-                'domain' => $domain,
-                // $hook,
-                'companyId' => $companyId,  //may be null
-                'leadId' => $leadId,     //may be null
-                'createdId' => $createdId,
-                'responsibleId' => $responsibleId,
-                'deadline' => $deadline,
-                'name' => $name,
-                'currentSmartItemId' => $currentSmartItemId,
-                'isNeedCompleteOtherTasks' => $isNeedCompleteOtherTasks,
-                'currentTaskId' => $currentTaskId
-            ]
-        );
+       
 
         //TODO
         //type - cold warm presentation hot
@@ -268,6 +250,14 @@ class BitrixTaskService
     protected function completeTask($hook, $taskIds)
     {
         $responseData = null;
+        Log::info(
+            'APRIL_HOOK completeTask data',
+            [
+
+                'hook' => $hook,
+                'taskIds' => $taskIds
+            ]
+        );
         try {
             $methodUpdate = 'tasks.task.update';
             $methodComplete = 'tasks.task.complete';
@@ -281,7 +271,14 @@ class BitrixTaskService
 
             $response = Http::post($hook . '/batch', $batchCommands);
             $responseData = APIBitrixController::getBitrixRespone($response, 'cold: completeTask');
-
+            Log::info(
+                'APRIL_HOOK completeTask ',
+                [
+    
+                    'responseData' => $responseData,
+                  
+                ]
+            );
             return $responseData;
         } catch (\Throwable $th) {
             Log::channel('telegram')->error('HOOK TASK SERVICE', ['message' => 'tasks was not completed', 'hook' => $hook]);
