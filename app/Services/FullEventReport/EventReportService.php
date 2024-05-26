@@ -1103,7 +1103,8 @@ class EventReportService
                 $this->hook,
                 $companyId,  //may be null
                 $leadId,     //may be null
-                $this->planCreatedId,
+                // $this->planCreatedId,
+                $this->planResponsibleId,
                 $this->planResponsibleId,
                 $this->planDeadline,
                 $this->currentPlanEventName,
