@@ -1142,6 +1142,8 @@ class EventReportService
             'reportDeals' => $reportDeals,
             'planDeals' => $planDeals,
         ]);
+
+        return [...$reportDeals, ...$planDeals];
     }
 
 
