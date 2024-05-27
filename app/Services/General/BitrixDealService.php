@@ -204,7 +204,7 @@ class BitrixDealService
         $resultCategoryDatas = [];
         $categoryPrephicks = [];
         if ($currentDepartamentType === 'sales') {
-            if($eventAction == 'plan'){
+            if($eventAction == 'plan' || ($eventAction == 'done' && $eventType == 'presentation')){
 
                 array_push($categoryPrephicks, $currentDepartamentType . '_base');
             }
