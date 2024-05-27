@@ -361,6 +361,8 @@ class BitrixDealService
                         // }
                     }
                 }
+            }else{
+                $result = true;
             }
         }
 
