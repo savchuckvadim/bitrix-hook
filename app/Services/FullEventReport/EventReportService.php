@@ -1090,18 +1090,21 @@ class EventReportService
                 }
             }
         }
-
-        $reportDeals = BitrixDealFlowService::flow(  //закрывает сделку
-            $this->hook,
-            $this->portalDealData,
-            $this->currentDepartamentType,
-            $this->entityType,
-            $this->entityId,
-            $this->currentReportEventType, // xo warm presentation,
-            'done',  // plan done expired fail
-            $this->planResponsibleId,
-            '$fields'
-        );
+        if (
+            ($this->currentReportEventType === 'presentation' && $this->isPresentationDone) ||
+            ($this->currentReportEventType !== 'presentation')
+        )
+            $reportDeals = BitrixDealFlowService::flow(  //закрывает сделку
+                $this->hook,
+                $this->portalDealData,
+                $this->currentDepartamentType,
+                $this->entityType,
+                $this->entityId,
+                $this->currentReportEventType, // xo warm presentation,
+                'done',  // plan done expired fail
+                $this->planResponsibleId,
+                '$fields'
+            );
 
 
         //todo plan flow
