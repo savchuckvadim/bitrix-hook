@@ -556,7 +556,7 @@ class EventReportService
 
             $this->getEntityFlow();
 
-            $result = $this->createTask(null, $currentDealsIds);
+            $result = $this->createTask(null, $currentDealsIds['planDeals']);
             // if ($this->withLists) {
             $nowDate = now();
             // BtxCreateListItemJob::dispatch(
@@ -682,8 +682,6 @@ class EventReportService
             'plan',  // plan done expired 
             $updatedFields, //updting fields 
         );
-
-       
     }
 
 
@@ -1143,7 +1141,10 @@ class EventReportService
             'planDeals' => $planDeals,
         ]);
 
-        return [...$reportDeals, ...$planDeals];
+        return [
+            'reportDeals' => $reportDeals,
+            'planDeals' => $planDeals,
+        ];
     }
 
 
