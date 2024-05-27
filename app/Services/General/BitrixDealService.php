@@ -202,8 +202,13 @@ class BitrixDealService
         // sales_presentation
         // tmc_base
         $resultCategoryDatas = [];
+        $categoryPrephicks = [];
         if ($currentDepartamentType === 'sales') {
-            $categoryPrephicks = [$currentDepartamentType . '_base'];
+            if($eventAction == 'plan'){
+
+                array_push($categoryPrephicks, $currentDepartamentType . '_base');
+            }
+           
 
             if ($eventType == 'xo') {
                 // $categoryPrephicks = 'xo';

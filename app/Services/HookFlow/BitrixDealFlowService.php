@@ -34,7 +34,7 @@ class BitrixDealFlowService
     ) {
         sleep(1);
         $currentDeal = null;
-        $currentDeals = [];
+        $currentDealIds = [];
         $currentDealId = null;
         $currentCategoryDatas =  BitrixDealService::getTargetCategoryData(
             $portalDealData,
@@ -70,14 +70,14 @@ class BitrixDealFlowService
 
 
                 if (!$currentDealId) {
-                    $currentDeal = BitrixDealService::setDeal(
+                    $currentDealId = BitrixDealService::setDeal(
                         $hook,
                         $fieldsData,
                         $currentCategoryData
 
                     );
                 } else {
-                    $currentDeal = BitrixDealService::updateDeal(
+                    BitrixDealService::updateDeal(
                         $hook,
                         $currentDealId,
                         $fieldsData,
@@ -86,11 +86,11 @@ class BitrixDealFlowService
                     );
                 }
 
-                array_push($currentDeals, $currentDeal);
+                array_push($currentDealIds, $currentDealId);
             }
         }
 
 
-        return $currentDeals;
+        return $currentDealIds;
     }
 }
