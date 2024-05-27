@@ -51,7 +51,7 @@ class BitrixDealFlowService
                     $eventAction
                 );
 
-                $currentDealId = BitrixDealService::getDealId(
+                $currentDeal = BitrixDealService::getDealId(
                     $hook,
                     null,
                     $entityId,
@@ -60,7 +60,9 @@ class BitrixDealFlowService
                     $currentCategoryData
 
                 );
-
+                if (!empty($currentDeal['ID'])) {
+                    $currentDealId =  $currentDeal['ID'];
+                }
 
                 $fieldsData = [
                     'CATEGORY_ID' => $currentCategoryData['bitrixId'],
@@ -77,13 +79,23 @@ class BitrixDealFlowService
 
                     );
                 } else {
-                    BitrixDealService::updateDeal(
-                        $hook,
-                        $currentDealId,
-                        $fieldsData,
 
-
+                    $isCanDealStageUpdate = BitrixDealService::getIsCanDealStageUpdate(
+                        $currentDeal, //with ID CATEGORY_ID STAGE_ID
+                        $targetStageBtxId,
+                        $currentCategoryData,
+                        // $eventType, // xo warm presentation,
+                        // $eventAction,  // plan done expired fail
                     );
+
+                    if ($isCanDealStageUpdate) {
+                        BitrixDealService::updateDeal(
+                            $hook,
+                            $currentDealId,
+                            $fieldsData,
+
+                        );
+                    }
                 }
 
                 array_push($currentDealIds, $currentDealId);

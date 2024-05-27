@@ -42,7 +42,7 @@ class BitrixDealService
                         "!=STAGE_ID" =>  ["C" . $currentCategoryBtxId . ":SUCCESS"]
 
                     ],
-                    'select' => ["ID"],
+                    'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
                 ];
             }
             if ($leadId) {
@@ -59,7 +59,7 @@ class BitrixDealService
                         "!=STAGE_ID" =>  ["C" . $currentCategoryBtxId . ":SUCCESS"]
 
                     ],
-                    'select' => ["ID"],
+                    'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
                 ];
             }
 
@@ -75,9 +75,9 @@ class BitrixDealService
             if (is_array($currentDeal)) {
                 $currentDeal =  $currentDeal[0];
             }
-            if (!empty($currentDeal['ID'])) {
-                $currentDeal =  $currentDeal['ID'];
-            }
+            // if (!empty($currentDeal['ID'])) {
+            //     $currentDeal =  $currentDeal['ID'];
+            // }
             // Log::channel('telegram')->info('COLD DEAL get currentDeal', [
             //     'currentDeal' => $currentDeal
             // ]);
@@ -204,11 +204,11 @@ class BitrixDealService
         $resultCategoryDatas = [];
         $categoryPrephicks = [];
         if ($currentDepartamentType === 'sales') {
-            if($eventAction == 'plan' || ($eventAction == 'done' && $eventType == 'presentation')){
+            if ($eventAction == 'plan' || ($eventAction == 'done' && $eventType == 'presentation')) {
 
                 array_push($categoryPrephicks, $currentDepartamentType . '_base');
             }
-           
+
 
             if ($eventType == 'xo') {
                 // $categoryPrephicks = 'xo';
@@ -272,20 +272,17 @@ class BitrixDealService
         $stagePrephicks = 'warm';
 
 
-        if($currentCategoryData['code'] === 'sales_base'){
+        if ($currentCategoryData['code'] === 'sales_base') {
             $stagePrephicks = 'sales';
 
             if ($eventType == 'xo') {
                 $stageSuphicks = 'cold';
-
             } else if ($eventType == 'warm') {
                 $stageSuphicks = 'warm';
-
             } else if ($eventType == 'presentation') {
                 $stageSuphicks = 'pres';
             }
-
-        }else{
+        } else {
             if ($eventAction == 'done') {
                 $stageSuphicks = 'success';
             } else if ($eventAction == 'expired') {
@@ -293,24 +290,16 @@ class BitrixDealService
             } else if ($eventAction == 'fail') {
                 $stageSuphicks = 'fail';
             }
-    
+
             if ($eventType == 'xo') {
                 $stagePrephicks = 'cold';
-    
             } else if ($eventType == 'warm') {
                 $stagePrephicks = 'sales';
-
             } else if ($eventType == 'presentation') {
                 $stagePrephicks = 'spres';
             }
-
         }
 
-    
-
-        Log::info('STAGES', [
-            '$currentCategoryData' => $currentCategoryData
-        ]);
         if (!empty($currentCategoryData['stages'])) {
 
             foreach ($currentCategoryData['stages'] as $stage) {
@@ -324,11 +313,49 @@ class BitrixDealService
             }
         }
 
-        Log::info('STAGES', [
-            'targetStageBtxId' => $targetStageBtxId,
-            'stagePrephicks' => $stagePrephicks,
-            'stageSuphicks' => $stageSuphicks
-        ]);
+
         return $targetStageBtxId;
+    }
+
+    static function getIsCanDealStageUpdate(
+        $currentDeal, //with ID CATEGORY_ID STAGE_ID
+        $targetStageBtxId,
+        $currentCategoryData,
+        // $eventType, // xo warm presentation,
+        // $eventAction,  // plan done expired fail
+    ) {
+        $result = false;
+
+        if (!empty($currentDeal) && !empty($targetStageBtxId)) {
+
+            if ($currentCategoryData['code'] === 'sales_base') {
+                // $stagePrephicks = 'sales';
+
+                // if ($eventType == 'xo') {
+                //     $stageSuphicks = 'cold';
+                // } else if ($eventType == 'warm') {
+                //     $stageSuphicks = 'warm';
+                // } else if ($eventType == 'presentation') {
+                //     $stageSuphicks = 'pres';
+                // }
+                $isCurrentSearched = false;
+                if (!empty($currentCategoryData['stages'])) {
+
+                    foreach ($currentCategoryData['stages'] as $stage) {
+
+                        // if ($eventType === 'xo' || $eventType === 'cold') {
+                        if ($stage['bitrixId'] ==  $currentDeal['STAGE_ID']) {
+                            $result = $isCurrentSearched && true;
+                        }
+                        if ($stage['bitrixId'] ==  $targetStageBtxId) {
+                            $isCurrentSearched = true;
+                        }
+                        // }
+                    }
+                }
+            }
+        }
+
+        return $result;
     }
 }
