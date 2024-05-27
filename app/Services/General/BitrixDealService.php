@@ -325,12 +325,7 @@ class BitrixDealService
         // $eventAction,  // plan done expired fail
     ) {
         $result = false;
-        Log::info('DEAL TEST', [
-            'currentDeal' => $currentDeal,
-            'targetStageBtxId' => $targetStageBtxId,
-            'currentCategoryData' => $currentCategoryData,
-
-        ]);
+       
         if (!empty($currentDeal) && !empty($targetStageBtxId)) {
 
             if ($currentCategoryData['code'] === 'sales_base') {
@@ -347,7 +342,12 @@ class BitrixDealService
                 if (!empty($currentCategoryData['stages'])) {
 
                     foreach ($currentCategoryData['stages'] as $stage) {
-
+                        Log::info('DEAL TEST', [
+                            'currentDeal' => $currentDeal['STAGE_ID'],
+                            'targetStageBtxId' => $targetStageBtxId,
+                            'currentCategoryData' => "C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'],
+                            'isCurrentSearched' => $isCurrentSearched,
+                        ]);
                         // if ($eventType === 'xo' || $eventType === 'cold') {
                         if ("C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'] ==  $currentDeal['STAGE_ID']) {
                             $result = $isCurrentSearched && true;
