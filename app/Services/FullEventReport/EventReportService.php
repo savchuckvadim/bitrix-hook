@@ -1091,7 +1091,7 @@ class EventReportService
             }
         }
 
-        BitrixDealFlowService::flow(  //закрывает сделку
+        $reportDeals = BitrixDealFlowService::flow(  //закрывает сделку
             $this->hook,
             $this->portalDealData,
             $this->currentDepartamentType,
@@ -1119,7 +1119,7 @@ class EventReportService
         //presentation - создать или обновить presentation & Основная
 
 
-        BitrixDealFlowService::flow( //создает сделку
+        $planDeals =  BitrixDealFlowService::flow( //создает сделку
             $this->hook,
             $this->portalDealData,
             $this->currentDepartamentType,
@@ -1130,6 +1130,12 @@ class EventReportService
             $this->planResponsibleId,
             '$fields'
         );
+
+
+        Log::info('HOOK TESt', [
+            'reportDeals' => $reportDeals,
+            'planDeals' => $planDeals,
+        ]);
     }
 
 
