@@ -537,6 +537,7 @@ class EventReportService
             $currentSmartId = null;
             $currentDeal = null;
             $currentDealId = null;
+            $currentDealsIds = null;
             // if(!$this->smartId){
 
             // }
@@ -547,13 +548,15 @@ class EventReportService
             // }
 
             if ($this->isDealFlow && $this->portalDealData) {
-                $this->getDealFlow();
+                $currentDealsIds = $this->getDealFlow();
             }
 
 
             // $this->createTask($currentSmartId);
 
-            $result = $this->getEntityFlow();
+            $this->getEntityFlow();
+
+            $result = $this->createTask(null, $currentDealsIds);
             // if ($this->withLists) {
             $nowDate = now();
             // BtxCreateListItemJob::dispatch(
@@ -680,7 +683,7 @@ class EventReportService
             $updatedFields, //updting fields 
         );
 
-        return $this->createTask(null);
+       
     }
 
 
@@ -1148,7 +1151,8 @@ class EventReportService
 
 
     protected function createTask(
-        $currentSmartItemId
+        $currentSmartItemId,
+        $currentDealsIds
 
     ) {
 
@@ -1190,7 +1194,8 @@ class EventReportService
                 $this->currentPlanEventName,
                 $currentSmartItemId,
                 true, //$isNeedCompleteOtherTasks
-                $currentTaskId
+                $currentTaskId,
+                $currentDealsIds
             );
 
             return $createdTask;

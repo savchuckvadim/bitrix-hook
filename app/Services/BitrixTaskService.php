@@ -37,7 +37,8 @@ class BitrixTaskService
         $name,
         $currentSmartItemId,
         $isNeedCompleteOtherTasks,
-        $currentTaskId = null
+        $currentTaskId = null,
+        $currentDealsItemIds = null
 
 
     ) {
@@ -54,6 +55,7 @@ class BitrixTaskService
                 'currentSmartItemId' => $currentSmartItemId,
                 'isNeedCompleteOtherTasks' => $isNeedCompleteOtherTasks,
                 'currentTaskId' => $currentTaskId,
+                'currentDealsItemIds' => $currentDealsItemIds,
             ]
         );
 
@@ -123,6 +125,13 @@ class BitrixTaskService
 
             $taskTitle = $stringType . $name . '  ' . $deadline;
 
+
+            if (!empty($currentDealsItemIds)) {
+                foreach ($currentDealsItemIds as $dealId) {
+
+                    array_push($crmItems, 'D_' . $dealId);
+                }
+            }
 
             $taskData =  [
                 'fields' => [
@@ -288,9 +297,9 @@ class BitrixTaskService
             Log::info(
                 'APRIL_HOOK completeTask ',
                 [
-    
+
                     'responseData' => $responseData,
-                  
+
                 ]
             );
             return $responseData;
