@@ -276,8 +276,13 @@ class BitrixDealService
             $stagePrephicks = 'cold';
         } else if ($eventType == 'warm') {
             $stagePrephicks = 'sales';
+            if ($eventAction == 'plan') {
+                $stageSuphicks = 'warm';
+            }
+
         } else if ($eventType == 'presentation') {
             $stagePrephicks = 'spres';
+
         }
 
         Log::info('STAGES', [
