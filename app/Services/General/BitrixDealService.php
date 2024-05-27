@@ -344,7 +344,7 @@ class BitrixDealService
                     foreach ($currentCategoryData['stages'] as $stage) {
 
                         // if ($eventType === 'xo' || $eventType === 'cold') {
-                        if ($stage['bitrixId'] ==  $currentDeal['STAGE_ID']) {
+                        if ("C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'] ==  $currentDeal['STAGE_ID']) {
                             $result = $isCurrentSearched && true;
                         }
                         if ($stage['bitrixId'] ==  $targetStageBtxId) {
