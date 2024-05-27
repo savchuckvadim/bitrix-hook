@@ -264,25 +264,44 @@ class BitrixDealService
         // sales_tmc_fail
         $targetStageBtxId = null;
         $stageSuphicks = 'plan';
-        $stagePrephicks = 'plan';
-        if ($eventAction == 'done') {
-            $stageSuphicks = 'success';
-        } else if ($eventAction == 'expired') {
-            $stageSuphicks = 'pending';
-        } else if ($eventAction == 'fail') {
-            $stageSuphicks = 'fail';
+        $stagePrephicks = 'warm';
+
+
+        if($currentCategoryData['code'] === 'sales_base'){
+            $stagePrephicks = 'sales';
+
+            if ($eventType == 'xo') {
+                $stageSuphicks = 'cold';
+
+            } else if ($eventType == 'warm') {
+                $stageSuphicks = 'warm';
+
+            } else if ($eventType == 'presentation') {
+                $stageSuphicks = 'pres';
+            }
+
+        }else{
+            if ($eventAction == 'done') {
+                $stageSuphicks = 'success';
+            } else if ($eventAction == 'expired') {
+                $stageSuphicks = 'pending';
+            } else if ($eventAction == 'fail') {
+                $stageSuphicks = 'fail';
+            }
+    
+            if ($eventType == 'xo') {
+                $stagePrephicks = 'cold';
+    
+            } else if ($eventType == 'warm') {
+                $stagePrephicks = 'sales';
+
+            } else if ($eventType == 'presentation') {
+                $stagePrephicks = 'spres';
+            }
+
         }
 
-        if ($eventType == 'xo') {
-            $stagePrephicks = 'cold';
-        } else if ($eventType == 'warm') {
-            $stagePrephicks = 'sales';
-            if ($eventAction == 'plan') {
-                $stageSuphicks = 'warm';
-            }
-        } else if ($eventType == 'presentation') {
-            $stagePrephicks = 'spres';
-        }
+    
 
         Log::info('STAGES', [
             '$currentCategoryData' => $currentCategoryData
