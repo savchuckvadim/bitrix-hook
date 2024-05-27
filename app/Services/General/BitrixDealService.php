@@ -348,13 +348,16 @@ class BitrixDealService
                             'currentCategoryData' => "C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'],
                             'isCurrentSearched' => $isCurrentSearched,
                         ]);
+                        if ($stage['bitrixId'] ==  $targetStageBtxId) {
+                            $result = $isCurrentSearched && true;
+                            
+                        }
+
                         // if ($eventType === 'xo' || $eventType === 'cold') {
                         if ("C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'] ==  $currentDeal['STAGE_ID']) {
-                            $result = $isCurrentSearched && true;
-                        }
-                        if ($stage['bitrixId'] ==  $targetStageBtxId) {
                             $isCurrentSearched = true;
                         }
+                        
                         // }
                     }
                 }
