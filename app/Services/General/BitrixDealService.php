@@ -325,7 +325,12 @@ class BitrixDealService
         // $eventAction,  // plan done expired fail
     ) {
         $result = false;
+        Log::info('DEAL TEST', [
+            'currentDeal' => $currentDeal,
+            'targetStageBtxId' => $targetStageBtxId,
+            'currentCategoryData' => $currentCategoryData,
 
+        ]);
         if (!empty($currentDeal) && !empty($targetStageBtxId)) {
 
             if ($currentCategoryData['code'] === 'sales_base') {
