@@ -280,7 +280,9 @@ class BitrixDealService
             $stagePrephicks = 'spres';
         }
 
-
+        Log::info('STAGES', [
+            '$currentCategoryData' => $currentCategoryData
+        ]);
         if (!empty($currentCategoryData['stages'])) {
 
             foreach ($currentCategoryData['stages'] as $stage) {
@@ -293,6 +295,12 @@ class BitrixDealService
                 // }
             }
         }
+
+        Log::info('STAGES', [
+            'targetStageBtxId' => $targetStageBtxId,
+            'stagePrephicks' => $stagePrephicks,
+            'stageSuphicks' => $stageSuphicks
+        ]);
         return $targetStageBtxId;
     }
 }
