@@ -24,7 +24,7 @@ class BitrixDealService
     ) {
         // lidIds UF_CRM_7_1697129081
         $currentDeal = null;
-        
+
         try {
             $method = '/crm.deal.list.json';
             $url = $hook . $method;
@@ -92,7 +92,7 @@ class BitrixDealService
     static function setDeal(
         $hook,
         $fieldsData,
-       
+
     ) {
         $responseData = null;
         try {
@@ -116,7 +116,7 @@ class BitrixDealService
 
             $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: create Deal Item');
 
-           
+
 
 
             if (isset($responseData['item'])) {
@@ -129,11 +129,10 @@ class BitrixDealService
     }
 
     static function updateDeal(
-        $hook, 
-        $dealId, 
+        $hook,
+        $dealId,
         $fieldsData
-        )
-    {
+    ) {
 
         $methodSmart = '/crm.deal.update.json';
         $url = $hook . $methodSmart;
@@ -195,8 +194,21 @@ class BitrixDealService
     static function getTargetCategoryData(
         $portalDealData,
         $currentDepartamentType,
-        $action, //cold warm done
+        $eventType, // xo warm presentation,
+        $eventAction,  // plan done expired fail
     ) {
+        // sales_base
+        // sales_xo
+        // sales_presentation
+        // tmc_base
+        $categoryPrephicks = 'xo';
+        if ($eventType == 'xo') {
+            $categoryPrephicks = 'xo';
+        } else if ($eventType == 'warm') {
+            $categoryPrephicks = 'base';
+        } else if ($eventType == 'presentation') {
+            $categoryPrephicks = 'presentation';
+        }
 
         $currentCategory = null;
         if (!empty($portalDealData['categories'])) {
@@ -204,11 +216,8 @@ class BitrixDealService
             foreach ($portalDealData['categories'] as $category) {
 
                 if ($currentDepartamentType === 'sales') {
-                    if ($category['code'] == 'sales_base') {
-                    } else if ($category['code'] == 'sales_xo') {
+                    if ($category['code'] == 'sales_' . $categoryPrephicks) {
                         $currentCategory = $category;
-                    } else if ($category['code'] == 'sales_presentation') {
-                    } else if ($category['code'] == 'tmc_base') {
                     }
                 }
             }
@@ -220,20 +229,68 @@ class BitrixDealService
     static function getTargetStage(
         $currentCategoryData,
         $group,
-        $action
-        
-        )
-    {
+        $eventType, // xo warm presentation,
+        $eventAction,  // plan done expired fail
+
+    ) {
+        // sales_new
+        // sales_cold
+        // sales_warm
+        // sales_pres
+        // sales_offer_create
+        // sales_document_send
+        // sales_in_progress
+        // sales_money_await
+        // sales_supply
+        // sales_success
+        // sales_fail
+        // sales_double
+        // cold_new
+        // cold_plan
+        // cold_pending
+        // cold_success
+        // cold_fail
+        // spres_new
+        // spres_plan
+        // spres_pending
+        // spres_success
+        // spres_fail
+        // sales_tmc_new
+        // sales_tmc_plan
+        // sales_tmc_pending
+        // sales_tmc_pres_in_progress
+        // sales_tmc_success
+        // sales_tmc_fail
         $targetStageBtxId = null;
+        $stageSuphicks = 'plan';
+        $stagePrephicks = 'plan';
+        if ($eventAction == 'done') {
+            $stageSuphicks = 'success';
+        } else if ($eventAction == 'expired') {
+            $stageSuphicks = 'pending';
+        } else if ($eventAction == 'fail') {
+            $stageSuphicks = 'fail';
+        }
+
+        if ($eventType == 'xo') {
+            $stagePrephicks = 'cold';
+        } else if ($eventType == 'warm') {
+            $stagePrephicks = 'sales';
+        } else if ($eventType == 'presentation') {
+            $stagePrephicks = 'spres';
+        }
+
+
         if (!empty($currentCategoryData['stages'])) {
 
             foreach ($currentCategoryData['stages'] as $stage) {
 
-                if ($action === 'cold') {
-                    if ($stage['code'] == 'cold_plan') {
-                        $targetStageBtxId = $stage['bitrixId'];
-                    } 
+                // if ($eventType === 'xo' || $eventType === 'cold') {
+
+                if ($stage['code'] == $stagePrephicks . '_' . $stageSuphicks) {
+                    $targetStageBtxId = $stage['bitrixId'];
                 }
+                // }
             }
         }
         return $targetStageBtxId;

@@ -27,7 +27,7 @@ class BitrixDealFlowService
         $entityType,
         $entityId,
         $eventType, // xo warm presentation,
-        $eventAction,  // plan done expired 
+        $eventAction,  // plan done expired fail
         $responsibleId,
         $fields
 
@@ -38,12 +38,14 @@ class BitrixDealFlowService
         $currentCategoryData =  BitrixDealService::getTargetCategoryData(
             $portalDealData,
             $currentDepartamentType,
-            'cold'
+            $eventType,
+            $eventAction
         );
         $targetStageBtxId =  BitrixDealService::getTargetStage(
             $currentCategoryData,
             'sales',
-            'cold'
+            $eventType,
+            $eventAction
         );
 
         $currentDealId = BitrixDealService::getDealId(
@@ -65,9 +67,6 @@ class BitrixDealFlowService
 
 
         if (!$currentDealId) {
-
-
-
             $currentDeal = BitrixDealService::setDeal(
                 $hook,
                 $fieldsData,

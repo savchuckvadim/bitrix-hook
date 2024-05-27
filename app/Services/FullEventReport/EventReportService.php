@@ -9,6 +9,7 @@ use App\Http\Controllers\PortalController;
 use App\Services\BitrixGeneralService;
 use App\Services\BitrixTaskService;
 use App\Services\General\BitrixDepartamentService;
+use App\Services\HookFlow\BitrixDealFlowService;
 use App\Services\HookFlow\BitrixEntityFlowService;
 use Carbon\Carbon;
 
@@ -31,30 +32,46 @@ class EventReportService
     protected $currentTask;
     protected $report;
     protected $resultStatus;  // result noresult expired
+
+    //если есть текущая задача, то в ее названии будет
+    // // Звонок Презентация, Звонок По решению, В оплате 
+    // // или currentTask->eventType // xo 'presentation' in Work money_await
+    protected $currentReportEventType; // currentTask-> eventType xo
+    protected $currentReportEventName;
+
+
     protected $isResult = false;     //boolean
     protected $workStatus;    //object with current {code:"setAside" id:1 name:"Отложено"}
+    // 0: {id: 0, code: "inJob", name: "В работе"}
+    // 1: {id: 1, code: "setAside", name: "Отложено"}
+    // 2: {id: 2, code: "success", name: "Продажа"}
+    // 3: {id: 3, code: "fail", name: "Отказ"}
+
     protected $isInWork = false;  //boolean
     protected $isFail = false;  //boolean
     protected $isSuccessSale = false;  //boolean
-    protected $currentReportType;  //если есть текущая задача, то в ее названии будет
-    // Звонок Презентация, Звонок По решению, В оплате 
-    // или currentTask->eventType // xo 'presentation' in Work money_await
 
     protected $plan;
     protected $presentation;
     protected $isPlanned;
     protected $currentPlanEventType;
+
+    // 0: {id: 1, code: "warm", name: "Звонок"}
+    // // 1: {id: 2, code: "presentation", name: "Презентация"}
+    // // 2: {id: 3, code: "hot", name: "Решение"}
+    // // 3: {id: 4, code: "moneyAwait", name: "Оплата"}
+
     protected $currentPlanEventTypeName;
+    protected $currentPlanEventName;
 
     protected $planCreatedId;
     protected $planResponsibleId;
     protected $planDeadline;
 
-    protected $currentPlanEventName;
+
     protected $isPresentationDone;
     protected $isUnplannedPresentation;
-    protected $currentReportEventType;
-    protected $currentReportEventName;
+
 
 
     protected $currentBtxEntity;
@@ -529,9 +546,9 @@ class EventReportService
             //     $this->getSmartFlow();
             // }
 
-            // if ($this->isDealFlow && $this->portalDealData) {
-            //     $this->getDealFlow();
-            // }
+            if ($this->isDealFlow && $this->portalDealData) {
+                $this->getDealFlow();
+            }
 
 
             // $this->createTask($currentSmartId);
@@ -1048,17 +1065,64 @@ class EventReportService
 
     protected function getDealFlow()
     {
-        // BitrixDealFlowService::flow(
-        //     $this->hook,
-        //     $this->portalDealData,
-        //     $this->currentDepartamentType,
-        //     $this->entityType,
-        //     $this->entityId,
-        //     'xo', // xo warm presentation,
-        //     'plan',  // plan done expired 
-        //     $this->responsibleId,
-        //     '$fields'
-        // );
+        // report - закрывает сделки
+        // plan - создаёт
+        //todo report flow
+
+        // if report type = xo | cold
+        $currentReportStatus = 'done';
+       
+        if ($this->currentReportEventType == 'xo') {
+
+            if ($this->isFail) {
+                //найти сделку хо -> закрыть в отказ , заполнить поля отказа по хо 
+
+            } else {
+                if ($this->isResult) {                   // результативный
+                    if ($this->isInWork) {                // в работе или успех
+                        //найти сделку хо и закрыть в успех
+                    }
+                } else { //нерезультативный 
+                    if ($this->isPlanned) {                // если запланирован нерезультативный - перенос 
+                        //найти сделку хо и закрыть в успех
+                        $currentReportStatus = 'expired';
+                    }
+                }
+            }
+        }
+
+        BitrixDealFlowService::flow(
+            $this->hook,
+            $this->portalDealData,
+            $this->currentDepartamentType,
+            $this->entityType,
+            $this->entityId,
+            $this->currentReportEventType, // xo warm presentation,
+            'done',  // plan done expired fail
+            $this->planResponsibleId,
+            '$fields'
+        );
+
+
+        //todo plan flow
+
+        // if ($this->currentPlanEventType == 'warm') {
+        //     // найти или создать сделку base не sucess стадия теплый прозвон
+
+
+        // }
+        // if plan type = xo | cold
+        BitrixDealFlowService::flow(
+            $this->hook,
+            $this->portalDealData,
+            $this->currentDepartamentType,
+            $this->entityType,
+            $this->entityId,
+            $this->currentPlanEventType, // xo warm presentation,
+            'plan',  // plan done expired 
+            $this->planResponsibleId,
+            '$fields'
+        );
     }
 
 
