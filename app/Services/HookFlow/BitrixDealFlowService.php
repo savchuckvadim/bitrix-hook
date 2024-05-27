@@ -34,53 +34,63 @@ class BitrixDealFlowService
     ) {
         sleep(1);
         $currentDeal = null;
+        $currentDeals = [];
         $currentDealId = null;
-        $currentCategoryData =  BitrixDealService::getTargetCategoryData(
+        $currentCategoryDatas =  BitrixDealService::getTargetCategoryData(
             $portalDealData,
             $currentDepartamentType,
             $eventType,
             $eventAction
         );
-        $targetStageBtxId =  BitrixDealService::getTargetStage(
-            $currentCategoryData,
-            'sales',
-            $eventType,
-            $eventAction
-        );
+        if (!empty($currentCategoryDatas)) {
+            foreach ($currentCategoryDatas as $currentCategoryData) {
+                $targetStageBtxId =  BitrixDealService::getTargetStage(
+                    $currentCategoryData,
+                    'sales',
+                    $eventType,
+                    $eventAction
+                );
 
-        $currentDealId = BitrixDealService::getDealId(
-            $hook,
-            null,
-            $entityId,
-            $responsibleId,
-            $portalDealData,
-            $currentCategoryData
+                $currentDealId = BitrixDealService::getDealId(
+                    $hook,
+                    null,
+                    $entityId,
+                    $responsibleId,
+                    $portalDealData,
+                    $currentCategoryData
 
-        );
-
-
-        $fieldsData = [
-            'CATEGORY_ID' => $currentCategoryData['bitrixId'],
-            'STAGE_ID' => "C" . $currentCategoryData['bitrixId'] . ':' . $targetStageBtxId,
-            "COMPANY_ID" => $entityId
-        ];
+                );
 
 
-        if (!$currentDealId) {
-            $currentDeal = BitrixDealService::setDeal(
-                $hook,
-                $fieldsData,
-                $currentCategoryData
-
-            );
-        } else {
-            $currentDeal = BitrixDealService::updateDeal(
-                $hook,
-                $currentDealId,
-                $fieldsData,
+                $fieldsData = [
+                    'CATEGORY_ID' => $currentCategoryData['bitrixId'],
+                    'STAGE_ID' => "C" . $currentCategoryData['bitrixId'] . ':' . $targetStageBtxId,
+                    "COMPANY_ID" => $entityId
+                ];
 
 
-            );
+                if (!$currentDealId) {
+                    $currentDeal = BitrixDealService::setDeal(
+                        $hook,
+                        $fieldsData,
+                        $currentCategoryData
+
+                    );
+                } else {
+                    $currentDeal = BitrixDealService::updateDeal(
+                        $hook,
+                        $currentDealId,
+                        $fieldsData,
+
+
+                    );
+                }
+
+                array_push($currentDeals, $currentDeal);
+            }
         }
+
+
+        return $currentDeals;
     }
 }

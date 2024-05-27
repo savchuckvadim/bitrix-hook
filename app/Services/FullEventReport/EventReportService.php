@@ -1071,7 +1071,7 @@ class EventReportService
 
         // if report type = xo | cold
         $currentReportStatus = 'done';
-       
+
         if ($this->currentReportEventType == 'xo') {
 
             if ($this->isFail) {
@@ -1091,7 +1091,7 @@ class EventReportService
             }
         }
 
-        BitrixDealFlowService::flow(
+        BitrixDealFlowService::flow(  //закрывает сделку
             $this->hook,
             $this->portalDealData,
             $this->currentDepartamentType,
@@ -1112,7 +1112,14 @@ class EventReportService
 
         // }
         // if plan type = xo | cold
-        BitrixDealFlowService::flow(
+
+        //если запланирован
+        //xo - создать или обновить ХО & Основная
+        //warm | money_await | in_progress - создать или обновить  Основная
+        //presentation - создать или обновить presentation & Основная
+
+
+        BitrixDealFlowService::flow( //создает сделку
             $this->hook,
             $this->portalDealData,
             $this->currentDepartamentType,

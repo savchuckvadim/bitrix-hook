@@ -201,29 +201,30 @@ class BitrixDealService
         // sales_xo
         // sales_presentation
         // tmc_base
-        $categoryPrephicks = 'xo';
-        if ($eventType == 'xo') {
-            $categoryPrephicks = 'xo';
-        } else if ($eventType == 'warm') {
-            $categoryPrephicks = 'base';
-        } else if ($eventType == 'presentation') {
-            $categoryPrephicks = 'presentation';
-        }
+        $resultCategoryDatas = [];
+        if ($currentDepartamentType === 'sales') {
+            $categoryPrephicks = [$currentDepartamentType . '_base'];
 
+            if ($eventType == 'xo') {
+                // $categoryPrephicks = 'xo';
+                array_push($categoryPrephicks, $currentDepartamentType . '_xo');
+            } else if ($eventType == 'presentation') {
+                array_push($categoryPrephicks, $currentDepartamentType . '_presentation');
+            }
+        }
         $currentCategory = null;
         if (!empty($portalDealData['categories'])) {
 
             foreach ($portalDealData['categories'] as $category) {
 
-                if ($currentDepartamentType === 'sales') {
-                    if ($category['code'] == 'sales_' . $categoryPrephicks) {
-                        $currentCategory = $category;
-                    }
+                if (in_array($category['code'], $categoryPrephicks)) {
+                    $currentCategory = $category;
+                    array_push($resultCategoryDatas, $category);
                 }
             }
         }
 
-        return $currentCategory;
+        return $resultCategoryDatas;
     }
 
     static function getTargetStage(
@@ -279,10 +280,8 @@ class BitrixDealService
             if ($eventAction == 'plan') {
                 $stageSuphicks = 'warm';
             }
-
         } else if ($eventType == 'presentation') {
             $stagePrephicks = 'spres';
-
         }
 
         Log::info('STAGES', [
