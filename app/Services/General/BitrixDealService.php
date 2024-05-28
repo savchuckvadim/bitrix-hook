@@ -228,7 +228,12 @@ class BitrixDealService
                 }
             }
         }
-
+        Log::info('DEAL TEST', [
+            'resultCategoryDatas' => $resultCategoryDatas,
+            // 'targetStageBtxId' => $targetStageBtxId,
+            // 'currentCategoryData' => "C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'],
+            // 'isCurrentSearched' => $isCurrentSearched,
+        ]);
         return $resultCategoryDatas;
     }
 
@@ -342,12 +347,7 @@ class BitrixDealService
                 if (!empty($currentCategoryData['stages'])) {
 
                     foreach ($currentCategoryData['stages'] as $stage) {
-                        Log::info('DEAL TEST', [
-                            'currentDeal' => $currentDeal['STAGE_ID'],
-                            'targetStageBtxId' => $targetStageBtxId,
-                            'currentCategoryData' => "C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'],
-                            'isCurrentSearched' => $isCurrentSearched,
-                        ]);
+                       
                         if ($stage['bitrixId'] ==  $targetStageBtxId) {
                             $result = $isCurrentSearched && true;
                             

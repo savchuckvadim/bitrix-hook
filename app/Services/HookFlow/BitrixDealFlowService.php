@@ -4,7 +4,7 @@ namespace App\Services\HookFlow;
 
 
 use App\Services\General\BitrixDealService;
-
+use Illuminate\Support\Facades\Log;
 
 class BitrixDealFlowService
 
@@ -77,7 +77,12 @@ class BitrixDealFlowService
                     $fieldsData['TITLE'] =  $eventName;
                 }
                
-            
+                Log::info('DEAL TEST', [
+                    'currentDealId' => $currentDealId,
+                    // 'targetStageBtxId' => $targetStageBtxId,
+                    // 'currentCategoryData' => "C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'],
+                    // 'isCurrentSearched' => $isCurrentSearched,
+                ]);
 
                 if (!$currentDealId) {
                     $currentDealId = BitrixDealService::setDeal(
@@ -86,6 +91,10 @@ class BitrixDealFlowService
                         $currentCategoryData
 
                     );
+                    Log::info('DEAL TEST', [
+                        'BitrixDealService::setDeal' => $currentDealId,
+
+                    ]);
                 } else {
 
                     $isCanDealStageUpdate = BitrixDealService::getIsCanDealStageUpdate(
