@@ -349,107 +349,6 @@ class EventReportService
 
 
 
-        // if (!empty($portal[$entityType])) {
-        //     if (!empty($portal[$entityType]['bitrixfields'])) {
-        //         $currentEntityField = [];
-        //         $entityBtxFields = $portal[$entityType]['bitrixfields'];
-
-        //         foreach ($entityBtxFields as $pField) {
-
-
-        //             if (!empty($pField['code'])) {
-        //                 switch ($pField['code']) {
-        //                     case 'xo_name':
-        //                     case 'call_next_name':
-        //                         // $currentEntityField = [
-        //                         //     'UF_CRM_' . $companyField['bitrixId'] => $data['name']
-        //                         // ];
-        //                         $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $data['name'];
-        //                         break;
-        //                     case 'xo_date':
-        //                     case 'call_next_date':
-        //                     case 'call_last_date':
-        //                         // $currentEntityField = [
-        //                         //     'UF_CRM_' . $companyField['bitrixId'] => $data['deadline']
-        //                         // ];
-        //                         $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $data['deadline'];
-
-        //                         break;
-
-        //                     case 'xo_responsible':
-        //                     case 'manager_op':
-
-        //                         // $currentEntityField = [
-        //                         //     'UF_CRM_' . $companyField['bitrixId'] => $data['responsible']
-        //                         // ];
-        //                         $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $data['responsible'];
-
-        //                         break;
-
-        //                     case 'xo_created':
-
-        //                         // $currentEntityField = [
-        //                         //     'UF_CRM_' . $companyField['bitrixId'] => $data['created']
-        //                         // ];
-        //                         $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $data['created'];
-
-        //                         break;
-
-        //                     case 'op_history':
-        //                     case 'op_mhistory':
-
-        //                         $fullFieldId = 'UF_CRM_' . $pField['bitrixId'];  //UF_CRM_OP_MHISTORY
-        //                         $now = now();
-        //                         $stringComment = $now . ' ХО запланирован ' . $data['name'] . ' на ' . $data['deadline'];
-
-        //                         $currentComments = '';
-
-
-        //                         if (!empty($currentBtxEntity)) {
-        //                             // if (isset($currentBtxCompany[$fullFieldId])) {
-
-        //                             $currentComments = $currentBtxEntity[$fullFieldId];
-
-        //                             if ($pField['code'] == 'op_mhistory') {
-        //                                 $currentComments = [];
-        //                                 array_push($currentComments, $stringComment);
-        //                                 // if (!empty($currentComments)) {
-        //                                 //     array_push($currentComments, $stringComment);
-        //                                 // } else {
-        //                                 //     $currentComments = $stringComment;
-        //                                 // }
-        //                             } else {
-        //                                 $currentComments = $currentComments  . ' | ' . $stringComment;
-        //                             }
-        //                             // }
-        //                         }
-
-
-        //                         $resultEntityFields[$fullFieldId] =  $currentComments;
-
-        //                         break;
-
-        //                     default:
-        //                         // Log::channel('telegram')->error('APRIL_HOOK', ['default' => $companyField['code']]);
-
-        //                         break;
-        //                 }
-
-        //                 // if (!empty($currentEntityField)) {
-
-        //                 //     array_push($resultEntityFields, $currentEntityField);
-        //                 // }
-        //             }
-        //         }
-        //     }
-        // }
-
-        // if (!empty($resultEntityFields)) {
-        //     $this->entityFieldsUpdatingContent = $resultEntityFields;
-        // }
-
-
-
 
 
         $smartEntityId = null;
@@ -560,7 +459,12 @@ class EventReportService
 
             $this->getEntityFlow();
 
-            $result = $this->createTask(null, $currentDealsIds['planDeals']);
+            if ($this->isPlanned) {
+                $result = $this->createTask(null, $currentDealsIds['planDeals']);
+            } else {
+                $result = $this->workStatus;
+            }
+
             // if ($this->withLists) {
             $nowDate = now();
             // BtxCreateListItemJob::dispatch(
@@ -1114,7 +1018,7 @@ class EventReportService
         }
 
         if ($this->isPresentationDone) {                 // вне зависимости от текущего отчетного события,
-                                                         // если была нажата презентация проведена  
+            // если была нажата презентация проведена  
             $reportDeals = BitrixDealFlowService::flow(  // закрывает сделку или создает и закрывает сделку - презентация
                 $this->hook,
                 $this->portalDealData,
@@ -1145,20 +1049,21 @@ class EventReportService
         //warm | money_await | in_progress - создать или обновить  Основная
         //presentation - создать или обновить presentation & Основная
 
-
-        $planDeals =  BitrixDealFlowService::flow( //создает сделку
-            $this->hook,
-            $this->portalDealData,
-            $this->currentDepartamentType,
-            $this->entityType,
-            $this->entityId,
-            $this->currentPlanEventType, // xo warm presentation,
-            $this->currentPlanEventTypeName,
-            $this->currentPlanEventName,
-            'plan',  // plan done expired 
-            $this->planResponsibleId,
-            '$fields'
-        );
+        if ($this->isPlanned) {
+            $planDeals =  BitrixDealFlowService::flow( //создает сделку
+                $this->hook,
+                $this->portalDealData,
+                $this->currentDepartamentType,
+                $this->entityType,
+                $this->entityId,
+                $this->currentPlanEventType, // xo warm presentation,
+                $this->currentPlanEventTypeName,
+                $this->currentPlanEventName,
+                'plan',  // plan done expired 
+                $this->planResponsibleId,
+                '$fields'
+            );
+        }
 
 
         Log::info('HOOK TESt', [
