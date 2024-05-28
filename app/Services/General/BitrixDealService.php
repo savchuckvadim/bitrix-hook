@@ -65,7 +65,7 @@ class BitrixDealService
 
             Log::info('DEAL TEST', [
                 'BitrixDealService::getDealId data' => $data,
-              
+
 
             ]);
             $response = Http::get($url, $data);
@@ -86,7 +86,7 @@ class BitrixDealService
             //     'currentDeal' => $currentDeal
             // ]);
             Log::info('DEAL TEST', [
-      
+
                 'BitrixDealService::getDealId' => $currentDeal,
 
             ]);
@@ -213,7 +213,11 @@ class BitrixDealService
         $resultCategoryDatas = [];
         $categoryPrephicks = [];
         if ($currentDepartamentType === 'sales') {
-            if ($eventAction == 'plan' || ($eventAction == 'done' && $eventType == 'presentation')) {
+            if (
+                $eventAction == 'plan' ||
+                ($eventAction == 'done' && $eventType == 'presentation') ||
+                $eventAction == 'fail'
+            ) {
 
                 array_push($categoryPrephicks, $currentDepartamentType . '_base');
             }
@@ -289,12 +293,16 @@ class BitrixDealService
         if ($currentCategoryData['code'] === 'sales_base') {
             $stagePrephicks = 'sales';
 
-            if ($eventType == 'xo') {
-                $stageSuphicks = 'cold';
-            } else if ($eventType == 'warm') {
-                $stageSuphicks = 'warm';
-            } else if ($eventType == 'presentation') {
-                $stageSuphicks = 'pres';
+            if ($eventAction == 'fail' || $eventAction == 'success') {
+                $stageSuphicks = $eventAction;
+            } else {
+                if ($eventType == 'xo') {
+                    $stageSuphicks = 'cold';
+                } else if ($eventType == 'warm') {
+                    $stageSuphicks = 'warm';
+                } else if ($eventType == 'presentation') {
+                    $stageSuphicks = 'pres';
+                }
             }
         } else {
             if ($eventAction == 'done') {
@@ -307,9 +315,11 @@ class BitrixDealService
 
             if ($eventType == 'xo') {
                 $stagePrephicks = 'cold';
-            } else if ($eventType == 'warm') {
-                $stagePrephicks = 'sales';
-            } else if ($eventType == 'presentation') {
+            }
+            //  else if ($eventType == 'warm') {
+            //     $stagePrephicks = 'sales';
+            // }
+            else if ($eventType == 'presentation') {
                 $stagePrephicks = 'spres';
             }
         }
@@ -339,7 +349,7 @@ class BitrixDealService
         // $eventAction,  // plan done expired fail
     ) {
         $result = false;
-       
+
         if (!empty($currentDeal) && !empty($targetStageBtxId)) {
 
             if ($currentCategoryData['code'] === 'sales_base') {
@@ -356,21 +366,20 @@ class BitrixDealService
                 if (!empty($currentCategoryData['stages'])) {
 
                     foreach ($currentCategoryData['stages'] as $stage) {
-                       
+
                         if ($stage['bitrixId'] ==  $targetStageBtxId) {
                             $result = $isCurrentSearched && true;
-                            
                         }
 
                         // if ($eventType === 'xo' || $eventType === 'cold') {
                         if ("C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'] ==  $currentDeal['STAGE_ID']) {
                             $isCurrentSearched = true;
                         }
-                        
+
                         // }
                     }
                 }
-            }else{
+            } else {
                 $result = true;
             }
         }
