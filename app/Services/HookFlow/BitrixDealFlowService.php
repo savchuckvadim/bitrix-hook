@@ -51,7 +51,10 @@ class BitrixDealFlowService
                     $eventType,
                     $eventAction
                 );
+                Log::info('DEAL TEST', [
+                    'targetStageBtxId' => $targetStageBtxId,
 
+                ]);
                 $currentDeal = BitrixDealService::getDealId(
                     $hook,
                     null,
@@ -66,17 +69,17 @@ class BitrixDealFlowService
                 }
 
                 $fieldsData = [
-                   
+
                     'CATEGORY_ID' => $currentCategoryData['bitrixId'],
                     'STAGE_ID' => "C" . $currentCategoryData['bitrixId'] . ':' . $targetStageBtxId,
                     "COMPANY_ID" => $entityId
                 ];
 
 
-                if($currentCategoryData['code'] === 'sales_xo' ||  $currentCategoryData['code'] === 'sales_presentation'){
+                if ($currentCategoryData['code'] === 'sales_xo' ||  $currentCategoryData['code'] === 'sales_presentation') {
                     $fieldsData['TITLE'] =  $eventName;
                 }
-               
+
                 // Log::info('DEAL TEST', [
                 //     'currentDealId' => $currentDealId,
                 //     // 'targetStageBtxId' => $targetStageBtxId,
