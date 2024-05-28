@@ -27,6 +27,7 @@ class BitrixDealFlowService
         $entityType,
         $entityId,
         $eventType, // xo warm presentation,
+        $eventName, //Презентация , Звонок
         $eventAction,  // plan done expired fail
         $responsibleId,
         $fields
@@ -65,11 +66,18 @@ class BitrixDealFlowService
                 }
 
                 $fieldsData = [
+                   
                     'CATEGORY_ID' => $currentCategoryData['bitrixId'],
                     'STAGE_ID' => "C" . $currentCategoryData['bitrixId'] . ':' . $targetStageBtxId,
                     "COMPANY_ID" => $entityId
                 ];
 
+
+                if($currentCategoryData['code'] === 'sales_xo' ||  $currentCategoryData['code'] === 'sales_presentation'){
+                    $fieldsData['TITLE'] =  $eventName;
+                }
+               
+            
 
                 if (!$currentDealId) {
                     $currentDealId = BitrixDealService::setDeal(
