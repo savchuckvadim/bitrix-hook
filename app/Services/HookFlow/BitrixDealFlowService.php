@@ -85,16 +85,20 @@ class BitrixDealFlowService
                 // ]);
 
                 if (!$currentDealId) {
+                    Log::info('DEAL TEST', [
+                        'currentDealId' => $currentDealId,
+
+                    ]);
                     $currentDealId = BitrixDealService::setDeal(
                         $hook,
                         $fieldsData,
                         $currentCategoryData
 
                     );
-                    // Log::info('DEAL TEST', [
-                    //     'BitrixDealService::setDeal' => $currentDealId,
+                    Log::info('DEAL TEST', [
+                        'setDeal currentDealId' => $currentDealId,
 
-                    // ]);
+                    ]);
                 } else {
 
                     $isCanDealStageUpdate = BitrixDealService::getIsCanDealStageUpdate(
