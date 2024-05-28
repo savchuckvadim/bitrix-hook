@@ -27,16 +27,17 @@ class BitrixDealFlowService
         $entityType,
         $entityId,
         $eventType, // xo warm presentation,
-        $eventName, //Презентация , Звонок
+        $eventTypeName, //Презентация , Звонок
+        $eventName, //имя планируемого события
         $eventAction,  // plan done expired fail
         $responsibleId,
         $fields
 
     ) {
         sleep(1);
-       
+
         $currentDealIds = [];
-       
+
         $currentCategoryDatas =  BitrixDealService::getTargetCategoryData(
             $portalDealData,
             $currentDepartamentType,
@@ -78,8 +79,16 @@ class BitrixDealFlowService
                 ];
 
 
-                if ($currentCategoryData['code'] === 'sales_xo' ||  $currentCategoryData['code'] === 'sales_presentation') {
-                    $fieldsData['TITLE'] =  $eventName;
+                if (
+                    $eventAction === 'plan'
+                    || ($eventAction === 'done' &&
+                        $currentCategoryData['code'] === 'sales_presentation' &&
+                        !$currentDealId
+                    )
+                ) {
+                    if ($currentCategoryData['code'] === 'sales_xo' ||  $currentCategoryData['code'] === 'sales_presentation') {
+                        $fieldsData['TITLE'] = $eventTypeName . ' ' .  $eventName;
+                    }
                 }
 
                 // Log::info('DEAL TEST', [

@@ -1106,6 +1106,7 @@ class EventReportService
                 $this->entityId,
                 $this->currentReportEventType, // xo warm presentation,
                 $this->currentReportEventName,
+                $this->currentPlanEventName,
                 'done',  // plan done expired fail
                 $this->planResponsibleId,
                 '$fields'
@@ -1122,6 +1123,7 @@ class EventReportService
                 $this->entityId,
                 'presentation', // xo warm presentation,
                 'Презентация',
+                'Проведена',
                 'done',  // plan done expired fail
                 $this->planResponsibleId,
                 '$fields'
@@ -1152,6 +1154,7 @@ class EventReportService
             $this->entityId,
             $this->currentPlanEventType, // xo warm presentation,
             $this->currentPlanEventTypeName,
+            $this->currentPlanEventName,
             'plan',  // plan done expired 
             $this->planResponsibleId,
             '$fields'

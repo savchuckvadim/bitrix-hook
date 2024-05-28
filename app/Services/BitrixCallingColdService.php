@@ -396,7 +396,7 @@ class BitrixCallingColdService
                 $this->entityFieldsUpdatingContent, //updting fields 
             );
             // if ($this->withLists) {
-                $nowDate = now();
+            $nowDate = now();
             BtxCreateListItemJob::dispatch(
                 $this->hook,
                 $this->bitrixLists,
@@ -566,6 +566,7 @@ class BitrixCallingColdService
             $this->entityId,
             'xo', // xo warm presentation,
             'Холодный звонок',
+            $this->name,
             'plan',  // plan done expired 
             $this->responsibleId,
             '$fields'
