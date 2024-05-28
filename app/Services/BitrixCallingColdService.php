@@ -389,7 +389,7 @@ class BitrixCallingColdService
                 }
             }
 
-            Log::info('APRIL_HOOK getCold', ['$data' => $currentDealsIds]);
+           
             $this->createColdTask($currentSmartId, $currentDealsIds);
 
             BitrixEntityFlowService::flow(
