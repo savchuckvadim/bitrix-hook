@@ -34,9 +34,9 @@ class BitrixDealFlowService
 
     ) {
         sleep(1);
-        $currentDeal = null;
+       
         $currentDealIds = [];
-        $currentDealId = null;
+       
         $currentCategoryDatas =  BitrixDealService::getTargetCategoryData(
             $portalDealData,
             $currentDepartamentType,
@@ -45,6 +45,8 @@ class BitrixDealFlowService
         );
         if (!empty($currentCategoryDatas)) {
             foreach ($currentCategoryDatas as $currentCategoryData) {
+                $currentDeal = null;
+                $currentDealId = null;
                 $targetStageBtxId =  BitrixDealService::getTargetStage(
                     $currentCategoryData,
                     'sales',
