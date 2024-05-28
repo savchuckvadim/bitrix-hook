@@ -565,6 +565,7 @@ class BitrixCallingColdService
             $this->entityType,
             $this->entityId,
             'xo', // xo warm presentation,
+            'Холодный звонок',
             'plan',  // plan done expired 
             $this->responsibleId,
             '$fields'

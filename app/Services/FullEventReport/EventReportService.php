@@ -1097,10 +1097,7 @@ class EventReportService
                 }
             }
         }
-        if (
-            ($this->currentReportEventType === 'presentation' && $this->isPresentationDone) ||
-            ($this->currentReportEventType !== 'presentation')
-        ) {
+        if ($this->currentReportEventType !== 'presentation') {            // если не презентация - отчитываемся просто по закрытию звонка
             $reportDeals = BitrixDealFlowService::flow(  //закрывает сделку
                 $this->hook,
                 $this->portalDealData,
@@ -1115,7 +1112,21 @@ class EventReportService
             );
         }
 
-
+        if ($this->isPresentationDone) {                 // вне зависимости от текущего отчетного события,
+                                                         // если была нажата презентация проведена  
+            $reportDeals = BitrixDealFlowService::flow(  // закрывает сделку или создает и закрывает сделку - презентация
+                $this->hook,
+                $this->portalDealData,
+                $this->currentDepartamentType,
+                $this->entityType,
+                $this->entityId,
+                'presentation', // xo warm presentation,
+                'Презентация',
+                'done',  // plan done expired fail
+                $this->planResponsibleId,
+                '$fields'
+            );
+        }
 
 
         //todo plan flow
