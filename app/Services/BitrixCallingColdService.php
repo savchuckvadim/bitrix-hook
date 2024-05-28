@@ -375,7 +375,7 @@ class BitrixCallingColdService
 
             // }
             // $randomNumber = rand(1, 2);
-
+            Log::info('APRIL_HOOK getCold', ['$data' => 'yo']);
             if ($this->isSmartFlow) {
                 $this->getSmartFlow();
             }
@@ -385,7 +385,7 @@ class BitrixCallingColdService
                 $currentDealsIds = $currentDealsIds['planDeals'];
             }
 
-
+            Log::info('APRIL_HOOK getCold', ['$data' => $currentDealsIds]);
             $this->createColdTask($currentSmartId, $currentDealsIds);
 
             BitrixEntityFlowService::flow(

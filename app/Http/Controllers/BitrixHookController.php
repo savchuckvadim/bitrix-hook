@@ -119,7 +119,7 @@ class BitrixHookController extends Controller
                 'name' => $name,
 
             ];
-            Log::channel('telegram')->error('APRIL_HOOK pre rerdis', ['$data' => $data]);
+            Log::info('APRIL_HOOK pre rerdis', ['$data' => $data]);
 
             ColdCallJob::dispatch(
                 $data
