@@ -39,7 +39,7 @@ class BitrixDealService
                         "=CATEGORY_ID" => $currentCategoryBtxId,
                         'COMPANY_ID' => $companyId,
                         "ASSIGNED_BY_ID" => $userId,
-                        "!=STAGE_ID" =>  ["C" . $currentCategoryBtxId . ":SUCCESS"]
+                        "!=STAGE_ID" =>  ["C" . $currentCategoryBtxId . ":WON"]
 
                     ],
                     'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
@@ -56,7 +56,7 @@ class BitrixDealService
                         "ASSIGNED_BY_ID" => $userId,
                         'LEAD_ID' => $leadId,
                         "CATEGORY_ID" => $currentCategoryBtxId,
-                        "!=STAGE_ID" =>  ["C" . $currentCategoryBtxId . ":SUCCESS"]
+                        "!=STAGE_ID" =>  ["C" . $currentCategoryBtxId . ":WON"]
 
                     ],
                     'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
