@@ -91,12 +91,12 @@ class BitrixDealFlowService
                     }
                 }
 
-                // Log::info('DEAL TEST', [
-                //     'currentDealId' => $currentDealId,
-                //     // 'targetStageBtxId' => $targetStageBtxId,
-                //     // 'currentCategoryData' => "C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'],
-                //     // 'isCurrentSearched' => $isCurrentSearched,
-                // ]);
+                Log::info('DEAL TEST', [
+                    'currentDealId' => $currentDealId,
+                    // 'targetStageBtxId' => $targetStageBtxId,
+                    // 'currentCategoryData' => "C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'],
+                    // 'isCurrentSearched' => $isCurrentSearched,
+                ]);
 
                 if (!$currentDealId) {
                     Log::info('DEAL TEST', [

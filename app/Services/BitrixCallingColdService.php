@@ -364,6 +364,7 @@ class BitrixCallingColdService
 
         try {
             // Log::channel('telegram')->error('APRIL_HOOK data', ['entityType' => $this->entityType]);
+            $currentDealsIds = [];
             $updatedCompany = null;
             $updatedLead = null;
             $currentSmart = null;
@@ -380,11 +381,12 @@ class BitrixCallingColdService
             }
 
             if ($this->isDealFlow && $this->portalDealData) {
-                $this->getDealFlow();
+                $currentDealsIds = $this->getDealFlow();
+                $currentDealsIds = $currentDealsIds['planDeals'];
             }
 
 
-            $this->createColdTask($currentSmartId);
+            $this->createColdTask($currentSmartId, $currentDealsIds);
 
             BitrixEntityFlowService::flow(
                 $this->portal,
@@ -580,8 +582,8 @@ class BitrixCallingColdService
 
 
     public function createColdTask(
-        $currentSmartItemId
-
+        $currentSmartItemId,
+        $currentDealsItemIds = null
     ) {
 
 
@@ -614,6 +616,10 @@ class BitrixCallingColdService
                 $this->name,
                 $currentSmartItemId,
                 true, //$isNeedCompleteOtherTasks
+                null,
+                $currentDealsItemIds,
+
+
             );
 
             return $createdTask;
