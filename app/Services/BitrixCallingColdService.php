@@ -382,7 +382,11 @@ class BitrixCallingColdService
 
             if ($this->isDealFlow && $this->portalDealData) {
                 $currentDealsIds = $this->getDealFlow();
-                $currentDealsIds = $currentDealsIds['planDeals'];
+                if (!empty($currentDealsIds)) {
+                    if (!empty($currentDealsIds['planDeals'])) {
+                        $currentDealsIds = $currentDealsIds['planDeals'];
+                    }
+                }
             }
 
             Log::info('APRIL_HOOK getCold', ['$data' => $currentDealsIds]);
