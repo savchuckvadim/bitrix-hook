@@ -1094,7 +1094,7 @@ class EventReportService
         if (
             ($this->currentReportEventType === 'presentation' && $this->isPresentationDone) ||
             ($this->currentReportEventType !== 'presentation')
-        )
+        ){
             $reportDeals = BitrixDealFlowService::flow(  //закрывает сделку
                 $this->hook,
                 $this->portalDealData,
@@ -1107,6 +1107,8 @@ class EventReportService
                 $this->planResponsibleId,
                 '$fields'
             );
+        }
+            
             
             
 
