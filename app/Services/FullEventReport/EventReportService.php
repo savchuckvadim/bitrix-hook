@@ -1066,6 +1066,8 @@ class EventReportService
 
     protected function getDealFlow()
     {
+        $reportDeals = [];
+        $planDeals = [];
         // report - закрывает сделки
         // plan - создаёт
         //todo report flow
@@ -1094,7 +1096,7 @@ class EventReportService
         if (
             ($this->currentReportEventType === 'presentation' && $this->isPresentationDone) ||
             ($this->currentReportEventType !== 'presentation')
-        ){
+        ) {
             $reportDeals = BitrixDealFlowService::flow(  //закрывает сделку
                 $this->hook,
                 $this->portalDealData,
@@ -1108,9 +1110,9 @@ class EventReportService
                 '$fields'
             );
         }
-            
-            
-            
+
+
+
 
         //todo plan flow
 
