@@ -164,7 +164,11 @@ class EventReportService
 
                 switch ($data['currentTask']['eventType']) {
                     case 'xo':
+                    case 'cold':
                         $this->currentReportEventName = 'Холодный звонок';
+                    case 'presentation':
+                    case 'pres':
+                        $this->currentReportEventName = 'Презентация';
                         break;
 
                     default:
@@ -1136,7 +1140,7 @@ class EventReportService
             $this->entityType,
             $this->entityId,
             $this->currentPlanEventType, // xo warm presentation,
-            $this->currentPlanEventName,
+            $this->currentPlanEventTypeName,
             'plan',  // plan done expired 
             $this->planResponsibleId,
             '$fields'
