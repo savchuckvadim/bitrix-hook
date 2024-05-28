@@ -36,7 +36,7 @@ class BitrixDealService
                     'filter' => [
                         // "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
                         // "=assignedById" => $userId,
-                        "CATEGORY_ID" => $currentCategoryBtxId,
+                        "=CATEGORY_ID" => $currentCategoryBtxId,
                         'COMPANY_ID' => $companyId,
                         "ASSIGNED_BY_ID" => $userId,
                         "!=STAGE_ID" =>  ["C" . $currentCategoryBtxId . ":SUCCESS"]
@@ -63,7 +63,11 @@ class BitrixDealService
                 ];
             }
 
+            Log::info('DEAL TEST', [
+                'BitrixDealService::getDealId data' => $data,
+              
 
+            ]);
             $response = Http::get($url, $data);
             // $responseData = $response->json();
             $currentDeal = APIBitrixController::getBitrixRespone($response, 'general service: get deal');
@@ -81,6 +85,11 @@ class BitrixDealService
             // Log::channel('telegram')->info('COLD DEAL get currentDeal', [
             //     'currentDeal' => $currentDeal
             // ]);
+            Log::info('DEAL TEST', [
+      
+                'BitrixDealService::getDealId' => $currentDeal,
+
+            ]);
             return $currentDeal;
         } catch (\Throwable $th) {
             return $currentDeal;
