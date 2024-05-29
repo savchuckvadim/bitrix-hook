@@ -5,7 +5,7 @@ namespace App\Services\FullEventReport;
 
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\PortalController;
-
+use App\Jobs\BtxCreateListItemJob;
 use App\Services\BitrixGeneralService;
 use App\Services\BitrixTaskService;
 use App\Services\General\BitrixDepartamentService;
@@ -469,38 +469,8 @@ class EventReportService
             } else {
                 $result = $this->workStatus;
             }
+            $this->getListFlow();
 
-            // if ($this->withLists) {
-            $nowDate = now();
-            // BtxCreateListItemJob::dispatch(
-            //     $this->hook,
-            //     $this->bitrixLists,
-            //     'xo',
-            //     'plan',
-            //     $nowDate,
-            //     $this->stringType,
-            //     $this->deadline,
-            //     $this->createdId,
-            //     $this->responsibleId,
-            //     $this->responsibleId,
-            //     $this->entityId,
-            //     '$comment'
-            // )->onQueue('low-priority');
-            // BitrixListFlowService::getListsFlow(
-            //     $this->hook,
-            //     $this->bitrixLists,
-            //     'xo',
-            //     'plan',
-            //     $this->deadline,
-            //     $this->stringType,
-            //     $this->deadline,
-            //     $this->createdId,
-            //     $this->responsibleId,
-            //     $this->responsibleId,
-            //     $this->entityId,
-            //     '$comment'
-            // );
-            // }
 
             return APIOnlineController::getSuccess(['result' => $result]);
         } catch (\Throwable $th) {
@@ -1167,11 +1137,11 @@ class EventReportService
                     true, //$isNeedCompleteOtherTasks
                     $currentTaskId,
                     $currentDealsIds,
-   
+
                 );
             } else {
                 $createdTask =  $taskService->updateTask(
-                  
+
                     $this->domain,
                     $this->hook,
                     $currentTaskId,
@@ -1193,6 +1163,55 @@ class EventReportService
             Log::info('error COLD', ['error' => $th->getMessage()]);
             Log::channel('telegram')->error('APRIL_HOOK', $errorMessages);
             return $createdTask;
+        }
+    }
+
+
+    protected function getListFlow()
+    {
+        $reportEventType = $this->currentReportEventType;
+        $reportEventTypeName = $this->currentReportEventName;
+        $planEventTypeName = $this->currentPlanEventTypeName;
+        $planEventType = $this->currentPlanEventType; //если перенос то тип будет автоматически взят из report - предыдущего события
+        $eventAction = 'expired';
+
+        if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
+            //report
+            $eventAction = 'plan';
+
+            BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию
+                $this->hook,
+                $this->bitrixLists,
+                $reportEventType,
+                $reportEventTypeName,
+                'done',
+                $this->stringType,
+                $this->planDeadline,
+                $this->planResponsibleId,
+                $this->planResponsibleId,
+                $this->planResponsibleId,
+                $this->entityId,
+                '$comment'
+            )->onQueue('low-priority');
+        }
+
+
+
+        if ($this->isPlanned) {
+            BtxCreateListItemJob::dispatch(
+                $this->hook,
+                $this->bitrixLists,
+                $planEventType,
+                $planEventTypeName,
+                $eventAction,
+                $this->stringType,
+                $this->planDeadline,
+                $this->planResponsibleId,
+                $this->planResponsibleId,
+                $this->planResponsibleId,
+                $this->entityId,
+                '$comment'
+            )->onQueue('low-priority');
         }
     }
 }

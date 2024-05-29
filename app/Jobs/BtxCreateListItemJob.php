@@ -21,11 +21,12 @@ class BtxCreateListItemJob implements ShouldQueue
     protected $hook;
     protected $bitrixLists;
     protected $eventType;
+    protected $eventTypeName;
     protected $eventAction;
     protected $stringType;
     protected $eventName;
     protected $deadline;
-    protected $nowDate;
+
     
     protected $createdId;
     protected $suresponsibleId;
@@ -36,8 +37,9 @@ class BtxCreateListItemJob implements ShouldQueue
         $hook,
         $bitrixLists,
         $eventType, // xo warm presentation,
+        $eventTypeName,
         $eventAction,  // plan done expired 
-        $nowDate,
+      
         $stringType,
         $deadline,
         $createdId,
@@ -48,11 +50,12 @@ class BtxCreateListItemJob implements ShouldQueue
     ) {
         $this->hook =  $hook;
         $this->bitrixLists =  $bitrixLists;
-        $this->$eventType = $eventType;
-        $this->$eventAction = $eventAction;
+        $this->eventType = $eventType;
+        $this->eventTypeName = $eventTypeName;
+        $this->eventAction = $eventAction;
         $this->deadline =  $deadline;
         $this->stringType =  $stringType;
-        $this->nowDate =  $nowDate;
+     
         $this->createdId =  $createdId;
         $this->responsibleId =  $responsibleId;
         $this->suresponsibleId =  $suresponsibleId;
@@ -65,15 +68,15 @@ class BtxCreateListItemJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $randomNumber = 5;
+        $randomNumber = rand(3, 10);
         sleep($randomNumber);
       
         BitrixListFlowService::getListsFlow(
             $this->hook,
             $this->bitrixLists,
             $this->eventType,
+            $this->eventTypeName,
             $this->eventAction,
-            $this->nowDate,
             $this->stringType,
             $this->deadline,
             $this->createdId,

@@ -402,13 +402,13 @@ class BitrixCallingColdService
                 $this->entityFieldsUpdatingContent, //updting fields 
             );
             // if ($this->withLists) {
-            $nowDate = now();
+      
             BtxCreateListItemJob::dispatch(
                 $this->hook,
                 $this->bitrixLists,
                 'xo',
+                'Холодный обзвон',
                 'plan',
-                $nowDate,
                 $this->stringType,
                 $this->deadline,
                 $this->createdId,

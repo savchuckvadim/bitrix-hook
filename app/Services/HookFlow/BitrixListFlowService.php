@@ -28,9 +28,9 @@ class BitrixListFlowService
     static function getListsFlow(
         $hook,
         $bitrixLists,
-        $eventType, // xo warm presentation,
-        $eventAction,  // plan done expired 
-        $nowDate,
+        $eventType, // xo warm presentation, offer invoice
+        $eventTypeName,
+        $eventAction,  // plan done expired fail success
         $eventName,
         $deadline,
         $created,
@@ -87,8 +87,8 @@ class BitrixListFlowService
                 'code' => 'event_type',
                 'name' => 'Тип События',
                 'list' =>  [
-                    'code' => 'xo',
-                    'name' => 'Холодный звонок',
+                    'code' => $eventType,
+                    'name' => $eventTypeName,
 
                 ],
             ],
@@ -96,7 +96,7 @@ class BitrixListFlowService
                 'code' => 'event_action',
                 'name' => 'Событие Действие',
                 'list' =>  [
-                    'code' => 'plan',
+                    'code' => $eventAction,
                     'name' => 'Запланирован'
                 ],
             ],
@@ -142,9 +142,9 @@ class BitrixListFlowService
                 }
                 // array_push($fieldsData, $currentDataField);
             }
-            Log::channel('telegram')->info('HOOK LISTS TEST', [
-                'data' => $fieldsData
-            ]);
+            // Log::channel('telegram')->info('HOOK LISTS TEST', [
+            //     'data' => $fieldsData
+            // ]);
             BitrixListService::setItem(
                 $hook,
                 $bitrixList['bitrixId'],
