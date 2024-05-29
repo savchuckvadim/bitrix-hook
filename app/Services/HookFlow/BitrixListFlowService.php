@@ -168,7 +168,10 @@ class BitrixListFlowService
 
                 $btxFields = $bitrixList['bitrixfields'];
                 foreach ($btxFields as $btxField) {
-
+                    Log::channel('telegram')->info('HOOK LISTS item', [
+                        'btxField' => $btxField,
+                       
+                    ]);
 
 
                     if ($btxField['code'] === $code) {
@@ -186,10 +189,7 @@ class BitrixListFlowService
                         foreach ($btxFieldItems as $btxFieldItem) {
 
                             if ($listCode) {
-                                Log::channel('telegram')->info('HOOK LISTS item', [
-                                    'listCode' => $listCode,
-                                    'btxFieldItem' => $btxFieldItem,
-                                ]);
+                              
                                 if ($btxFieldItem['code'] === $listCode) {
                                     $result['fieldItemBtxId'] = $btxFieldItem['bitrixId'];
                                 }
