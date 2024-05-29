@@ -40,7 +40,7 @@ class BtxCreateListItemJob implements ShouldQueue
         $eventTypeName,
         $eventAction,  // plan done expired 
       
-        $stringType,
+        // $stringType,
         $deadline,
         $createdId,
         $responsibleId,
@@ -54,7 +54,7 @@ class BtxCreateListItemJob implements ShouldQueue
         $this->eventTypeName = $eventTypeName;
         $this->eventAction = $eventAction;
         $this->deadline =  $deadline;
-        $this->stringType =  $stringType;
+        // $this->stringType =  $stringType;
      
         $this->createdId =  $createdId;
         $this->responsibleId =  $responsibleId;
@@ -77,7 +77,7 @@ class BtxCreateListItemJob implements ShouldQueue
             $this->eventType,
             $this->eventTypeName,
             $this->eventAction,
-            $this->stringType,
+            // $this->stringType,
             $this->deadline,
             $this->createdId,
             $this->responsibleId,

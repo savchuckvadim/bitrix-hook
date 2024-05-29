@@ -409,7 +409,7 @@ class BitrixCallingColdService
                 'xo',
                 'Холодный обзвон',
                 'plan',
-                $this->stringType,
+                // $this->stringType,
                 $this->deadline,
                 $this->createdId,
                 $this->responsibleId,

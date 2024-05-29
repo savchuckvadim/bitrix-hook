@@ -31,7 +31,7 @@ class BitrixListFlowService
         $eventType, // xo warm presentation, offer invoice
         $eventTypeName,
         $eventAction,  // plan done expired fail success
-        $eventName,
+        // $eventName,
         $deadline,
         $created,
         $responsible,
@@ -50,7 +50,7 @@ class BitrixListFlowService
             [
                 'code' => 'event_title',
                 'name' => 'Название',
-                'value' => $eventName
+                'value' => $eventTypeName . ' ' . $eventAction
             ],
             [
                 'code' => 'plan_date',
@@ -115,7 +115,7 @@ class BitrixListFlowService
 
         foreach ($bitrixLists as $bitrixList) {
             $fieldsData = [
-                'NAME' => $eventName
+                'NAME' => $eventTypeName
             ];
             foreach ($xoFields as $xoValue) {
                 $currentDataField = [];
