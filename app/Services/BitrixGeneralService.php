@@ -102,10 +102,10 @@ class BitrixGeneralService
 
             $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: createSmartItem');
             $resultFields = $responseData;
-            Log::channel('telegram')->error('APRIL_HOOK createSmartItem', [
+            // Log::channel('telegram')->error('APRIL_HOOK createSmartItem', [
 
-                'resultFields' => $resultFields
-            ]);
+            //     'resultFields' => $resultFields
+            // ]);
 
 
             if (isset($responseData['item'])) {

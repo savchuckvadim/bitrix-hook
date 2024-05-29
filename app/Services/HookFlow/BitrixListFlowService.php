@@ -105,7 +105,7 @@ class BitrixListFlowService
                 'code' => 'op_work_status',
                 'name' => 'Статус Работы',
                 'list' =>  [
-                    'code' => 'op_status_in_work',
+                    'code' => 'in_work',
                     'name' => 'В работе'
                 ],
             ]
@@ -186,13 +186,13 @@ class BitrixListFlowService
                         foreach ($btxFieldItems as $btxFieldItem) {
 
                             if ($listCode) {
-                                if ($listCode == 'op_status_in_work') {
-                                    Log::channel('telegram')->info('HOOK LISTS item', [
-                                        'listCode' => $listCode,
-                                        'pbtxflistCode' => $btxFieldItem['code'],
+                                // if ($listCode == 'op_status_in_work') {
+                                //     Log::channel('telegram')->info('HOOK LISTS item', [
+                                //         'listCode' => $listCode,
+                                //         'pbtxflistCode' => $btxFieldItem['code'],
 
-                                    ]);
-                                }
+                                //     ]);
+                                // }
 
                                 if ($btxFieldItem['code'] === $listCode) {
                                     $result['fieldItemBtxId'] = $btxFieldItem['bitrixId'];

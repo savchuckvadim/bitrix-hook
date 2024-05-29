@@ -155,10 +155,7 @@ class BitrixSmartFlowService
 
 
         $entityId = $aprilSmartData['bitrixId'];
-        Log::channel('telegram')->error('APRIL_HOOK createSmartItem', [
-            'createSmartItem fieldsData' => $fieldsData,
-            'entityId' => $entityId,
-        ]);
+
         $resultFields = BitrixGeneralService::createSmartItem(
             $hook,
             $entityId,
