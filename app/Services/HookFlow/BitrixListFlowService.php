@@ -186,6 +186,10 @@ class BitrixListFlowService
                         foreach ($btxFieldItems as $btxFieldItem) {
 
                             if ($listCode) {
+                                Log::info('HOOK LISTS item', [
+                                    'listCode' => $listCode,
+                                    'btxFieldItem' => $btxFieldItem,
+                                ]);
                                 if ($btxFieldItem['code'] === $listCode) {
                                     $result['fieldItemBtxId'] = $btxFieldItem['bitrixId'];
                                 }
