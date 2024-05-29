@@ -199,7 +199,7 @@ class EventReportService
             $this->isSuccessSale =  true;
         }
 
-        if ($data['report']['resultStatus'] === 'result' && $data['plan']['isPlanned']) {
+        if ($data['report']['resultStatus'] !== 'result' && $data['plan']['isPlanned']) {
             $this->isExpired  = true;
         }
 
