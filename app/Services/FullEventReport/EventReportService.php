@@ -41,6 +41,8 @@ class EventReportService
 
 
     protected $isResult = false;     //boolean
+    protected $isExpired = false;     //boolean перенос текущей задачи
+
     protected $workStatus;    //object with current {code:"setAside" id:1 name:"Отложено"}
     // 0: {id: 0, code: "inJob", name: "В работе"}
     // 1: {id: 1, code: "setAside", name: "Отложено"}
@@ -197,6 +199,9 @@ class EventReportService
             $this->isSuccessSale =  true;
         }
 
+        if ($data['report']['resultStatus'] === 'result' && $data['plan']['isPlanned']) {
+            $this->isExpired  = true;
+        }
 
 
         $this->plan = $data['plan'];
@@ -459,8 +464,8 @@ class EventReportService
 
             $this->getEntityFlow();
 
-            if ($this->isPlanned) {
-                $result = $this->createTask(null, $currentDealsIds['planDeals']);
+            if ($this->isExpired || $this->isPlanned) {
+                $result = $this->taskFlow(null, $currentDealsIds['planDeals']);
             } else {
                 $result = $this->workStatus;
             }
@@ -1001,7 +1006,7 @@ class EventReportService
             }
         }
         // }
-       
+
         if ($this->currentReportEventType !== 'presentation') {            // если не презентация - отчитываемся просто по закрытию звонка
             $reportDeals = BitrixDealFlowService::flow(  //закрывает сделку
                 $this->hook,
@@ -1116,7 +1121,7 @@ class EventReportService
     //tasks for complete
 
 
-    protected function createTask(
+    protected function taskFlow(
         $currentSmartItemId,
         $currentDealsIds
 
@@ -1144,25 +1149,37 @@ class EventReportService
             }
             $taskService = new BitrixTaskService();
 
+            if (!$this->isExpired) {
+                $createdTask =  $taskService->createTask(
+                    $this->currentPlanEventType,       //$type,   //cold warm presentation hot 
+                    $this->currentPlanEventTypeName,
+                    $this->portal,
+                    $this->domain,
+                    $this->hook,
+                    $companyId,  //may be null
+                    $leadId,     //may be null
+                    // $this->planCreatedId,
+                    $this->planResponsibleId,
+                    $this->planResponsibleId,
+                    $this->planDeadline,
+                    $this->currentPlanEventName,
+                    $currentSmartItemId,
+                    true, //$isNeedCompleteOtherTasks
+                    $currentTaskId,
+                    $currentDealsIds,
+   
+                );
+            } else {
+                $createdTask =  $taskService->updateTask(
+                  
+                    $this->domain,
+                    $this->hook,
+                    $currentTaskId,
+                    $this->planDeadline,
+                    $this->currentPlanEventName,
+                );
+            }
 
-            $createdTask =  $taskService->createTask(
-                $this->currentPlanEventType,       //$type,   //cold warm presentation hot 
-                $this->currentPlanEventTypeName,
-                $this->portal,
-                $this->domain,
-                $this->hook,
-                $companyId,  //may be null
-                $leadId,     //may be null
-                // $this->planCreatedId,
-                $this->planResponsibleId,
-                $this->planResponsibleId,
-                $this->planDeadline,
-                $this->currentPlanEventName,
-                $currentSmartItemId,
-                true, //$isNeedCompleteOtherTasks
-                $currentTaskId,
-                $currentDealsIds
-            );
 
             return $createdTask;
         } catch (\Throwable $th) {

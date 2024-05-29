@@ -431,6 +431,44 @@ class BitrixGeneralService
         }
     }
 
+    static function updateTask(
+        $parentMethod,
+        $hook,
+        $taskData
+
+    ) {
+
+        $methodTask = '/tasks.task.update.json';
+
+
+
+        $createdTask = null;
+
+        try {
+
+            $url = $hook . $methodTask;
+
+            $responseData = Http::get($url, $taskData);
+            $createdTask =  APIBitrixController::getBitrixRespone($responseData, $parentMethod);
+
+            return $createdTask;
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR: Exception caught',  $errorMessages);
+            Log::info('error', ['error' => $th->getMessage()]);
+            Log::channel('telegram')->info(
+                'HOOK: general createTask from' . $parentMethod,
+                ['error' => $th->getMessage()]
+            );
+            return  $createdTask;
+        }
+    }
+
     // protected function getCurrentTasksIdsWarm($crmForCurrent)
     // {
     //     $hook = $this->hook;

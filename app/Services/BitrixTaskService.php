@@ -203,6 +203,77 @@ class BitrixTaskService
         }
     }
 
+    public function updateTask(
+
+
+        $domain,
+        $hook,
+        $currentTaskId,
+
+        $deadline,
+        $name,
+        // $currentSmartItemId,
+        // $isNeedCompleteOtherTasks,
+       
+        // $currentDealsItemIds = null
+
+
+    ) {
+
+
+
+        try {
+        
+            $moscowTime = $deadline;
+
+            if ($domain === 'alfacentr.bitrix24.ru') {
+               
+
+                $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
+                $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
+                $moscowTime = $moscowTime->format('Y-m-d H:i:s');
+            }
+
+
+            $taskData =  [
+                'taskId' => $currentTaskId,
+                'fields' => [
+                    'DEADLINE' => $moscowTime, //- крайний срок;
+                    'ALLOW_CHANGE_DEADLINE' => 'N',
+   
+                ]
+            ];
+
+
+
+
+            $updatedTask = BitrixGeneralService::updateTask(
+                'Bitrix Task Service create task',
+                $hook,
+                $taskData
+            );
+
+            return APIOnlineController::getResponse(
+                0,
+                'success',
+                [
+                    'updatedTask' => $updatedTask,
+
+                ]
+            );
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR COLD: Exception caught',  $errorMessages);
+            Log::info('error COLD', ['error' => $th->getMessage()]);
+            return APIOnlineController::getResponse(1, $th->getMessage(),  $errorMessages);
+        }
+    }
+
 
     //tasks for complete
     protected function getCurrentTasksIds(
