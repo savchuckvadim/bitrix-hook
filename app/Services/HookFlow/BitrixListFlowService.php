@@ -4,25 +4,22 @@ namespace App\Services\HookFlow;
 
 use App\Services\General\BitrixListService;
 use DateTime;
+use Illuminate\Support\Facades\Log;
 
 class BitrixListFlowService
 
 
 
 {
-    
+
     protected $currentDepartamentType = null;
     protected $withLists = false;
     protected $bitrixLists = [];
 
 
 
-    public function __construct(
-
-     
-
-    ) {
-
+    public function __construct()
+    {
     }
 
 
@@ -122,11 +119,11 @@ class BitrixListFlowService
             ];
             foreach ($xoFields as $xoValue) {
                 $currentDataField = [];
-                $fieldCode = $bitrixList['group'].'_'.$bitrixList['type'].'_'. $xoValue['code'];
+                $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $xoValue['code'];
                 $btxId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, null);
                 if (!empty($xoValue)) {
 
-                    
+
 
                     if (!empty($xoValue['value'])) {
                         $fieldsData[$btxId] = $xoValue['value'];
@@ -136,18 +133,18 @@ class BitrixListFlowService
                     if (!empty($xoValue['list'])) {
                         $btxItemId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, $xoValue['list']['code']);
                         $currentDataField[$btxId] = [
-                            
+
                             $btxItemId =>  $xoValue['list']['name']
                         ];
 
                         $fieldsData[$btxId] =  $btxItemId;
-
-                      
                     }
                 }
                 // array_push($fieldsData, $currentDataField);
             }
-          
+            Log::info('HOOK LISTS TEST', [
+                'data' => $fieldsData
+            ]);
             BitrixListService::setItem(
                 $hook,
                 $bitrixList['bitrixId'],
@@ -172,11 +169,10 @@ class BitrixListFlowService
                 $btxFields = $bitrixList['bitrixfields'];
                 foreach ($btxFields as $btxField) {
 
-                    
+
 
                     if ($btxField['code'] === $code) {
                         $result['fieldBtxId'] = $btxField['bitrixCamelId'];
-
                     }
                     if (!empty($btxField['bitrixfielditems'])) {
 
@@ -207,6 +203,3 @@ class BitrixListFlowService
         }
     }
 }
-
-
-
