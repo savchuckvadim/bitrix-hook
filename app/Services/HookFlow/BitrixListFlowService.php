@@ -48,8 +48,7 @@ class BitrixListFlowService
             [
                 'code' => 'event_date',
                 'name' => 'Дата',
-                // 'value' => $nowDate->format('d.m.Y H:i:s'),
-                'value' => $deadline
+                'value' => $nowDate->format('d.m.Y H:i:s'),
             ],
             [
                 'code' => 'event_title',
