@@ -3,6 +3,7 @@
 namespace App\Services\HookFlow;
 
 use App\Services\General\BitrixListService;
+use DateTime;
 
 class BitrixListFlowService
 
@@ -42,12 +43,12 @@ class BitrixListFlowService
         $comment,
 
     ) {
-
+        $nowDate = new DateTime();
         $xoFields = [
             [
                 'code' => 'event_date',
                 'name' => 'Дата',
-                'value' => $nowDate
+                'value' => $nowDate->format('Y-m-d H:i:s'),
             ],
             [
                 'code' => 'event_title',
