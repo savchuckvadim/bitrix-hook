@@ -142,7 +142,7 @@ class BitrixListFlowService
                 }
                 // array_push($fieldsData, $currentDataField);
             }
-            Log::info('HOOK LISTS TEST', [
+            Log::channel('telegram')->info('HOOK LISTS TEST', [
                 'data' => $fieldsData
             ]);
             BitrixListService::setItem(
@@ -186,7 +186,7 @@ class BitrixListFlowService
                         foreach ($btxFieldItems as $btxFieldItem) {
 
                             if ($listCode) {
-                                Log::info('HOOK LISTS item', [
+                                Log::channel('telegram')->info('HOOK LISTS item', [
                                     'listCode' => $listCode,
                                     'btxFieldItem' => $btxFieldItem,
                                 ]);
