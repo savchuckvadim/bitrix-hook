@@ -58,6 +58,8 @@ class BitrixDealFlowService
                     'targetStageBtxId' => $targetStageBtxId,
 
                 ]);
+                $rand = rand(1, 2);
+                sleep($rand);
                 $currentDeal = BitrixDealService::getDealId(
                     $hook,
                     null,
@@ -97,7 +99,8 @@ class BitrixDealFlowService
                     // 'currentCategoryData' => "C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'],
                     // 'isCurrentSearched' => $isCurrentSearched,
                 ]);
-                sleep(1);
+                $rand = rand(1, 2);
+                sleep($rand);
                 if (!$currentDealId) {
                     Log::info('DEAL TEST', [
                         'currentDealId' => $currentDealId,

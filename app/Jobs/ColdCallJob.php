@@ -34,6 +34,8 @@ class ColdCallJob implements ShouldQueue
     {
         Log::info("Processing job from Redis queue.");
         Log::info('APRIL_HOOK getCold', ['$data' => $this->data]);
+        $rand = rand(1, 10);
+        sleep($rand);
         $service = new BitrixCallingColdService($this->data);
         $reult =  $service->getCold();
     }
