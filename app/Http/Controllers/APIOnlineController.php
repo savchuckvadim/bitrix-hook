@@ -98,6 +98,12 @@ class APIOnlineController extends Controller
                 $data
             ]
         ]);
+        Log::error('APRIL_HOOK', [
+            'APRIL_HOOK' => [
+                '$message' => $message,
+                $data
+            ]
+        ]);
         return response([
             'resultCode' => 1,
             'message' => $message,

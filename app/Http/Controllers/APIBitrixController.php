@@ -1339,7 +1339,7 @@ class APIBitrixController extends Controller
                     ]);
 
 
-                    Log::info('error', [
+                    Log::error('error', [
                         $method => [
                             'btrx error' => $response['error'],
                             'btrx response' => $response['error_description']
