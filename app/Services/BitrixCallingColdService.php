@@ -141,7 +141,8 @@ class BitrixCallingColdService
         $currentBtxCompany = null;
         $currentBtxEntity = null;
         if (!empty($data['entityType'])) {
-
+            $randomNumber = rand(1, 3);
+            sleep($randomNumber);
             $currentBtxEntity = BitrixGeneralService::getEntity(
                 $this->hook,
                 $data['entityType'],
@@ -374,12 +375,13 @@ class BitrixCallingColdService
             // if(!$this->smartId){
 
             // }
-            // $randomNumber = rand(1, 2);
+            $randomNumber = rand(1, 3);
+            sleep($randomNumber);
             Log::info('APRIL_HOOK getCold', ['$data' => 'yo']);
             if ($this->isSmartFlow) {
                 $this->getSmartFlow();
             }
-
+            sleep(1);
             if ($this->isDealFlow && $this->portalDealData) {
                 $currentDealsIds = $this->getDealFlow();
                 if (!empty($currentDealsIds)) {
@@ -389,7 +391,7 @@ class BitrixCallingColdService
                 }
             }
 
-           
+            sleep(1);
             $this->createColdTask($currentSmartId, $currentDealsIds);
 
             BitrixEntityFlowService::flow(
@@ -402,7 +404,7 @@ class BitrixCallingColdService
                 $this->entityFieldsUpdatingContent, //updting fields 
             );
             // if ($this->withLists) {
-      
+
             BtxCreateListItemJob::dispatch(
                 $this->hook,
                 $this->bitrixLists,
@@ -590,8 +592,8 @@ class BitrixCallingColdService
         $currentDealsItemIds = null
     ) {
 
-
-
+        $rand = rand(3, 5);
+        sleep($rand);
 
         try {
             // Log::channel('telegram')->error('APRIL_HOOK', $this->portal);

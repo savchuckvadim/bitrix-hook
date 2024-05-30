@@ -1119,7 +1119,7 @@ sleep(1);
                 $leadId  = $this->entityId;
             }
             $taskService = new BitrixTaskService();
-            sleep(1);
+            
             if (!$this->isExpired) {
                 $createdTask =  $taskService->createTask(
                     $this->currentPlanEventType,       //$type,   //cold warm presentation hot 
