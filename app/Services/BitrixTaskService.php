@@ -58,6 +58,9 @@ class BitrixTaskService
                 'currentDealsItemIds' => $currentDealsItemIds,
             ]
         );
+        $rand = rand(3, 5);
+        sleep($rand);
+
 
         //TODO
         //type - cold warm presentation hot
@@ -214,7 +217,7 @@ class BitrixTaskService
         $name,
         // $currentSmartItemId,
         // $isNeedCompleteOtherTasks,
-       
+
         // $currentDealsItemIds = null
 
 
@@ -223,11 +226,11 @@ class BitrixTaskService
 
 
         try {
-        
+
             $moscowTime = $deadline;
 
             if ($domain === 'alfacentr.bitrix24.ru') {
-               
+
 
                 $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
                 $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
@@ -240,7 +243,7 @@ class BitrixTaskService
                 'fields' => [
                     'DEADLINE' => $moscowTime, //- крайний срок;
                     'ALLOW_CHANGE_DEADLINE' => 'N',
-   
+
                 ]
             ];
 
@@ -352,6 +355,8 @@ class BitrixTaskService
                 'taskIds' => $taskIds
             ]
         );
+        $rand = rand(3, 5);
+        sleep($rand);
         try {
             $methodUpdate = 'tasks.task.update';
             $methodComplete = 'tasks.task.complete';
