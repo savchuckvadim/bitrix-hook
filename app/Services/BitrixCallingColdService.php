@@ -377,7 +377,6 @@ class BitrixCallingColdService
             // }
             $randomNumber = rand(1, 3);
             sleep($randomNumber);
-            Log::info('APRIL_HOOK getCold', ['$data' => 'yo']);
             if ($this->isSmartFlow) {
                 $this->getSmartFlow();
             }

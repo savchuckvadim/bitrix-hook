@@ -168,7 +168,7 @@ class BitrixTaskService
                         $currentTaskId
                     ];
                 }
-                sleep(1);
+                sleep(2);
                 $this->completeTask($hook, $idsForComplete);
             }
 
@@ -347,12 +347,12 @@ class BitrixTaskService
     protected function completeTask($hook, $taskIds)
     {
         $responseData = null;
-        Log::info(
+        Log::channel('telegram')->info(
             'APRIL_HOOK completeTask data',
             [
 
-                'hook' => $hook,
-                'taskIds' => $taskIds
+                'taskIds' => $taskIds,
+                // 'taskIds' => $taskIds
             ]
         );
         $rand = rand(3, 5);
