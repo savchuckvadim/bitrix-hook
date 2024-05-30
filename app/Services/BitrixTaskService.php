@@ -347,7 +347,7 @@ class BitrixTaskService
     protected function completeTask($hook, $taskIds)
     {
         $responseData = null;
-        Log::channel('telegram')->info(
+        Log::info(
             'APRIL_HOOK completeTask data',
             [
 
@@ -381,6 +381,8 @@ class BitrixTaskService
             return $responseData;
         } catch (\Throwable $th) {
             Log::channel('telegram')->error('HOOK TASK SERVICE', ['message' => 'tasks was not completed', 'hook' => $hook]);
+            Log::error('HOOK TASK SERVICE', ['message' => 'tasks was not completed', 'hook' => $hook]);
+
             return $responseData;
         }
     }
