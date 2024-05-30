@@ -165,11 +165,11 @@ class BitrixTaskService
                         $currentTaskId
                     ];
                 }
-
+                sleep(1);
                 $this->completeTask($hook, $idsForComplete);
             }
 
-
+            sleep(1);
             $createdTask = BitrixGeneralService::createTask(
                 'Bitrix Task Service create task',
                 $hook,

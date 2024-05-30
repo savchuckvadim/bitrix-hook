@@ -56,7 +56,7 @@ class ReportController extends Controller
             }
             if ($isFullData) {
                 $service = new EventReportService($data);
-                $result = $service->getCold();
+                $result = $service->getEventFlow();
                 return $result;
             } else {
 

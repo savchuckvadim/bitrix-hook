@@ -434,7 +434,7 @@ class EventReportService
     }
 
 
-    public function getCold()
+    public function getEventFlow()
     {
 
         try {
@@ -458,17 +458,18 @@ class EventReportService
             if ($this->isDealFlow && $this->portalDealData) {
                 $currentDealsIds = $this->getDealFlow();
             }
-
+            sleep(1);
 
             // $this->createTask($currentSmartId);
 
             $this->getEntityFlow();
-
+            sleep(1);
             if ($this->isExpired || $this->isPlanned) {
                 $result = $this->taskFlow(null, $currentDealsIds['planDeals']);
             } else {
                 $result = $this->workStatus;
             }
+            sleep(1);
             $this->getListFlow();
 
 
@@ -1026,7 +1027,7 @@ class EventReportService
                 );
             }
         }
-
+sleep(1);
         if ($this->isFail) {
             $reportDeals = BitrixDealFlowService::flow(  // закрывает сделку или создает и закрывает сделку - презентация
                 $this->hook,
@@ -1056,7 +1057,7 @@ class EventReportService
         //xo - создать или обновить ХО & Основная
         //warm | money_await | in_progress - создать или обновить  Основная
         //presentation - создать или обновить presentation & Основная
-
+        sleep(1);
         if ($this->isPlanned) {
             $planDeals =  BitrixDealFlowService::flow( //создает сделку
                 $this->hook,
@@ -1118,7 +1119,7 @@ class EventReportService
                 $leadId  = $this->entityId;
             }
             $taskService = new BitrixTaskService();
-
+            sleep(1);
             if (!$this->isExpired) {
                 $createdTask =  $taskService->createTask(
                     $this->currentPlanEventType,       //$type,   //cold warm presentation hot 

@@ -97,7 +97,7 @@ class BitrixDealFlowService
                     // 'currentCategoryData' => "C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'],
                     // 'isCurrentSearched' => $isCurrentSearched,
                 ]);
-
+                sleep(1);
                 if (!$currentDealId) {
                     Log::info('DEAL TEST', [
                         'currentDealId' => $currentDealId,
