@@ -575,7 +575,7 @@ class BitrixCallingColdService
 
     protected function getDealFlow()
     {
-        BitrixDealFlowService::flow(
+        $planDeals = BitrixDealFlowService::flow(
             $this->hook,
             null, // current btx deals for report
             $this->portalDealData,
@@ -590,6 +590,10 @@ class BitrixCallingColdService
             true, //is result for report
             '$fields'
         );
+        return [
+
+            'planDeals' => $planDeals,
+        ];
     }
 
 
