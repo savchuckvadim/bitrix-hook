@@ -54,10 +54,7 @@ class BitrixDealFlowService
                     $eventType,
                     $eventAction
                 );
-                Log::info('DEAL TEST', [
-                    'targetStageBtxId' => $targetStageBtxId,
-
-                ]);
+           
                 $rand = rand(1, 2);
                 sleep($rand);
                 $currentDeal = BitrixDealService::getDealId(
@@ -93,29 +90,24 @@ class BitrixDealFlowService
                     }
                 }
 
-                Log::info('DEAL TEST', [
-                    'currentDealId' => $currentDealId,
-                    // 'targetStageBtxId' => $targetStageBtxId,
-                    // 'currentCategoryData' => "C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'],
-                    // 'isCurrentSearched' => $isCurrentSearched,
-                ]);
+            
                 $rand = rand(1, 2);
                 sleep($rand);
                 if (!$currentDealId) {
-                    Log::info('DEAL TEST', [
-                        'currentDealId' => $currentDealId,
+                    // Log::info('DEAL TEST', [
+                    //     'currentDealId' => $currentDealId,
 
-                    ]);
+                    // ]);
                     $currentDealId = BitrixDealService::setDeal(
                         $hook,
                         $fieldsData,
                         $currentCategoryData
 
                     );
-                    Log::info('DEAL TEST', [
-                        'setDeal currentDealId' => $currentDealId,
+                    // Log::info('DEAL TEST', [
+                    //     'setDeal currentDealId' => $currentDealId,
 
-                    ]);
+                    // ]);
                 } else {
 
                     $isCanDealStageUpdate = BitrixDealService::getIsCanDealStageUpdate(

@@ -884,7 +884,7 @@ class BitrixCallingTaskService
                 $result =  $responseData['result'];
             } else if (isset($responseData['error_description'])) {
                 $result =  null;
-                Log::error('BTX ERROR updateCompanyCold', ['fieldsData' => $responseData['error_description']]);
+                Log::error('BTX ERROR updateCompany', ['fieldsData' => $responseData['error_description']]);
             }
         }
 

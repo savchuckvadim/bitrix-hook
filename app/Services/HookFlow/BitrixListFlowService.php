@@ -41,6 +41,33 @@ class BitrixListFlowService
 
     ) {
         $nowDate = new DateTime();
+
+        $eventActionName = 'Запланирован';
+
+        if ($eventType == 'presentation') {
+            $eventActionName = 'Запланирована';
+        }
+
+
+        if ($eventAction == 'expired') {
+            $eventAction = 'pound';
+            $eventActionName = 'Перенос';
+        } else    if ($eventAction == 'done') {
+
+            $eventActionName = 'Состоялся';
+            if ($eventType == 'presentation') {
+                $eventActionName = 'Состоялась';
+            }
+        } else    if ($eventAction == 'fail') {
+
+            $eventActionName = 'Отказ';
+
+        } else    if ($eventAction == 'success') {
+
+            $eventActionName = 'Продажа';
+
+        }
+
         $xoFields = [
             [
                 'code' => 'event_date',

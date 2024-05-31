@@ -42,22 +42,7 @@ class BitrixTaskService
 
 
     ) {
-        Log::info(
-            'APRIL_HOOK completeTask data',
-            [
 
-                'type' => $type,
-                'stringType' => $stringType,
-                'companyId' => $companyId,
-                'createdId' => $createdId,
-                'responsibleId' => $responsibleId,
-                'deadline' => $deadline,
-                'currentSmartItemId' => $currentSmartItemId,
-                'isNeedCompleteOtherTasks' => $isNeedCompleteOtherTasks,
-                'currentTaskId' => $currentTaskId,
-                'currentDealsItemIds' => $currentDealsItemIds,
-            ]
-        );
         $rand = rand(3, 5);
         sleep($rand);
 

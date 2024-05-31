@@ -2,7 +2,7 @@
 
 namespace App\Services\FullEventReport;
 
-
+use App\Http\Controllers\APIBitrixController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\PortalController;
 use App\Jobs\BtxCreateListItemJob;
@@ -12,7 +12,7 @@ use App\Services\General\BitrixDepartamentService;
 use App\Services\HookFlow\BitrixDealFlowService;
 use App\Services\HookFlow\BitrixEntityFlowService;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class EventReportService
@@ -302,6 +302,8 @@ class EventReportService
 
             );
         }
+
+        $currentBtxEntities =  $this->getEntities();
         $this->currentBtxEntity  = $currentBtxEntity;
         // Log::error('APRIL_HOOK portal', ['$portal.lead' => $portal['company']['bitrixfields']]); // массив fields
         // Log::error('APRIL_HOOK portal', ['$portal.company' => $portal['company']['bitrixfields']]); // массив fields
@@ -487,6 +489,62 @@ class EventReportService
         }
     }
 
+    protected function getEntities()
+    {
+        $response = null;
+        $resultFields = null;
+        $batchCommands = [];
+        try {
+            if (!empty($this->currentTask['ufCrmTask'])) {
+                foreach ($this->currentTask['ufCrmTask'] as $ufCrm) {
+                    $type = substr($ufCrm, 0, 2); // Получаем первые два символа строки
+                    $id = explode('_', $ufCrm)[1]; // Разделяем строку и берем вторую часть как ID
+
+                    $keyName = '';
+                    $method = '';
+                    switch ($type) {
+                        case 'CO':
+                            $method = 'crm.company.get';
+                            $keyName = 'company_' . $id;
+
+                            break;
+                        case 'D':
+                            $method = 'crm.deal.get';
+                            $keyName = 'deal_' . $id;
+                            break;
+                        default:
+                            # code...
+                            break;
+                    }
+
+                    $batchCommands['cmd'][$keyName] = $method . '?id=' . $id;
+                }
+            }
+
+            $response = Http::post($this->hook . '/batch', $batchCommands);
+            $responseData = APIBitrixController::getBitrixRespone($response, 'event: getEntities');
+            Log::channel('telegram')->info(
+                'APRIL_HOOK getEntities ',
+                [
+                    'responseData' => $responseData,
+                ]
+            );
+            return $responseData;
+        } catch (\Throwable $th) {
+            Log::channel('telegram')->info(
+                'APRIL_HOOK getEntities ',
+                [
+                    'error' => $th->getMessage(),
+                    'response' => $response,
+                    'resultFields' => $resultFields,
+                    'batchCommands' => $batchCommands,
+
+
+                ]
+            );
+            return $resultFields;
+        }
+    }
 
     //entity
     protected function getEntityFlow()
@@ -1027,7 +1085,7 @@ class EventReportService
                 );
             }
         }
-sleep(1);
+        sleep(1);
         if ($this->isFail) {
             $reportDeals = BitrixDealFlowService::flow(  // закрывает сделку или создает и закрывает сделку - презентация
                 $this->hook,
@@ -1119,7 +1177,7 @@ sleep(1);
                 $leadId  = $this->entityId;
             }
             $taskService = new BitrixTaskService();
-            
+
             if (!$this->isExpired) {
                 $createdTask =  $taskService->createTask(
                     $this->currentPlanEventType,       //$type,   //cold warm presentation hot 
