@@ -172,7 +172,7 @@ class BitrixDealFlowService
     ) {
         sleep(1);
 
-        $currentDeal = null;
+    
         $currentDealId = null;
         $currentCategoryDatas =  BitrixDealService::getTargetCategoryData(
             $portalDealData,
