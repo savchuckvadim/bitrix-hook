@@ -982,6 +982,7 @@ class EventReportService
             $currentReportStatus = 'fail';
         } else {
             if ($this->isResult) {                   // результативный
+                
                 if ($this->isInWork) {                // в работе или успех
                     //найти сделку хо и закрыть в успех
                 }
@@ -1063,6 +1064,7 @@ class EventReportService
                 'Запланирована',
                 'plan',  // plan done expired fail
                 $this->planResponsibleId,
+                true,
                 '$fields'
             );
             $unplannedPresResultStatus = 'done';
@@ -1083,6 +1085,7 @@ class EventReportService
                 $unplannedPresResultName,
                 $unplannedPresResultStatus,  // plan done expired fail
                 $this->planResponsibleId,
+                true,
                 '$fields'
             );
         }
@@ -1100,6 +1103,7 @@ class EventReportService
             $this->currentPlanEventName,
             $currentReportStatus,  // plan done expired fail
             $this->planResponsibleId,
+            $this->isResult,
             '$fields'
         );
         //todo plan flow
@@ -1129,6 +1133,7 @@ class EventReportService
                 $this->currentPlanEventName,
                 'plan',  // plan done expired 
                 $this->planResponsibleId,
+                $this->isResult,
                 '$fields'
             );
         }

@@ -32,6 +32,7 @@ class BitrixDealFlowService
         $eventName, //имя планируемого события
         $eventAction,  // plan done expired fail
         $responsibleId,
+        $isResult,
         $fields
 
     ) {
@@ -53,7 +54,8 @@ class BitrixDealFlowService
                     $currentCategoryData,
                     'sales',
                     $eventType,
-                    $eventAction
+                    $eventAction,
+                    $isResult,
                 );
 
                 $rand = rand(1, 2);
@@ -164,6 +166,7 @@ class BitrixDealFlowService
         $eventName, //имя планируемого события
         $eventAction,  // plan done expired fail
         $responsibleId,
+        $isResult,
         $fields
 
     ) {
@@ -186,7 +189,8 @@ class BitrixDealFlowService
                         $currentCategoryData,
                         'sales',
                         $eventType,
-                        $eventAction
+                        $eventAction,
+                        $isResult,
                     );
 
                     // $rand = rand(1, 2);

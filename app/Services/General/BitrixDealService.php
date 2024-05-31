@@ -231,6 +231,7 @@ class BitrixDealService
         $currentDepartamentType,
         $eventType, // xo warm presentation,
         $eventAction,  // plan done expired fail
+      
     ) {
         // sales_base
         // sales_xo
@@ -281,7 +282,7 @@ class BitrixDealService
         $group,
         $eventType, // xo warm presentation,
         $eventAction,  // plan done expired fail
-
+        $isResult,
     ) {
         // sales_new
         // sales_cold
@@ -300,11 +301,13 @@ class BitrixDealService
         // cold_pending
         // cold_success
         // cold_fail
+        // cold_noresult
         // spres_new
         // spres_plan
         // spres_pending
         // spres_success
         // spres_fail
+        // spres_noresult
         // sales_tmc_new
         // sales_tmc_plan
         // sales_tmc_pending
@@ -337,6 +340,10 @@ class BitrixDealService
                 $stageSuphicks = 'pending';
             } else if ($eventAction == 'fail') {
                 $stageSuphicks = 'fail';
+
+                if(!$isResult){
+                    $stageSuphicks = 'noresult';
+                }
             }
 
             if ($eventType == 'xo') {
