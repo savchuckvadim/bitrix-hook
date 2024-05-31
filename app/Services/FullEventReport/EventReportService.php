@@ -1123,7 +1123,7 @@ class EventReportService
         if ($this->isPlanned) {
             $planDeals =  BitrixDealFlowService::flow( //создает сделку
                 $this->hook,
-                null,
+                $this->currentBtxDeals,
                 $this->portalDealData,
                 $this->currentDepartamentType,
                 $this->entityType,

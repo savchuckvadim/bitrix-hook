@@ -591,7 +591,6 @@ class BitrixCallingColdService
             '$fields'
         );
         return [
-
             'planDeals' => $planDeals,
         ];
     }
