@@ -570,6 +570,7 @@ class BitrixCallingColdService
     {
         BitrixDealFlowService::flow(
             $this->hook,
+            null, // current btx deals for report
             $this->portalDealData,
             $this->currentDepartamentType,
             $this->entityType,
@@ -579,6 +580,7 @@ class BitrixCallingColdService
             $this->name,
             'plan',  // plan done expired 
             $this->responsibleId,
+            true, //is result for report
             '$fields'
         );
     }
