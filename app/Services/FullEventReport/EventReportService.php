@@ -497,8 +497,9 @@ class EventReportService
         try {
             if (!empty($this->currentTask['ufCrmTask'])) {
                 foreach ($this->currentTask['ufCrmTask'] as $ufCrm) {
-                    $type = substr($ufCrm, 0, 2); // Получаем первые два символа строки
-                    $id = explode('_', $ufCrm)[1]; // Разделяем строку и берем вторую часть как ID
+                    $parts = explode('_', $ufCrm); // Разделяем строку по символу '_'
+                    $type = $parts[0]; // Тип это все, что перед '_'
+                    $id = $parts[1]; // ID это все, что после '_'
 
                     $keyName = '';
                     $method = '';
@@ -527,6 +528,7 @@ class EventReportService
                 'APRIL_HOOK getEntities ',
                 [
                     'responseData' => $responseData,
+                    'batchCommands' => $batchCommands,
                 ]
             );
             return $responseData;
