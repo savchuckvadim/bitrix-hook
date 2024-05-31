@@ -524,14 +524,27 @@ class EventReportService
 
             $response = Http::post($this->hook . '/batch', $batchCommands);
             $responseData = APIBitrixController::getBitrixRespone($response, 'event: getEntities');
+
+            if (!empty($responseData['result'])) {
+                foreach ($responseData['result'] as $key => $value) {
+                    if (strpos($key, 'company_') === 0) {
+                        $resultFields['companies'][] = $value;
+                    } elseif (strpos($key, 'deal_') === 0) {
+                        $resultFields['deals'][] = $value;
+                    }
+                }
+            }
             Log::info(
                 'APRIL_HOOK getEntities ',
                 [
-                    'responseData' => $responseData,
-                    'batchCommands' => $batchCommands,
+                  
+                    'resultFields' => $resultFields,
+
+
+
                 ]
-            );
-            return $responseData;
+                );
+            return $resultFields;
         } catch (\Throwable $th) {
             Log::info(
                 'APRIL_HOOK getEntities ',
