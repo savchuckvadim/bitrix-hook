@@ -523,7 +523,7 @@ class EventReportService
 
             $response = Http::post($this->hook . '/batch', $batchCommands);
             $responseData = APIBitrixController::getBitrixRespone($response, 'event: getEntities');
-            Log::channel('telegram')->info(
+            Log::info(
                 'APRIL_HOOK getEntities ',
                 [
                     'responseData' => $responseData,
@@ -531,7 +531,7 @@ class EventReportService
             );
             return $responseData;
         } catch (\Throwable $th) {
-            Log::channel('telegram')->info(
+            Log::info(
                 'APRIL_HOOK getEntities ',
                 [
                     'error' => $th->getMessage(),
