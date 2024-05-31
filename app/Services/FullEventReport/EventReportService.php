@@ -77,7 +77,7 @@ class EventReportService
 
 
     protected $currentBtxEntity;
-
+    protected $currentBtxDeals;
 
     protected $taskTitle;
 
@@ -293,18 +293,31 @@ class EventReportService
 
         $currentBtxCompany = null;
         $currentBtxEntity = null;
-        if (!empty($entityType)) {
+        $currentBtxDeals = null;
+        // if (!empty($entityType)) {
 
-            $currentBtxEntity = BitrixGeneralService::getEntity(
-                $this->hook,
-                $entityType,
-                $entityId
+        //     $currentBtxEntity = BitrixGeneralService::getEntity(
+        //         $this->hook,
+        //         $entityType,
+        //         $entityId
 
-            );
+        //     );
+        // }
+
+        $currentBtxEntities =  BitrixEntityFlowService::getEntities(
+            $this->hook,
+            $this->currentTask,
+        );
+        if (!empty($currentBtxEntities)) {
+            if (!empty($currentBtxEntities['companies'])) {
+                $currentBtxEntity = $currentBtxEntities['companies'][0];
+            }
+            if (!empty($currentBtxEntities['deals'])) {
+                $currentBtxDeals = $currentBtxEntities['deals'];
+            }
         }
-
-        $currentBtxEntities =  $this->getEntities();
         $this->currentBtxEntity  = $currentBtxEntity;
+        $this->currentBtxDeals  = $currentBtxDeals;
         // Log::error('APRIL_HOOK portal', ['$portal.lead' => $portal['company']['bitrixfields']]); // массив fields
         // Log::error('APRIL_HOOK portal', ['$portal.company' => $portal['company']['bitrixfields']]); // массив fields
 
@@ -489,77 +502,7 @@ class EventReportService
         }
     }
 
-    protected function getEntities()
-    {
-        $response = null;
-        $resultFields = null;
-        $batchCommands = [];
-        try {
-            if (!empty($this->currentTask['ufCrmTask'])) {
-                foreach ($this->currentTask['ufCrmTask'] as $ufCrm) {
-                    $parts = explode('_', $ufCrm); // Разделяем строку по символу '_'
-                    $type = $parts[0]; // Тип это все, что перед '_'
-                    $id = $parts[1]; // ID это все, что после '_'
 
-                    $keyName = '';
-                    $method = '';
-                    switch ($type) {
-                        case 'CO':
-                            $method = 'crm.company.get';
-                            $keyName = 'company_' . $id;
-
-                            break;
-                        case 'D':
-                            $method = 'crm.deal.get';
-                            $keyName = 'deal_' . $id;
-                            break;
-                        default:
-                            # code...
-                            break;
-                    }
-
-                    $batchCommands['cmd'][$keyName] = $method . '?id=' . $id;
-                }
-            }
-
-            $response = Http::post($this->hook . '/batch', $batchCommands);
-            $responseData = APIBitrixController::getBitrixRespone($response, 'event: getEntities');
-
-            if (!empty($responseData['result'])) {
-                foreach ($responseData['result'] as $key => $value) {
-                    if (strpos($key, 'company_') === 0) {
-                        $resultFields['companies'][] = $value;
-                    } elseif (strpos($key, 'deal_') === 0) {
-                        $resultFields['deals'][] = $value;
-                    }
-                }
-            }
-            Log::info(
-                'APRIL_HOOK getEntities ',
-                [
-                  
-                    'resultFields' => $resultFields,
-
-
-
-                ]
-                );
-            return $resultFields;
-        } catch (\Throwable $th) {
-            Log::info(
-                'APRIL_HOOK getEntities ',
-                [
-                    'error' => $th->getMessage(),
-                    'response' => $response,
-                    'resultFields' => $resultFields,
-                    'batchCommands' => $batchCommands,
-
-
-                ]
-            );
-            return $resultFields;
-        }
-    }
 
     //entity
     protected function getEntityFlow()
@@ -1051,72 +994,114 @@ class EventReportService
         }
         // }
 
-        if ($this->currentReportEventType !== 'presentation') {            // если не презентация - отчитываемся просто по закрытию звонка
-            $reportDeals = BitrixDealFlowService::flow(  //закрывает сделку
-                $this->hook,
-                $this->portalDealData,
-                $this->currentDepartamentType,
-                $this->entityType,
-                $this->entityId,
-                $this->currentReportEventType, // xo warm presentation,
-                $this->currentReportEventName,
-                $this->currentPlanEventName,
-                $currentReportStatus,  // plan done expired fail
-                $this->planResponsibleId,
-                '$fields'
-            );
-        }
+        // if ($this->currentReportEventType !== 'presentation') {            // если не презентация - отчитываемся просто по закрытию звонка
+        //     $reportDeals = BitrixDealFlowService::flow(  //закрывает сделку
+        //         $this->hook,
+        //         $this->currentBtxDeals,
+        //         $this->portalDealData,
+        //         $this->currentDepartamentType,
+        //         $this->entityType,
+        //         $this->entityId,
+        //         $this->currentReportEventType, // xo warm presentation,
+        //         $this->currentReportEventName,
+        //         $this->currentPlanEventName,
+        //         $currentReportStatus,  // plan done expired fail
+        //         $this->planResponsibleId,
+        //         '$fields'
+        //     );
+        // }
 
-        if ($this->isPresentationDone) {                 // вне зависимости от текущего отчетного события,
-            // если была нажата презентация проведена  
+        // if ($this->isPresentationDone) {                 // вне зависимости от текущего отчетного события,
+        //     // если была нажата презентация проведена  
 
-            $reportDeals = BitrixDealFlowService::flow(  // закрывает сделку или создает и закрывает сделку - презентация
+        //     $reportDeals = BitrixDealFlowService::flow(  // закрывает сделку или создает и закрывает сделку - презентация
+        //         $this->hook,
+        //         null,
+        //         $this->portalDealData,
+        //         $this->currentDepartamentType,
+        //         $this->entityType,
+        //         $this->entityId,
+        //         'presentation', // xo warm presentation,
+        //         'Презентация',
+        //         'Проведена',
+        //         'done',  // plan done expired fail
+        //         $this->planResponsibleId,
+        //         '$fields'
+        //     );
+
+        //     if ($this->isFail) {
+        //         $reportDeals = BitrixDealFlowService::flow(  // закрывает сделку или создает и закрывает сделку - презентация
+        //             $this->hook,
+        //             null,
+        //             $this->portalDealData,
+        //             $this->currentDepartamentType,
+        //             $this->entityType,
+        //             $this->entityId,
+        //             'presentation', // xo warm presentation,
+        //             'Презентация',
+        //             'Отказ',
+        //             'fail',  // plan done expired fail
+        //             $this->planResponsibleId,
+        //             '$fields'
+        //         );
+        //     }
+        // }
+
+        if ($this->isPresentationDone && $this->currentReportEventType !== 'presentation') { // проведенная презентация будет isUnplanned
+            //в current task не будет id сделки презентации
+            // в таком случае предполагается, что сделки презентация еще не существует
+
+            $unplannedPresDeal = BitrixDealFlowService::unplannedPresflow(  //  создает - презентация
                 $this->hook,
+                null,
                 $this->portalDealData,
                 $this->currentDepartamentType,
                 $this->entityType,
                 $this->entityId,
                 'presentation', // xo warm presentation,
                 'Презентация',
-                'Проведена',
-                'done',  // plan done expired fail
+                'Запланирована',
+                'plan',  // plan done expired fail
                 $this->planResponsibleId,
                 '$fields'
             );
-
+            $unplannedPresResultStatus = 'done';
+            $unplannedPresResultName = 'Проведена';
             if ($this->isFail) {
-                $reportDeals = BitrixDealFlowService::flow(  // закрывает сделку или создает и закрывает сделку - презентация
-                    $this->hook,
-                    $this->portalDealData,
-                    $this->currentDepartamentType,
-                    $this->entityType,
-                    $this->entityId,
-                    'presentation', // xo warm presentation,
-                    'Презентация',
-                    'Отказ',
-                    'fail',  // plan done expired fail
-                    $this->planResponsibleId,
-                    '$fields'
-                );
+                $unplannedPresResultStatus = 'fail';
+                $unplannedPresResultName = 'Отказ после презентации';
             }
-        }
-        sleep(1);
-        if ($this->isFail) {
-            $reportDeals = BitrixDealFlowService::flow(  // закрывает сделку или создает и закрывает сделку - презентация
+            BitrixDealFlowService::unplannedPresflow(  // закрывает сделку  - презентация
                 $this->hook,
+                $unplannedPresDeal,
                 $this->portalDealData,
                 $this->currentDepartamentType,
                 $this->entityType,
                 $this->entityId,
-                $this->currentReportEventType, // xo warm presentation,
-                $this->currentReportEventName,
-                $this->currentPlanEventName,
-                $currentReportStatus,  // plan done expired fail
+                'presentation', // xo warm presentation,
+                'Презентация',
+                $unplannedPresResultName,
+                $unplannedPresResultStatus,  // plan done expired fail
                 $this->planResponsibleId,
                 '$fields'
             );
         }
+        sleep(1);
 
+        $reportDeals = BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
+            $this->hook,
+            $this->currentBtxDeals,
+            $this->portalDealData,
+            $this->currentDepartamentType,
+            $this->entityType,
+            $this->entityId,
+            $this->currentReportEventType, // xo warm presentation,
+            $this->currentReportEventName,
+            $this->currentPlanEventName,
+            $currentReportStatus,  // plan done expired fail
+            $this->planResponsibleId,
+            '$fields'
+        );
         //todo plan flow
 
         // if ($this->currentPlanEventType == 'warm') {
@@ -1134,6 +1119,7 @@ class EventReportService
         if ($this->isPlanned) {
             $planDeals =  BitrixDealFlowService::flow( //создает сделку
                 $this->hook,
+                null,
                 $this->portalDealData,
                 $this->currentDepartamentType,
                 $this->entityType,

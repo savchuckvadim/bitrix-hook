@@ -63,11 +63,11 @@ class BitrixDealService
                 ];
             }
 
-            Log::info('DEAL TEST', [
-                'BitrixDealService::getDealId data' => $data,
+            // Log::info('DEAL TEST', [
+            //     'BitrixDealService::getDealId data' => $data,
 
 
-            ]);
+            // ]);
             $response = Http::get($url, $data);
             // $responseData = $response->json();
             $currentDeal = APIBitrixController::getBitrixRespone($response, 'general service: get deal');
@@ -85,11 +85,11 @@ class BitrixDealService
             // Log::channel('telegram')->info('COLD DEAL get currentDeal', [
             //     'currentDeal' => $currentDeal
             // ]);
-            Log::info('DEAL TEST', [
+            // Log::info('DEAL TEST', [
 
-                'BitrixDealService::getDealId' => $currentDeal,
+            //     'BitrixDealService::getDealId' => $currentDeal,
 
-            ]);
+            // ]);
             return $currentDeal;
         } catch (\Throwable $th) {
             return $currentDeal;
@@ -165,7 +165,33 @@ class BitrixDealService
 
         return $resultFields;
     }
+    static function getDeal(
+        $hook,
+        $data,
 
+    ) {
+        $responseData = null;
+        try {
+            $methodSmart = '/crm.deal.get.json';
+            $url = $hook . $methodSmart;
+
+
+
+            $smartFieldsResponse = Http::get($url, $data);
+
+            $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: create Deal Item');
+
+            if (isset($responseData['item'])) {
+                $responseData = $responseData['item'];
+            }
+            if (isset($responseData['deal'])) {
+                $responseData = $responseData['deal'];
+            }
+            return $responseData;
+        } catch (\Throwable $th) {
+            return $responseData;
+        }
+    }
 
     static function deleteSmartItem($hook, $entityId, $smartId)
     {

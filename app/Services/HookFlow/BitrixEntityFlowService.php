@@ -2,7 +2,7 @@
 
 namespace App\Services\HookFlow;
 
-
+use App\Http\Controllers\APIBitrixController;
 use App\Http\Controllers\APIOnlineController;
 use App\Services\BitrixGeneralService;
 use Illuminate\Support\Facades\Http;
@@ -101,6 +101,70 @@ class BitrixEntityFlowService
         $result =  BitrixGeneralService::updateLead($hook, $leadId, $fields);
 
         return $result;
+    }
+
+    //entities
+    static function getEntities($hook, $currentTask)
+    {
+        $response = null;
+        $resultFields = null;
+        $batchCommands = [];
+        try {
+            if (!empty($currentTask['ufCrmTask'])) {
+                foreach ($currentTask['ufCrmTask'] as $ufCrm) {
+                    $parts = explode('_', $ufCrm); // Разделяем строку по символу '_'
+                    $type = $parts[0]; // Тип это все, что перед '_'
+                    $id = $parts[1]; // ID это все, что после '_'
+
+                    $keyName = '';
+                    $method = '';
+                    switch ($type) {
+                        case 'CO':
+                            $method = 'crm.company.get';
+                            $keyName = 'company_' . $id;
+
+                            break;
+                        case 'D':
+                            $method = 'crm.deal.get';
+                            $keyName = 'deal_' . $id;
+                            break;
+                        default:
+                            # code...
+                            break;
+                    }
+
+                    $batchCommands['cmd'][$keyName] = $method . '?id=' . $id;
+                }
+            }
+
+            $response = Http::post($hook . '/batch', $batchCommands);
+            $responseData = APIBitrixController::getBitrixRespone($response, 'event: getEntities');
+
+            if (!empty($responseData['result'])) {
+                foreach ($responseData['result'] as $key => $value) {
+                    if (strpos($key, 'company_') === 0) {
+                        $resultFields['companies'][] = $value;
+                    } elseif (strpos($key, 'deal_') === 0) {
+                        $resultFields['deals'][] = $value;
+                    }
+                }
+            }
+            
+            return $resultFields;
+        } catch (\Throwable $th) {
+            Log::info(
+                'APRIL_HOOK getEntities ',
+                [
+                    'error' => $th->getMessage(),
+                    'response' => $response,
+                    'resultFields' => $resultFields,
+                    'batchCommands' => $batchCommands,
+
+
+                ]
+            );
+            return $resultFields;
+        }
     }
 }
 
