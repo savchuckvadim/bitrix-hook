@@ -75,6 +75,11 @@ class BitrixListFlowService
                 'value' => $nowDate->format('d.m.Y H:i:s'),
             ],
             [
+                'code' => 'name',
+                'name' => 'Название',
+                'value' => $eventTypeName . ' ' . $eventAction
+            ],
+            [
                 'code' => 'event_title',
                 'name' => 'Название',
                 'value' => $eventTypeName . ' ' . $eventAction
@@ -142,7 +147,7 @@ class BitrixListFlowService
 
         foreach ($bitrixLists as $bitrixList) {
             $fieldsData = [
-                'NAME' => $eventTypeName
+                'NAME' => $eventTypeName . ' ' . $eventAction
             ];
             foreach ($xoFields as $xoValue) {
                 $currentDataField = [];
