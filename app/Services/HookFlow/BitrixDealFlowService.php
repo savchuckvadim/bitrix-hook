@@ -78,7 +78,6 @@ class BitrixDealFlowService
                                 $currentDeal = $curbtxDeal;
                             }
                         }
-                      
                     }
                 }
 
@@ -95,26 +94,23 @@ class BitrixDealFlowService
                 ];
 
 
-                if (
-                    $eventAction === 'plan'
-                    || ($eventAction === 'done' &&
-                        $currentCategoryData['code'] === 'sales_presentation' &&
-                        !$currentDealId
-                    )
-                ) {
-                    if ($currentCategoryData['code'] === 'sales_xo' ||  $currentCategoryData['code'] === 'sales_presentation') {
-                        $fieldsData['TITLE'] = $eventTypeName . ' ' .  $eventName;
-                    }
-                }
+
 
 
                 $rand = rand(1, 2);
                 sleep($rand);
                 if (!$currentDealId) {
-                    // Log::info('DEAL TEST', [
-                    //     'currentDealId' => $currentDealId,
-
-                    // ]);
+                    if (
+                        $eventAction === 'plan'
+                        || ($eventAction === 'done' &&
+                            $currentCategoryData['code'] === 'sales_presentation' &&
+                            !$currentDealId
+                        )
+                    ) {
+                        if ($currentCategoryData['code'] === 'sales_xo' ||  $currentCategoryData['code'] === 'sales_presentation') {
+                            $fieldsData['TITLE'] = $eventTypeName . ' ' .  $eventName;
+                        }
+                    }
                     $currentDealId = BitrixDealService::setDeal(
                         $hook,
                         $fieldsData,
@@ -142,6 +138,10 @@ class BitrixDealFlowService
                             $fieldsData,
 
                         );
+
+                   
+                        $curbtxDeal['CATEGORY_ID'] = $currentCategoryData['bitrixId'];
+                        $curbtxDeal['STAGE_ID'] = "C" . $currentCategoryData['bitrixId'] . ':' . $targetStageBtxId;
                     }
                 }
 
