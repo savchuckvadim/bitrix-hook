@@ -78,6 +78,10 @@ class BitrixDealFlowService
                                 $currentDeal = $curbtxDeal;
                             }
                         }
+                        Log::channel('telegram')->info('DEAL TEST', [
+                            'curbtxDeal' => $curbtxDeal,
+
+                        ]);
                     }
                 }
 
@@ -172,7 +176,7 @@ class BitrixDealFlowService
     ) {
         sleep(1);
 
-    
+
         $currentDealId = null;
         $currentCategoryDatas =  BitrixDealService::getTargetCategoryData(
             $portalDealData,
@@ -249,9 +253,9 @@ class BitrixDealFlowService
                             $hook,
                             $fieldsData,
                             $currentCategoryData
-    
+
                         );
-                    }else{
+                    } else {
                         BitrixDealService::updateDeal(
                             $hook,
                             $currentDealId,
@@ -264,7 +268,7 @@ class BitrixDealFlowService
                     //     'currentDealId' => $currentDealId,
 
                     // ]);
-                  
+
                     $rand = rand(1, 2);
                     sleep($rand);
                     $currentDeal = BitrixDealService::getDeal(
@@ -273,7 +277,6 @@ class BitrixDealFlowService
 
 
                     );
-
                 }
             }
         }

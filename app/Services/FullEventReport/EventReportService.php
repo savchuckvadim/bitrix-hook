@@ -1067,15 +1067,16 @@ class EventReportService
                 true,
                 '$fields'
             );
+            array_push($this->currentBtxDeals, $unplannedPresDeal);
             $unplannedPresResultStatus = 'done';
             $unplannedPresResultName = 'Проведена';
             if ($this->isFail) {
                 $unplannedPresResultStatus = 'fail';
                 $unplannedPresResultName = 'Отказ после презентации';
             }
-            BitrixDealFlowService::unplannedPresflow(  // закрывает сделку  - презентация
+            BitrixDealFlowService::flow(  // закрывает сделку  - презентация
                 $this->hook,
-                $unplannedPresDeal,
+                $this->currentBtxDeals,
                 $this->portalDealData,
                 $this->currentDepartamentType,
                 $this->entityType,
