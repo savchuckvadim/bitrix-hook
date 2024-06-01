@@ -982,7 +982,7 @@ class EventReportService
             $currentReportStatus = 'fail';
         } else {
             if ($this->isResult) {                   // результативный
-                
+
                 if ($this->isInWork) {                // в работе или успех
                     //найти сделку хо и закрыть в успех
                 }
@@ -1067,16 +1067,19 @@ class EventReportService
                 true,
                 '$fields'
             );
-            array_push($this->currentBtxDeals, $unplannedPresDeal);
+
+            $currentBtxDealForUnplanned = [...$this->currentBtxDeals, $unplannedPresDeal];
+
+
             $unplannedPresResultStatus = 'done';
             $unplannedPresResultName = 'Проведена';
             if ($this->isFail) {
                 $unplannedPresResultStatus = 'fail';
                 $unplannedPresResultName = 'Отказ после презентации';
             }
-            BitrixDealFlowService::flow(  // закрывает сделку  - презентация
+            BitrixDealFlowService::flow(  // закрывает сделку  - презентация обновляет базовую в соответствии с проведенной през
                 $this->hook,
-                $this->currentBtxDeals,
+                $currentBtxDealForUnplanned,
                 $this->portalDealData,
                 $this->currentDepartamentType,
                 $this->entityType,
@@ -1091,7 +1094,22 @@ class EventReportService
             );
         }
         sleep(1);
+        Log::channel('telegram')->info('DEAL TEST', [
+            'setDeal currentDealId' => $this->currentBtxDeals,
 
+        ]);
+        Log::info('DEAL TEST', [
+            'setDeal currentDealId' => $this->currentBtxDeals,
+
+        ]);
+        //если был unplanned а потом plan ->
+        //если warm plan а report был xo 
+        // - то нужна обновленная стадия в базовой битрикс сделке что не пыталось повысить
+        // с xo в warm так как уже на самом деле pres 
+        // если plan pres -> планируется новая презентация и поэтому в  
+        // $this->currentBtxDeals должна отсутствовать сделка презентации созданная при unplanned, 
+        // которая пушится туда  при unplanned - чтобы были обработаны базовая сделка 
+        // в соответствии с проведенной през
         $reportDeals = BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
             $this->hook,
             $this->currentBtxDeals,

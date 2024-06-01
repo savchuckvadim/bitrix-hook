@@ -139,7 +139,7 @@ class BitrixDealFlowService
 
                         );
 
-                   
+
                         $curbtxDeal['CATEGORY_ID'] = $currentCategoryData['bitrixId'];
                         $curbtxDeal['STAGE_ID'] = "C" . $currentCategoryData['bitrixId'] . ':' . $targetStageBtxId;
                     }
@@ -237,15 +237,18 @@ class BitrixDealFlowService
                     //         !$currentDealId
                     //     )
                     // ) {
-                    if ($currentCategoryData['code'] === 'sales_xo' ||  $currentCategoryData['code'] === 'sales_presentation') {
-                        $fieldsData['TITLE'] = $eventTypeName . ' ' .  $eventName;
-                    }
+                    // if ($currentCategoryData['code'] === 'sales_xo' ||  $currentCategoryData['code'] === 'sales_presentation') {
+                    //     $fieldsData['TITLE'] = $eventTypeName . ' ' .  $eventName;
+                    // }
                     // }
 
 
                     $rand = rand(1, 2);
                     sleep($rand);
                     if (!$currentDeal) {
+
+                        $fieldsData['TITLE'] = $eventTypeName . ' ' .  $eventName;
+
                         $currentDealId = BitrixDealService::setDeal(
                             $hook,
                             $fieldsData,
