@@ -78,10 +78,7 @@ class BitrixDealFlowService
                                 $currentDeal = $curbtxDeal;
                             }
                         }
-                        Log::channel('telegram')->info('DEAL TEST', [
-                            'curbtxDeal' => $curbtxDeal,
-
-                        ]);
+                      
                     }
                 }
 

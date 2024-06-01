@@ -395,6 +395,7 @@ class BitrixDealService
                 // } else if ($eventType == 'presentation') {
                 //     $stageSuphicks = 'pres';
                 // }
+                
                 $isCurrentSearched = false;
                 if (!empty($currentCategoryData['stages'])) {
 
@@ -403,12 +404,16 @@ class BitrixDealService
                         if ($stage['bitrixId'] ==  $targetStageBtxId) {
                             $result = $isCurrentSearched && true;
                         }
-
+                  
                         // if ($eventType === 'xo' || $eventType === 'cold') {
                         if ("C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'] ==  $currentDeal['STAGE_ID']) {
                             $isCurrentSearched = true;
                         }
-
+                        Log::channel('telegram')->info('DEAL TEST', [
+                            'bitrixId' => $stage['bitrixId'],
+                            'isCurrentSearched' => $isCurrentSearched,
+                            'result' => $result,
+                        ]);
                         // }
                     }
                 }
