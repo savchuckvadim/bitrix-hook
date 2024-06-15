@@ -429,8 +429,10 @@ class BitrixCallingColdService
                 $this->responsibleId,
                 $this->responsibleId,
                 $this->entityId,
-                '$comment',
-                $workStatus
+                'Холодный обзвон' . $this->name,
+                $workStatus,
+                'result'  // result noresult expired
+
             )->onQueue('low-priority');
             // BitrixListFlowService::getListsFlow(
             //     $this->hook,

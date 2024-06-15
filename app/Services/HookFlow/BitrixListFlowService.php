@@ -38,7 +38,12 @@ class BitrixListFlowService
         $suresponsible,
         $companyId,
         $comment,
-        $workStatus
+        $workStatus,
+        $resultStatus,  // result noresult expired
+        $noresultReason,
+        $failReason ,
+        $failType,
+
 
     ) {
         $nowDate = new DateTime();
@@ -142,6 +147,16 @@ class BitrixListFlowService
                     ),  //'in_work',
                     'name' =>  'В работе' //'В работе'
                 ],
+            ],
+            [
+                'code' => 'op_result_status',
+                'name' => 'Результативность',
+                'list' =>  [
+                    'code' => BitrixListFlowService::getResultStatus(
+                        $resultStatus,
+                    ),  //'in_work',
+                    'name' =>  'В работе' //'В работе'
+                ],
             ]
 
         ];
@@ -221,7 +236,6 @@ class BitrixListFlowService
 
                             if ($listCode) {
                                 if ($listCode == 'op_status_in_work' || $listCode == 'in_work') {
-                             
                                 }
 
                                 if ($btxFieldItem['code'] === $listCode) {
@@ -271,9 +285,9 @@ class BitrixListFlowService
                     case 'inJob':
                         $resultCode = 'in_work';
 
-                        if($currentEventType == 'hot'){
+                        if ($currentEventType == 'hot') {
                             $resultCode = 'in_progress';
-                        }else  if($currentEventType == 'moneyAwait'){
+                        } else  if ($currentEventType == 'moneyAwait') {
                             $resultCode = 'money_await';
                         }
 
@@ -293,15 +307,107 @@ class BitrixListFlowService
                 }
             }
         }
-        Log::channel('telegram')->info('WORKSTATUS', [
-            'wstatus' => $workStatus,
-            'currentEventType' => $currentEventType,
 
-        
-        ]);
         return $resultCode;
     }
 
+    static function  getResultStatus($resultStatus)
+    {
+
+        $result = 'yes';
+        if ($resultStatus !== 'result') {
+            $result = 'no';
+        }
+        Log::channel('telegram')->info('resultStatus', [
+            'resultStatus' => $resultStatus,
+
+
+        ]);
+
+        return $result;
+    }
+
+
+    static function  getNoResultReasone($resultStatus)
+    {
+        // Секретарь 	op_noresult_reason	secretar
+        // Недозвон - трубку не берут	op_noresult_reason	nopickup
+        // Недозвон - номер не существует	op_noresult_reason	nonumber
+        // Занято 	op_noresult_reason	busy
+        // Перенос - не было времени	op_noresult_reason	noresult_notime
+        // Контактера нет на месте	op_noresult_reason	nocontact
+        // Просят оставить свой номер	op_noresult_reason	giveup
+        // Не интересует, до свидания	op_noresult_reason	bay
+        // По телефону отвечает не та организация	op_noresult_reason	wrong
+        // Автоответчик	op_noresult_reason	auto
+        $result = 'yes';
+        if ($resultStatus !== 'result') {
+            $result = 'no';
+        }
+        Log::channel('telegram')->info('resultStatus', [
+            'resultStatus' => $resultStatus,
+
+
+        ]);
+
+        return $result;
+    }
+
+
+
+    static function  getFailType($resultStatus)
+    {
+        // не было времени	op_fail_reason	fail_notime
+        // конкуренты - привыкли	op_fail_reason	c_habit
+        // конкуренты - оплачено	op_fail_reason	c_prepay
+        // конкуренты - цена	op_fail_reason	c_price
+        // слишком дорого	op_fail_reason	to_expensive
+        // слишком дешево	op_fail_reason	to_cheap
+        // нет денег	op_fail_reason	nomoney
+        // не видят надобности	op_fail_reason	noneed
+        // лпр против	op_fail_reason	lpr
+        // ключевой сотрудник против	op_fail_reason	employee
+
+
+        $result = 'yes';
+        if ($resultStatus !== 'result') {
+            $result = 'no';
+        }
+        Log::channel('telegram')->info('resultStatus', [
+            'resultStatus' => $resultStatus,
+
+
+        ]);
+
+        return $result;
+    }
+
+    static function  getFailReasone($resultStatus)
+    {
+        // не было времени	op_fail_reason	fail_notime
+        // конкуренты - привыкли	op_fail_reason	c_habit
+        // конкуренты - оплачено	op_fail_reason	c_prepay
+        // конкуренты - цена	op_fail_reason	c_price
+        // слишком дорого	op_fail_reason	to_expensive
+        // слишком дешево	op_fail_reason	to_cheap
+        // нет денег	op_fail_reason	nomoney
+        // не видят надобности	op_fail_reason	noneed
+        // лпр против	op_fail_reason	lpr
+        // ключевой сотрудник против	op_fail_reason	employee
+
+        
+        $result = 'yes';
+        if ($resultStatus !== 'result') {
+            $result = 'no';
+        }
+        Log::channel('telegram')->info('resultStatus', [
+            'resultStatus' => $resultStatus,
+
+
+        ]);
+
+        return $result;
+    }
     // protected function getCurrentWorkStatusCode($isFail, $isSuccess)
     // {
     //     // В работе	op_work_status	op_status_in_work || in_work

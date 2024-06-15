@@ -47,6 +47,13 @@ class EventReportService
     // 2: {id: 2, code: "success", name: "Продажа"}
     // 3: {id: 3, code: "fail", name: "Отказ"}
 
+
+    protected $noresultReason;
+    protected $failReason;
+    protected $failType;
+
+
+
     protected $isInWork = false;  //boolean
     protected $isFail = false;  //boolean
     protected $isSuccessSale = false;  //boolean
@@ -1279,6 +1286,7 @@ class EventReportService
                 $this->entityId,
                 $this->comment,
                 $this->workStatus['current'],
+                $this->resultStatus  // result noresult expired
    
             )->onQueue('low-priority');
         }
@@ -1299,7 +1307,9 @@ class EventReportService
                 $this->planResponsibleId,
                 $this->entityId,
                 $planComment,
-                $this->workStatus['current']
+                $this->workStatus['current'],
+                $this->resultStatus  // result noresult expired
+
             )->onQueue('low-priority');
         }
     }

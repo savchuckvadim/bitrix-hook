@@ -17,7 +17,7 @@ class BtxCreateListItemJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-  
+
     protected $hook;
     protected $bitrixLists;
     protected $eventType;
@@ -27,13 +27,17 @@ class BtxCreateListItemJob implements ShouldQueue
     protected $eventName;
     protected $deadline;
 
-    
+
     protected $createdId;
     protected $suresponsibleId;
     protected $responsibleId;
     protected $entityId;
     protected $comment;
     protected $workStatus;
+    protected $resultStatus;
+    protected $noresultReason;
+    protected $failReason;
+    protected $failType;
 
 
     public function __construct(
@@ -42,7 +46,7 @@ class BtxCreateListItemJob implements ShouldQueue
         $eventType, // xo warm presentation,
         $eventTypeName,
         $eventAction,  // plan done expired 
-      
+
         // $stringType,
         $deadline,
         $createdId,
@@ -50,7 +54,11 @@ class BtxCreateListItemJob implements ShouldQueue
         $suresponsibleId,
         $entityId,
         $comment,
-        $workStatus
+        $workStatus,
+        $resultStatus,
+        $noresultReason = null,
+        $failReason = null,
+        $failType = null,
     ) {
         $this->hook =  $hook;
         $this->bitrixLists =  $bitrixLists;
@@ -59,7 +67,7 @@ class BtxCreateListItemJob implements ShouldQueue
         $this->eventAction = $eventAction;
         $this->deadline =  $deadline;
         // $this->stringType =  $stringType;
-     
+
         $this->createdId =  $createdId;
         $this->responsibleId =  $responsibleId;
         $this->suresponsibleId =  $suresponsibleId;
@@ -67,7 +75,11 @@ class BtxCreateListItemJob implements ShouldQueue
         $this->comment = $comment;
 
         $this->workStatus = $workStatus;
-        
+        $this->resultStatus = $resultStatus;
+
+        $this->noresultReason = $noresultReason;
+        $this->failReason = $failReason;
+        $this->failType = $failType;
     }
 
     /**
@@ -77,7 +89,7 @@ class BtxCreateListItemJob implements ShouldQueue
     {
         $randomNumber = rand(3, 10);
         sleep($randomNumber);
-      
+
         BitrixListFlowService::getListsFlow(
             $this->hook,
             $this->bitrixLists,
@@ -91,8 +103,13 @@ class BtxCreateListItemJob implements ShouldQueue
             $this->suresponsibleId,
             $this->entityId,
             $this->comment,
-            $this->workStatus
+            $this->workStatus,
+            $this->resultStatus,
+            $this->noresultReason,
+            $this->failReason,
+            $this->failType
+
+
         );
-        
     }
 }
