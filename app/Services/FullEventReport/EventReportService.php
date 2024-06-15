@@ -1278,7 +1278,7 @@ class EventReportService
                 $this->planResponsibleId,
                 $this->entityId,
                 $this->comment,
-                $this->workStatus,
+                $this->workStatus['current'],
    
             )->onQueue('low-priority');
         }
@@ -1299,7 +1299,7 @@ class EventReportService
                 $this->planResponsibleId,
                 $this->entityId,
                 $planComment,
-                $this->workStatus
+                $this->workStatus['current']
             )->onQueue('low-priority');
         }
     }
