@@ -111,7 +111,7 @@ class BitrixTaskService
             }
 
 
-            $taskTitle = $stringType . $name . '  ' . $deadline;
+            $taskTitle = $stringType . '  ' . $name . '  ' . $deadline;
 
 
             if (!empty($currentDealsItemIds)) {

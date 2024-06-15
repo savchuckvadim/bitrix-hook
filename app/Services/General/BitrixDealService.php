@@ -268,12 +268,12 @@ class BitrixDealService
                 }
             }
         }
-        Log::info('DEAL TEST', [
-            'resultCategoryDatas' => $resultCategoryDatas,
-            // 'targetStageBtxId' => $targetStageBtxId,
-            // 'currentCategoryData' => "C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'],
-            // 'isCurrentSearched' => $isCurrentSearched,
-        ]);
+        // Log::info('DEAL TEST', [
+        //     'resultCategoryDatas' => $resultCategoryDatas,
+        //     // 'targetStageBtxId' => $targetStageBtxId,
+        //     // 'currentCategoryData' => "C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'],
+        //     // 'isCurrentSearched' => $isCurrentSearched,
+        // ]);
         return $resultCategoryDatas;
     }
 
@@ -409,11 +409,11 @@ class BitrixDealService
                         if ("C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'] ==  $currentDeal['STAGE_ID']) {
                             $isCurrentSearched = true;
                         }
-                        Log::channel('telegram')->info('DEAL TEST', [
-                            'bitrixId' => $stage['bitrixId'],
-                            'isCurrentSearched' => $isCurrentSearched,
-                            'result' => $result,
-                        ]);
+                        // Log::channel('telegram')->info('DEAL TEST', [
+                        //     'bitrixId' => $stage['bitrixId'],
+                        //     'isCurrentSearched' => $isCurrentSearched,
+                        //     'result' => $result,
+                        // ]);
                         // }
                     }
                 }

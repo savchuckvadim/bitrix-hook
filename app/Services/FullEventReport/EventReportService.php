@@ -2,17 +2,13 @@
 
 namespace App\Services\FullEventReport;
 
-use App\Http\Controllers\APIBitrixController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\PortalController;
 use App\Jobs\BtxCreateListItemJob;
-use App\Services\BitrixGeneralService;
 use App\Services\BitrixTaskService;
 use App\Services\General\BitrixDepartamentService;
 use App\Services\HookFlow\BitrixDealFlowService;
 use App\Services\HookFlow\BitrixEntityFlowService;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class EventReportService
@@ -38,6 +34,8 @@ class EventReportService
     // // или currentTask->eventType // xo 'presentation' in Work money_await
     protected $currentReportEventType; // currentTask-> eventType xo
     protected $currentReportEventName;
+
+    protected $comment = '';
 
 
     protected $isResult = false;     //boolean
@@ -202,6 +200,11 @@ class EventReportService
         if ($data['report']['resultStatus'] !== 'result' && $data['plan']['isPlanned']) {
             $this->isExpired  = true;
         }
+
+        if (!empty($data['report']['description'])) {
+            $this->comment  = $data['report']['description'];
+        }
+
 
 
         $this->plan = $data['plan'];
@@ -565,13 +568,10 @@ class EventReportService
         $fields = $this->portalCompanyData['bitrixfields'];
         $updatedFields = $this->getReportFields(
             [],
-            $fields
+            $fields //portal fields
         );
 
-        Log::info('TEST ENTITY FIELDS', [
-            'updatedFields' => $updatedFields
-        ]);
-
+  
 
         BitrixEntityFlowService::flow(
             $this->portal,
@@ -1068,9 +1068,9 @@ class EventReportService
                 true,
                 '$fields'
             );
-           
-            if(!empty($unplannedPresDeal)){
-                if(isset($unplannedPresDeal['ID'])){
+
+            if (!empty($unplannedPresDeal)) {
+                if (isset($unplannedPresDeal['ID'])) {
 
                     $unplannedPresDealId = $unplannedPresDeal['ID'];
                     array_push($this->currentBtxDeals, $unplannedPresDeal);
@@ -1097,17 +1097,12 @@ class EventReportService
                     );
 
                     foreach ($this->currentBtxDeals as $cbtxdeal) {
-                        if($cbtxdeal['ID'] !== $unplannedPresDealId){
+                        if ($cbtxdeal['ID'] !== $unplannedPresDealId) {
                             array_push($currentBtxDeals, $cbtxdeal);
                         }
                     }
-
-
-
                 }
             }
-
-       
         }
         sleep(1);
 
@@ -1168,7 +1163,7 @@ class EventReportService
         }
 
 
-        
+
         return [
             'reportDeals' => $reportDeals,
             'planDeals' => $planDeals,
@@ -1264,11 +1259,12 @@ class EventReportService
         $planEventTypeName = $this->currentPlanEventTypeName;
         $planEventType = $this->currentPlanEventType; //если перенос то тип будет автоматически взят из report - предыдущего события
         $eventAction = 'expired';
+        $planComment = 'Перенесен';
 
         if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
             //report
             $eventAction = 'plan';
-
+            $planComment = 'Запланирован';
             BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию
                 $this->hook,
                 $this->bitrixLists,
@@ -1281,14 +1277,14 @@ class EventReportService
                 $this->planResponsibleId,
                 $this->planResponsibleId,
                 $this->entityId,
-                '$comment'
+                $this->comment,
             )->onQueue('low-priority');
         }
 
 
 
         if ($this->isPlanned) {
-            BtxCreateListItemJob::dispatch(
+            BtxCreateListItemJob::dispatch(  //запись о планировании и переносе
                 $this->hook,
                 $this->bitrixLists,
                 $planEventType,
@@ -1300,7 +1296,7 @@ class EventReportService
                 $this->planResponsibleId,
                 $this->planResponsibleId,
                 $this->entityId,
-                '$comment'
+                $planComment
             )->onQueue('low-priority');
         }
     }
