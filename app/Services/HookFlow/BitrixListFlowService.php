@@ -293,7 +293,13 @@ class BitrixListFlowService
                 }
             }
         }
-        return 'money_await';
+        Log::channel('telegram')->info('WORKSTATUS', [
+            'wstatus' => $workStatus,
+            'currentEventType' => $currentEventType,
+
+        
+        ]);
+        return $resultCode;
     }
 
     // protected function getCurrentWorkStatusCode($isFail, $isSuccess)
