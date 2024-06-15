@@ -293,7 +293,7 @@ class BitrixListFlowService
                 }
             }
         }
-        return $resultCode;
+        return 'money_await';
     }
 
     // protected function getCurrentWorkStatusCode($isFail, $isSuccess)
