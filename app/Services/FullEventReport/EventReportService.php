@@ -42,7 +42,7 @@ class EventReportService
     protected $isExpired = false;     //boolean перенос текущей задачи
 
     protected $workStatus;    //object with current {code:"setAside" id:1 name:"Отложено"}
-    // 0: {id: 0, code: "inJob", name: "В работе"}
+    // 0: {id: 0, code: "inJob", name: "В работе"} in_long
     // 1: {id: 1, code: "setAside", name: "Отложено"}
     // 2: {id: 2, code: "success", name: "Продажа"}
     // 3: {id: 3, code: "fail", name: "Отказ"}
@@ -1152,7 +1152,7 @@ class EventReportService
                 $this->currentDepartamentType,
                 $this->entityType,
                 $this->entityId,
-                $this->currentPlanEventType, // xo warm presentation,
+                $this->currentPlanEventType, // xo warm presentation, hot moneyAwait
                 $this->currentPlanEventTypeName,
                 $this->currentPlanEventName,
                 'plan',  // plan done expired 
@@ -1258,7 +1258,7 @@ class EventReportService
         $reportEventTypeName = $this->currentReportEventName;
         $planEventTypeName = $this->currentPlanEventTypeName;
         $planEventType = $this->currentPlanEventType; //если перенос то тип будет автоматически взят из report - предыдущего события
-        $eventAction = 'expired';
+        $eventAction = 'expired';  // не состоялся и двигается крайний срок 
         $planComment = 'Перенесен';
 
         if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
@@ -1278,6 +1278,8 @@ class EventReportService
                 $this->planResponsibleId,
                 $this->entityId,
                 $this->comment,
+                $this->workStatus,
+   
             )->onQueue('low-priority');
         }
 
@@ -1296,7 +1298,8 @@ class EventReportService
                 $this->planResponsibleId,
                 $this->planResponsibleId,
                 $this->entityId,
-                $planComment
+                $planComment,
+                $this->workStatus
             )->onQueue('low-priority');
         }
     }

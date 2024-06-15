@@ -29,7 +29,7 @@ class BitrixListFlowService
         $hook,
         $bitrixLists,
         $eventType, // xo warm presentation, offer invoice
-        $eventTypeName,
+        $eventTypeName, //звонок по решению по оплате
         $eventAction,  // plan done expired fail success
         // $eventName,
         $deadline,
@@ -38,6 +38,7 @@ class BitrixListFlowService
         $suresponsible,
         $companyId,
         $comment,
+        $workStatus
 
     ) {
         $nowDate = new DateTime();
@@ -61,11 +62,9 @@ class BitrixListFlowService
         } else    if ($eventAction == 'fail') {
 
             $eventActionName = 'Отказ';
-
         } else    if ($eventAction == 'success') {
 
             $eventActionName = 'Продажа';
-
         }
 
         $xoFields = [
@@ -129,7 +128,7 @@ class BitrixListFlowService
                 'name' => 'Событие Действие',
                 'list' =>  [
                     'code' => $eventAction,
-                    'name' => 'Запланирован'
+                    'name' => $eventActionName //Запланирован/на
                 ],
             ],
 
@@ -137,8 +136,11 @@ class BitrixListFlowService
                 'code' => 'op_work_status',
                 'name' => 'Статус Работы',
                 'list' =>  [
-                    'code' => 'in_work',
-                    'name' => 'В работе'
+                    'code' => BitrixListFlowService::getCurrentWorkStatusCode(
+                        $workStatus,
+                        $eventType
+                    ),  //'in_work',
+                    'name' =>  'В работе' //'В работе'
                 ],
             ]
 
@@ -166,7 +168,7 @@ class BitrixListFlowService
                         $btxItemId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, $xoValue['list']['code']);
                         $currentDataField[$btxId] = [
 
-                            $btxItemId =>  $xoValue['list']['name']
+                            $btxItemId =>  $xoValue['list']['code']
                         ];
 
                         $fieldsData[$btxId] =  $btxItemId;
@@ -218,13 +220,9 @@ class BitrixListFlowService
                         foreach ($btxFieldItems as $btxFieldItem) {
 
                             if ($listCode) {
-                                // if ($listCode == 'op_status_in_work') {
-                                //     Log::channel('telegram')->info('HOOK LISTS item', [
-                                //         'listCode' => $listCode,
-                                //         'pbtxflistCode' => $btxFieldItem['code'],
-
-                                //     ]);
-                                // }
+                                if ($listCode == 'op_status_in_work' || $listCode == 'in_work') {
+                             
+                                }
 
                                 if ($btxFieldItem['code'] === $listCode) {
                                     $result['fieldItemBtxId'] = $btxFieldItem['bitrixId'];
@@ -242,4 +240,69 @@ class BitrixListFlowService
             return $result['fieldItemBtxId'];
         }
     }
+
+    static function getCurrentWorkStatusCode(
+        $workStatus,
+        $currentEventType,
+
+        // 0: {id: 1, code: "warm", name: "Звонок"}
+        // // 1: {id: 2, code: "presentation", name: "Презентация"}
+        // // 2: {id: 3, code: "hot", name: "Решение"}
+        // // 3: {id: 4, code: "moneyAwait", name: "Оплата"}
+
+    ) {
+        $resultCode = 'in_work';
+        // В работе	op_work_status	op_status_in_work
+        // На долгий период	op_work_status	op_status_in_long
+        // Продажа	op_work_status	op_status_success
+        // В решении	op_work_status	op_status_in_progress
+        // В оплате	op_work_status	op_status_money_await
+        // Отказ	op_work_status	op_status_fail
+
+
+        // 0: {id: 0, code: "inJob", name: "В работе"} in_long
+        // 1: {id: 1, code: "setAside", name: "Отложено"}
+        // 2: {id: 2, code: "success", name: "Продажа"}
+        // 3: {id: 3, code: "fail", name: "Отказ"}
+        if (!empty($workStatus)) {
+            if (!empty($workStatus['code'])) {
+                $code = $workStatus['code'];
+                switch ($code) {
+                    case 'inJob':
+                        $resultCode = 'in_work';
+
+                        if($currentEventType == 'hot'){
+                            $resultCode = 'in_progress';
+                        }else  if($currentEventType == 'moneyAwait'){
+                            $resultCode = 'money_await';
+                        }
+
+
+                        break;
+                    case 'setAside': //in_long
+                        $resultCode = 'in_long';
+                        break;
+                    case 'fail':
+                        $resultCode = 'fail';
+                        break;
+                    case 'success':
+                        $resultCode = 'success';
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        return $resultCode;
+    }
+
+    // protected function getCurrentWorkStatusCode($isFail, $isSuccess)
+    // {
+    //     // В работе	op_work_status	op_status_in_work || in_work
+    //     // На долгий период	op_work_status	op_status_in_long
+    //     // Продажа	op_work_status	op_status_success
+    //     // В решении	op_work_status	op_status_in_progress
+    //     // В оплате	op_work_status	op_status_money_await
+    //     // Отказ	op_work_status	op_status_fail
+    // }
 }
