@@ -33,6 +33,9 @@ class BtxCreateListItemJob implements ShouldQueue
     protected $responsibleId;
     protected $entityId;
     protected $comment;
+    protected $workStatus;
+
+
     public function __construct(
         $hook,
         $bitrixLists,
@@ -47,6 +50,7 @@ class BtxCreateListItemJob implements ShouldQueue
         $suresponsibleId,
         $entityId,
         $comment,
+        $workStatus
     ) {
         $this->hook =  $hook;
         $this->bitrixLists =  $bitrixLists;
@@ -61,6 +65,9 @@ class BtxCreateListItemJob implements ShouldQueue
         $this->suresponsibleId =  $suresponsibleId;
         $this->entityId =   $entityId;
         $this->comment = $comment;
+
+        $this->workStatus = $workStatus;
+        
     }
 
     /**
@@ -83,7 +90,8 @@ class BtxCreateListItemJob implements ShouldQueue
             $this->responsibleId,
             $this->suresponsibleId,
             $this->entityId,
-            $this->comment
+            $this->comment,
+            $this->workStatus
         );
         
     }

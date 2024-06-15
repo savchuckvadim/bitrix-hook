@@ -413,7 +413,10 @@ class BitrixCallingColdService
                 $this->entityFieldsUpdatingContent, //updting fields 
             );
             // if ($this->withLists) {
-
+            $workStatus = [
+                'id' => 0,
+                'code' => "inJob", 'name' => "В работе"
+            ];
             BtxCreateListItemJob::dispatch(
                 $this->hook,
                 $this->bitrixLists,
@@ -426,7 +429,8 @@ class BitrixCallingColdService
                 $this->responsibleId,
                 $this->responsibleId,
                 $this->entityId,
-                '$comment'
+                '$comment',
+                $workStatus
             )->onQueue('low-priority');
             // BitrixListFlowService::getListsFlow(
             //     $this->hook,
