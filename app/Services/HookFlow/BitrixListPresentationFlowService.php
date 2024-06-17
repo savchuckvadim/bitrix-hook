@@ -28,6 +28,7 @@ class BitrixListPresentationFlowService
     static function getListPresentationFlow(
         $hook,
         $bitrixLists,
+        $currentDealIds
         // $eventType, // xo warm presentation, offer invoice
         // $eventTypeName, //звонок по решению по оплате
         // $eventAction,  // plan done expired fail success
@@ -47,18 +48,33 @@ class BitrixListPresentationFlowService
 
     ) {
         try {
-            $presentationBtxLis = null;
+            $presentationBtxList = null;
+            $code = '';
 
-            foreach ($bitrixLists as $bitrixList) {
-                if(!empty($bitrixList['type'] == 'presentation')){
-                    $presentationBtxLis = $bitrixList;
-
+            foreach ($currentDealIds as $key => $dealId) {
+                if ($key == 0) {
+                    $code = $dealId;
+                } else {
+                    $code = $code . '_' . $dealId;
                 }
             }
 
-
+            foreach ($bitrixLists as $bitrixList) {
+                if (!empty($bitrixList['type'] == 'presentation')) {
+                    $presentationBtxList = $bitrixList;
+                }
+            }
+            $fieldsData = [
+                'NAME' => 'test',
+                'CODE' => $code
+            ];
+            BitrixListService::setItem(
+                $hook,
+                $bitrixList['bitrixId'],
+                $fieldsData
+            );
             Log::channel('telegram')->info('presentationBtxList', [
-                'presentationBtxLis' => $presentationBtxLis,
+                'presentationBtxLis' => $presentationBtxList,
                 // 'noresultReason' => $noresultReason,
                 // 'failReason' => $failReason,
                 // 'failType' => $failType,

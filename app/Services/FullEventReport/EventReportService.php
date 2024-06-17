@@ -9,6 +9,7 @@ use App\Services\BitrixTaskService;
 use App\Services\General\BitrixDepartamentService;
 use App\Services\HookFlow\BitrixDealFlowService;
 use App\Services\HookFlow\BitrixEntityFlowService;
+use App\Services\HookFlow\BitrixListPresentationFlowService;
 use DateTime;
 use Illuminate\Console\View\Components\Task;
 use Illuminate\Support\Facades\Date;
@@ -1199,7 +1200,7 @@ class EventReportService
             );
         }
 
-      
+
 
         return [
             'reportDeals' => $reportDeals,
@@ -1409,23 +1410,43 @@ class EventReportService
         $planPresDealIds
     ) {
         $currentTask = $this->currentTask;
-
+        $currentDealIds = $planPresDealIds;
         // presentation list flow запускается когда
         // планируется презентация или unplunned тогда для связи со сделками берется $planPresDealIds
         // отчитываются о презентации презентация или unplunned тогда для связи со сделками берется $currentTask
 
-        if($this->currentPlanEventType == 'presentation'){
-            Log::channel('telegram')->error('APRIL_HOOK', [
-                'planPresDealIds' => $planPresDealIds,
-             
-            ]);
+        if ($this->currentPlanEventType == 'presentation') {
+
+            BitrixListPresentationFlowService::getListPresentationFlow(
+                $this->hook,
+                $this->bitrixLists,
+                $currentDealIds
+
+            );
         }
-        if($this->currentReportEventType == 'presentation'){
-            Log::channel('telegram')->error('APRIL_HOOK', [
-                'currentTask' => $currentTask,
-             
-            ]);
+        if ($this->currentReportEventType == 'presentation') {
+            $currentDealIds = [];
+            if (!empty($currentTask)) {
+                if (!empty($currentTask['ufCrmTask'])) {
+                    $array = $currentTask['ufCrmTask'];
+                    foreach ($array as $item) {
+                        // Проверяем, начинается ли элемент с "D_"
+                        if (strpos($item, "D_") === 0) {
+                            // Добавляем ID в массив, удаляя первые два символа "D_"
+                            $currentDealIds[] = substr($item, 2);
+                        }
+                    }
+                }
+            }
+
+            BitrixListPresentationFlowService::getListPresentationFlow(
+                $this->hook,
+                $this->bitrixLists,
+                $currentDealIds
+
+            );
         }
+
         // $reportEventType = $this->currentReportEventType;
         // $reportEventTypeName = $this->currentReportEventName;
         // $planEventTypeName = $this->currentPlanEventTypeName;
