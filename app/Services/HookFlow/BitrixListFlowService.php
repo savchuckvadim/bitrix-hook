@@ -46,210 +46,224 @@ class BitrixListFlowService
 
 
     ) {
-        $nowDate = new DateTime();
+        try {
+            //code...
 
-        $eventActionName = 'Запланирован';
+            $nowDate = new DateTime();
 
-        if ($eventType == 'presentation') {
-            $eventActionName = 'Запланирована';
-        }
+            $eventActionName = 'Запланирован';
 
-
-        if ($eventAction == 'expired') {
-            $eventAction = 'pound';
-            $eventActionName = 'Перенос';
-        } else    if ($eventAction == 'done') {
-
-            $eventActionName = 'Состоялся';
             if ($eventType == 'presentation') {
-                $eventActionName = 'Состоялась';
+                $eventActionName = 'Запланирована';
             }
-        } else    if ($eventAction == 'fail') {
 
-            $eventActionName = 'Отказ';
-        } else    if ($eventAction == 'success') {
 
-            $eventActionName = 'Продажа';
-        }
+            if ($eventAction == 'expired') {
+                $eventAction = 'pound';
+                $eventActionName = 'Перенос';
+            } else    if ($eventAction == 'done') {
 
-        $xoFields = [
-            [
-                'code' => 'event_date',
-                'name' => 'Дата',
-                'value' => $nowDate->format('d.m.Y H:i:s'),
-            ],
-            [
-                'code' => 'name',
-                'name' => 'Название',
-                'value' => $eventTypeName . ' ' . $eventActionName
-            ],
-            [
-                'code' => 'event_title',
-                'name' => 'Название',
-                'value' => $eventTypeName . ' ' . $eventActionName
-            ],
-            [
-                'code' => 'plan_date',
-                'name' => 'Дата Следующей коммуникации',
-                'value' => $deadline
-            ],
-            [
-                'code' => 'author',
-                'name' => 'Автор',
-                'value' => $created,
-            ],
-            [
-                'code' => 'responsible',
-                'name' => 'Ответственный',
-                'value' => $responsible,
-            ],
-            [
-                'code' => 'su',
-                'name' => 'Соисполнитель',
-                'value' => $suresponsible,
-            ],
-            [
-                'code' => 'crm',
-                'name' => 'crm',
-                'value' => ['n0' => 'CO_' . $companyId],
-            ],
+                $eventActionName = 'Состоялся';
+                if ($eventType == 'presentation') {
+                    $eventActionName = 'Состоялась';
+                }
+            } else    if ($eventAction == 'fail') {
 
-            [
-                'code' => 'manager_comment',
-                'name' => 'Комментарий',
-                'value' => $comment,
-            ],
-            [
-                'code' => 'event_type',
-                'name' => 'Тип События',
-                'list' =>  [
-                    'code'  => BitrixListFlowService::getEventType(
-                        $eventType
-                    )
-                    // 'name' => $eventTypeName,
+                $eventActionName = 'Отказ';
+            } else    if ($eventAction == 'success') {
 
+                $eventActionName = 'Продажа';
+            }
+
+            $xoFields = [
+                [
+                    'code' => 'event_date',
+                    'name' => 'Дата',
+                    'value' => $nowDate->format('d.m.Y H:i:s'),
                 ],
-            ],
-            [
-                'code' => 'event_action',
-                'name' => 'Событие Действие',
-                'list' =>  [
-                    'code' => $eventAction,
-                    'name' => $eventActionName //Запланирован/на
+                [
+                    'code' => 'name',
+                    'name' => 'Название',
+                    'value' => $eventTypeName . ' ' . $eventActionName
                 ],
-            ],
-
-            [
-                'code' => 'op_work_status',
-                'name' => 'Статус Работы',
-                'list' =>  [
-                    'code' => BitrixListFlowService::getCurrentWorkStatusCode(
-                        $workStatus,
-                        $eventType
-                    ),  //'in_work',
-                    // 'name' =>  'В работе' //'В работе'
+                [
+                    'code' => 'event_title',
+                    'name' => 'Название',
+                    'value' => $eventTypeName . ' ' . $eventActionName
                 ],
-            ],
-            [
-                'code' => 'op_result_status',
-                'name' => 'Результативность',
-                'list' =>  [
-                    'code' => BitrixListFlowService::getResultStatus(
-                        $resultStatus,
-                    ),  //'in_work',
-                    // 'name' =>  'В работе' //'В работе'
+                [
+                    'code' => 'plan_date',
+                    'name' => 'Дата Следующей коммуникации',
+                    'value' => $deadline
                 ],
-            ],
+                [
+                    'code' => 'author',
+                    'name' => 'Автор',
+                    'value' => $created,
+                ],
+                [
+                    'code' => 'responsible',
+                    'name' => 'Ответственный',
+                    'value' => $responsible,
+                ],
+                [
+                    'code' => 'su',
+                    'name' => 'Соисполнитель',
+                    'value' => $suresponsible,
+                ],
+                [
+                    'code' => 'crm',
+                    'name' => 'crm',
+                    'value' => ['n0' => 'CO_' . $companyId],
+                ],
+
+                [
+                    'code' => 'manager_comment',
+                    'name' => 'Комментарий',
+                    'value' => $comment,
+                ],
+                [
+                    'code' => 'event_type',
+                    'name' => 'Тип События',
+                    'list' =>  [
+                        'code'  => BitrixListFlowService::getEventType(
+                            $eventType
+                        )
+                        // 'name' => $eventTypeName,
+
+                    ],
+                ],
+                [
+                    'code' => 'event_action',
+                    'name' => 'Событие Действие',
+                    'list' =>  [
+                        'code' => $eventAction,
+                        'name' => $eventActionName //Запланирован/на
+                    ],
+                ],
+
+                [
+                    'code' => 'op_work_status',
+                    'name' => 'Статус Работы',
+                    'list' =>  [
+                        'code' => BitrixListFlowService::getCurrentWorkStatusCode(
+                            $workStatus,
+                            $eventType
+                        ),  //'in_work',
+                        // 'name' =>  'В работе' //'В работе'
+                    ],
+                ],
+                [
+                    'code' => 'op_result_status',
+                    'name' => 'Результативность',
+                    'list' =>  [
+                        'code' => BitrixListFlowService::getResultStatus(
+                            $resultStatus,
+                        ),  //'in_work',
+                        // 'name' =>  'В работе' //'В работе'
+                    ],
+                ],
 
 
-        ];
+            ];
 
 
-        if ($resultStatus !== 'result') {
-            if (!empty($noresultReason)) {
-                if (!empty($noresultReason['code'])) {
-                    $noresultReasoneItem = [
-                        'code' => 'op_noresult_reason',
-                        'name' => 'Тип Нерезультативности',
-                        'list' =>  [
-                            'code' => $noresultReason['code'],
-                            // 'name' =>  'В работе' //'В работе'
-                        ],
-                    ];
-                    array_push($xoFields, $noresultReasoneItem);
+            if ($resultStatus !== 'result') {
+                if (!empty($noresultReason)) {
+                    if (!empty($noresultReason['code'])) {
+                        $noresultReasoneItem = [
+                            'code' => 'op_noresult_reason',
+                            'name' => 'Тип Нерезультативности',
+                            'list' =>  [
+                                'code' => $noresultReason['code'],
+                                // 'name' =>  'В работе' //'В работе'
+                            ],
+                        ];
+                        array_push($xoFields, $noresultReasoneItem);
+                    }
                 }
             }
-        }
-        if ($workStatus === 'fail') {  //если провал
-            if (!empty($failType)) {
-                if (!empty($failType['code'])) {
-                    $noresultReasoneItem = [
-                        'code' => 'op_fail_type',
-                        'name' => 'Тип провала',
-                        'list' =>  [
-                            'code' => $failType['code'],
-                            // 'name' =>  'В работе' //'В работе'
-                        ],
-                    ];
-                    array_push($xoFields, $noresultReasoneItem);
+            if ($workStatus === 'fail') {  //если провал
+                if (!empty($failType)) {
+                    if (!empty($failType['code'])) {
+                        $noresultReasoneItem = [
+                            'code' => 'op_fail_type',
+                            'name' => 'Тип провала',
+                            'list' =>  [
+                                'code' => $failType['code'],
+                                // 'name' =>  'В работе' //'В работе'
+                            ],
+                        ];
+                        array_push($xoFields, $noresultReasoneItem);
 
 
 
-                    if ($failType['code'] == 'failure') { //если тип провала - отказ
-                        if (!empty($failReason)) {
-                            if (!empty($failReason['code'])) {
-                                $noresultReasoneItem = [
-                                    'code' => 'op_fail_reason',
-                                    'name' => 'ОП Причина Отказа',
-                                    'list' =>  [
-                                        'code' => $failReason['code'],
-                                        // 'name' =>  'В работе' //'В работе'
-                                    ],
-                                ];
-                                array_push($xoFields, $noresultReasoneItem);
+                        if ($failType['code'] == 'failure') { //если тип провала - отказ
+                            if (!empty($failReason)) {
+                                if (!empty($failReason['code'])) {
+                                    $noresultReasoneItem = [
+                                        'code' => 'op_fail_reason',
+                                        'name' => 'ОП Причина Отказа',
+                                        'list' =>  [
+                                            'code' => $failReason['code'],
+                                            // 'name' =>  'В работе' //'В работе'
+                                        ],
+                                    ];
+                                    array_push($xoFields, $noresultReasoneItem);
+                                }
                             }
                         }
                     }
                 }
             }
-        }
 
 
-        foreach ($bitrixLists as $bitrixList) {
-            $fieldsData = [
-                'NAME' => $eventTypeName . ' ' . $eventActionName
-            ];
-            foreach ($xoFields as $xoValue) {
-                $currentDataField = [];
-                $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $xoValue['code'];
-                $btxId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, null);
-                if (!empty($xoValue)) {
+            foreach ($bitrixLists as $bitrixList) {
+                $fieldsData = [
+                    'NAME' => $eventTypeName . ' ' . $eventActionName
+                ];
+                foreach ($xoFields as $xoValue) {
+                    $currentDataField = [];
+                    $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $xoValue['code'];
+                    $btxId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, null);
+                    if (!empty($xoValue)) {
 
 
 
-                    if (!empty($xoValue['value'])) {
-                        $fieldsData[$btxId] = $xoValue['value'];
-                        $currentDataField[$btxId] = $xoValue['value'];
+                        if (!empty($xoValue['value'])) {
+                            $fieldsData[$btxId] = $xoValue['value'];
+                            $currentDataField[$btxId] = $xoValue['value'];
+                        }
+
+                        if (!empty($xoValue['list'])) {
+                            $btxItemId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, $xoValue['list']['code']);
+                            $currentDataField[$btxId] = [
+
+                                $btxItemId =>  $xoValue['list']['code']
+                            ];
+
+                            $fieldsData[$btxId] =  $btxItemId;
+                        }
                     }
-
-                    if (!empty($xoValue['list'])) {
-                        $btxItemId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, $xoValue['list']['code']);
-                        $currentDataField[$btxId] = [
-
-                            $btxItemId =>  $xoValue['list']['code']
-                        ];
-
-                        $fieldsData[$btxId] =  $btxItemId;
-                    }
+                    // array_push($fieldsData, $currentDataField);
                 }
-                // array_push($fieldsData, $currentDataField);
-            }
 
-            BitrixListService::setItem(
-                $hook,
-                $bitrixList['bitrixId'],
-                $fieldsData
-            );
+                BitrixListService::setItem(
+                    $hook,
+                    $bitrixList['bitrixId'],
+                    $fieldsData
+                );
+            }
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR COLD: getListsFlow',  $errorMessages);
+  
+            Log::channel('telegram')->error('APRIL_HOOK getListsFlow', $errorMessages);
         }
     }
     static function getBtxListCurrentData(
