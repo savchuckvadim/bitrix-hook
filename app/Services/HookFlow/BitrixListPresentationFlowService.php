@@ -64,8 +64,15 @@ class BitrixListPresentationFlowService
                     $presentationBtxList = $bitrixList;
                 }
             }
+            Log::channel('telegram')->info('presentationBtxList', [
+                'presentationBtxLis' => $presentationBtxList,
+                // 'noresultReason' => $noresultReason,
+                // 'failReason' => $failReason,
+                // 'failType' => $failType,
+
+            ]);
             $fieldsData = [
-                'NAME' => 'test',
+                'NAME' => 'test34',
               
             ];
             BitrixListService::setItem(
@@ -74,13 +81,7 @@ class BitrixListPresentationFlowService
                 $fieldsData,
                 $code
             );
-            Log::channel('telegram')->info('presentationBtxList', [
-                'presentationBtxLis' => $presentationBtxList,
-                // 'noresultReason' => $noresultReason,
-                // 'failReason' => $failReason,
-                // 'failType' => $failType,
-
-            ]);
+         
 
             $nowDate = new DateTime();
 
