@@ -1416,7 +1416,13 @@ class EventReportService
         // отчитываются о презентации презентация или unplunned тогда для связи со сделками берется $currentTask
 
         if ($this->currentPlanEventType == 'presentation') {
+            Log::channel('telegram')->info('pres lidt test plan', [
+                'currentDealIds' => $currentDealIds,
+                // 'noresultReason' => $noresultReason,
+                // 'failReason' => $failReason,
+                // 'failType' => $failType,
 
+            ]);
             BitrixListPresentationFlowService::getListPresentationFlow(
                 $this->hook,
                 $this->bitrixLists,
@@ -1439,7 +1445,13 @@ class EventReportService
                     }
                 }
             }
+            Log::channel('telegram')->info('pres lidt test report', [
+                'currentDealIds' => $currentDealIds,
+                // 'noresultReason' => $noresultReason,
+                // 'failReason' => $failReason,
+                // 'failType' => $failType,
 
+            ]);
             BitrixListPresentationFlowService::getListPresentationFlow(
                 $this->hook,
                 $this->bitrixLists,
