@@ -10,6 +10,7 @@ use App\Services\General\BitrixDepartamentService;
 use App\Services\HookFlow\BitrixDealFlowService;
 use App\Services\HookFlow\BitrixEntityFlowService;
 use DateTime;
+use Illuminate\Console\View\Components\Task;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Log;
 
@@ -522,7 +523,10 @@ class EventReportService
             }
             sleep(1);
             $this->getListFlow();
-
+            sleep(1);
+            $this->getListPresentationFlow(
+                $currentDealsIds['planDeals']
+            );
 
             return APIOnlineController::getSuccess(['result' => $result]);
         } catch (\Throwable $th) {
@@ -1195,10 +1199,7 @@ class EventReportService
             );
         }
 
-        Log::channel('telegram')->error('APRIL_HOOK', [
-            'planDeals' => $planDeals,
-            'reportDeals' => $reportDeals
-        ]);
+      
 
         return [
             'reportDeals' => $reportDeals,
@@ -1403,6 +1404,141 @@ class EventReportService
 
             )->onQueue('low-priority');
         }
+    }
+    protected function getListPresentationFlow(
+        $planPresDealIds
+    ) {
+        $currentTask = $this->currentTask;
+
+        // presentation list flow запускается когда
+        // планируется презентация или unplunned тогда для связи со сделками берется $planPresDealIds
+        // отчитываются о презентации презентация или unplunned тогда для связи со сделками берется $currentTask
+
+        if($this->currentPlanEventType == 'presentation'){
+            Log::channel('telegram')->error('APRIL_HOOK', [
+                'planPresDealIds' => $planPresDealIds,
+             
+            ]);
+        }
+        if($this->currentReportEventType == 'presentation'){
+            Log::channel('telegram')->error('APRIL_HOOK', [
+                'currentTask' => $currentTask,
+             
+            ]);
+        }
+        // $reportEventType = $this->currentReportEventType;
+        // $reportEventTypeName = $this->currentReportEventName;
+        // $planEventTypeName = $this->currentPlanEventTypeName;
+        // $planEventType = $this->currentPlanEventType; //если перенос то тип будет автоматически взят из report - предыдущего события
+        // $eventAction = 'expired';  // не состоялся и двигается крайний срок 
+        // $planComment = 'Перенесен';
+
+
+        // if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
+        //     //report
+        //     $eventAction = 'plan';
+        //     $planComment = 'Запланирован';
+
+        //     if ($reportEventType !== 'presentation') {
+
+        //         //если текущий не презентация
+        //         BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию
+        //             $this->hook,
+        //             $this->bitrixLists,
+        //             $reportEventType,
+        //             $reportEventTypeName,
+        //             'done',
+        //             // $this->stringType,
+        //             $this->planDeadline,
+        //             $this->planResponsibleId,
+        //             $this->planResponsibleId,
+        //             $this->planResponsibleId,
+        //             $this->entityId,
+        //             $this->comment,
+        //             $this->workStatus['current'],
+        //             $this->resultStatus, // result noresult expired,
+        //             $this->noresultReason,
+        //             $this->failReason,
+        //             $this->failType
+
+        //         )->onQueue('low-priority');
+        //     }
+
+        //     //если была проведена презентация - не важно какое текущее report event
+
+        //     if ($this->isPresentationDone == true) {
+        //         //если была проведена през
+        //         if ($reportEventType !== 'presentation') {
+        //             //если текущее событие не през - значит uplanned
+        //             //значит надо запланировать през в холостую
+        //             BtxCreateListItemJob::dispatch(  //запись о планировании и переносе
+        //                 $this->hook,
+        //                 $this->bitrixLists,
+        //                 'presentation',
+        //                 'Презентация',
+        //                 'plan',
+        //                 // $this->stringType,
+        //                 $this->nowDate,
+        //                 $this->planResponsibleId,
+        //                 $this->planResponsibleId,
+        //                 $this->planResponsibleId,
+        //                 $this->entityId,
+        //                 'не запланированая презентация',
+        //                 ['code' => 'inJob'], //$this->workStatus['current'],
+        //                 'result',  // result noresult expired
+        //                 $this->noresultReason,
+        //                 $this->failReason,
+        //                 $this->failType
+
+        //             )->onQueue('low-priority');
+        //         }
+        //         BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию
+        //             $this->hook,
+        //             $this->bitrixLists,
+        //             'presentation',
+        //             'Презентация',
+        //             'done',
+        //             // $this->stringType,
+        //             $this->planDeadline,
+        //             $this->planResponsibleId,
+        //             $this->planResponsibleId,
+        //             $this->planResponsibleId,
+        //             $this->entityId,
+        //             $this->comment,
+        //             $this->workStatus['current'],
+        //             $this->resultStatus, // result noresult expired,
+        //             $this->noresultReason,
+        //             $this->failReason,
+        //             $this->failType
+
+        //         )->onQueue('low-priority');
+        //     }
+        // }
+
+
+
+        // if ($this->isPlanned) {
+        //     BtxCreateListItemJob::dispatch(  //запись о планировании и переносе
+        //         $this->hook,
+        //         $this->bitrixLists,
+        //         $planEventType,
+        //         $planEventTypeName,
+        //         $eventAction,
+        //         // $this->stringType,
+        //         $this->planDeadline,
+        //         $this->planResponsibleId,
+        //         $this->planResponsibleId,
+        //         $this->planResponsibleId,
+        //         $this->entityId,
+        //         $planComment,
+        //         $this->workStatus['current'],
+        //         $this->resultStatus,  // result noresult expired
+        //         $this->noresultReason,
+        //         $this->failReason,
+        //         $this->failType
+
+        //     )->onQueue('low-priority');
+        // }
     }
 }
 
