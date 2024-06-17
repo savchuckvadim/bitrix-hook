@@ -58,14 +58,24 @@ class BitrixListPresentationFlowService
                     $code = $code . '_' . $dealId;
                 }
             }
-
+        
             foreach ($bitrixLists as $bitrixList) {
                 if (!empty($bitrixList['type'] == 'presentation')) {
                     $presentationBtxList = $bitrixList;
+
+
+                   
                 }
             }
+
+            $currentItemList = BitrixListService::getItem(
+                $hook,
+                $bitrixList['bitrixId'],
+
+                $code
+            );
             Log::channel('telegram')->info('presentationBtxList', [
-                'presentationBtxLis' => $presentationBtxList,
+                'currentItemList' => $currentItemList,
                 // 'noresultReason' => $noresultReason,
                 // 'failReason' => $failReason,
                 // 'failType' => $failType,
@@ -75,12 +85,22 @@ class BitrixListPresentationFlowService
                 'NAME' => 'test34',
               
             ];
-            BitrixListService::updateItem(
-                $hook,
-                $bitrixList['bitrixId'],
-                $fieldsData,
-                $code
-            );
+            if($currentItemList){
+                BitrixListService::updateItem(
+                    $hook,
+                    $bitrixList['bitrixId'],
+                    $fieldsData,
+                    $code
+                );
+            }else{
+                BitrixListService::setItem(
+                    $hook,
+                    $bitrixList['bitrixId'],
+                    $fieldsData,
+                    $code
+                );
+            }
+           
          
 
             $nowDate = new DateTime();
