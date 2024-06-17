@@ -1195,7 +1195,10 @@ class EventReportService
             );
         }
 
-
+        Log::channel('telegram')->error('APRIL_HOOK', [
+            'planDeals' => $planDeals,
+            'reportDeals' => $reportDeals
+        ]);
 
         return [
             'reportDeals' => $reportDeals,
