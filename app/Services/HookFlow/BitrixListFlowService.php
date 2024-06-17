@@ -128,8 +128,8 @@ class BitrixListFlowService
                     'list' =>  [
                         'code'  => BitrixListFlowService::getEventType(
                             $eventType
-                        )
-                        // 'name' => $eventTypeName,
+                        ),
+                        'name' => $eventTypeName,
 
                     ],
                 ],
@@ -183,40 +183,46 @@ class BitrixListFlowService
                     }
                 }
             }
-            if ($workStatus === 'fail') {  //если провал
-                if (!empty($failType)) {
-                    if (!empty($failType['code'])) {
-                        $noresultReasoneItem = [
-                            'code' => 'op_fail_type',
-                            'name' => 'Тип провала',
-                            'list' =>  [
-                                'code' => $failType['code'],
-                                // 'name' =>  'В работе' //'В работе'
-                            ],
-                        ];
-                        array_push($xoFields, $noresultReasoneItem);
+            if (!empty($workStatus)) {
+                if (!empty($workStatus['code'])) {
+                    $workStatusCode = $workStatus['code'];
+
+
+                    if ($workStatusCode === 'fail') {  //если провал
+                        if (!empty($failType)) {
+                            if (!empty($failType['code'])) {
+                                $noresultReasoneItem = [
+                                    'code' => 'op_fail_type',
+                                    'name' => 'Тип провала',
+                                    'list' =>  [
+                                        'code' => $failType['code'],
+                                        // 'name' =>  'В работе' //'В работе'
+                                    ],
+                                ];
+                                array_push($xoFields, $noresultReasoneItem);
 
 
 
-                        if ($failType['code'] == 'failure') { //если тип провала - отказ
-                            if (!empty($failReason)) {
-                                if (!empty($failReason['code'])) {
-                                    $noresultReasoneItem = [
-                                        'code' => 'op_fail_reason',
-                                        'name' => 'ОП Причина Отказа',
-                                        'list' =>  [
-                                            'code' => $failReason['code'],
-                                            // 'name' =>  'В работе' //'В работе'
-                                        ],
-                                    ];
-                                    array_push($xoFields, $noresultReasoneItem);
+                                if ($failType['code'] == 'failure') { //если тип провала - отказ
+                                    if (!empty($failReason)) {
+                                        if (!empty($failReason['code'])) {
+                                            $noresultReasoneItem = [
+                                                'code' => 'op_fail_reason',
+                                                'name' => 'ОП Причина Отказа',
+                                                'list' =>  [
+                                                    'code' => $failReason['code'],
+                                                    // 'name' =>  'В работе' //'В работе'
+                                                ],
+                                            ];
+                                            array_push($xoFields, $noresultReasoneItem);
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-
 
             foreach ($bitrixLists as $bitrixList) {
                 $fieldsData = [
@@ -262,7 +268,7 @@ class BitrixListFlowService
                 'trace'     => $th->getTraceAsString(),
             ];
             Log::error('ERROR COLD: getListsFlow',  $errorMessages);
-  
+
             Log::channel('telegram')->error('APRIL_HOOK getListsFlow', $errorMessages);
         }
     }

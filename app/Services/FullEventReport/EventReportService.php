@@ -177,7 +177,10 @@ class EventReportService
                     case 'pres':
                         $this->currentReportEventName = 'Презентация';
                         break;
-
+                    case 'presentation':
+                    case 'pres':
+                        $this->currentReportEventName = 'Презентация';
+                        break;
                     default:
                         # code...
                         break;
