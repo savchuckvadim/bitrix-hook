@@ -1287,31 +1287,60 @@ class EventReportService
         $eventAction = 'expired';  // не состоялся и двигается крайний срок 
         $planComment = 'Перенесен';
 
-      
+
         if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
             //report
             $eventAction = 'plan';
             $planComment = 'Запланирован';
-            BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию
-                $this->hook,
-                $this->bitrixLists,
-                $reportEventType,
-                $reportEventTypeName,
-                'done',
-                // $this->stringType,
-                $this->planDeadline,
-                $this->planResponsibleId,
-                $this->planResponsibleId,
-                $this->planResponsibleId,
-                $this->entityId,
-                $this->comment,
-                $this->workStatus['current'],
-                $this->resultStatus, // result noresult expired,
-                $this->noresultReason,
-                $this->failReason,
-                $this->failType
 
-            )->onQueue('low-priority');
+            if ($reportEventType !== 'presentation') {
+
+                //если текущий не презентация
+                BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию
+                    $this->hook,
+                    $this->bitrixLists,
+                    $reportEventType,
+                    $reportEventTypeName,
+                    'done',
+                    // $this->stringType,
+                    $this->planDeadline,
+                    $this->planResponsibleId,
+                    $this->planResponsibleId,
+                    $this->planResponsibleId,
+                    $this->entityId,
+                    $this->comment,
+                    $this->workStatus['current'],
+                    $this->resultStatus, // result noresult expired,
+                    $this->noresultReason,
+                    $this->failReason,
+                    $this->failType
+
+                )->onQueue('low-priority');
+            }
+            if ($this->isPresentationDone == true) {
+
+                //если была проведена презентация - не важно какое текущее report event
+                BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию
+                    $this->hook,
+                    $this->bitrixLists,
+                    'presentation',
+                    'Презентация',
+                    'done',
+                    // $this->stringType,
+                    $this->planDeadline,
+                    $this->planResponsibleId,
+                    $this->planResponsibleId,
+                    $this->planResponsibleId,
+                    $this->entityId,
+                    $this->comment,
+                    $this->workStatus['current'],
+                    $this->resultStatus, // result noresult expired,
+                    $this->noresultReason,
+                    $this->failReason,
+                    $this->failType
+
+                )->onQueue('low-priority');
+            }
         }
 
 

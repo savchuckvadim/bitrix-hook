@@ -48,7 +48,7 @@ class BitrixListFlowService
     ) {
         try {
             Log::channel('telegram')->info('failType list test', [
-                'resultStatus' => $resultStatus,
+                'eventType' => $eventType,
                 'noresultReason' => $noresultReason,
                 'failReason' => $failReason,
                 'failType' => $failType,
