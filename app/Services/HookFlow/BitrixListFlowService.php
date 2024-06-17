@@ -47,7 +47,13 @@ class BitrixListFlowService
 
     ) {
         try {
-            //code...
+            Log::channel('telegram')->info('failType list test', [
+                'resultStatus' => $resultStatus,
+                'noresultReason' => $noresultReason,
+                'failReason' => $failReason,
+                'failType' => $failType,
+
+            ]);
 
             $nowDate = new DateTime();
 
@@ -206,7 +212,7 @@ class BitrixListFlowService
                     if ($workStatusCode === 'fail') {  //если провал
                         if (!empty($failType)) {
                             if (!empty($failType['code'])) {
-                                $noresultReasoneItem = [
+                                $failTypeItemItem = [
                                     'code' => 'op_fail_type',
                                     'name' => 'Тип провала',
                                     'list' =>  [
@@ -214,14 +220,14 @@ class BitrixListFlowService
                                         // 'name' =>  'В работе' //'В работе'
                                     ],
                                 ];
-                                array_push($xoFields, $noresultReasoneItem);
+                                array_push($xoFields, $failTypeItemItem);
 
 
 
                                 if ($failType['code'] == 'failure') { //если тип провала - отказ
                                     if (!empty($failReason)) {
                                         if (!empty($failReason['code'])) {
-                                            $noresultReasoneItem = [
+                                            $failReasonItem = [
                                                 'code' => 'op_fail_reason',
                                                 'name' => 'ОП Причина Отказа',
                                                 'list' =>  [
@@ -229,7 +235,7 @@ class BitrixListFlowService
                                                     // 'name' =>  'В работе' //'В работе'
                                                 ],
                                             ];
-                                            array_push($xoFields, $noresultReasoneItem);
+                                            array_push($xoFields, $failReasonItem);
                                         }
                                     }
                                 }

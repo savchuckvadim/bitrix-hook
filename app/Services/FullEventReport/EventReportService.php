@@ -1309,7 +1309,7 @@ class EventReportService
                 $this->resultStatus, // result noresult expired,
                 $this->noresultReason,
                 $this->failReason,
-                $this->noresultReason
+                $this->failType
 
             )->onQueue('low-priority');
         }
@@ -1334,7 +1334,7 @@ class EventReportService
                 $this->resultStatus,  // result noresult expired
                 $this->noresultReason,
                 $this->failReason,
-                $this->noresultReason
+                $this->failType
 
             )->onQueue('low-priority');
         }
