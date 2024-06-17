@@ -1287,15 +1287,7 @@ class EventReportService
         $eventAction = 'expired';  // не состоялся и двигается крайний срок 
         $planComment = 'Перенесен';
 
-        Log::channel('telegram')->info(
-            'HOOK LIST TEST',
-            [
-                'reportEventType' => $reportEventType,
-                'planEventType' => $planEventType,
-                'reportEventTypeName' => $reportEventTypeName,
-
-            ]
-        );
+      
         if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
             //report
             $eventAction = 'plan';

@@ -52,10 +52,25 @@ class BitrixListFlowService
             $nowDate = new DateTime();
 
             $eventActionName = 'Запланирован';
+            $evTypeName = 'Звонок';
 
-            if ($eventType == 'presentation') {
+
+            if ($eventType == 'xo' || $eventType == 'cold') {
+                $evTypeName = 'Холодный звонок';
+            } else if ($eventType == 'warm' || $eventType == 'call') {
+                $evTypeName = 'Звонок';
+            } else if ($eventType == 'presentation') {
+                $evTypeName = 'Презентация';
                 $eventActionName = 'Запланирована';
+            } else if ($eventType == 'hot' || $eventType == 'inProgress' || $eventType == 'in_progress') {
+                $evTypeName = 'Звонок по решению';
+            } else if ($eventType == 'money' || $eventType == 'moneyAwait' || $eventType == 'money_await') {
+                $evTypeName = 'Звонок по оплате';
             }
+
+
+
+
 
 
             if ($eventAction == 'expired') {
@@ -84,12 +99,12 @@ class BitrixListFlowService
                 [
                     'code' => 'name',
                     'name' => 'Название',
-                    'value' => $eventTypeName . ' ' . $eventActionName
+                    'value' => $evTypeName . ' ' . $eventActionName
                 ],
                 [
                     'code' => 'event_title',
                     'name' => 'Название',
-                    'value' => $eventTypeName . ' ' . $eventActionName
+                    'value' => $evTypeName . ' ' . $eventActionName
                 ],
                 [
                     'code' => 'plan_date',
@@ -226,7 +241,7 @@ class BitrixListFlowService
 
             foreach ($bitrixLists as $bitrixList) {
                 $fieldsData = [
-                    'NAME' => $eventTypeName . ' ' . $eventActionName
+                    'NAME' => $evTypeName . ' ' . $eventActionName
                 ];
                 foreach ($xoFields as $xoValue) {
                     $currentDataField = [];
