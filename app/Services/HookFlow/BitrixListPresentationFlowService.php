@@ -75,7 +75,7 @@ class BitrixListPresentationFlowService
                 'NAME' => 'test34',
               
             ];
-            BitrixListService::setItem(
+            BitrixListService::updateItem(
                 $hook,
                 $bitrixList['bitrixId'],
                 $fieldsData,
