@@ -177,9 +177,15 @@ class EventReportService
                     case 'pres':
                         $this->currentReportEventName = 'Презентация';
                         break;
-                    case 'presentation':
-                    case 'pres':
-                        $this->currentReportEventName = 'Презентация';
+                    case 'hot':
+                    case 'inProgress':
+                    case 'in_progress':
+                        $this->currentReportEventName = 'В решении';
+                        break;
+                    case 'money':
+                    case 'moneyAwait':
+                    case 'money_await':
+                        $this->currentReportEventName = 'В оплате';
                         break;
                     default:
                         # code...
@@ -258,7 +264,7 @@ class EventReportService
             if (!empty($data['currentTask'])) {
                 if (!empty($data['currentTask']['eventType'])) {
 
-                    $this->currentReportEventType = $data['currentTask']['eventType'];
+                    // $this->currentReportEventType = $data['currentTask']['eventType'];
 
 
                     if ($data['currentTask']['eventType'] !== 'presentation') {
@@ -1281,6 +1287,15 @@ class EventReportService
         $eventAction = 'expired';  // не состоялся и двигается крайний срок 
         $planComment = 'Перенесен';
 
+        Log::channel('telegram')->info(
+            'HOOK LIST TEST',
+            [
+                'reportEventType' => $reportEventType,
+                'planEventType' => $planEventType,
+                'reportEventTypeName' => $reportEventTypeName,
+
+            ]
+        );
         if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
             //report
             $eventAction = 'plan';
