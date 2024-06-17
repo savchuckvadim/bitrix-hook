@@ -123,8 +123,10 @@ class BitrixListFlowService
                 'code' => 'event_type',
                 'name' => 'Тип События',
                 'list' =>  [
-                    'code' => $eventType,
-                    'name' => $eventTypeName,
+                    'code'  => BitrixListFlowService::getEventType(
+                        $eventType
+                    )
+                    // 'name' => $eventTypeName,
 
                 ],
             ],
@@ -303,6 +305,35 @@ class BitrixListFlowService
             return $result['fieldItemBtxId'];
         }
     }
+
+    static function  getEventType(
+        $eventType, // xo warm presentation, offer invoice
+    ) {
+        // Холодный звонок	event_type	xo
+        // Звонок	event_type	call
+        // Презентация	event_type	presentation
+        // Информация	event_type	info
+        // Приглашение на семинар	event_type	seminar
+        // Звонок по решению	event_type	call_in_progress
+        // Звонок по оплате	event_type	call_in_money
+        // Входящий звонок	event_type	come_call
+        // Заявка с сайта	event_type	site
+
+        $result = 'xo';
+        if ($eventType === 'call' || $eventType === 'warm') {
+            $result = 'call';
+        } else if ($eventType === 'presentation') {
+            $result = 'presentation';
+        } else if ($eventType === 'hot' || $eventType === 'inProgress' || $eventType === 'in_progress') {
+            $result = 'call_in_progress';
+        } else if ($eventType === 'moneyAwait' || $eventType === 'money_await' || $eventType === 'money') {
+            $result = 'call_in_money';
+        }
+
+
+        return $result;
+    }
+
 
     static function getCurrentWorkStatusCode(
         $workStatus,
