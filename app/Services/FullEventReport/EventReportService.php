@@ -516,7 +516,7 @@ class EventReportService
             // $this->createTask($currentSmartId);
 
             $this->getEntityFlow();
-            sleep(1);
+            // sleep(1);
             if ($this->isExpired || $this->isPlanned) {
                 $result = $this->taskFlow(null, $currentDealsIds['planDeals']);
             } else {
