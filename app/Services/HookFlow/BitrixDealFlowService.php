@@ -284,4 +284,42 @@ class BitrixDealFlowService
 
         return $currentDeal;
     }
+
+
+    static function getBaseDealFromCurrentBtxDeals(
+        $portalDealData,
+        $currentBtxDeals,
+        // $eventType, // xo warm presentation,
+        // $eventAction,  // plan done expired fail
+
+    ) {
+        // sales_base
+        // sales_xo
+        // sales_presentation
+        // tmc_base
+        $result = [];
+        $currentBtxDeal = null;
+        foreach ($currentBtxDeals as $btxDeal) {
+
+            if (!empty($portalDealData['categories'])) {
+
+                foreach ($portalDealData['categories'] as $category) {
+
+                    if ($category['code'] == 'sales_base' && $btxDeal['CATEGORY_ID'] === $category['bitrixId']) {
+                        $currentBtxDeal = $btxDeal;
+                        $result = [$currentBtxDeal];
+                    }
+                }
+            }
+        }
+
+
+        // Log::info('DEAL TEST', [
+        //     'resultCategoryDatas' => $resultCategoryDatas,
+        //     // 'targetStageBtxId' => $targetStageBtxId,
+        //     // 'currentCategoryData' => "C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'],
+        //     // 'isCurrentSearched' => $isCurrentSearched,
+        // ]);
+        return $result;
+    }
 }

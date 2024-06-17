@@ -1183,6 +1183,11 @@ class EventReportService
         //presentation - создать или обновить presentation & Основная
         sleep(1);
         if ($this->isPlanned) {
+            $currentBtxDeals = BitrixDealFlowService::getBaseDealFromCurrentBtxDeals(
+                $this->portalDealData,
+                $currentBtxDeals
+            );
+
             $planDeals =  BitrixDealFlowService::flow( //создает сделку
                 $this->hook,
                 $currentBtxDeals,

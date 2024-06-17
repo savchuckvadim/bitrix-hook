@@ -6,6 +6,7 @@ use App\Http\Controllers\APIBitrixController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\PortalController;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -231,7 +232,7 @@ class BitrixDealService
         $currentDepartamentType,
         $eventType, // xo warm presentation,
         $eventAction,  // plan done expired fail
-      
+
     ) {
         // sales_base
         // sales_xo
@@ -341,7 +342,7 @@ class BitrixDealService
             } else if ($eventAction == 'fail') {
                 $stageSuphicks = 'fail';
 
-                if(!$isResult){
+                if (!$isResult) {
                     $stageSuphicks = 'noresult';
                 }
             }
@@ -395,7 +396,7 @@ class BitrixDealService
                 // } else if ($eventType == 'presentation') {
                 //     $stageSuphicks = 'pres';
                 // }
-                
+
                 $isCurrentSearched = false;
                 if (!empty($currentCategoryData['stages'])) {
 
@@ -404,7 +405,7 @@ class BitrixDealService
                         if ($stage['bitrixId'] ==  $targetStageBtxId) {
                             $result = $isCurrentSearched && true;
                         }
-                  
+
                         // if ($eventType === 'xo' || $eventType === 'cold') {
                         if ("C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'] ==  $currentDeal['STAGE_ID']) {
                             $isCurrentSearched = true;
@@ -424,4 +425,7 @@ class BitrixDealService
 
         return $result;
     }
+
+
+   
 }
