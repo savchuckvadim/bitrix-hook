@@ -1200,7 +1200,13 @@ class EventReportService
             );
         }
 
+        Log::channel('telegram')->info('presentationBtxList', [
+            'reportDeals' => $reportDeals,
+            'planDeals' => $planDeals,
+            // 'failReason' => $failReason,
+            // 'failType' => $failType,
 
+        ]);
 
         return [
             'reportDeals' => $reportDeals,
@@ -1416,6 +1422,7 @@ class EventReportService
         // отчитываются о презентации презентация или unplunned тогда для связи со сделками берется $currentTask
 
         if ($this->currentPlanEventType == 'presentation') {
+            $eventType = 'plan';
             Log::channel('telegram')->info('pres lidt test plan', [
                 'currentDealIds' => $currentDealIds,
                 // 'noresultReason' => $noresultReason,
@@ -1427,10 +1434,12 @@ class EventReportService
                 $this->hook,
                 $this->bitrixLists,
                 $currentDealIds,
-                $this->nowDate
+                $this->nowDate,
+                $eventType
 
             );
         }
+        sleep(1);
         if ($this->currentReportEventType == 'presentation') {
             $currentDealIds = [];
             if (!empty($currentTask)) {
@@ -1445,6 +1454,7 @@ class EventReportService
                     }
                 }
             }
+            $eventType = 'report';
             Log::channel('telegram')->info('pres lidt test report', [
                 'currentDealIds' => $currentDealIds,
                 // 'noresultReason' => $noresultReason,
@@ -1456,7 +1466,8 @@ class EventReportService
                 $this->hook,
                 $this->bitrixLists,
                 $currentDealIds,
-                $this->nowDate
+                $this->nowDate,
+                $eventType
 
             );
         }

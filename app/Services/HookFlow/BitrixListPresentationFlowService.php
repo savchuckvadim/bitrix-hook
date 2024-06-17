@@ -29,7 +29,8 @@ class BitrixListPresentationFlowService
         $hook,
         $bitrixLists,
         $currentDealIds,
-        $nowDate
+        $nowDate,
+        $eventType, //plan|report
         // $eventType, // xo warm presentation, offer invoice
         // $eventTypeName, //звонок по решению по оплате
         // $eventAction,  // plan done expired fail success
@@ -80,7 +81,7 @@ class BitrixListPresentationFlowService
 
             ]);
             $fieldsData = [
-                'NAME' => 'test__' . $nowDate,
+                'NAME' => 'test__' . $nowDate . '_' . $eventType,
 
             ];
             if ($currentItemList) {
