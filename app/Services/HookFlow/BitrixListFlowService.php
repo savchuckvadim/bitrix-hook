@@ -215,7 +215,7 @@ class BitrixListFlowService
 
         foreach ($bitrixLists as $bitrixList) {
             $fieldsData = [
-                'NAME' => $eventTypeName . ' ' . $eventAction
+                'NAME' => $eventTypeName . ' ' . $eventActionName
             ];
             foreach ($xoFields as $xoValue) {
                 $currentDataField = [];
