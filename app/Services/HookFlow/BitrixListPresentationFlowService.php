@@ -28,7 +28,8 @@ class BitrixListPresentationFlowService
     static function getListPresentationFlow(
         $hook,
         $bitrixLists,
-        $currentDealIds
+        $currentDealIds,
+        $nowDate
         // $eventType, // xo warm presentation, offer invoice
         // $eventTypeName, //звонок по решению по оплате
         // $eventAction,  // plan done expired fail success
@@ -58,13 +59,10 @@ class BitrixListPresentationFlowService
                     $code = $code . '_' . $dealId;
                 }
             }
-        
+
             foreach ($bitrixLists as $bitrixList) {
                 if (!empty($bitrixList['type'] == 'presentation')) {
                     $presentationBtxList = $bitrixList;
-
-
-                   
                 }
             }
 
@@ -82,17 +80,17 @@ class BitrixListPresentationFlowService
 
             ]);
             $fieldsData = [
-                'NAME' => 'test34',
-              
+                'NAME' => 'test__' . $nowDate,
+
             ];
-            if($currentItemList){
+            if ($currentItemList) {
                 BitrixListService::updateItem(
                     $hook,
                     $bitrixList['bitrixId'],
                     $fieldsData,
                     $code
                 );
-            }else{
+            } else {
                 BitrixListService::setItem(
                     $hook,
                     $bitrixList['bitrixId'],
@@ -100,8 +98,8 @@ class BitrixListPresentationFlowService
                     $code
                 );
             }
-           
-         
+
+
 
             $nowDate = new DateTime();
 

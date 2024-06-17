@@ -1420,7 +1420,8 @@ class EventReportService
             BitrixListPresentationFlowService::getListPresentationFlow(
                 $this->hook,
                 $this->bitrixLists,
-                $currentDealIds
+                $currentDealIds,
+                $this->nowDate
 
             );
         }
@@ -1442,7 +1443,8 @@ class EventReportService
             BitrixListPresentationFlowService::getListPresentationFlow(
                 $this->hook,
                 $this->bitrixLists,
-                $currentDealIds
+                $currentDealIds,
+                $this->nowDate
 
             );
         }
