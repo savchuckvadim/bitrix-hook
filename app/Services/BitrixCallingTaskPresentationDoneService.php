@@ -475,10 +475,10 @@ class BitrixCallingTaskPresentationDoneService
             Log::channel('telegram')->error('APRIL_HOOK', [
                 $method => [
 
-                    'isUnplannedPresentation UF_CRM_1697117364' => $presentationDate,
+                    'isUnplannedPresentation UF_CRM_1697117364' => 'Y',
                 ]
             ]);
-            $company['UF_CRM_1697117364'] = $presentationDate;
+            $company['UF_CRM_1697117364'] = 'Y';
             // }
         }
 
