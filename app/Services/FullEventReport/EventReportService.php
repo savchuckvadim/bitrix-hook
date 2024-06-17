@@ -9,6 +9,8 @@ use App\Services\BitrixTaskService;
 use App\Services\General\BitrixDepartamentService;
 use App\Services\HookFlow\BitrixDealFlowService;
 use App\Services\HookFlow\BitrixEntityFlowService;
+use DateTime;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Log;
 
 class EventReportService
@@ -74,6 +76,7 @@ class EventReportService
     protected $planCreatedId;
     protected $planResponsibleId;
     protected $planDeadline;
+    protected $nowDate;
 
 
     protected $isPresentationDone;
@@ -251,6 +254,10 @@ class EventReportService
         if (!empty($data['plan']['deadline'])) {
             $this->planDeadline = $data['plan']['deadline'];
         };
+        $nowDate = new DateTime();
+
+        // Форматируем дату и время в нужный формат
+        $this->nowDate = $nowDate->format('d.m.Y H:i:s');
 
         $this->isPresentationDone = $data['presentation']['isPresentationDone'];
 
@@ -1317,9 +1324,35 @@ class EventReportService
 
                 )->onQueue('low-priority');
             }
-            if ($this->isPresentationDone == true) {
 
-                //если была проведена презентация - не важно какое текущее report event
+            //если была проведена презентация - не важно какое текущее report event
+
+            if ($this->isPresentationDone == true) {
+                //если была проведена през
+                if ($reportEventType !== 'presentation') {
+                    //если текущее событие не през - значит uplanned
+                    //значит надо запланировать през в холостую
+                    BtxCreateListItemJob::dispatch(  //запись о планировании и переносе
+                        $this->hook,
+                        $this->bitrixLists,
+                        'presentation',
+                        'Презентация',
+                        'plan',
+                        // $this->stringType,
+                        $this->nowDate,
+                        $this->planResponsibleId,
+                        $this->planResponsibleId,
+                        $this->planResponsibleId,
+                        $this->entityId,
+                        'не запланированая презентация',
+                        ['code' => 'inJob'], //$this->workStatus['current'],
+                        'result',  // result noresult expired
+                        $this->noresultReason,
+                        $this->failReason,
+                        $this->failType
+
+                    )->onQueue('low-priority');
+                }
                 BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию
                     $this->hook,
                     $this->bitrixLists,
