@@ -17,22 +17,31 @@ class BitrixListService
         $hook,
         $listBitrixId, // from portal db
         $fields, //fields values eith fields id's from portal db
+        $elementCode = null
 
     ) {
 
         $result = false;
+
+
+
         try {
             $method = '/lists.element.add.json';
             $url = $hook . $method;
             $nowDate = now();
+
+            $code = $listBitrixId . '_' . $nowDate;
+            if (!empty($elementCode)) {
+                $code =  $elementCode;
+            }
             $data =  [
                 'IBLOCK_TYPE_ID' => 'lists',
                 'IBLOCK_ID' => $listBitrixId,
-                'ELEMENT_CODE' => $listBitrixId. 'element1'.$nowDate,
+                'ELEMENT_CODE' => $code,
                 'FIELDS' => $fields
             ];
 
-   
+
             $response = Http::get($url, $data);
             // $responseData = $response->json();
             $responseData = APIBitrixController::getBitrixRespone($response, 'list service: setItem');

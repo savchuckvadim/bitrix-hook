@@ -66,12 +66,13 @@ class BitrixListPresentationFlowService
             }
             $fieldsData = [
                 'NAME' => 'test',
-                'CODE' => $code
+              
             ];
             BitrixListService::setItem(
                 $hook,
                 $bitrixList['bitrixId'],
-                $fieldsData
+                $fieldsData,
+                $code
             );
             Log::channel('telegram')->info('presentationBtxList', [
                 'presentationBtxLis' => $presentationBtxList,
