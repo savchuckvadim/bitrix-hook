@@ -48,9 +48,9 @@ class EventReportService
     // 3: {id: 3, code: "fail", name: "Отказ"}
 
 
-    protected $noresultReason;
-    protected $failReason;
-    protected $failType;
+    protected $noresultReason = false; // as fals | currentObject
+    protected $failReason = false; // as fals | currentObject
+    protected $failType = false; // as fals | currentObject
 
 
 
@@ -190,7 +190,7 @@ class EventReportService
 
         $this->report = $data['report'];
 
-        $this->resultStatus = $data['report']['resultStatus'];
+        $this->resultStatus = $data['report']['resultStatus']; // result | noresult | expired - todo expired to pound
         $this->workStatus  = $data['report']['workStatus'];
 
         if ($data['report']['resultStatus'] === 'result') {
@@ -212,6 +212,16 @@ class EventReportService
             $this->comment  = $data['report']['description'];
         }
 
+        if (!empty($data['report']['noresultReason'])) {
+            $this->noresultReason  = $data['report']['noresultReason']['current'];
+        }
+
+        if (!empty($data['report']['failReason'])) {
+            $this->failReason  = $data['report']['failReason']['current'];
+        }
+        if (!empty($data['report']['failType'])) {
+            $this->failType  = $data['report']['failType']['current'];
+        }
 
 
         $this->plan = $data['plan'];
@@ -578,7 +588,7 @@ class EventReportService
             $fields //portal fields
         );
 
-  
+
 
         BitrixEntityFlowService::flow(
             $this->portal,
@@ -1286,8 +1296,11 @@ class EventReportService
                 $this->entityId,
                 $this->comment,
                 $this->workStatus['current'],
-                $this->resultStatus  // result noresult expired
-   
+                $this->resultStatus, // result noresult expired,
+                $this->noresultReason,
+                $this->failReason,
+                $this->noresultReason
+
             )->onQueue('low-priority');
         }
 
@@ -1308,7 +1321,10 @@ class EventReportService
                 $this->entityId,
                 $planComment,
                 $this->workStatus['current'],
-                $this->resultStatus  // result noresult expired
+                $this->resultStatus,  // result noresult expired
+                $this->noresultReason,
+                $this->failReason,
+                $this->noresultReason
 
             )->onQueue('low-priority');
         }

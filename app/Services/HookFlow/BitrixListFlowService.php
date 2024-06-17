@@ -38,10 +38,10 @@ class BitrixListFlowService
         $suresponsible,
         $companyId,
         $comment,
-        $workStatus,
+        $workStatus, //inJob
         $resultStatus,  // result noresult expired
         $noresultReason,
-        $failReason ,
+        $failReason,
         $failType,
 
 
@@ -81,12 +81,12 @@ class BitrixListFlowService
             [
                 'code' => 'name',
                 'name' => 'Название',
-                'value' => $eventTypeName . ' ' . $eventAction
+                'value' => $eventTypeName . ' ' . $eventActionName
             ],
             [
                 'code' => 'event_title',
                 'name' => 'Название',
-                'value' => $eventTypeName . ' ' . $eventAction
+                'value' => $eventTypeName . ' ' . $eventActionName
             ],
             [
                 'code' => 'plan_date',
@@ -145,7 +145,7 @@ class BitrixListFlowService
                         $workStatus,
                         $eventType
                     ),  //'in_work',
-                    'name' =>  'В работе' //'В работе'
+                    // 'name' =>  'В работе' //'В работе'
                 ],
             ],
             [
@@ -155,11 +155,62 @@ class BitrixListFlowService
                     'code' => BitrixListFlowService::getResultStatus(
                         $resultStatus,
                     ),  //'in_work',
-                    'name' =>  'В работе' //'В работе'
+                    // 'name' =>  'В работе' //'В работе'
                 ],
-            ]
+            ],
+
 
         ];
+
+
+        if ($resultStatus !== 'result') {
+            if (!empty($noresultReason)) {
+                if (!empty($noresultReason['code'])) {
+                    $noresultReasoneItem = [
+                        'code' => 'op_noresult_reason',
+                        'name' => 'Тип Нерезультативности',
+                        'list' =>  [
+                            'code' => $noresultReason['code'],
+                            // 'name' =>  'В работе' //'В работе'
+                        ],
+                    ];
+                    array_push($xoFields, $noresultReasoneItem);
+                }
+            }
+        }
+        if ($workStatus === 'fail') {  //если провал
+            if (!empty($failType)) {
+                if (!empty($failType['code'])) {
+                    $noresultReasoneItem = [
+                        'code' => 'op_fail_type',
+                        'name' => 'Тип провала',
+                        'list' =>  [
+                            'code' => $failType['code'],
+                            // 'name' =>  'В работе' //'В работе'
+                        ],
+                    ];
+                    array_push($xoFields, $noresultReasoneItem);
+
+
+
+                    if ($failType['code'] == 'failure') { //если тип провала - отказ
+                        if (!empty($failReason)) {
+                            if (!empty($failReason['code'])) {
+                                $noresultReasoneItem = [
+                                    'code' => 'op_fail_reason',
+                                    'name' => 'ОП Причина Отказа',
+                                    'list' =>  [
+                                        'code' => $failReason['code'],
+                                        // 'name' =>  'В работе' //'В работе'
+                                    ],
+                                ];
+                                array_push($xoFields, $noresultReasoneItem);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
 
         foreach ($bitrixLists as $bitrixList) {
@@ -191,9 +242,7 @@ class BitrixListFlowService
                 }
                 // array_push($fieldsData, $currentDataField);
             }
-            // Log::channel('telegram')->info('HOOK LISTS TEST', [
-            //     'data' => $fieldsData
-            // ]);
+
             BitrixListService::setItem(
                 $hook,
                 $bitrixList['bitrixId'],
@@ -318,17 +367,13 @@ class BitrixListFlowService
         if ($resultStatus !== 'result') {
             $result = 'no';
         }
-        Log::channel('telegram')->info('resultStatus', [
-            'resultStatus' => $resultStatus,
 
-
-        ]);
 
         return $result;
     }
 
 
-    static function  getNoResultReasone($resultStatus)
+    static function  getNoResultReasone($resultStatus, $noresultReason)
     {
         // Секретарь 	op_noresult_reason	secretar
         // Недозвон - трубку не берут	op_noresult_reason	nopickup
@@ -344,12 +389,17 @@ class BitrixListFlowService
         if ($resultStatus !== 'result') {
             $result = 'no';
         }
-        Log::channel('telegram')->info('resultStatus', [
+        Log::channel('telegram')->info('op_noresult_reason', [
             'resultStatus' => $resultStatus,
 
 
         ]);
 
+        if (!empty($noresultReason)) {
+            if (!empty($noresultReason['code'])) {
+                $code = $noresultReason['code'];
+            }
+        }
         return $result;
     }
 
@@ -395,7 +445,7 @@ class BitrixListFlowService
         // лпр против	op_fail_reason	lpr
         // ключевой сотрудник против	op_fail_reason	employee
 
-        
+
         $result = 'yes';
         if ($resultStatus !== 'result') {
             $result = 'no';
