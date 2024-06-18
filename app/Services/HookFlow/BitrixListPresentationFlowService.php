@@ -192,7 +192,19 @@ class BitrixListPresentationFlowService
                 //     'name' => 'crm',
                 //     // 'value' => ['n0' => 'CO_' . $companyId], //tmc deal
                 // ],
-
+                [
+                    'code' => 'pres_result_status',
+                    'name' => 'Результативность',
+                    'list' =>  [
+                        'code' => BitrixListPresentationFlowService::getPresResultStatus(
+                            false,
+                            false,
+                            true,
+                            $workStatus
+                        ),  //'in_work',
+                        // 'name' =>  'В работе' //'В работе'
+                    ],
+                ],
 
                 [
                     'code' => 'pres_work_status',
@@ -447,6 +459,7 @@ class BitrixListPresentationFlowService
                         'code' => BitrixListPresentationFlowService::getPresResultStatus(
                             $isDone,
                             $isExpired,
+                            false, // isPlan
                             $workStatus
                         ),  //'in_work',
                         // 'name' =>  'В работе' //'В работе'
@@ -772,6 +785,7 @@ class BitrixListPresentationFlowService
     static function  getPresResultStatus(
         $isDone,
         $isExpired,
+        $isPlan,
         $workStatus // inJob expired fail success
 
     ) {
@@ -786,28 +800,37 @@ class BitrixListPresentationFlowService
         // Продажа после презентации	pres_result_status	pres_result_pres_sale
         $result = 'pres_result_init_done';
 
-        if ($isDone) { // состоялась
+        if($isPlan){
             $result = 'pres_result_init_done';
-            if ($workStatus == 'inJob' || $workStatus == 'expired') { //В работе после презентации
 
-                $result = 'pres_result_pres_in_work';
-            } else if ($workStatus == 'fail') {  //Отказ после презентации
-
-                $result = 'pres_result_pres_fail';
-            } else if ($workStatus == 'success') { //Продажа после презентации
-
-                $result = 'pres_result_pres_sale';
+        }else{
+            if ($isDone) { // состоялась
+                $result = 'pres_result_init_done';
+                if ($workStatus == 'inJob' || $workStatus == 'expired') { //В работе после презентации
+    
+                    $result = 'pres_result_pres_in_work';
+                } else if ($workStatus == 'fail') {  //Отказ после презентации
+    
+                    $result = 'pres_result_pres_fail';
+                } else if ($workStatus == 'success') { //Продажа после презентации
+    
+                    $result = 'pres_result_pres_sale';
+                }
+            } else { // не состоялась
+    
+                if ($isExpired) { // Презентация перенесена
+                    $result = 'pres_result_init_pound';
+                } else {  // не состоялась
+    
+                    $result = 'pres_result_nopres';
+                }
             }
-        } else { // не состоялась
+    
 
-            if ($isExpired) { // Презентация перенесена
-                $result = 'pres_result_init_pound';
-            } else {  // не состоялась
-
-                $result = 'pres_result_nopres';
-            }
         }
 
+
+       
         return $result;
     }
 
