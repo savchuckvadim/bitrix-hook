@@ -309,7 +309,7 @@ class BitrixListPresentationFlowService
 
             $bitrixList = null;
             $code = '';
-
+            $fieldsData = [];
             foreach ($currentDealIds as $key => $dealId) {
                 if ($key == 0) {
                     $code = $dealId;
@@ -330,7 +330,12 @@ class BitrixListPresentationFlowService
 
                 $code
             );
-
+            if (!empty($currentItemList) && is_array($currentItemList)) {
+                $currentItemList = $currentItemList[0];
+                if (!empty($currentItemList)) {
+                    $fieldsData = $currentItemList;
+                }
+            }
             Log::channel('telegram')->info('pres lidt test rep first get', [
                 'currentItemList' => $currentItemList,
 
@@ -520,9 +525,7 @@ class BitrixListPresentationFlowService
             // }
 
 
-            $fieldsData = [
-                'NAME' => $evTypeName . ' ' . $eventActionName
-            ];
+            $fieldsData['NAME'] = $evTypeName . ' ' . $eventActionName;
             foreach ($presentatationReportFields as $prRepValue) {
                 $currentDataField = [];
                 $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $prRepValue['code'];
