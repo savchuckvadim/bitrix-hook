@@ -37,7 +37,7 @@ class EventReportService
     // // Звонок Презентация, Звонок По решению, В оплате 
     // // или currentTask->eventType // xo 'presentation' in Work money_await
     protected $currentReportEventType; // currentTask-> eventType xo
-    protected $currentReportEventName;
+    protected $currentReportEventName = '';
 
     protected $comment = '';
 
@@ -1484,7 +1484,7 @@ class EventReportService
                 $this->bitrixLists,
                 $currentDealIds,
                 $this->nowDate,
-                'plan',
+                $eventType,
                 $this->planDeadline,
                 $this->planCreatedId,
                 $this->planResponsibleId,
@@ -1500,8 +1500,12 @@ class EventReportService
 
             );
         }
+
         sleep(1);
         if ($this->currentReportEventType == 'presentation') {  //report
+
+            //если текущее событие по которому отчитываются - презентация
+
             $currentDealIds = [];
             if (!empty($currentTask)) {
                 if (!empty($currentTask['ufCrmTask'])) {
@@ -1516,24 +1520,52 @@ class EventReportService
                 }
             }
             $eventType = 'report';
-            // Log::channel('telegram')->info('pres lidt test report', [
-            //     'currentDealIds' => $currentDealIds,
-            //     // 'noresultReason' => $noresultReason,
-            //     // 'failReason' => $failReason,
-            //     // 'failType' => $failType,
 
-            // ]);
+            if (
+                $this->isExpired ////текущую назначенную презентацию переносят
+                || (
+                    // //текущая назначенная презентация не состоялась
+                    $this->resultStatus !== 'result'
+                    && $this->isFail && !$this->isPresentationDone
+                )
+            ) {
 
-            //report
-            // BitrixListPresentationFlowService::getListPresentationFlow(
-            //     $this->hook,
-            //     $this->bitrixLists,
-            //     $currentDealIds,
-            //     $this->nowDate,
-            //     $eventType
+                $reportStatus = 'pound';
+                $eventAction = 'expired';
+                //report
+                BitrixListPresentationFlowService::getListPresentationReportFlow(
+                    $this->hook,
+                    $this->bitrixLists,
+                    $currentDealIds,
+                    // $reportStatus,
+                    $this->isPresentationDone,
 
-            // );
+                    $this->nowDate,
+                    $eventType,
+                    $this->isExpired,
+                    $this->planDeadline,
+                    $this->planCreatedId,
+                    $this->planResponsibleId,
+                    $this->entityId,
+                    $this->comment,
+                    $this->currentPlanEventName,
+                    $this->workStatus['current'],
+                    $this->resultStatus, // result noresult expired,
+                    // $this->noresultReason,
+                    // $this->failReason,
+                    // $this->failType
+
+
+                );
+            }
+
+
+            if ($this->isPresentationDone) {
+                //unplanned | planned
+                // если была проведена презентация вне зависимости от текущего события
+            }
         }
+
 
         // $reportEventType = $this->currentReportEventType;
         // $reportEventTypeName = $this->currentReportEventName;

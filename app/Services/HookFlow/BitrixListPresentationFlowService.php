@@ -34,6 +34,7 @@ class BitrixListPresentationFlowService
         // $eventType, // xo warm presentation, offer invoice
         // $eventTypeName, //звонок по решению по оплате
         $eventAction,  // plan done expired fail success
+
         // // $eventName,
         $deadline,
         $created,
@@ -52,6 +53,7 @@ class BitrixListPresentationFlowService
     ) {
         try {
             $eventType = 'plan';
+
 
             $presPortalBtxList = null;
             $code = '';
@@ -88,30 +90,7 @@ class BitrixListPresentationFlowService
 
             $eventActionName = 'Запланирована';
             $evTypeName = 'Презентация';
-            Log::info(
-                'list pres test',
-                [
-                    'currentDealIds' => $currentDealIds,
-                    'eventAction' => $eventAction,
-                    'deadline' => $deadline,
-                    'created' => $created,
-                    'responsible' => $responsible,
-                    'presPortalBtxList' => $presPortalBtxList,
 
-                ]
-            );
-            Log::channel('telegram')->info(
-                'list pres test',
-                [
-                    'currentDealIds' => $currentDealIds,
-                    'eventAction' => $eventAction,
-                    'deadline' => $deadline,
-                    'created' => $created,
-                    'responsible' => $responsible,
-
-
-                ]
-            );
 
             // if ($eventType == 'xo' || $eventType == 'cold') {
             //     $evTypeName = 'Холодный звонок';
@@ -189,7 +168,9 @@ class BitrixListPresentationFlowService
                 [
                     'code' => 'pres_init_status',
                     'name' => 'Статус Заявки',
-                    'value' => BitrixListPresentationFlowService::getPresResultStatus()
+                    'value' => BitrixListPresentationFlowService::getPresInitStatus(
+                        $resultStatus
+                    )
                 ],
                 [
                     'code' => 'pres_crm',
@@ -297,11 +278,13 @@ class BitrixListPresentationFlowService
         $hook,
         $bitrixLists,
         $currentDealIds,
+        // $reportStatus, // as pound noresultFail
+        $isPresentationDone,
         $nowDate,
         $eventType, //plan|report
         // $eventType, // xo warm presentation, offer invoice
         // $eventTypeName, //звонок по решению по оплате
-        $eventAction,  // plan done expired fail success
+        $isExpired,
         // // $eventName,
         $deadline,
         $created,
@@ -309,6 +292,7 @@ class BitrixListPresentationFlowService
         // $suresponsible,
         $companyId,
         $comment,
+        $name,
         $workStatus, //inJob
         $resultStatus,  // result noresult expired
         // $noresultReason,
@@ -319,6 +303,10 @@ class BitrixListPresentationFlowService
     ) {
         try {
             $eventType = 'report';
+            $isDone = $isPresentationDone;
+
+
+
             $presentationBtxList = null;
             $code = '';
 
@@ -342,32 +330,11 @@ class BitrixListPresentationFlowService
 
                 $code
             );
-            Log::channel('telegram')->info('presentationBtxList', [
-                'currentItemList' => $currentItemList,
-                // 'noresultReason' => $noresultReason,
-                // 'failReason' => $failReason,
-                // 'failType' => $failType,
 
-            ]);
             $fieldsData = [
                 'NAME' => 'test__' . $nowDate . '_' . $eventType,
 
             ];
-            if ($currentItemList) {
-                BitrixListService::updateItem(
-                    $hook,
-                    $bitrixList['bitrixId'],
-                    $fieldsData,
-                    $code
-                );
-            } else {
-                BitrixListService::setItem(
-                    $hook,
-                    $bitrixList['bitrixId'],
-                    $fieldsData,
-                    $code
-                );
-            }
 
 
 
@@ -395,173 +362,78 @@ class BitrixListPresentationFlowService
 
 
 
-            if ($eventAction == 'expired') {
-                $eventAction = 'pound';
-                $eventActionName = 'Перенесена';
-            } else    if ($eventAction == 'done') {
+            // if ($eventAction == 'expired') {
+            //     $eventAction = 'pound';
+            //     $eventActionName = 'Перенесена';
+            // } else    if ($eventAction == 'done') {
 
-                $eventActionName = 'Состоялась';
-            } else    if ($eventAction == 'fail') {
+            //     $eventActionName = 'Состоялась';
+            // } else    if ($eventAction == 'fail') {
 
-                $eventActionName = 'Отказ';
-            } else    if ($eventAction == 'success') {
+            //     $eventActionName = 'Отказ';
+            // } else    if ($eventAction == 'success') {
 
-                $eventActionName = 'Продажа';
-            }
+            //     $eventActionName = 'Продажа';
+            // }
 
-            $presentatationPlanFields = [
-                [
-                    'code' => 'pres_event_date', //дата начала
-                    'name' => 'Дата создания заявки',
-                    'value' => $nowDate //$nowDate->format('d.m.Y H:i:s'),
-                ],
-                // [
-                //     'code' => 'name',
-                //     'name' => 'Название',
-                //     'value' => $evTypeName . ' ' . $eventActionName
-                // ],
-                // [
-                //     'code' => 'event_title',
-                //     'name' => 'Название',
-                //     'value' => $evTypeName . ' ' . $eventActionName
-                // ],
-                [
-                    'code' => 'pres_plan_date',
-                    'name' => 'Планируемая Дата презентации',
-                    'value' => $deadline
-                ],
-                [
-                    'code' => 'pres_plan_author',
-                    'name' => 'Автор Заявки',
-                    'value' => $created,
-                ],
-                [
-                    'code' => 'pres_responsible',
-                    'name' => 'Ответственный',
-                    'value' => $responsible,
-                ],
-                [
-                    'code' => 'pres_plan_comment',
-                    'name' => 'Комментарий к заявке',
-                    'value' => $comment,
-                ],
-                [
-                    'code' => 'pres_plan_contacts',
-                    'name' => 'Контактные данные',
-                    'value' => 'Контактные данные', // []
-                ],
-                [
-                    'code' => 'pres_init_status',
-                    'name' => 'Статус Заявки',
-                    // 'value' => BitrixListPresentationFlowService::getPresStatus();
-                ],
-                [
-                    'code' => 'pres_crm',
-                    'name' => 'pres_crm',
-                    'value' => ['n0' => 'CO_' . $companyId],
-                ],
-                [
-                    'code' => 'pres_crm_base_deal',
-                    'name' => 'crm',
-                    // 'value' => ['n0' => 'CO_' . $companyId], //base deal
-                ],
-                [
-                    'code' => 'pres_crm_deal',
-                    'name' => 'crm',
-                    // 'value' => ['n0' => 'CO_' . $companyId], //pres deal
-                ],
-                [
-                    'code' => 'pres_crm_tmc_deal',
-                    'name' => 'crm',
-                    // 'value' => ['n0' => 'CO_' . $companyId], //tmc deal
-                ],
-
-
-                [
-                    'code' => 'pres_work_status',
-                    'name' => 'Статус Работы',
-                    'list' =>  [
-                        'code' => BitrixListFlowService::getCurrentWorkStatusCode(
-                            $workStatus,
-                            $eventType
-                        ),  //'in_work',
-                        // 'name' =>  'В работе' //'В работе'
-                    ],
-                ],
-                // [
-                //     'code' => 'op_result_status',
-                //     'name' => 'Результативность',
-                //     'list' =>  [
-                //         'code' => BitrixListFlowService::getResultStatus(
-                //             $resultStatus,
-                //         ),  //'in_work',
-                //         // 'name' =>  'В работе' //'В работе'
-                //     ],
-                // ],
-
-
-            ];
 
             $presentatationReportFields = [
 
-                [
-                    'code' => 'pres_init_status',
-                    'name' => 'Статус Заявки',
-                    // 'value' => BitrixListPresentationFlowService::getPresStatus();
-                ],
-                [
-                    'code' => 'pres_init_status_date', //дата принятия отклонения заявки
-                    'name' => 'Заявка Принята/Отклонена',
-                    // 'value' => BitrixListPresentationFlowService::getPresStatus();
-                ],
-                [
-                    'code' => 'pres_init_fail_comment',
-                    'name' => 'Комментарий к непринятой заявке',
-                    'value' => $comment,
-                ],
+                // [
+                //     'code' => 'pres_init_status',
+                //     'name' => 'Статус Заявки',
+                //     'value' => BitrixListPresentationFlowService::getPresInitStatus($resultStatus)
+                // ],
+                // [
+                //     'code' => 'pres_init_status_date', //дата принятия отклонения заявки
+                //     'name' => 'Заявка Принята/Отклонена',
+                //     // 'value' => BitrixListPresentationFlowService::getPresStatus();
+                // ],
                 [
                     'code' => 'pres_done_comment',
                     'name' => 'Комментарий после презентации',
                     'value' => $comment,
                 ],
-                [
-                    'code' => 'pres_crm',
-                    'name' => 'pres_crm',
-                    'value' => ['n0' => 'CO_' . $companyId],
-                ],
-                [
-                    'code' => 'pres_crm_base_deal',
-                    'name' => 'crm',
-                    // 'value' => ['n0' => 'CO_' . $companyId], //base deal
-                ],
-                [
-                    'code' => 'pres_crm_deal',
-                    'name' => 'crm',
-                    // 'value' => ['n0' => 'CO_' . $companyId], //pres deal
-                ],
-                [
-                    'code' => 'pres_crm_tmc_deal',
-                    'name' => 'crm',
-                    // 'value' => ['n0' => 'CO_' . $companyId], //tmc deal
-                ],
+
+                // [
+                //     'code' => 'pres_crm',
+                //     'name' => 'pres_crm',
+                //     'value' => ['n0' => 'CO_' . $companyId],
+                // ],
+                // [
+                //     'code' => 'pres_crm_base_deal',
+                //     'name' => 'crm',
+                //     // 'value' => ['n0' => 'CO_' . $companyId], //base deal
+                // ],
+                // [
+                //     'code' => 'pres_crm_deal',
+                //     'name' => 'crm',
+                //     // 'value' => ['n0' => 'CO_' . $companyId], //pres deal
+                // ],
+                // [
+                //     'code' => 'pres_crm_tmc_deal',
+                //     'name' => 'crm',
+                //     // 'value' => ['n0' => 'CO_' . $companyId], //tmc deal
+                // ],
 
                 [
                     'code' => 'pres_result_status',
                     'name' => 'Результативность',
-                    // 'list' =>  [
-                    //     'code' => BitrixListFlowService::getCurrentPresResultStatusCode(
-                    //         $workStatus,
-                    //         $eventType
-                    //     ),  //'in_work',
-                    //     // 'name' =>  'В работе' //'В работе'
-                    // ],
+                    'list' =>  [
+                        'code' => BitrixListPresentationFlowService::getPresResultStatus(
+                            $isDone,
+                            $isExpired,
+                            $workStatus
+                        ),  //'in_work',
+                        // 'name' =>  'В работе' //'В работе'
+                    ],
                 ],
 
                 [
                     'code' => 'pres_work_status',
                     'name' => 'Статус Работы',
                     'list' =>  [
-                        'code' => BitrixListFlowService::getCurrentWorkStatusCode(
+                        'code' => BitrixListPresentationFlowService::getCurrentWorkStatusCode(
                             $workStatus,
                             $eventType
                         ),  //'in_work',
@@ -639,42 +511,58 @@ class BitrixListPresentationFlowService
             //     }
             // }
 
-            // foreach ($bitrixLists as $bitrixList) {
-            //     $fieldsData = [
-            //         'NAME' => $evTypeName . ' ' . $eventActionName
-            //     ];
-            //     foreach ($xoFields as $xoValue) {
-            //         $currentDataField = [];
-            //         $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $xoValue['code'];
-            //         $btxId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, null);
-            //         if (!empty($xoValue)) {
+
+            $fieldsData = [
+                'NAME' => $evTypeName . ' ' . $eventActionName
+            ];
+            foreach ($presentatationReportFields as $prRepValue) {
+                $currentDataField = [];
+                $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $prRepValue['code'];
+                $btxId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, null);
+                if (!empty($prRepValue)) {
 
 
 
-            //             if (!empty($xoValue['value'])) {
-            //                 $fieldsData[$btxId] = $xoValue['value'];
-            //                 $currentDataField[$btxId] = $xoValue['value'];
-            //             }
+                    if (!empty($prRepValue['value'])) {
+                        $fieldsData[$btxId] = $prRepValue['value'];
+                        $currentDataField[$btxId] = $prRepValue['value'];
+                    }
 
-            //             if (!empty($xoValue['list'])) {
-            //                 $btxItemId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, $xoValue['list']['code']);
-            //                 $currentDataField[$btxId] = [
+                    if (!empty($prRepValue['list'])) {
+                        $btxItemId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, $prRepValue['list']['code']);
+                        $currentDataField[$btxId] = [
 
-            //                     $btxItemId =>  $xoValue['list']['code']
-            //                 ];
+                            $btxItemId =>  $prRepValue['list']['code']
+                        ];
 
-            //                 $fieldsData[$btxId] =  $btxItemId;
-            //             }
-            //         }
-            //         // array_push($fieldsData, $currentDataField);
-            //     }
+                        $fieldsData[$btxId] =  $btxItemId;
+                    }
+                }
+                // array_push($fieldsData, $currentDataField);
+            }
 
-            //     BitrixListService::setItem(
-            //         $hook,
-            //         $bitrixList['bitrixId'],
-            //         $fieldsData
-            //     );
-            // }
+            BitrixListService::setItem(
+                $hook,
+                $bitrixList['bitrixId'],
+                $fieldsData
+            );
+
+
+            if ($currentItemList) {
+                BitrixListService::updateItem(
+                    $hook,
+                    $bitrixList['bitrixId'],
+                    $fieldsData,
+                    $code
+                );
+            } else {
+                BitrixListService::setItem(
+                    $hook,
+                    $bitrixList['bitrixId'],
+                    $fieldsData,
+                    $code
+                );
+            }
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
@@ -842,19 +730,44 @@ class BitrixListPresentationFlowService
 
         return $result;
     }
-    static function  getPresResultStatus()
-    {
+    static function  getPresResultStatus(
+        $isDone,
+        $isExpired,
+        $workStatus // inJob expired fail success
+
+    ) {
         // Заявка в рассмотрении	pres_result_status	pres_result_init_await
         // Заявка принята	pres_result_status	pres_result_init_done
         // Заявка не принята	pres_result_status	pres_result_init_fail
-        // Презентация перенесена	pres_result_status	pres_result_init_pound
-        // Презентация проведена	pres_result_status	pres_result_done
-        // Презентация не состоялась	pres_result_status	pres_result_nopres
-        // Отказ после презентации	pres_result_status	pres_result_pres_fail
-        // В работе после презентации	pres_result_status	pres_result_pres_in_work
+        //   Презентация перенесена	pres_result_status	pres_result_init_pound
+        //Презентация проведена	pres_result_status	pres_result_done
+        //   Презентация не состоялась	pres_result_status	pres_result_nopres
+        //   Отказ после презентации	pres_result_status	pres_result_pres_fail
+        //   В работе после презентации	pres_result_status	pres_result_pres_in_work
         // Продажа после презентации	pres_result_status	pres_result_pres_sale
         $result = 'pres_result_init_done';
 
+        if ($isDone) { // состоялась
+            $result = 'pres_result_init_done';
+            if ($workStatus == 'inJob' || $workStatus == 'expired') { //В работе после презентации
+
+                $result = 'pres_result_pres_in_work';
+            } else if ($workStatus == 'fail') {  //Отказ после презентации
+
+                $result = 'pres_result_pres_fail';
+            } else if ($workStatus == 'success') { //Продажа после презентации
+
+                $result = 'pres_result_pres_sale';
+            }
+        } else { // не состоялась
+
+            if ($isExpired) { // Презентация перенесена
+                $result = 'pres_result_init_pound';
+            } else {  // не состоялась
+
+                $result = 'pres_result_nopres';
+            }
+        }
 
         return $result;
     }
