@@ -52,6 +52,7 @@ class BitrixListPresentationFlowService
     ) {
         try {
             $eventType = 'plan';
+         
             $presPortalBtxList = null;
             $code = '';
 
@@ -76,11 +77,22 @@ class BitrixListPresentationFlowService
 
 
 
-            $nowDate = new DateTime();
+            // $nowDate = new DateTime();
 
             $eventActionName = 'Запланирована';
             $evTypeName = 'Презентация';
+            Log::channel('telegram')->info(
+                'list pres test',
+              [
+                'currentDealIds' => $currentDealIds,
+                'eventAction' => $eventAction,
+                'deadline' => $deadline,
+                'created' => $created,
+                'responsible' => $responsible,
+                'presPortalBtxList' => $presPortalBtxList,
 
+              ]
+            );
 
             // if ($eventType == 'xo' || $eventType == 'cold') {
             //     $evTypeName = 'Холодный звонок';
@@ -238,12 +250,16 @@ class BitrixListPresentationFlowService
                     // array_push($fieldsData, $currentDataField);
                 }
 
-             
-    
+                Log::channel('telegram')->info(
+                    'list pres test',
+                    $fieldsData
+                );
+
                 BitrixListService::setItem(
                     $hook,
                     $bitrixList['bitrixId'],
-                    $fieldsData
+                    $fieldsData,
+                    $code
                 );
             }
         } catch (\Throwable $th) {
@@ -713,33 +729,33 @@ class BitrixListPresentationFlowService
         }
     }
 
-    static function  getEventType(
-        $eventType, // xo warm presentation, offer invoice
-    ) {
-        // Холодный звонок	event_type	xo
-        // Звонок	event_type	call
-        // Презентация	event_type	presentation
-        // Информация	event_type	info
-        // Приглашение на семинар	event_type	seminar
-        // Звонок по решению	event_type	call_in_progress
-        // Звонок по оплате	event_type	call_in_money
-        // Входящий звонок	event_type	come_call
-        // Заявка с сайта	event_type	site
+    // static function  getEventType(
+    //     $eventType, // xo warm presentation, offer invoice
+    // ) {
+    //     // Холодный звонок	event_type	xo
+    //     // Звонок	event_type	call
+    //     // Презентация	event_type	presentation
+    //     // Информация	event_type	info
+    //     // Приглашение на семинар	event_type	seminar
+    //     // Звонок по решению	event_type	call_in_progress
+    //     // Звонок по оплате	event_type	call_in_money
+    //     // Входящий звонок	event_type	come_call
+    //     // Заявка с сайта	event_type	site
 
-        $result = 'xo';
-        if ($eventType === 'call' || $eventType === 'warm') {
-            $result = 'call';
-        } else if ($eventType === 'presentation') {
-            $result = 'presentation';
-        } else if ($eventType === 'hot' || $eventType === 'inProgress' || $eventType === 'in_progress') {
-            $result = 'call_in_progress';
-        } else if ($eventType === 'moneyAwait' || $eventType === 'money_await' || $eventType === 'money') {
-            $result = 'call_in_money';
-        }
+    //     $result = 'xo';
+    //     if ($eventType === 'call' || $eventType === 'warm') {
+    //         $result = 'call';
+    //     } else if ($eventType === 'presentation') {
+    //         $result = 'presentation';
+    //     } else if ($eventType === 'hot' || $eventType === 'inProgress' || $eventType === 'in_progress') {
+    //         $result = 'call_in_progress';
+    //     } else if ($eventType === 'moneyAwait' || $eventType === 'money_await' || $eventType === 'money') {
+    //         $result = 'call_in_money';
+    //     }
 
 
-        return $result;
-    }
+    //     return $result;
+    // }
 
 
     static function getCurrentWorkStatusCode(

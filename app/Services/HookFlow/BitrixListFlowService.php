@@ -373,12 +373,7 @@ class BitrixListFlowService
         } else if ($eventType === 'moneyAwait' || $eventType === 'money_await' || $eventType === 'money') {
             $result = 'call_in_money';
         }
-        Log::channel('telegram')->info('getEventType list test', [
-            'eventType' => $eventType,
-            'eventType result' => $result,
 
-
-        ]);
 
         return $result;
     }
