@@ -800,37 +800,34 @@ class BitrixListPresentationFlowService
         // Продажа после презентации	pres_result_status	pres_result_pres_sale
         $result = 'pres_result_init_done';
 
-        if($isPlan){
+        if ($isPlan) {
             $result = 'pres_result_init_done';
-
-        }else{
+        } else {
             if ($isDone) { // состоялась
                 $result = 'pres_result_init_done';
                 if ($workStatus == 'inJob' || $workStatus == 'expired') { //В работе после презентации
-    
+
                     $result = 'pres_result_pres_in_work';
                 } else if ($workStatus == 'fail') {  //Отказ после презентации
-    
+
                     $result = 'pres_result_pres_fail';
                 } else if ($workStatus == 'success') { //Продажа после презентации
-    
+
                     $result = 'pres_result_pres_sale';
                 }
             } else { // не состоялась
-    
+
                 if ($isExpired) { // Презентация перенесена
                     $result = 'pres_result_init_pound';
                 } else {  // не состоялась
-    
+
                     $result = 'pres_result_nopres';
                 }
             }
-    
-
         }
 
 
-       
+
         return $result;
     }
 
@@ -950,8 +947,33 @@ class BitrixListPresentationFlowService
                 $btxFields = $bitrixList['bitrixfields'];
                 foreach ($btxFields as $btxField) {
                     if ($btxField['code'] == 'sales_presentation_pres_done_comment') {
+                        Log::channel('telegram')->info('pres sales_presentation_pres_done_comment', [
+                            'btxField' => $btxField,
+
+                            // 'failReason' => $failReason,
+                            // 'failType' => $failType,
+
+                        ]);
+
+
                         foreach ($currentItemList as $prop_key => $value) {
+                            Log::channel('telegram')->info('pres all prop_key', [
+                                'prop_key' => $prop_key,
+
+
+                            ]);
+
+
                             if ($prop_key == $btxField['bitrixCamelId']) {
+                                Log::channel('telegram')->info('pres searching prop_key', [
+                                    'prop_key' => $prop_key,
+                                    'value' => $value,
+                                    // 'failReason' => $failReason,
+                                    // 'failType' => $failType,
+
+                                ]);
+
+
                                 if (!empty($value)) {
                                     foreach ($value as $id => $value) {
                                         $currentCommentIndex += 1;
