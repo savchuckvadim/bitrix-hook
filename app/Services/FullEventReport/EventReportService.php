@@ -1515,13 +1515,13 @@ class EventReportService
                 }
             }
             $eventType = 'report';
-            Log::channel('telegram')->info('pres lidt test report', [
-                'currentDealIds' => $currentDealIds,
-                // 'noresultReason' => $noresultReason,
-                // 'failReason' => $failReason,
-                // 'failType' => $failType,
+            // Log::channel('telegram')->info('pres lidt test report', [
+            //     'currentDealIds' => $currentDealIds,
+            //     // 'noresultReason' => $noresultReason,
+            //     // 'failReason' => $failReason,
+            //     // 'failType' => $failType,
 
-            ]);
+            // ]);
 
             //report
             // BitrixListPresentationFlowService::getListPresentationFlow(

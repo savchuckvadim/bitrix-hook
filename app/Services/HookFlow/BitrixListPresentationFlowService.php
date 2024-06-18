@@ -52,10 +52,17 @@ class BitrixListPresentationFlowService
     ) {
         try {
             $eventType = 'plan';
-         
+
             $presPortalBtxList = null;
             $code = '';
+            Log::channel('telegram')->info(
+                'list pres test',
+                [
+                    'plan' => $eventType,
 
+
+                ]
+            );
             foreach ($currentDealIds as $key => $dealId) {
                 if ($key == 0) {
                     $code = $dealId;
@@ -81,17 +88,29 @@ class BitrixListPresentationFlowService
 
             $eventActionName = 'Запланирована';
             $evTypeName = 'Презентация';
+            Log::info(
+                'list pres test',
+                [
+                    'currentDealIds' => $currentDealIds,
+                    'eventAction' => $eventAction,
+                    'deadline' => $deadline,
+                    'created' => $created,
+                    'responsible' => $responsible,
+                    'presPortalBtxList' => $presPortalBtxList,
+
+                ]
+            );
             Log::channel('telegram')->info(
                 'list pres test',
-              [
-                'currentDealIds' => $currentDealIds,
-                'eventAction' => $eventAction,
-                'deadline' => $deadline,
-                'created' => $created,
-                'responsible' => $responsible,
-                'presPortalBtxList' => $presPortalBtxList,
+                [
+                    'currentDealIds' => $currentDealIds,
+                    'eventAction' => $eventAction,
+                    'deadline' => $deadline,
+                    'created' => $created,
+                    'responsible' => $responsible,
 
-              ]
+
+                ]
             );
 
             // if ($eventType == 'xo' || $eventType == 'cold') {
@@ -220,48 +239,46 @@ class BitrixListPresentationFlowService
             ];
 
 
-            foreach ($bitrixLists as $bitrixList) {
-                $fieldsData = [
-                    'NAME' => $evTypeName . ' ' . $eventActionName
-                ];
-                foreach ($presentatationPlanFields as $presValue) {
-                    $currentDataField = [];
-                    $fieldCode = $presPortalBtxList['group'] . '_' . $presPortalBtxList['type'] . '_' . $presValue['code'];
-                    $btxId = BitrixListPresentationFlowService::getBtxListCurrentData($presPortalBtxList, $fieldCode, null);
-                    if (!empty($xoValue)) {
+            $fieldsData = [
+                'NAME' => $evTypeName . ' ' . $eventActionName
+            ];
+            foreach ($presentatationPlanFields as $presValue) {
+                $currentDataField = [];
+                $fieldCode = $presPortalBtxList['group'] . '_' . $presPortalBtxList['type'] . '_' . $presValue['code'];
+                $btxId = BitrixListPresentationFlowService::getBtxListCurrentData($presPortalBtxList, $fieldCode, null);
+                if (!empty($presValue)) {
 
 
 
-                        if (!empty($xoValue['value'])) {
-                            $fieldsData[$btxId] = $xoValue['value'];
-                            $currentDataField[$btxId] = $xoValue['value'];
-                        }
-
-                        if (!empty($xoValue['list'])) {
-                            $btxItemId = BitrixListPresentationFlowService::getBtxListCurrentData($presPortalBtxList, $fieldCode, $xoValue['list']['code']);
-                            $currentDataField[$btxId] = [
-
-                                $btxItemId =>  $xoValue['list']['code']
-                            ];
-
-                            $fieldsData[$btxId] =  $btxItemId;
-                        }
+                    if (!empty($presValue['value'])) {
+                        $fieldsData[$btxId] = $presValue['value'];
+                        $currentDataField[$btxId] = $presValue['value'];
                     }
-                    // array_push($fieldsData, $currentDataField);
+
+                    if (!empty($presValue['list'])) {
+                        $btxItemId = BitrixListPresentationFlowService::getBtxListCurrentData($presPortalBtxList, $fieldCode, $presValue['list']['code']);
+                        $currentDataField[$btxId] = [
+
+                            $btxItemId =>  $presValue['list']['code']
+                        ];
+
+                        $fieldsData[$btxId] =  $btxItemId;
+                    }
                 }
-
-                Log::channel('telegram')->info(
-                    'list pres test',
-                    $fieldsData
-                );
-
-                BitrixListService::setItem(
-                    $hook,
-                    $bitrixList['bitrixId'],
-                    $fieldsData,
-                    $code
-                );
+                // array_push($fieldsData, $currentDataField);
             }
+
+            Log::channel('telegram')->info(
+                'list pres test',
+                $fieldsData
+            );
+
+            BitrixListService::setItem(
+                $hook,
+                $bitrixList['bitrixId'],
+                $fieldsData,
+                $code
+            );
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
