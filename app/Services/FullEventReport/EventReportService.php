@@ -73,7 +73,7 @@ class EventReportService
     // // 3: {id: 4, code: "moneyAwait", name: "Оплата"}
 
     protected $currentPlanEventTypeName;
-    protected $currentPlanEventName;
+    protected $currentPlanEventName; // name 
 
     protected $planCreatedId;
     protected $planResponsibleId;
@@ -1490,11 +1490,12 @@ class EventReportService
                 $this->planResponsibleId,
                 $this->entityId,
                 $this->comment,
+                $this->currentPlanEventName,
                 $this->workStatus['current'],
                 $this->resultStatus, // result noresult expired,
-                $this->noresultReason,
-                $this->failReason,
-                $this->failType
+                // $this->noresultReason,
+                // $this->failReason,
+                // $this->failType
 
 
             );
