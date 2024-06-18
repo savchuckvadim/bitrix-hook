@@ -74,14 +74,6 @@ class BitrixListPresentationFlowService
 
             ];
 
-            BitrixListService::setItem(
-                $hook,
-                $bitrixList['bitrixId'],
-                $fieldsData,
-                $code
-            );
-
-
 
 
             $nowDate = new DateTime();
@@ -246,6 +238,8 @@ class BitrixListPresentationFlowService
                     // array_push($fieldsData, $currentDataField);
                 }
 
+             
+    
                 BitrixListService::setItem(
                     $hook,
                     $bitrixList['bitrixId'],
