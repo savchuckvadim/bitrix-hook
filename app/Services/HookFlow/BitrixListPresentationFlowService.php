@@ -307,7 +307,7 @@ class BitrixListPresentationFlowService
 
 
 
-            $presentationBtxList = null;
+            $bitrixList = null;
             $code = '';
 
             foreach ($currentDealIds as $key => $dealId) {
@@ -318,9 +318,9 @@ class BitrixListPresentationFlowService
                 }
             }
 
-            foreach ($bitrixLists as $bitrixList) {
-                if (!empty($bitrixList['type'] == 'presentation')) {
-                    $presentationBtxList = $bitrixList;
+            foreach ($bitrixLists as $btxList) {
+                if (!empty($btxList['type'] == 'presentation')) {
+                    $bitrixList = $btxList;
                 }
             }
 
@@ -545,11 +545,6 @@ class BitrixListPresentationFlowService
                 // array_push($fieldsData, $currentDataField);
             }
 
-            BitrixListService::setItem(
-                $hook,
-                $bitrixList['bitrixId'],
-                $fieldsData
-            );
 
 
             if ($currentItemList) {
@@ -566,7 +561,8 @@ class BitrixListPresentationFlowService
                     // 'failType' => $failType,
 
                 ]);
-            } else {
+            } else { //это так на всякий случай по идее при репорте не должно нечего создаваться
+                // даже если unplanned
                 BitrixListService::setItem(
                     $hook,
                     $bitrixList['bitrixId'],
