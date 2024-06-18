@@ -937,9 +937,10 @@ class BitrixListPresentationFlowService
         //     "PROPERTY_1239":{"49995":"3521"},
         //     "PROPERTY_1251":{"49989":"D_1801"}
         // }
-        $result = '';
+   
         $commentField = null;
         $currentCommentIndex = 0;
+        $resultComments = [];
         if (!empty($bitrixList)) { //every from portal
 
             if (!empty($bitrixList['bitrixfields'])) {
@@ -975,7 +976,9 @@ class BitrixListPresentationFlowService
 
 
                                 if (!empty($value)) {
-                                    foreach ($value as $id => $value) {
+                                    foreach ($value as $id => $commentItemvalue) {
+                                        $resultComments['n' . $currentCommentIndex] = $commentItemvalue;
+                                    
                                         $currentCommentIndex += 1;
                                     }
                                 }
@@ -986,8 +989,8 @@ class BitrixListPresentationFlowService
             }
         }
 
-        $result = ['n' . $currentCommentIndex => $comment];
-        return $result;
+        $resultComments['n' . $currentCommentIndex] = $comment;
+        return $resultComments;
     }
 
     // protected function getCurrentWorkStatusCode($isFail, $isSuccess)
