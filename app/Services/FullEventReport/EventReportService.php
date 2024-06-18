@@ -1427,9 +1427,11 @@ class EventReportService
         // отчитываются о презентации презентация или unplunned тогда для связи со сделками берется $currentTask
 
 
-        // Дата	presentation	datetime	pres_event_date
+        //         Дата начала	presentation	datetime	pres_event_date
         // Автор Заявки	presentation	employee	pres_plan_author
         // Планируемая Дата презентации	presentation	datetime	pres_plan_date
+        // Дата переноса	presentation	datetime	pres_pound_date
+        // Дата проведения презентации	presentation	datetime	pres_done_date
         // Комментарий к заявке	presentation	string	pres_plan_comment
         // Контактные данные	presentation	multiple	pres_plan_contacts
         // Ответственный	presentation	employee	pres_responsible
@@ -1438,13 +1440,12 @@ class EventReportService
         // Комментарий к непринятой заявке	presentation	string	pres_init_fail_comment
         // Комментарий после презентации	presentation	string	pres_done_comment
         // Результативность	presentation	enumeration	pres_result_status
-        // Тип Нерезультативности	presentation	enumeration	pres_noresult_reason
         // Статус Работы	presentation	enumeration	pres_work_status
         // Неперспективная 	presentation	enumeration	pres_fail_type
         // ОП Причина Отказа	presentation	enumeration	pres_fail_reason
         // CRM	presentation	crm	pres_crm
         // Презентация Сделка	presentation	crm	pres_crm_deal
-        // ТМЦ Сделка	presentation	crm		pres_crm_tmc_deal
+        // ТМЦ Сделка	presentation	crm	pres_crm_tmc_deal
         // Основная Сделка	presentation	crm	pres_crm_base_deal
         // Связи	presentation	crm	pres_crm_other
         // Контакт	presentation	crm	pres_crm_contacts

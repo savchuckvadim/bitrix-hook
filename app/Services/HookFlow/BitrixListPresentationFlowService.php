@@ -305,6 +305,7 @@ class BitrixListPresentationFlowService
             $eventType = 'report';
             $isDone = $isPresentationDone;
 
+            $totalPresComment = $comment;
 
 
             $bitrixList = null;
@@ -334,6 +335,12 @@ class BitrixListPresentationFlowService
                 $currentItemList = $currentItemList[0];
                 if (!empty($currentItemList)) {
                     $fieldsData = $currentItemList;
+
+                    $totalPresComment = BitrixListPresentationFlowService::getCurrentPresComment(
+                        $currentItemList, 
+                        $bitrixList,
+                        $comment
+                    );
                 }
             }
             Log::channel('telegram')->info('pres lidt test rep first get', [
@@ -405,7 +412,7 @@ class BitrixListPresentationFlowService
                 [
                     'code' => 'pres_done_comment',
                     'name' => 'Комментарий после презентации',
-                    'value' => $comment,
+                    'value' => $totalPresComment,
                 ],
 
                 // [
@@ -467,69 +474,77 @@ class BitrixListPresentationFlowService
 
             ];
 
+            if ($isExpired) {
+                $isExpiredItem = [
+                    'code' => 'pres_pound_date',
+                    // 'name' => 'Тип Нерезультативности',
+                    'value' =>  $deadline,
+                ];
+                array_push($xoFields, $isExpiredItem);
+            }
 
-            // if ($resultStatus !== 'result') {
-            //     if (!empty($noresultReason)) {
-            //         if (!empty($noresultReason['code'])) {
-            //             $noresultReasoneItem = [
-            //                 'code' => 'op_noresult_reason',
-            //                 'name' => 'Тип Нерезультативности',
-            //                 'list' =>  [
-            //                     'code' => $noresultReason['code'],
-            //                     // 'name' =>  'В работе' //'В работе'
-            //                 ],
-            //             ];
-            //             array_push($xoFields, $noresultReasoneItem);
-            //         }
-            //     }
-            // }
-            // if (!empty($workStatus)) {
-            //     if (!empty($workStatus['code'])) {
-            //         $workStatusCode = $workStatus['code'];
-
-
-            //         if ($workStatusCode === 'fail') {  //если провал
-            //             if (!empty($failType)) {
-            //                 if (!empty($failType['code'])) {
-            //                     $failTypeItemItem = [
-            //                         'code' => 'op_fail_type',
-            //                         'name' => 'Тип провала',
-            //                         'list' =>  [
-            //                             'code' => $failType['code'],
-            //                             // 'name' =>  'В работе' //'В работе'
-            //                         ],
-            //                     ];
-            //                     array_push($xoFields, $failTypeItemItem);
+            if ($resultStatus !== 'result') {
+                if (!empty($noresultReason)) {
+                    if (!empty($noresultReason['code'])) {
+                        $noresultReasoneItem = [
+                            'code' => 'op_noresult_reason',
+                            'name' => 'Тип Нерезультативности',
+                            'list' =>  [
+                                'code' => $noresultReason['code'],
+                                // 'name' =>  'В работе' //'В работе'
+                            ],
+                        ];
+                        array_push($xoFields, $noresultReasoneItem);
+                    }
+                }
+            }
+            if (!empty($workStatus)) {
+                if (!empty($workStatus['code'])) {
+                    $workStatusCode = $workStatus['code'];
 
 
+                    if ($workStatusCode === 'fail') {  //если провал
+                        if (!empty($failType)) {
+                            if (!empty($failType['code'])) {
+                                $failTypeItemItem = [
+                                    'code' => 'op_fail_type',
+                                    'name' => 'Тип провала',
+                                    'list' =>  [
+                                        'code' => $failType['code'],
+                                        // 'name' =>  'В работе' //'В работе'
+                                    ],
+                                ];
+                                array_push($xoFields, $failTypeItemItem);
 
-            //                     if ($failType['code'] == 'failure') { //если тип провала - отказ
-            //                         if (!empty($failReason)) {
-            //                             if (!empty($failReason['code'])) {
-            //                                 $failReasonItem = [
-            //                                     'code' => 'op_fail_reason',
-            //                                     'name' => 'ОП Причина Отказа',
-            //                                     'list' =>  [
-            //                                         'code' => $failReason['code'],
-            //                                         // 'name' =>  'В работе' //'В работе'
-            //                                     ],
-            //                                 ];
-            //                                 array_push($xoFields, $failReasonItem);
-            //                             }
-            //                         }
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
+
+
+                                if ($failType['code'] == 'failure') { //если тип провала - отказ
+                                    if (!empty($failReason)) {
+                                        if (!empty($failReason['code'])) {
+                                            $failReasonItem = [
+                                                'code' => 'op_fail_reason',
+                                                'name' => 'ОП Причина Отказа',
+                                                'list' =>  [
+                                                    'code' => $failReason['code'],
+                                                    // 'name' =>  'В работе' //'В работе'
+                                                ],
+                                            ];
+                                            array_push($xoFields, $failReasonItem);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
 
             $fieldsData['NAME'] = $evTypeName . ' ' . $eventActionName;
             foreach ($presentatationReportFields as $prRepValue) {
                 $currentDataField = [];
                 $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $prRepValue['code'];
-                $btxId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, null);
+                $btxId = BitrixListPresentationFlowService::getBtxListCurrentData($bitrixList, $fieldCode, null);
                 if (!empty($prRepValue)) {
 
 
@@ -540,7 +555,7 @@ class BitrixListPresentationFlowService
                     }
 
                     if (!empty($prRepValue['list'])) {
-                        $btxItemId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, $prRepValue['list']['code']);
+                        $btxItemId = BitrixListPresentationFlowService::getBtxListCurrentData($bitrixList, $fieldCode, $prRepValue['list']['code']);
                         $currentDataField[$btxId] = [
 
                             $btxItemId =>  $prRepValue['list']['code']
@@ -878,6 +893,55 @@ class BitrixListPresentationFlowService
 
         return $result;
     }
+    static function  getCurrentPresComment($currentItemList, $bitrixList, $comment)
+    {
+        // {"ID":"6121","
+        //     IBLOCK_ID":"111",
+        //     "NAME":"Презентация Перенесена",
+        //     "IBLOCK_SECTION_ID":null,
+        //     "CREATED_BY":"1",
+        //     "BP_PUBLISHED":"Y",
+        //     "CODE":"1801_1805",
+        //     "PROPERTY_1213":{"49973":"18.06.2024 11:55:36"},
+        //     "PROPERTY_1215":{"49975":"1"},
+        //     "PROPERTY_1225":{"49979":"Контактные данные"},
+        //     "PROPERTY_1227":{"49981":"1"},
+        //     "PROPERTY_1217":{"49977":"07.07.2024 18:55:13"},
+        //     "PROPERTY_1235":{"49991":"не было на месте"},
+        //     "PROPERTY_1237":{"49993":"3509"},
+        //     "PROPERTY_1245":{"49985":"CO_13"},
+        //     "PROPERTY_1247":{"49987":"D_1805"},
+        //     "PROPERTY_1239":{"49995":"3521"},
+        //     "PROPERTY_1251":{"49989":"D_1801"}
+        // }
+        $result = '';
+        $commentField = null;
+        $currentCommentIndex = 0;
+        if (!empty($bitrixList)) { //every from portal
+
+            if (!empty($bitrixList['bitrixfields'])) {
+
+                $btxFields = $bitrixList['bitrixfields'];
+                foreach ($btxFields as $btxField) {
+                    if ($btxField['code'] == 'sales_presentation_pres_done_comment') {
+                        foreach ($currentItemList as $prop_key => $value) {
+                            if ($prop_key == $btxField['bitrixCamelId']) {
+                                if (!empty($value)) {
+                                    foreach ($value as $id => $value) {
+                                        $currentCommentIndex += 1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        $result = ['n' . $currentCommentIndex => $comment];
+        return $result;
+    }
+
     // protected function getCurrentWorkStatusCode($isFail, $isSuccess)
     // {
     //     // В работе	op_work_status	op_status_in_work || in_work
