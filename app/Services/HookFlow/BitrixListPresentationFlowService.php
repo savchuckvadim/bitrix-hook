@@ -337,7 +337,7 @@ class BitrixListPresentationFlowService
                     $fieldsData = $currentItemList;
 
                     $totalPresComment = BitrixListPresentationFlowService::getCurrentPresComment(
-                        $currentItemList, 
+                        $currentItemList,
                         $bitrixList,
                         $comment
                     );
@@ -567,7 +567,13 @@ class BitrixListPresentationFlowService
                 // array_push($fieldsData, $currentDataField);
             }
 
+            Log::channel('telegram')->info('pres lidt test update or create', [
+                'currentItemList' => $currentItemList,
+                'fieldsData' => $fieldsData,
+                // 'failReason' => $failReason,
+                // 'failType' => $failType,
 
+            ]);
 
             if ($currentItemList) {
                 BitrixListService::updateItem(
@@ -576,13 +582,6 @@ class BitrixListPresentationFlowService
                     $fieldsData,
                     $code
                 );
-                Log::channel('telegram')->info('pres lidt test rep', [
-                    'currentItemList' => $currentItemList,
-                    // 'noresultReason' => $noresultReason,
-                    // 'failReason' => $failReason,
-                    // 'failType' => $failType,
-
-                ]);
             } else { //это так на всякий случай по идее при репорте не должно нечего создаваться
                 // даже если unplanned
                 BitrixListService::setItem(
