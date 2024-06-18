@@ -1470,7 +1470,7 @@ class EventReportService
         // все изменения записываются в множественное поле коммент после презентации
 
 
-        if ($this->currentPlanEventType == 'presentation') { //plan
+        if ($this->currentPlanEventType == 'presentation' && $this->isPlanned) { //plan
             $eventType = 'plan';
             Log::channel('telegram')->info('pres lidt test plan', [
                 'currentDealIds' => $currentDealIds,
@@ -1523,8 +1523,8 @@ class EventReportService
 
             if (
                 $this->isExpired ////текущую назначенную презентацию переносят
-                || (
-                    // //текущая назначенная презентация не состоялась
+                || ( // //текущая назначенная презентация не состоялась
+
                     $this->resultStatus !== 'result'
                     && $this->isFail && !$this->isPresentationDone
                 )

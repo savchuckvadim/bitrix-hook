@@ -331,10 +331,7 @@ class BitrixListPresentationFlowService
                 $code
             );
 
-            $fieldsData = [
-                'NAME' => 'test__' . $nowDate . '_' . $eventType,
 
-            ];
 
 
 
@@ -343,6 +340,13 @@ class BitrixListPresentationFlowService
             $eventActionName = 'Запланирована';
             $evTypeName = 'Презентация';
 
+            if ($isPresentationDone) {
+                $eventActionName = 'Проведена';
+            } else if ($isExpired) {
+                $eventActionName = 'Перенесена';
+            } else if (!$isExpired && !$isPresentationDone && $workStatus == 'fail') {
+                $eventActionName = 'Не состоялась';
+            }
 
             // if ($eventType == 'xo' || $eventType == 'cold') {
             //     $evTypeName = 'Холодный звонок';
@@ -555,6 +559,13 @@ class BitrixListPresentationFlowService
                     $fieldsData,
                     $code
                 );
+                Log::channel('telegram')->info('pres lidt test rep', [
+                    'currentItemList' => $currentItemList,
+                    // 'noresultReason' => $noresultReason,
+                    // 'failReason' => $failReason,
+                    // 'failType' => $failType,
+
+                ]);
             } else {
                 BitrixListService::setItem(
                     $hook,
@@ -563,6 +574,18 @@ class BitrixListPresentationFlowService
                     $code
                 );
             }
+
+            $currentItemList = BitrixListService::getItem(
+                $hook,
+                $bitrixList['bitrixId'],
+
+                $code
+            );
+            Log::channel('telegram')->info('pres lidt test rep после обновления', [
+                'currentItemList' => $currentItemList,
+
+
+            ]);
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
