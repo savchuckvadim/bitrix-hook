@@ -331,7 +331,11 @@ class BitrixListPresentationFlowService
                 $code
             );
 
+            Log::channel('telegram')->info('pres lidt test rep first get', [
+                'currentItemList' => $currentItemList,
 
+
+            ]);
 
 
 
@@ -577,11 +581,6 @@ class BitrixListPresentationFlowService
 
                 $code
             );
-            Log::channel('telegram')->info('pres lidt test rep после обновления', [
-                'currentItemList' => $currentItemList,
-
-
-            ]);
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
