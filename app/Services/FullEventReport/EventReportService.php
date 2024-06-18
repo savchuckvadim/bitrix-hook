@@ -1426,7 +1426,51 @@ class EventReportService
         // планируется презентация или unplunned тогда для связи со сделками берется $planPresDealIds
         // отчитываются о презентации презентация или unplunned тогда для связи со сделками берется $currentTask
 
-        if ($this->currentPlanEventType == 'presentation') {
+
+        // Дата	presentation	datetime	pres_event_date
+        // Автор Заявки	presentation	employee	pres_plan_author
+        // Планируемая Дата презентации	presentation	datetime	pres_plan_date
+        // Комментарий к заявке	presentation	string	pres_plan_comment
+        // Контактные данные	presentation	multiple	pres_plan_contacts
+        // Ответственный	presentation	employee	pres_responsible
+        // Статус Заявки	presentation	enumeration	pres_init_status
+        // Заявка Принята/Отклонена	presentation	datetime	pres_init_status_date
+        // Комментарий к непринятой заявке	presentation	string	pres_init_fail_comment
+        // Комментарий после презентации	presentation	string	pres_done_comment
+        // Результативность	presentation	enumeration	pres_result_status
+        // Тип Нерезультативности	presentation	enumeration	pres_noresult_reason
+        // Статус Работы	presentation	enumeration	pres_work_status
+        // Неперспективная 	presentation	enumeration	pres_fail_type
+        // ОП Причина Отказа	presentation	enumeration	pres_fail_reason
+        // CRM	presentation	crm	pres_crm
+        // Презентация Сделка	presentation	crm	pres_crm_deal
+        // ТМЦ Сделка	presentation	crm		pres_crm_tmc_deal
+        // Основная Сделка	presentation	crm	pres_crm_base_deal
+        // Связи	presentation	crm	pres_crm_other
+        // Контакт	presentation	crm	pres_crm_contacts
+
+        // для планирования plan
+        // дата
+        // автор заявки
+        // ответственный
+        // планируемая дата презентации
+        // название 
+        // комментарий к заявке
+        // crm - компания и plan deals
+        //  по идее связать с tmc deal
+
+
+
+        // для отчетности report
+        // результативность да или нет, тип нерезультативности
+        // статус работы в работе, отказ, причина
+        // если перенос - отображать в комментариях после през строками
+        // текущая дата - дата последнего изменения 
+        // если была проведена презентация обновляется поле дата проведения презентации
+        // все изменения записываются в множественное поле коммент после презентации
+
+
+        if ($this->currentPlanEventType == 'presentation') { //plan
             $eventType = 'plan';
             Log::channel('telegram')->info('pres lidt test plan', [
                 'currentDealIds' => $currentDealIds,
@@ -1435,17 +1479,28 @@ class EventReportService
                 // 'failType' => $failType,
 
             ]);
-            BitrixListPresentationFlowService::getListPresentationFlow(
+            BitrixListPresentationFlowService::getListPresentationPlanFlow(
                 $this->hook,
                 $this->bitrixLists,
                 $currentDealIds,
                 $this->nowDate,
-                $eventType
+                'plan',
+                $this->planDeadline,
+                $this->planCreatedId,
+                $this->planResponsibleId,
+                $this->entityId,
+                $this->comment,
+                $this->workStatus['current'],
+                $this->resultStatus, // result noresult expired,
+                $this->noresultReason,
+                $this->failReason,
+                $this->failType
+
 
             );
         }
         sleep(1);
-        if ($this->currentReportEventType == 'presentation') {
+        if ($this->currentReportEventType == 'presentation') {  //report
             $currentDealIds = [];
             if (!empty($currentTask)) {
                 if (!empty($currentTask['ufCrmTask'])) {
@@ -1467,14 +1522,16 @@ class EventReportService
                 // 'failType' => $failType,
 
             ]);
-            BitrixListPresentationFlowService::getListPresentationFlow(
-                $this->hook,
-                $this->bitrixLists,
-                $currentDealIds,
-                $this->nowDate,
-                $eventType
 
-            );
+            //report
+            // BitrixListPresentationFlowService::getListPresentationFlow(
+            //     $this->hook,
+            //     $this->bitrixLists,
+            //     $currentDealIds,
+            //     $this->nowDate,
+            //     $eventType
+
+            // );
         }
 
         // $reportEventType = $this->currentReportEventType;
