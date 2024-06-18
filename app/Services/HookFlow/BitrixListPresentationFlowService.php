@@ -221,7 +221,7 @@ class BitrixListPresentationFlowService
 
 
             $fieldsData = [
-                'NAME' => $evTypeName . ' ' . $eventActionName
+                'NAME' => $evTypeName . ' ' . $name
             ];
             foreach ($presentatationPlanFields as $presValue) {
                 $currentDataField = [];
@@ -540,7 +540,7 @@ class BitrixListPresentationFlowService
             }
 
 
-            $fieldsData['NAME'] = $evTypeName . ' ' . $eventActionName;
+            // $fieldsData['NAME'] = $evTypeName . ' ' . $eventActionName;
             foreach ($presentatationReportFields as $prRepValue) {
                 $currentDataField = [];
                 $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $prRepValue['code'];
