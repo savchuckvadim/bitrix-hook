@@ -1552,9 +1552,9 @@ class EventReportService
                     $this->currentPlanEventName,
                     $this->workStatus['current'],
                     $this->resultStatus, // result noresult expired,
-                    // $this->noresultReason,
-                    // $this->failReason,
-                    // $this->failType
+                    $this->noresultReason,
+                    $this->failReason,
+                    $this->failType
 
 
                 );

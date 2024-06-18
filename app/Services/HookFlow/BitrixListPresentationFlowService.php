@@ -295,9 +295,9 @@ class BitrixListPresentationFlowService
         $name,
         $workStatus, //inJob
         $resultStatus,  // result noresult expired
-        // $noresultReason,
-        // $failReason,
-        // $failType,
+        $noresultReason,
+        $failReason,
+        $failType,
 
 
     ) {
@@ -305,6 +305,19 @@ class BitrixListPresentationFlowService
             $eventType = 'report';
             $isDone = $isPresentationDone;
 
+            $eventActionName = 'Запланирована';
+            $evTypeName = 'Презентация';
+
+            if ($isPresentationDone) {
+                $eventActionName = 'Проведена';
+            } else if ($isExpired) {
+                $eventActionName = 'Перенесена';
+            } else if (!$isExpired && !$isPresentationDone && $workStatus == 'fail') {
+                $eventActionName = 'Не состоялась';
+            }
+
+
+            $comment = $deadline . ' ' . $eventActionName . ' ' . $comment;
             $totalPresComment = $comment;
 
 
@@ -353,16 +366,7 @@ class BitrixListPresentationFlowService
 
             $nowDate = new DateTime();
 
-            $eventActionName = 'Запланирована';
-            $evTypeName = 'Презентация';
 
-            if ($isPresentationDone) {
-                $eventActionName = 'Проведена';
-            } else if ($isExpired) {
-                $eventActionName = 'Перенесена';
-            } else if (!$isExpired && !$isPresentationDone && $workStatus == 'fail') {
-                $eventActionName = 'Не состоялась';
-            }
 
             // if ($eventType == 'xo' || $eventType == 'cold') {
             //     $evTypeName = 'Холодный звонок';
@@ -480,7 +484,7 @@ class BitrixListPresentationFlowService
                     // 'name' => 'Тип Нерезультативности',
                     'value' =>  $deadline,
                 ];
-                array_push($xoFields, $isExpiredItem);
+                array_push($presentatationReportFields, $isExpiredItem);
             }
 
             if ($resultStatus !== 'result') {
@@ -494,7 +498,7 @@ class BitrixListPresentationFlowService
                                 // 'name' =>  'В работе' //'В работе'
                             ],
                         ];
-                        array_push($xoFields, $noresultReasoneItem);
+                        array_push($presentatationReportFields, $noresultReasoneItem);
                     }
                 }
             }
@@ -514,7 +518,7 @@ class BitrixListPresentationFlowService
                                         // 'name' =>  'В работе' //'В работе'
                                     ],
                                 ];
-                                array_push($xoFields, $failTypeItemItem);
+                                array_push($presentatationReportFields, $failTypeItemItem);
 
 
 
@@ -529,7 +533,7 @@ class BitrixListPresentationFlowService
                                                     // 'name' =>  'В работе' //'В работе'
                                                 ],
                                             ];
-                                            array_push($xoFields, $failReasonItem);
+                                            array_push($presentatationReportFields, $failReasonItem);
                                         }
                                     }
                                 }
