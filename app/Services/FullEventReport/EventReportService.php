@@ -522,8 +522,8 @@ class EventReportService
             } else {
                 $result = $this->workStatus;
             }
-            sleep(1);
-            $this->getListFlow();
+            // sleep(1);
+            // $this->getListFlow();
             sleep(1);
             $this->getListPresentationFlow(
                 $currentDealsIds['planDeals']
