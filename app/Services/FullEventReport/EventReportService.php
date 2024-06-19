@@ -1562,7 +1562,7 @@ class EventReportService
         }
 
         if ($this->isPresentationDone) { //unplanned | planned
-            
+
 
             if ($this->currentReportEventType !== 'presentation') {
                 $currentDealIds =  $unplannedPresDealsIds;
@@ -1580,7 +1580,7 @@ class EventReportService
                     $this->bitrixLists,
                     $currentDealIds, //передаем айди основной и уже закрытой през сделки
                     $this->nowDate,
-                    $eventType,
+                    'plan',
                     $this->planDeadline,
                     $this->planCreatedId,
                     $this->planResponsibleId,
@@ -1607,7 +1607,7 @@ class EventReportService
                 $this->isPresentationDone,
 
                 $this->nowDate,
-                $eventType,
+                'report',
                 $this->isExpired,
                 $this->planDeadline,
                 $this->planCreatedId,

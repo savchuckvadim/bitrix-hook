@@ -87,7 +87,7 @@ class BtxCreateListItemJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $randomNumber = rand(3, 10);
+        $randomNumber = rand(3, 5);
         sleep($randomNumber);
 
         BitrixListFlowService::getListsFlow(
