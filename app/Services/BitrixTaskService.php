@@ -333,7 +333,7 @@ class BitrixTaskService
     {
         $responseData = null;
 
-        $rand = rand(1);
+        $rand = rand(1, 2);
         sleep($rand);
         try {
             $methodUpdate = 'tasks.task.update';

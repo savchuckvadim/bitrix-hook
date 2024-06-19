@@ -361,12 +361,7 @@ class BitrixListPresentationFlowService
                 $bitrixList['bitrixId'],
                 $code
             );
-            Log::channel('telegram')->info('getListPresentationReportFlow', [
-                'code' => $code,
-                'currentItemList' => $currentItemList,
 
-
-            ]);
             if (!empty($currentItemList) && is_array($currentItemList)) {
                 $currentItemList = $currentItemList[0];
                 if (!empty($currentItemList)) {
@@ -386,8 +381,6 @@ class BitrixListPresentationFlowService
 
 
             $presentatationReportFields = [
-
-
                 [
                     'code' => 'pres_done_comment',
                     'name' => 'Комментарий после презентации',
@@ -437,12 +430,19 @@ class BitrixListPresentationFlowService
             if ($isExpired) {
                 $isExpiredItem = [
                     'code' => 'pres_pound_date',
-                    // 'name' => 'Тип Нерезультативности',
+                    'name' => 'Дата переноса',
                     'value' =>  $deadline,
                 ];
                 array_push($presentatationReportFields, $isExpiredItem);
             }
-
+            if ($isDone) {
+                $isDoneItem = [
+                    'code' => 'pres_done_date',
+                    'name' => 'Дата проведения презентации',
+                    'value' =>  $deadline,
+                ];
+                array_push($presentatationReportFields, $isDoneItem);
+            }
             if ($resultStatus !== 'result') {
                 if (!empty($noresultReason)) {
                     if (!empty($noresultReason['code'])) {
