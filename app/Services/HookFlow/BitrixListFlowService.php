@@ -47,11 +47,7 @@ class BitrixListFlowService
 
     ) {
         try {
-            Log::channel('telegram')->info('failType list test', [
-                'eventType' => $eventType,
-   
 
-            ]);
 
             $nowDate = new DateTime();
 
@@ -525,11 +521,7 @@ class BitrixListFlowService
         if ($resultStatus !== 'result') {
             $result = 'no';
         }
-        Log::channel('telegram')->info('resultStatus', [
-            'resultStatus' => $resultStatus,
 
-
-        ]);
 
         return $result;
     }
