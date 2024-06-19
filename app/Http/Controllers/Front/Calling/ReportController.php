@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front\Calling;
 use App\Http\Controllers\APIController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\Controller;
+use App\Jobs\EventJob;
 use App\Services\FullEventReport\EventReportService;
 use Illuminate\Http\Request;
 
@@ -55,9 +56,18 @@ class ReportController extends Controller
                 $isFullData = false;
             }
             if ($isFullData) {
-                $service = new EventReportService($data);
-                $result = $service->getEventFlow();
-                return $result;
+                dispatch(
+                    new EventJob($data)
+                )->onQueue('high-priority');
+
+                return APIOnlineController::getSuccess(
+                    [
+                        'result' => 'success',
+                        'message' => 'job !'
+
+                    ]
+
+                );
             } else {
 
                 return APIOnlineController::getError(
