@@ -60,7 +60,7 @@ class BitrixListPresentationFlowService
 
             $presPortalBtxList = null;
             $code = '';
-  
+
             foreach ($currentDealIds as $key => $dealId) {
                 if ($key == 0) {
                     $code = $dealId;
@@ -259,7 +259,12 @@ class BitrixListPresentationFlowService
                 // array_push($fieldsData, $currentDataField);
             }
 
-         
+            Log::channel('telegram')->info('getListPresentationPlanFlow', [
+                'fieldsData' => $fieldsData,
+                'currentDealIds' => $currentDealIds,
+
+
+            ]);
 
             BitrixListService::setItem(
                 $hook,
@@ -308,6 +313,8 @@ class BitrixListPresentationFlowService
 
 
     ) {
+
+
         try {
             $eventType = 'report';
             $isDone = $isPresentationDone;
@@ -354,6 +361,12 @@ class BitrixListPresentationFlowService
                 $bitrixList['bitrixId'],
                 $code
             );
+            Log::channel('telegram')->info('getListPresentationReportFlow', [
+                'code' => $code,
+                'currentItemList' => $currentItemList,
+
+
+            ]);
             if (!empty($currentItemList) && is_array($currentItemList)) {
                 $currentItemList = $currentItemList[0];
                 if (!empty($currentItemList)) {
@@ -374,7 +387,7 @@ class BitrixListPresentationFlowService
 
             $presentatationReportFields = [
 
-   
+
                 [
                     'code' => 'pres_done_comment',
                     'name' => 'Комментарий после презентации',
@@ -445,42 +458,42 @@ class BitrixListPresentationFlowService
                     }
                 }
             }
- 
-
-                    if ($workStatus === 'fail') {  //если провал
-                        if (!empty($failType)) {
-                            if (!empty($failType['code'])) {
-                                $failTypeItemItem = [
-                                    'code' => 'op_fail_type',
-                                    'name' => 'Тип провала',
-                                    'list' =>  [
-                                        'code' => $failType['code'],
-                                        // 'name' =>  'В работе' //'В работе'
-                                    ],
-                                ];
-                                array_push($presentatationReportFields, $failTypeItemItem);
 
 
+            if ($workStatus === 'fail') {  //если провал
+                if (!empty($failType)) {
+                    if (!empty($failType['code'])) {
+                        $failTypeItemItem = [
+                            'code' => 'op_fail_type',
+                            'name' => 'Тип провала',
+                            'list' =>  [
+                                'code' => $failType['code'],
+                                // 'name' =>  'В работе' //'В работе'
+                            ],
+                        ];
+                        array_push($presentatationReportFields, $failTypeItemItem);
 
-                                if ($failType['code'] == 'failure') { //если тип провала - отказ
-                                    if (!empty($failReason)) {
-                                        if (!empty($failReason['code'])) {
-                                            $failReasonItem = [
-                                                'code' => 'op_fail_reason',
-                                                'name' => 'ОП Причина Отказа',
-                                                'list' =>  [
-                                                    'code' => $failReason['code'],
-                                                    // 'name' =>  'В работе' //'В работе'
-                                                ],
-                                            ];
-                                            array_push($presentatationReportFields, $failReasonItem);
-                                        }
-                                    }
+
+
+                        if ($failType['code'] == 'failure') { //если тип провала - отказ
+                            if (!empty($failReason)) {
+                                if (!empty($failReason['code'])) {
+                                    $failReasonItem = [
+                                        'code' => 'op_fail_reason',
+                                        'name' => 'ОП Причина Отказа',
+                                        'list' =>  [
+                                            'code' => $failReason['code'],
+                                            // 'name' =>  'В работе' //'В работе'
+                                        ],
+                                    ];
+                                    array_push($presentatationReportFields, $failReasonItem);
                                 }
                             }
                         }
                     }
-                
+                }
+            }
+
 
 
             // $fieldsData['NAME'] = $evTypeName . ' ' . $eventActionName;

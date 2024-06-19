@@ -96,8 +96,6 @@ class BitrixDealFlowService
 
 
 
-                $rand = rand(1, 2);
-                sleep($rand);
                 if (!$currentDealId) {
                     if (
                         $eventAction === 'plan'

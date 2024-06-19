@@ -1561,8 +1561,8 @@ class EventReportService
             }
         }
 
-        if ($this->isPresentationDone) {
-            //unplanned | planned
+        if ($this->isPresentationDone) { //unplanned | planned
+            
 
             if ($this->currentReportEventType !== 'presentation') {
                 $currentDealIds =  $unplannedPresDealsIds;
@@ -1588,7 +1588,7 @@ class EventReportService
                     $this->comment,
                     $this->currentPlanEventName,
                     $this->workStatus['current'],
-                    $this->resultStatus, // result noresult expired,
+                    'result', // result noresult expired,
                     // $this->noresultReason,
                     // $this->failReason,
                     // $this->failType
