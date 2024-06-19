@@ -522,8 +522,8 @@ class EventReportService
             } else {
                 $result = $this->workStatus;
             }
-            // sleep(1);
-            // $this->getListFlow();
+           
+            $this->getListFlow();
             sleep(1);
             $this->getListPresentationFlow(
                 $currentDealsIds['planDeals']
@@ -1205,13 +1205,13 @@ class EventReportService
             );
         }
 
-        Log::channel('telegram')->info('presentationBtxList', [
-            'reportDeals' => $reportDeals,
-            'planDeals' => $planDeals,
-            // 'failReason' => $failReason,
-            // 'failType' => $failType,
+        // Log::channel('telegram')->info('presentationBtxList', [
+        //     'reportDeals' => $reportDeals,
+        //     'planDeals' => $planDeals,
+        //     // 'failReason' => $failReason,
+        //     // 'failType' => $failType,
 
-        ]);
+        // ]);
 
         return [
             'reportDeals' => $reportDeals,
@@ -1473,13 +1473,7 @@ class EventReportService
 
         if ($this->currentPlanEventType == 'presentation' && $this->isPlanned) { //plan
             $eventType = 'plan';
-            Log::channel('telegram')->info('pres lidt test plan', [
-                'currentDealIds' => $currentDealIds,
-                // 'noresultReason' => $noresultReason,
-                // 'failReason' => $failReason,
-                // 'failType' => $failType,
 
-            ]);
             BitrixListPresentationFlowService::getListPresentationPlanFlow(
                 $this->hook,
                 $this->bitrixLists,
