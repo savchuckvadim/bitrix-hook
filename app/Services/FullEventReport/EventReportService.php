@@ -511,7 +511,7 @@ class EventReportService
             if ($this->isDealFlow && $this->portalDealData) {
                 $currentDealsIds = $this->getDealFlow();
             }
-        
+
             // $this->createTask($currentSmartId);
 
             $this->getEntityFlow();
@@ -1181,7 +1181,7 @@ class EventReportService
         //xo - создать или обновить ХО & Основная
         //warm | money_await | in_progress - создать или обновить  Основная
         //presentation - создать или обновить presentation & Основная
-    
+
         if ($this->isPlanned) {
             $currentBtxDeals = BitrixDealFlowService::getBaseDealFromCurrentBtxDeals(
                 $this->portalDealData,
@@ -1559,51 +1559,28 @@ class EventReportService
 
                 );
             }
+        }
+
+        if ($this->isPresentationDone) {
+            //unplanned | planned
+
+            if ($this->currentReportEventType !== 'presentation') {
+                $currentDealIds =  $unplannedPresDealsIds;
+                // если unplanned то у следующих действий додлжны быть айди 
+                // соответствующих сделок
+                // если текущее событие не през - значит uplanned
+                // занчит сначала планируем
+                Log::channel('telegram')->info('presentationBtxList', [
+                    'currentDealIds' => $currentDealIds,
 
 
-            if ($this->isPresentationDone) {
-                //unplanned | planned
-
-                if ($this->currentReportEventType !== 'presentation') {
-                    $currentDealIds =  $unplannedPresDealsIds;
-                    // если unplanned то у следующих действий додлжны быть айди 
-                    // соответствующих сделок
-                    // если текущее событие не през - значит uplanned
-                    // занчит сначала планируем
-
-                    BitrixListPresentationFlowService::getListPresentationPlanFlow(
-                        $this->hook,
-                        $this->bitrixLists,
-                        $currentDealIds, //передаем айди основной и уже закрытой през сделки
-                        $this->nowDate,
-                        $eventType,
-                        $this->planDeadline,
-                        $this->planCreatedId,
-                        $this->planResponsibleId,
-                        $this->entityId,
-                        $this->comment,
-                        $this->currentPlanEventName,
-                        $this->workStatus['current'],
-                        $this->resultStatus, // result noresult expired,
-                        // $this->noresultReason,
-                        // $this->failReason,
-                        // $this->failType
-
-
-                    );
-                }
-                sleep(1);
-                // если была проведена презентация вне зависимости от текущего события
-                BitrixListPresentationFlowService::getListPresentationReportFlow(
+                ]);
+                BitrixListPresentationFlowService::getListPresentationPlanFlow(
                     $this->hook,
                     $this->bitrixLists,
-                    $currentDealIds, //planDeals || unplannedDeals если през была незапланированной
-                    // $reportStatus,
-                    $this->isPresentationDone,
-
+                    $currentDealIds, //передаем айди основной и уже закрытой през сделки
                     $this->nowDate,
                     $eventType,
-                    $this->isExpired,
                     $this->planDeadline,
                     $this->planCreatedId,
                     $this->planResponsibleId,
@@ -1612,14 +1589,42 @@ class EventReportService
                     $this->currentPlanEventName,
                     $this->workStatus['current'],
                     $this->resultStatus, // result noresult expired,
-                    $this->noresultReason,
-                    $this->failReason,
-                    $this->failType
+                    // $this->noresultReason,
+                    // $this->failReason,
+                    // $this->failType
 
 
                 );
             }
+            sleep(1);
+
+            // если была проведена презентация вне зависимости от текущего события
+            BitrixListPresentationFlowService::getListPresentationReportFlow(
+                $this->hook,
+                $this->bitrixLists,
+                $currentDealIds, //planDeals || unplannedDeals если през была незапланированной
+                // $reportStatus,
+                $this->isPresentationDone,
+
+                $this->nowDate,
+                $eventType,
+                $this->isExpired,
+                $this->planDeadline,
+                $this->planCreatedId,
+                $this->planResponsibleId,
+                $this->entityId,
+                $this->comment,
+                $this->currentPlanEventName,
+                $this->workStatus['current'],
+                $this->resultStatus, // result noresult expired,
+                $this->noresultReason,
+                $this->failReason,
+                $this->failType
+
+
+            );
         }
+
 
 
         // $reportEventType = $this->currentReportEventType;

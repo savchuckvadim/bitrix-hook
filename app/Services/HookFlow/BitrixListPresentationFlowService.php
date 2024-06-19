@@ -60,14 +60,7 @@ class BitrixListPresentationFlowService
 
             $presPortalBtxList = null;
             $code = '';
-            Log::channel('telegram')->info(
-                'list pres test',
-                [
-                    'plan' => $eventType,
-
-
-                ]
-            );
+  
             foreach ($currentDealIds as $key => $dealId) {
                 if ($key == 0) {
                     $code = $dealId;
@@ -266,10 +259,7 @@ class BitrixListPresentationFlowService
                 // array_push($fieldsData, $currentDataField);
             }
 
-            Log::channel('telegram')->info(
-                'list pres test',
-                $fieldsData
-            );
+         
 
             BitrixListService::setItem(
                 $hook,

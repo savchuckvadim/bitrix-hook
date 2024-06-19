@@ -348,14 +348,7 @@ class BitrixTaskService
 
             $response = Http::post($hook . '/batch', $batchCommands);
             $responseData = APIBitrixController::getBitrixRespone($response, 'cold: completeTask');
-            Log::info(
-                'APRIL_HOOK completeTask ',
-                [
 
-                    'responseData' => $responseData,
-
-                ]
-            );
             return $responseData;
         } catch (\Throwable $th) {
             Log::channel('telegram')->error('HOOK TASK SERVICE', ['message' => 'tasks was not completed', 'hook' => $hook]);
