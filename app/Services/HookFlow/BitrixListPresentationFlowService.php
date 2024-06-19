@@ -53,6 +53,9 @@ class BitrixListPresentationFlowService
     ) {
         try {
             $eventType = 'plan';
+            if (isset($workStatus['code'])) {
+                $workStatus = $workStatus['code'];
+            }
 
 
             $presPortalBtxList = null;
@@ -318,6 +321,10 @@ class BitrixListPresentationFlowService
         try {
             $eventType = 'report';
             $isDone = $isPresentationDone;
+
+            if (isset($workStatus['code'])) {
+                $workStatus = $workStatus['code'];
+            }
 
             $eventActionName = 'Запланирована';
             $evTypeName = 'Презентация';

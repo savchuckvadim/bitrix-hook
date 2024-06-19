@@ -1558,6 +1558,30 @@ class EventReportService
             if ($this->isPresentationDone) {
                 //unplanned | planned
                 // если была проведена презентация вне зависимости от текущего события
+                BitrixListPresentationFlowService::getListPresentationReportFlow(
+                    $this->hook,
+                    $this->bitrixLists,
+                    $currentDealIds,
+                    // $reportStatus,
+                    $this->isPresentationDone,
+
+                    $this->nowDate,
+                    $eventType,
+                    $this->isExpired,
+                    $this->planDeadline,
+                    $this->planCreatedId,
+                    $this->planResponsibleId,
+                    $this->entityId,
+                    $this->comment,
+                    $this->currentPlanEventName,
+                    $this->workStatus['current'],
+                    $this->resultStatus, // result noresult expired,
+                    $this->noresultReason,
+                    $this->failReason,
+                    $this->failType
+
+
+                );
             }
         }
 
