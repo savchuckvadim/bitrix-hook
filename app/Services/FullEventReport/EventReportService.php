@@ -1471,7 +1471,7 @@ class EventReportService
         // все изменения записываются в множественное поле коммент после презентации
 
 
-        if ($this->currentPlanEventType == 'presentation' && $this->isPlanned) { //plan
+        if ($this->currentPlanEventType == 'presentation' && $this->isPlanned && !$this->isExpired) { //plan
             $eventType = 'plan';
 
             BitrixListPresentationFlowService::getListPresentationPlanFlow(
