@@ -526,7 +526,7 @@ class EventReportService
             $this->getListFlow();
             sleep(1);
             $this->getListPresentationFlow(
-                $currentDealsIds['planDeals']
+                $currentDealsIds
             );
 
             return APIOnlineController::getSuccess(['result' => $result]);
@@ -1007,6 +1007,7 @@ class EventReportService
         $reportDeals = [];
         $planDeals = [];
         $currentBtxDeals = $this->currentBtxDeals;
+        $unplannedPresDeals = null;
         // report - закрывает сделки
         // plan - создаёт
         //todo report flow
@@ -1133,11 +1134,7 @@ class EventReportService
                         true,
                         '$fields'
                     );
-                    Log::channel('telegram')->info('getDealFlow', [
-                        'unplannedPresDeals' => $unplannedPresDeals,
-    
 
-                    ]);
                     foreach ($this->currentBtxDeals as $cbtxdeal) {
                         if ($cbtxdeal['ID'] !== $unplannedPresDealId) {
                             array_push($currentBtxDeals, $cbtxdeal);
@@ -1220,6 +1217,7 @@ class EventReportService
         return [
             'reportDeals' => $reportDeals,
             'planDeals' => $planDeals,
+            'unplannedPresDeals' => $unplannedPresDeals,
         ];
     }
 
@@ -1425,14 +1423,8 @@ class EventReportService
         $planPresDealIds
     ) {
         $currentTask = $this->currentTask;
-        $currentDealIds = $planPresDealIds;
-        Log::channel('telegram')->info('getListPresentationFlow', [
-
-            'planDeals' => $planPresDealIds,
-            // 'failReason' => $failReason,
-            // 'failType' => $failType,
-
-        ]);
+        $currentDealIds = $planPresDealIds['planDeals'];
+        $unplannedPresDealsIds = $planPresDealIds['unplannedPresDeals'];
 
         // presentation list flow запускается когда
         // планируется презентация или unplunned тогда для связи со сделками берется $planPresDealIds
@@ -1574,12 +1566,16 @@ class EventReportService
                 //unplanned | planned
 
                 if ($this->currentReportEventType !== 'presentation') {
-                    //если текущее событие не през - значит uplanned
+                    $currentDealIds =  $unplannedPresDealsIds;
+                    // если unplanned то у следующих действий додлжны быть айди 
+                    // соответствующих сделок
+                    // если текущее событие не през - значит uplanned
                     // занчит сначала планируем
+                    
                     BitrixListPresentationFlowService::getListPresentationPlanFlow(
                         $this->hook,
                         $this->bitrixLists,
-                        $currentDealIds,
+                        $currentDealIds, //передаем айди основной и уже закрытой през сделки
                         $this->nowDate,
                         $eventType,
                         $this->planDeadline,
@@ -1602,7 +1598,7 @@ class EventReportService
                 BitrixListPresentationFlowService::getListPresentationReportFlow(
                     $this->hook,
                     $this->bitrixLists,
-                    $currentDealIds,
+                    $currentDealIds, //planDeals || unplannedDeals если през была незапланированной
                     // $reportStatus,
                     $this->isPresentationDone,
 

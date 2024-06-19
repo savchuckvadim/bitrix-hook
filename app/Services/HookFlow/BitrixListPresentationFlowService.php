@@ -336,12 +336,6 @@ class BitrixListPresentationFlowService
             } else if (!$isExpired && !$isDone && $workStatus == 'fail') {
                 $eventActionName = 'Не состоялась';
             }
-            Log::channel('telegram')->info('pres lidt test rep first get', [
-                'isExpired' => $isExpired,
-                'isPresentationDone' => $isPresentationDone,
-                'workStatus' => $workStatus,
-            ]);
-
 
 
             $comment = $deadline . ' ' . $eventActionName . ' ' . $comment;
@@ -368,7 +362,6 @@ class BitrixListPresentationFlowService
             $currentItemList = BitrixListService::getItem(
                 $hook,
                 $bitrixList['bitrixId'],
-
                 $code
             );
             if (!empty($currentItemList) && is_array($currentItemList)) {
@@ -385,81 +378,19 @@ class BitrixListPresentationFlowService
             }
 
 
-            $nowDate = new DateTime();
 
 
-
-            // if ($eventType == 'xo' || $eventType == 'cold') {
-            //     $evTypeName = 'Холодный звонок';
-            // } else if ($eventType == 'warm' || $eventType == 'call') {
-            //     $evTypeName = 'Звонок';
-            // } else if ($eventType == 'presentation') {
-            //     $evTypeName = 'Презентация';
-            //     $eventActionName = 'Запланирована';
-            // } else if ($eventType == 'hot' || $eventType == 'inProgress' || $eventType == 'in_progress') {
-            //     $evTypeName = 'Звонок по решению';
-            // } else if ($eventType == 'money' || $eventType == 'moneyAwait' || $eventType == 'money_await') {
-            //     $evTypeName = 'Звонок по оплате';
-            // }
-
-
-
-
-
-
-            // if ($eventAction == 'expired') {
-            //     $eventAction = 'pound';
-            //     $eventActionName = 'Перенесена';
-            // } else    if ($eventAction == 'done') {
-
-            //     $eventActionName = 'Состоялась';
-            // } else    if ($eventAction == 'fail') {
-
-            //     $eventActionName = 'Отказ';
-            // } else    if ($eventAction == 'success') {
-
-            //     $eventActionName = 'Продажа';
-            // }
 
 
             $presentatationReportFields = [
 
-                // [
-                //     'code' => 'pres_init_status',
-                //     'name' => 'Статус Заявки',
-                //     'value' => BitrixListPresentationFlowService::getPresInitStatus($resultStatus)
-                // ],
-                // [
-                //     'code' => 'pres_init_status_date', //дата принятия отклонения заявки
-                //     'name' => 'Заявка Принята/Отклонена',
-                //     // 'value' => BitrixListPresentationFlowService::getPresStatus();
-                // ],
+   
                 [
                     'code' => 'pres_done_comment',
                     'name' => 'Комментарий после презентации',
                     'value' => $totalPresComment,
                 ],
 
-                // [
-                //     'code' => 'pres_crm',
-                //     'name' => 'pres_crm',
-                //     'value' => ['n0' => 'CO_' . $companyId],
-                // ],
-                // [
-                //     'code' => 'pres_crm_base_deal',
-                //     'name' => 'crm',
-                //     // 'value' => ['n0' => 'CO_' . $companyId], //base deal
-                // ],
-                // [
-                //     'code' => 'pres_crm_deal',
-                //     'name' => 'crm',
-                //     // 'value' => ['n0' => 'CO_' . $companyId], //pres deal
-                // ],
-                // [
-                //     'code' => 'pres_crm_tmc_deal',
-                //     'name' => 'crm',
-                //     // 'value' => ['n0' => 'CO_' . $companyId], //tmc deal
-                // ],
 
                 [
                     'code' => 'pres_result_status',
@@ -589,13 +520,13 @@ class BitrixListPresentationFlowService
                 // array_push($fieldsData, $currentDataField);
             }
 
-            Log::channel('telegram')->info('pres lidt test update or create', [
-                'currentItemList' => $currentItemList,
-                'fieldsData' => $fieldsData,
-                // 'failReason' => $failReason,
-                // 'failType' => $failType,
+            // Log::channel('telegram')->info('pres lidt test update or create', [
+            //     'currentItemList' => $currentItemList,
+            //     'fieldsData' => $fieldsData,
+            //     // 'failReason' => $failReason,
+            //     // 'failType' => $failType,
 
-            ]);
+            // ]);
 
             if ($currentItemList) {
                 BitrixListService::updateItem(
