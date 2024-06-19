@@ -154,7 +154,7 @@ class BitrixTaskService
                     ];
                 }
                 
-                $this->completeTask($hook, $idsForComplete);
+               
             }
 
         
@@ -166,7 +166,7 @@ class BitrixTaskService
                 // $crmItems,
                 $taskData
             );
-
+            $this->completeTask($hook, $idsForComplete);
             return APIOnlineController::getResponse(
                 0,
                 'success',
