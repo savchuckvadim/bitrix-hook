@@ -43,7 +43,7 @@ class BitrixTaskService
 
     ) {
 
-        $rand = rand(1, 2);
+        $rand = 1;
         sleep($rand);
 
 
@@ -153,11 +153,11 @@ class BitrixTaskService
                         $currentTaskId
                     ];
                 }
-                sleep(1);
+                
                 $this->completeTask($hook, $idsForComplete);
             }
 
-            sleep(1);
+        
             $createdTask = BitrixGeneralService::createTask(
                 'Bitrix Task Service create task',
                 $hook,
@@ -333,7 +333,7 @@ class BitrixTaskService
     {
         $responseData = null;
 
-        $rand = rand(3, 5);
+        $rand = rand(1);
         sleep($rand);
         try {
             $methodUpdate = 'tasks.task.update';

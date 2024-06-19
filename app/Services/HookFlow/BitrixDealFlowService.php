@@ -168,7 +168,7 @@ class BitrixDealFlowService
         $fields
 
     ) {
-        sleep(1);
+       
 
 
         $currentDealId = null;
