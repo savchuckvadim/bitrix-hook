@@ -58,8 +58,7 @@ class BitrixDealFlowService
                     $isResult,
                 );
 
-                $rand = rand(1, 2);
-                sleep($rand);
+       
                 // $currentDeal = BitrixDealService::getDealId(
                 //     $hook,
                 //     null,
@@ -243,8 +242,7 @@ class BitrixDealFlowService
                     // }
 
 
-                    $rand = rand(1, 2);
-                    sleep($rand);
+             
                     if (!$currentDeal) {
 
                         $fieldsData['TITLE'] = $eventTypeName . ' ' .  $eventName;
@@ -269,7 +267,7 @@ class BitrixDealFlowService
 
                     // ]);
 
-                    $rand = rand(1, 2);
+                    $rand = 1;
                     sleep($rand);
                     $currentDeal = BitrixDealService::getDeal(
                         $hook,

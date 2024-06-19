@@ -43,7 +43,7 @@ class BitrixTaskService
 
     ) {
 
-        $rand = rand(3, 5);
+        $rand = rand(1, 2);
         sleep($rand);
 
 
@@ -153,7 +153,7 @@ class BitrixTaskService
                         $currentTaskId
                     ];
                 }
-                sleep(2);
+                sleep(1);
                 $this->completeTask($hook, $idsForComplete);
             }
 
@@ -332,14 +332,7 @@ class BitrixTaskService
     protected function completeTask($hook, $taskIds)
     {
         $responseData = null;
-        Log::info(
-            'APRIL_HOOK completeTask data',
-            [
 
-                'taskIds' => $taskIds,
-                // 'taskIds' => $taskIds
-            ]
-        );
         $rand = rand(3, 5);
         sleep($rand);
         try {

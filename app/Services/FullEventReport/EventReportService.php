@@ -511,8 +511,7 @@ class EventReportService
             if ($this->isDealFlow && $this->portalDealData) {
                 $currentDealsIds = $this->getDealFlow();
             }
-            sleep(1);
-
+        
             // $this->createTask($currentSmartId);
 
             $this->getEntityFlow();
@@ -1182,7 +1181,7 @@ class EventReportService
         //xo - создать или обновить ХО & Основная
         //warm | money_await | in_progress - создать или обновить  Основная
         //presentation - создать или обновить presentation & Основная
-        sleep(1);
+    
         if ($this->isPlanned) {
             $currentBtxDeals = BitrixDealFlowService::getBaseDealFromCurrentBtxDeals(
                 $this->portalDealData,
@@ -1571,7 +1570,7 @@ class EventReportService
                     // соответствующих сделок
                     // если текущее событие не през - значит uplanned
                     // занчит сначала планируем
-                    
+
                     BitrixListPresentationFlowService::getListPresentationPlanFlow(
                         $this->hook,
                         $this->bitrixLists,
