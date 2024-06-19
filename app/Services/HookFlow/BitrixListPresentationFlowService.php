@@ -439,7 +439,7 @@ class BitrixListPresentationFlowService
                 $isDoneItem = [
                     'code' => 'pres_done_date',
                     'name' => 'Дата проведения презентации',
-                    'value' =>  $deadline,
+                    'value' =>  $nowDate,
                 ];
                 array_push($presentatationReportFields, $isDoneItem);
             }
