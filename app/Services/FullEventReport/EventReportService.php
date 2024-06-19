@@ -1118,7 +1118,7 @@ class EventReportService
                         $unplannedPresResultStatus = 'fail';
                         $unplannedPresResultName = 'Отказ после презентации';
                     }
-                    BitrixDealFlowService::flow(  // закрывает сделку  - презентация обновляет базовую в соответствии с проведенной през
+                    $unplannedPresDeals = BitrixDealFlowService::flow(  // закрывает сделку  - презентация обновляет базовую в соответствии с проведенной през
                         $this->hook,
                         $this->currentBtxDeals,
                         $this->portalDealData,
@@ -1133,7 +1133,11 @@ class EventReportService
                         true,
                         '$fields'
                     );
+                    Log::channel('telegram')->info('getDealFlow', [
+                        'unplannedPresDeals' => $unplannedPresDeals,
+    
 
+                    ]);
                     foreach ($this->currentBtxDeals as $cbtxdeal) {
                         if ($cbtxdeal['ID'] !== $unplannedPresDealId) {
                             array_push($currentBtxDeals, $cbtxdeal);
