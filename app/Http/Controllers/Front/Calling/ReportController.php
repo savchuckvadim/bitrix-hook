@@ -56,6 +56,9 @@ class ReportController extends Controller
                 $isFullData = false;
             }
             if ($isFullData) {
+                // $service = new EventReportService($data);
+                // $result = $service->getEventFlow();
+                // return $result;
                 dispatch(
                     new EventJob($data)
                 )->onQueue('high-priority');

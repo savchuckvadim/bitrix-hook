@@ -390,14 +390,14 @@ class BitrixCallingColdService
                     }
                 }
             }
-            Log::channel('telegram')->info('plan deals ids', [
-                'currentDealsIds' => $currentDealsIds
+            // Log::channel('telegram')->info('plan deals ids', [
+            //     'currentDealsIds' => $currentDealsIds
 
-            ]);
-            Log::info('plan deals ids', [
-                'currentDealsIds' => $currentDealsIds
+            // ]);
+            // Log::info('plan deals ids', [
+            //     'currentDealsIds' => $currentDealsIds
 
-            ]);
+            // ]);
             $rand = rand(1, 3);
             sleep($rand);
             $this->createColdTask($currentSmartId, $currentDealsIds);

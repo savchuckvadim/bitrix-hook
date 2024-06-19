@@ -322,13 +322,19 @@ class BitrixListPresentationFlowService
             $eventActionName = 'Запланирована';
             $evTypeName = 'Презентация';
 
-            if ($isPresentationDone) {
+            if ($isDone) {
                 $eventActionName = 'Проведена';
             } else if ($isExpired) {
                 $eventActionName = 'Перенесена';
-            } else if (!$isExpired && !$isPresentationDone && $workStatus == 'fail') {
+            } else if (!$isExpired && !$isDone && $workStatus == 'fail') {
                 $eventActionName = 'Не состоялась';
             }
+            Log::channel('telegram')->info('pres lidt test rep first get', [
+                'isExpired' => $isExpired,
+                'isPresentationDone' => $isPresentationDone,
+                'workStatus' => $workStatus,
+            ]);
+
 
 
             $comment = $deadline . ' ' . $eventActionName . ' ' . $comment;
@@ -370,12 +376,6 @@ class BitrixListPresentationFlowService
                     );
                 }
             }
-            Log::channel('telegram')->info('pres lidt test rep first get', [
-                'currentItemList' => $currentItemList,
-
-
-            ]);
-
 
 
             $nowDate = new DateTime();
@@ -960,11 +960,11 @@ class BitrixListPresentationFlowService
 
 
                         foreach ($currentItemList as $prop_key => $value) {
-                            Log::channel('telegram')->info('pres all prop_key', [
-                                'prop_key' => $prop_key,
+                            // Log::channel('telegram')->info('pres all prop_key', [
+                            //     'prop_key' => $prop_key,
 
 
-                            ]);
+                            // ]);
 
 
                             if ($prop_key == $btxField['bitrixCamelId']) {
