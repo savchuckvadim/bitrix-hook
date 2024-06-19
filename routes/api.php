@@ -294,7 +294,14 @@ Route::post('/full', function (Request $request) {
 });
 
 
-
+Route::post('/activity/test', function (Request $request) {
+    Log::info('', [
+        'request' => $request->all()
+    ]);
+    Log::channel('telegram')->info('', [
+        'request' => $request->all()
+    ]);
+});
 
 
 
