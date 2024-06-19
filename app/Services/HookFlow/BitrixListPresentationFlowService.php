@@ -133,11 +133,11 @@ class BitrixListPresentationFlowService
                     'name' => 'Дата создания заявки',
                     'value' => $nowDate //$nowDate->format('d.m.Y H:i:s'),
                 ],
-                // [
-                //     'code' => 'name',
-                //     'name' => 'Название',
-                //     'value' => $evTypeName . ' ' . $eventActionName
-                // ],
+                [
+                    'code' => 'pres_init_status_date',
+                    'name' => 'Заявка Принята/Отклонена',
+                    'value' => $nowDate
+                ],
                 // [
                 //     'code' => 'event_title',
                 //     'name' => 'Название',
@@ -524,12 +524,9 @@ class BitrixListPresentationFlowService
                     }
                 }
             }
-            if (!empty($workStatus)) {
-                if (!empty($workStatus['code'])) {
-                    $workStatusCode = $workStatus['code'];
+ 
 
-
-                    if ($workStatusCode === 'fail') {  //если провал
+                    if ($workStatus === 'fail') {  //если провал
                         if (!empty($failType)) {
                             if (!empty($failType['code'])) {
                                 $failTypeItemItem = [
@@ -562,8 +559,7 @@ class BitrixListPresentationFlowService
                             }
                         }
                     }
-                }
-            }
+                
 
 
             // $fieldsData['NAME'] = $evTypeName . ' ' . $eventActionName;

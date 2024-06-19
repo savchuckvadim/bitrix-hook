@@ -1525,8 +1525,8 @@ class EventReportService
                 )
             ) {
 
-                $reportStatus = 'pound';
-                $eventAction = 'expired';
+                // $reportStatus = 'pound';
+                // $eventAction = 'expired';
                 //report
                 BitrixListPresentationFlowService::getListPresentationReportFlow(
                     $this->hook,
