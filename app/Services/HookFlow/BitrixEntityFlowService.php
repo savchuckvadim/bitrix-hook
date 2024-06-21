@@ -578,8 +578,8 @@ class BitrixEntityFlowService
 
 
         if (!empty($portalField)) {
-            if (!empty($portalField['bitrixfielditems'])) {
-                $pitems = $portalField['bitrixfielditems'];
+            if (!empty($portalField['items'])) {
+                $pitems = $portalField['items'];
                 foreach ($pitems as $pitem) {
                     if (!empty($pitem['code'])) {
                         if ($pitem['code'] == $resultCode) {
