@@ -535,6 +535,7 @@ class BitrixEntityFlowService
         // В оплате	money_await
         // Продажа	    op_status_success
         // Отказ	    op_status_fail
+        $resultCode = 'in_work';
         switch ($workStatus) {
             case 'inJob':
                 $resultCode = 'in_work';
@@ -575,7 +576,8 @@ class BitrixEntityFlowService
         }
         Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
             'portalField' => $portalField,
-            'workStatus' => $workStatus
+            'workStatus' => $workStatus,
+            'resultCode' => $resultCode
         ]);
         return $resultItemBtxId;
     }
