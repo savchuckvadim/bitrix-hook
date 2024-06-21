@@ -581,7 +581,7 @@ class BitrixEntityFlowService
                 }
             }
         }
-        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+        Log::channel('telegram')->info('HOOK TEST getWorstatusFieldItemValue', [
             'resultCode' => $resultCode,
             'planEventType' => $planEventType,
             'workStatus' => $workStatus,
@@ -685,7 +685,13 @@ class BitrixEntityFlowService
                 }
             }
         }
+        Log::channel('telegram')->info('HOOK TEST getProspectsFieldItemValue', [
+            'resultCode' => $resultCode,
+            'failType' => $failType,
+            'workStatus' => $workStatus,
+        
 
+        ]);
         return $resultItemBtxId;
     }
 
