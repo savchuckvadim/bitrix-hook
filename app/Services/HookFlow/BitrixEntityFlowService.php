@@ -103,6 +103,20 @@ class BitrixEntityFlowService
         try {
             if (!empty($portalCompanyData) && !empty($portalCompanyData['bitrixfields'])) {
                 $fields = $portalCompanyData['bitrixfields'];
+
+                Log::channel('telegram')->info('APRIL_HOOK updateCompany', [
+                    'portal fields' => $fields,
+                    'currentFieldsForUpdate' => $currentFieldsForUpdate,
+                    'currentBtxEntity' => $currentBtxEntity
+         
+                ]);
+                Log::info('APRIL_HOOK updateCompany', [
+                    'portal fields' => $fields,
+                    'currentFieldsForUpdate' => $currentFieldsForUpdate,
+                    'currentBtxEntity' => $currentBtxEntity
+         
+                ]);
+
                 $updatedFields = $this->getReportFields(
                     [],
                     $currentBtxEntity,
