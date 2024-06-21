@@ -326,17 +326,20 @@ class BitrixEntityFlowService
             if (!empty($pField) && !empty($pField['code'])) {
                 $portalFieldCode = $pField['code'];
 
-                Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                    'code' => $pField['code'],
-
-                ]);
 
                 foreach ($currentFieldsForUpdate as $targetFieldCode) {  //массив кодов - которые нужно обновить
-                    if ($portalFieldCode === $targetFieldCode) {
-                        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                            ' === equal code' => $pField['code'],
 
-                        ]);
+
+
+                    if ($portalFieldCode === $targetFieldCode) {
+                        if ($portalFieldCode == 'op_work_status') {
+                            Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                                ' === equal code' => $pField['code'],
+
+                            ]);
+                        }
+
+
                         switch ($portalFieldCode) {
 
                             case 'manager_op':
