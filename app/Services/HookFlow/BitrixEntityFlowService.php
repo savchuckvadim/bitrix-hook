@@ -108,13 +108,13 @@ class BitrixEntityFlowService
                     'portal fields' => $fields,
                     'currentFieldsForUpdate' => $currentFieldsForUpdate,
                     'currentBtxEntity' => $currentBtxEntity
-         
+
                 ]);
                 Log::info('APRIL_HOOK updateCompany', [
                     'portal fields' => $fields,
                     'currentFieldsForUpdate' => $currentFieldsForUpdate,
                     'currentBtxEntity' => $currentBtxEntity
-         
+
                 ]);
 
                 $updatedFields = $this->getReportFields(
@@ -334,7 +334,13 @@ class BitrixEntityFlowService
         //     $resultStatus = $resultStatus . ' в работе';
         // }
 
+        Log::info('HOOK TEST CURRENTENTITY', [
+            'portalFields' => $portalFields,
 
+        ]);
+        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+            'portalFields' => $portalFields,
+        ]);
         //general report fields 
         foreach ($portalFields as $pField) {
             if (!empty($pField) && !empty($pField['code'])) {
