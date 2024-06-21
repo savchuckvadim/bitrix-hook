@@ -362,7 +362,7 @@ class BitrixEntityFlowService
                                 );
 
 
-
+break;
                                 // /statusesCodes
                             case 'op_work_status':
                                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getWorstatusFieldItemValue(
@@ -370,12 +370,14 @@ class BitrixEntityFlowService
                                     $workStatus,
                                     $planEventType // only PLAN ! event type
                                 );
+                                break;
                             case 'op_prospects_type':  //Перспективность
                                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getProspectsFieldItemValue(
                                     $pField, //with items
                                     $workStatus,
                                     $failType
                                 );
+                                break;
 
 
                                 //xo

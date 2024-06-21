@@ -616,7 +616,10 @@ class EventReportService
             array_push($currentFieldsForUpdate, $targedCode);
         }
         $entityService = new BitrixEntityFlowService();
+        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+            'currentFieldsForUpdate' => $currentFieldsForUpdate,
 
+        ]);
 
         $entityService->flow(
             $this->portal,
