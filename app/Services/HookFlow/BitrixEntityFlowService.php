@@ -623,7 +623,7 @@ break;
 
 
         $resultCode = 'op_prospects_good';
-        if ($workStatus !== 'inJob' || $workStatus !== 'success') {
+        if ($workStatus !== 'inJob' && $workStatus !== 'success') {
 
             if (!empty($failType) && !empty($failType['code'])) {
                 $failCode = $failType['code'];
