@@ -535,10 +535,10 @@ class BitrixEntityFlowService
         // В оплате	money_await
         // Продажа	    op_status_success
         // Отказ	    op_status_fail
-        $resultCode = 'in_work';
+        $resultCode = 'work';
         switch ($workStatus) {
             case 'inJob':
-                $resultCode = 'in_work';
+                $resultCode = 'work';
 
                 if ($planEventType == 'hot') {
                     $resultCode = 'in_progress';
@@ -549,7 +549,7 @@ class BitrixEntityFlowService
 
                 break;
             case 'setAside': //in_long
-                $resultCode = 'in_long';
+                $resultCode = 'long';
                 break;
             case 'fail':
                 $resultCode = 'fail';
