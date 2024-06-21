@@ -370,10 +370,11 @@ class BitrixEntityFlowService
                                 $now = now();
                                 $stringComment = $now . ' ' . $currentReportEventName . ' ' . $resultStatus;
                                 $updatedFields = $this->getCommentsWithEntity(
+                                $currentBtxEntity,
                                     $pField,
                                     $stringComment,
                                     $updatedFields,
-                                    $currentBtxEntity
+                                    
                                 );
 
 
