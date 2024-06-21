@@ -73,7 +73,6 @@ class BitrixEntityFlowService
         $failType,
         $failReason,
         $noResultReason,
-        $isSuccessSale,
         $currentReportEventType,
         $currentReportEventName,
         $currentFieldsForUpdate,
@@ -134,7 +133,6 @@ class BitrixEntityFlowService
                     $failType,
                     $failReason,
                     $noResultReason,
-                    $isSuccessSale,
                     $currentReportEventType,
                     $currentReportEventName,
 
