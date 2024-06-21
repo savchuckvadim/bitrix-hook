@@ -522,7 +522,7 @@ break;
         return $fields;
     }
 
-    protected function getWorstatusFieldItemValue(
+    public function getWorstatusFieldItemValue(
         $portalField, //with items
         $workStatus,
         $planEventType // only PLAN ! event type
@@ -588,7 +588,7 @@ break;
     }
 
 
-    protected function getProspectsFieldItemValue(
+    public function getProspectsFieldItemValue(
         $portalField, //with items
         $workStatus,
         $failType

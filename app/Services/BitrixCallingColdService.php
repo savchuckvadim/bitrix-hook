@@ -251,6 +251,18 @@ class BitrixCallingColdService
                                 $resultEntityFields[$fullFieldId] =  $currentComments;
 
                                 break;
+                            case 'op_work_status':
+                                $workStatus = [
+                                    'id' => 0,
+                                    'code' => "inJob", 'name' => "В работе"
+                                ];
+                                $workStatusController = new BitrixEntityFlowService();
+                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $workStatusController->getWorstatusFieldItemValue(
+                                    $pField, //with items
+                                    $workStatus,
+                                    'xo' // only PLAN ! event type
+                                );
+                                break;
 
                             default:
                                 // Log::channel('telegram')->error('APRIL_HOOK', ['default' => $companyField['code']]);
@@ -403,7 +415,7 @@ class BitrixCallingColdService
             $this->createColdTask($currentSmartId, $currentDealsIds);
             $rand = 1;
             sleep($rand);
-            
+
             BitrixEntityFlowService::coldflow(
                 $this->portal,
                 $this->hook,
