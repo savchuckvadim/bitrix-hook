@@ -387,70 +387,72 @@ class BitrixEntityFlowService
             }
         }
 
-        if ($reportEventType == 'xo') {
+        // if ($reportEventType == 'xo') {
 
-            foreach ($portalFields as $pField) {
-                switch ($pField['code']) {
-                    case 'call_last_date':
-                        $now = date('d.m.Y H:i:s');
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = $now;
-                        break;
+        //     foreach ($portalFields as $pField) {
+        //         switch ($pField['code']) {
+        //             case 'call_last_date':
+        //                 $now = date('d.m.Y H:i:s');
+        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $now;
+        //                 break;
 
-                    default:
-                        # code...
-                        break;
-                }
-            }
-        } else  if ($reportEventType == 'warm') {
-            foreach ($portalFields as $pField) {
-                switch ($pField['code']) {
-                    case 'call_last_date':
-                        $now = date('d.m.Y H:i:s');
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = $now;
-                        break;
-                    case 'manager_op':
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-                        break;
-                }
-            }
-        } else if ($reportEventType == 'presentation') {
-            foreach ($portalFields as $pField) {
-                switch ($pField['code']) {
+        //             default:
+        //                 # code...
+        //                 break;
+        //         }
+        //     }
+        // } else  if ($reportEventType == 'warm') {
+        //     foreach ($portalFields as $pField) {
+        //         switch ($pField['code']) {
+        //             case 'call_last_date':
+        //                 $now = date('d.m.Y H:i:s');
+        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $now;
+        //                 break;
+        //             case 'manager_op':
+        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+        //                 break;
+        //         }
+        //     }
+        // } else if ($reportEventType == 'presentation') {
+        //     foreach ($portalFields as $pField) {
+        //         switch ($pField['code']) {
 
-                    case 'manager_op':
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-                        break;
-                }
-            }
-        } else if ($reportEventType == 'in_progress') {
-            foreach ($portalFields as $pField) {
-                switch ($pField['code']) {
+        //             case 'manager_op':
+        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+        //                 break;
+        //         }
+        //     }
+        // } else if ($reportEventType == 'in_progress') {
+        //     foreach ($portalFields as $pField) {
+        //         switch ($pField['code']) {
 
-                    case 'manager_op':
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-                        break;
-                }
-            }
-        } else if ($reportEventType == 'money_await') {
-            foreach ($portalFields as $pField) {
-                switch ($pField['code']) {
+        //             case 'manager_op':
+        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+        //                 break;
+        //         }
+        //     }
+        // } else if ($reportEventType == 'money_await') {
+        //     foreach ($portalFields as $pField) {
+        //         switch ($pField['code']) {
 
-                    case 'manager_op':
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-                        break;
-                }
-            }
-        } else if ($reportEventType == 'other') {
-            foreach ($portalFields as $pField) {
-                switch ($pField['code']) {
+        //             case 'manager_op':
+        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+        //                 break;
+        //         }
+        //     }
+        // } else if ($reportEventType == 'other') {
+        //     foreach ($portalFields as $pField) {
+        //         switch ($pField['code']) {
 
-                    case 'manager_op':
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-                        break;
-                }
-            }
-        }
-
+        //             case 'manager_op':
+        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+        //                 break;
+        //         }
+        //     }
+        // }
+        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+            'updatedFields' => $updatedFields
+        ]);
         return $updatedFields;
     }
 
