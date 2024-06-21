@@ -16,9 +16,7 @@ class BitrixEntityFlowService
     public function __construct()
     {
     }
-
-
-    static function flow(
+    static function coldflow(
         $portal,
         $hook,
         $entityType,
@@ -38,6 +36,114 @@ class BitrixEntityFlowService
                 $updatedLead = BitrixEntityFlowService::updateLeadCold($hook, $entityId, $entityFieldsUpdatingContent);
             }
 
+
+            return APIOnlineController::getSuccess(['result' => 'success']);
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR COLD: Exception caught',  $errorMessages);
+            Log::info('error COLD', ['error' => $th->getMessage()]);
+            return APIOnlineController::getError($th->getMessage(),  $errorMessages);
+        }
+    }
+
+    public function flow(
+        $portal,
+        $currentBtxEntity,
+        $portalCompanyData,
+        $hook,
+        $entityType,
+        $entityId,
+        $planEventType, // xo warm presentation,
+        $eventAction,  // plan done expired 
+        //updting fields
+
+        $createdId,
+        $responsibleId,
+        $deadline,
+        $nowdate,
+        $isPresentationDone,
+        $isUnplannedPresentation,
+        $workStatus,  // inJob setAside ...
+        $resultStatus, //result | noresult ...
+        $failType,
+        $failReason,
+        $noResultReason,
+        $isSuccessSale,
+        $currentReportEventType,
+        $currentReportEventName,
+        $currentFieldsForUpdate,
+
+    ) {
+        sleep(1);
+        // Log::channel('telegram')->info('APRIL_HOOK updateCompany', ['$entityFieldsUpdatingContent' => $entityFieldsUpdatingContent]);
+        // Log::info('APRIL_HOOK updateCompany', ['$entityFieldsUpdatingContent' => $entityFieldsUpdatingContent]);
+
+
+        // $data =   [
+        //     // 'plan' => $this->plan,
+        //     // 'report' => $this->report,
+        //     // 'presentation' => $this->presentation,
+        //     'isPlanned' => $this->isPlanned,
+        //     'isPresentationDone' => $this->isPresentationDone,
+        //     'isUnplannedPresentation' => $this->isUnplannedPresentation,
+        //     'currentReportEventType' => $this->currentReportEventType,
+        //     'currentPlanEventType' => $this->currentPlanEventType,
+        //     '$this->portalCompanyData' => $this->portalCompanyData
+
+
+
+        // ];
+
+
+        try {
+            if (!empty($portalCompanyData) && !empty($portalCompanyData['bitrixfields'])) {
+                $fields = $portalCompanyData['bitrixfields'];
+                $updatedFields = $this->getReportFields(
+                    [],
+                    $currentBtxEntity,
+                    $currentFieldsForUpdate,
+                    $fields, //portal fields
+                    $planEventType,
+                    $createdId,
+                    $responsibleId,
+                    $deadline,
+                    $nowdate,
+                    $isPresentationDone,
+                    $isUnplannedPresentation,
+                    $workStatus,  // inJob setAside ...
+                    $resultStatus, //result | noresult ...
+                    $failType,
+                    $failReason,
+                    $noResultReason,
+                    $isSuccessSale,
+                    $currentReportEventType,
+                    $currentReportEventName,
+
+                );
+
+                // $entityFieldsUpdatingContent
+
+
+
+                if ($entityType == 'company') {
+                    $updatedCompany = BitrixEntityFlowService::updateCompanyCold(
+                        $hook,
+                        $entityId,
+                        $updatedFields
+                    );
+                } else if ($entityType == 'lead') {
+                    $updatedLead = BitrixEntityFlowService::updateLeadCold(
+                        $hook,
+                        $entityId,
+                        $updatedFields
+                    );
+                }
+            }
 
             return APIOnlineController::getSuccess(['result' => 'success']);
         } catch (\Throwable $th) {
@@ -149,7 +255,7 @@ class BitrixEntityFlowService
                     }
                 }
             }
-            
+
             return $resultFields;
         } catch (\Throwable $th) {
             Log::info(
@@ -165,6 +271,392 @@ class BitrixEntityFlowService
             );
             return $resultFields;
         }
+    }
+
+
+    //fields
+
+    //report fields
+    protected function getReportFields(
+        $updatedFields,
+        $currentBtxEntity,
+        $currentFieldsForUpdate,
+        $portalFields,
+        $planEventType,
+        // 0: {id: 1, code: "warm", name: "Звонок"}
+        // // 1: {id: 2, code: "presentation", name: "Презентация"}
+        // // 2: {id: 3, code: "hot", name: "Решение"}
+        // // 3: {id: 4, code: "moneyAwait", name: "Оплата"}
+        $createdId,
+        $responsibleId,
+        $deadline,
+        $nowdate,
+        $isPresentationDone,
+        $isUnplannedPresentation,
+        $workStatus,  // inJob setAside ...
+        $resultStatus, //result | noresult ...
+        $failType,
+        $failReason,
+        $noResultReason,
+        $reportEventType, //xo warm presentaton
+        $currentReportEventName,
+
+
+    ) {
+        Log::info('HOOK TEST CURRENTENTITY', [
+            '$currentBtxEntity' => $currentBtxEntity
+        ]);
+
+        // $resultStatus = 'Совершен';
+
+        // if ($isInWork) {
+        //     $resultStatus = $resultStatus . ' в работе';
+        // }
+
+
+        //general report fields 
+        foreach ($portalFields as $pField) {
+            if (!empty($pField) && !empty($pField['code'])) {
+                $portalFieldCode = $pField['code'];
+                foreach ($currentFieldsForUpdate as $targetFieldCode) {  //массив кодов - которые нужно обновить
+                    if ($portalFieldCode === $targetFieldCode) {
+
+                        switch ($portalFieldCode) {
+
+                            case 'manager_op':
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+                                break;
+                            case 'op_history':
+                            case 'op_mhistory':
+                                $now = now();
+                                $stringComment = $now . ' ' . $currentReportEventName . ' ' . $resultStatus;
+                                $updatedFields = $this->getCommentsWithEntity(
+                                    $pField,
+                                    $stringComment,
+                                    $updatedFields,
+                                    $currentBtxEntity
+                                );
+
+
+
+                                // /statusesCodes
+                            case 'op_work_status':
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getWorstatusFieldItemValue(
+                                    $pField, //with items
+                                    $workStatus,
+                                    $planEventType // only PLAN ! event type
+                                );
+                            case 'op_fail_type':
+                            case 'op_fail_reason':
+                            case 'op_noresult_reason':
+
+
+                                //xo
+
+                                //warm
+                            case 'call_next_date':   //ОП Дата Следующего звонка
+                            case 'call_next_name':   //ОП Тема Следующего звонка
+                            case 'call_last_date':  //ОП Дата последнего звонка
+
+                                //in_progress
+
+                                //money_a
+
+
+
+                                //presentation
+                            case 'next_pres_plan_date':
+                            case 'last_pres_plan_date':
+                            case 'last_pres_done_date':
+                            case 'last_pres_plan_responsible':
+                            case 'last_pres_done_responsible':
+                            case 'pres_count':
+                            case 'pres_comments':
+                            case 'call_last_date':
+
+
+                                //fail
+                            case 'op_fail_comments':
+                                break;
+                            default:
+                                # code...
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($reportEventType == 'xo') {
+
+            foreach ($portalFields as $pField) {
+                switch ($pField['code']) {
+                    case 'call_last_date':
+                        $now = date('d.m.Y H:i:s');
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = $now;
+                        break;
+
+                    default:
+                        # code...
+                        break;
+                }
+            }
+        } else  if ($reportEventType == 'warm') {
+            foreach ($portalFields as $pField) {
+                switch ($pField['code']) {
+                    case 'call_last_date':
+                        $now = date('d.m.Y H:i:s');
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = $now;
+                        break;
+                    case 'manager_op':
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+                        break;
+                }
+            }
+        } else if ($reportEventType == 'presentation') {
+            foreach ($portalFields as $pField) {
+                switch ($pField['code']) {
+
+                    case 'manager_op':
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+                        break;
+                }
+            }
+        } else if ($reportEventType == 'in_progress') {
+            foreach ($portalFields as $pField) {
+                switch ($pField['code']) {
+
+                    case 'manager_op':
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+                        break;
+                }
+            }
+        } else if ($reportEventType == 'money_await') {
+            foreach ($portalFields as $pField) {
+                switch ($pField['code']) {
+
+                    case 'manager_op':
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+                        break;
+                }
+            }
+        } else if ($reportEventType == 'other') {
+            foreach ($portalFields as $pField) {
+                switch ($pField['code']) {
+
+                    case 'manager_op':
+                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+                        break;
+                }
+            }
+        }
+
+        return $updatedFields;
+    }
+
+
+    protected function getCommentsWithEntity(
+        $currentBtxEntity,
+        $pField,
+        $stringComment,
+        $fields
+    ) {
+        $fullFieldId = 'UF_CRM_' . $pField['bitrixId'];  //UF_CRM_OP_MHISTORY
+        // $now = now();
+        // $stringComment = $now . ' ХО запланирован ' . $data['name'] . ' на ' . $data['deadline'];
+
+        $currentComments = '';
+
+
+        if (!empty($currentBtxEntity)) {
+            // if (isset($currentBtxCompany[$fullFieldId])) {
+
+            $currentComments = $currentBtxEntity[$fullFieldId];
+
+            if ($pField['code'] == 'op_mhistory') {
+                $currentComments = [];
+                array_push($currentComments, $stringComment);
+                // if (!empty($currentComments)) {
+                //     array_push($currentComments, $stringComment);
+                // } else {
+                //     $currentComments = $stringComment;
+                // }
+            } else {
+                $currentComments = $currentComments  . ' | ' . $stringComment;
+            }
+            // }
+        }
+
+
+        $fields[$fullFieldId] =  $currentComments;
+        return $fields;
+    }
+
+    protected function getWorstatusFieldItemValue(
+        $portalField, //with items
+        $workStatus,
+        $planEventType // only PLAN ! event type
+    ) {
+        $resultItemBtxId = null;
+        //         inJob
+        // setAside
+        // success
+        // fail
+        // op_work_status
+        // В работе	work
+        // Отложена	long
+        // В решении	in_progress
+        // В оплате	money_await
+        // Продажа	    op_status_success
+        // Отказ	    op_status_fail
+        switch ($workStatus) {
+            case 'inJob':
+                $resultCode = 'in_work';
+
+                if ($planEventType == 'hot') {
+                    $resultCode = 'in_progress';
+                } else  if ($planEventType == 'moneyAwait') {
+                    $resultCode = 'money_await';
+                }
+
+
+                break;
+            case 'setAside': //in_long
+                $resultCode = 'in_long';
+                break;
+            case 'fail':
+                $resultCode = 'fail';
+                break;
+            case 'success':
+                $resultCode = 'success';
+                break;
+            default:
+                break;
+        }
+
+
+        if (!empty($portalField)) {
+            if (!empty($portalField['bitrixfielditems'])) {
+                $pitems = $portalField['bitrixfielditems'];
+                foreach ($pitems as $pitem) {
+                    if (!empty($pitem['code'])) {
+                        if ($pitem['code'] == $resultCode) {
+                            $resultItemBtxId = $pitem['bitrixId'];
+                        }
+                    }
+                }
+            }
+        }
+
+        return $resultItemBtxId;
+    }
+
+    //plan fields
+    protected function getPlanFields(
+        $updatedFields,
+        $portalFields,
+
+
+    ) {
+        // $isPresentationDone = $this->isPresentationDone;
+        // $isUnplannedPresentation = $this->isUnplannedPresentation;
+        // $isResult  = $this->isResult;
+        // $isInWork  = $this->isInWork;
+        // $isSuccessSale  = $this->isSuccessSale;
+        // $reportEventType = $this->currentReportEventType;
+        // $currentReportEventName = $this->currentReportEventName;
+
+        // $resultStatus = 'Совершен';
+
+        // if ($isInWork) {
+        //     $resultStatus = $resultStatus . ' в работе';
+        // }
+
+
+        // //general report fields 
+        // foreach ($portalFields as $pField) {
+        //     switch ($pField['code']) {
+
+        //         case 'manager_op':
+        //             $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+        //             break;
+        //         case 'op_history':
+        //         case 'op_mhistory':
+        //             $now = now();
+        //             $stringComment = $now . ' ' . $currentReportEventName . ' ' . $resultStatus;
+        //             $updatedFields = $this->getCommentsWithEntity($pField, $stringComment, $updatedFields);
+        //             break;
+        //         default:
+        //             # code...
+        //             break;
+        //     }
+        // }
+
+        // if ($reportEventType == 'xo') {
+
+        //     foreach ($portalFields as $pField) {
+        //         switch ($pField['code']) {
+        //             case 'call_last_date':
+        //                 $now = date('d.m.Y H:i:s');
+        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $now;
+        //                 break;
+
+        //             default:
+        //                 # code...
+        //                 break;
+        //         }
+        //     }
+        // } else  if ($reportEventType == 'warm') {
+        //     foreach ($portalFields as $pField) {
+        //         switch ($pField['code']) {
+        //             case 'call_last_date':
+        //                 $now = date('d.m.Y H:i:s');
+        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $now;
+        //                 break;
+        //             case 'manager_op':
+        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+        //                 break;
+        //         }
+        //     }
+        // } else if ($reportEventType == 'presentation') {
+        //     foreach ($portalFields as $pField) {
+        //         switch ($pField['code']) {
+
+        //             case 'manager_op':
+        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+        //                 break;
+        //         }
+        //     }
+        // } else if ($reportEventType == 'in_progress') {
+        //     foreach ($portalFields as $pField) {
+        //         switch ($pField['code']) {
+
+        //             case 'manager_op':
+        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+        //                 break;
+        //         }
+        //     }
+        // } else if ($reportEventType == 'money_await') {
+        //     foreach ($portalFields as $pField) {
+        //         switch ($pField['code']) {
+
+        //             case 'manager_op':
+        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+        //                 break;
+        //         }
+        //     }
+        // } else if ($reportEventType == 'other') {
+        //     foreach ($portalFields as $pField) {
+        //         switch ($pField['code']) {
+
+        //             case 'manager_op':
+        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+        //                 break;
+        //         }
+        //     }
+        // }
+
+        // return $updatedFields;
     }
 }
 

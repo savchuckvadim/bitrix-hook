@@ -547,6 +547,7 @@ class EventReportService
     //entity
     protected function getEntityFlow()
     {
+        $currentFieldsForUpdate = [];
         $fieldsPresentationCodes = [
             'next_pres_plan_date', // ОП Дата назначенной презентации
             'last_pres_plan_date', //ОП Дата последней назначенной презентации
@@ -580,44 +581,52 @@ class EventReportService
             'call_next_date', //ОП Дата Следующего звонка
             'call_next_name',    //ОП Тема Следующего звонка
             'call_last_date',  //ОП Дата последнего звонка
-            'xo_created',
-            'manager_op',
-            'call_next_date',
-            'call_next_name',
-            'call_last_date',
+            // 'xo_created',
+            // 'manager_op',
+            // 'call_next_date',
+            // 'call_next_name',
+            // 'call_last_date',
 
         ];
 
-        $data =   [
-            // 'plan' => $this->plan,
-            // 'report' => $this->report,
-            // 'presentation' => $this->presentation,
-            'isPlanned' => $this->isPlanned,
-            'isPresentationDone' => $this->isPresentationDone,
-            'isUnplannedPresentation' => $this->isUnplannedPresentation,
-            'currentReportEventType' => $this->currentReportEventType,
-            'currentPlanEventType' => $this->currentPlanEventType,
-            '$this->portalCompanyData' => $this->portalCompanyData
+
+        $statusesCodesAssoc = array_fill_keys($statusesCodes, true);
+        $generalSalesCodesAssoc = array_fill_keys($generalSalesCode, true);
+        $fieldsCallCodesAssoc = array_fill_keys($fieldsCallCodes, true);
+
+        $presentationCodesAssoc = array_fill_keys($fieldsPresentationCodes, true);
 
 
+        // Объединение массивов
+        $currentFieldsForUpdate = array_merge($presentationCodesAssoc, $statusesCodesAssoc, $generalSalesCodesAssoc, $fieldsCallCodesAssoc);
 
-        ];
-        $fields = $this->portalCompanyData['bitrixfields'];
-        $updatedFields = $this->getReportFields(
-            [],
-            $fields //portal fields
-        );
+        $entityService = new BitrixEntityFlowService();
 
 
-
-        BitrixEntityFlowService::flow(
+        $entityService->flow(
             $this->portal,
+            $this->currentBtxEntity,
+            $this->portalCompanyData,
             $this->hook,
             $this->entityType,
             $this->entityId,
-            'xo', // xo warm presentation,
+            $this->currentPlanEventType, // xo warm presentation,
             'plan',  // plan done expired 
-            $updatedFields, //updting fields 
+            $this->planCreatedId,
+            $this->planResponsibleId,
+            $this->planDeadline,
+            $this->nowDate,
+            $this->isPresentationDone,
+            $this->isUnplannedPresentation,
+            $this->workStatus,  // inJob setAside ...
+            $this->resultStatus, //result | noresult ...
+            $this->isFail,
+            $this->failType,
+            $this->failReason,
+            $this->noresultReason,
+            $this->currentReportEventType,
+            $this->currentReportEventName,
+            $currentFieldsForUpdate
         );
     }
 
@@ -629,145 +638,7 @@ class EventReportService
     //get presentation report fields
     //get other report fields
     //get new event report fields
-    protected function getReportFields(
-        $updatedFields,
-        $portalFields,
 
-
-    ) {
-        $isPresentationDone = $this->isPresentationDone;
-        $isUnplannedPresentation = $this->isUnplannedPresentation;
-        $isResult  = $this->isResult;
-        $isInWork  = $this->isInWork;
-        $isSuccessSale  = $this->isSuccessSale;
-        $reportEventType = $this->currentReportEventType;
-        $currentReportEventName = $this->currentReportEventName;
-
-        $resultStatus = 'Совершен';
-
-        if ($isInWork) {
-            $resultStatus = $resultStatus . ' в работе';
-        }
-
-
-        //general report fields 
-        foreach ($portalFields as $pField) {
-            switch ($pField['code']) {
-
-                case 'manager_op':
-                    $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-                    break;
-                case 'op_history':
-                case 'op_mhistory':
-                    $now = now();
-                    $stringComment = $now . ' ' . $currentReportEventName . ' ' . $resultStatus;
-                    $updatedFields = $this->getCommentsWithEntity($pField, $stringComment, $updatedFields);
-                    break;
-                default:
-                    # code...
-                    break;
-            }
-        }
-
-        if ($reportEventType == 'xo') {
-
-            foreach ($portalFields as $pField) {
-                switch ($pField['code']) {
-                    case 'call_last_date':
-                        $now = date('d.m.Y H:i:s');
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = $now;
-                        break;
-
-                    default:
-                        # code...
-                        break;
-                }
-            }
-        } else  if ($reportEventType == 'warm') {
-            foreach ($portalFields as $pField) {
-                switch ($pField['code']) {
-                    case 'call_last_date':
-                        $now = date('d.m.Y H:i:s');
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = $now;
-                        break;
-                    case 'manager_op':
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-                        break;
-                }
-            }
-        } else if ($reportEventType == 'presentation') {
-            foreach ($portalFields as $pField) {
-                switch ($pField['code']) {
-
-                    case 'manager_op':
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-                        break;
-                }
-            }
-        } else if ($reportEventType == 'in_progress') {
-            foreach ($portalFields as $pField) {
-                switch ($pField['code']) {
-
-                    case 'manager_op':
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-                        break;
-                }
-            }
-        } else if ($reportEventType == 'money_await') {
-            foreach ($portalFields as $pField) {
-                switch ($pField['code']) {
-
-                    case 'manager_op':
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-                        break;
-                }
-            }
-        } else if ($reportEventType == 'other') {
-            foreach ($portalFields as $pField) {
-                switch ($pField['code']) {
-
-                    case 'manager_op':
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-                        break;
-                }
-            }
-        }
-
-        return $updatedFields;
-    }
-
-    protected function getCommentsWithEntity($pField, $stringComment, $fields)
-    {
-        $fullFieldId = 'UF_CRM_' . $pField['bitrixId'];  //UF_CRM_OP_MHISTORY
-        // $now = now();
-        // $stringComment = $now . ' ХО запланирован ' . $data['name'] . ' на ' . $data['deadline'];
-
-        $currentComments = '';
-        $currentBtxEntity = $this->currentBtxEntity;
-
-        if (!empty($currentBtxEntity)) {
-            // if (isset($currentBtxCompany[$fullFieldId])) {
-
-            $currentComments = $currentBtxEntity[$fullFieldId];
-
-            if ($pField['code'] == 'op_mhistory') {
-                $currentComments = [];
-                array_push($currentComments, $stringComment);
-                // if (!empty($currentComments)) {
-                //     array_push($currentComments, $stringComment);
-                // } else {
-                //     $currentComments = $stringComment;
-                // }
-            } else {
-                $currentComments = $currentComments  . ' | ' . $stringComment;
-            }
-            // }
-        }
-
-
-        $fields[$fullFieldId] =  $currentComments;
-        return $fields;
-    }
 
 
 
@@ -776,113 +647,6 @@ class EventReportService
     //get presentation plan fields
     //get in_progress plan fields
     //get money_await plan fields
-    protected function getPlanFields(
-        $updatedFields,
-        $portalFields,
-
-
-    ) {
-        $isPresentationDone = $this->isPresentationDone;
-        $isUnplannedPresentation = $this->isUnplannedPresentation;
-        $isResult  = $this->isResult;
-        $isInWork  = $this->isInWork;
-        $isSuccessSale  = $this->isSuccessSale;
-        $reportEventType = $this->currentReportEventType;
-        $currentReportEventName = $this->currentReportEventName;
-
-        $resultStatus = 'Совершен';
-
-        if ($isInWork) {
-            $resultStatus = $resultStatus . ' в работе';
-        }
-
-
-        //general report fields 
-        foreach ($portalFields as $pField) {
-            switch ($pField['code']) {
-
-                case 'manager_op':
-                    $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-                    break;
-                case 'op_history':
-                case 'op_mhistory':
-                    $now = now();
-                    $stringComment = $now . ' ' . $currentReportEventName . ' ' . $resultStatus;
-                    $updatedFields = $this->getCommentsWithEntity($pField, $stringComment, $updatedFields);
-                    break;
-                default:
-                    # code...
-                    break;
-            }
-        }
-
-        if ($reportEventType == 'xo') {
-
-            foreach ($portalFields as $pField) {
-                switch ($pField['code']) {
-                    case 'call_last_date':
-                        $now = date('d.m.Y H:i:s');
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = $now;
-                        break;
-
-                    default:
-                        # code...
-                        break;
-                }
-            }
-        } else  if ($reportEventType == 'warm') {
-            foreach ($portalFields as $pField) {
-                switch ($pField['code']) {
-                    case 'call_last_date':
-                        $now = date('d.m.Y H:i:s');
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = $now;
-                        break;
-                    case 'manager_op':
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-                        break;
-                }
-            }
-        } else if ($reportEventType == 'presentation') {
-            foreach ($portalFields as $pField) {
-                switch ($pField['code']) {
-
-                    case 'manager_op':
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-                        break;
-                }
-            }
-        } else if ($reportEventType == 'in_progress') {
-            foreach ($portalFields as $pField) {
-                switch ($pField['code']) {
-
-                    case 'manager_op':
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-                        break;
-                }
-            }
-        } else if ($reportEventType == 'money_await') {
-            foreach ($portalFields as $pField) {
-                switch ($pField['code']) {
-
-                    case 'manager_op':
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-                        break;
-                }
-            }
-        } else if ($reportEventType == 'other') {
-            foreach ($portalFields as $pField) {
-                switch ($pField['code']) {
-
-                    case 'manager_op':
-                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-                        break;
-                }
-            }
-        }
-
-        return $updatedFields;
-    }
-
 
 
     //get presentation done fields

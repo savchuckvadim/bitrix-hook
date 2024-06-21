@@ -380,7 +380,7 @@ class BitrixCallingColdService
             if ($this->isSmartFlow) {
                 $this->getSmartFlow();
             }
-            $rand = rand(1, 3);
+            $rand = 1;
             sleep($rand);
             if ($this->isDealFlow && $this->portalDealData) {
                 $currentDealsIds = $this->getDealFlow();
@@ -398,12 +398,13 @@ class BitrixCallingColdService
             //     'currentDealsIds' => $currentDealsIds
 
             // ]);
-            $rand = rand(1, 3);
+            $rand = 1;
             sleep($rand);
             $this->createColdTask($currentSmartId, $currentDealsIds);
-            $rand = rand(1, 2);
+            $rand = 1;
             sleep($rand);
-            BitrixEntityFlowService::flow(
+            
+            BitrixEntityFlowService::coldflow(
                 $this->portal,
                 $this->hook,
                 $this->entityType,
