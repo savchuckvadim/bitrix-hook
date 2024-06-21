@@ -304,14 +304,14 @@ class BitrixEntityFlowService
 
     ) {
         Log::info('HOOK TEST CURRENTENTITY', [
-            'currentBtxEntity' => $currentBtxEntity,
-            'portalFields' => $portalFields,
+            // 'currentBtxEntity' => $currentBtxEntity,
+            // 'portalFields' => $portalFields,
             'currentFieldsForUpdate' => $currentFieldsForUpdate,
 
         ]);
         Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            'currentBtxEntity' => $currentBtxEntity,
-            'portalFields' => $portalFields,
+            // 'currentBtxEntity' => $currentBtxEntity,
+            // 'portalFields' => $portalFields,
             'currentFieldsForUpdate' => $currentFieldsForUpdate,
         ]);
         // $resultStatus = 'Совершен';
