@@ -169,8 +169,11 @@ class BitrixCallingColdService
         ];
         $resultEntityFields = [];
 
-
-
+        $workStatus = [
+            'id' => 0,
+            'code' => "inJob", 'name' => "В работе"
+        ];
+        $workStatusController = new BitrixEntityFlowService();
 
         if (!empty($portal[$data['entityType']])) {
             if (!empty($portal[$data['entityType']]['bitrixfields'])) {
@@ -252,18 +255,21 @@ class BitrixCallingColdService
 
                                 break;
                             case 'op_work_status':
-                                $workStatus = [
-                                    'id' => 0,
-                                    'code' => "inJob", 'name' => "В работе"
-                                ];
-                                $workStatusController = new BitrixEntityFlowService();
+
+                                
                                 $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $workStatusController->getWorstatusFieldItemValue(
                                     $pField, //with items
                                     $workStatus,
                                     'xo' // only PLAN ! event type
                                 );
                                 break;
-
+                            case 'op_prospects_type':  //Перспективность
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $workStatusController->getProspectsFieldItemValue(
+                                    $pField, //with items
+                                    $workStatus,
+                                    false //$failType
+                                );
+                                break;
                             default:
                                 // Log::channel('telegram')->error('APRIL_HOOK', ['default' => $companyField['code']]);
 
