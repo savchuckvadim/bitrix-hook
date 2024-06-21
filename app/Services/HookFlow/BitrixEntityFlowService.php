@@ -333,7 +333,7 @@ class BitrixEntityFlowService
 
 
                     if ($portalFieldCode === $targetFieldCode) {
-                        if ($portalFieldCode == 'op_work_status') {
+                        if ($portalFieldCode == 'op_prospects_type') {
                             Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
                                 'op_prospects_type' => $pField['code'],
 
