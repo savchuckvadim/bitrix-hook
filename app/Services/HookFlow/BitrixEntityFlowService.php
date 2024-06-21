@@ -556,10 +556,10 @@ break;
                 $resultCode = 'long';
                 break;
             case 'fail':
-                $resultCode = 'fail';
+                $resultCode = 'op_status_fail';
                 break;
             case 'success':
-                $resultCode = 'success';
+                $resultCode = 'op_status_success';
                 break;
             default:
                 break;
