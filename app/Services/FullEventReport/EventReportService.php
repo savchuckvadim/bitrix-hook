@@ -56,6 +56,13 @@ class EventReportService
     protected $failReason = false; // as fals | currentObject
     protected $failType = false; // as fals | currentObject
 
+    // 0: {id: 0, code: "garant", name: "Гарант/Запрет"}
+    // // 1: {id: 1, code: "go", name: "Покупает ГО"}
+    // // 2: {id: 2, code: "territory", name: "Чужая территория"}
+    // // 3: {id: 3, code: "accountant", name: "Бухприх"}
+    // // 4: {id: 4, code: "autsorc", name: "Аутсорсинг"}
+    // // 5: {id: 5, code: "depend", name: "Несамостоятельная организация"}
+    // // 6: {id: 6, code: "failure", name: "Отказ"}
 
 
     protected $isInWork = false;  //boolean

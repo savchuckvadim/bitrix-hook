@@ -370,9 +370,12 @@ class BitrixEntityFlowService
                                     $workStatus,
                                     $planEventType // only PLAN ! event type
                                 );
-                            case 'op_fail_type':
-                            case 'op_fail_reason':
-                            case 'op_noresult_reason':
+                            case 'op_prospects_type':  //Перспективность
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getProspectsFieldItemValue(
+                                    $pField, //with items
+                                    $workStatus,
+                                    $failType
+                                );
 
 
                                 //xo
@@ -474,6 +477,10 @@ class BitrixEntityFlowService
         //         }
         //     }
         // }
+
+
+        if ($workStatus == 'fail') {
+        }
         Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
             'updatedFields' => $updatedFields
         ]);
@@ -574,11 +581,106 @@ class BitrixEntityFlowService
                 }
             }
         }
-        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            'portalField' => $portalField,
-            'workStatus' => $workStatus,
-            'resultCode' => $resultCode
-        ]);
+
+        return $resultItemBtxId;
+    }
+
+
+    protected function getProspectsFieldItemValue(
+        $portalField, //with items
+        $workStatus,
+        $failType
+    ) {
+        $resultItemBtxId = null;
+        //         inJob
+        // setAside
+        // success
+        // fail
+
+        // 0: {id: 0, code: "garant", name: "Гарант/Запрет"}
+        // // 1: {id: 1, code: "go", name: "Покупает ГО"}
+        // // 2: {id: 2, code: "territory", name: "Чужая территория"}
+        // // 3: {id: 3, code: "accountant", name: "Бухприх"}
+        // // 4: {id: 4, code: "autsorc", name: "Аутсорсинг"}
+        // // 5: {id: 5, code: "depend", name: "Несамостоятельная организация"}
+        // // 6: {id: 6, code: "failure", name: "Отказ"}
+
+
+        // Перспективность	op_prospects_type	Перспективная	op_prospects_good	calling
+        // Нет перспектив	op_prospects_nopersp	calling
+        // Гарант/Запрет	op_prospects_garant	calling
+        // Покупает ГО	op_prospects_go	calling
+        // Чужая территория	op_prospects_territory	calling
+        // Бухприх	op_prospects_acountant	calling
+        // Аутсорсинг	op_prospects_autsorc	calling
+        // Несамостоятельная организация	op_prospects_depend	calling
+        // недозвон	op_prospects_nophone	calling
+        // компания не существует	op_prospects_company	calling
+        // не хотят общаться	op_prospects_off	calling
+        // Отказ	op_prospects_fail	calling
+
+
+        $resultCode = 'op_prospects_good';
+        if ($workStatus !== 'inJob' && $workStatus !== 'success') {
+
+            if (!empty($failType) && !empty($failType['code'])) {
+                $failCode = $failType['code'];
+
+                switch ($failCode) {
+                    case 'op_prospects_nopersp': //Нет перспектив
+                        $resultCode = 'op_prospects_nopersp';
+
+                        break;
+                    case 'garant': //Гарант/Запрет
+                        $resultCode = 'op_prospects_garant';
+                        break;
+                    case 'go':
+                        $resultCode = 'op_prospects_go';
+                        break;
+                    case 'territory':
+                        $resultCode = 'op_prospects_territory';
+                        break;
+                    case 'accountant':
+                        $resultCode = 'op_prospects_acountant';
+                        break;
+                    case 'autsorc':
+                        $resultCode = 'op_prospects_autsorc';
+                        break;
+                    case 'depend':
+                        $resultCode = 'op_prospects_depend';
+                        break;
+
+                        //todo
+                        // case 'op_prospects_nophone':  //недозвон
+                        // case 'op_prospects_company': //компания не существует
+                        // case 'op_prospects_off': //не хотят общаться
+
+
+                    case 'failure':
+                        $resultCode = 'op_prospects_fail';
+
+                        break;
+
+
+                    default:
+                        break;
+                        break;
+                }
+            }
+        }
+        if (!empty($portalField)) {
+            if (!empty($portalField['items'])) {
+                $pitems = $portalField['items'];
+                foreach ($pitems as $pitem) {
+                    if (!empty($pitem['code'])) {
+                        if ($pitem['code'] == $resultCode) {
+                            $resultItemBtxId = $pitem['bitrixId'];
+                        }
+                    }
+                }
+            }
+        }
+
         return $resultItemBtxId;
     }
 
