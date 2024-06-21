@@ -569,7 +569,7 @@ class EventReportService
 
         $statusesCodes = [
             'op_work_status', //Статус Работы
-            'op_fail_type', //тип отказа  ОП Неперспективная
+            'op_prospects_type', //тип отказа  ОП Неперспективная
             'op_fail_reason', //причина отказа
             'op_noresult_reason', //ОП Причины нерезультативности
         ];
