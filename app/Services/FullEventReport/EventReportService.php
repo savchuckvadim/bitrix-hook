@@ -598,13 +598,16 @@ class EventReportService
 
 
         // Объединение массивов
-        $currentFieldsForUpdate = array_merge(
+        $currentFieldsForUpdate = [];
+        $mergedFields = array_merge(
             $presentationCodesAssoc,
             $statusesCodesAssoc,
             $generalSalesCodesAssoc,
             $fieldsCallCodesAssoc
         );
-
+        foreach ($mergedFields as $targedCode => $bool) {
+            array_push($currentFieldsForUpdate, $targedCode);
+        }
         $entityService = new BitrixEntityFlowService();
 
 
