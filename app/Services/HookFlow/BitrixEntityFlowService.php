@@ -585,7 +585,7 @@ class BitrixEntityFlowService
             'resultCode' => $resultCode,
             'planEventType' => $planEventType,
             'workStatus' => $workStatus,
-
+            'resultItemBtxId' => $resultItemBtxId,
         ]);
         return $resultItemBtxId;
     }
@@ -689,7 +689,8 @@ class BitrixEntityFlowService
             'resultCode' => $resultCode,
             'failType' => $failType,
             'workStatus' => $workStatus,
-        
+             'resultItemBtxId' => $resultItemBtxId,
+
 
         ]);
         return $resultItemBtxId;
