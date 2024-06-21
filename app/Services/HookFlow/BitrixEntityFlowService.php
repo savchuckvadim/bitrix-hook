@@ -317,22 +317,6 @@ class BitrixEntityFlowService
 
 
     ) {
-        Log::info('HOOK TEST CURRENTENTITY', [
-            // 'currentBtxEntity' => $currentBtxEntity,
-            // 'portalFields' => $portalFields,
-            'currentFieldsForUpdate' => $currentFieldsForUpdate,
-
-        ]);
-        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            // 'currentBtxEntity' => $currentBtxEntity,
-            // 'portalFields' => $portalFields,
-            'currentFieldsForUpdate' => $currentFieldsForUpdate,
-        ]);
-        // $resultStatus = 'Совершен';
-
-        // if ($isInWork) {
-        //     $resultStatus = $resultStatus . ' в работе';
-        // }
 
         Log::info('HOOK TEST CURRENTENTITY', [
             'portalFields' => $portalFields,
@@ -370,11 +354,11 @@ class BitrixEntityFlowService
                                 $now = now();
                                 $stringComment = $now . ' ' . $currentReportEventName . ' ' . $resultStatus;
                                 $updatedFields = $this->getCommentsWithEntity(
-                                $currentBtxEntity,
+                                    $currentBtxEntity,
                                     $pField,
                                     $stringComment,
                                     $updatedFields,
-                                    
+
                                 );
 
 
@@ -589,7 +573,10 @@ class BitrixEntityFlowService
                 }
             }
         }
-
+        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+            'portalField' => $portalField,
+            'workStatus' => $workStatus
+        ]);
         return $resultItemBtxId;
     }
 
