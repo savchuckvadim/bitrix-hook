@@ -129,6 +129,12 @@ class EventReportService
         $data,
 
     ) {
+        date_default_timezone_set('Europe/Moscow');
+        $nowDate = new DateTime();
+        // Форматируем дату и время в нужный формат
+        $this->nowDate = $nowDate->format('d.m.Y H:i:s');
+
+        
         $domain = $data['domain'];
         $placement = $data['placement'];
 
@@ -263,10 +269,7 @@ class EventReportService
         if (!empty($data['plan']['deadline'])) {
             $this->planDeadline = $data['plan']['deadline'];
         };
-        $nowDate = new DateTime();
-
-        // Форматируем дату и время в нужный формат
-        $this->nowDate = $nowDate->format('d.m.Y H:i:s');
+      
 
         $this->isPresentationDone = $data['presentation']['isPresentationDone'];
 

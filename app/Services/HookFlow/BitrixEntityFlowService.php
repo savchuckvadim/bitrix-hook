@@ -316,7 +316,7 @@ class BitrixEntityFlowService
 
     ) {
 
-        
+
         Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
             'portalFields' => $portalFields,
         ]);
@@ -357,7 +357,7 @@ class BitrixEntityFlowService
                                 );
 
 
-break;
+                                break;
                                 // /statusesCodes
                             case 'op_work_status':
                                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getWorstatusFieldItemValue(
@@ -686,7 +686,7 @@ break;
             'resultCode' => $resultCode,
             'failType' => $failType,
             'workStatus' => $workStatus,
-             'resultItemBtxId' => $resultItemBtxId,
+            'resultItemBtxId' => $resultItemBtxId,
 
 
         ]);

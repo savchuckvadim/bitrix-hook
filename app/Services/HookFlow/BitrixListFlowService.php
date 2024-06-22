@@ -48,7 +48,7 @@ class BitrixListFlowService
     ) {
         try {
 
-
+            date_default_timezone_set('Europe/Moscow');
             $nowDate = new DateTime();
 
             $eventActionName = 'Запланирован';
