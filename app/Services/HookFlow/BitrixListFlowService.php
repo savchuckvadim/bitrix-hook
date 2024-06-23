@@ -210,8 +210,9 @@ class BitrixListFlowService
                                     'code' => 'op_prospects_type',
                                     'name' => 'Перспективность',
                                     'list' =>  [
-                                        'code' => $failType['code'],
-                                        // 'name' =>  'В работе' //'В работе'
+                                        'code' => BitrixListFlowService::getPerspectStatus(
+                                            $failType['code']
+                                        ),
                                     ],
                                 ];
                                 array_push($xoFields, $failTypeItemItem);
@@ -412,24 +413,24 @@ class BitrixListFlowService
                 $code = $workStatus['code'];
                 switch ($code) {
                     case 'inJob':
-                        $resultCode = 'in_work';
+                        $resultCode = 'op_status_in_work';
 
                         if ($currentEventType == 'hot') {
-                            $resultCode = 'in_progress';
+                            $resultCode = 'op_status_in_progress';
                         } else  if ($currentEventType == 'moneyAwait') {
-                            $resultCode = 'money_await';
+                            $resultCode = 'op_status_money_await';
                         }
 
 
                         break;
                     case 'setAside': //in_long
-                        $resultCode = 'in_long';
+                        $resultCode = 'op_status_in_long';
                         break;
                     case 'fail':
-                        $resultCode = 'fail';
+                        $resultCode = 'op_status_fail';
                         break;
                     case 'success':
-                        $resultCode = 'success';
+                        $resultCode = 'op_status_success';
                         break;
                     default:
                         break;
@@ -446,6 +447,40 @@ class BitrixListFlowService
         $result = 'op_call_result_yes';
         if ($resultStatus !== 'result') {
             $result = 'op_call_result_no';
+        }
+
+
+        return $result;
+    }
+
+
+    static function  getPerspectStatus(
+        $failTypeCode
+    ) {
+
+        $result = 'op_call_result_yes';
+
+        switch ($failTypeCode) {
+            case 'op_prospects_good':
+            case 'op_prospects_nopersp':
+            case 'op_prospects_nophone':
+            case 'op_prospects_company':
+                $result = $failTypeCode;
+                break;
+            case 'garant':
+            case 'go':
+            case 'territory':
+            case 'autsorc':
+            case 'depend':
+            case 'op_prospects_good':
+                $result = 'op_prospects_' . $failTypeCode;
+                break;
+            case 'accountant':
+                $result = 'op_prospects_acountant';
+                break;
+            default:
+                # code...
+                break;
         }
 
 
