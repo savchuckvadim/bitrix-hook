@@ -443,9 +443,9 @@ class BitrixListFlowService
     static function  getResultStatus($resultStatus)
     {
 
-        $result = 'yes';
+        $result = 'op_call_result_yes';
         if ($resultStatus !== 'result') {
-            $result = 'no';
+            $result = 'op_call_result_no';
         }
 
 
