@@ -207,8 +207,8 @@ class BitrixListFlowService
                         if (!empty($failType)) {
                             if (!empty($failType['code'])) {
                                 $failTypeItemItem = [
-                                    'code' => 'op_fail_type',
-                                    'name' => 'Тип провала',
+                                    'code' => 'op_prospects_type',
+                                    'name' => 'Перспективность',
                                     'list' =>  [
                                         'code' => $failType['code'],
                                         // 'name' =>  'В работе' //'В работе'
@@ -235,12 +235,24 @@ class BitrixListFlowService
                                 }
                             }
                         }
+                    } else {
+
+                        // если не отказ - перспективная
+                        $failTypeItemItem = [
+                            'code' => 'op_prospects_type',
+                            'name' => 'Перспективность',
+                            'list' =>  [
+                                'code' => 'op_prospects_good',
+                                // 'name' =>  'В работе' //'В работе'
+                            ],
+                        ];
+                        array_push($xoFields, $failTypeItemItem);
                     }
                 }
             }
 
             foreach ($bitrixLists as $bitrixList) {
-                if($bitrixList['type'] !== 'presentation'){
+                if ($bitrixList['type'] !== 'presentation') {
                     $fieldsData = [
                         'NAME' => $evTypeName . ' ' . $eventActionName
                     ];
@@ -249,36 +261,33 @@ class BitrixListFlowService
                         $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $xoValue['code'];
                         $btxId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, null);
                         if (!empty($xoValue)) {
-    
-    
-    
+
+
+
                             if (!empty($xoValue['value'])) {
                                 $fieldsData[$btxId] = $xoValue['value'];
                                 $currentDataField[$btxId] = $xoValue['value'];
                             }
-    
+
                             if (!empty($xoValue['list'])) {
                                 $btxItemId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, $xoValue['list']['code']);
                                 $currentDataField[$btxId] = [
-    
+
                                     $btxItemId =>  $xoValue['list']['code']
                                 ];
-    
+
                                 $fieldsData[$btxId] =  $btxItemId;
                             }
                         }
                         // array_push($fieldsData, $currentDataField);
                     }
-    
+
                     BitrixListService::setItem(
                         $hook,
                         $bitrixList['bitrixId'],
                         $fieldsData
                     );
-
-
                 }
-              
             }
         } catch (\Throwable $th) {
             $errorMessages =  [
