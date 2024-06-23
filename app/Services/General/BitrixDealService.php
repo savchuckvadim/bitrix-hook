@@ -332,7 +332,13 @@ class BitrixDealService
                     $stageSuphicks = 'warm';
                 } else if ($eventType == 'presentation') {
                     $stageSuphicks = 'pres';
+                } else if ($eventType == 'hot') {
+                    $stageSuphicks = 'in_progress';
+                } else if ($eventType == 'moneyAwait') {
+                    $stageSuphicks = 'money_await';
                 }
+                
+                
             }
         } else {
             if ($eventAction == 'done') {
