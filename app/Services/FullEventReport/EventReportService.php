@@ -589,10 +589,10 @@ class EventReportService
                 $currentFailComments = $this->currentBtxEntity['UF_CRM_OP_FAIL_COMMENTS'];
             }
         }
-        Log::channel('telegram')->info('TST', [
-            'currentPresComments' => $currentPresComments,
-            'currentFailComments' => $currentFailComments,
-        ]);
+        // Log::channel('telegram')->info('TST', [
+        //     'currentPresComments' => $currentPresComments,
+        //     'currentFailComments' => $currentFailComments,
+        // ]);
         if ($currentReportEventType) {
 
 
@@ -986,7 +986,11 @@ class EventReportService
         //         );
         //     }
         // }
+        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+            'isPresentationDone' => $this->isPresentationDone,
+            'currentReportEventType' => $this->currentReportEventType,
 
+        ]);
         if ($this->isPresentationDone && $this->currentReportEventType !== 'presentation') { // проведенная презентация будет isUnplanned
             //в current task не будет id сделки презентации
             // в таком случае предполагается, что сделки презентация еще не существует

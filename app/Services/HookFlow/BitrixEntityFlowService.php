@@ -460,9 +460,9 @@ class BitrixEntityFlowService
 
         if ($workStatus == 'fail') {
         }
-        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            'updatedFields' => $updatedFields
-        ]);
+        // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+        //     'updatedFields' => $updatedFields
+        // ]);
         return $updatedFields;
     }
 
