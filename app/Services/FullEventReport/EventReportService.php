@@ -751,7 +751,7 @@ class EventReportService
             $this->currentReportEventName,
             $this->currentPlanEventName,
             $this->comment,
-            $currentFieldsForUpdate
+            $reportFields
         );
     }
 
