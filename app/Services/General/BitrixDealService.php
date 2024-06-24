@@ -144,7 +144,7 @@ class BitrixDealService
         $fieldsData
     ) {
 
-        $methodSmart = '/crm.deal.update.json';
+        $methodSmart = '/crm.deal.update';
         $url = $hook . $methodSmart;
         $resultFields = null;
         $data = [
