@@ -418,6 +418,15 @@ class BitrixEntityFlowService
 
 
                             case 'pres_count':
+                                $count = 0;
+                                if (!empty($currentBtxEntity)) {
+                                    if (!empty($currentBtxEntity['UF_CRM_' . $pField['bitrixId']])) {
+                                        $count = (int)$currentBtxEntity['UF_CRM_' . $pField['bitrixId']];
+                                    }
+                                }
+                                $count = $count + 1;
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $count;
+                                break;
                             case 'pres_comments':
                                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $comment;
                                 break;
@@ -430,7 +439,7 @@ class BitrixEntityFlowService
                             case 'op_fail_comments':
                                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $comment;
                                 break;
-                            
+
                             default:
                                 # code...
                                 break;
@@ -628,13 +637,18 @@ class BitrixEntityFlowService
         // success
         // fail
 
-        // 0: {id: 0, code: "garant", name: "Гарант/Запрет"}
-        // // 1: {id: 1, code: "go", name: "Покупает ГО"}
-        // // 2: {id: 2, code: "territory", name: "Чужая территория"}
-        // // 3: {id: 3, code: "accountant", name: "Бухприх"}
-        // // 4: {id: 4, code: "autsorc", name: "Аутсорсинг"}
-        // // 5: {id: 5, code: "depend", name: "Несамостоятельная организация"}
-        // // 6: {id: 6, code: "failure", name: "Отказ"}
+
+        // {id: 0, code: "op_prospects_good", name: "Перспективная", isActive: false} 
+        // {id: 1, code: "op_prospects_good", name: "Нет перспектив", isActive: false} 
+        // {id: 2, code: "garant", name: "Гарант/Запрет", isActive: true} 
+        // {id: 3, code: "go", name: "Покупает ГО", isActive: true} 
+        // {id: 4, code: "territory", name: "Чужая территория", isActive: true} 
+        // {id: 5, code: "accountant", name: "Бухприх", isActive: true} 
+        // {id: 6, code: "autsorc", name: "Аутсорсинг", isActive: true} 
+        // {id: 7, code: "depend", name: "Несамостоятельная организация", isActive: true} 
+        // {id: 8, code: "op_prospects_nophone", name: "Недозвон", isActive: true}
+        // {id: 9, code: "op_prospects_company", name: "Компания не существует", isActive: true}
+        // {id: 10, code: "failure", name: "Отказ", isActive: true}
 
 
         // Перспективность	op_prospects_type	Перспективная	op_prospects_good	calling
