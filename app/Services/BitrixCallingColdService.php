@@ -606,9 +606,25 @@ class BitrixCallingColdService
         if (!empty($this->portalDealData['categories'])) {
             foreach ($this->portalDealData['categories'] as $category) {
                 $categoryId = $category['bitrixId'];
-                array_push($execStages, "C" . $categoryId . ":WON");
+                if (!empty($category['stages'])) {
+                    foreach ($category['stages'] as $stage) {
+                        if ($stage['code']) {
+                            if (
+                                (strpos($stage['code'], 'fail') === false) &&
+                                (strpos($stage['code'], 'success') === false)
+                            ) {
+                                array_push($execStages, "C" . $categoryId . ":" . $stage['bitrixId']);
+                            }
+                        }
+                    }
+                }
             }
         }
+        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+            'execStages' => $execStages,
+
+
+        ]);
         $currentDeals = BitrixDealService::getDealList(
             $this->hook,
             [
@@ -618,7 +634,7 @@ class BitrixCallingColdService
                     // "=CATEGORY_ID" => $currentCategoryBtxId,
                     'COMPANY_ID' => $this->entityId,
                     "ASSIGNED_BY_ID" => $this->responsibleId,
-                    "!=STAGE_ID" =>  $execStages
+                    "!=STAGE_ID" =>  ["C" . $categoryId . ":WON"]
 
                 ],
                 'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
@@ -627,9 +643,22 @@ class BitrixCallingColdService
 
 
         );
+        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+            'currentDeals' => count($currentDeals),
+
+
+        ]);
         foreach ($currentDeals as $bxDeal) {
             if (!empty($bxDeal)) {
-                if (!empty($bxDeal['ID'])) {
+                if (!empty($bxDeal['ID']) && !empty($bxDeal['CATEGORY_ID'])) {
+                    if (!empty($this->portalDealData['categories'])) {
+                        foreach ($this->portalDealData['categories'] as $category) {
+                            $categoryId = $category['bitrixId'];
+
+                            if ($bxDeal['CATEGORY_ID'] === $categoryId) {
+                            }
+                        }
+                    }
                     BitrixDealService::updateDeal(
                         $this->hook,
                         $bxDeal['ID'],
