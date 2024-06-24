@@ -658,7 +658,7 @@ class BitrixCallingColdService
                                 BitrixDealService::updateDeal(
                                     $this->hook,
                                     $bxDeal['ID'],
-                                    ['STAGE_ID' => 'C' . $categoryId . ':LOSE', 'STAGE_ID' => 'C' . $categoryId . ':APOLOGY']
+                                    ['STAGE_ID' => 'C' . $categoryId . ':LOSE']
                                 );
                             }
                         }
