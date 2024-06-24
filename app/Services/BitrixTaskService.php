@@ -50,7 +50,7 @@ class BitrixTaskService
         //TODO
         //type - cold warm presentation hot
         $isXO = false;
-        if ( $type == 'cold' || $type == 'xo') {
+        if ($type == 'cold' || $type == 'xo') {
             $stringType = 'Холодный обзвон ';
             $isXO = true;
         }
@@ -102,12 +102,18 @@ class BitrixTaskService
 
             $crmItems = [...$tasksCrmRelations];
 
-            if ($currentSmartItemId) {
-                $crmItems = [$smartId  . $currentSmartItemId, ...$tasksCrmRelations];
-            }
-            $moscowTime = $deadline;
-            $nowDate = now();
+
             if ($domain === 'alfacentr.bitrix24.ru') {
+
+
+
+                if ($currentSmartItemId) {
+                    $crmItems = [$smartId  . $currentSmartItemId, ...$tasksCrmRelations];
+                }
+                $moscowTime = $deadline;
+                $nowDate = now();
+
+
                 $crmItems = [$smartId . ''  . '' . $currentSmartItemId];
 
                 $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
@@ -118,13 +124,15 @@ class BitrixTaskService
 
             $taskTitle = $stringType . '  ' . $name . '  ' . $deadline;
 
+            if (!$isXO) {
+                if (!empty($currentDealsItemIds)) {
+                    foreach ($currentDealsItemIds as $dealId) {
 
-            if (!empty($currentDealsItemIds)) {
-                foreach ($currentDealsItemIds as $dealId) {
-
-                    array_push($crmItems, 'D_' . $dealId);
+                        array_push($crmItems, 'D_' . $dealId);
+                    }
                 }
             }
+
 
             $taskData =  [
                 'fields' => [
@@ -152,7 +160,7 @@ class BitrixTaskService
                         $responsibleId,
                         !$isXO, //$isNeedCompleteOnlyTypeTasks
                         $stringType,
-                        $isXO
+     
                     );
                 } else {
                     $idsForComplete = [
@@ -161,14 +169,14 @@ class BitrixTaskService
                 }
             }
 
-            Log::channel('telegram')->info(
-                'TST TASKS ID',
-                [
-                    'currentTaskId' => $currentTaskId,
-                    'idsForComplete' => $idsForComplete,
-                    'isXO' => $isXO,
-                ]
-            );
+            // Log::channel('telegram')->info(
+            //     'TST TASKS ID',
+            //     [
+            //         'currentTaskId' => $currentTaskId,
+            //         'idsForComplete' => $idsForComplete,
+            //         'isXO' => $isXO,
+            //     ]
+            // );
             if ($idsForComplete) {
                 $this->completeTask($hook, $idsForComplete);
             }
@@ -286,7 +294,7 @@ class BitrixTaskService
         $responsibleId,
         $isNeedCompleteOnlyTypeTasks,
         $typeNameString,
-        $isXO
+  
     ) {
         $resultIds = [];
         try {
@@ -296,14 +304,14 @@ class BitrixTaskService
             // for get
             $filter = [
                 'GROUP_ID' => $callingTaskGroupId,
-                // 'UF_CRM_TASK' => $crmForCurrent,
+                'UF_CRM_TASK' => $crmForCurrent,
                 'RESPONSIBLE_ID' => $responsibleId,
                 '!=STATUS' => 5, // Исключаем задачи со статусом "завершена"
 
             ];
-            if (!$isXO) {
-                $filter['UF_CRM_TASK'] = $crmForCurrent;
-            }
+            // if (!$isXO) {
+            //     $filter['UF_CRM_TASK'] = $crmForCurrent;
+            // }
             // foreach ($crmForCurrent as $id) {
             //     $filter[] = [
             //         'LOGIC' => 'OR',
