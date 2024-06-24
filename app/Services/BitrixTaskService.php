@@ -53,7 +53,7 @@ class BitrixTaskService
         if ($isXO) {
             $stringType = 'Холодный обзвон ';
         }
-        if ($type == 'warm' || $type == 'call' ) {
+        if ($type == 'warm' || $type == 'call') {
             $stringType = 'Холодный обзвон ';
         }
 
@@ -157,14 +157,12 @@ class BitrixTaskService
                         $currentTaskId
                     ];
                 }
-                
-               
             }
 
-        Log::channel('telegram')->info(
-            'TST TASKS ID',
-            ['currentTaskId' => $currentTaskId]
-        );
+            Log::channel('telegram')->info(
+                'TST TASKS ID',
+                ['currentTaskId' => $currentTaskId]
+            );
             $createdTask = BitrixGeneralService::createTask(
                 'Bitrix Task Service create task',
                 $hook,
@@ -296,7 +294,7 @@ class BitrixTaskService
                 $filter['%TITLE']  =   $typeNameString;
             }
 
-
+            Log::info('TST TASKS', ['$filter' => $filter]);
             $select = [
                 'ID',
                 'TITLE',
