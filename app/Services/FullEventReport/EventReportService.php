@@ -1015,8 +1015,13 @@ class EventReportService
 
     
             ]);
-            Log::info('HOOK TEST CURRENTENTITY', [
+            Log::info('HOOK TEST unplannedPresDeal', [
                 'unplannedPresDeal' => $unplannedPresDeal,
+
+    
+            ]);
+            Log::info('HOOK TEST currentBtxDeals', [
+                'currentBtxDeals' => $this->currentBtxDeals,
 
     
             ]);
@@ -1047,12 +1052,12 @@ class EventReportService
                         '$fields'
                     );
                     Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                        'unplannedPresDeal' => $unplannedPresDeal,
+                        'unplannedPresDeals' => $unplannedPresDeals,
         
             
                     ]);
                     Log::info('HOOK TEST CURRENTENTITY', [
-                        'unplannedPresDeal' => $unplannedPresDeal,
+                        'unplannedPresDeals' => $unplannedPresDeals,
         
             
                     ]);

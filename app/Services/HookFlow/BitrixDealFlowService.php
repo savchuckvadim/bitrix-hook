@@ -58,9 +58,10 @@ class BitrixDealFlowService
 
             ]);
             Log::info('HOOK TEST CURRENTENTITY', [
+                'eventAction' => $eventAction,
                 'eventType' => $eventType,
                 'currentBtxDeals' => $currentCategoryDatas,
-                'eventAction' => $eventAction,
+               
 
 
             ]);
