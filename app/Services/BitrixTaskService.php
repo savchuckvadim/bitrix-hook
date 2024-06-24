@@ -49,7 +49,11 @@ class BitrixTaskService
 
         //TODO
         //type - cold warm presentation hot
-        if ($type == 'cold' || $type == 'xo') {
+        $isXO = $type == 'cold' || $type == 'xo';
+        if ($isXO) {
+            $stringType = 'Холодный обзвон ';
+        }
+        if ($type == 'warm' || $type == 'call' ) {
             $stringType = 'Холодный обзвон ';
         }
 
@@ -145,7 +149,7 @@ class BitrixTaskService
                         $callingTaskGroupId,
                         $crmItems,
                         $responsibleId,
-                        true, //$isNeedCompleteOnlyTypeTasks
+                        !$isXO, //$isNeedCompleteOnlyTypeTasks
                         $stringType
                     );
                 } else {
