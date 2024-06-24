@@ -184,10 +184,7 @@ class ReportController extends Controller
                     }
                 }
 
-                Log::info('GET COMPANY AND DEAL', [
-                    'currentDeal' => $currentDeal,
-                    'currentcompany' => $currentCompany
-                ]);
+
                 if (!empty($currentDeal) && !empty($currentCompany)) {
 
                     if (isset($currentDeal['UF_CRM_PRES_COUNT'])) {

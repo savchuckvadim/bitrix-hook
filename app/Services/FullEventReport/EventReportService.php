@@ -557,6 +557,132 @@ class EventReportService
     //entity
     protected function getEntityFlow()
     {
+        $currentReportEventType = $this->currentReportEventType;
+        $currentPlanEventType = $this->currentPlanEventType;
+        $isPresentationDone = $this->isPresentationDone;
+
+
+        $reportFields = [];
+        $reportFields['manager_op'] = $this->planResponsibleId;
+        $companyPresCount = 0;
+        $dealPresCount = 0;
+        if (!empty($this->currentTask)) {
+            if (!empty($this->currentTask['presentation'])) {
+
+                if (!empty($this->currentTask['presentation']['company'])) {
+                    $companyPresCount = (int)$this->currentTask['presentation']['company'];
+                }
+                if (!empty($this->currentTask['presentation']['deal'])) {
+                    $dealPresCount = (int)$this->currentTask['presentation']['deal'];
+                }
+            }
+        }
+
+        $currentPresComments = [];
+        $currentFailComments = [];
+        if (isset($this->currentBtxEntity)) {
+            if (isset($this->currentBtxEntity['UF_CRM_PRES_COMMENTS'])) {
+                $currentPresComments = $this->currentBtxEntity['UF_CRM_PRES_COMMENTS'];
+            }
+
+            if (isset($this->currentBtxEntity['UF_CRM_PRES_COMMENTS'])) {
+                $currentFailComments = $this->currentBtxEntity['UF_CRM_OP_FAIL_COMMENTS'];
+            }
+        }
+        Log::channel('telegram')->info('TST', [
+            'currentPresComments' => $currentPresComments,
+            'currentFailComments' => $currentFailComments,
+        ]);
+        if ($currentReportEventType) {
+
+
+            //general
+            $reportFields['call_last_date'] = $this->nowDate;
+
+            switch ($currentReportEventType) {
+                case 'xo':
+                    $reportFields['xo_date'] = null;
+
+                    break;
+                case 'warm':
+                    # code...
+                    break;
+                case 'hot':
+                    # code...
+                    break;
+                case 'moneyAwait':
+
+
+
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        }
+
+        $planFields = [];
+
+        if ($currentPlanEventType) {
+
+
+            //general
+            $reportFields['call_next_date'] = $this->planDeadline;
+            $reportFields['call_next_name'] = $this->currentPlanEventName;
+            $reportFields['xo_responsible'] = $this->planResponsibleId;
+            $reportFields['xo_created'] = $this->planResponsibleId;
+            switch ($currentReportEventType) {
+                case 'xo':
+                    $reportFields['xo_date'] = $this->planDeadline;
+                    $reportFields['xo_name'] = $this->currentPlanEventName;
+                    break;
+                case 'warm':
+                    # code...
+                    break;
+                case 'hot':
+                    # code...
+                    break;
+                case 'moneyAwait':
+                    # code...
+                    break;
+                case 'presentation':
+
+                    $reportFields['last_pres_plan_date'] = $this->planDeadline;
+                    $reportFields['last_pres_plan_responsible'] = 'user_' . $this->planResponsibleId;
+                    $reportFields['next_pres_plan_date'] = $this->planDeadline;
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+        }
+
+
+        Log::channel('telegram')->info('TST', [
+            'currentPresComments' => $currentPresComments,
+            'currentFailComments' => $currentFailComments,
+        ]);
+        if ($this->isPresentationDone) {
+            array_push($currentPresComments, $this->comment);
+
+
+            $reportFields['last_pres_done_date'] = $this->nowDate;
+            $reportFields['last_pres_done_responsible'] = $this->planResponsibleId;
+            $reportFields['pres_count'] = $companyPresCount + 1;
+            $reportFields['pres_comments'] = $currentPresComments;
+        }
+
+        Log::channel('telegram')->info('TST', [
+            'reportFields' => $reportFields,
+     
+        ]);
+        $presentationFields = [];
+
+
+
+
+
         $currentFieldsForUpdate = [];
         $fieldsPresentationCodes = [
             'next_pres_plan_date', // ОП Дата назначенной презентации
