@@ -611,6 +611,25 @@ class EventReportService
             }
         }
 
+        //presentation done with unplanned
+        if ($this->isPresentationDone) {
+            array_push($currentPresComments, $this->comment);
+
+
+            $reportFields['last_pres_done_date'] = $this->nowDate;
+            $reportFields['last_pres_done_responsible'] = 'user_' . $this->planResponsibleId;
+            $reportFields['pres_count'] = $companyPresCount + 1;
+            $reportFields['pres_comments'] = $currentPresComments;
+            if ($currentReportEventType !== 'presentation') {
+                $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
+                $reportFields['last_pres_plan_responsible'] = 'user_' . $this->planResponsibleId;
+                $reportFields['next_pres_plan_date'] = $this->nowDate;  //дата на которую запланировали през
+
+            }
+        }
+
+
+        //plan
         $planFields = [];
 
         if ($currentPlanEventType) {
@@ -629,9 +648,9 @@ class EventReportService
 
                 case 'presentation':
 
-                    $reportFields['last_pres_plan_date'] = $this->planDeadline;
+                    $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
                     $reportFields['last_pres_plan_responsible'] = 'user_' . $this->planResponsibleId;
-                    $reportFields['next_pres_plan_date'] = $this->planDeadline;
+                    $reportFields['next_pres_plan_date'] = $this->planDeadline;  //дата на которую запланировали през
                     break;
                 default:
                     # code...
@@ -644,15 +663,7 @@ class EventReportService
             'currentPresComments' => $currentPresComments,
             'currentFailComments' => $currentFailComments,
         ]);
-        if ($this->isPresentationDone) {
-        array_push($currentPresComments, $this->comment);
 
-
-        $reportFields['last_pres_done_date'] = $this->nowDate;
-        $reportFields['last_pres_done_responsible'] = $this->planResponsibleId;
-        $reportFields['pres_count'] = $companyPresCount + 1;
-        $reportFields['pres_comments'] = $currentPresComments;
-        }
 
         Log::channel('telegram')->info('TST', [
             'reportFields' => $reportFields,
