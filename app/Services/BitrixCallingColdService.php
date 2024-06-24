@@ -651,6 +651,7 @@ class BitrixCallingColdService
 
 
                 ]);
+                
                 if (!empty($currentDeals)) {
                     foreach ($currentDeals as $bxDeal) {
                         if (!empty($bxDeal)) {
@@ -658,7 +659,7 @@ class BitrixCallingColdService
                                 BitrixDealService::updateDeal(
                                     $this->hook,
                                     $bxDeal['ID'],
-                                    ['STAGE_ID' => 'C' . $categoryId . ':LOSE']
+                                    ['STAGE_ID' => 'C' . $categoryId . ':APOLOGY']
                                 );
                             }
                         }
