@@ -604,17 +604,6 @@ class EventReportService
                     $reportFields['xo_date'] = null;
 
                     break;
-                case 'warm':
-                    # code...
-                    break;
-                case 'hot':
-                    # code...
-                    break;
-                case 'moneyAwait':
-
-
-
-                    break;
 
                 default:
                     # code...
@@ -637,15 +626,7 @@ class EventReportService
                     $reportFields['xo_date'] = $this->planDeadline;
                     $reportFields['xo_name'] = $this->currentPlanEventName;
                     break;
-                case 'warm':
-                    # code...
-                    break;
-                case 'hot':
-                    # code...
-                    break;
-                case 'moneyAwait':
-                    # code...
-                    break;
+
                 case 'presentation':
 
                     $reportFields['last_pres_plan_date'] = $this->planDeadline;
@@ -663,19 +644,19 @@ class EventReportService
             'currentPresComments' => $currentPresComments,
             'currentFailComments' => $currentFailComments,
         ]);
-        // if ($this->isPresentationDone) {
-            array_push($currentPresComments, $this->comment);
+        if ($this->isPresentationDone) {
+        array_push($currentPresComments, $this->comment);
 
 
-            $reportFields['last_pres_done_date'] = $this->nowDate;
-            $reportFields['last_pres_done_responsible'] = $this->planResponsibleId;
-            $reportFields['pres_count'] = $companyPresCount + 1;
-            $reportFields['pres_comments'] = $currentPresComments;
-        // }
+        $reportFields['last_pres_done_date'] = $this->nowDate;
+        $reportFields['last_pres_done_responsible'] = $this->planResponsibleId;
+        $reportFields['pres_count'] = $companyPresCount + 1;
+        $reportFields['pres_comments'] = $currentPresComments;
+        }
 
         Log::channel('telegram')->info('TST', [
             'reportFields' => $reportFields,
-     
+
         ]);
         $presentationFields = [];
 
