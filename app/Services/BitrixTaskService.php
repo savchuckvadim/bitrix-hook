@@ -162,7 +162,10 @@ class BitrixTaskService
 
             Log::channel('telegram')->info(
                 'TST TASKS ID',
-                ['currentTaskId' => $currentTaskId]
+                [
+                    'currentTaskId' => $currentTaskId,
+                    'idsForComplete' => $idsForComplete,
+                ]
             );
             $createdTask = BitrixGeneralService::createTask(
                 'Bitrix Task Service create task',
