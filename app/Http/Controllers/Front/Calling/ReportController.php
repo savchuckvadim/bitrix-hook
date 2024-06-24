@@ -190,14 +190,14 @@ class ReportController extends Controller
                 ]);
                 if (!empty($currentDeal) && !empty($currentCompany)) {
 
-                    if (!empty($currentDeal['UF_CRM_PRES_COUNT'])) {
+                    if (isset($currentDeal['UF_CRM_PRES_COUNT'])) {
                         $result['counts']['deal'] = (int)$currentDeal['UF_CRM_PRES_COUNT'];
                     }
-                    if (!empty($currentCompany['UF_CRM_1709807026'])) {
+                    if (isset($currentCompany['UF_CRM_1709807026'])) {
                         $result['counts']['company'] = (int)$currentCompany['UF_CRM_PRES_COUNT'];
                     }
 
-                    if (!empty($currentCompany['UF_CRM_PRES_COUNT'])) {
+                    if (isset($currentCompany['UF_CRM_PRES_COUNT'])) {
                         $result['counts']['company'] = (int)$currentCompany['UF_CRM_PRES_COUNT'];
                     }
                 }
