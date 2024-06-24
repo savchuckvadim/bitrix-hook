@@ -615,6 +615,12 @@ class BitrixCallingColdService
             true, //is result for report
             '$fields'
         );
+
+        Log::info('HOOK TEST COLD', [
+            'planDeals' => $planDeals,
+
+
+        ]);
         return [
             'planDeals' => $planDeals,
         ];

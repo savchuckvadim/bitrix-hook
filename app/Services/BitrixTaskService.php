@@ -125,14 +125,14 @@ class BitrixTaskService
 
             $taskTitle = $stringType . '  ' . $name . '  ' . $deadline;
 
-            if (!$isXO) {
+            // if (!$isXO) {
                 if (!empty($currentDealsItemIds)) {
                     foreach ($currentDealsItemIds as $dealId) {
 
                         array_push($crmItems, 'D_' . $dealId);
                     }
                 }
-            }
+            // }
 
 
             $taskData =  [
