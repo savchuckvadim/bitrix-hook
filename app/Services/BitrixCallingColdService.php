@@ -618,6 +618,8 @@ class BitrixCallingColdService
                         if ($stage['code']) {
                             if (
                                 (strpos($stage['code'], 'fail') === false) &&
+                                (strpos($stage['code'], 'noresult') === false) &&
+                                (strpos($stage['code'], 'double') === false) &&
                                 (strpos($stage['code'], 'success') === false)
                             ) {
                                 array_push($includedStages, "C" . $categoryId . ":" . $stage['bitrixId']);
@@ -656,7 +658,7 @@ class BitrixCallingColdService
                                 BitrixDealService::updateDeal(
                                     $this->hook,
                                     $bxDeal['ID'],
-                                    ['STAGE_ID' => 'C' . $categoryId . ':LOSE']
+                                    ['STAGE_ID' => 'C' . $categoryId . ':LOSE', 'STAGE_ID' => 'C' . $categoryId . ':APOLOGY']
                                 );
                             }
                         }
