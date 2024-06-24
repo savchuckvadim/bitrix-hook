@@ -663,7 +663,7 @@ class EventReportService
             'currentPresComments' => $currentPresComments,
             'currentFailComments' => $currentFailComments,
         ]);
-        if ($this->isPresentationDone) {
+        // if ($this->isPresentationDone) {
             array_push($currentPresComments, $this->comment);
 
 
@@ -671,7 +671,7 @@ class EventReportService
             $reportFields['last_pres_done_responsible'] = $this->planResponsibleId;
             $reportFields['pres_count'] = $companyPresCount + 1;
             $reportFields['pres_comments'] = $currentPresComments;
-        }
+        // }
 
         Log::channel('telegram')->info('TST', [
             'reportFields' => $reportFields,
