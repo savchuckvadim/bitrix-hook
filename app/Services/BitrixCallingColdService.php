@@ -606,7 +606,7 @@ class BitrixCallingColdService
         if (!empty($this->portalDealData['categories'])) {
             foreach ($this->portalDealData['categories'] as $category) {
 
-                $execStages = [];
+                $includedStages = [];
 
 
                 $categoryId = $category['bitrixId'];
@@ -614,8 +614,8 @@ class BitrixCallingColdService
                     foreach ($category['stages'] as $stage) {
                         if ($stage['code']) {
                             if (
-                                (strpos($stage['code'], 'fail') === true) &&
-                                (strpos($stage['code'], 'success') === true)
+                                (strpos($stage['code'], 'fail') === false) &&
+                                (strpos($stage['code'], 'success') === false)
                             ) {
                                 array_push($execStages, "C" . $categoryId . ":" . $stage['bitrixId']);
                             }
@@ -632,7 +632,7 @@ class BitrixCallingColdService
                             // "=CATEGORY_ID" => $currentCategoryBtxId,
                             'COMPANY_ID' => $this->entityId,
                             "ASSIGNED_BY_ID" => $this->responsibleId,
-                            "!=STAGE_ID" =>  $execStages
+                            "=STAGE_ID" =>  $includedStages
 
                         ],
                         'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
@@ -643,10 +643,10 @@ class BitrixCallingColdService
                 );
                 Log::info('HOOK TEST CURRENTENTITY', [
                     'currentDeals' => $currentDeals,
-        
-        
+
+
                 ]);
-        
+
                 foreach ($currentDeals as $bxDeal) {
                     if (!empty($bxDeal)) {
                         if (!empty($bxDeal['ID'])) {
