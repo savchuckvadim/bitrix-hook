@@ -659,16 +659,16 @@ class EventReportService
         }
 
 
-        Log::channel('telegram')->info('TST', [
-            'currentPresComments' => $currentPresComments,
-            'currentFailComments' => $currentFailComments,
-        ]);
+        // Log::channel('telegram')->info('TST', [
+        //     'currentPresComments' => $currentPresComments,
+        //     'currentFailComments' => $currentFailComments,
+        // ]);
 
 
-        Log::channel('telegram')->info('TST', [
-            'reportFields' => $reportFields,
+        // Log::channel('telegram')->info('TST', [
+        //     'reportFields' => $reportFields,
 
-        ]);
+        // ]);
         $presentationFields = [];
 
 
@@ -1010,7 +1010,16 @@ class EventReportService
                 true,
                 '$fields'
             );
+            Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                'unplannedPresDeal' => $unplannedPresDeal,
 
+    
+            ]);
+            Log::info('HOOK TEST CURRENTENTITY', [
+                'unplannedPresDeal' => $unplannedPresDeal,
+
+    
+            ]);
             if (!empty($unplannedPresDeal)) {
                 if (isset($unplannedPresDeal['ID'])) {
 
@@ -1037,7 +1046,16 @@ class EventReportService
                         true,
                         '$fields'
                     );
-
+                    Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                        'unplannedPresDeal' => $unplannedPresDeal,
+        
+            
+                    ]);
+                    Log::info('HOOK TEST CURRENTENTITY', [
+                        'unplannedPresDeal' => $unplannedPresDeal,
+        
+            
+                    ]);
                     foreach ($this->currentBtxDeals as $cbtxdeal) {
                         if ($cbtxdeal['ID'] !== $unplannedPresDealId) {
                             array_push($currentBtxDeals, $cbtxdeal);
@@ -1057,6 +1075,11 @@ class EventReportService
         // $this->currentBtxDeals должна отсутствовать сделка презентации созданная при unplanned, 
         // которая пушится туда  при unplanned - чтобы были обработаны базовая сделка 
         // в соответствии с проведенной през
+        Log::info('HOOK TEST currentBtxDeals', [
+            'currentBtxDeals' => $currentBtxDeals,
+
+
+        ]);
         $reportDeals = BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
             $this->hook,
             $currentBtxDeals,

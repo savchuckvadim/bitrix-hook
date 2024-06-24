@@ -269,12 +269,12 @@ class BitrixDealService
                 }
             }
         }
-        // Log::info('DEAL TEST', [
-        //     'resultCategoryDatas' => $resultCategoryDatas,
-        //     // 'targetStageBtxId' => $targetStageBtxId,
-        //     // 'currentCategoryData' => "C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'],
-        //     // 'isCurrentSearched' => $isCurrentSearched,
-        // ]);
+        Log::info('DEAL TEST', [
+            'resultCategoryDatas' => $resultCategoryDatas,
+            'eventType' => $eventType,
+            // 'currentCategoryData' => "C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'],
+            // 'isCurrentSearched' => $isCurrentSearched,
+        ]);
         return $resultCategoryDatas;
     }
 

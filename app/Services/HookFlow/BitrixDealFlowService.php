@@ -46,6 +46,26 @@ class BitrixDealFlowService
             $eventType,
             $eventAction
         );
+        if ($eventAction == 'done') {
+            Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                'currentCategoryDatas' => $currentCategoryDatas,
+
+
+            ]);
+            Log::info('HOOK TEST CURRENTENTITY', [
+                'currentCategoryDatas' => $currentCategoryDatas,
+
+
+            ]);
+            Log::info('HOOK TEST CURRENTENTITY', [
+                'eventType' => $eventType,
+                'currentBtxDeals' => $currentCategoryDatas,
+                'eventAction' => $eventAction,
+
+
+            ]);
+        }
+
         if (!empty($currentCategoryDatas)) {
             foreach ($currentCategoryDatas as $currentCategoryData) {
                 $currentDeal = null;
@@ -58,7 +78,7 @@ class BitrixDealFlowService
                     $isResult,
                 );
 
-       
+
                 // $currentDeal = BitrixDealService::getDealId(
                 //     $hook,
                 //     null,
@@ -97,13 +117,13 @@ class BitrixDealFlowService
                     'currentDealId' => $currentDealId,
                     'currentDeal' => $currentDeal,
                     '$eventType' => $eventType,
-        
+
                 ]);
                 // Log::info('HOOK TEST CURRENTENTITY', [
                 //     'currentDeal' => $currentDeal,
                 //     'targetStageBtxId' => $targetStageBtxId,
                 //     'currentCategoryData' => $currentCategoryData,
-        
+
                 // ]);
 
 
@@ -179,7 +199,7 @@ class BitrixDealFlowService
         $fields
 
     ) {
-       
+
 
 
         $currentDealId = null;
@@ -191,6 +211,10 @@ class BitrixDealFlowService
         );
         if (!empty($currentCategoryDatas)) {
             foreach ($currentCategoryDatas as $currentCategoryData) {
+
+             
+
+
                 if ($currentCategoryData['code'] == 'sales_presentation') {
                     // $currentDeal = null;
 
@@ -251,7 +275,7 @@ class BitrixDealFlowService
                     // }
 
 
-             
+
                     if (!$currentDeal) {
 
                         $fieldsData['TITLE'] = $eventTypeName . ' ' .  $eventName;

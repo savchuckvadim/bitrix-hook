@@ -259,12 +259,12 @@ class BitrixListPresentationFlowService
                 // array_push($fieldsData, $currentDataField);
             }
 
-            Log::channel('telegram')->info('getListPresentationPlanFlow', [
-                'fieldsData' => $fieldsData,
-                'currentDealIds' => $currentDealIds,
+            // Log::channel('telegram')->info('getListPresentationPlanFlow', [
+            //     'fieldsData' => $fieldsData,
+            //     'currentDealIds' => $currentDealIds,
 
 
-            ]);
+            // ]);
 
             BitrixListService::setItem(
                 $hook,
