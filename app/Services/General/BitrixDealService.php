@@ -466,7 +466,11 @@ class BitrixDealService
                 $result = true;
             }
         }
+        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+            'getIsCanDealStageUpdate' => $result,
 
+
+        ]);
         return $result;
     }
 
