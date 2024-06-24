@@ -323,16 +323,14 @@ class BitrixEntityFlowService
 
         $userId = 'user_' . $responsibleId;
 
-        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            'portalFields' => $portalFields,
-        ]);
+     
         //general report fields 
         foreach ($portalFields as $pField) {
             if (!empty($pField) && !empty($pField['code'])) {
                 $portalFieldCode = $pField['code'];
 
 
-                foreach ($currentFieldsForUpdate as $targetFieldCode) {  //массив кодов - которые нужно обновить
+                foreach ($currentFieldsForUpdate as $targetFieldCode => $value) {  //массив кодов - которые нужно обновить
 
 
 
@@ -344,12 +342,22 @@ class BitrixEntityFlowService
                         switch ($portalFieldCode) {
 
                             case 'manager_op':
-                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $userId;
+                            case 'call_next_date':
+                            case 'call_next_name':
+                            case 'call_last_date':
+                            case 'next_pres_plan_date':
+                            case 'last_pres_plan_date':
+                            case 'last_pres_done_date':
+                            case 'last_pres_plan_responsible':
+                            case 'last_pres_done_responsible':
+                            case 'pres_count':
+                            case 'pres_comments':
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $value;
                                 break;
                             case 'op_history':
                             case 'op_mhistory':
-                                $now = now();
-                                $stringComment = $now . ' ' . $currentReportEventName . ' ' . $resultStatus;
+
+                                $stringComment = $nowdate . ' ' . $currentReportEventName . ' ' . $resultStatus;
                                 $updatedFields = $this->getCommentsWithEntity(
                                     $currentBtxEntity,
                                     $pField,
@@ -379,66 +387,66 @@ class BitrixEntityFlowService
 
                                 //xo
 
-                                //warm
-                            case 'call_next_date':   //ОП Дата Следующего звонка
-                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $deadline;
-                                break;
-                            case 'call_next_name':   //ОП Тема Следующего звонка
+                            //     //warm
+                            // case 'call_next_date':   //ОП Дата Следующего звонка
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $deadline;
+                            //     break;
+                            // case 'call_next_name':   //ОП Тема Следующего звонка
 
-                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $currentPlanEventName;
-                                break;
-                            case 'call_last_date':  //ОП Дата последнего звонка 
-                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $nowdate;
-                                break;
-                                //in_progress
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $currentPlanEventName;
+                            //     break;
+                            // case 'call_last_date':  //ОП Дата последнего звонка 
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $nowdate;
+                            //     break;
+                            //     //in_progress
 
-                                //money_a
-
-
-
-                                //presentation
-                            case 'next_pres_plan_date':
-                            case 'last_pres_plan_date':
-                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $deadline;
-                                break;
-
-
-                            case 'last_pres_done_date':
-                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $nowdate;
-                                break;
-
-
-                            case 'last_pres_plan_responsible':
-                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $userId;
-                                break;
-
-                            case 'last_pres_done_responsible':
+                            //     //money_a
 
 
 
+                            //     //presentation
+                            // case 'next_pres_plan_date':
+                            // case 'last_pres_plan_date':
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $deadline;
+                            //     break;
 
-                            case 'pres_count':
-                                $count = 0;
-                                if (!empty($currentBtxEntity)) {
-                                    if (!empty($currentBtxEntity['UF_CRM_' . $pField['bitrixId']])) {
-                                        $count = (int)$currentBtxEntity['UF_CRM_' . $pField['bitrixId']];
-                                    }
-                                }
-                                $count = $count + 1;
-                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $count;
-                                break;
-                            case 'pres_comments':
-                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $comment;
-                                break;
+
+                            // case 'last_pres_done_date':
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $nowdate;
+                            //     break;
+
+
+                            // case 'last_pres_plan_responsible':
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $userId;
+                            //     break;
+
+                            // case 'last_pres_done_responsible':
 
 
 
 
+                            // case 'pres_count':
+                            //     $count = 0;
+                            //     if (!empty($currentBtxEntity)) {
+                            //         if (!empty($currentBtxEntity['UF_CRM_' . $pField['bitrixId']])) {
+                            //             $count = (int)$currentBtxEntity['UF_CRM_' . $pField['bitrixId']];
+                            //         }
+                            //     }
+                            //     $count = $count + 1;
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $count;
+                            //     break;
+                            // case 'pres_comments':
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $comment;
+                            //     break;
 
-                                //fail
-                            case 'op_fail_comments':
-                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $comment;
-                                break;
+
+
+
+
+                            //     //fail
+                            // case 'op_fail_comments':
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $comment;
+                            //     break;
 
                             default:
                                 # code...
@@ -448,70 +456,6 @@ class BitrixEntityFlowService
                 }
             }
         }
-
-        // if ($reportEventType == 'xo') {
-
-        //     foreach ($portalFields as $pField) {
-        //         switch ($pField['code']) {
-        //             case 'call_last_date':
-        //                 $now = date('d.m.Y H:i:s');
-        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $now;
-        //                 break;
-
-        //             default:
-        //                 # code...
-        //                 break;
-        //         }
-        //     }
-        // } else  if ($reportEventType == 'warm') {
-        //     foreach ($portalFields as $pField) {
-        //         switch ($pField['code']) {
-        //             case 'call_last_date':
-        //                 $now = date('d.m.Y H:i:s');
-        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $now;
-        //                 break;
-        //             case 'manager_op':
-        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-        //                 break;
-        //         }
-        //     }
-        // } else if ($reportEventType == 'presentation') {
-        //     foreach ($portalFields as $pField) {
-        //         switch ($pField['code']) {
-
-        //             case 'manager_op':
-        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-        //                 break;
-        //         }
-        //     }
-        // } else if ($reportEventType == 'in_progress') {
-        //     foreach ($portalFields as $pField) {
-        //         switch ($pField['code']) {
-
-        //             case 'manager_op':
-        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-        //                 break;
-        //         }
-        //     }
-        // } else if ($reportEventType == 'money_await') {
-        //     foreach ($portalFields as $pField) {
-        //         switch ($pField['code']) {
-
-        //             case 'manager_op':
-        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-        //                 break;
-        //         }
-        //     }
-        // } else if ($reportEventType == 'other') {
-        //     foreach ($portalFields as $pField) {
-        //         switch ($pField['code']) {
-
-        //             case 'manager_op':
-        //                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
-        //                 break;
-        //         }
-        //     }
-        // }
 
 
         if ($workStatus == 'fail') {
