@@ -389,7 +389,18 @@ class BitrixDealService
         // $eventAction,  // plan done expired fail
     ) {
         $result = false;
+        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+            'currentDeal' => $currentDeal,
+            'targetStageBtxId' => $targetStageBtxId,
+            'currentCategoryData' => $currentCategoryData,
 
+        ]);
+        Log::info('HOOK TEST CURRENTENTITY', [
+            'currentDeal' => $currentDeal,
+            'targetStageBtxId' => $targetStageBtxId,
+            'currentCategoryData' => $currentCategoryData,
+
+        ]);
         if (!empty($currentDeal) && !empty($targetStageBtxId)) {
 
             if ($currentCategoryData['code'] === 'sales_base') {
