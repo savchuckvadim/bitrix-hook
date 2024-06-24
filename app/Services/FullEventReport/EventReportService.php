@@ -356,6 +356,11 @@ class EventReportService
             $this->hook,
             $this->currentTask,
         );
+        Log::info('HOOK TEST currentBtxDeals', [
+            'currentBtxDeals' => $this->currentBtxDeals,
+
+
+        ]);
         if (!empty($currentBtxEntities)) {
             if (!empty($currentBtxEntities['companies'])) {
                 $currentBtxEntity = $currentBtxEntities['companies'][0];
@@ -366,6 +371,12 @@ class EventReportService
         }
         $this->currentBtxEntity  = $currentBtxEntity;
         $this->currentBtxDeals  = $currentBtxDeals;
+
+        Log::info('HOOK TEST currentBtxDeals', [
+            'currentBtxEntity' => $this->currentBtxEntity,
+            'currentBtxDeals' => $this->currentBtxDeals,
+
+        ]);
         // Log::error('APRIL_HOOK portal', ['$portal.lead' => $portal['company']['bitrixfields']]); // массив fields
         // Log::error('APRIL_HOOK portal', ['$portal.company' => $portal['company']['bitrixfields']]); // массив fields
 
