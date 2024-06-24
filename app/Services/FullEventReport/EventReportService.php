@@ -6,6 +6,7 @@ use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\PortalController;
 use App\Jobs\BtxCreateListItemJob;
 use App\Services\BitrixTaskService;
+use App\Services\General\BitrixDealService;
 use App\Services\General\BitrixDepartamentService;
 use App\Services\HookFlow\BitrixDealFlowService;
 use App\Services\HookFlow\BitrixEntityFlowService;
@@ -356,7 +357,7 @@ class EventReportService
             $this->hook,
             $this->currentTask,
         );
-       
+
         if (!empty($currentBtxEntities)) {
             if (!empty($currentBtxEntities['companies'])) {
                 $currentBtxEntity = $currentBtxEntities['companies'][0];
@@ -1020,17 +1021,17 @@ class EventReportService
             Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
                 'unplannedPresDeal' => $unplannedPresDeal,
 
-    
+
             ]);
             Log::info('HOOK TEST unplannedPresDeal', [
                 'unplannedPresDeal' => $unplannedPresDeal,
 
-    
+
             ]);
             Log::info('HOOK TEST currentBtxDeals', [
                 'currentBtxDeals' => $this->currentBtxDeals,
 
-    
+
             ]);
             if (!empty($unplannedPresDeal)) {
                 if (isset($unplannedPresDeal['ID'])) {
@@ -1060,16 +1061,25 @@ class EventReportService
                     );
                     Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
                         'unplannedPresDeals' => $unplannedPresDeals,
-        
-            
+
+
                     ]);
                     Log::info('HOOK TEST CURRENTENTITY', [
                         'unplannedPresDeals' => $unplannedPresDeals,
-        
-            
+
+
                     ]);
                     foreach ($this->currentBtxDeals as $cbtxdeal) {
                         if ($cbtxdeal['ID'] !== $unplannedPresDealId) {
+                            sleep(1);
+                            $updtdbtxdeal = BitrixDealService::getDeal(
+                                $this->hook,
+                                ['id' => $cbtxdeal['ID']]
+                            );
+                            if (!empty($updtdbtxdeal)) {
+
+                                $cbtxdeal = $updtdbtxdeal;
+                            }
                             array_push($currentBtxDeals, $cbtxdeal);
                         }
                     }
@@ -1087,6 +1097,7 @@ class EventReportService
         // $this->currentBtxDeals должна отсутствовать сделка презентации созданная при unplanned, 
         // которая пушится туда  при unplanned - чтобы были обработаны базовая сделка 
         // в соответствии с проведенной през
+        // при этом у основной сделки должна быть обновлена стадия - например на през если была unplanned
         Log::info('HOOK TEST currentBtxDeals', [
             'currentBtxDeals' => $currentBtxDeals,
 

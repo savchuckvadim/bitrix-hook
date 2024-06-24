@@ -151,7 +151,7 @@ class BitrixDealFlowService
 
                     // ]);
                 } else {
-
+                
                     $isCanDealStageUpdate = BitrixDealService::getIsCanDealStageUpdate(
                         $currentDeal, //with ID CATEGORY_ID STAGE_ID
                         $targetStageBtxId,
