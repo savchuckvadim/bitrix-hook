@@ -42,7 +42,8 @@ class BitrixTaskService
 
 
     ) {
-
+        date_default_timezone_set('Europe/Moscow');
+        $nowDate = now();
         $rand = 1;
         sleep($rand);
 
@@ -101,17 +102,17 @@ class BitrixTaskService
             // }
 
             $crmItems = [...$tasksCrmRelations];
+            if ($currentSmartItemId) {
+                $crmItems = [$smartId  . $currentSmartItemId, ...$tasksCrmRelations];
+            }
+            $moscowTime = $deadline;
 
 
             if ($domain === 'alfacentr.bitrix24.ru') {
 
 
 
-                if ($currentSmartItemId) {
-                    $crmItems = [$smartId  . $currentSmartItemId, ...$tasksCrmRelations];
-                }
-                $moscowTime = $deadline;
-                $nowDate = now();
+
 
 
                 $crmItems = [$smartId . ''  . '' . $currentSmartItemId];
@@ -160,7 +161,7 @@ class BitrixTaskService
                         $responsibleId,
                         !$isXO, //$isNeedCompleteOnlyTypeTasks
                         $stringType,
-     
+
                     );
                 } else {
                     $idsForComplete = [
@@ -294,7 +295,7 @@ class BitrixTaskService
         $responsibleId,
         $isNeedCompleteOnlyTypeTasks,
         $typeNameString,
-  
+
     ) {
         $resultIds = [];
         try {
