@@ -581,11 +581,11 @@ class EventReportService
         $currentPresComments = [];
         $currentFailComments = [];
         if (isset($this->currentBtxEntity)) {
-            if (isset($this->currentBtxEntity['UF_CRM_PRES_COMMENTS'])) {
+            if (!empty($this->currentBtxEntity['UF_CRM_PRES_COMMENTS'])) {
                 $currentPresComments = $this->currentBtxEntity['UF_CRM_PRES_COMMENTS'];
             }
 
-            if (isset($this->currentBtxEntity['UF_CRM_PRES_COMMENTS'])) {
+            if (!empty($this->currentBtxEntity['UF_CRM_PRES_COMMENTS'])) {
                 $currentFailComments = $this->currentBtxEntity['UF_CRM_OP_FAIL_COMMENTS'];
             }
         }
