@@ -150,7 +150,8 @@ class BitrixTaskService
                         $crmItems,
                         $responsibleId,
                         !$isXO, //$isNeedCompleteOnlyTypeTasks
-                        $stringType
+                        $stringType,
+                        $isXO
                     );
                 } else {
                     $idsForComplete = [
@@ -275,7 +276,8 @@ class BitrixTaskService
         $crmForCurrent,
         $responsibleId,
         $isNeedCompleteOnlyTypeTasks,
-        $typeNameString
+        $typeNameString,
+        $isXO
     ) {
         $resultIds = [];
         try {
@@ -285,11 +287,14 @@ class BitrixTaskService
             // for get
             $filter = [
                 'GROUP_ID' => $callingTaskGroupId,
-                'UF_CRM_TASK' => $crmForCurrent,
+                // 'UF_CRM_TASK' => $crmForCurrent,
                 'RESPONSIBLE_ID' => $responsibleId,
                 '!=STATUS' => 5, // Исключаем задачи со статусом "завершена"
 
             ];
+            if (!$isXO) {
+                $filter['UF_CRM_TASK'] = $crmForCurrent;
+            }
             // foreach ($crmForCurrent as $id) {
             //     $filter[] = [
             //         'LOGIC' => 'OR',

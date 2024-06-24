@@ -560,12 +560,12 @@ class BitrixEntityFlowService
                 }
             }
         }
-        Log::channel('telegram')->info('HOOK TEST getWorstatusFieldItemValue', [
-            'resultCode' => $resultCode,
-            'planEventType' => $planEventType,
-            'workStatus' => $workStatus,
-            'resultItemBtxId' => $resultItemBtxId,
-        ]);
+        // Log::channel('telegram')->info('HOOK TEST getWorstatusFieldItemValue', [
+        //     'resultCode' => $resultCode,
+        //     'planEventType' => $planEventType,
+        //     'workStatus' => $workStatus,
+        //     'resultItemBtxId' => $resultItemBtxId,
+        // ]);
         return $resultItemBtxId;
     }
 
@@ -669,14 +669,14 @@ class BitrixEntityFlowService
                 }
             }
         }
-        Log::channel('telegram')->info('HOOK TEST getProspectsFieldItemValue', [
-            'resultCode' => $resultCode,
-            'failType' => $failType,
-            'workStatus' => $workStatus,
-            'resultItemBtxId' => $resultItemBtxId,
+        // Log::channel('telegram')->info('HOOK TEST getProspectsFieldItemValue', [
+        //     'resultCode' => $resultCode,
+        //     'failType' => $failType,
+        //     'workStatus' => $workStatus,
+        //     'resultItemBtxId' => $resultItemBtxId,
 
 
-        ]);
+        // ]);
         return $resultItemBtxId;
     }
 
