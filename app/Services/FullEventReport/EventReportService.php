@@ -134,7 +134,7 @@ class EventReportService
         // Форматируем дату и время в нужный формат
         $this->nowDate = $nowDate->format('d.m.Y H:i:s');
 
-        
+
         $domain = $data['domain'];
         $placement = $data['placement'];
 
@@ -269,7 +269,7 @@ class EventReportService
         if (!empty($data['plan']['deadline'])) {
             $this->planDeadline = $data['plan']['deadline'];
         };
-      
+
 
         $this->isPresentationDone = $data['presentation']['isPresentationDone'];
 
@@ -341,7 +341,7 @@ class EventReportService
 
         $currentBtxCompany = null;
         $currentBtxEntity = null;
-        $currentBtxDeals = null;
+        $currentBtxDeals = [];
         // if (!empty($entityType)) {
 
         //     $currentBtxEntity = BitrixGeneralService::getEntity(
@@ -619,10 +619,6 @@ class EventReportService
             array_push($currentFieldsForUpdate, $targedCode);
         }
         $entityService = new BitrixEntityFlowService();
-        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            'currentFieldsForUpdate' => $currentFieldsForUpdate,
-
-        ]);
 
         $entityService->flow(
             $this->portal,
@@ -646,6 +642,8 @@ class EventReportService
             $this->noresultReason,
             $this->currentReportEventType,
             $this->currentReportEventName,
+            $this->currentPlanEventName,
+            $this->comment,
             $currentFieldsForUpdate
         );
     }

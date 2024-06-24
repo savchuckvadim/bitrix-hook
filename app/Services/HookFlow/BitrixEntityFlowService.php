@@ -75,6 +75,8 @@ class BitrixEntityFlowService
         $noResultReason,
         $currentReportEventType,
         $currentReportEventName,
+        $currentPlanEventName,
+        $comment,
         $currentFieldsForUpdate,
 
     ) {
@@ -135,6 +137,8 @@ class BitrixEntityFlowService
                     $noResultReason,
                     $currentReportEventType,
                     $currentReportEventName,
+                    $currentPlanEventName,
+                    $comment,
 
                 );
 
@@ -312,10 +316,12 @@ class BitrixEntityFlowService
         $noResultReason,
         $reportEventType, //xo warm presentaton
         $currentReportEventName,
-
+        $currentPlanEventName,
+        $comment,
 
     ) {
 
+        $userId = 'user_' . $responsibleId;
 
         Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
             'portalFields' => $portalFields,
@@ -332,17 +338,13 @@ class BitrixEntityFlowService
 
                     if ($portalFieldCode === $targetFieldCode) {
                         if ($portalFieldCode == 'op_prospects_type') {
-                            Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                                'op_prospects_type' => $pField['code'],
-
-                            ]);
                         }
 
 
                         switch ($portalFieldCode) {
 
                             case 'manager_op':
-                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = 'user_1';
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $userId;
                                 break;
                             case 'op_history':
                             case 'op_mhistory':
@@ -379,9 +381,15 @@ class BitrixEntityFlowService
 
                                 //warm
                             case 'call_next_date':   //ОП Дата Следующего звонка
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $deadline;
+                                break;
                             case 'call_next_name':   //ОП Тема Следующего звонка
-                            case 'call_last_date':  //ОП Дата последнего звонка
 
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $currentPlanEventName;
+                                break;
+                            case 'call_last_date':  //ОП Дата последнего звонка 
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $nowdate;
+                                break;
                                 //in_progress
 
                                 //money_a
@@ -391,17 +399,38 @@ class BitrixEntityFlowService
                                 //presentation
                             case 'next_pres_plan_date':
                             case 'last_pres_plan_date':
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $deadline;
+                                break;
+
+
                             case 'last_pres_done_date':
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $nowdate;
+                                break;
+
+
                             case 'last_pres_plan_responsible':
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $userId;
+                                break;
+
                             case 'last_pres_done_responsible':
+
+
+
+
                             case 'pres_count':
                             case 'pres_comments':
-                            case 'call_last_date':
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $comment;
+                                break;
+
+
+
 
 
                                 //fail
                             case 'op_fail_comments':
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $comment;
                                 break;
+                            
                             default:
                                 # code...
                                 break;
