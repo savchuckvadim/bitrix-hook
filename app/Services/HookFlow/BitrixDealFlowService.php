@@ -93,7 +93,18 @@ class BitrixDealFlowService
                 ];
 
 
-
+                Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                    'currentDealId' => $currentDealId,
+                    'currentDeal' => $currentDeal,
+                    '$eventType' => $eventType,
+        
+                ]);
+                // Log::info('HOOK TEST CURRENTENTITY', [
+                //     'currentDeal' => $currentDeal,
+                //     'targetStageBtxId' => $targetStageBtxId,
+                //     'currentCategoryData' => $currentCategoryData,
+        
+                // ]);
 
 
                 if (!$currentDealId) {
