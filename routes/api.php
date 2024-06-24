@@ -304,6 +304,10 @@ Route::post('/activity/test', function (Request $request) {
 });
 
 
+Route::post('/pres/count', function (Request $request) {
+    return ReportController::getPresCounts($request);
+});
+
 
 
 

@@ -57,7 +57,7 @@ class BitrixGeneralService
                 ];
             }
 
-           
+
             $response = Http::get($url, $data);
             // $responseData = $response->json();
             $responseData = APIBitrixController::getBitrixRespone($response, 'general service: getSmartItem');
@@ -66,7 +66,7 @@ class BitrixGeneralService
                     $currentSmart =  $responseData['items'][0];
                 }
             }
-           
+
             return $currentSmart;
         } catch (\Throwable $th) {
             return $currentSmart;
@@ -243,7 +243,7 @@ class BitrixGeneralService
 
 
     // general simple entity
-    static function getEntity($hook, $entityType, $entityId)
+    static function getEntity($hook, $entityType, $entityId, $filter = null, $select = null)
     {
         $resultFields = null;
         try {
@@ -267,7 +267,7 @@ class BitrixGeneralService
         }
     }
 
-   
+
 
 
     //task

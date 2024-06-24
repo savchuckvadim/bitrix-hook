@@ -29,7 +29,7 @@ class BitrixDealService
         try {
             $method = '/crm.deal.list.json';
             $url = $hook . $method;
-            $portalDealCategories =  $portalDeal['categories'];
+            // $portalDealCategories =  $portalDeal['categories'];
             $currentCategoryBtxId = $currentCategoryData['bitrixId'];
             if ($companyId) {
                 $data =  [

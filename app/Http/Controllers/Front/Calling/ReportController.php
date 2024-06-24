@@ -5,9 +5,13 @@ namespace App\Http\Controllers\Front\Calling;
 use App\Http\Controllers\APIController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\PortalController;
 use App\Jobs\EventJob;
+use App\Services\BitrixGeneralService;
 use App\Services\FullEventReport\EventReportService;
+use App\Services\General\BitrixDealService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ReportController extends Controller
 {
@@ -82,6 +86,124 @@ class ReportController extends Controller
 
                 );
             }
+        } catch (\Throwable $th) {
+            return APIOnlineController::getError(
+                $th->getMessage(),
+                [
+                    'task' => [
+                        'message' => 'success'
+                    ],
+                    'rq' => $request->all()
+
+                ]
+
+            );
+        }
+    }
+
+    public static function getPresCounts(Request $request)
+    {
+
+        // entities [deal, smart ...]
+        //companyId
+        //userId
+        $result = null;
+        try {
+            $data = $request->all();
+            if (!empty($data['userId'])  && !empty($data['companyId']) && !empty($data['domain'])) {
+
+                $companyId = $data['userId'];
+                $userId = $data['companyId'];
+                $domain = $data['domain'];
+                $result = [
+                    'counts' => [
+                        'deal' => 0,
+                        'company' => 0,
+                    ],
+                    'deal' => null
+                ];
+                $portal = PortalController::getPortal($domain);
+                $portal = $portal['data'];
+                $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+                $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+                $currentCompany = BitrixGeneralService::getEntity($hook, 'company', $companyId);
+
+
+                $btxDealPortalCategories = null;
+                $currentCategoryData  = null;
+                if (!empty($portal['bitrixDeal'])) {
+                    if (!empty($portal['bitrixDeal']['categories'])) {
+                        $btxDealPortalCategories = $portal['bitrixDeal']['categories'];
+                    }
+                }
+
+
+                if (!empty($btxDealPortalCategories)) {
+                    foreach ($btxDealPortalCategories as $btxDealPortalCategory) {
+                        if (!empty($btxDealPortalCategory['code'])) {
+                            if ($btxDealPortalCategory['code'] == "sales_base") {
+                                $currentCategoryData  = $btxDealPortalCategory;
+                            }
+                        }
+                    }
+                }
+                if (!empty($currentCategoryData)) {
+                    $currentDeal = BitrixDealService::getDealId(
+                        $hook,
+                        null, //lead id
+                        $companyId,
+                        $userId,
+                        null, //portalDeal вроде не нужно todo убрать
+                        $currentCategoryData
+                    );
+                    $result['deal'] = $currentDeal;
+                }
+
+                Log::info('GET COMPANY AND DEAL', [
+                    'currentDeal' => $currentDeal,
+                    'currentcompany' => $currentCompany
+                ]);
+                if (!empty($currentDeal) && !empty($currentCompany)) {
+
+                    if (!empty($currentDeal['UF_CRM_PRES_COUNT'])) {
+                        $result['counts']['deal'] = $currentDeal['UF_CRM_PRES_COUNT'];
+                    }
+                    if (!empty($currentCompany['UF_CRM_1709807026'])) {
+                        $result['counts']['company'] = $currentDeal['UF_CRM_PRES_COUNT'];
+                    }
+
+                    if (!empty($currentCompany['UF_CRM_PRES_COUNT'])) {
+                        $result['counts']['company'] = $currentDeal['UF_CRM_PRES_COUNT'];
+                    }
+                }
+
+                return APIOnlineController::getSuccess(
+                    [
+                        'presentation' => $result
+
+                    ]
+
+                );
+            } else {
+                return APIOnlineController::getError(
+                    'is not full data',
+                    [
+                        'rq' => $request->all()
+
+                    ]
+
+                );
+            }
+
+
+            return APIOnlineController::getSuccess(
+                [
+                    'result' => 'success',
+                    'message' => 'job !'
+
+                ]
+
+            );
         } catch (\Throwable $th) {
             return APIOnlineController::getError(
                 $th->getMessage(),
