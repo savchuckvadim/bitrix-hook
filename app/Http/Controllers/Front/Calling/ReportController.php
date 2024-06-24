@@ -176,17 +176,14 @@ class ReportController extends Controller
                                     if (!empty($btxDeal['CATEGORY_ID'])) {
                                         if ($btxDeal['CATEGORY_ID'] == $btxDealPortalCategory['bitrixId']) {
                                             $currentDeal = $btxDeal;
-
                                         }
-
                                     }
                                 }
-                   
                             }
                         }
                     }
                 }
- 
+
                 Log::info('GET COMPANY AND DEAL', [
                     'currentDeal' => $currentDeal,
                     'currentcompany' => $currentCompany
@@ -194,14 +191,14 @@ class ReportController extends Controller
                 if (!empty($currentDeal) && !empty($currentCompany)) {
 
                     if (!empty($currentDeal['UF_CRM_PRES_COUNT'])) {
-                        $result['counts']['deal'] = $currentDeal['UF_CRM_PRES_COUNT'];
+                        $result['counts']['deal'] = (int)$currentDeal['UF_CRM_PRES_COUNT'];
                     }
                     if (!empty($currentCompany['UF_CRM_1709807026'])) {
-                        $result['counts']['company'] = $currentDeal['UF_CRM_PRES_COUNT'];
+                        $result['counts']['company'] = (int)$currentCompany['UF_CRM_PRES_COUNT'];
                     }
 
                     if (!empty($currentCompany['UF_CRM_PRES_COUNT'])) {
-                        $result['counts']['company'] = $currentDeal['UF_CRM_PRES_COUNT'];
+                        $result['counts']['company'] = (int)$currentCompany['UF_CRM_PRES_COUNT'];
                     }
                 }
 
