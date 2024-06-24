@@ -364,8 +364,6 @@ class BitrixDealService
                 } else if ($eventType == 'moneyAwait') {
                     $stageSuphicks = 'money_await';
                 }
-                
-                
             }
         } else {
             if ($eventAction == 'done') {
@@ -453,6 +451,12 @@ class BitrixDealService
                         // if ($eventType === 'xo' || $eventType === 'cold') {
                         if ("C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'] ==  $currentDeal['STAGE_ID']) {
                             $isCurrentSearched = true;
+                            Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                                'isCurrentSearched' => $isCurrentSearched,
+                                'stage' => $stage,
+                                'currentCategoryData' => $currentCategoryData['code'],
+
+                            ]);
                         }
                         // Log::channel('telegram')->info('DEAL TEST', [
                         //     'bitrixId' => $stage['bitrixId'],
@@ -467,17 +471,13 @@ class BitrixDealService
             }
         }
 
-    
+
         Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
             'currentDeal' => $currentDeal,
 
 
         ]);
-        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            'isCurrentSearched' => $isCurrentSearched,
 
-
-        ]);
         Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
             'getIsCanDealStageUpdate' => $result,
 
@@ -485,7 +485,4 @@ class BitrixDealService
         ]);
         return $result;
     }
-
-
-   
 }
