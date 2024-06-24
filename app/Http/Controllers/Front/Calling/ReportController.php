@@ -10,6 +10,7 @@ use App\Jobs\EventJob;
 use App\Services\BitrixGeneralService;
 use App\Services\FullEventReport\EventReportService;
 use App\Services\General\BitrixDealService;
+use App\Services\HookFlow\BitrixEntityFlowService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -107,14 +108,26 @@ class ReportController extends Controller
         // entities [deal, smart ...]
         //companyId
         //userId
+        //currentTask
         $result = null;
         try {
             $data = $request->all();
-            if (!empty($data['userId'])  && !empty($data['companyId']) && !empty($data['domain'])) {
+            if (
+                !empty($data['userId'])  &&
+                !empty($data['companyId']) &&
+                !empty($data['domain']) &&
+                !empty($data['currentTask'])
+            ) {
+
+
 
                 $companyId = $data['userId'];
                 $userId = $data['companyId'];
                 $domain = $data['domain'];
+                $btxDeals = []; //from task
+                $currentTask =  $data['currentTask'];
+
+
                 $result = [
                     'counts' => [
                         'deal' => 0,
@@ -126,7 +139,24 @@ class ReportController extends Controller
                 $portal = $portal['data'];
                 $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
                 $hook = 'https://' . $domain  . '/' . $webhookRestKey;
-                $currentCompany = BitrixGeneralService::getEntity($hook, 'company', $companyId);
+                // $currentCompany = BitrixGeneralService::getEntity($hook, 'company', $companyId);
+
+
+                //from task - получаем из task компании и сделки разных направлений
+
+                $currentBtxEntities =  BitrixEntityFlowService::getEntities(
+                    $hook,
+                    $currentTask,
+                );
+                if (!empty($currentBtxEntities)) {
+                    if (!empty($currentBtxEntities['companies'])) {
+                        $currentCompany = $currentBtxEntities['companies'][0];
+                    }
+                    if (!empty($currentBtxEntities['deals'])) {
+                        $btxDeals = $currentBtxEntities['deals'];
+                    }
+                }
+
 
 
                 $btxDealPortalCategories = null;
@@ -142,23 +172,21 @@ class ReportController extends Controller
                     foreach ($btxDealPortalCategories as $btxDealPortalCategory) {
                         if (!empty($btxDealPortalCategory['code'])) {
                             if ($btxDealPortalCategory['code'] == "sales_base") {
-                                $currentCategoryData  = $btxDealPortalCategory;
+                                foreach ($btxDeals as $btxDeal) {
+                                    if (!empty($btxDeal['CATEGORY_ID'])) {
+                                        if ($btxDeal['CATEGORY_ID'] == $btxDealPortalCategory['bitrixId']) {
+                                            $currentDeal = $btxDeal;
+
+                                        }
+
+                                    }
+                                }
+                   
                             }
                         }
                     }
                 }
-                if (!empty($currentCategoryData)) {
-                    $currentDeal = BitrixDealService::getDealId(
-                        $hook,
-                        null, //lead id
-                        $companyId,
-                        $userId,
-                        null, //portalDeal вроде не нужно todo убрать
-                        $currentCategoryData
-                    );
-                    $result['deal'] = $currentDeal;
-                }
-
+ 
                 Log::info('GET COMPANY AND DEAL', [
                     'currentDeal' => $currentDeal,
                     'currentcompany' => $currentCompany
