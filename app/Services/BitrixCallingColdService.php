@@ -602,19 +602,53 @@ class BitrixCallingColdService
     {
 
 
-        $execStages = [];
+
         if (!empty($this->portalDealData['categories'])) {
             foreach ($this->portalDealData['categories'] as $category) {
+
+                $execStages = [];
+
+
                 $categoryId = $category['bitrixId'];
                 if (!empty($category['stages'])) {
                     foreach ($category['stages'] as $stage) {
                         if ($stage['code']) {
                             if (
-                                (strpos($stage['code'], 'fail') === false) &&
-                                (strpos($stage['code'], 'success') === false)
+                                (strpos($stage['code'], 'fail') === true) &&
+                                (strpos($stage['code'], 'success') === true)
                             ) {
                                 array_push($execStages, "C" . $categoryId . ":" . $stage['bitrixId']);
                             }
+                        }
+                    }
+                }
+
+                $currentDeals = BitrixDealService::getDealList(
+                    $this->hook,
+                    [
+                        'filter' => [
+                            // "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
+                            // "=assignedById" => $userId,
+                            // "=CATEGORY_ID" => $currentCategoryBtxId,
+                            'COMPANY_ID' => $this->entityId,
+                            "ASSIGNED_BY_ID" => $this->responsibleId,
+                            "!=STAGE_ID" =>  $execStages
+
+                        ],
+                        'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
+
+                    ]
+
+
+                );
+                foreach ($currentDeals as $bxDeal) {
+                    if (!empty($bxDeal)) {
+                        if (!empty($bxDeal['ID'])) {
+                            BitrixDealService::updateDeal(
+                                $this->hook,
+                                $bxDeal['ID'],
+                                ['STAGE_ID' => "C" . $categoryId . ':LOSE']
+                            );
                         }
                     }
                 }
@@ -625,48 +659,8 @@ class BitrixCallingColdService
 
 
         ]);
-        $currentDeals = BitrixDealService::getDealList(
-            $this->hook,
-            [
-                'filter' => [
-                    // "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
-                    // "=assignedById" => $userId,
-                    // "=CATEGORY_ID" => $currentCategoryBtxId,
-                    'COMPANY_ID' => $this->entityId,
-                    "ASSIGNED_BY_ID" => $this->responsibleId,
-                    "!=STAGE_ID" =>  ["C" . $categoryId . ":WON"]
-
-                ],
-                'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
-
-            ]
 
 
-        );
-        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            'currentDeals' => count($currentDeals),
-
-
-        ]);
-        foreach ($currentDeals as $bxDeal) {
-            if (!empty($bxDeal)) {
-                if (!empty($bxDeal['ID']) && !empty($bxDeal['CATEGORY_ID'])) {
-                    if (!empty($this->portalDealData['categories'])) {
-                        foreach ($this->portalDealData['categories'] as $category) {
-                            $categoryId = $category['bitrixId'];
-
-                            if ($bxDeal['CATEGORY_ID'] === $categoryId) {
-                            }
-                        }
-                    }
-                    BitrixDealService::updateDeal(
-                        $this->hook,
-                        $bxDeal['ID'],
-                        ['STAGE_ID' => 'LOSE']
-                    );
-                }
-            }
-        }
         $planDeals = BitrixDealFlowService::flow(
             $this->hook,
             null, // current btx deals for report
