@@ -113,16 +113,16 @@ class ReportController extends Controller
         try {
             $data = $request->all();
             if (
-                !empty($data['userId'])  &&
-                !empty($data['companyId']) &&
+                // !empty($data['userId'])  &&
+                // !empty($data['companyId']) &&
                 !empty($data['domain']) &&
                 !empty($data['currentTask'])
             ) {
 
 
 
-                $companyId = $data['userId'];
-                $userId = $data['companyId'];
+                // $companyId = $data['userId'];
+                // $userId = $data['companyId'];
                 $domain = $data['domain'];
                 $btxDeals = []; //from task
                 $currentTask =  $data['currentTask'];
