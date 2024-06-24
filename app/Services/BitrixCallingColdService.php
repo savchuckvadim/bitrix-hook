@@ -620,7 +620,7 @@ class BitrixCallingColdService
                                 (strpos($stage['code'], 'fail') === false) &&
                                 (strpos($stage['code'], 'success') === false)
                             ) {
-                                array_push($execStages, "C" . $categoryId . ":" . $stage['bitrixId']);
+                                array_push($includedStages, "C" . $categoryId . ":" . $stage['bitrixId']);
                             }
                         }
                     }
@@ -665,7 +665,7 @@ class BitrixCallingColdService
             }
         }
         Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            'execStages' => $execStages,
+            'includedStages' => $includedStages,
 
 
         ]);
