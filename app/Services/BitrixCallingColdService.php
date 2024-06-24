@@ -412,13 +412,16 @@ class BitrixCallingColdService
             //     'currentDealsIds' => $currentDealsIds
 
             // ]);
-            // Log::info('plan deals ids', [
-            //     'currentDealsIds' => $currentDealsIds
+            Log::info('currentDealsIds befor task ids', [
+                'currentDealsIds' => $currentDealsIds
 
-            // ]);
-            $rand = 1;
-            sleep($rand);
-            $this->createColdTask($currentSmartId, $currentDealsIds);
+            ]);
+            if (!empty($currentDealsIds)) {
+                $rand = 1;
+                sleep($rand);
+                $this->createColdTask($currentSmartId, $currentDealsIds);
+            }
+
             $rand = 1;
             sleep($rand);
 
