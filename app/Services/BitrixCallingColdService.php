@@ -660,7 +660,7 @@ class BitrixCallingColdService
                 $this->deadline,
                 $this->name,
                 $currentSmartItemId,
-                false, //$isNeedCompleteOtherTasks
+                true, //$isNeedCompleteOtherTasks
                 null,
                 $currentDealsItemIds,
 
