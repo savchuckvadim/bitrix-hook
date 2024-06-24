@@ -256,7 +256,7 @@ class BitrixCallingColdService
                                 break;
                             case 'op_work_status':
 
-                                
+
                                 $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $workStatusController->getWorstatusFieldItemValue(
                                     $pField, //with items
                                     $workStatus,
@@ -600,6 +600,44 @@ class BitrixCallingColdService
 
     protected function getDealFlow()
     {
+
+
+        $execStages = [];
+        if (!empty($this->portalDealData['categories'])) {
+            foreach ($this->portalDealData['categories'] as $category) {
+                $categoryId = $category['bitrixId'];
+                array_push($execStages, "C" . $categoryId . ":WON");
+            }
+        }
+        $currentDeals = BitrixDealService::getDealList(
+            $this->hook,
+            [
+                'filter' => [
+                    // "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
+                    // "=assignedById" => $userId,
+                    // "=CATEGORY_ID" => $currentCategoryBtxId,
+                    'COMPANY_ID' => $this->entityId,
+                    "ASSIGNED_BY_ID" => $this->responsibleId,
+                    "!=STAGE_ID" =>  $execStages
+
+                ],
+                'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
+
+            ]
+
+
+        );
+        foreach ($currentDeals as $bxDeal) {
+            if (!empty($bxDeal)) {
+                if (!empty($bxDeal['ID'])) {
+                    BitrixDealService::updateDeal(
+                        $this->hook,
+                        $bxDeal['ID'],
+                        ['STAGE_ID' => 'LOSE']
+                    );
+                }
+            }
+        }
         $planDeals = BitrixDealFlowService::flow(
             $this->hook,
             null, // current btx deals for report

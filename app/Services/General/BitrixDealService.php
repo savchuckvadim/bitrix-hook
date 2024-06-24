@@ -193,6 +193,33 @@ class BitrixDealService
             return $responseData;
         }
     }
+    static function getDealList(
+        $hook,
+        $data,
+
+    ) {
+        $responseData = null;
+        try {
+            $methodSmart = '/crm.deal.list.json';
+            $url = $hook . $methodSmart;
+
+
+
+            $smartFieldsResponse = Http::get($url, $data);
+
+            $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: create Deal Item');
+
+            if (isset($responseData['items'])) {
+                $responseData = $responseData['items'];
+            }
+            if (isset($responseData['deals'])) {
+                $responseData = $responseData['deals'];
+            }
+            return $responseData;
+        } catch (\Throwable $th) {
+            return $responseData;
+        }
+    }
 
     static function deleteSmartItem($hook, $entityId, $smartId)
     {
