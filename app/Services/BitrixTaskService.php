@@ -53,9 +53,9 @@ class BitrixTaskService
         if ($isXO) {
             $stringType = 'Холодный обзвон ';
         }
-        if ($type == 'warm' || $type == 'call') {
-            $stringType = 'Холодный обзвон ';
-        }
+        // if ($type == 'warm' || $type == 'call') {
+        //     $stringType = 'Холодный обзвон ';
+        // }
 
 
         $gettedSmart = null;
@@ -290,6 +290,12 @@ class BitrixTaskService
                 '!=STATUS' => 5, // Исключаем задачи со статусом "завершена"
 
             ];
+            // foreach ($crmForCurrent as $id) {
+            //     $filter[] = [
+            //         'LOGIC' => 'OR',
+            //         ['UF_CRM_TASK' => $id]
+            //     ];
+            // }
             if ($isNeedCompleteOnlyTypeTasks) {
                 $filter['%TITLE']  =   $typeNameString;
             }
