@@ -141,7 +141,7 @@ class BitrixTaskService
             ];
 
 
-
+            $idsForComplete = null;
             if ($isNeedCompleteOtherTasks) {
                 if (empty($currentTaskId)) {
                     $idsForComplete = $this->getCurrentTasksIds(
@@ -167,6 +167,9 @@ class BitrixTaskService
                     'idsForComplete' => $idsForComplete,
                 ]
             );
+            if ($idsForComplete) {
+                $this->completeTask($hook, $idsForComplete);
+            }
             $createdTask = BitrixGeneralService::createTask(
                 'Bitrix Task Service create task',
                 $hook,
@@ -175,7 +178,8 @@ class BitrixTaskService
                 // $crmItems,
                 $taskData
             );
-            $this->completeTask($hook, $idsForComplete);
+
+
             return APIOnlineController::getResponse(
                 0,
                 'success',
