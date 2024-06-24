@@ -646,15 +646,16 @@ class BitrixCallingColdService
 
 
                 ]);
-
-                foreach ($currentDeals as $bxDeal) {
-                    if (!empty($bxDeal)) {
-                        if (!empty($bxDeal['ID'])) {
-                            BitrixDealService::updateDeal(
-                                $this->hook,
-                                $bxDeal['ID'],
-                                ['STAGE_ID' => 'C' . $categoryId . ':LOSE']
-                            );
+                if (!empty($currentDeals)) {
+                    foreach ($currentDeals as $bxDeal) {
+                        if (!empty($bxDeal)) {
+                            if (!empty($bxDeal['ID'])) {
+                                BitrixDealService::updateDeal(
+                                    $this->hook,
+                                    $bxDeal['ID'],
+                                    ['STAGE_ID' => 'C' . $categoryId . ':LOSE']
+                                );
+                            }
                         }
                     }
                 }
