@@ -240,13 +240,13 @@ class BitrixDealService
 
         $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: deleteSmartItem');
         $resultFields = $responseData;
-        Log::channel('telegram')->info(
-            'lead/complete deleteSmartItem',
-            [
-                'responseData' => $responseData,
+        // Log::channel('telegram')->info(
+        //     'lead/complete deleteSmartItem',
+        //     [
+        //         'responseData' => $responseData,
 
-            ]
-        );
+        //     ]
+        // );
         return $resultFields;
     }
 
@@ -414,18 +414,18 @@ class BitrixDealService
         // $eventAction,  // plan done expired fail
     ) {
         $result = false;
-        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            'currentDeal' => $currentDeal,
-            'targetStageBtxId' => $targetStageBtxId,
-            'currentCategoryData' => $currentCategoryData,
+        // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+        //     'currentDeal' => $currentDeal,
+        //     'targetStageBtxId' => $targetStageBtxId,
+        //     'currentCategoryData' => $currentCategoryData,
 
-        ]);
-        Log::info('HOOK TEST CURRENTENTITY', [
-            'currentDeal' => $currentDeal,
-            'targetStageBtxId' => $targetStageBtxId,
-            'currentCategoryData' => $currentCategoryData,
+        // ]);
+        // Log::info('HOOK TEST CURRENTENTITY', [
+        //     'currentDeal' => $currentDeal,
+        //     'targetStageBtxId' => $targetStageBtxId,
+        //     'currentCategoryData' => $currentCategoryData,
 
-        ]);
+        // ]);
         if (!empty($currentDeal) && !empty($targetStageBtxId)) {
 
             if ($currentCategoryData['code'] === 'sales_base') {
@@ -451,12 +451,12 @@ class BitrixDealService
                         // if ($eventType === 'xo' || $eventType === 'cold') {
                         if ("C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'] ==  $currentDeal['STAGE_ID']) {
                             $isCurrentSearched = true;
-                            Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                                'isCurrentSearched' => $isCurrentSearched,
-                                'stage' => $stage,
-                                'currentCategoryData' => $currentCategoryData['code'],
+                            // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                            //     'isCurrentSearched' => $isCurrentSearched,
+                            //     'stage' => $stage,
+                            //     'currentCategoryData' => $currentCategoryData['code'],
 
-                            ]);
+                            // ]);
                         }
                         // Log::channel('telegram')->info('DEAL TEST', [
                         //     'bitrixId' => $stage['bitrixId'],
@@ -472,17 +472,17 @@ class BitrixDealService
         }
 
 
-        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            'currentDeal' => $currentDeal,
+        // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+        //     'currentDeal' => $currentDeal,
 
 
-        ]);
+        // ]);
 
-        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            'getIsCanDealStageUpdate' => $result,
+        // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+        //     'getIsCanDealStageUpdate' => $result,
 
 
-        ]);
+        // ]);
         return $result;
     }
 }

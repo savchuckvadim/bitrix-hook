@@ -786,11 +786,11 @@ class BitrixListPresentationFlowService
         if ($resultStatus !== 'result') {
             $result = 'no';
         }
-        Log::channel('telegram')->info('op_noresult_reason', [
-            'resultStatus' => $resultStatus,
+        // Log::channel('telegram')->info('op_noresult_reason', [
+        //     'resultStatus' => $resultStatus,
 
 
-        ]);
+        // ]);
 
         if (!empty($noresultReason)) {
             if (!empty($noresultReason['code'])) {
@@ -820,11 +820,11 @@ class BitrixListPresentationFlowService
         if ($resultStatus !== 'result') {
             $result = 'no';
         }
-        Log::channel('telegram')->info('resultStatus', [
-            'resultStatus' => $resultStatus,
+        // Log::channel('telegram')->info('resultStatus', [
+        //     'resultStatus' => $resultStatus,
 
 
-        ]);
+        // ]);
 
         return $result;
     }
@@ -847,11 +847,11 @@ class BitrixListPresentationFlowService
         if ($resultStatus !== 'result') {
             $result = 'no';
         }
-        Log::channel('telegram')->info('resultStatus', [
-            'resultStatus' => $resultStatus,
+        // Log::channel('telegram')->info('resultStatus', [
+        //     'resultStatus' => $resultStatus,
 
 
-        ]);
+        // ]);
 
         return $result;
     }
@@ -887,13 +887,13 @@ class BitrixListPresentationFlowService
                 $btxFields = $bitrixList['bitrixfields'];
                 foreach ($btxFields as $btxField) {
                     if ($btxField['code'] == 'sales_presentation_pres_done_comment') {
-                        Log::channel('telegram')->info('pres sales_presentation_pres_done_comment', [
-                            'btxField' => $btxField,
+                        // Log::channel('telegram')->info('pres sales_presentation_pres_done_comment', [
+                        //     'btxField' => $btxField,
 
-                            // 'failReason' => $failReason,
-                            // 'failType' => $failType,
+                        //     // 'failReason' => $failReason,
+                        //     // 'failType' => $failType,
 
-                        ]);
+                        // ]);
 
 
                         foreach ($currentItemList as $prop_key => $value) {
@@ -905,13 +905,13 @@ class BitrixListPresentationFlowService
 
 
                             if ($prop_key == $btxField['bitrixCamelId']) {
-                                Log::channel('telegram')->info('pres searching prop_key', [
-                                    'prop_key' => $prop_key,
-                                    'value' => $value,
-                                    // 'failReason' => $failReason,
-                                    // 'failType' => $failType,
+                                // Log::channel('telegram')->info('pres searching prop_key', [
+                                //     'prop_key' => $prop_key,
+                                //     'value' => $value,
+                                //     // 'failReason' => $failReason,
+                                //     // 'failType' => $failType,
 
-                                ]);
+                                // ]);
 
 
                                 if (!empty($value)) {

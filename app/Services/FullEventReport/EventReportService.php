@@ -994,11 +994,11 @@ class EventReportService
         //         );
         //     }
         // }
-        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            'isPresentationDone' => $this->isPresentationDone,
-            'currentReportEventType' => $this->currentReportEventType,
+        // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+        //     'isPresentationDone' => $this->isPresentationDone,
+        //     'currentReportEventType' => $this->currentReportEventType,
 
-        ]);
+        // ]);
         if ($this->isPresentationDone && $this->currentReportEventType !== 'presentation') { // проведенная презентация будет isUnplanned
             //в current task не будет id сделки презентации
             // в таком случае предполагается, что сделки презентация еще не существует
@@ -1018,21 +1018,21 @@ class EventReportService
                 true,
                 '$fields'
             );
-            Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                'unplannedPresDeal' => $unplannedPresDeal,
+            // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+            //     'unplannedPresDeal' => $unplannedPresDeal,
 
 
-            ]);
-            Log::info('HOOK TEST unplannedPresDeal', [
-                'unplannedPresDeal' => $unplannedPresDeal,
+            // ]);
+            // Log::info('HOOK TEST unplannedPresDeal', [
+            //     'unplannedPresDeal' => $unplannedPresDeal,
 
 
-            ]);
-            Log::info('HOOK TEST currentBtxDeals', [
-                'currentBtxDeals' => $this->currentBtxDeals,
+            // ]);
+            // Log::info('HOOK TEST currentBtxDeals', [
+            //     'currentBtxDeals' => $this->currentBtxDeals,
 
 
-            ]);
+            // ]);
             if (!empty($unplannedPresDeal)) {
                 if (isset($unplannedPresDeal['ID'])) {
 
@@ -1059,16 +1059,16 @@ class EventReportService
                         true,
                         '$fields'
                     );
-                    Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                        'unplannedPresDeals' => $unplannedPresDeals,
+                    // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                    //     'unplannedPresDeals' => $unplannedPresDeals,
 
 
-                    ]);
-                    Log::info('HOOK TEST CURRENTENTITY', [
-                        'unplannedPresDeals' => $unplannedPresDeals,
+                    // ]);
+                    // Log::info('HOOK TEST CURRENTENTITY', [
+                    //     'unplannedPresDeals' => $unplannedPresDeals,
 
 
-                    ]);
+                    // ]);
                     foreach ($this->currentBtxDeals as $cbtxdeal) {
                         if ($cbtxdeal['ID'] !== $unplannedPresDealId) {
                             sleep(1);
@@ -1520,11 +1520,11 @@ class EventReportService
                 // соответствующих сделок
                 // если текущее событие не през - значит uplanned
                 // занчит сначала планируем
-                Log::channel('telegram')->info('presentationBtxList', [
-                    'currentDealIds' => $currentDealIds,
+                // Log::channel('telegram')->info('presentationBtxList', [
+                //     'currentDealIds' => $currentDealIds,
 
 
-                ]);
+                // ]);
                 BitrixListPresentationFlowService::getListPresentationPlanFlow(
                     $this->hook,
                     $this->bitrixLists,

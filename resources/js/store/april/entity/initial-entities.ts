@@ -25,7 +25,7 @@ export const allEntities = [
                 method: API_METHOD.GET
             }
         },
-        relations: [1, 11, 12, 13, 14, 19, 20, 21],
+        relations: [1, 5, 11, 12, 13, 14, 19, 20, 21],
 
     },
     {

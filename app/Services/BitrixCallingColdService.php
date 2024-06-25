@@ -667,11 +667,11 @@ class BitrixCallingColdService
                 }
             }
         }
-        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            'includedStages' => $includedStages,
+        // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+        //     'includedStages' => $includedStages,
 
 
-        ]);
+        // ]);
 
 
         $planDeals = BitrixDealFlowService::flow(

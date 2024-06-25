@@ -46,26 +46,26 @@ class BitrixDealFlowService
             $eventType,
             $eventAction
         );
-        if ($eventAction == 'done') {
-            Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                'currentCategoryDatas' => $currentCategoryDatas,
+        // if ($eventAction == 'done') {
+            // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+            //     'currentCategoryDatas' => $currentCategoryDatas,
 
 
-            ]);
-            Log::info('HOOK TEST CURRENTENTITY', [
-                'currentCategoryDatas' => $currentCategoryDatas,
+            // ]);
+            // Log::info('HOOK TEST CURRENTENTITY', [
+            //     'currentCategoryDatas' => $currentCategoryDatas,
 
 
-            ]);
-            Log::info('HOOK TEST CURRENTENTITY', [
-                'eventAction' => $eventAction,
-                'eventType' => $eventType,
-                'currentBtxDeals' => $currentCategoryDatas,
+            // ]);
+            // Log::info('HOOK TEST CURRENTENTITY', [
+            //     'eventAction' => $eventAction,
+            //     'eventType' => $eventType,
+            //     'currentBtxDeals' => $currentCategoryDatas,
                
 
 
-            ]);
-        }
+            // ]);
+        // }
 
         if (!empty($currentCategoryDatas)) {
             foreach ($currentCategoryDatas as $currentCategoryData) {

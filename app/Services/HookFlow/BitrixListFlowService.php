@@ -504,11 +504,11 @@ class BitrixListFlowService
         if ($resultStatus !== 'result') {
             $result = 'no';
         }
-        Log::channel('telegram')->info('op_noresult_reason', [
-            'resultStatus' => $resultStatus,
+        // Log::channel('telegram')->info('op_noresult_reason', [
+        //     'resultStatus' => $resultStatus,
 
 
-        ]);
+        // ]);
 
         if (!empty($noresultReason)) {
             if (!empty($noresultReason['code'])) {
@@ -538,11 +538,11 @@ class BitrixListFlowService
         if ($resultStatus !== 'result') {
             $result = 'no';
         }
-        Log::channel('telegram')->info('resultStatus', [
-            'resultStatus' => $resultStatus,
+        // Log::channel('telegram')->info('resultStatus', [
+        //     'resultStatus' => $resultStatus,
 
 
-        ]);
+        // ]);
 
         return $result;
     }
