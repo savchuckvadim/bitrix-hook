@@ -646,11 +646,11 @@ class BitrixCallingColdService
 
 
                 );
-                Log::info('HOOK TEST CURRENTENTITY', [
-                    'currentDeals' => $currentDeals,
+                // Log::info('HOOK TEST CURRENTENTITY', [
+                //     'currentDeals' => $currentDeals,
 
 
-                ]);
+                // ]);
                 
                 if (!empty($currentDeals)) {
                     foreach ($currentDeals as $bxDeal) {
