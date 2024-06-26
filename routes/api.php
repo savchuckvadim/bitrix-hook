@@ -1057,9 +1057,10 @@ Route::post('/bitrix/method', function (Request $request) {
         $hook = 'https://' . $domain  . '/' . $webhookRestKey;
         $url  = $hook . '/' . $method;
 
-        return Http::get($url, $data);
-
-
+        $result = Http::get($url, $data);
+        $result['resultCode'] = 0;
+        return $result;
+        
     } catch (\Throwable $th) {
         Log::error('Exception caught', [
             'message'   => $th->getMessage(),
