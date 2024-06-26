@@ -1060,10 +1060,11 @@ Route::post('/bitrix/method', function (Request $request) {
         $response = Http::get($url, $data);
         $responseData = APIBitrixController::getBitrixRespone($response, 'general service: update deal');
 
-        $result['resultCode'] = 0;
-        $result['result'] = $responseData;
 
-        return APIOnlineController::getSuccess($responseData);
+        return APIOnlineController::getSuccess([
+            'result' =>  $responseData
+        ]);
+        
     } catch (\Throwable $th) {
         Log::error('Exception caught', [
             'message'   => $th->getMessage(),
