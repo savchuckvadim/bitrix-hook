@@ -1057,10 +1057,16 @@ Route::post('/bitrix/method', function (Request $request) {
         $hook = 'https://' . $domain  . '/' . $webhookRestKey;
         $url  = $hook . '/' . $method;
 
-        $result = Http::get($url, $data);
+        $response = Http::get($url, $data);
+        $responseData = APIBitrixController::getBitrixRespone($response, 'general service: update deal');
+
         $result['resultCode'] = 0;
-        return $result;
-        
+        $result['result'] = $responseData;
+
+        return APIOnlineController::getSuccess([
+            'data' => $result
+        ]);
+
     } catch (\Throwable $th) {
         Log::error('Exception caught', [
             'message'   => $th->getMessage(),
