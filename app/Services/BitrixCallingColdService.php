@@ -14,6 +14,7 @@ use App\Services\HookFlow\BitrixEntityFlowService;
 use App\Services\HookFlow\BitrixListFlowService;
 use App\Services\HookFlow\BitrixSmartFlowService;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -79,6 +80,7 @@ class BitrixCallingColdService
     protected $withLists = false;
     protected $bitrixLists = [];
 
+    protected $nowDate = [];
 
 
     public function __construct(
@@ -86,6 +88,12 @@ class BitrixCallingColdService
         $data,
 
     ) {
+        date_default_timezone_set('Europe/Moscow');
+        $nowDate = new DateTime();
+        // Форматируем дату и время в нужный формат
+        $this->nowDate = $nowDate->format('d.m.Y H:i:s');
+
+
         $domain = $data['domain'];
         $this->entityType = $data['entityType'];
         $this->entityId = $data['entityId'];
@@ -194,11 +202,14 @@ class BitrixCallingColdService
                                 break;
                             case 'xo_date':
                             case 'call_next_date':
+                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $data['deadline'];
+
+                                break;
                             case 'call_last_date':
                                 // $currentEntityField = [
                                 //     'UF_CRM_' . $companyField['bitrixId'] => $data['deadline']
                                 // ];
-                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $data['deadline'];
+                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $this->nowDate;
 
                                 break;
 
@@ -225,7 +236,8 @@ class BitrixCallingColdService
                             case 'op_mhistory':
 
                                 $fullFieldId = 'UF_CRM_' . $pField['bitrixId'];  //UF_CRM_OP_MHISTORY
-                                $now = now();
+                                $now =  new DateTime();
+                                $now = $nowDate->format('d.m.Y H:i');
                                 $stringComment = $now . ' ХО запланирован ' . $data['name'] . ' на ' . $data['deadline'];
 
                                 $currentComments = '';
