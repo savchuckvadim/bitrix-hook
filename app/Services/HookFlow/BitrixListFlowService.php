@@ -479,12 +479,17 @@ class BitrixListFlowService
             case 'territory':
             case 'autsorc':
             case 'depend':
-            case 'op_prospects_good':
+
                 $result = 'op_prospects_' . $failTypeCode;
                 break;
             case 'accountant':
                 $result = 'op_prospects_acountant';
                 break;
+
+            case 'failure':
+                $result = 'op_prospects_fail';
+                break;
+
             default:
                 # code...
                 break;
