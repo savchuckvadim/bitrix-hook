@@ -233,8 +233,9 @@ class BitrixListFlowService
                                                 'code' => 'op_fail_reason',
                                                 'name' => 'ОП Причина Отказа',
                                                 'list' =>  [
-                                                    'code' => $failReason['code'],
-                                                    // 'name' =>  'В работе' //'В работе'
+                                                    'code' => BitrixListFlowService::getFailType(
+                                                        $failReason['code']
+                                                    ),
                                                 ],
                                             ];
                                             array_push($xoFields, $failReasonItem);
@@ -532,7 +533,9 @@ class BitrixListFlowService
 
 
 
-    static function  getFailType($resultStatus)
+    static function  getFailType(
+        $failReason
+        )
     {
         // не было времени	op_fail_reason	fail_notime
         // конкуренты - привыкли	op_fail_reason	c_habit
@@ -546,17 +549,7 @@ class BitrixListFlowService
         // ключевой сотрудник против	op_fail_reason	employee
 
 
-        $result = 'yes';
-        if ($resultStatus !== 'result') {
-            $result = 'no';
-        }
-        // Log::channel('telegram')->info('resultStatus', [
-        //     'resultStatus' => $resultStatus,
-
-
-        // ]);
-
-        return $result;
+        return $failReason;
     }
 
     static function  getFailReasone($resultStatus)

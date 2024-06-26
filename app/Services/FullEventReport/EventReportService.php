@@ -572,6 +572,12 @@ class EventReportService
 
         $reportFields = [];
         $reportFields['manager_op'] = $this->planResponsibleId;
+        $reportFields['op_work_status'] = '';
+        $reportFields['op_prospects_type'] = '';
+        $reportFields['op_work_status'] = '';
+        $reportFields['op_work_status'] = '';
+
+
         $companyPresCount = 0;
         $dealPresCount = 0;
         if (!empty($this->currentTask)) {
@@ -593,7 +599,7 @@ class EventReportService
                 $currentPresComments = $this->currentBtxEntity['UF_CRM_PRES_COMMENTS'];
             }
 
-            if (!empty($this->currentBtxEntity['UF_CRM_PRES_COMMENTS'])) {
+            if (!empty($this->currentBtxEntity['UF_CRM_OP_FAIL_COMMENTS'])) {
                 $currentFailComments = $this->currentBtxEntity['UF_CRM_OP_FAIL_COMMENTS'];
             }
         }
@@ -625,7 +631,7 @@ class EventReportService
 
 
             $reportFields['last_pres_done_date'] = $this->nowDate;
-            $reportFields['last_pres_done_responsible'] = 'user_' . $this->planResponsibleId;
+            $reportFields['last_pres_done_responsible'] =  $this->planResponsibleId;
             $reportFields['pres_count'] = $companyPresCount + 1;
             $reportFields['pres_comments'] = $currentPresComments;
             if ($currentReportEventType !== 'presentation') {
@@ -726,25 +732,26 @@ class EventReportService
         ];
 
 
-        $statusesCodesAssoc = array_fill_keys($statusesCodes, true);
-        $generalSalesCodesAssoc = array_fill_keys($generalSalesCode, true);
-        $fieldsCallCodesAssoc = array_fill_keys($fieldsCallCodes, true);
+        // $statusesCodesAssoc = array_fill_keys($statusesCodes, true);
+        // $generalSalesCodesAssoc = array_fill_keys($generalSalesCode, true);
+        // $fieldsCallCodesAssoc = array_fill_keys($fieldsCallCodes, true);
 
-        $presentationCodesAssoc = array_fill_keys($fieldsPresentationCodes, true);
+        // $presentationCodesAssoc = array_fill_keys($fieldsPresentationCodes, true);
 
 
         // Объединение массивов
-        $currentFieldsForUpdate = [];
-        $mergedFields = array_merge(
-            $presentationCodesAssoc,
-            $statusesCodesAssoc,
-            $generalSalesCodesAssoc,
-            $fieldsCallCodesAssoc
-        );
-        foreach ($mergedFields as $targedCode => $bool) {
-            array_push($currentFieldsForUpdate, $targedCode);
-        }
+        // $currentFieldsForUpdate = [];
+        // $mergedFields = array_merge(
+        //     $presentationCodesAssoc,
+        //     $statusesCodesAssoc,
+        //     $generalSalesCodesAssoc,
+        //     $fieldsCallCodesAssoc
+        // );
+        // foreach ($mergedFields as $targedCode => $bool) {
+        //     array_push($currentFieldsForUpdate, $targedCode);
+        // }
         $entityService = new BitrixEntityFlowService();
+
 
         $entityService->flow(
             $this->portal,
