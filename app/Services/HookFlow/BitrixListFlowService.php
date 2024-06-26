@@ -92,7 +92,7 @@ class BitrixListFlowService
             }
 
             if ($eventAction  !== 'plan') {
-                if ($workStatus !== 'inJob' && $workStatus !== 'setAside') {
+                if ($workStatus['code'] !== 'inJob' && $workStatus['code'] !== 'setAside') {
                     $nextCommunication = null;
                 }
             }
@@ -116,7 +116,7 @@ class BitrixListFlowService
                 [
                     'code' => 'plan_date',
                     'name' => 'Дата Следующей коммуникации',
-                    'value' => $nextCommunication 
+                    'value' => $nextCommunication
                 ],
                 [
                     'code' => 'author',
