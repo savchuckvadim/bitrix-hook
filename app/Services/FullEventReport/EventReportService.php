@@ -646,7 +646,7 @@ class EventReportService
         //plan
         $planFields = [];
 
-        if ($currentPlanEventType) {
+        if ($this->isPlanned) {
 
 
             //general
@@ -654,7 +654,7 @@ class EventReportService
             $reportFields['call_next_name'] = $this->currentPlanEventName;
             $reportFields['xo_responsible'] = $this->planResponsibleId;
             $reportFields['xo_created'] = $this->planResponsibleId;
-            switch ($currentReportEventType) {
+            switch ($currentPlanEventType) {
                 case 'xo':
                     $reportFields['xo_date'] = $this->planDeadline;
                     $reportFields['xo_name'] = $this->currentPlanEventName;
@@ -663,13 +663,15 @@ class EventReportService
                 case 'presentation':
 
                     $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
-                    $reportFields['last_pres_plan_responsible'] = 'user_' . $this->planResponsibleId;
+                    $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
                     $reportFields['next_pres_plan_date'] = $this->planDeadline;  //дата на которую запланировали през
                     break;
                 default:
                     # code...
                     break;
             }
+        }else{
+
         }
 
 
