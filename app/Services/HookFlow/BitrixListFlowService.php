@@ -30,7 +30,7 @@ class BitrixListFlowService
         $bitrixLists,
         $eventType, // xo warm presentation, offer invoice
         $eventTypeName, //звонок по решению по оплате
-        $eventAction,  // plan done expired fail success
+        $eventAction,  // plan done //если будет репорт и при этом не было переноса придет done или nodone - типа состоялся или нет
         // $eventName,
         $deadline,
         $created,
@@ -39,7 +39,7 @@ class BitrixListFlowService
         $companyId,
         $comment,
         $workStatus, //inJob
-        $resultStatus,  // result noresult expired
+        $resultStatus,  // result noresult   .. without expired
         $noresultReason,
         $failReason,
         $failType,
@@ -53,7 +53,7 @@ class BitrixListFlowService
 
             $eventActionName = 'Запланирован';
             $evTypeName = 'Звонок';
-
+            $nextCommunication = $deadline;
 
             if ($eventType == 'xo' || $eventType == 'cold') {
                 $evTypeName = 'Холодный звонок';
@@ -82,12 +82,19 @@ class BitrixListFlowService
                 if ($eventType == 'presentation') {
                     $eventActionName = 'Состоялась';
                 }
-            } else    if ($eventAction == 'fail') {
+            } else    if ($eventAction == 'nodone') {
+                $nextCommunication = null;
+                $eventActionName = 'Не Состоялся: отказ';
 
-                $eventActionName = 'Отказ';
-            } else    if ($eventAction == 'success') {
+                if ($eventType == 'presentation') {
+                    $eventActionName = 'Не Состоялась: отказ';
+                }
+            }
 
-                $eventActionName = 'Продажа';
+            if ($eventAction  !== 'plan') {
+                if ($workStatus !== 'inJob' && $workStatus !== 'setAside') {
+                    $nextCommunication = null;
+                }
             }
 
             $xoFields = [
@@ -109,7 +116,7 @@ class BitrixListFlowService
                 [
                     'code' => 'plan_date',
                     'name' => 'Дата Следующей коммуникации',
-                    'value' => $deadline
+                    'value' => $nextCommunication 
                 ],
                 [
                     'code' => 'author',

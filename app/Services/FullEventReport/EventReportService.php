@@ -538,7 +538,7 @@ class EventReportService
             }
             $this->getEntityFlow();
             // sleep(1);
-           
+
 
             $this->getListFlow();
             sleep(1);
@@ -1266,6 +1266,10 @@ class EventReportService
             //report
             $eventAction = 'plan';
             $planComment = 'Запланирован';
+            $reportAction = 'done';
+            if ($this->resultStatus !== 'result') {
+                $reportAction = 'nodone';
+            }
 
             if ($reportEventType !== 'presentation') {
 
@@ -1275,7 +1279,7 @@ class EventReportService
                     $this->bitrixLists,
                     $reportEventType,
                     $reportEventTypeName,
-                    'done',
+                    $reportAction,
                     // $this->stringType,
                     $this->planDeadline,
                     $this->planResponsibleId,
