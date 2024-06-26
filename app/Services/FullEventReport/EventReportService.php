@@ -636,7 +636,7 @@ class EventReportService
             $reportFields['pres_comments'] = $currentPresComments;
             if ($currentReportEventType !== 'presentation') {
                 $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
-                $reportFields['last_pres_plan_responsible'] = 'user_' . $this->planResponsibleId;
+                $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
                 $reportFields['next_pres_plan_date'] = $this->nowDate;  //дата на которую запланировали през
 
             }
