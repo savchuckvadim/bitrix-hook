@@ -1040,6 +1040,41 @@ Route::post('/install/smart/', function (Request $request) {
 });
 
 
+Route::post('/bitrix/method', function (Request $request) {
+
+    $domain = $request->domain;
+    $method = $request->method;
+    $data = $request->bxData;
+
+
+
+
+    try {
+        $portal = PortalController::getPortal($domain);
+        $portal = $portal['data'];
+        $portal = $portal;
+        $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+        $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+        $url  = $hook . '/' . $method;
+
+        return Http::get($url, $data);
+
+
+    } catch (\Throwable $th) {
+        Log::error('Exception caught', [
+            'message'   => $th->getMessage(),
+            'file'      => $th->getFile(),
+            'line'      => $th->getLine(),
+            'trace'     => $th->getTraceAsString(),
+        ]);
+        return response([
+            'result' => 'error',
+            'message' => $th->getMessage()
+        ]);
+    }
+});
+
+
 
 Route::post('/test/', function (Request $request) {
     // $data = $request->all();

@@ -607,6 +607,11 @@ class EventReportService
         //     'currentPresComments' => $currentPresComments,
         //     'currentFailComments' => $currentFailComments,
         // ]);
+
+        //обнуляем дату следующей презентации и звонка - они будут аполнены только если реально что-то запланировано
+        $reportFields['next_pres_plan_date'] = null;
+        $reportFields['call_next_date'] = null;
+        
         if ($currentReportEventType) {
 
 
@@ -656,6 +661,10 @@ class EventReportService
             $reportFields['xo_responsible'] = $this->planResponsibleId;
             $reportFields['xo_created'] = $this->planResponsibleId;
             $reportFields['op_current_status'] = 'Звонок запланирован в работе';
+
+
+
+
             switch ($currentPlanEventType) {
                 case 'xo':
                     $reportFields['xo_date'] = $this->planDeadline;
@@ -673,8 +682,7 @@ class EventReportService
                     # code...
                     break;
             }
-        }else{
-
+        } else {
         }
 
 
