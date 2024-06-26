@@ -1260,12 +1260,16 @@ class EventReportService
         $planEventType = $this->currentPlanEventType; //если перенос то тип будет автоматически взят из report - предыдущего события
         $eventAction = 'expired';  // не состоялся и двигается крайний срок 
         $planComment = 'Перенесен';
-
-
         if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
             //report
             $eventAction = 'plan';
             $planComment = 'Запланирован';
+        }
+
+        $planComment = $planComment . ' ' . $planEventTypeName . ' ' . $this->comment;
+
+        if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
+
             $reportAction = 'done';
             if ($this->resultStatus !== 'result') {
                 $reportAction = 'nodone';
