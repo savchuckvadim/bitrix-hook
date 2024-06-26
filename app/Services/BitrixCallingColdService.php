@@ -266,6 +266,10 @@ class BitrixCallingColdService
                                 $resultEntityFields[$fullFieldId] =  $currentComments;
 
                                 break;
+                            case 'op_current_status':
+                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] =  'Холодный в работе';
+
+                                break;
                             case 'op_work_status':
 
 
@@ -664,7 +668,7 @@ class BitrixCallingColdService
 
 
                 // ]);
-                
+
                 if (!empty($currentDeals)) {
                     foreach ($currentDeals as $bxDeal) {
                         if (!empty($bxDeal)) {
