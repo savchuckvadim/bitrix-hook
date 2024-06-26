@@ -1063,10 +1063,7 @@ Route::post('/bitrix/method', function (Request $request) {
         $result['resultCode'] = 0;
         $result['result'] = $responseData;
 
-        return APIOnlineController::getSuccess([
-            'data' => $result
-        ]);
-
+        return APIOnlineController::getSuccess($responseData);
     } catch (\Throwable $th) {
         Log::error('Exception caught', [
             'message'   => $th->getMessage(),
