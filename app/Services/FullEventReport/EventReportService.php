@@ -640,6 +640,7 @@ class EventReportService
                 $reportFields['next_pres_plan_date'] = $this->nowDate;  //дата на которую запланировали през
 
             }
+            $reportFields['op_current_status'] = 'Презентация проведена';
         }
 
 
@@ -654,6 +655,7 @@ class EventReportService
             $reportFields['call_next_name'] = $this->currentPlanEventName;
             $reportFields['xo_responsible'] = $this->planResponsibleId;
             $reportFields['xo_created'] = $this->planResponsibleId;
+            $reportFields['op_current_status'] = 'Звонок запланирован в работе';
             switch ($currentPlanEventType) {
                 case 'xo':
                     $reportFields['xo_date'] = $this->planDeadline;
@@ -665,6 +667,7 @@ class EventReportService
                     $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
                     $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
                     $reportFields['next_pres_plan_date'] = $this->planDeadline;  //дата на которую запланировали през
+                    $reportFields['op_current_status'] = 'Презентация запланирована в работе';
                     break;
                 default:
                     # code...
