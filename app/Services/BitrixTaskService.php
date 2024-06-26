@@ -44,7 +44,7 @@ class BitrixTaskService
     ) {
         date_default_timezone_set('Europe/Moscow');
         $nowDate = now();
-        $rand = 1;
+        $rand = rand(1, 3);
         sleep($rand);
 
 
@@ -154,6 +154,8 @@ class BitrixTaskService
             $idsForComplete = null;
             if ($isNeedCompleteOtherTasks) {
                 if (empty($currentTaskId)) {
+                    $rand = rand(1, 3);
+                    sleep($rand);
                     $idsForComplete = $this->getCurrentTasksIds(
                         $hook,
                         $callingTaskGroupId,
@@ -178,6 +180,8 @@ class BitrixTaskService
             //         'isXO' => $isXO,
             //     ]
             // );
+            $rand = 1;
+            sleep($rand);
             if ($idsForComplete) {
                 $this->completeTask($hook, $idsForComplete);
             }

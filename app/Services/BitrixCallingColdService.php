@@ -422,7 +422,7 @@ class BitrixCallingColdService
                 $this->createColdTask($currentSmartId, $currentDealsIds);
             }
 
-            $rand = 1;
+            $rand = rand(1, 3);
             sleep($rand);
 
             BitrixEntityFlowService::coldflow(
@@ -627,7 +627,8 @@ class BitrixCallingColdService
                         }
                     }
                 }
-
+                $rand = rand(1, 2);
+                sleep($rand);
                 $currentDeals = BitrixDealService::getDealList(
                     $this->hook,
                     [
@@ -656,6 +657,8 @@ class BitrixCallingColdService
                     foreach ($currentDeals as $bxDeal) {
                         if (!empty($bxDeal)) {
                             if (!empty($bxDeal['ID'])) {
+                                $rand = rand(1, 2);
+                                sleep($rand);
                                 BitrixDealService::updateDeal(
                                     $this->hook,
                                     $bxDeal['ID'],
@@ -673,7 +676,8 @@ class BitrixCallingColdService
 
         // ]);
 
-
+        $rand = rand(1, 2);
+        sleep($rand);
         $planDeals = BitrixDealFlowService::flow(
             $this->hook,
             null, // current btx deals for report

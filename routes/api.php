@@ -308,6 +308,26 @@ Route::post('/pres/count', function (Request $request) {
     return ReportController::getPresCounts($request);
 });
 
+// новй холодный звонка из Откуда Угодно
+Route::post('cold', function (Request $request) {
+
+    //from anywhere
+    // https: //april-hook.ru/api/cold?
+    // created={=Template:Parameter2}&
+    // responsible={=Template:Parameter3}&
+    // deadline={=Template:Parameter1}&
+    // name={=Template:Parameter4}&
+    // entity_id={{ID}}
+    // &entity_type=smart | company | lead
+    // isOlyDeal ??
+    // Log::info('APRIL_HOOK ', ['cold' => 'yo']);
+    // Log::info('APRIL_HOOK cold', ['data' => $request->all()]);
+    $controller = new BitrixHookController();
+    return $controller->getColdCall(
+        $request
+    );
+});
+
 
 
 
@@ -552,26 +572,6 @@ Route::post('/cold/smart/init', function (Request $request) {
         Log::error('ROUTE ERROR COLD: Exception caught',  $errorMessages);
         Log::info('error COLD', ['error' => $th->getMessage()]);
     }
-});
-
-// новй холодный звонка из Откуда Угодно
-Route::post('cold', function (Request $request) {
-
-    //from anywhere
-    // https: //april-hook.ru/api/cold?
-    // created={=Template:Parameter2}&
-    // responsible={=Template:Parameter3}&
-    // deadline={=Template:Parameter1}&
-    // name={=Template:Parameter4}&
-    // entity_id={{ID}}
-    // &entity_type=smart | company | lead
-    // isOlyDeal ??
-    // Log::info('APRIL_HOOK ', ['cold' => 'yo']);
-    // Log::info('APRIL_HOOK cold', ['data' => $request->all()]);
-    $controller = new BitrixHookController();
-    return $controller->getColdCall(
-        $request
-    );
 });
 
 

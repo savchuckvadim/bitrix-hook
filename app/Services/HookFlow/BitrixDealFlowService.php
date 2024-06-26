@@ -161,6 +161,8 @@ class BitrixDealFlowService
                     );
 
                     if ($isCanDealStageUpdate) {
+                        $rand = rand(1, 2);
+                        sleep($rand);
                         BitrixDealService::updateDeal(
                             $hook,
                             $currentDealId,
@@ -275,7 +277,8 @@ class BitrixDealFlowService
                     // }
                     // }
 
-
+                    $rand = rand(1, 2);
+                    sleep($rand);
 
                     if (!$currentDeal) {
 

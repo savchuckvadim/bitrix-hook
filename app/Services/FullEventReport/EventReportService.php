@@ -531,14 +531,14 @@ class EventReportService
             }
 
             // $this->createTask($currentSmartId);
-
-            $this->getEntityFlow();
-            // sleep(1);
             if ($this->isExpired || $this->isPlanned) {
                 $result = $this->taskFlow(null, $currentDealsIds['planDeals']);
             } else {
                 $result = $this->workStatus;
             }
+            $this->getEntityFlow();
+            // sleep(1);
+           
 
             $this->getListFlow();
             sleep(1);
