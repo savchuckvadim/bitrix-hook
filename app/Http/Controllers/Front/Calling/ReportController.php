@@ -415,11 +415,13 @@ class ReportController extends Controller
                             'currentPresentationDeal' => $currentPresentationDeal,
                             'basePresentationDeals' => $basePresentationDeals,
                             'allPresentationDeals' => $allPresentationDeals,
-                            '$getAllPresDealsData' => $getAllPresDealsData
+                            '$getAllPresDealsData' => $getAllPresDealsData,
+                            'fromSession' => $fromSession
+
 
                         ],
-                        'fromSession' => $fromSession
                         
+
                     ]
                 );
             } else {
