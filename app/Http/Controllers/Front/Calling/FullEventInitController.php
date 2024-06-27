@@ -105,7 +105,7 @@ class FullEventInitController extends Controller
             $isFullData = true;
             $currentTaskId = false;
             $domain =  false;
-            if (isset($request->currentTask)) {
+            if (isset($request->currentTaskId)) {
                 $currentTaskId = $request->currentTaskId;
             } else {
                 $isFullData = false;
