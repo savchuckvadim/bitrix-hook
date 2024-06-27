@@ -67,7 +67,7 @@ class FullEventInitController extends Controller
                 $hashedKey = str_replace('.', '_', $sessionKey);
                 $hashedKey = str_replace('-', '_', $hashedKey);
                 $value = Session::get($hashedKey);
-                session([$hashedKey => $sessionValue]);
+                Session::put([$hashedKey => $sessionValue]);
 
                 $session = session()->all();
 
@@ -85,8 +85,8 @@ class FullEventInitController extends Controller
                         'result' => 'success',
                         'message' => 'sission init !',
                         'sessionKey' => $hashedKey,
-                        'all' => $session
-
+                        'all' => $session,
+                        'value' => $value,
                     ]
 
                 );
