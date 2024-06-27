@@ -56,9 +56,9 @@ class FullEventInitController extends Controller
                 }
                 $sessionKey = $domain . '' . $currentTask['id'];
                 $sessionValue = [
-                    'currentCompany' => $currentCompany,
-                    'btxDeals' => $btxDeals,
-                    'portal' => $portal,
+                    // 'currentCompany' => $currentCompany,
+                    // 'btxDeals' => $btxDeals,
+                    // 'portal' => $portal,
                     'currentTask' => $currentTask,
                 ];
 
