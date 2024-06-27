@@ -61,7 +61,9 @@ class FullEventInitController extends Controller
                     'currentTask' => $currentTask,
                 ];
 
-                $hashedKey = md5($sessionKey);
+                // $hashedKey = md5($sessionKey);
+                $hashedKey = str_replace('.', '_', $sessionKey);
+                $hashedKey = str_replace('-', '_', $sessionKey);
                 session([$hashedKey => $sessionValue]);
 
                 $session = session()->all();
@@ -123,11 +125,12 @@ class FullEventInitController extends Controller
             if ($isFullData) {
                 $session = session()->all();
                 $sessionKey = $domain . '' . $currentTaskId;
-                $hashedKey = md5($sessionKey); 
-
+                // $hashedKey = md5($sessionKey); 
+                $hashedKey = str_replace('.', '_', $sessionKey);
+                $hashedKey = str_replace('-', '_', $sessionKey);
                 $value = Session::get($hashedKey);
 
-            
+
                 return APIOnlineController::getSuccess(
                     [
                         'result' => $value,
