@@ -298,8 +298,8 @@ Route::post('/full/session', function (Request $request) {
     return FullEventInitController::sessionGet($request);
 });
 
-Route::post('full/deal/base', function (Request $request) {
-    return ReportController::getPresCounts($request);
+Route::post('full/deals', function (Request $request) {
+    return ReportController::getDealFullDeals($request);
 });
 
 
