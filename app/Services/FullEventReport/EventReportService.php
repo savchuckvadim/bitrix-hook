@@ -365,12 +365,12 @@ class EventReportService
 
         if (isset($sessionData['currentCompany'])) {
             $this->currentBtxEntity  = $sessionData['currentCompany'];
-            $this->currentBtxDeals  = [$sessionData['desls']['currentBaseDeal']];
+            $this->currentBtxDeals  = [$sessionData['deals']['currentBaseDeal']];
 
-            if(isset($sessionData['desls']['currentPresentationDeal'])){
+            if(isset($sessionData['deals']['currentPresentationDeal'])){
 
                 array_push($this->currentBtxDeals ,
-                $sessionData['desls']['currentPresentationDeal']
+                $sessionData['deals']['currentPresentationDeal']
             );
             }
            
