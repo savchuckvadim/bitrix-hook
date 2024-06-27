@@ -365,13 +365,14 @@ class ReportController extends Controller
 
                 return APIOnlineController::getSuccess(
                     [
-                        'currentBaseDeal' => $currentBaseDeal,
-                        'currentPresentationDeal' => $currentPresentationDeal,
-                        'basePresentationDeals' => $basePresentationDeals,
-                        'allPresentationDeals' => $allPresentationDeals,
+                        'deals' =>  [
+                            'currentBaseDeal' => $currentBaseDeal,
+                            'currentPresentationDeal' => $currentPresentationDeal,
+                            'basePresentationDeals' => $basePresentationDeals,
+                            'allPresentationDeals' => $allPresentationDeals,
 
+                        ]
                     ]
-
                 );
             } else {
                 return APIOnlineController::getError(
