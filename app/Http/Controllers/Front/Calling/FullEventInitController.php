@@ -80,8 +80,8 @@ class FullEventInitController extends Controller
                     ->info(
                         'Session saved',
                         [
-                            'id' => session()->getId(),
-                            'data' => session()->all()
+                            'id' => $keys,
+                            'hashedKey' => $hashedKey
                         ]
                     );
 
@@ -147,15 +147,18 @@ class FullEventInitController extends Controller
 
                 // Десериализация данных из JSON
                 $data = json_decode($value, true);
+
+                $keys = Redis::keys('*');
+
                 Log::channel('telegram')
                     ->info(
                         'Session get',
                         [
-                            'id' => session()->getId(),
-                            'data' => session()->all()
+                            'id' => $keys,
+                            'data' => $data
                         ]
                     );
-
+               
                 return APIOnlineController::getSuccess(
                     [
                         'result' => $data,
