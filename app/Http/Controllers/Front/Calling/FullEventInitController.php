@@ -19,7 +19,9 @@ class FullEventInitController extends Controller
             $isFullData = true;
             $currentTask = false;
             if (isset($request->currentTask)) {
-                $currentTask = $request->currentTask;
+                if (isset($request->currentTask['id'])) {
+                    $currentTask = $request->currentTask;
+                }
             } else {
                 $isFullData = false;
             }
@@ -51,7 +53,7 @@ class FullEventInitController extends Controller
                         $btxDeals = $currentBtxEntities['deals'];
                     }
                 }
-                $sessionKey = $domain . '' . $currentTask['ID'];
+                $sessionKey = $domain . '' . $currentTask['id'];
                 $sessionValue = [
                     'currentCompany' => $currentCompany,
                     'btxDeals' => $btxDeals,
