@@ -336,6 +336,13 @@ class ReportController extends Controller
                                             'CATEGORY_ID' => $currentPresentCategoryBtxId,
                                             'RESPONSIBLE_ID' => 1,
                                             '!=STAGE_ID' => ['C' . $currentPresentCategoryBtxId . ':LOSE', 'C' . $currentPresentCategoryBtxId . ':APOLOGY']
+                                        ],
+                                        'select' => [
+                                            'ID',
+                                            'TITLE',
+                                            'UF_CRM_PRES_COUNT',
+                                            'STAGE_ID',
+
                                         ]
                                     ];
 
