@@ -71,7 +71,7 @@ class FullEventInitController extends Controller
                     [
                         'result' => 'success',
                         'message' => 'sission init !',
-                        'sessionKey' => $sessionKey,
+                        'sessionKey' => $hashedKey,
                         'all' => $session
 
                     ]
@@ -130,8 +130,9 @@ class FullEventInitController extends Controller
                     [
                         'result' => $value,
                         'message' => 'from session !',
-                        'sessionKey' => $sessionKey,
-                        'all' => $session
+                        'sessionKey' => $hashedKey,
+                        'all' => $session,
+                        'currentTaskId' => $currentTaskId
 
                     ]
 
