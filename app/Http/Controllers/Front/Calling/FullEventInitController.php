@@ -55,7 +55,7 @@ class FullEventInitController extends Controller
                         $btxDeals = $currentBtxEntities['deals'];
                     }
                 }
-                $sessionKey = $domain . '' . $currentTask['id'];
+                $sessionKey = $domain . '_' . $currentTask['id'];
                 $sessionValue = [
                     // 'currentCompany' => $currentCompany,
                     // 'btxDeals' => $btxDeals,
