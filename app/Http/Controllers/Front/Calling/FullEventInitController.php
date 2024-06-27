@@ -61,9 +61,11 @@ class FullEventInitController extends Controller
                     'currentTask' => $currentTask,
                 ];
 
-                // $hashedKey = md5($sessionKey);
+                 
+                // $hashedKey = md5($sessionKey); 
                 $hashedKey = str_replace('.', '_', $sessionKey);
-                $hashedKey = str_replace('-', '_', $sessionKey);
+                $hashedKey = str_replace('-', '', $hashedKey);
+                $value = Session::get($hashedKey);
                 session([$hashedKey => $sessionValue]);
 
                 $session = session()->all();
@@ -124,10 +126,10 @@ class FullEventInitController extends Controller
 
             if ($isFullData) {
                 $session = session()->all();
-                $sessionKey = $domain . '' . $currentTaskId;
+                $sessionKey = $domain . '_' . $currentTaskId;
                 // $hashedKey = md5($sessionKey); 
                 $hashedKey = str_replace('.', '_', $sessionKey);
-                $hashedKey = str_replace('-', '_', $sessionKey);
+                $hashedKey = str_replace('-', '', $hashedKey);
                 $value = Session::get($hashedKey);
 
 
