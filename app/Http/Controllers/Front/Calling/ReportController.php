@@ -331,10 +331,12 @@ class ReportController extends Controller
 
 
                                     $getAllPresDealsData =  [
-                                        'COMPANY_ID' => $currentCompany['ID'],
-                                        'CATEGORY_ID' => $currentPresentCategoryBtxId,
-                                        'RESPONSIBLE_ID' => 1,
-                                        '!=STAGE_ID' => ['C' . $currentPresentCategoryBtxId . ':LOSE', 'C' . $currentPresentCategoryBtxId . ':APOLOGY']
+                                        'filter' => [
+                                            'COMPANY_ID' => $currentCompany['ID'],
+                                            'CATEGORY_ID' => $currentPresentCategoryBtxId,
+                                            'RESPONSIBLE_ID' => 1,
+                                            '!=STAGE_ID' => ['C' . $currentPresentCategoryBtxId . ':LOSE', 'C' . $currentPresentCategoryBtxId . ':APOLOGY']
+                                        ]
                                     ];
 
                                     sleep(1);
