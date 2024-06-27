@@ -185,7 +185,7 @@ class EventReportService
         // smartCout: 0}
 
         $this->currentTask = $data['currentTask'];
-        
+
         if (!empty($data['currentTask'])) {
             if (!empty($data['currentTask']['eventType'])) {
                 $this->currentReportEventType = $data['currentTask']['eventType'];
@@ -300,14 +300,14 @@ class EventReportService
 
         $sessionKey = $domain . '_' . $this->currentTask['id'];
         $sessionData = FullEventInitController::getSessionItem($sessionKey);
-        Log::info('HOOK TEST sessionData', [
-            'sessionData' => $sessionData
+        // Log::info('HOOK TEST sessionData', [
+        //     'sessionData' => $sessionData
 
-        ]);
-        Log::channel('telegram')->info('HOOK TEST sessionData', [
-            'task from session' => $sessionData['currentTask']
+        // ]);
+        // Log::channel('telegram')->info('HOOK TEST sessionData', [
+        //     'task from session' => $sessionData['currentTask']
 
-        ]);
+        // ]);
         $portal = PortalController::getPortal($domain);
         $portal = $portal['data'];
         $this->portal = $portal;
@@ -363,21 +363,37 @@ class EventReportService
         //     );
         // }
 
-        $currentBtxEntities =  BitrixEntityFlowService::getEntities(
-            $this->hook,
-            $this->currentTask,
-        );
+        if (isset($sessionData['currentCompany'])) {
+            $this->currentBtxEntity  = $sessionData['currentCompany'];
+            $this->currentBtxDeals  = [$sessionData['desls']['currentBaseDeal']];
 
-        if (!empty($currentBtxEntities)) {
-            if (!empty($currentBtxEntities['companies'])) {
-                $currentBtxEntity = $currentBtxEntities['companies'][0];
+            if(isset($sessionData['desls']['currentPresentationDeal'])){
+
+                array_push($this->currentBtxDeals ,
+                $sessionData['desls']['currentPresentationDeal']
+            );
             }
-            if (!empty($currentBtxEntities['deals'])) {
-                $currentBtxDeals = $currentBtxEntities['deals'];
+           
+
+
+        } else {
+            $currentBtxEntities =  BitrixEntityFlowService::getEntities(
+                $this->hook,
+                $this->currentTask,
+            );
+
+            if (!empty($currentBtxEntities)) {
+                if (!empty($currentBtxEntities['companies'])) {
+                    $currentBtxEntity = $currentBtxEntities['companies'][0];
+                }
+                if (!empty($currentBtxEntities['deals'])) {
+                    $currentBtxDeals = $currentBtxEntities['deals'];
+                }
             }
+            $this->currentBtxEntity  = $currentBtxEntity;
+            $this->currentBtxDeals  = $currentBtxDeals;
         }
-        $this->currentBtxEntity  = $currentBtxEntity;
-        $this->currentBtxDeals  = $currentBtxDeals;
+
 
         Log::info('HOOK TEST currentBtxDeals', [
             'currentBtxDeals' => $this->currentBtxDeals,
@@ -621,7 +637,7 @@ class EventReportService
         //обнуляем дату следующей презентации и звонка - они будут аполнены только если реально что-то запланировано
         $reportFields['next_pres_plan_date'] = null;
         $reportFields['call_next_date'] = null;
-        
+
         if ($currentReportEventType) {
 
 
