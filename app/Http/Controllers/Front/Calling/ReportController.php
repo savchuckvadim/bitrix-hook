@@ -370,6 +370,7 @@ class ReportController extends Controller
                             'currentPresentationDeal' => $currentPresentationDeal,
                             'basePresentationDeals' => $basePresentationDeals,
                             'allPresentationDeals' => $allPresentationDeals,
+                            '$getAllPresDealsData' => $getAllPresDealsData
 
                         ]
                     ]
