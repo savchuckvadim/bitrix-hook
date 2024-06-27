@@ -8,6 +8,7 @@ use App\Http\Controllers\PortalController;
 use App\Services\HookFlow\BitrixEntityFlowService;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class FullEventInitController extends Controller
@@ -61,15 +62,23 @@ class FullEventInitController extends Controller
                     'currentTask' => $currentTask,
                 ];
 
-                 
+
                 // $hashedKey = md5($sessionKey); 
                 $hashedKey = str_replace('.', '_', $sessionKey);
-                $hashedKey = str_replace('-', '', $hashedKey);
+                $hashedKey = str_replace('-', '_', $hashedKey);
                 $value = Session::get($hashedKey);
                 session([$hashedKey => $sessionValue]);
 
                 $session = session()->all();
 
+                Log::channel('telegram')
+                    ->info(
+                        'Session saved',
+                        [
+                            'id' => session()->getId(),
+                            'data' => session()->all()
+                        ]
+                    );
 
                 return APIOnlineController::getSuccess(
                     [
@@ -129,9 +138,16 @@ class FullEventInitController extends Controller
                 $sessionKey = $domain . '_' . $currentTaskId;
                 // $hashedKey = md5($sessionKey); 
                 $hashedKey = str_replace('.', '_', $sessionKey);
-                $hashedKey = str_replace('-', '', $hashedKey);
+                $hashedKey = str_replace('-', '_', $hashedKey);
                 $value = Session::get($hashedKey);
-
+                Log::channel('telegram')
+                    ->info(
+                        'Session saved',
+                        [
+                            'id' => session()->getId(),
+                            'data' => session()->all()
+                        ]
+                    );
 
                 return APIOnlineController::getSuccess(
                     [
