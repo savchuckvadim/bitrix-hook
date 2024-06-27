@@ -158,7 +158,7 @@ class FullEventInitController extends Controller
                             'data' => $data
                         ]
                     );
-               
+
                 return APIOnlineController::getSuccess(
                     [
                         'result' => $data,
@@ -193,6 +193,56 @@ class FullEventInitController extends Controller
                 ]
 
             );
+        }
+    }
+
+    public static function setSessionItem($key, $data)
+    {
+
+        try {
+
+            $hashedKey = md5($key);
+
+            // Сериализация данных в JSON и сохранение в Redis
+            Redis::set($hashedKey, json_encode($data));
+
+            // Установка времени жизни данных (например, 30 минут)
+            Redis::expire($hashedKey, 1800);
+            // $keys = Redis::keys('*');
+
+
+
+            return [
+                'result' => 'success',
+                'message' => 'sission init !',
+                'sessionKey' => $hashedKey,
+                // 'all' => $session,
+                // 'keys' => $keys,
+            ];
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+    public static function getSessionItem($key, $itemKey = null)
+    {
+        $result = null;
+        try {
+
+
+            $hashedKey = md5($key);
+
+            $value = Redis::get($hashedKey);
+
+            // Десериализация данных из JSON
+            $data = json_decode($value, true);
+            if (!empty($itemKey) && isset($data[$itemKey])) {
+                $data = $data[$itemKey];
+            }
+            $result = $data;
+
+            return $result;
+        } catch (\Throwable $th) {
+            return $result;
         }
     }
 }

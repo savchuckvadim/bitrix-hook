@@ -277,6 +277,17 @@ class ReportController extends Controller
                 $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
                 $hook = 'https://' . $domain  . '/' . $webhookRestKey;
                 // $currentCompany = BitrixGeneralService::getEntity($hook, 'company', $companyId);
+                $sessionKey = $domain . '_' . $currentTask['id'];
+                FullEventInitController::setSessionItem(
+                    $sessionKey,
+                    [
+                        'hook' => $hook,
+                        'portal' => $portal,
+                        'currentTask' => $currentTask,
+
+
+                    ]
+                );
 
 
                 //from task - получаем из task компании и сделки разных направлений
@@ -293,7 +304,15 @@ class ReportController extends Controller
                         $btxDeals = $currentBtxEntities['deals'];
                     }
                 }
+                FullEventInitController::setSessionItem(
+                    $sessionKey,
+                    [
 
+                        'currentCompany' => $currentCompany,
+
+
+                    ]
+                );
 
 
                 $btxDealPortalCategories = null;
@@ -371,7 +390,24 @@ class ReportController extends Controller
                         $result['counts']['company'] = (int)$currentCompany['UF_CRM_PRES_COUNT'];
                     }
                 }
+                FullEventInitController::setSessionItem(
+                    $sessionKey,
+                    [
 
+                        'deals' => [
+                            'currentBaseDeal' => $currentBaseDeal,
+                            'currentPresentationDeal' => $currentPresentationDeal,
+                            'basePresentationDeals' => $basePresentationDeals,
+                            'allPresentationDeals' => $allPresentationDeals,
+
+                        ]
+
+
+                    ]
+                );
+                $fromSession = FullEventInitController::getSessionItem(
+                    $sessionKey
+                );
                 return APIOnlineController::getSuccess(
                     [
                         'deals' =>  [
@@ -381,7 +417,9 @@ class ReportController extends Controller
                             'allPresentationDeals' => $allPresentationDeals,
                             '$getAllPresDealsData' => $getAllPresDealsData
 
-                        ]
+                        ],
+                        'fromSession' => $fromSession
+                        
                     ]
                 );
             } else {
