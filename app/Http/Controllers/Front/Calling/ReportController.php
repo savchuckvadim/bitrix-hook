@@ -278,16 +278,7 @@ class ReportController extends Controller
                 $hook = 'https://' . $domain  . '/' . $webhookRestKey;
                 // $currentCompany = BitrixGeneralService::getEntity($hook, 'company', $companyId);
                 $sessionKey = $domain . '_' . $currentTask['id'];
-                FullEventInitController::setSessionItem(
-                    $sessionKey,
-                    [
-                        'hook' => $hook,
-                        'portal' => $portal,
-                        'currentTask' => $currentTask,
 
-
-                    ]
-                );
 
 
                 //from task - получаем из task компании и сделки разных направлений
@@ -304,15 +295,7 @@ class ReportController extends Controller
                         $btxDeals = $currentBtxEntities['deals'];
                     }
                 }
-                FullEventInitController::setSessionItem(
-                    $sessionKey,
-                    [
 
-                        'currentCompany' => $currentCompany,
-
-
-                    ]
-                );
 
 
                 $btxDealPortalCategories = null;
@@ -393,7 +376,10 @@ class ReportController extends Controller
                 FullEventInitController::setSessionItem(
                     $sessionKey,
                     [
-
+                        'hook' => $hook,
+                        'portal' => $portal,
+                        'currentTask' => $currentTask,
+                        'currentCompany' => $currentCompany,
                         'deals' => [
                             'currentBaseDeal' => $currentBaseDeal,
                             'currentPresentationDeal' => $currentPresentationDeal,
@@ -420,7 +406,7 @@ class ReportController extends Controller
 
 
                         ],
-                        
+
 
                     ]
                 );
