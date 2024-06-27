@@ -3,6 +3,7 @@
 namespace App\Services\FullEventReport;
 
 use App\Http\Controllers\APIOnlineController;
+use App\Http\Controllers\Front\Calling\FullEventInitController;
 use App\Http\Controllers\PortalController;
 use App\Jobs\BtxCreateListItemJob;
 use App\Services\BitrixTaskService;
@@ -184,6 +185,7 @@ class EventReportService
         // smartCout: 0}
 
         $this->currentTask = $data['currentTask'];
+        
         if (!empty($data['currentTask'])) {
             if (!empty($data['currentTask']['eventType'])) {
                 $this->currentReportEventType = $data['currentTask']['eventType'];
@@ -296,8 +298,16 @@ class EventReportService
             }
         }
 
+        $sessionKey = $domain . '_' . $this->currentTask['id'];
+        $sessionData = FullEventInitController::getSessionItem($sessionKey);
+        Log::info('HOOK TEST sessionData', [
+            'sessionData' => $sessionData
 
+        ]);
+        Log::channel('telegram')->info('HOOK TEST sessionData', [
+            'task from session' => $sessionData['currentTask']
 
+        ]);
         $portal = PortalController::getPortal($domain);
         $portal = $portal['data'];
         $this->portal = $portal;
