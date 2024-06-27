@@ -142,7 +142,7 @@ class FullEventInitController extends Controller
                 $value = Session::get($hashedKey);
                 Log::channel('telegram')
                     ->info(
-                        'Session saved',
+                        'Session get',
                         [
                             'id' => session()->getId(),
                             'data' => session()->all()
