@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\APIController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\BitrixHookController;
+use App\Http\Controllers\Front\Calling\FullEventInitController;
 use App\Http\Controllers\Front\Calling\ReportController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\ReactAppController;
@@ -287,7 +288,16 @@ Route::post('/task/fail', function (Request $request) {
 
 
 
-// ............................... FULL CALING FRONT
+// ............................... FULL EVENT CALING PRES FRONT
+
+Route::post('/full/init', function (Request $request) {
+    return FullEventInitController::fullEventSessionInit($request);
+});
+
+Route::post('/full/session', function (Request $request) {
+    return FullEventInitController::sessionGet($request);
+});
+
 
 Route::post('/full', function (Request $request) {
     return ReportController::eventReport($request);
@@ -853,6 +863,48 @@ Route::post('/calling', function (Request $request) {
 
 
 
+//for testing front
+
+Route::post('/bitrix/method', function (Request $request) {
+
+    $domain = $request->domain;
+    $method = $request->method;
+    $data = $request->bxData;
+
+
+
+
+    try {
+        $portal = PortalController::getPortal($domain);
+        $portal = $portal['data'];
+        $portal = $portal;
+        $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+        $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+        $url  = $hook . '/' . $method;
+
+        $response = Http::get($url, $data);
+        $responseData = APIBitrixController::getBitrixRespone($response, 'general service: update deal');
+
+
+        return APIOnlineController::getSuccess([
+            'result' =>  $responseData
+        ]);
+        
+    } catch (\Throwable $th) {
+        Log::error('Exception caught', [
+            'message'   => $th->getMessage(),
+            'file'      => $th->getFile(),
+            'line'      => $th->getLine(),
+            'trace'     => $th->getTraceAsString(),
+        ]);
+        return response([
+            'result' => 'error',
+            'message' => $th->getMessage()
+        ]);
+    }
+});
+
+
 //testing
 
 Route::post('/lists', function (Request $request) {
@@ -1040,44 +1092,6 @@ Route::post('/install/smart/', function (Request $request) {
 });
 
 
-Route::post('/bitrix/method', function (Request $request) {
-
-    $domain = $request->domain;
-    $method = $request->method;
-    $data = $request->bxData;
-
-
-
-
-    try {
-        $portal = PortalController::getPortal($domain);
-        $portal = $portal['data'];
-        $portal = $portal;
-        $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
-        $hook = 'https://' . $domain  . '/' . $webhookRestKey;
-        $url  = $hook . '/' . $method;
-
-        $response = Http::get($url, $data);
-        $responseData = APIBitrixController::getBitrixRespone($response, 'general service: update deal');
-
-
-        return APIOnlineController::getSuccess([
-            'result' =>  $responseData
-        ]);
-        
-    } catch (\Throwable $th) {
-        Log::error('Exception caught', [
-            'message'   => $th->getMessage(),
-            'file'      => $th->getFile(),
-            'line'      => $th->getLine(),
-            'trace'     => $th->getTraceAsString(),
-        ]);
-        return response([
-            'result' => 'error',
-            'message' => $th->getMessage()
-        ]);
-    }
-});
 
 
 
