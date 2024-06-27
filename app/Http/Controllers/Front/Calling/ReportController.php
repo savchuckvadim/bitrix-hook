@@ -240,4 +240,171 @@ class ReportController extends Controller
             );
         }
     }
+
+    public static function getDealFullDeals(Request $request)
+    {
+
+        // entities [deal, smart ...]
+        //companyId
+        //userId
+        //currentTask
+        $result = null;
+        try {
+            $data = $request->all();
+            if (
+                // !empty($data['userId'])  &&
+                // !empty($data['companyId']) &&
+                !empty($data['domain']) &&
+                !empty($data['currentTask'])
+            ) {
+
+                $currentBaseDeal = null;               //базовая сделка в задаче всегда должна быть одна
+                $currentPresentationDeal = null;               // сделка презентации из задачи
+                $basePresentationDeals = [];                 // сделки презентаций связанные с основной через списки
+                $allPresentationDeals = [];                  // все сделки презентации связанные с компанией и пользователем
+                $currentCompany = null;
+
+                // $companyId = $data['userId'];
+                // $userId = $data['companyId'];
+                $domain = $data['domain'];
+                $companyId  = $data['domain'];
+                $btxDeals = []; //from task
+                $currentTask =  $data['currentTask'];
+
+
+                $portal = PortalController::getPortal($domain);
+                $portal = $portal['data'];
+                $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+                $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+                // $currentCompany = BitrixGeneralService::getEntity($hook, 'company', $companyId);
+
+
+                //from task - получаем из task компании и сделки разных направлений
+
+                $currentBtxEntities =  BitrixEntityFlowService::getEntities(
+                    $hook,
+                    $currentTask,
+                );
+                if (!empty($currentBtxEntities)) {
+                    if (!empty($currentBtxEntities['companies'])) {
+                        $currentCompany = $currentBtxEntities['companies'][0];
+                    }
+                    if (!empty($currentBtxEntities['deals'])) {
+                        $btxDeals = $currentBtxEntities['deals'];
+                    }
+                }
+
+
+
+                $btxDealPortalCategories = null;
+                $currentCategoryData  = null;
+                if (!empty($portal['bitrixDeal'])) {
+                    if (!empty($portal['bitrixDeal']['categories'])) {
+                        $btxDealPortalCategories = $portal['bitrixDeal']['categories'];
+                    }
+                }
+
+
+                if (!empty($btxDealPortalCategories)) {
+                    foreach ($btxDealPortalCategories as $btxDealPortalCategory) {
+                        if (!empty($btxDealPortalCategory['code'])) {
+                            if ($btxDealPortalCategory['code'] == "sales_base") {
+                                foreach ($btxDeals as $btxDeal) {
+
+
+                                    if (!empty($btxDeal['CATEGORY_ID'])) {
+                                        if ($btxDeal['CATEGORY_ID'] == $btxDealPortalCategory['bitrixId']) {
+                                            $currentBaseDeal = $btxDeal;   //базовая сделка в задаче всегда должна быть одна
+                                        }
+                                    }
+                                }
+                            } else  if ($btxDealPortalCategory['code'] == "sales_presentation") {
+                                $currentPresentCategoryBtxId = $btxDealPortalCategory['bitrixId'];
+
+                                foreach ($btxDeals as $btxDeal) {
+                                    if (!empty($btxDeal['CATEGORY_ID'])) {
+                                        if ($btxDeal['CATEGORY_ID'] == $currentPresentCategoryBtxId) {
+                                            $currentPresentationDeal = $btxDeal;      // сделка презентации из задачи
+
+                                        }
+                                    }
+
+
+                                    $getAllPresDealsData =  [
+                                        'COMPANY_ID' => $currentCompany['ID'],
+                                        'CATEGORY_ID' => $currentPresentCategoryBtxId,
+                                        'RESPONSIBLE_ID' => 1,
+                                        '!=STAGE_ID' => ['C' . $currentPresentCategoryBtxId . ':LOSE', 'C' . $currentPresentCategoryBtxId . ':APOLOGY']
+                                    ];
+
+                                    sleep(1);
+                                    $allPresentationDeals =   BitrixDealService::getDealList(
+                                        $hook,
+                                        $getAllPresDealsData,
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+                if (!empty($currentBaseDeal) && !empty($currentCompany)) {
+
+                    if (isset($currentBaseDeal['UF_CRM_PRES_COUNT'])) {
+                        $result['counts']['deal'] = (int)$currentBaseDeal['UF_CRM_PRES_COUNT'];
+                    }
+                    if (isset($currentCompany['UF_CRM_1709807026'])) {
+                        $result['counts']['company'] = (int)$currentCompany['UF_CRM_1709807026'];
+                    }
+
+                    if (isset($currentCompany['UF_CRM_PRES_COUNT'])) {
+                        $result['counts']['company'] = (int)$currentCompany['UF_CRM_PRES_COUNT'];
+                    }
+                }
+
+                return APIOnlineController::getSuccess(
+                    [
+                        'currentBaseDeal' => $currentBaseDeal,
+                        'currentPresentationDeal' => $currentPresentationDeal,
+                        'basePresentationDeals' => $basePresentationDeals,
+                        'allPresentationDeals' => $allPresentationDeals,
+
+                    ]
+
+                );
+            } else {
+                return APIOnlineController::getError(
+                    'is not full data',
+                    [
+                        'rq' => $request->all()
+
+                    ]
+
+                );
+            }
+
+
+            return APIOnlineController::getSuccess(
+                [
+                    'result' => 'success',
+                    'message' => 'job !'
+
+                ]
+
+            );
+        } catch (\Throwable $th) {
+            return APIOnlineController::getError(
+                $th->getMessage(),
+                [
+                    'task' => [
+                        'message' => 'success'
+                    ],
+                    'rq' => $request->all()
+
+                ]
+
+            );
+        }
+    }
 }

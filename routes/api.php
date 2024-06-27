@@ -298,6 +298,10 @@ Route::post('/full/session', function (Request $request) {
     return FullEventInitController::sessionGet($request);
 });
 
+Route::post('full/deal/base', function (Request $request) {
+    return ReportController::getPresCounts($request);
+});
+
 
 Route::post('/full', function (Request $request) {
     return ReportController::eventReport($request);
@@ -317,6 +321,8 @@ Route::post('/activity/test', function (Request $request) {
 Route::post('/pres/count', function (Request $request) {
     return ReportController::getPresCounts($request);
 });
+
+
 
 // новй холодный звонка из Откуда Угодно
 Route::post('cold', function (Request $request) {
