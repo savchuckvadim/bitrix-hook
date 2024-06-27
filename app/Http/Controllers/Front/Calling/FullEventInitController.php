@@ -9,6 +9,7 @@ use App\Services\HookFlow\BitrixEntityFlowService;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Session;
 
 class FullEventInitController extends Controller
@@ -63,13 +64,17 @@ class FullEventInitController extends Controller
                 ];
 
 
-                // $hashedKey = md5($sessionKey); 
-                $hashedKey = str_replace('.', '_', $sessionKey);
-                $hashedKey = str_replace('-', '_', $hashedKey);
-                $value = Session::get($hashedKey);
-                Session::put([$hashedKey => $sessionValue]);
+                $hashedKey = md5($sessionKey);
+                // $hashedKey = str_replace('.', '_', $sessionKey);
+                // $hashedKey = str_replace('-', '_', $hashedKey);
 
-                $session = session()->all();
+                // Сериализация данных в JSON и сохранение в Redis
+                Redis::set($hashedKey, json_encode($sessionValue));
+
+                // Установка времени жизни данных (например, 30 минут)
+                Redis::expire($hashedKey, 1800);
+                $keys = Redis::keys('*');
+
 
                 Log::channel('telegram')
                     ->info(
@@ -85,8 +90,8 @@ class FullEventInitController extends Controller
                         'result' => 'success',
                         'message' => 'sission init !',
                         'sessionKey' => $hashedKey,
-                        'all' => $session,
-                        'value' => $value,
+                        // 'all' => $session,
+                        'keys' => $keys,
                     ]
 
                 );
@@ -134,12 +139,14 @@ class FullEventInitController extends Controller
             }
 
             if ($isFullData) {
-                $session = session()->all();
+                // $session = session()->all();
                 $sessionKey = $domain . '_' . $currentTaskId;
-                // $hashedKey = md5($sessionKey); 
-                $hashedKey = str_replace('.', '_', $sessionKey);
-                $hashedKey = str_replace('-', '_', $hashedKey);
-                $value = Session::get($hashedKey);
+                $hashedKey = md5($sessionKey);
+
+                $value = Redis::get($hashedKey);
+
+                // Десериализация данных из JSON
+                $data = json_decode($value, true);
                 Log::channel('telegram')
                     ->info(
                         'Session get',
@@ -151,10 +158,10 @@ class FullEventInitController extends Controller
 
                 return APIOnlineController::getSuccess(
                     [
-                        'result' => $value,
+                        'result' => $data,
                         'message' => 'from session !',
                         'sessionKey' => $hashedKey,
-                        'all' => $session,
+                        // 'all' => $session,
                         'currentTaskId' => $currentTaskId
 
                     ]
