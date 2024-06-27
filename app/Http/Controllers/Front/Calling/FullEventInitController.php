@@ -64,11 +64,15 @@ class FullEventInitController extends Controller
 
                 session([$sessionKey => $sessionValue]);
 
+                $session = session()->all();
+
 
                 return APIOnlineController::getSuccess(
                     [
                         'result' => 'success',
-                        'message' => 'sission init !'
+                        'message' => 'sission init !',
+                        'sessionKey' => $sessionKey,
+                        'all' => $session
 
                     ]
 
@@ -121,10 +125,13 @@ class FullEventInitController extends Controller
                 $sessionKey = $domain . '' . $currentTaskId;
 
                 $value = Session::get($sessionKey);
+                $session = session()->all();
                 return APIOnlineController::getSuccess(
                     [
                         'result' => $value,
-                        'message' => 'from sission !'
+                        'message' => 'from session !',
+                        'sessionKey' => $sessionKey,
+                        'all' => $session
 
                     ]
 
