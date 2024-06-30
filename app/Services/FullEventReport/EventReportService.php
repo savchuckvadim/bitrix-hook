@@ -395,15 +395,6 @@ class EventReportService
         }
 
 
-        Log::info('HOOK TEST currentBtxDeals', [
-            'currentBtxDeals' => $this->currentBtxDeals,
-
-
-        ]);
-        // Log::error('APRIL_HOOK portal', ['$portal.lead' => $portal['company']['bitrixfields']]); // массив fields
-        // Log::error('APRIL_HOOK portal', ['$portal.company' => $portal['company']['bitrixfields']]); // массив fields
-
-
 
         $fieldsCallCodes = [
             'call_next_date', //ОП Дата Следующего звонка

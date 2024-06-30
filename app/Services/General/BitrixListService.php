@@ -137,4 +137,40 @@ class BitrixListService
             return $result;
         }
     }
+
+    static function getList(
+        $hook,
+        $listBitrixId, // from portal db
+        $filter
+
+    ) {
+
+        $result = false;
+
+
+
+        try {
+            $method = '/lists.element.get.json';
+            $url = $hook . $method;
+         
+            $data =  [
+                'IBLOCK_TYPE_ID' => 'lists',
+                'IBLOCK_ID' => $listBitrixId,
+                'filter' => $filter,
+
+            ];
+
+
+            $response = Http::get($url, $data);
+            // $responseData = $response->json();
+            $responseData = APIBitrixController::getBitrixRespone($response, 'list service: setItem');
+            if (isset($responseData)) {
+                $result = $responseData;
+            }
+
+            return $result;
+        } catch (\Throwable $th) {
+            return $result;
+        }
+    }
 }

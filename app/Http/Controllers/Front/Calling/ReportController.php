@@ -10,6 +10,7 @@ use App\Jobs\EventJob;
 use App\Services\BitrixGeneralService;
 use App\Services\FullEventReport\EventReportService;
 use App\Services\General\BitrixDealService;
+use App\Services\General\BitrixListService;
 use App\Services\HookFlow\BitrixEntityFlowService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -280,7 +281,7 @@ class ReportController extends Controller
                 $sessionKey = $domain . '_' . $currentTask['id'];
 
 
-
+                $presList = null;
                 //from task - получаем из task компании и сделки разных направлений
 
                 $currentBtxEntities =  BitrixEntityFlowService::getEntities(
@@ -373,6 +374,43 @@ class ReportController extends Controller
                         $result['counts']['company'] = (int)$currentCompany['UF_CRM_PRES_COUNT'];
                     }
                 }
+                $filter = [];
+                if (!empty($portal['bitrixLists'])) {
+                    $listBitrixId = null;
+                    foreach ($portal['bitrixLists'] as $list) {
+                        if ($list['type'] == 'presentation') {
+                            $listBitrixId = $list['bitrixId'];
+                        }
+                    }
+
+                    if (!empty($portal['bitrixLists']['bitrixfields'])) {
+                        $listBitrixId = null;
+                        foreach ($portal['bitrixLists']['bitrixfields'] as $field) {
+                            if ($field['code'] == 'sales_presentation_pres_crm') {
+                                $filter[$field['bitrixCamelId']] = $currentCompany['ID'];
+                            } else if ($field['code'] == 'sales_presentation_pres_responsible') {
+                                $filter[$field['bitrixCamelId']] = 'user_1';
+                            }
+                        }
+                    }
+
+                    if ($listBitrixId) {
+                        $presList = BitrixListService::getList(
+                            $hook,
+                            $listBitrixId,
+                            $filter
+                        );
+                    }
+                }
+
+
+                Log::channel('telegram')->info('session presList', [
+                    'presList' => $presList
+
+                ]);
+
+
+
                 FullEventInitController::setSessionItem(
                     $sessionKey,
                     [
@@ -386,7 +424,8 @@ class ReportController extends Controller
                             'basePresentationDeals' => $basePresentationDeals,
                             'allPresentationDeals' => $allPresentationDeals,
 
-                        ]
+                        ],
+                        'presList' => $presList
 
 
                     ]
@@ -404,9 +443,8 @@ class ReportController extends Controller
                             '$getAllPresDealsData' => $getAllPresDealsData,
                             'fromSession' => $fromSession
 
-
                         ],
-
+                        'presList' => $presList
 
                     ]
                 );
