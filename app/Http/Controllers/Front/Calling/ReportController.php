@@ -273,6 +273,8 @@ class ReportController extends Controller
                 $currentTask =  $data['currentTask'];
 
 
+                $getAllPresDealsData = [];
+
                 $portal = PortalController::getPortal($domain);
                 $portal = $portal['data'];
                 $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
