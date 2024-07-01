@@ -30,7 +30,7 @@ class BitrixDealFlowService
         $eventType, // xo warm presentation, 
         $eventTypeName, //Презентация , Звонок
         $eventName, //имя планируемого события
-        $eventAction,  // plan done expired fail
+        $eventAction,  // plan done expired fail success
         $responsibleId,
         $isResult,
         $fields,
@@ -38,9 +38,9 @@ class BitrixDealFlowService
 
     ) {
         sleep(1);
-        Log::channel('telegram')->info('HOOK TEST currentReportStatus', [
+        Log::info('HOOK TEST currentReportStatus', [
             'eventAction' => $eventAction,
-    
+            'currentBtxDeals' => $currentBtxDeals
 
         ]);
         $currentDealIds = [];
@@ -64,7 +64,12 @@ class BitrixDealFlowService
                     $eventAction,
                     $isResult,
                 );
-
+                Log::info('HOOK TEST currentReportStatus', [
+                    'eventAction' => $eventAction,
+                    'currentCategoryData' => $currentCategoryData,
+                    'targetStageBtxId' => $targetStageBtxId
+        
+                ]);
 
                 // $currentDeal = BitrixDealService::getDealId(
                 //     $hook,
@@ -137,7 +142,7 @@ class BitrixDealFlowService
 
                     // ]);
                 } else {
-                
+
                     $isCanDealStageUpdate = BitrixDealService::getIsCanDealStageUpdate(
                         $currentDeal, //with ID CATEGORY_ID STAGE_ID
                         $targetStageBtxId,
@@ -201,7 +206,7 @@ class BitrixDealFlowService
         if (!empty($currentCategoryDatas)) {
             foreach ($currentCategoryDatas as $currentCategoryData) {
 
-             
+
 
 
                 if ($currentCategoryData['code'] == 'sales_presentation') {
