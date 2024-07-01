@@ -128,7 +128,9 @@ class EventReportService
     protected $bitrixLists = [];
 
 
+    //sale
 
+    protected $relationSalePresDeal = null;
 
 
     public function __construct(
@@ -522,6 +524,15 @@ class EventReportService
 
 
         $this->currentDepartamentType = BitrixDepartamentService::getDepartamentTypeByUserId();
+
+
+        if (!empty($data['sale'])) {
+
+            if (!empty($data['sale']['relationSalePresDeal'])) {
+
+                $this->relationSalePresDeal = $data['sale']['relationSalePresDeal'];
+            }
+        }
     }
 
 
@@ -967,6 +978,9 @@ class EventReportService
         if ($this->isFail) {
             //найти сделку хо -> закрыть в отказ , заполнить поля отказа по хо 
             $currentReportStatus = 'fail';
+        } else if ($this->isSuccessSale) {
+            //найти сделку хо -> закрыть в отказ , заполнить поля отказа по хо 
+            $currentReportStatus = 'success';
         } else {
             if ($this->isResult) {                   // результативный
 
@@ -982,63 +996,7 @@ class EventReportService
         }
         // }
 
-        // if ($this->currentReportEventType !== 'presentation') {            // если не презентация - отчитываемся просто по закрытию звонка
-        //     $reportDeals = BitrixDealFlowService::flow(  //закрывает сделку
-        //         $this->hook,
-        //         $this->currentBtxDeals,
-        //         $this->portalDealData,
-        //         $this->currentDepartamentType,
-        //         $this->entityType,
-        //         $this->entityId,
-        //         $this->currentReportEventType, // xo warm presentation,
-        //         $this->currentReportEventName,
-        //         $this->currentPlanEventName,
-        //         $currentReportStatus,  // plan done expired fail
-        //         $this->planResponsibleId,
-        //         '$fields'
-        //     );
-        // }
 
-        // if ($this->isPresentationDone) {                 // вне зависимости от текущего отчетного события,
-        //     // если была нажата презентация проведена  
-
-        //     $reportDeals = BitrixDealFlowService::flow(  // закрывает сделку или создает и закрывает сделку - презентация
-        //         $this->hook,
-        //         null,
-        //         $this->portalDealData,
-        //         $this->currentDepartamentType,
-        //         $this->entityType,
-        //         $this->entityId,
-        //         'presentation', // xo warm presentation,
-        //         'Презентация',
-        //         'Проведена',
-        //         'done',  // plan done expired fail
-        //         $this->planResponsibleId,
-        //         '$fields'
-        //     );
-
-        //     if ($this->isFail) {
-        //         $reportDeals = BitrixDealFlowService::flow(  // закрывает сделку или создает и закрывает сделку - презентация
-        //             $this->hook,
-        //             null,
-        //             $this->portalDealData,
-        //             $this->currentDepartamentType,
-        //             $this->entityType,
-        //             $this->entityId,
-        //             'presentation', // xo warm presentation,
-        //             'Презентация',
-        //             'Отказ',
-        //             'fail',  // plan done expired fail
-        //             $this->planResponsibleId,
-        //             '$fields'
-        //         );
-        //     }
-        // }
-        // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-        //     'isPresentationDone' => $this->isPresentationDone,
-        //     'currentReportEventType' => $this->currentReportEventType,
-
-        // ]);
         if ($this->isPresentationDone && $this->currentReportEventType !== 'presentation') { // проведенная презентация будет isUnplanned
             //в current task не будет id сделки презентации
             // в таком случае предполагается, что сделки презентация еще не существует
@@ -1056,7 +1014,8 @@ class EventReportService
                 'plan',  // plan done expired fail
                 $this->planResponsibleId,
                 true,
-                '$fields'
+                '$fields',
+                null // $relationSalePresDeal
             );
             // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
             //     'unplannedPresDeal' => $unplannedPresDeal,
@@ -1097,7 +1056,8 @@ class EventReportService
                         $unplannedPresResultStatus,  // plan done expired fail
                         $this->planResponsibleId,
                         true,
-                        '$fields'
+                        '$fields',
+                        null // $relationSalePresDeal
                     );
                     // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
                     //     'unplannedPresDeals' => $unplannedPresDeals,
@@ -1138,11 +1098,7 @@ class EventReportService
         // которая пушится туда  при unplanned - чтобы были обработаны базовая сделка 
         // в соответствии с проведенной през
         // при этом у основной сделки должна быть обновлена стадия - например на през если была unplanned
-        Log::info('HOOK TEST currentBtxDeals', [
-            'currentBtxDeals' => $currentBtxDeals,
-
-
-        ]);
+    
         $reportDeals = BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
             $this->hook,
             $currentBtxDeals,
@@ -1150,13 +1106,14 @@ class EventReportService
             $this->currentDepartamentType,
             $this->entityType,
             $this->entityId,
-            $this->currentReportEventType, // xo warm presentation,
+            $this->currentReportEventType, // xo warm presentation, 
             $this->currentReportEventName,
             $this->currentPlanEventName,
-            $currentReportStatus,  // plan done expired fail
+            $currentReportStatus,  // plan done expired fail success
             $this->planResponsibleId,
             $this->isResult,
-            '$fields'
+            '$fields',
+            $this->relationSalePresDeal
         );
         //todo plan flow
 
@@ -1191,7 +1148,8 @@ class EventReportService
                 'plan',  // plan done expired 
                 $this->planResponsibleId,
                 $this->isResult,
-                '$fields'
+                '$fields',
+                null // $relationSalePresDeal
             );
         }
 

@@ -27,17 +27,22 @@ class BitrixDealFlowService
         $currentDepartamentType,
         $entityType,
         $entityId,
-        $eventType, // xo warm presentation,
+        $eventType, // xo warm presentation, 
         $eventTypeName, //Презентация , Звонок
         $eventName, //имя планируемого события
         $eventAction,  // plan done expired fail
         $responsibleId,
         $isResult,
-        $fields
+        $fields,
+
 
     ) {
         sleep(1);
+        Log::channel('telegram')->info('HOOK TEST currentReportStatus', [
+            'eventAction' => $eventAction,
+    
 
+        ]);
         $currentDealIds = [];
 
         $currentCategoryDatas =  BitrixDealService::getTargetCategoryData(
@@ -46,26 +51,7 @@ class BitrixDealFlowService
             $eventType,
             $eventAction
         );
-        // if ($eventAction == 'done') {
-            // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            //     'currentCategoryDatas' => $currentCategoryDatas,
 
-
-            // ]);
-            // Log::info('HOOK TEST CURRENTENTITY', [
-            //     'currentCategoryDatas' => $currentCategoryDatas,
-
-
-            // ]);
-            // Log::info('HOOK TEST CURRENTENTITY', [
-            //     'eventAction' => $eventAction,
-            //     'eventType' => $eventType,
-            //     'currentBtxDeals' => $currentCategoryDatas,
-               
-
-
-            // ]);
-        // }
 
         if (!empty($currentCategoryDatas)) {
             foreach ($currentCategoryDatas as $currentCategoryData) {
@@ -114,18 +100,18 @@ class BitrixDealFlowService
                 ];
 
 
-                // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                //     'currentDealId' => $currentDealId,
-                //     'currentDeal' => $currentDeal,
-                //     '$eventType' => $eventType,
+                Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                    'currentDealId' => $currentDealId,
+                    'currentDeal' => $currentDeal,
+                    '$eventType' => $eventType,
 
-                // ]);
-                // Log::info('HOOK TEST CURRENTENTITY', [
-                //     'currentDeal' => $currentDeal,
-                //     'targetStageBtxId' => $targetStageBtxId,
-                //     'currentCategoryData' => $currentCategoryData,
+                ]);
+                Log::info('HOOK TEST CURRENTENTITY', [
+                    'currentDeal' => $currentDeal,
+                    'targetStageBtxId' => $targetStageBtxId,
+                    'currentCategoryData' => $currentCategoryData,
 
-                // ]);
+                ]);
 
 
                 if (!$currentDealId) {
