@@ -15,6 +15,7 @@ use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use IntlDateFormatter;
 
 class BitrixHookController extends Controller
 {
@@ -76,6 +77,33 @@ class BitrixHookController extends Controller
 
         // ]);
         try {
+            date_default_timezone_set('Europe/Moscow');
+            $nowDate = new DateTime();
+            setlocale(LC_TIME, 'ru_RU.utf8');
+            // Форматируем дату и время в нужный формат
+            $locale = 'ru_RU';
+            $pattern = 'd MMMM yyyy';
+
+            // Создаем форматтер
+            $formatter = new IntlDateFormatter(
+                $locale,
+                IntlDateFormatter::NONE,
+                IntlDateFormatter::NONE,
+                date_default_timezone_get(),
+                IntlDateFormatter::GREGORIAN,
+                $pattern
+            );
+           
+            $formattedStringNowDate = $formatter->format($nowDate);
+            $name = 'от ' . $formattedStringNowDate;
+            if (isset($request['name'])) {
+                if (!empty($request['name'])) {
+                    $name = $request['name'];
+                }
+            }
+
+
+
             if (isset($request['created'])) {
                 $created = $request['created'];
                 $partsCreated = explode("_", $created);
@@ -103,9 +131,9 @@ class BitrixHookController extends Controller
 
             $deadline = $request['deadline'];
             // $crm = $request['crm'];
-            if (isset($request['name'])) {
-                $name = $request['name'];
-            }
+            // if (isset($request['name'])) {
+            //     $name = $request['name'];
+            // }
 
 
 
