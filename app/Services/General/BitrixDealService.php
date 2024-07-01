@@ -271,7 +271,8 @@ class BitrixDealService
             if (
                 $eventAction == 'plan' ||
                 ($eventAction == 'done' && $eventType == 'presentation') ||
-                $eventAction == 'fail'
+                $eventAction == 'fail' ||
+                $eventAction == 'success'
             ) {
 
                 array_push($categoryPrephicks, $currentDepartamentType . '_base');
@@ -401,7 +402,7 @@ class BitrixDealService
                         'stageCode' => $stage['code'],
                         'stage' => $stage,
                         'eventType' => $eventType,
-                       
+
                     ]);
                 }
                 // }
