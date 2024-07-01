@@ -38,7 +38,10 @@ class EventReportService
     //если есть текущая задача, то в ее названии будет
     // // Звонок Презентация, Звонок По решению, В оплате 
     // // или currentTask->eventType // xo 'presentation' in Work money_await
-    protected $currentReportEventType; // currentTask-> eventType xo
+    protected $currentReportEventType; // currentTask-> eventType xo  
+    // todo если нет текущей задачи значит нужно брать report event type из списка типа событий отчета
+    // в котором могут быть входящий звонок и тд
+    // или пока просто можно воспринимать как NEW 
     protected $currentReportEventName = '';
 
     protected $comment = '';
@@ -70,6 +73,8 @@ class EventReportService
     protected $isInWork = false;  //boolean
     protected $isFail = false;  //boolean
     protected $isSuccessSale = false;  //boolean
+    protected $isNew = false;  //boolean
+
 
     protected $plan;
     protected $presentation;
@@ -185,7 +190,7 @@ class EventReportService
         // smartCout: 0}
 
         $this->currentTask = $data['currentTask'];
-
+        $this->currentReportEventType = 'new';
         if (!empty($data['currentTask'])) {
             if (!empty($data['currentTask']['eventType'])) {
                 $this->currentReportEventType = $data['currentTask']['eventType'];
@@ -367,15 +372,13 @@ class EventReportService
             $this->currentBtxEntity  = $sessionData['currentCompany'];
             $this->currentBtxDeals  = [$sessionData['deals']['currentBaseDeal']];
 
-            if(isset($sessionData['deals']['currentPresentationDeal'])){
+            if (isset($sessionData['deals']['currentPresentationDeal'])) {
 
-                array_push($this->currentBtxDeals ,
-                $sessionData['deals']['currentPresentationDeal']
-            );
+                array_push(
+                    $this->currentBtxDeals,
+                    $sessionData['deals']['currentPresentationDeal']
+                );
             }
-           
-
-
         } else {
             $currentBtxEntities =  BitrixEntityFlowService::getEntities(
                 $this->hook,

@@ -425,9 +425,10 @@ class ReportController extends Controller
                             'currentPresentationDeal' => $currentPresentationDeal,
                             'basePresentationDeals' => $basePresentationDeals,
                             'allPresentationDeals' => $allPresentationDeals,
+                            'presList' => $presList
 
                         ],
-                        'presList' => $presList
+
 
 
                     ]
@@ -442,11 +443,10 @@ class ReportController extends Controller
                             'currentPresentationDeal' => $currentPresentationDeal,
                             'basePresentationDeals' => $basePresentationDeals,
                             'allPresentationDeals' => $allPresentationDeals,
-                            '$getAllPresDealsData' => $getAllPresDealsData,
-                            'fromSession' => $fromSession
+                            'presList' => $presList
 
                         ],
-                        'presList' => $presList
+
 
                     ]
                 );
