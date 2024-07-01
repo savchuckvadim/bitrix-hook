@@ -17,6 +17,7 @@ use Carbon\Carbon;
 use DateTime;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use IntlDateFormatter;
 
 class BitrixCallingColdService
 
@@ -90,17 +91,39 @@ class BitrixCallingColdService
     ) {
         date_default_timezone_set('Europe/Moscow');
         $nowDate = new DateTime();
+        setlocale(LC_TIME, 'ru_RU.utf8');
         // Форматируем дату и время в нужный формат
         $this->nowDate = $nowDate->format('d.m.Y H:i:s');
+        $locale = 'ru_RU';
+        $pattern = 'd MMMM yyyy';
 
+        // Создаем форматтер
+        $formatter = new IntlDateFormatter(
+            $locale,
+            IntlDateFormatter::NONE,
+            IntlDateFormatter::NONE,
+            date_default_timezone_get(),
+            IntlDateFormatter::GREGORIAN,
+            $pattern
+        );
 
+        // Форматируем дату
+        $formattedStringNowDate = $formatter->format($nowDate);
         $domain = $data['domain'];
         $this->entityType = $data['entityType'];
         $this->entityId = $data['entityId'];
         $this->responsibleId = $data['responsible'];
         $this->createdId = $data['created'];
         $this->deadline = $data['deadline'];
-        $this->name = $data['name'];
+        $this->name = 'от ' . $formattedStringNowDate;
+
+        if (isset($data['name'])) {
+            if (!empty($data['name'])) {
+                $this->name = $data['name'];
+            }
+        }
+
+
         $this->stringType = 'Холодный обзвон  ';
         // $this->entityType = $entityType;
 
