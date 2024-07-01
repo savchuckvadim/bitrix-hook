@@ -2,18 +2,202 @@
 
 namespace App\Http\Controllers\Front\Calling;
 
+use App\Http\Controllers\APIBitrixController;
 use App\Http\Controllers\APIOnlineController;
+use App\Http\Controllers\BitrixHookController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PortalController;
 use App\Services\HookFlow\BitrixEntityFlowService;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Session;
 
 class FullEventInitController extends Controller
 {
+    public static function getEventTasks(Request $request)
+    {
+        $resultTasks = [];
+        try {
+            $domain = $request->domain;
+            $userId = $request->userId;
+            $placement = $request->placement;
+            $method = '/tasks.task.list';
+            $portal = PortalController::getPortal($domain);
+            $portal = $portal['data'];
+            $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+            $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+          
+
+            $tasksGroupId = FullEventInitController::getCallingGroupId($portal);
+            $crmItems = [];
+
+
+            if ($placement) {
+
+                $placamentData = FullEventInitController::getPlacement($placement);
+
+                if (!empty($placamentData['type']) && !empty($placamentData['id'])) {
+
+                    if ($placamentData['type'] === "LEAD") {
+                        $crmItems = ['L_' . $placamentData['id']];
+                    } else  if ($placamentData['type'] === "COMPANY") {
+                        $crmItems = ['CO_' . $placamentData['id']];
+                    }
+                }
+            }
+
+            if ($hook) {
+
+                // if(isset($userId['ID'])){
+
+                //     $userId = 'user_'.$userId['ID'];
+                // }
+
+
+                $url = $hook . $method;
+                $data = [
+                    'filter' => [
+                        // '>DEADLINE' => $start,
+                        // '<DEADLINE' => $finish,
+                        'RESPONSIBLE_ID' => $userId,
+                        'GROUP_ID' => $tasksGroupId,
+                        '!=STATUS' => 5, // Исключаем задачи со статусом "завершена"
+                        'UF_CRM_TASK' => $crmItems,
+                    ],
+                    'select' => [
+                        'ID',
+                        'UF_CRM_TASK',
+                        'TITLE',
+                        'DATE_START',
+                        'CREATED_DATE',
+                        'CHANGED_DATE',
+                        'CLOSED_DATE',
+
+                        'DEADLINE',
+                        'PRIORITY',
+                        'MARK',
+                        'GROUP_ID',
+
+                        'CREATED_BY',
+                        'STATUS_CHANGED_BY',
+                        'REAL_STATUS',
+                        'STATUS',
+                        'STAGE_ID',
+                        'RESPONSIBLE_ID',
+                        'CREATED_BY',
+                        'TITLE',
+
+                    ],
+
+                    // 'RESPONSIBLE_LAST_NAME' => $userId,
+                    // 'GROUP_ID' => $date,
+                ];
+
+                $response = Http::get($url, $data);
+
+                $bitrixResult = APIBitrixController::getBitrixRespone($response, 'getCallingTasksReport');
+
+                if (!empty($bitrixResult)) {
+                    if (isset($bitrixResult['tasks'])) {
+                        $resultTasks = $response['result']['tasks'];
+                        return APIOnlineController::getSuccess(
+
+                            [
+                                'tasks' => $resultTasks,
+                                '$response' => $response,
+                                '$tasksGroupId' => $tasksGroupId,
+                                'data' => $data,
+                                'RESPONSIBLE_ID' => $userId,
+                                '$url' => $url
+
+
+
+                            ]
+                        );
+                    }
+                }
+
+                return APIOnlineController::getError(
+                    $response['error_description'],
+                    [
+                        'response' => $response,
+                        // 'date' => $date,
+                        // 'data' => $data,
+                        'RESPONSIBLE_ID' => $userId
+
+                    ]
+
+                );
+            } else {
+                return APIOnlineController::getError(
+                    'hook not found',
+                    [
+                        'hook' => $hook
+                    ]
+                );
+            }
+        } catch (\Throwable $th) {
+            $errorData = [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+
+            return APIOnlineController::getError(
+                'getCallingTasks',
+                $errorData
+            );
+        }
+    }
+
+    public static function getCallingGroupId($portal)
+    {
+        $callingGroupId = 28;
+        try {
+
+            $callingGroups = $portal['callingGroups'];
+            foreach ($callingGroups as $group) {
+                if (isset($group['name']) && isset($group['bitrixId'])) {
+
+                    if ($group['name'] === 'calling') {
+                        $callingGroupId = $group['bitrixId'];
+                    }
+                }
+            }
+
+            return  $callingGroupId;
+        } catch (\Throwable $th) {
+            return  $callingGroupId;
+        }
+    }
+
+    public static function getPlacement($placement)
+    {
+        $result = [
+            'type' => '',
+            'id' => null
+        ];
+        if (!empty($placement)) {
+            if (isset($placement['placement']) && isset($placement['options']['ID'])) {
+                $placementType = $placement['placement'];
+                $result['id'] = $placement['options']['ID'];
+
+                if (strpos($placementType, "LEAD") !== false) {
+                    $result['type'] = "LEAD";
+                } else if (strpos($placementType, "COMPANY") !== false) {
+
+                    $result['type'] = "COMPANY";
+                }
+            }
+        }
+        return $result;
+    }
+
+
     public static function fullEventSessionInit(Request $request)
     {
         try {
@@ -76,14 +260,14 @@ class FullEventInitController extends Controller
                 $keys = Redis::keys('*');
 
 
-                Log::channel('telegram')
-                    ->info(
-                        'Session saved',
-                        [
-                            'id' => $keys,
-                            'hashedKey' => $hashedKey
-                        ]
-                    );
+                // Log::channel('telegram')
+                //     ->info(
+                //         'Session saved',
+                //         [
+                //             'id' => $keys,
+                //             'hashedKey' => $hashedKey
+                //         ]
+                //     );
 
                 return APIOnlineController::getSuccess(
                     [

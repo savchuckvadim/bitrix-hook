@@ -289,7 +289,9 @@ Route::post('/task/fail', function (Request $request) {
 
 
 // ............................... FULL EVENT CALING PRES FRONT
-
+Route::post('/full/tasks', function (Request $request) {
+    return FullEventInitController::getEventTasks($request);
+});
 Route::post('/full/init', function (Request $request) {
     return FullEventInitController::fullEventSessionInit($request);
 });

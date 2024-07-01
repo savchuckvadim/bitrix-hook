@@ -327,7 +327,6 @@ class BitrixTaskService
                 $filter['%TITLE']  =   $typeNameString;
             }
 
-            Log::info('TST TASKS', ['$filter' => $filter]);
             $select = [
                 'ID',
                 'TITLE',
