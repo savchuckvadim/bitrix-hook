@@ -366,7 +366,7 @@ class BitrixDealService
                 }
             }
         } else {
-            if ($eventAction == 'done') {
+            if ($eventAction == 'done' || $eventAction == 'success') {
                 $stageSuphicks = 'success';
             } else if ($eventAction == 'expired') {
                 $stageSuphicks = 'pending';
@@ -397,6 +397,12 @@ class BitrixDealService
 
                 if ($stage['code'] == $stagePrephicks . '_' . $stageSuphicks) {
                     $targetStageBtxId = $stage['bitrixId'];
+                    Log::channel('telegram')->info('DEAL TEST', [
+                        'stageCode' => $stage['code'],
+                        'stage' => $stage,
+                        'eventType' => $eventType,
+                       
+                    ]);
                 }
                 // }
             }
