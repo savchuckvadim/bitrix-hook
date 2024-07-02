@@ -345,8 +345,13 @@ export const onlineAPI = {
         let result = null
         
         try {
-            
+            debugger
+            if(model === 'portal'){
+                debugger
+
+            }
             const response = await online[method](url, data)
+           
             
             if (response && response.data) {
                 if (response.data.resultCode === 0) {

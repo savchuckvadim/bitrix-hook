@@ -20,16 +20,22 @@ class FullEventInitController extends Controller
     public static function getEventTasks(Request $request)
     {
         $resultTasks = [];
+        $domain = $request->domain;
+        $userId = $request->userId;
+        $placement = $request->placement;
+
+
+        $portal = PortalController::getPortal($domain);
+        $portal = $portal['data'];
+        $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+        $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+        $method = '/tasks.task.list.json';
+        $url = $hook . $method;
+
         try {
-            $domain = $request->domain;
-            $userId = $request->userId;
-            $placement = $request->placement;
-            $method = '/tasks.task.list.json';
-            $portal = PortalController::getPortal($domain);
-            $portal = $portal['data'];
-            $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
-            $hook = 'https://' . $domain  . '/' . $webhookRestKey;
-          
+
+
+
 
             $tasksGroupId = FullEventInitController::getCallingGroupId($portal);
             $crmItems = [];
@@ -51,13 +57,13 @@ class FullEventInitController extends Controller
 
             if ($hook) {
 
-                if(isset($userId['ID'])){
+                if (isset($userId['ID'])) {
 
-                    $userId = 'user_'.$userId['ID'];
+                    $userId = $userId['ID'];
                 }
 
 
-                $url = $hook . $method;
+
                 $data = [
                     'filter' => [
                         // '>DEADLINE' => $start,
@@ -126,7 +132,9 @@ class FullEventInitController extends Controller
                         'response' => $response,
                         // 'date' => $date,
                         // 'data' => $data,
-                        'RESPONSIBLE_ID' => $userId
+                        'RESPONSIBLE_ID' => $userId,
+                        '$hook' => $hook,
+                        '$url' => $url
 
                     ]
 

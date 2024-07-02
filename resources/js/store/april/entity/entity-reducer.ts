@@ -110,7 +110,7 @@ export const updateEntities = (token = null, entityName: string) => async (dispa
 
 }
 export const getEntities = (url: string, method: string, collectionName: string, data: any = null) => async (dispatch: AppDispatchType, getState: GetStateType) => {
-    debugger
+
     if (url) {
         debugger
         const collection = await onlineAPI.service(url, API_METHOD.GET, collectionName, null)
@@ -145,62 +145,95 @@ export const getEntityItem = (url: string, entityName: string, entityId: number)
 
 
 }
-export const setOrupdateEntityItem = (history: (url: string) => void, currentUrl: string, url: string, entityName: string, data: number) => async (dispatch: AppDispatchType, getState: GetStateType) => {
+export const setOrupdateEntityItem = (history: (url: string) => void,
+    currentUrl: string, url: string, entityName: string, data: FormData) => async (dispatch: AppDispatchType, getState: GetStateType) => {
+        debugger
+
+        if (url) {
+            debugger
+            const formData = data as FormData
+            let apiData = {} as { [key: string]: any };
+            if (url == 'portal') {
+
+                for (let [key, value] of formData.entries()) {
+                    if (key === 'number' ||
+                        key === 'domain' ||
+                        key === 'key' 
+                    ) {
+                        apiData[key] = value;
+                    } else if (
+                        key === 'C_REST_CLIENT_SECRET'
+
+                    ) {
+                        apiData['clientId'] = value;
+                        apiData['clientSecret'] = value;
+
+                    } else if (
+                        key === 'C_REST_WEB_HOOK_URL'
+
+                    ) {
+                        apiData['hook'] = value;
+                    }
+
+                }
+                debugger
+            } else {
+                apiData = formData
+
+            }
 
 
-    if (url) {
-        const apiData = data
-        let targetUrl = currentUrl
-        let method = API_METHOD.POST
-        if (targetUrl) {
-            if (targetUrl.endsWith("/add")) {
+            let targetUrl = currentUrl
+            let method = API_METHOD.POST
+            if (targetUrl) {
+                if (targetUrl.endsWith("/add")) {
 
-                targetUrl = targetUrl.slice(0, -4);
+                    targetUrl = targetUrl.slice(0, -4);
 
-                // if (targetUrl.endsWith("ies")) {
-                //     // Удаляем 'ies' и добавляем 'y'
-                //     targetUrl = targetUrl.slice(0, -3) + "y";
-                // } else if (targetUrl.endsWith("s")) {
-                //     // Удаление окончания 's' для обычного множественного числа, например 'lists' -> 'list'
-                //     targetUrl = targetUrl.slice(0, -1);
-                // }
+                    // if (targetUrl.endsWith("ies")) {
+                    //     // Удаляем 'ies' и добавляем 'y'
+                    //     targetUrl = targetUrl.slice(0, -3) + "y";
+                    // } else if (targetUrl.endsWith("s")) {
+                    //     // Удаление окончания 's' для обычного множественного числа, например 'lists' -> 'list'
+                    //     targetUrl = targetUrl.slice(0, -1);
+                    // }
 
+
+                } else {
+                    //update
+
+                    // method = API_METHOD.PUT
+
+                }
+            }
+            //@ts-ignore
+            // if (apiData.number) {
+            //     //@ts-ignore
+            //     apiData.number = Number(apiData.number)
+            // }
+
+            // const item = await onlineAPI.service(url, API_METHOD.POST, entityName, apiData)
+            const item = await onlineAPI.service(targetUrl, method, entityName, apiData)
+
+            if (item) {
+                dispatch(entityActions.setEntityItem(item))
+
+                if (item.id) {
+
+                    const redirectUrl = `${url}/${item.id}`
+                    redirectUrl !== currentUrl
+                        && history(`../../${url}/${item.id}`)
+                }
 
             } else {
-                //update
-
-                // method = API_METHOD.PUT
-
+                console.log('no collection')
             }
-        }
-        //@ts-ignore
-        // if (apiData.number) {
-        //     //@ts-ignore
-        //     apiData.number = Number(apiData.number)
-        // }
-
-        // const item = await onlineAPI.service(url, API_METHOD.POST, entityName, apiData)
-        const item = await onlineAPI.service(targetUrl, method, entityName, apiData)
-
-        if (item) {
-            dispatch(entityActions.setEntityItem(item))
-
-            if (item.id) {
-
-                const redirectUrl = `${url}/${item.id}`
-                redirectUrl !== currentUrl
-                    && history(`../../${url}/${item.id}`)
-            }
-
         } else {
-            console.log('no collection')
+            console.log('no url')
         }
-    } else {
-        console.log('no url')
+
+
     }
-
-
-}
 export const getInitialEntityData = (url: string, router: any, currentUrl: string, history: (url: string) => void) => async (dispatch: AppDispatchType, getState: GetStateType) => {
     // parentEntityId //entityId
     const entityState = getState().entity as EntityStateType
@@ -218,7 +251,7 @@ export const getInitialEntityData = (url: string, router: any, currentUrl: strin
         if (fullUrl.endsWith("ies")) {
             // Удаляем 'ies' и добавляем 'y'
             fullUrl = fullUrl.slice(0, -3) + "y";
-            targetUrl = targetUrl.slice(0, -3) + "y" ;
+            targetUrl = targetUrl.slice(0, -3) + "y";
             targetUrl = `${targetUrl}/add`
         }
 
@@ -262,7 +295,7 @@ export const getInitialEntityData = (url: string, router: any, currentUrl: strin
         // }
 
         dispatch(entityActions.setFetchingInitialAdd())
-        
+
         if (!cretingEntity) {
             cretingEntity = await onlineAPI.service(fullUrl, API_METHOD.GET, 'initial', null) as InitialEntityData | null
             if (cretingEntity) {
@@ -275,7 +308,7 @@ export const getInitialEntityData = (url: string, router: any, currentUrl: strin
 
 
 
-        
+
 
         if (currentUrl !== targetUrl) {
 
@@ -456,7 +489,7 @@ const initialAddEntity = (entityName: string) => async (dispatch: AppDispatchTyp
 export const setUpdatingEntity = (url: string, model: string, values: Array<any>) => async (dispatch: AppDispatchType, getState: GetStateType) => {
 
 
-
+    debugger
     const state = getState() as AppStateType
 
     switch (model) {

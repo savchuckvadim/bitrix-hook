@@ -27,7 +27,7 @@ const EntityItem = ({
     setOrupdateEntityItem, deleteEntityItem }) => {
 
     //meta title
-    document.title = entityName + " | Skote React + Laravel 10 Admin And Dashboard Template";
+    document.title = entityName + " | Savchuk April + EntityItem Template";
 
 
     // Form validation 
