@@ -258,7 +258,7 @@ class ReportController extends Controller
                 !empty($data['domain']) &&
                 !empty($data['currentTask'])
             ) {
-
+                $responsibleId = 1;
                 $currentBaseDeal = null;               //базовая сделка в задаче всегда должна быть одна
                 $currentPresentationDeal = null;               // сделка презентации из задачи
                 $currentXODeal = null;
@@ -333,8 +333,8 @@ class ReportController extends Controller
                                         'filter' => [
                                             'COMPANY_ID' => $currentCompany['ID'],
                                             'CATEGORY_ID' => $currenBaseCategoryBtxId,
-                                            'RESPONSIBLE_ID' => 1,
-                                            '!=STAGE_ID' => ['C' . $currenBaseCategoryBtxId . ':LOSE', 'C' . $currenBaseCategoryBtxId . ':APOLOGY']
+                                            'RESPONSIBLE_ID' => $responsibleId,
+                                            '!=STAGE_ID' => ['C' . $currenBaseCategoryBtxId . ':WON', 'C' . $currenBaseCategoryBtxId . ':LOSE', 'C' . $currenBaseCategoryBtxId . ':APOLOGY']
                                         ],
                                         'select' => [
                                             'ID',
@@ -367,7 +367,7 @@ class ReportController extends Controller
                                         'filter' => [
                                             'COMPANY_ID' => $currentCompany['ID'],
                                             'CATEGORY_ID' => $currentPresentCategoryBtxId,
-                                            'RESPONSIBLE_ID' => 1,
+                                            'RESPONSIBLE_ID' => $responsibleId,
                                             '!=STAGE_ID' => ['C' . $currentPresentCategoryBtxId . ':LOSE', 'C' . $currentPresentCategoryBtxId . ':APOLOGY']
                                         ],
                                         'select' => [
@@ -391,7 +391,7 @@ class ReportController extends Controller
                                                 'filter' => [
                                                     'COMPANY_ID' => $currentCompany['ID'],
                                                     'CATEGORY_ID' => $currentPresentCategoryBtxId,
-                                                    'RESPONSIBLE_ID' => 1,
+                                                    'RESPONSIBLE_ID' => $responsibleId,
                                                     '!=STAGE_ID' => ['C' . $currentPresentCategoryBtxId . ':LOSE', 'C' . $currentPresentCategoryBtxId . ':APOLOGY'],
                                                     'UF_CRM_TO_BASE_SALES' => $currentBaseDeal['ID']
                                                 ],
@@ -404,7 +404,7 @@ class ReportController extends Controller
                                                 ]
                                             ];
 
-                                            sleep(1);
+
                                             $basePresentationDeals =   BitrixDealService::getDealList(
                                                 $hook,
                                                 $getAllPresDealsData,
@@ -428,7 +428,7 @@ class ReportController extends Controller
                                         'filter' => [
                                             'COMPANY_ID' => $currentCompany['ID'],
                                             'CATEGORY_ID' => $currentXOCategoryBtxId,
-                                            'RESPONSIBLE_ID' => 1,
+                                            'RESPONSIBLE_ID' => $responsibleId,
                                             '!=STAGE_ID' => ['C' . $currentXOCategoryBtxId . ':LOSE', 'C' . $currentXOCategoryBtxId . ':APOLOGY']
                                         ],
                                         'select' => [
