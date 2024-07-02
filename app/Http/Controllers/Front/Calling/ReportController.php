@@ -1126,10 +1126,31 @@ class ReportController extends Controller
 
                     ]
                 );
-                $fromSession = FullEventInitController::getSessionItem(
-                    $sessionKey
-                );
-                return $fromSession;
+                // $fromSession = FullEventInitController::getSessionItem(
+                //     $sessionKey
+                // );
+                return [
+                    'hook' => $hook,
+                    'portal' => $portal,
+                    'currentTask' => $currentTask,
+                    'currentCompany' => $currentCompany,
+                    'deals' => [
+                        'currentBaseDeal' => $currentBaseDeal,
+                        'allBaseDeals' => $allBaseDeals,
+                        'currentPresentationDeal' => $currentPresentationDeal,
+                        'basePresentationDeals' => $basePresentationDeals,
+                        'allPresentationDeals' => $allPresentationDeals,
+                        'presList' => $presList,
+                        'currentXODeal' => $currentXODeal,
+                        'allXODeals' => $allXODeals,
+                        'currentTaskDeals' => $btxDeals,
+                        // 'allDeals' => $allDeals
+
+                    ],
+
+
+
+                ];
             } else {
                 return null;
             }

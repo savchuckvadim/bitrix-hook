@@ -426,7 +426,7 @@ class EventReportService
             $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
             $this->relationColdDeals = $sessionDeals['allXODeals'];
         }
-        
+
         if (!isset($sessionData['currentCompany'])) {
             $currentBtxEntities =  BitrixEntityFlowService::getEntities(
                 $this->hook,
@@ -1006,6 +1006,27 @@ class EventReportService
 
     protected function getDealFlow()
     {
+
+        //сейчас есть
+        // protected $currentBaseDeal;
+        // protected $currentPresDeal;
+        // protected $currentColdDeal;
+        // protected $currentTMCDeal;
+
+        // protected $relationBaseDeals;  //базовые сделки пользователь-компания
+        // protected $relationCompanyUserPresDeals; //allPresDeals //през сделки пользователь-компания
+        // protected $relationFromBasePresDeals;
+        // protected $relationColdDeals;
+        // protected $relationTMCDeals;
+
+
+
+        // $currentBaseDeal - обновляется в любом случае если ее нет - создается
+        // $currentPresDeal - обновляется если през - done или planEventType - pres
+        // $currentColdDeal - обновляется если xo - done или planEventType - xo
+
+        // в зависимости от условий сделка в итоге попадает либо в plan либо в report deals
+
         $reportDeals = [];
         $planDeals = [];
         $currentBtxDeals = $this->currentBtxDeals;
