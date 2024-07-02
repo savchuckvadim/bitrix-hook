@@ -51,10 +51,10 @@ class FullEventInitController extends Controller
 
             if ($hook) {
 
-                // if(isset($userId['ID'])){
+                if(isset($userId['ID'])){
 
-                //     $userId = 'user_'.$userId['ID'];
-                // }
+                    $userId = 'user_'.$userId['ID'];
+                }
 
 
                 $url = $hook . $method;
@@ -63,7 +63,7 @@ class FullEventInitController extends Controller
                         // '>DEADLINE' => $start,
                         // '<DEADLINE' => $finish,
                         'RESPONSIBLE_ID' => $userId,
-                        'GROUP_ID' => $tasksGroupId,
+                        // 'GROUP_ID' => $tasksGroupId,
                         '!=STATUS' => 5, // Исключаем задачи со статусом "завершена"
                         'UF_CRM_TASK' => $crmItems,
                     ],
