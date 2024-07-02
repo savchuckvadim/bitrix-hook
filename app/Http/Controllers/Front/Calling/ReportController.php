@@ -308,6 +308,8 @@ class ReportController extends Controller
 
                 $btxDealPortalCategories = null;
                 $currentCategoryData  = null;
+                $allExecludeStages =  [];
+                $allIncludeCategories =  [];
                 if (!empty($portal['bitrixDeal'])) {
                     if (!empty($portal['bitrixDeal']['categories'])) {
                         $btxDealPortalCategories = $portal['bitrixDeal']['categories'];
@@ -316,9 +318,48 @@ class ReportController extends Controller
 
 
                 if (!empty($btxDealPortalCategories)) {
+                    if (!empty($btxDealPortalCategory['code'])) {
+                        foreach ($btxDealPortalCategories as $btxDealPortalCategory) {
+                            $currenBaseCategoryBtxId = $btxDealPortalCategory['bitrixId'];
+
+                            array_push($allExecludeStages, 'C' . $currenBaseCategoryBtxId . ':LOSE');
+                            array_push($allExecludeStages, 'C' . $currenBaseCategoryBtxId . ':APOLOGY');
+                            if ($btxDealPortalCategory['code'] == "sales_base") {
+                                array_push($allExecludeStages, 'C' . $currenBaseCategoryBtxId . ':WON');
+                            }
+                            array_push($allIncludeCategories, $currenBaseCategoryBtxId);
+                        }
+                    }
+
+                    $getAllDealsData =  [
+                        'filter' => [
+                            'COMPANY_ID' => $currentCompany['ID'],
+                            'CATEGORY_ID' => $allIncludeCategories,
+                            'RESPONSIBLE_ID' => $responsibleId,
+                            '!=STAGE_ID' => ['C' . $currenBaseCategoryBtxId . ':WON', 'C' . $currenBaseCategoryBtxId . ':LOSE', 'C' . $currenBaseCategoryBtxId . ':APOLOGY']
+                        ],
+                        'select' => [
+                            'ID',
+                            'TITLE',
+                            'UF_CRM_PRES_COUNT',
+                            'STAGE_ID',
+
+                        ]
+                    ];
+
+
+                    $allDeals =   BitrixDealService::getDealList(
+                        $hook,
+                        $getAllDealsData,
+                    );
+
+
                     foreach ($btxDealPortalCategories as $btxDealPortalCategory) {
                         if (!empty($btxDealPortalCategory['code'])) {
                             if ($btxDealPortalCategory['code'] == "sales_base") {
+
+
+
                                 foreach ($btxDeals as $btxDeal) {
                                     $currenBaseCategoryBtxId = $btxDealPortalCategory['bitrixId'];
 
@@ -512,8 +553,9 @@ class ReportController extends Controller
                             'allPresentationDeals' => $allPresentationDeals,
                             'presList' => $presList,
                             'currentXODeal' => $currentXODeal,
-                            // 'allXODeals' => $allXODeals,
+                            'allXODeals' => $allXODeals,
                             'currentTaskDeals' => $btxDeals,
+                            'allDeals' => $allDeals
 
                         ],
 
@@ -536,7 +578,8 @@ class ReportController extends Controller
                             'allXODeals' => $allXODeals,
                             'btxDeals' => $btxDeals,
                             'currentCompany' => $currentCompany,
-                            'fromSession' => $fromSession
+                            'fromSession' => $fromSession,
+                            'allDeals' => $allDeals
 
                         ],
 

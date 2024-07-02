@@ -288,6 +288,64 @@ class BitrixEntityFlowService
             return $resultFields;
         }
     }
+    // static function getEventInitDeals($hook, $btxDealPortalCategories)
+    // {
+    //     $response = null;
+    //     $resultFields = null;
+    //     $method = 'crm.deal.list';
+    //     $batchCommands = [];
+    //     try {
+    //         if (!empty($btxDealPortalCategories)) {
+    //             foreach ($btxDealPortalCategories as $pCategory) {
+    //                 $code = $pCategory['code'];
+    //                 switch ($code) {
+    //                     case 'sales_base':
+                            
+    //                         $keyName = 'company_' . $id;
+
+
+    //                     case 'D':
+    //                         $method = 'crm.deal.get';
+    //                         $keyName = 'deal_' . $id;
+    //                         break;
+    //                     default:
+    //                         # code...
+    //                         break;
+    //                 }
+
+    //                 $batchCommands['cmd'][$keyName] = $method . '?id=' . $id;
+    //             }
+    //         }
+
+    //         $response = Http::post($hook . '/batch', $batchCommands);
+    //         $responseData = APIBitrixController::getBitrixRespone($response, 'event: getEntities');
+
+    //         if (!empty($responseData['result'])) {
+    //             foreach ($responseData['result'] as $key => $value) {
+    //                 if (strpos($key, 'company_') === 0) {
+    //                     $resultFields['companies'][] = $value;
+    //                 } elseif (strpos($key, 'deal_') === 0) {
+    //                     $resultFields['deals'][] = $value;
+    //                 }
+    //             }
+    //         }
+
+    //         return $resultFields;
+    //     } catch (\Throwable $th) {
+    //         Log::info(
+    //             'APRIL_HOOK getEntities ',
+    //             [
+    //                 'error' => $th->getMessage(),
+    //                 'response' => $response,
+    //                 'resultFields' => $resultFields,
+    //                 'batchCommands' => $batchCommands,
+
+
+    //             ]
+    //         );
+    //         return $resultFields;
+    //     }
+    // }
 
 
     //fields
@@ -323,7 +381,7 @@ class BitrixEntityFlowService
 
         $userId = 'user_' . $responsibleId;
 
-     
+
         //general report fields 
         foreach ($portalFields as $pField) {
             if (!empty($pField) && !empty($pField['code'])) {
@@ -387,66 +445,66 @@ class BitrixEntityFlowService
 
                                 //xo
 
-                            //     //warm
-                            // case 'call_next_date':   //ОП Дата Следующего звонка
-                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $deadline;
-                            //     break;
-                            // case 'call_next_name':   //ОП Тема Следующего звонка
+                                //     //warm
+                                // case 'call_next_date':   //ОП Дата Следующего звонка
+                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $deadline;
+                                //     break;
+                                // case 'call_next_name':   //ОП Тема Следующего звонка
 
-                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $currentPlanEventName;
-                            //     break;
-                            // case 'call_last_date':  //ОП Дата последнего звонка 
-                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $nowdate;
-                            //     break;
-                            //     //in_progress
+                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $currentPlanEventName;
+                                //     break;
+                                // case 'call_last_date':  //ОП Дата последнего звонка 
+                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $nowdate;
+                                //     break;
+                                //     //in_progress
 
-                            //     //money_a
-
-
-
-                            //     //presentation
-                            // case 'next_pres_plan_date':
-                            // case 'last_pres_plan_date':
-                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $deadline;
-                            //     break;
-
-
-                            // case 'last_pres_done_date':
-                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $nowdate;
-                            //     break;
-
-
-                            // case 'last_pres_plan_responsible':
-                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $userId;
-                            //     break;
-
-                            // case 'last_pres_done_responsible':
+                                //     //money_a
 
 
 
+                                //     //presentation
+                                // case 'next_pres_plan_date':
+                                // case 'last_pres_plan_date':
+                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $deadline;
+                                //     break;
 
-                            // case 'pres_count':
-                            //     $count = 0;
-                            //     if (!empty($currentBtxEntity)) {
-                            //         if (!empty($currentBtxEntity['UF_CRM_' . $pField['bitrixId']])) {
-                            //             $count = (int)$currentBtxEntity['UF_CRM_' . $pField['bitrixId']];
-                            //         }
-                            //     }
-                            //     $count = $count + 1;
-                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $count;
-                            //     break;
-                            // case 'pres_comments':
-                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $comment;
-                            //     break;
+
+                                // case 'last_pres_done_date':
+                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $nowdate;
+                                //     break;
+
+
+                                // case 'last_pres_plan_responsible':
+                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $userId;
+                                //     break;
+
+                                // case 'last_pres_done_responsible':
 
 
 
 
+                                // case 'pres_count':
+                                //     $count = 0;
+                                //     if (!empty($currentBtxEntity)) {
+                                //         if (!empty($currentBtxEntity['UF_CRM_' . $pField['bitrixId']])) {
+                                //             $count = (int)$currentBtxEntity['UF_CRM_' . $pField['bitrixId']];
+                                //         }
+                                //     }
+                                //     $count = $count + 1;
+                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $count;
+                                //     break;
+                                // case 'pres_comments':
+                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $comment;
+                                //     break;
 
-                            //     //fail
-                            // case 'op_fail_comments':
-                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $comment;
-                            //     break;
+
+
+
+
+                                //     //fail
+                                // case 'op_fail_comments':
+                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $comment;
+                                //     break;
 
                             default:
                                 # code...

@@ -140,7 +140,7 @@ class EventReportService
     protected $currentTMCDeal;
 
     protected $relationBaseDeals;
-    protected $relationCompanyUserPresDeals;
+    protected $relationCompanyUserPresDeals; //allPresDeals
     protected $relationFromBasePresDeals;
     protected $relationColdDeals;
     protected $relationTMCDeals;
@@ -384,14 +384,37 @@ class EventReportService
 
         if (isset($sessionData['currentCompany'])) {
             $this->currentBtxEntity  = $sessionData['currentCompany'];
-            $this->currentBtxDeals  = [$sessionData['deals']['currentBaseDeal']];
+
 
             if (isset($sessionData['deals']['currentPresentationDeal'])) {
 
-                array_push(
-                    $this->currentBtxDeals,
-                    $sessionData['deals']['currentPresentationDeal']
-                );
+                $sessionDeals = $sessionData['deals'];
+                if (
+                    isset($sessionDeals['currentBaseDeal']) &&
+                    isset($sessionDeals['allBaseDeals']) &&
+                    isset($sessionDeals['currentPresentationDeal']) &&
+                    isset($sessionDeals['basePresentationDeals']) &&
+                    isset($sessionDeals['allPresentationDeals']) &&
+                    // isset($sessionDeals['presList']) &&
+                    isset($sessionDeals['currentXODeal']) &&
+                    isset($sessionDeals['allXODeals']) &&
+                    isset($sessionDeals['currentTaskDeals'])
+
+
+                ) {
+                }
+
+                $this->currentBtxDeals  = $sessionDeals['currentTaskDeals'];
+
+                $this->currentBaseDeal = $sessionDeals['currentBaseDeal'];
+                $this->currentPresDeal = $sessionDeals['currentPresentationDeal'];
+                $this->currentColdDeal = $sessionDeals['currentXODeal'];
+
+
+                $this->relationBaseDeals = $sessionDeals['allBaseDeals'];
+                $this->relationCompanyUserPresDeals = $sessionDeals['allPresentationDeals']; //allPresDeal 
+                $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
+                $this->relationColdDeals = $sessionDeals['allXODeals'];
             }
         } else {
             $currentBtxEntities =  BitrixEntityFlowService::getEntities(
