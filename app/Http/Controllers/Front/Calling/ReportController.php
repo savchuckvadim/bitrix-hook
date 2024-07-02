@@ -319,14 +319,16 @@ class ReportController extends Controller
                 if (!empty($btxDealPortalCategories)) {
                     if (!empty($btxDealPortalCategory['code'])) {
                         foreach ($btxDealPortalCategories as $btxDealPortalCategory) {
-                            $currenBaseCategoryBtxId = $btxDealPortalCategory['bitrixId'];
+                            if ($btxDealPortalCategory['code'] === "sales_base" || $btxDealPortalCategory['code'] === "sales_presentation") {
+                                $currenBaseCategoryBtxId = $btxDealPortalCategory['bitrixId'];
 
-                            array_push($allExecludeStages, 'C' . $currenBaseCategoryBtxId . ':LOSE');
-                            array_push($allExecludeStages, 'C' . $currenBaseCategoryBtxId . ':APOLOGY');
-                            if ($btxDealPortalCategory['code'] == "sales_base") {
-                                array_push($allExecludeStages, 'C' . $currenBaseCategoryBtxId . ':WON');
+                                array_push($allExecludeStages, 'C' . $currenBaseCategoryBtxId . ':LOSE');
+                                array_push($allExecludeStages, 'C' . $currenBaseCategoryBtxId . ':APOLOGY');
+                                if ($btxDealPortalCategory['code'] == "sales_base") {
+                                    array_push($allExecludeStages, 'C' . $currenBaseCategoryBtxId . ':WON');
+                                }
+                                array_push($allIncludeCategories, $currenBaseCategoryBtxId);
                             }
-                            array_push($allIncludeCategories, $currenBaseCategoryBtxId);
                         }
                     }
 
