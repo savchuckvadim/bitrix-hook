@@ -133,6 +133,17 @@ class EventReportService
     protected $relationSalePresDeal = null;
 
 
+    // deals
+    protected $currentBaseDeal;
+    protected $currentPresDeal;
+    protected $currentColdDeal;
+    protected $currentTMCDeal;
+
+    protected $relationBaseDeals;
+    protected $relationPresDeals;
+    protected $relationColdDeals;
+    protected $relationTMCDeals;
+
     public function __construct(
 
         $data,
@@ -1098,7 +1109,7 @@ class EventReportService
         // которая пушится туда  при unplanned - чтобы были обработаны базовая сделка 
         // в соответствии с проведенной през
         // при этом у основной сделки должна быть обновлена стадия - например на през если была unplanned
-    
+
         $reportDeals = BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
             $this->hook,
             $currentBtxDeals,

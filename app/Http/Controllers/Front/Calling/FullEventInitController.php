@@ -24,7 +24,7 @@ class FullEventInitController extends Controller
             $domain = $request->domain;
             $userId = $request->userId;
             $placement = $request->placement;
-            $method = '/tasks.task.list';
+            $method = '/tasks.task.list.json';
             $portal = PortalController::getPortal($domain);
             $portal = $portal['data'];
             $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
