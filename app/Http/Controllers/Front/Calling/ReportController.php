@@ -336,13 +336,14 @@ class ReportController extends Controller
                             'COMPANY_ID' => $currentCompany['ID'],
                             'CATEGORY_ID' => $allIncludeCategories,
                             'RESPONSIBLE_ID' => $responsibleId,
-                            '!=STAGE_ID' => ['C' . $currenBaseCategoryBtxId . ':WON', 'C' . $currenBaseCategoryBtxId . ':LOSE', 'C' . $currenBaseCategoryBtxId . ':APOLOGY']
+                            '!=STAGE_ID' => $allExecludeStages
                         ],
                         'select' => [
                             'ID',
                             'TITLE',
                             'UF_CRM_PRES_COUNT',
                             'STAGE_ID',
+                            'UF_CRM_TO_BASE_SALES'
 
                         ]
                     ];
@@ -382,8 +383,9 @@ class ReportController extends Controller
                                             'TITLE',
                                             'UF_CRM_PRES_COUNT',
                                             'STAGE_ID',
-
+                                            
                                         ]
+
                                     ];
 
 
