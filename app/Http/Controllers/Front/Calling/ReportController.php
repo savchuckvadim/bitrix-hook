@@ -361,14 +361,14 @@ class ReportController extends Controller
                                     );
 
                                     if(!empty($currentBaseDeal)) {
-                                        if(!empty($currentBaseDeal['id'])) {
+                                        if(!empty($currentBaseDeal['ID'])) {
                                             $getAllPresDealsData =  [
                                                 'filter' => [
                                                     'COMPANY_ID' => $currentCompany['ID'],
                                                     'CATEGORY_ID' => $currentPresentCategoryBtxId,
                                                     'RESPONSIBLE_ID' => 1,
                                                     '!=STAGE_ID' => ['C' . $currentPresentCategoryBtxId . ':LOSE', 'C' . $currentPresentCategoryBtxId . ':APOLOGY'],
-                                                    'UF_CRM_TO_BASE_SALES' => $currentBaseDeal['id']
+                                                    'UF_CRM_TO_BASE_SALES' => $currentBaseDeal['ID']
                                                 ],
                                                 'select' => [
                                                     'ID',
