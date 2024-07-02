@@ -4,6 +4,7 @@ namespace App\Services\FullEventReport;
 
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\Front\Calling\FullEventInitController;
+use App\Http\Controllers\Front\Calling\ReportController;
 use App\Http\Controllers\PortalController;
 use App\Jobs\BtxCreateListItemJob;
 use App\Services\BitrixTaskService;
@@ -317,8 +318,7 @@ class EventReportService
             }
         }
 
-        $sessionKey = $domain . '_' . $this->currentTask['id'];
-        $sessionData = FullEventInitController::getSessionItem($sessionKey);
+
         // Log::info('HOOK TEST sessionData', [
         //     'sessionData' => $sessionData
 
@@ -381,42 +381,53 @@ class EventReportService
 
         //     );
         // }
-
-        if (isset($sessionData['currentCompany'])) {
+        $sessionKey = $domain . '_' . $this->currentTask['id'];
+        $sessionData = FullEventInitController::getSessionItem($sessionKey);
+        if (isset($sessionData['currentCompany']) && isset($sessionData['deals'])) {
             $this->currentBtxEntity  = $sessionData['currentCompany'];
 
 
-            if (isset($sessionData['deals']['currentPresentationDeal'])) {
-
-                $sessionDeals = $sessionData['deals'];
-                if (
-                    isset($sessionDeals['currentBaseDeal']) &&
-                    isset($sessionDeals['allBaseDeals']) &&
-                    isset($sessionDeals['currentPresentationDeal']) &&
-                    isset($sessionDeals['basePresentationDeals']) &&
-                    isset($sessionDeals['allPresentationDeals']) &&
-                    // isset($sessionDeals['presList']) &&
-                    isset($sessionDeals['currentXODeal']) &&
-                    isset($sessionDeals['allXODeals']) &&
-                    isset($sessionDeals['currentTaskDeals'])
-
-
-                ) {
-                }
-
-                $this->currentBtxDeals  = $sessionDeals['currentTaskDeals'];
-
-                $this->currentBaseDeal = $sessionDeals['currentBaseDeal'];
-                $this->currentPresDeal = $sessionDeals['currentPresentationDeal'];
-                $this->currentColdDeal = $sessionDeals['currentXODeal'];
-
-
-                $this->relationBaseDeals = $sessionDeals['allBaseDeals'];
-                $this->relationCompanyUserPresDeals = $sessionDeals['allPresentationDeals']; //allPresDeal 
-                $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
-                $this->relationColdDeals = $sessionDeals['allXODeals'];
-            }
+            $sessionDeals = $sessionData['deals'];
         } else {
+            $sessionData = ReportController::getFullDealsInner(
+                $this->hook,
+                $portal,
+                $domain,
+                $this->currentTask
+            );
+            if (!empty($sessionData['deals'])) {
+                $sessionDeals = $sessionData['deals'];
+            }
+        }
+        if (
+            isset($sessionDeals['currentBaseDeal']) &&
+            isset($sessionDeals['allBaseDeals']) &&
+            isset($sessionDeals['currentPresentationDeal']) &&
+            isset($sessionDeals['basePresentationDeals']) &&
+            isset($sessionDeals['allPresentationDeals']) &&
+            // isset($sessionDeals['presList']) &&
+            isset($sessionDeals['currentXODeal']) &&
+            isset($sessionDeals['allXODeals']) &&
+            isset($sessionDeals['currentTaskDeals'])
+
+
+        ) {
+
+
+            $this->currentBtxDeals  = $sessionDeals['currentTaskDeals'];
+
+            $this->currentBaseDeal = $sessionDeals['currentBaseDeal'];
+            $this->currentPresDeal = $sessionDeals['currentPresentationDeal'];
+            $this->currentColdDeal = $sessionDeals['currentXODeal'];
+
+
+            $this->relationBaseDeals = $sessionDeals['allBaseDeals'];
+            $this->relationCompanyUserPresDeals = $sessionDeals['allPresentationDeals']; //allPresDeal 
+            $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
+            $this->relationColdDeals = $sessionDeals['allXODeals'];
+        }
+        
+        if (!isset($sessionData['currentCompany'])) {
             $currentBtxEntities =  BitrixEntityFlowService::getEntities(
                 $this->hook,
                 $this->currentTask,
@@ -433,8 +444,6 @@ class EventReportService
             $this->currentBtxEntity  = $currentBtxEntity;
             $this->currentBtxDeals  = $currentBtxDeals;
         }
-
-
 
         $fieldsCallCodes = [
             'call_next_date', //ОП Дата Следующего звонка

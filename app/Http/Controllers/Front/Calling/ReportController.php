@@ -714,4 +714,430 @@ class ReportController extends Controller
             );
         }
     }
+
+    public static function getFullDealsInner(
+        $hook,
+        $portal,
+        $domain,
+        $currentTask
+    ) {
+
+
+        $result = null;
+        try {
+
+            if (
+
+                !empty($domain) &&
+                !empty($currentTask)
+            ) {
+                $responsibleId = 1;
+                $currentBaseDeal = null;               //базовая сделка в задаче всегда должна быть одна
+                $currentPresentationDeal = null;               // сделка презентации из задачи
+                $currentXODeal = null;
+
+
+                $allBaseDeals = [];
+                $basePresentationDeals = [];                 // сделки презентаций связанные с основной через списки
+                $allPresentationDeals = [];                  // все сделки презентации связанные с компанией и пользователем
+                $currentCompany = null;
+                $allXODeals = [];
+
+                // $companyId = $data['userId'];
+                // $userId = $data['companyId'];
+
+                $btxDeals = []; //from task
+
+
+
+                $getAllPresDealsData = [];
+
+
+
+                $sessionKey = $domain . '_' . $currentTask['id'];
+
+
+                $presList = null;
+
+
+
+                //from task - получаем из task компании и сделки разных направлений
+
+                $currentBtxEntities =  BitrixEntityFlowService::getEntities(
+                    $hook,
+                    $currentTask,
+                );
+                if (!empty($currentBtxEntities)) {
+                    if (!empty($currentBtxEntities['companies'])) {
+                        $currentCompany = $currentBtxEntities['companies'][0];
+                    }
+                    if (!empty($currentBtxEntities['deals'])) {
+                        $btxDeals = $currentBtxEntities['deals'];
+                    }
+                }
+
+
+
+                $btxDealPortalCategories = null;
+                $currentCategoryData  = null;
+                $allExecludeStages =  [];
+                $allIncludeCategories =  [];
+                if (!empty($portal['bitrixDeal'])) {
+                    if (!empty($portal['bitrixDeal']['categories'])) {
+                        $btxDealPortalCategories = $portal['bitrixDeal']['categories'];
+                    }
+                }
+
+                if (!empty($btxDealPortalCategories)) {
+                    // if (!empty($btxDealPortalCategory['code'])) {
+                    //     foreach ($btxDealPortalCategories as $btxDealPortalCategory) {
+                    //         if ($btxDealPortalCategory['code'] === "sales_base" || $btxDealPortalCategory['code'] === "sales_presentation") {
+                    //             $currenBaseCategoryBtxId = $btxDealPortalCategory['bitrixId'];
+
+                    //             array_push($allExecludeStages, 'C' . $currenBaseCategoryBtxId . ':LOSE');
+                    //             array_push($allExecludeStages, 'C' . $currenBaseCategoryBtxId . ':APOLOGY');
+                    //             if ($btxDealPortalCategory['code'] == "sales_base") {
+                    //                 array_push($allExecludeStages, 'C' . $currenBaseCategoryBtxId . ':WON');
+                    //             }
+                    //             array_push($allIncludeCategories, $currenBaseCategoryBtxId);
+                    //         }
+                    //     }
+                    // }
+
+                    // $getAllDealsData =  [
+                    //     'filter' => [
+                    //         'COMPANY_ID' => $currentCompany['ID'],
+                    //         'CATEGORY_ID' => $allIncludeCategories,
+                    //         'RESPONSIBLE_ID' => $responsibleId,
+                    //         '!=STAGE_ID' => $allExecludeStages
+                    //     ],
+                    //     'select' => [
+                    //         'ID',
+                    //         'TITLE',
+                    //         'UF_CRM_PRES_COUNT',
+                    //         'STAGE_ID',
+                    //         'UF_CRM_TO_BASE_SALES',
+                    //         'CATEGORY_ID'
+
+                    //     ]
+                    // ];
+
+
+                    // $allDeals =   BitrixDealService::getDealList(
+                    //     $hook,
+                    //     $getAllDealsData,
+                    // );
+
+                    //task current deals
+
+                    foreach ($btxDealPortalCategories as $btxDealPortalCategory) {
+                        if (!empty($btxDealPortalCategory['code'])) {
+                            if ($btxDealPortalCategory['code'] == "sales_base") {
+
+
+
+                                foreach ($btxDeals as $btxDeal) {
+                                    $currenBaseCategoryBtxId = $btxDealPortalCategory['bitrixId'];
+
+                                    if (!empty($btxDeal['CATEGORY_ID'])) {
+                                        if ($btxDeal['CATEGORY_ID'] == $btxDealPortalCategory['bitrixId']) {
+                                            $currentBaseDeal = $btxDeal;   //базовая сделка в задаче всегда должна быть одна
+                                        }
+                                    }
+                                }
+                            } else  if ($btxDealPortalCategory['code'] == "sales_presentation") {
+                                $currentPresentCategoryBtxId = $btxDealPortalCategory['bitrixId'];
+
+                                foreach ($btxDeals as $btxDeal) {
+                                    if (!empty($btxDeal['CATEGORY_ID'])) {
+                                        if ($btxDeal['CATEGORY_ID'] == $currentPresentCategoryBtxId) {
+                                            $currentPresentationDeal = $btxDeal;      // сделка презентации из задачи
+
+                                        }
+                                    }
+                                }
+                            } else  if ($btxDealPortalCategory['code'] == "sales_xo") {
+                                $currentXOCategoryBtxId = $btxDealPortalCategory['bitrixId'];
+
+                                foreach ($btxDeals as $btxDeal) {
+                                    if (!empty($btxDeal['CATEGORY_ID'])) {
+                                        if ($btxDeal['CATEGORY_ID'] == $currentXOCategoryBtxId) {
+                                            $currentXODeal = $btxDeal;      // сделка презентации из задачи
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    //deal from company user by category
+                    // foreach ($allDeals as $btxDealFromAll) {
+                    //     foreach ($btxDealPortalCategories as $btxDealPortalCategory) {
+                    //         if (!empty($btxDealPortalCategory['code'])) {
+                    //             if ($btxDealPortalCategory['code'] == "sales_base") {
+
+                    //                 if ($btxDealFromAll['CATEGORY_ID'] == $btxDealPortalCategory['bitrixId']) {
+                    //                     array_push($allBaseDeals, $btxDealFromAll);
+                    //                 }
+                    //             } else  if ($btxDealPortalCategory['code'] == "sales_presentation") {
+                    //                 $currentPresentCategoryBtxId = $btxDealPortalCategory['bitrixId'];
+                    //                 if ($btxDealFromAll['CATEGORY_ID'] == $btxDealPortalCategory['bitrixId']) {
+                    //                     array_push($allPresentationDeals, $btxDealFromAll);
+
+
+                    //                     if (!empty($currentBaseDeal)) {
+                    //                         if (!empty($currentBaseDeal['ID'])) {
+
+                    //                             if (!empty($btxDealFromAll['UF_CRM_TO_BASE_SALES'])) {
+                    //                                 if ($btxDealFromAll['UF_CRM_TO_BASE_SALES'] == $currentBaseDeal['ID']) {
+                    //                                     array_push($basePresentationDeals, $btxDealFromAll);
+                    //                                 }
+                    //                             }
+                    //                         }
+                    //                     }
+                    //                 }
+                    //             }
+                    //         } else  if ($btxDealPortalCategory['code'] == "sales_xo") {
+                    //             $currentXOCategoryBtxId = $btxDealPortalCategory['bitrixId'];
+                    //             if ($btxDealFromAll['CATEGORY_ID'] == $currentXOCategoryBtxId) {
+                    //                 array_push($allXODeals, $btxDealFromAll);
+                    //             }
+                    //         }
+                    //     }
+                    // }
+
+
+
+
+
+
+                }
+
+
+
+                foreach ($btxDealPortalCategories as $btxDealPortalCategory) {
+                    if (!empty($btxDealPortalCategory['code'])) {
+                        if ($btxDealPortalCategory['code'] == "sales_base") {
+
+
+
+                            foreach ($btxDeals as $btxDeal) {
+                                $currenBaseCategoryBtxId = $btxDealPortalCategory['bitrixId'];
+
+                                if (!empty($btxDeal['CATEGORY_ID'])) {
+                                    if ($btxDeal['CATEGORY_ID'] == $btxDealPortalCategory['bitrixId']) {
+                                        $currentBaseDeal = $btxDeal;   //базовая сделка в задаче всегда должна быть одна
+                                    }
+                                }
+
+
+                                $getAllBaseDealsData =  [
+                                    'filter' => [
+                                        'COMPANY_ID' => $currentCompany['ID'],
+                                        'CATEGORY_ID' => $currenBaseCategoryBtxId,
+                                        'RESPONSIBLE_ID' => $responsibleId,
+                                        '!=STAGE_ID' => ['C' . $currenBaseCategoryBtxId . ':WON', 'C' . $currenBaseCategoryBtxId . ':LOSE', 'C' . $currenBaseCategoryBtxId . ':APOLOGY']
+                                    ],
+                                    'select' => [
+                                        'ID',
+                                        'TITLE',
+                                        'UF_CRM_PRES_COUNT',
+                                        'STAGE_ID',
+
+                                    ]
+
+                                ];
+
+
+                                $allBaseDeals =   BitrixDealService::getDealList(
+                                    $hook,
+                                    $getAllBaseDealsData,
+                                );
+                            }
+                        } else  if ($btxDealPortalCategory['code'] == "sales_presentation") {
+                            $currentPresentCategoryBtxId = $btxDealPortalCategory['bitrixId'];
+
+                            foreach ($btxDeals as $btxDeal) {
+                                if (!empty($btxDeal['CATEGORY_ID'])) {
+                                    if ($btxDeal['CATEGORY_ID'] == $currentPresentCategoryBtxId) {
+                                        $currentPresentationDeal = $btxDeal;      // сделка презентации из задачи
+
+                                    }
+                                }
+
+
+                                $getAllPresDealsData =  [
+                                    'filter' => [
+                                        'COMPANY_ID' => $currentCompany['ID'],
+                                        'CATEGORY_ID' => $currentPresentCategoryBtxId,
+                                        'RESPONSIBLE_ID' => $responsibleId,
+                                        '!=STAGE_ID' => ['C' . $currentPresentCategoryBtxId . ':LOSE', 'C' . $currentPresentCategoryBtxId . ':APOLOGY']
+                                    ],
+                                    'select' => [
+                                        'ID',
+                                        'TITLE',
+                                        'UF_CRM_PRES_COUNT',
+                                        'STAGE_ID',
+
+                                    ]
+                                ];
+
+                                // sleep(1);
+                                $allPresentationDeals =   BitrixDealService::getDealList(
+                                    $hook,
+                                    $getAllPresDealsData,
+                                );
+
+                                if (!empty($currentBaseDeal)) {
+                                    if (!empty($currentBaseDeal['ID'])) {
+                                        $getAllPresDealsData =  [
+                                            'filter' => [
+                                                'COMPANY_ID' => $currentCompany['ID'],
+                                                'CATEGORY_ID' => $currentPresentCategoryBtxId,
+                                                'RESPONSIBLE_ID' => $responsibleId,
+                                                '!=STAGE_ID' => ['C' . $currentPresentCategoryBtxId . ':LOSE', 'C' . $currentPresentCategoryBtxId . ':APOLOGY'],
+                                                'UF_CRM_TO_BASE_SALES' => $currentBaseDeal['ID']
+                                            ],
+                                            'select' => [
+                                                'ID',
+                                                'TITLE',
+                                                'UF_CRM_PRES_COUNT',
+                                                'STAGE_ID',
+
+                                            ]
+                                        ];
+
+
+                                        $basePresentationDeals =   BitrixDealService::getDealList(
+                                            $hook,
+                                            $getAllPresDealsData,
+                                        );
+                                    }
+                                }
+                            }
+                        } else  if ($btxDealPortalCategory['code'] == "sales_xo") {
+                            $currentXOCategoryBtxId = $btxDealPortalCategory['bitrixId'];
+
+                            foreach ($btxDeals as $btxDeal) {
+                                if (!empty($btxDeal['CATEGORY_ID'])) {
+                                    if ($btxDeal['CATEGORY_ID'] == $currentXOCategoryBtxId) {
+                                        $currentXODeal = $btxDeal;      // сделка презентации из задачи
+
+                                    }
+                                }
+
+
+                                $getAllXODealsData =  [
+                                    'filter' => [
+                                        'COMPANY_ID' => $currentCompany['ID'],
+                                        'CATEGORY_ID' => $currentXOCategoryBtxId,
+                                        'RESPONSIBLE_ID' => $responsibleId,
+                                        '!=STAGE_ID' => ['C' . $currentXOCategoryBtxId . ':LOSE', 'C' . $currentXOCategoryBtxId . ':APOLOGY']
+                                    ],
+                                    'select' => [
+                                        'ID',
+                                        'TITLE',
+                                        'UF_CRM_PRES_COUNT',
+                                        'STAGE_ID',
+
+                                    ]
+                                ];
+
+                                sleep(1);
+                                $allXODeals =   BitrixDealService::getDealList(
+                                    $hook,
+                                    $getAllXODealsData,
+                                );
+                            }
+                        }
+                    }
+                }
+
+
+
+                if (!empty($currentBaseDeal) && !empty($currentCompany)) {
+
+                    if (isset($currentBaseDeal['UF_CRM_PRES_COUNT'])) {
+                        $result['counts']['deal'] = (int)$currentBaseDeal['UF_CRM_PRES_COUNT'];
+                    }
+                    if (isset($currentCompany['UF_CRM_1709807026'])) {
+                        $result['counts']['company'] = (int)$currentCompany['UF_CRM_1709807026'];
+                    }
+
+                    if (isset($currentCompany['UF_CRM_PRES_COUNT'])) {
+                        $result['counts']['company'] = (int)$currentCompany['UF_CRM_PRES_COUNT'];
+                    }
+                }
+                $filter = [];
+                if (!empty($portal['bitrixLists'])) {
+                    $listBitrixId = null;
+                    foreach ($portal['bitrixLists'] as $list) {
+                        if ($list['type'] == 'presentation') {
+                            $listBitrixId = $list['bitrixId'];
+                        }
+                    }
+
+                    if (!empty($portal['bitrixLists']['bitrixfields'])) {
+                        $listBitrixId = null;
+                        foreach ($portal['bitrixLists']['bitrixfields'] as $field) {
+                            if ($field['code'] == 'sales_presentation_pres_crm') {
+                                $filter[$field['bitrixCamelId']] = $currentCompany['ID'];
+                            } else if ($field['code'] == 'sales_presentation_pres_responsible') {
+                                $filter[$field['bitrixCamelId']] = 'user_' . $responsibleId;
+                            }
+                        }
+                    }
+
+                    if ($listBitrixId) {
+                        $presList = BitrixListService::getList(
+                            $hook,
+                            $listBitrixId,
+                            $filter
+                        );
+                    }
+                }
+
+
+
+
+                FullEventInitController::setSessionItem(
+                    $sessionKey,
+                    [
+                        'hook' => $hook,
+                        'portal' => $portal,
+                        'currentTask' => $currentTask,
+                        'currentCompany' => $currentCompany,
+                        'deals' => [
+                            'currentBaseDeal' => $currentBaseDeal,
+                            'allBaseDeals' => $allBaseDeals,
+                            'currentPresentationDeal' => $currentPresentationDeal,
+                            'basePresentationDeals' => $basePresentationDeals,
+                            'allPresentationDeals' => $allPresentationDeals,
+                            'presList' => $presList,
+                            'currentXODeal' => $currentXODeal,
+                            'allXODeals' => $allXODeals,
+                            'currentTaskDeals' => $btxDeals,
+                            // 'allDeals' => $allDeals
+
+                        ],
+
+
+
+                    ]
+                );
+                $fromSession = FullEventInitController::getSessionItem(
+                    $sessionKey
+                );
+                return $fromSession;
+            } else {
+                return null;
+            }
+
+
+            return null;
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
 }
