@@ -340,7 +340,7 @@ class ReportController extends Controller
 
                                     $getAllPresDealsData =  [
                                         'filter' => [
-                                            'COMPANY_ID' => $currentCompany['id'],
+                                            'COMPANY_ID' => $currentCompany['ID'],
                                             'CATEGORY_ID' => $currentPresentCategoryBtxId,
                                             'RESPONSIBLE_ID' => 1,
                                             '!=STAGE_ID' => ['C' . $currentPresentCategoryBtxId . ':LOSE', 'C' . $currentPresentCategoryBtxId . ':APOLOGY']
@@ -364,7 +364,7 @@ class ReportController extends Controller
                                         if(!empty($currentBaseDeal['id'])) {
                                             $getAllPresDealsData =  [
                                                 'filter' => [
-                                                    'COMPANY_ID' => $currentCompany['id'],
+                                                    'COMPANY_ID' => $currentCompany['ID'],
                                                     'CATEGORY_ID' => $currentPresentCategoryBtxId,
                                                     'RESPONSIBLE_ID' => 1,
                                                     '!=STAGE_ID' => ['C' . $currentPresentCategoryBtxId . ':LOSE', 'C' . $currentPresentCategoryBtxId . ':APOLOGY'],
@@ -407,7 +407,7 @@ class ReportController extends Controller
 
                                     $getAllXODealsData =  [
                                         'filter' => [
-                                            'COMPANY_ID' => $currentCompany['id'],
+                                            'COMPANY_ID' => $currentCompany['ID'],
                                             'CATEGORY_ID' => $currentXOCategoryBtxId,
                                             'RESPONSIBLE_ID' => 1,
                                             '!=STAGE_ID' => ['C' . $currentXOCategoryBtxId . ':LOSE', 'C' . $currentXOCategoryBtxId . ':APOLOGY']
