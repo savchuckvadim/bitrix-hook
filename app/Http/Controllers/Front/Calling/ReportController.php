@@ -242,7 +242,7 @@ class ReportController extends Controller
         }
     }
 
-    public static function getDealFullDeals(Request $request)
+    public static function getFullDeals(Request $request)
     {
 
         // entities [deal, smart ...]
@@ -261,9 +261,12 @@ class ReportController extends Controller
 
                 $currentBaseDeal = null;               //базовая сделка в задаче всегда должна быть одна
                 $currentPresentationDeal = null;               // сделка презентации из задачи
+                $currentXODeal = null;
+
                 $basePresentationDeals = [];                 // сделки презентаций связанные с основной через списки
                 $allPresentationDeals = [];                  // все сделки презентации связанные с компанией и пользователем
                 $currentCompany = null;
+                $allXODeals = [];
 
                 // $companyId = $data['userId'];
                 // $userId = $data['companyId'];
@@ -337,7 +340,7 @@ class ReportController extends Controller
 
                                     $getAllPresDealsData =  [
                                         'filter' => [
-                                            'COMPANY_ID' => $currentCompany['ID'],
+                                            'COMPANY_ID' => $currentCompany['id'],
                                             'CATEGORY_ID' => $currentPresentCategoryBtxId,
                                             'RESPONSIBLE_ID' => 1,
                                             '!=STAGE_ID' => ['C' . $currentPresentCategoryBtxId . ':LOSE', 'C' . $currentPresentCategoryBtxId . ':APOLOGY']
@@ -355,6 +358,73 @@ class ReportController extends Controller
                                     $allPresentationDeals =   BitrixDealService::getDealList(
                                         $hook,
                                         $getAllPresDealsData,
+                                    );
+
+                                    if(!empty($currentBaseDeal)) {
+                                        if(!empty($currentBaseDeal['id'])) {
+                                            $getAllPresDealsData =  [
+                                                'filter' => [
+                                                    'COMPANY_ID' => $currentCompany['id'],
+                                                    'CATEGORY_ID' => $currentPresentCategoryBtxId,
+                                                    'RESPONSIBLE_ID' => 1,
+                                                    '!=STAGE_ID' => ['C' . $currentPresentCategoryBtxId . ':LOSE', 'C' . $currentPresentCategoryBtxId . ':APOLOGY'],
+                                                    'UF_CRM_TO_BASE_SALES' => $currentBaseDeal['id']
+                                                ],
+                                                'select' => [
+                                                    'ID',
+                                                    'TITLE',
+                                                    'UF_CRM_PRES_COUNT',
+                                                    'STAGE_ID',
+        
+                                                ]
+                                            ];
+        
+                                            sleep(1);
+                                            $basePresentationDeals =   BitrixDealService::getDealList(
+                                                $hook,
+                                                $getAllPresDealsData,
+                                            );
+                                        }
+                                    }
+                                  
+
+                                 
+
+
+
+                                }
+                            } else  if ($btxDealPortalCategory['code'] == "sales_xo") {
+                                $currentXOCategoryBtxId = $btxDealPortalCategory['bitrixId'];
+
+                                foreach ($btxDeals as $btxDeal) {
+                                    if (!empty($btxDeal['CATEGORY_ID'])) {
+                                        if ($btxDeal['CATEGORY_ID'] == $currentXOCategoryBtxId) {
+                                            $currentXODeal = $btxDeal;      // сделка презентации из задачи
+
+                                        }
+                                    }
+
+
+                                    $getAllXODealsData =  [
+                                        'filter' => [
+                                            'COMPANY_ID' => $currentCompany['id'],
+                                            'CATEGORY_ID' => $currentXOCategoryBtxId,
+                                            'RESPONSIBLE_ID' => 1,
+                                            '!=STAGE_ID' => ['C' . $currentXOCategoryBtxId . ':LOSE', 'C' . $currentXOCategoryBtxId . ':APOLOGY']
+                                        ],
+                                        'select' => [
+                                            'ID',
+                                            'TITLE',
+                                            'UF_CRM_PRES_COUNT',
+                                            'STAGE_ID',
+
+                                        ]
+                                    ];
+
+                                    sleep(1);
+                                    $allXODeals =   BitrixDealService::getDealList(
+                                        $hook,
+                                        $getAllXODealsData,
                                     );
                                 }
                             }
@@ -406,11 +476,6 @@ class ReportController extends Controller
                 }
 
 
-                Log::channel('telegram')->info('session presList', [
-                    'presList' => $presList
-
-                ]);
-
 
 
                 FullEventInitController::setSessionItem(
@@ -425,7 +490,11 @@ class ReportController extends Controller
                             'currentPresentationDeal' => $currentPresentationDeal,
                             'basePresentationDeals' => $basePresentationDeals,
                             'allPresentationDeals' => $allPresentationDeals,
-                            'presList' => $presList
+                            'presList' => $presList,
+                            'currentXODeal' => $currentXODeal,
+                            'allXODeals' => $allXODeals,
+                            'btxDeals' => $btxDeals,
+                             
 
                         ],
 
@@ -443,7 +512,12 @@ class ReportController extends Controller
                             'currentPresentationDeal' => $currentPresentationDeal,
                             'basePresentationDeals' => $basePresentationDeals,
                             'allPresentationDeals' => $allPresentationDeals,
-                            'presList' => $presList
+                            'presList' => $presList,
+                            'currentXODeal' => $currentXODeal,
+                            'allXODeals' => $allXODeals,
+                            'btxDeals' => $btxDeals,
+                            'currentCompany' => $currentCompany,
+                            'fromSession' => $fromSession
 
                         ],
 

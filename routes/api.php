@@ -301,7 +301,7 @@ Route::post('/full/session', function (Request $request) {
 });
 
 Route::post('full/deals', function (Request $request) {
-    return ReportController::getDealFullDeals($request);
+    return ReportController::getFullDeals($request);
 });
 
 
