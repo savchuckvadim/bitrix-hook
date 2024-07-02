@@ -263,6 +263,8 @@ class ReportController extends Controller
                 $currentPresentationDeal = null;               // сделка презентации из задачи
                 $currentXODeal = null;
 
+
+                $allBaseDeals = [];
                 $basePresentationDeals = [];                 // сделки презентаций связанные с основной через списки
                 $allPresentationDeals = [];                  // все сделки презентации связанные с компанией и пользователем
                 $currentCompany = null;
@@ -318,13 +320,36 @@ class ReportController extends Controller
                         if (!empty($btxDealPortalCategory['code'])) {
                             if ($btxDealPortalCategory['code'] == "sales_base") {
                                 foreach ($btxDeals as $btxDeal) {
-
+                                    $currenBaseCategoryBtxId = $btxDealPortalCategory['bitrixId'];
 
                                     if (!empty($btxDeal['CATEGORY_ID'])) {
                                         if ($btxDeal['CATEGORY_ID'] == $btxDealPortalCategory['bitrixId']) {
                                             $currentBaseDeal = $btxDeal;   //базовая сделка в задаче всегда должна быть одна
                                         }
                                     }
+
+
+                                    $getAllBaseDealsData =  [
+                                        'filter' => [
+                                            'COMPANY_ID' => $currentCompany['ID'],
+                                            'CATEGORY_ID' => $currenBaseCategoryBtxId,
+                                            'RESPONSIBLE_ID' => 1,
+                                            '!=STAGE_ID' => ['C' . $currenBaseCategoryBtxId . ':LOSE', 'C' . $currenBaseCategoryBtxId . ':APOLOGY']
+                                        ],
+                                        'select' => [
+                                            'ID',
+                                            'TITLE',
+                                            'UF_CRM_PRES_COUNT',
+                                            'STAGE_ID',
+
+                                        ]
+                                    ];
+
+
+                                    $allBaseDeals =   BitrixDealService::getDealList(
+                                        $hook,
+                                        $getAllBaseDealsData,
+                                    );
                                 }
                             } else  if ($btxDealPortalCategory['code'] == "sales_presentation") {
                                 $currentPresentCategoryBtxId = $btxDealPortalCategory['bitrixId'];
@@ -360,8 +385,8 @@ class ReportController extends Controller
                                         $getAllPresDealsData,
                                     );
 
-                                    if(!empty($currentBaseDeal)) {
-                                        if(!empty($currentBaseDeal['ID'])) {
+                                    if (!empty($currentBaseDeal)) {
+                                        if (!empty($currentBaseDeal['ID'])) {
                                             $getAllPresDealsData =  [
                                                 'filter' => [
                                                     'COMPANY_ID' => $currentCompany['ID'],
@@ -375,10 +400,10 @@ class ReportController extends Controller
                                                     'TITLE',
                                                     'UF_CRM_PRES_COUNT',
                                                     'STAGE_ID',
-        
+
                                                 ]
                                             ];
-        
+
                                             sleep(1);
                                             $basePresentationDeals =   BitrixDealService::getDealList(
                                                 $hook,
@@ -386,12 +411,6 @@ class ReportController extends Controller
                                             );
                                         }
                                     }
-                                  
-
-                                 
-
-
-
                                 }
                             } else  if ($btxDealPortalCategory['code'] == "sales_xo") {
                                 $currentXOCategoryBtxId = $btxDealPortalCategory['bitrixId'];
@@ -487,14 +506,14 @@ class ReportController extends Controller
                         'currentCompany' => $currentCompany,
                         'deals' => [
                             'currentBaseDeal' => $currentBaseDeal,
+                            'allBaseDeals' => $allBaseDeals,
                             'currentPresentationDeal' => $currentPresentationDeal,
                             'basePresentationDeals' => $basePresentationDeals,
                             'allPresentationDeals' => $allPresentationDeals,
                             'presList' => $presList,
                             'currentXODeal' => $currentXODeal,
-                            'allXODeals' => $allXODeals,
-                            'btxDeals' => $btxDeals,
-                             
+                            // 'allXODeals' => $allXODeals,
+                            'currentTaskDeals' => $btxDeals,
 
                         ],
 

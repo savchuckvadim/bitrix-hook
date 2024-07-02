@@ -140,7 +140,8 @@ class EventReportService
     protected $currentTMCDeal;
 
     protected $relationBaseDeals;
-    protected $relationPresDeals;
+    protected $relationCompanyUserPresDeals;
+    protected $relationFromBasePresDeals;
     protected $relationColdDeals;
     protected $relationTMCDeals;
 
