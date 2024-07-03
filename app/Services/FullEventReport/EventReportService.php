@@ -1238,6 +1238,10 @@ class EventReportService
 
         foreach ($currentBtxDeals as $currentBtxDeal) {
             sleep(1);
+            Log::info('HOOK TEST currentBtxDeals', [
+                'currentBtxDeal' => $currentBtxDeal,    
+    
+            ]);
             $this->getEntityFlow(true, $currentBtxDeal);
         }
         if ($this->isPlanned) {
