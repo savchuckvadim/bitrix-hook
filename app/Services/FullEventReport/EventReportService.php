@@ -445,30 +445,30 @@ class EventReportService
 
         Log::info('HOOK TEST sessionData total', [
             'sessionData' => $sessionData,
-            'currentBtxDeals' =>$this->currentBtxDeals
+            'currentBtxDeals' => $this->currentBtxDeals
 
 
         ]);
 
 
 
-        if (!isset($sessionData['currentCompany'])) {
-            $currentBtxEntities =  BitrixEntityFlowService::getEntities(
-                $this->hook,
-                $this->currentTask,
-            );
+        // if (!isset($sessionData['currentCompany'])) {
+        //     $currentBtxEntities =  BitrixEntityFlowService::getEntities(
+        //         $this->hook,
+        //         $this->currentTask,
+        //     );
 
-            if (!empty($currentBtxEntities)) {
-                if (!empty($currentBtxEntities['companies'])) {
-                    $currentBtxEntity = $currentBtxEntities['companies'][0];
-                }
-                if (!empty($currentBtxEntities['deals'])) {
-                    $currentBtxDeals = $currentBtxEntities['deals'];
-                }
-            }
-            $this->currentBtxEntity  = $currentBtxEntity;
-            $this->currentBtxDeals  = $currentBtxDeals;
-        }
+        //     if (!empty($currentBtxEntities)) {
+        //         if (!empty($currentBtxEntities['companies'])) {
+        //             $currentBtxEntity = $currentBtxEntities['companies'][0];
+        //         }
+        //         if (!empty($currentBtxEntities['deals'])) {
+        //             $currentBtxDeals = $currentBtxEntities['deals'];
+        //         }
+        //     }
+        //     $this->currentBtxEntity  = $currentBtxEntity;
+        //     $this->currentBtxDeals  = $currentBtxDeals;
+        // }
 
         $fieldsCallCodes = [
             'call_next_date', //ОП Дата Следующего звонка
@@ -663,12 +663,15 @@ class EventReportService
 
 
     //entity
-    protected function getEntityFlow()
+    protected function getEntityFlow($isDeal = false, $deal = null)
     {
         $currentReportEventType = $this->currentReportEventType;
         $currentPlanEventType = $this->currentPlanEventType;
         $isPresentationDone = $this->isPresentationDone;
 
+        $currentBtxEntity = $this->currentBtxEntity;
+        $entityType = $this->entityType;
+        $entityId = $this->entityId;
 
         $reportFields = [];
         $reportFields['manager_op'] = $this->planResponsibleId;
@@ -677,7 +680,7 @@ class EventReportService
         $reportFields['op_work_status'] = '';
         $reportFields['op_work_status'] = '';
 
-
+        $currentPresCount = 0;
         $companyPresCount = 0;
         $dealPresCount = 0;
         if (!empty($this->currentTask)) {
@@ -692,15 +695,27 @@ class EventReportService
             }
         }
 
+
+
+        $currentPresCount =  $companyPresCount;
+        if ($isDeal && !empty($deal) && !empty($deal['ID'])) {
+
+            $currentPresCount =  $dealPresCount;
+            $currentBtxEntity = $deal;
+            $entityType = 'deal';
+            $entityId =  $deal['ID'];
+        }
+
+
         $currentPresComments = [];
         $currentFailComments = [];
-        if (isset($this->currentBtxEntity)) {
-            if (!empty($this->currentBtxEntity['UF_CRM_PRES_COMMENTS'])) {
-                $currentPresComments = $this->currentBtxEntity['UF_CRM_PRES_COMMENTS'];
+        if (isset($currentBtxEntity)) {
+            if (!empty($currentBtxEntity['UF_CRM_PRES_COMMENTS'])) {
+                $currentPresComments = $currentBtxEntity['UF_CRM_PRES_COMMENTS'];
             }
 
-            if (!empty($this->currentBtxEntity['UF_CRM_OP_FAIL_COMMENTS'])) {
-                $currentFailComments = $this->currentBtxEntity['UF_CRM_OP_FAIL_COMMENTS'];
+            if (!empty($currentBtxEntity['UF_CRM_OP_FAIL_COMMENTS'])) {
+                $currentFailComments = $currentBtxEntity['UF_CRM_OP_FAIL_COMMENTS'];
             }
         }
         // Log::channel('telegram')->info('TST', [
@@ -737,7 +752,7 @@ class EventReportService
 
             $reportFields['last_pres_done_date'] = $this->nowDate;
             $reportFields['last_pres_done_responsible'] =  $this->planResponsibleId;
-            $reportFields['pres_count'] = $companyPresCount + 1;
+            $reportFields['pres_count'] = $currentPresCount + 1;
             $reportFields['pres_comments'] = $currentPresComments;
             if ($currentReportEventType !== 'presentation') {
                 $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
@@ -868,11 +883,11 @@ class EventReportService
 
         $entityService->flow(
             $this->portal,
-            $this->currentBtxEntity,
+            $currentBtxEntity,
             $this->portalCompanyData,
             $this->hook,
-            $this->entityType,
-            $this->entityId,
+            $entityType,
+            $entityId,
             $this->currentPlanEventType, // xo warm presentation,
             'plan',  // plan done expired 
             $this->planCreatedId,
@@ -1220,6 +1235,11 @@ class EventReportService
         //warm | money_await | in_progress - создать или обновить  Основная
         //presentation - создать или обновить presentation & Основная
 
+
+        foreach ($currentBtxDeals as $currentBtxDeal) {
+            sleep(1);
+            $this->getEntityFlow(true, $currentBtxDeal);
+        }
         if ($this->isPlanned) {
             $currentBtxDeals = BitrixDealFlowService::getBaseDealFromCurrentBtxDeals(
                 $this->portalDealData,

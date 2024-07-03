@@ -759,7 +759,17 @@ class ReportController extends Controller
 
                 $presList = null;
 
+                $select = [
+                    'ID',
+                    'TITLE',
+                    'UF_CRM_PRES_COUNT',
+                    'CATEGORY_ID',
+                    'STAGE_ID',
+                    'UF_CRM_PRES_COMMENTS',
+                    'UF_CRM_OP_FAIL_COMMENTS',
+                    'UF_CRM_TO_BASE_SALES'
 
+                ];
 
                 //from task - получаем из task компании и сделки разных направлений
 
@@ -939,13 +949,7 @@ class ReportController extends Controller
                                         'RESPONSIBLE_ID' => $responsibleId,
                                         '!=STAGE_ID' => ['C' . $currenBaseCategoryBtxId . ':WON', 'C' . $currenBaseCategoryBtxId . ':LOSE', 'C' . $currenBaseCategoryBtxId . ':APOLOGY']
                                     ],
-                                    'select' => [
-                                        'ID',
-                                        'TITLE',
-                                        'UF_CRM_PRES_COUNT',
-                                        'STAGE_ID',
-
-                                    ]
+                                    'select' => $select
 
                                 ];
 
@@ -974,13 +978,7 @@ class ReportController extends Controller
                                         'RESPONSIBLE_ID' => $responsibleId,
                                         '!=STAGE_ID' => ['C' . $currentPresentCategoryBtxId . ':LOSE', 'C' . $currentPresentCategoryBtxId . ':APOLOGY']
                                     ],
-                                    'select' => [
-                                        'ID',
-                                        'TITLE',
-                                        'UF_CRM_PRES_COUNT',
-                                        'STAGE_ID',
-
-                                    ]
+                                    'select' => $select
                                 ];
 
                                 // sleep(1);
@@ -999,13 +997,7 @@ class ReportController extends Controller
                                                 '!=STAGE_ID' => ['C' . $currentPresentCategoryBtxId . ':LOSE', 'C' . $currentPresentCategoryBtxId . ':APOLOGY'],
                                                 'UF_CRM_TO_BASE_SALES' => $currentBaseDeal['ID']
                                             ],
-                                            'select' => [
-                                                'ID',
-                                                'TITLE',
-                                                'UF_CRM_PRES_COUNT',
-                                                'STAGE_ID',
-
-                                            ]
+                                            'select' => $select
                                         ];
 
 
@@ -1035,13 +1027,7 @@ class ReportController extends Controller
                                         'RESPONSIBLE_ID' => $responsibleId,
                                         '!=STAGE_ID' => ['C' . $currentXOCategoryBtxId . ':LOSE', 'C' . $currentXOCategoryBtxId . ':APOLOGY']
                                     ],
-                                    'select' => [
-                                        'ID',
-                                        'TITLE',
-                                        'UF_CRM_PRES_COUNT',
-                                        'STAGE_ID',
-
-                                    ]
+                                    'select' => $select
                                 ];
 
                                 sleep(1);
