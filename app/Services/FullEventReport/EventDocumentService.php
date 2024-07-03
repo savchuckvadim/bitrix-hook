@@ -148,7 +148,7 @@ class EventDocumentService
             // !empty($data['userId'])  &&
             // !empty($data['companyId']) &&
             !empty($data['domain']) &&
-            !empty($data['baseDealId']) &&
+            !empty($data['dealId']) &&
             !empty($data['companyId']) &&
             !empty($data['userId'])
 
@@ -157,10 +157,25 @@ class EventDocumentService
             date_default_timezone_set('Europe/Moscow');
 
             $domain = $data['domain'];
-            $baseDealId = $data['baseDealId'];
+            $baseDealId = $data['dealId'];
             $companyId = $data['companyId'];
             $userId = $data['userId'];
+            // domain,
+            // companyId: companyId,
+            // placement: placement,
+            // dealId: newDealId,
+            // userId,
+            // price,
+            // supply,
 
+            // manager: state.document.manager,
+            // invoice: invoiceData,
+            // isPublic: IS_PUBLIC || IS_MAX_DEV,
+            // salePhrase,
+            // invoiceDate,
+            // withStamps: withStamps,
+            // isWord,
+            // currentComplect,
             Log::info('HOOK TEST EventDocumentService', [
                 'rekvest' => $data,
 
@@ -223,33 +238,14 @@ class EventDocumentService
 
             $this->entityId = $entityId;
 
-            $this->presentation = $data['presentation'];
-
-
-            $this->isPresentationDone = $data['presentation']['isPresentationDone'];
-
-
-
 
 
             $this->isUnplannedPresentation = false;
 
-            if (!empty($this->isPresentationDone)) {
-                if (!empty($data['currentTask'])) {
-                    if (!empty($data['currentTask']['eventType'])) {
+          if(isset($data['presentation'])){
+            $this->currentPresDeal = $data['presentation'];
 
-                        // $this->currentReportEventType = $data['currentTask']['eventType'];
-
-
-                        if ($data['currentTask']['eventType'] !== 'presentation') {
-                            $this->isUnplannedPresentation = true;
-                        }
-                    }
-                } else {
-                    $this->isUnplannedPresentation = true;
-                }
-            }
-
+          }
 
             // Log::info('HOOK TEST sessionData', [
             //     'sessionData' => $sessionData
@@ -263,21 +259,7 @@ class EventDocumentService
             $portal = $portal['data'];
             $this->portal = $portal;
 
-            if ($domain === 'april-dev.bitrix24.ru' || $domain === 'gsr.bitrix24.ru') {
-                $this->isDealFlow = true;
-                $this->withLists = true;
-                if (!empty($portal['deals'])) {
-                    $this->portalDealData = $portal['bitrixDeal'];
-                }
-                if (!empty($portal['bitrixLists'])) {
-
-                    $this->bitrixLists = $portal['bitrixLists'];
-                }
-            }
-
-            if ($domain === 'gsr.bitrix24.ru') {
-                $this->isSmartFlow = false;
-            }
+          
 
 
             // $this->aprilSmartData = $portal['bitrixSmart'];
@@ -488,13 +470,13 @@ class EventDocumentService
             $this->currentDepartamentType = BitrixDepartamentService::getDepartamentTypeByUserId();
 
 
-            if (!empty($data['sale'])) {
+            // if (!empty($data['sale'])) {
 
-                if (!empty($data['sale']['relationSalePresDeal'])) {
+            //     if (!empty($data['sale']['relationSalePresDeal'])) {
 
-                    $this->relationSalePresDeal = $data['sale']['relationSalePresDeal'];
-                }
-            }
+            //         $this->relationSalePresDeal = $data['sale']['relationSalePresDeal'];
+            //     }
+            // }
         }
     }
 
@@ -510,6 +492,12 @@ class EventDocumentService
             $currentDeal = null;
             $currentDealId = null;
             $currentDealsIds = null;
+            Log::channel('telegram')->error('APRIL_HOOK getDocumentFlow', [
+                'data' => [
+                    'currentPresDeal' =>  $this->currentPresDeal,
+
+                ]
+            ]);
             // if(!$this->smartId){
 
             // }
@@ -519,9 +507,9 @@ class EventDocumentService
             //     $this->getSmartFlow();
             // }
 
-            if ($this->isDealFlow && $this->portalDealData) {
-                $currentDealsIds = $this->getDealFlow();
-            }
+            // if ($this->isDealFlow && $this->portalDealData) {
+            //     $currentDealsIds = $this->getDealFlow();
+            // }
 
             // $this->createTask($currentSmartId);
             // if ($this->isExpired || $this->isPlanned) {
@@ -529,15 +517,15 @@ class EventDocumentService
             // } else {
             //     $result = $this->workStatus;
             // }
-            $this->getEntityFlow();
+            // $this->getEntityFlow();
             // sleep(1);
 
 
-            $this->getListFlow();
+            // $this->getListFlow();
             sleep(1);
-            $this->getListPresentationFlow(
-                $currentDealsIds
-            );
+            // $this->getListPresentationFlow(
+            //     $currentDealsIds
+            // );
 
             return APIOnlineController::getSuccess(['result' => $this->workStatus]);
         } catch (\Throwable $th) {
