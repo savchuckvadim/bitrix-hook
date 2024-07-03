@@ -102,6 +102,16 @@ class BitrixEntityFlowService
 
 
         try {
+            if ($entityType == 'deal') {
+                Log::info('HOOK TEST currentBtxDeals', [
+                    'currentBtxEntity' => $currentBtxEntity,
+                    'entityType' => $entityType,
+                    'entityId' => $entityId,
+                    // 'reportFields' => $reportFields,  
+
+
+                ]);
+            }
             if (!empty($portalCompanyData) && !empty($portalCompanyData['bitrixfields'])) {
                 $fields = $portalCompanyData['bitrixfields'];
 
@@ -144,22 +154,37 @@ class BitrixEntityFlowService
 
                 // $entityFieldsUpdatingContent
 
+                BitrixGeneralService::updateEntity(
+                    $hook,
+                    $entityType,
+                    $entityId,
+                    $updatedFields
+                );
 
-
-                if ($entityType == 'company') {
-                    $updatedCompany = BitrixEntityFlowService::updateCompanyCold(
-                        $hook,
-                        $entityId,
-                        $updatedFields
-                    );
-                } else if ($entityType == 'lead') {
-                    $updatedLead = BitrixEntityFlowService::updateLeadCold(
-                        $hook,
-                        $entityId,
-                        $updatedFields
-                    );
-                }
+                // if ($entityType == 'company') {
+                //     $updatedCompany = BitrixEntityFlowService::updateCompanyCold(
+                //         $hook,
+                //         $entityId,
+                //         $updatedFields
+                //     );
+                // } else if ($entityType == 'lead') {
+                //     $updatedLead = BitrixEntityFlowService::updateLeadCold(
+                //         $hook,
+                //         $entityId,
+                //         $updatedFields
+                //     );
+                // } else if ($entityType == 'deal') {
+                //     $updatedLead = BitrixGeneralService::updateEntity(
+                //         $hook,
+                //         $entityType,
+                //         $entityId,
+                //         $updatedFields
+                //     );
+                // }
             }
+
+
+
 
             return APIOnlineController::getSuccess(['result' => 'success']);
         } catch (\Throwable $th) {
@@ -300,7 +325,7 @@ class BitrixEntityFlowService
     //                 $code = $pCategory['code'];
     //                 switch ($code) {
     //                     case 'sales_base':
-                            
+
     //                         $keyName = 'company_' . $id;
 
 

@@ -673,6 +673,9 @@ class EventReportService
         $entityType = $this->entityType;
         $entityId = $this->entityId;
 
+        $portalEntityData = $this->portalCompanyData;
+
+
         $reportFields = [];
         $reportFields['manager_op'] = $this->planResponsibleId;
         $reportFields['op_work_status'] = '';
@@ -704,6 +707,7 @@ class EventReportService
             $currentBtxEntity = $deal;
             $entityType = 'deal';
             $entityId =  $deal['ID'];
+            $portalEntityData = $this->portalDealData;
         }
 
 
@@ -881,19 +885,12 @@ class EventReportService
         $entityService = new BitrixEntityFlowService();
 
 
-        Log::info('HOOK TEST currentBtxDeals', [
-            'currentBtxEntity' => $currentBtxEntity,    
-            'entityType' => $entityType,    
-            'entityId' => $entityId,  
-            'reportFields' => $reportFields,  
-              
-
-        ]);
-
+       
+     
         $entityService->flow(
             $this->portal,
             $currentBtxEntity,
-            $this->portalCompanyData,
+            $portalEntityData,
             $this->hook,
             $entityType,
             $entityId,

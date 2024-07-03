@@ -266,6 +266,32 @@ class BitrixGeneralService
             return $resultFields;
         }
     }
+    static function updateEntity($hook, $entityType, $entityId, $fieldsData)
+    {
+        $resultLead = null;
+        try {
+            $methodSmart = '/crm.'.$entityType.'.update.json';
+            $url = $hook . $methodSmart;
+
+            $data = [
+                'id' => $entityId,
+                'fields' =>  $fieldsData
+
+            ];
+
+
+
+            $resultLeadResponse = Http::get($url, $data);
+
+            $resultData = APIBitrixController::getBitrixRespone($resultLeadResponse, 'general service: updateSmartItemCold');
+            $result= $resultData;
+
+
+            return $result;
+        } catch (\Throwable $th) {
+            return $resultLead;
+        }
+    }
 
 
 
