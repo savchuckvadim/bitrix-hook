@@ -707,7 +707,7 @@ class EventReportService
             $currentBtxEntity = $deal;
             $entityType = 'deal';
             $entityId =  $deal['ID'];
-            // $portalEntityData = $this->portalDealData;
+            $portalEntityData = $this->portalDealData;
         }
 
 
@@ -1250,6 +1250,8 @@ class EventReportService
             ]);
             $this->getEntityFlow(true, $currentBtxDeal);
         }
+
+
         if ($this->isPlanned) {
             $currentBtxDeals = BitrixDealFlowService::getBaseDealFromCurrentBtxDeals(
                 $this->portalDealData,
