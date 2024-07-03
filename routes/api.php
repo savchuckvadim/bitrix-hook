@@ -334,7 +334,7 @@ Route::post('/full/document/init', function (Request $request) {
     //текущую компанию 
 
     return APIOnlineController::getSuccess([
-        'body' => $request->body()
+        'body' => $request->all()
     ]);
     // return FullEventInitController::sessionGet($request);
 });
