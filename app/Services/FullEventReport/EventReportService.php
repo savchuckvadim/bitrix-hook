@@ -383,6 +383,13 @@ class EventReportService
         // }
         $sessionKey = $domain . '_' . $this->currentTask['id'];
         $sessionData = FullEventInitController::getSessionItem($sessionKey);
+
+        Log::info('HOOK TEST sessionData try first', [
+            'sessionData' => $sessionData,
+
+
+
+        ]);
         if (isset($sessionData['currentCompany']) && isset($sessionData['deals'])) {
             $this->currentBtxEntity  = $sessionData['currentCompany'];
 
@@ -398,17 +405,25 @@ class EventReportService
             if (!empty($sessionData['deals'])) {
                 $sessionDeals = $sessionData['deals'];
             }
+
+
+            Log::info('HOOK TEST sessionData try self', [
+                'sessionData' => $sessionData,
+
+
+
+            ]);
         }
         if (
             isset($sessionDeals['currentBaseDeal']) &&
-            isset($sessionDeals['allBaseDeals']) &&
-            isset($sessionDeals['currentPresentationDeal']) &&
-            isset($sessionDeals['basePresentationDeals']) &&
-            isset($sessionDeals['allPresentationDeals']) &&
-            // isset($sessionDeals['presList']) &&
-            isset($sessionDeals['currentXODeal']) &&
-            isset($sessionDeals['allXODeals']) &&
-            isset($sessionDeals['currentTaskDeals'])
+            isset($sessionDeals['allBaseDeals'])
+            // isset($sessionDeals['currentPresentationDeal']) &&
+            // isset($sessionDeals['basePresentationDeals']) &&
+            // isset($sessionDeals['allPresentationDeals']) &&
+            // // isset($sessionDeals['presList']) &&
+            // isset($sessionDeals['currentXODeal']) &&
+            // isset($sessionDeals['allXODeals']) &&
+            // isset($sessionDeals['currentTaskDeals'])
 
 
         ) {
@@ -426,6 +441,16 @@ class EventReportService
             $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
             $this->relationColdDeals = $sessionDeals['allXODeals'];
         }
+
+
+        Log::info('HOOK TEST sessionData total', [
+            'sessionData' => $sessionData,
+            'currentBtxDeals' =>$this->currentBtxDeals
+
+
+        ]);
+
+
 
         if (!isset($sessionData['currentCompany'])) {
             $currentBtxEntities =  BitrixEntityFlowService::getEntities(
@@ -1082,7 +1107,7 @@ class EventReportService
                 '$fields',
                 null // $relationSalePresDeal
             );
-          
+
             Log::info('HOOK TEST unplannedPresDeal', [
                 'unplannedPresDeal' => $unplannedPresDeal,
 
