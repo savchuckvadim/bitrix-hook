@@ -333,14 +333,12 @@ Route::post('/full/document/init', function (Request $request) {
     //находит сделки презентации fromBase и fromCompany
     //текущую компанию 
 
-    return APIOnlineController::getSuccess([
-        'body' => $request->all()
-    ]);
+    return ReportController::getDocumentDealsInit($request);
     // return FullEventInitController::sessionGet($request);
 });
 
 
-Route::post('/full/document/send', function (Request $request) {
+Route::post('/full/document/flow', function (Request $request) {
 
     //    получает информацию о текущем документе
     //    записывает в entity и списки и обновляет стадию сделки
