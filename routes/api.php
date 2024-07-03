@@ -11,6 +11,7 @@ use App\Http\Controllers\Front\Calling\ReportController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\ReactAppController;
 use App\Models\Price;
+use App\Services\FullEventReport\EventDocumentService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -343,7 +344,9 @@ Route::post('/full/document/flow', function (Request $request) {
     //    получает информацию о текущем документе
     //    записывает в entity и списки и обновляет стадию сделки
     // document service flow
-    return FullEventInitController::sessionGet($request);
+    $data = $request->all();
+    $service = new EventDocumentService($data);
+    return $service->getDocumentFlow();
 });
 
 // новй холодный звонка из Откуда Угодно

@@ -750,7 +750,7 @@ class ReportController extends Controller
                 // $userId = $data['companyId'];
                 $domain = $data['domain'];
                 $companyId  = $data['domain'];
-                $btxDeals = []; //from task
+             
                 $baseDealId =  $data['baseDealId'];
                 $companyId =  $data['companyId'];
                 $userId =  $data['userId'];
@@ -815,14 +815,6 @@ class ReportController extends Controller
                         if ($btxDealPortalCategory['code'] == "sales_presentation") {
                             $currentPresentCategoryBtxId = $btxDealPortalCategory['bitrixId'];
 
-                            foreach ($btxDeals as $btxDeal) {
-                                if (!empty($btxDeal['CATEGORY_ID'])) {
-                                    if ($btxDeal['CATEGORY_ID'] == $currentPresentCategoryBtxId) {
-                                        $currentPresentationDeal = $btxDeal;      // сделка презентации из задачи
-
-                                    }
-                                }
-
 
                                 $getAllPresDealsData =  [
                                     'filter' => [
@@ -872,7 +864,7 @@ class ReportController extends Controller
                                         );
                                     }
                                 }
-                            }
+                            
                         }
                     }
                 }
