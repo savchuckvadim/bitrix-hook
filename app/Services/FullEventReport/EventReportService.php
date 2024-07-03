@@ -707,7 +707,7 @@ class EventReportService
             $currentBtxEntity = $deal;
             $entityType = 'deal';
             $entityId =  $deal['ID'];
-            $portalEntityData = $this->portalDealData;
+            // $portalEntityData = $this->portalDealData;
         }
 
 
