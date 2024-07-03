@@ -326,6 +326,28 @@ Route::post('/pres/count', function (Request $request) {
 
 
 
+// ............................... FULL EVENT Document PRES FRONT
+Route::post('/full/document/init', function (Request $request) {
+
+    //засовывает в сессию текущую base сделку
+    //находит сделки презентации fromBase и fromCompany
+    //текущую компанию 
+
+    return APIOnlineController::getSuccess([
+        'body' => $request->body()
+    ]);
+    // return FullEventInitController::sessionGet($request);
+});
+
+
+Route::post('/full/document/send', function (Request $request) {
+
+    //    получает информацию о текущем документе
+    //    записывает в entity и списки и обновляет стадию сделки
+    // document service flow
+    return FullEventInitController::sessionGet($request);
+});
+
 // новй холодный звонка из Откуда Угодно
 Route::post('cold', function (Request $request) {
 
@@ -897,7 +919,6 @@ Route::post('/bitrix/method', function (Request $request) {
         return APIOnlineController::getSuccess([
             'result' =>  $responseData
         ]);
-        
     } catch (\Throwable $th) {
         Log::error('Exception caught', [
             'message'   => $th->getMessage(),
