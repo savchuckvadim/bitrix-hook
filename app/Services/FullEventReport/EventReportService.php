@@ -881,6 +881,15 @@ class EventReportService
         $entityService = new BitrixEntityFlowService();
 
 
+        Log::info('HOOK TEST currentBtxDeals', [
+            'currentBtxEntity' => $currentBtxEntity,    
+            'entityType' => $entityType,    
+            'entityId' => $entityId,  
+            'reportFields' => $reportFields,  
+              
+
+        ]);
+
         $entityService->flow(
             $this->portal,
             $currentBtxEntity,
