@@ -1082,21 +1082,17 @@ class EventReportService
                 '$fields',
                 null // $relationSalePresDeal
             );
-            // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            //     'unplannedPresDeal' => $unplannedPresDeal,
+          
+            Log::info('HOOK TEST unplannedPresDeal', [
+                'unplannedPresDeal' => $unplannedPresDeal,
 
 
-            // ]);
-            // Log::info('HOOK TEST unplannedPresDeal', [
-            //     'unplannedPresDeal' => $unplannedPresDeal,
+            ]);
+            Log::info('HOOK TEST currentBtxDeals', [
+                'currentBtxDeals' => $this->currentBtxDeals,
 
 
-            // ]);
-            // Log::info('HOOK TEST currentBtxDeals', [
-            //     'currentBtxDeals' => $this->currentBtxDeals,
-
-
-            // ]);
+            ]);
             if (!empty($unplannedPresDeal)) {
                 if (isset($unplannedPresDeal['ID'])) {
 
@@ -1163,7 +1159,12 @@ class EventReportService
         // которая пушится туда  при unplanned - чтобы были обработаны базовая сделка 
         // в соответствии с проведенной през
         // при этом у основной сделки должна быть обновлена стадия - например на през если была unplanned
+        Log::info('HOOK TEST currentBtxDeals', [
+            'currentBtxDeals' => $currentBtxDeals,
+            'this currentBtxDeals' => $this->currentBtxDeals,
 
+
+        ]);
         $reportDeals = BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
             $this->hook,
             $currentBtxDeals,

@@ -38,11 +38,9 @@ class BitrixDealFlowService
 
     ) {
         sleep(1);
-        Log::info('HOOK TEST currentReportStatus', [
-            'eventAction' => $eventAction,
-            'currentBtxDeals' => $currentBtxDeals
-
-        ]);
+        //находит сначала целевые категиории сделок из portal   по eventType и eventAction - по тому что происходит
+        //сюда могут при ходить массив текущих сделок и которых есть CATEGORY_ID такой как в portal->deal->category->bitrixId
+        //
         $currentDealIds = [];
 
         $currentCategoryDatas =  BitrixDealService::getTargetCategoryData(
@@ -68,7 +66,7 @@ class BitrixDealFlowService
                     'eventAction' => $eventAction,
                     'currentCategoryData' => $currentCategoryData,
                     'targetStageBtxId' => $targetStageBtxId
-        
+
                 ]);
 
                 // $currentDeal = BitrixDealService::getDealId(
@@ -105,7 +103,7 @@ class BitrixDealFlowService
                 ];
 
 
-        
+
 
                 if (!$currentDealId) {
                     if (
@@ -336,4 +334,8 @@ class BitrixDealFlowService
         // ]);
         return $result;
     }
+
+
+
+    
 }

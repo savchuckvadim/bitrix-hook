@@ -1099,37 +1099,7 @@ class ReportController extends Controller
                 }
 
 
-
-
-                FullEventInitController::setSessionItem(
-                    $sessionKey,
-                    [
-                        'hook' => $hook,
-                        'portal' => $portal,
-                        'currentTask' => $currentTask,
-                        'currentCompany' => $currentCompany,
-                        'deals' => [
-                            'currentBaseDeal' => $currentBaseDeal,
-                            'allBaseDeals' => $allBaseDeals,
-                            'currentPresentationDeal' => $currentPresentationDeal,
-                            'basePresentationDeals' => $basePresentationDeals,
-                            'allPresentationDeals' => $allPresentationDeals,
-                            'presList' => $presList,
-                            'currentXODeal' => $currentXODeal,
-                            'allXODeals' => $allXODeals,
-                            'currentTaskDeals' => $btxDeals,
-                            // 'allDeals' => $allDeals
-
-                        ],
-
-
-
-                    ]
-                );
-                // $fromSession = FullEventInitController::getSessionItem(
-                //     $sessionKey
-                // );
-                return [
+                $sessionData = [
                     'hook' => $hook,
                     'portal' => $portal,
                     'currentTask' => $currentTask,
@@ -1151,6 +1121,15 @@ class ReportController extends Controller
 
 
                 ];
+
+                FullEventInitController::setSessionItem(
+                    $sessionKey,
+                    $sessionData
+                );
+                // $fromSession = FullEventInitController::getSessionItem(
+                //     $sessionKey
+                // );
+                return  $sessionData;
             } else {
                 return null;
             }
