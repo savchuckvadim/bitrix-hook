@@ -111,8 +111,7 @@ class EventDocumentService
     protected $isDealFlow = false;
     protected $isSmartFlow = true;
 
-    protected $portalDealData = null;
-    protected $portalCompanyData = null;
+   
 
 
     protected $currentDepartamentType = null;
@@ -145,6 +144,8 @@ class EventDocumentService
 
 
 
+    protected $portalDealData = null;
+    protected $portalCompanyData = null;
 
     public function __construct(
 
@@ -257,8 +258,8 @@ class EventDocumentService
 
             // $this->aprilSmartData = $portal['bitrixSmart'];
             $this->portalCompanyData = $portal['company'];
-
-
+            $this->portalDealData = $portal['bitrixDeal'];
+            
 
 
 
@@ -321,18 +322,23 @@ class EventDocumentService
             }
 
 
+            Log::channel('telegram')->info('HOOK TEST sessionData', [
 
+                'invoiceData' => $data['invoice'],
+
+
+            ]);
             $this->isOfferDone = true;
-            if (!empty($data['invoiceData'])) {
+            if (!empty($data['invoice'])) {
 
                 Log::channel('telegram')->info('HOOK TEST sessionData', [
 
-                    'invoiceData' => $data['invoiceData'],
+                    'invoiceData' => $data['invoice'],
 
 
                 ]);
-                if (!empty($data['invoiceData']['one'])) {
-                    if (!empty($data['invoiceData']['one']['value'])) {
+                if (!empty($data['invoice']['one'])) {
+                    if (!empty($data['invoice']['one']['value'])) {
                         $this->isInvoiceDone = true;
                     }
                 }
