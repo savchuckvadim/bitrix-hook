@@ -565,7 +565,7 @@ class EventDocumentService
 
         $currentPresComments = [];
         $currentFailComments = [];
-        $currentComments = [];
+        $currentComments = '';
         if (isset($currentBtxEntity)) {
             if ($this->isPresentationDone) {
                 if (!empty($currentBtxEntity['UF_CRM_PRES_COMMENTS'])) {
