@@ -271,7 +271,13 @@ class EventDocumentService
             $sessionKey = 'document_' . $domain . $userId . '_' . $baseDealId;
 
             $sessionData = FullEventInitController::getSessionItem($sessionKey);
+            Log::info('HOOK TEST sessionData', [
+                'sessionData' => $sessionData,
 
+
+
+
+            ]);
 
             if (isset($sessionData['currentCompany']) && isset($sessionData['deals'])) {
                 $this->currentBtxEntity  = $sessionData['currentCompany'];
@@ -293,13 +299,13 @@ class EventDocumentService
 
 
                 $sessionDeals = $sessionData['deals'];
-                Log::channel('telegram')->info('HOOK TEST sessionData', [
+                Log::info('HOOK TEST sessionData', [
 
                     'sessionDeals' => $sessionDeals,
     
     
                 ]);
-                Log::channel('telegram')->info('HOOK TEST currentBaseDeal', [
+                Log::info('HOOK TEST currentBaseDeal', [
 
                     'session currentBaseDeal' => $sessionDeals['currentBaseDeal'],
     
@@ -335,21 +341,11 @@ class EventDocumentService
             }
 
 
-            Log::channel('telegram')->info('HOOK TEST sessionData', [
-
-                'invoiceData' => $data['invoice'],
-
-
-            ]);
+         
             $this->isOfferDone = true;
             if (!empty($data['invoice'])) {
 
-                Log::channel('telegram')->info('HOOK TEST sessionData', [
-
-                    'invoiceData' => $data['invoice'],
-
-
-                ]);
+               
                 if (!empty($data['invoice']['one'])) {
                     if (!empty($data['invoice']['one']['value'])) {
                         $this->isInvoiceDone = true;
@@ -359,14 +355,7 @@ class EventDocumentService
 
             sleep(1);
 
-            Log::channel('telegram')->info('HOOK TEST sessionData', [
-                'isOfferDone' => $this->isOfferDone,
-                'isInvoiceDone' => $this->isInvoiceDone,
-                'currentBaseDeal' => $this->currentBaseDeal,
-
-
-
-            ]);
+          
 
 
 
@@ -729,7 +718,7 @@ class EventDocumentService
 
             if ($isFromPresentation) {
                 $reportFields['op_invoice_pres_q'] =   $entityPresInvoiceCount + 1; //количество после през
-                $reportFields['op_current_status'] = 'Счет предложение после презентации';
+                $reportFields['op_current_status'] = 'Счет после презентации';
             }
 
             $reportFields['op_invoice_date'] = $this->nowDate;
