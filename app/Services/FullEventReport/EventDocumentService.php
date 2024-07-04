@@ -508,6 +508,7 @@ class EventDocumentService
             Log::channel('telegram')->error('APRIL_HOOK getDocumentFlow', [
                 'data' => [
                     'currentPresDeal' =>  $this->currentPresDeal,
+                    'portalDealData' =>  $this->portalDealData,
 
                 ]
             ]);
@@ -520,7 +521,7 @@ class EventDocumentService
             //     $this->getSmartFlow();
             // }
 
-            if ($this->isDealFlow && $this->portalDealData) {
+            if ($this->portalDealData) {
                 $currentDealsIds = $this->getDealFlow();
                 // обновляет основную сделку стадию в документ
                 // если менее чем документ
