@@ -697,9 +697,9 @@ class EventDocumentService
 
         // в зависимости от условий сделка в итоге попадает либо в plan либо в report deals
         $this->getEntityFlow(true, $this->currentBaseDeal);
-        if ($this->currentPresDeal) {
-            $this->getEntityFlow(true, $this->currentPresDeal);
-        }
+        // if ($this->currentPresDeal) {
+        //     $this->getEntityFlow(true, $this->currentPresDeal);
+        // }
 
 
         return true;
