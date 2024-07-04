@@ -214,38 +214,36 @@ class EventDocumentService
             $entityType = null;
             $entityId = null;
 
-            if (isset($placement)) {
-                if (!empty($placement['placement'])) {
-                    if ($placement['placement'] == 'CALL_CARD') {
-                        if (!empty($placement['options'])) {
-                            if (!empty($placement['options']['CRM_BINDINGS'])) {
-                                foreach ($placement['options']['CRM_BINDINGS'] as $crmBind) {
-                                    if (!empty($crmBind['ENTITY_TYPE'])) {
-                                        if ($crmBind['ENTITY_TYPE'] == 'LEAD') {
-                                            $entityType = 'lead';
-                                            $entityId = $crmBind['ENTITY_ID'];
-                                        }
-                                        if ($crmBind['ENTITY_TYPE'] == 'COMPANY') {
-                                            $entityType = 'company';
-                                            $entityId = $crmBind['ENTITY_ID'];
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } else if (strpos($placement['placement'], 'COMPANY') !== false) {
-                        $entityType = 'company';
-                        $entityId = $placement['options']['ID'];
-                    } else if (strpos($placement['placement'], 'LEAD') !== false) {
-                        $entityType = 'lead';
-                        $entityId = $placement['options']['ID'];
-                    }
-                }
-            }
-            $this->entityType = $entityType;
-
-            $this->entityId = $entityId;
+            // if (isset($placement)) {
+            //     if (!empty($placement['placement'])) {
+            //         if ($placement['placement'] == 'CALL_CARD') {
+            //             if (!empty($placement['options'])) {
+            //                 if (!empty($placement['options']['CRM_BINDINGS'])) {
+            //                     foreach ($placement['options']['CRM_BINDINGS'] as $crmBind) {
+            //                         if (!empty($crmBind['ENTITY_TYPE'])) {
+            //                             if ($crmBind['ENTITY_TYPE'] == 'LEAD') {
+            //                                 $entityType = 'lead';
+            //                                 $entityId = $crmBind['ENTITY_ID'];
+            //                             }
+            //                             if ($crmBind['ENTITY_TYPE'] == 'COMPANY') {
+            //                                 $entityType = 'company';
+            //                                 $entityId = $crmBind['ENTITY_ID'];
+            //                                 break;
+            //                             }
+            //                         }
+            //                     }
+            //                 }
+            //             }
+            //         } else if (strpos($placement['placement'], 'COMPANY') !== false) {
+            //             $entityType = 'company';
+            //             $entityId = $placement['options']['ID'];
+            //         } else if (strpos($placement['placement'], 'LEAD') !== false) {
+            //             $entityType = 'lead';
+            //             $entityId = $placement['options']['ID'];
+            //         }
+            //     }
+            // }
+      
 
 
 
@@ -278,6 +276,21 @@ class EventDocumentService
             if (isset($sessionData['currentCompany']) && isset($sessionData['deals'])) {
                 $this->currentBtxEntity  = $sessionData['currentCompany'];
 
+
+                $this->entityType = 'company';
+
+                
+                if(isset($this->currentBtxEntity['ID'])){
+                    $this->entityId = $this->currentBtxEntity['ID'];
+                }
+
+
+                if(isset($this->currentBtxEntity['id'])){
+                    $this->entityId = $this->currentBtxEntity['id'];
+                }
+                
+
+                
 
                 $sessionDeals = $sessionData['deals'];
             }
