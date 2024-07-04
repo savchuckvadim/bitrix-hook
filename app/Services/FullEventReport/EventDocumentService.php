@@ -309,31 +309,14 @@ class EventDocumentService
             }
             if (
                 isset($sessionDeals['currentBaseDeal']) 
-                // &&
-                // isset($sessionDeals['allBaseDeals'])
-                // isset($sessionDeals['currentPresentationDeal']) &&
-                // isset($sessionDeals['basePresentationDeals']) &&
-                // isset($sessionDeals['allPresentationDeals']) &&
-                // // isset($sessionDeals['presList']) &&
-                // isset($sessionDeals['currentXODeal']) &&
-                // isset($sessionDeals['allXODeals']) &&
-                // isset($sessionDeals['currentTaskDeals'])
-
-
             ) {
 
 
-                // $this->currentBtxDeals  = $sessionDeals['currentTaskDeals'];
-
                 $this->currentBaseDeal = $sessionDeals['currentBaseDeal'];
-                $this->currentPresDeal = $sessionDeals['currentPresentationDeal'];
-                // $this->currentColdDeal = $sessionDeals['currentXODeal'];
 
-
-                // $this->relationBaseDeals = $sessionDeals['allBaseDeals'];
                 $this->relationCompanyUserPresDeals = $sessionDeals['allPresentationDeals']; //allPresDeal 
                 $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
-                // $this->relationColdDeals = $sessionDeals['allXODeals'];
+
             }
 
 
@@ -349,86 +332,7 @@ class EventDocumentService
                 }
             }
 
-            sleep(1);
-
-          
-
-
-
-            // if (!isset($sessionData['currentCompany'])) {
-            //     $currentBtxEntities =  BitrixEntityFlowService::getEntities(
-            //         $this->hook,
-            //         $this->currentTask,
-            //     );
-
-            //     if (!empty($currentBtxEntities)) {
-            //         if (!empty($currentBtxEntities['companies'])) {
-            //             $currentBtxEntity = $currentBtxEntities['companies'][0];
-            //         }
-            //         if (!empty($currentBtxEntities['deals'])) {
-            //             $currentBtxDeals = $currentBtxEntities['deals'];
-            //         }
-            //     }
-            //     $this->currentBtxEntity  = $currentBtxEntity;
-            //     $this->currentBtxDeals  = $currentBtxDeals;
-            // }
-
-            $fieldsCallCodes = [
-                'call_next_date', //ОП Дата Следующего звонка
-                'call_next_name',    //ОП Тема Следующего звонка
-                'call_last_date',  //ОП Дата последнего звонка
-                'xo_created',
-                'manager_op',
-                'call_next_date', //дата следующего план звонка
-                'call_next_name',
-                'call_last_date', //дата последнего результативного звонка
-
-            ];
-
-            $fieldsPresentationCodes = [
-                'next_pres_plan_date', // ОП Дата назначенной презентации
-                'last_pres_plan_date', //ОП Дата последней назначенной презентации
-                'last_pres_done_date',  //ОП Дата последней проведенной презентации
-                'last_pres_plan_responsible',  //ОП Кто назначил последнюю заявку на презентацию
-                'last_pres_done_responsible',   //ОП Кто провел последнюю презентацию
-                'pres_count', //ОП Проведено презентаций
-                'pres_comments', //ОП Комментарии после презентаций
-                'call_last_date',
-                'op_history',
-                'op_history_multiple',
-            ];
-
-            $statusesCodes = [
-                'op_work_status', //Статус Работы
-                'op_fail_type', //тип отказа  ОП Неперспективная
-                'op_fail_reason', //причина отказа
-                'op_noresult_reason', //ОП Причины нерезультативности
-            ];
-            $generalSalesCode = [
-                'manager_op',  //Менеджер по продажам Гарант
-                'op_history',
-                'op_history_multiple',
-            ];
-
-            $failSalesCode = [
-                'op_fail_comments',  //ОП Комментарии после отказов
-
-            ];
-            $resultEntityFields = [];
-
-
-
-
-
-
-            $smartEntityId = null;
-            $targetCategoryId = null;
-            $targetStageId = null;
-
-            $lastCallDateField = '';
-            $callThemeField = '';
-            $lastCallDateFieldCold = '';
-            $callThemeFieldCold = '';
+        
 
 
             if (!empty($portal['smarts'])) {
