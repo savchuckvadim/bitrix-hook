@@ -308,8 +308,9 @@ class EventDocumentService
                 
             }
             if (
-                isset($sessionDeals['currentBaseDeal']) &&
-                isset($sessionDeals['allBaseDeals'])
+                isset($sessionDeals['currentBaseDeal']) 
+                // &&
+                // isset($sessionDeals['allBaseDeals'])
                 // isset($sessionDeals['currentPresentationDeal']) &&
                 // isset($sessionDeals['basePresentationDeals']) &&
                 // isset($sessionDeals['allPresentationDeals']) &&
@@ -521,7 +522,7 @@ class EventDocumentService
             $currentDealsIds = null;
             Log::info('HOOK TEST getDocumentFlow', [
 
-                'session currentBaseDeal' =>$this->currentBaseDeal,
+                'session currentBaseDeal' => $this->currentBaseDeal,
 
 
             ]);
