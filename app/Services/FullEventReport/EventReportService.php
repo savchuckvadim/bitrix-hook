@@ -1144,12 +1144,20 @@ class EventReportService
             // $deal = null, 
             // $dealType = 'base',  //presentation, xo
             // $baseDealId = null
-            $this->getEntityFlow(
-                true,
-                $unplannedPresDeal,
-                'presentation',
-                $this->currentBaseDeal['ID']
-            );
+
+            Log::info('HOOK TEST unplannedPresDeal', [
+                'currentBaseDeal' => $this->currentBaseDeal,
+
+
+            ]);
+            if (!empty($this->currentBaseDeal)) {
+                $this->getEntityFlow(
+                    true,
+                    $unplannedPresDeal,
+                    'presentation',
+                    $this->currentBaseDeal['ID']
+                );
+            }
 
 
 
