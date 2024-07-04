@@ -320,20 +320,31 @@ class EventDocumentService
                 // $this->relationColdDeals = $sessionDeals['allXODeals'];
             }
 
+
+
             $this->isOfferDone = true;
             if (!empty($data['invoiceData'])) {
 
+                Log::channel('telegram')->info('HOOK TEST sessionData', [
+
+                    'invoiceData' => $data['invoiceData'],
+
+
+                ]);
                 if (!empty($data['invoiceData']['one'])) {
                     if (!empty($data['invoiceData']['one']['value'])) {
-                        $isInvoiceDone = true;
+                        $this->isInvoiceDone = true;
                     }
                 }
             }
-            Log::info('HOOK TEST sessionData', [
+
+            sleep(1);
+
+            Log::channel('telegram')->info('HOOK TEST sessionData', [
                 'isOfferDone' => $this->isOfferDone,
                 'isInvoiceDone' => $this->isInvoiceDone,
                 'currentBaseDeal' => $this->currentBaseDeal,
-                'currentPresDeal' => $this->currentPresDeal,
+
 
 
             ]);
