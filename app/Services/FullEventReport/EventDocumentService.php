@@ -562,7 +562,6 @@ class EventDocumentService
         }
 
 
-
         $currentPresComments = [];
         $currentFailComments = [];
         $currentComments = '';
@@ -574,31 +573,7 @@ class EventDocumentService
             }
 
 
-            if (!empty($currentBtxEntity['UF_CRM_OP_MHISTORY'])) {
-                $currentComments = $currentBtxEntity['UF_CRM_OP_MHISTORY'];
-            }
-
-
-            if (!empty($currentBtxEntity['UF_CRM_OP_OFFER_Q'])) { //количество кп
-                $currentComments = $currentBtxEntity['UF_CRM_OP_OFFER_Q'];
-            }
-
-
-
-            if ($isFromPresentation) {
-                if (!empty($currentBtxEntity['UF_CRM_OP_OFFER_PRES_Q'])) { //количество кп
-                    $currentComments = $currentBtxEntity['UF_CRM_OP_OFFER_PRES_Q'];
-                }
-                if (!empty($currentBtxEntity['UF_CRM_OP_INVOICE_PRES_Q'])) { //количество кп
-                    $currentComments = $currentBtxEntity['UF_CRM_OP_INVOICE_PRES_Q'];
-                }
-            }
         }
-        // Log::channel('telegram')->info('TST', [
-        //     'currentPresComments' => $currentPresComments,
-        //     'currentFailComments' => $currentFailComments,
-        // ]);
-
 
         // isOfferDone
         // isInvoiceDone
@@ -629,7 +604,7 @@ class EventDocumentService
 
             $reportFields['op_invoice_date'] = $this->nowDate;
         }
-        $reportFields['pres_comments'] = $currentComments . ' |' . $this->nowDate . ' ' . $reportFields['op_current_status'];
+        $reportFields['pres_comments'] = $currentComments . ' | ' . $this->nowDate . ' ' . $reportFields['op_current_status'];
         // if ($this->isContractDone) {
         // $reportFields['op_current_status'] = 'Договор';
         //     $reportFields['op_contract_q'] = $currentContractCount + 1; //количество 
