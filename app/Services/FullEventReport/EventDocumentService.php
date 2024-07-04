@@ -185,10 +185,8 @@ class EventDocumentService
             // withStamps: withStamps,
             // isWord,
             // currentComplect,
-            Log::info('HOOK TEST EventDocumentService', [
-                'rekvest' => $data,
-
-
+            Log::channel('telegram')->info('HOOK TEST EventDocumentService', [
+                'rekvest presentation' => $data['presentation'],
 
             ]);
 
@@ -585,9 +583,7 @@ class EventDocumentService
         $complectName = null;
         $supply = null;
         $isFromPresentation = false;
-        $presentationDeal = $this->currentPresDeal;
-        $baseDeal = $this->currentBaseDeal;
-        $recipient = null;
+
 
         $currentBtxEntity = $this->currentBtxEntity;
         $entityType = $this->entityType;
@@ -611,7 +607,7 @@ class EventDocumentService
 
 
         if ($isDeal && !empty($deal) && !empty($deal['ID'])) {
-            $currentBtxEntity = $deal;
+
 
             $currentBtxEntity = $deal;
             $entityType = 'deal';
@@ -773,230 +769,14 @@ class EventDocumentService
         // protected $relationColdDeals;
         // protected $relationTMCDeals;
 
-
-
-        // $currentBaseDeal - обновляется в любом случае если ее нет - создается
-        // $currentPresDeal - обновляется если през - done или planEventType - pres
-        // $currentColdDeal - обновляется если xo - done или planEventType - xo
-
         // в зависимости от условий сделка в итоге попадает либо в plan либо в report deals
-
-        $reportDeals = [];
-        $planDeals = [];
-        $currentBtxDeals = $this->currentBtxDeals;
-        $unplannedPresDeals = null;
-        // report - закрывает сделки
-        // plan - создаёт
-        //todo report flow
-
-        // if report type = xo | cold
-        $currentReportStatus = 'done';
-
-        // if ($this->currentReportEventType == 'xo') {
-
-        if ($this->isFail) {
-            //найти сделку хо -> закрыть в отказ , заполнить поля отказа по хо 
-            $currentReportStatus = 'fail';
-        } else if ($this->isSuccessSale) {
-            //найти сделку хо -> закрыть в отказ , заполнить поля отказа по хо 
-            $currentReportStatus = 'success';
-        } else {
-            if ($this->isResult) {                   // результативный
-
-                if ($this->isInWork) {                // в работе или успех
-                    //найти сделку хо и закрыть в успех
-                }
-            } else { //нерезультативный 
-                if ($this->isPlanned) {                // если запланирован нерезультативный - перенос 
-                    //найти сделку хо и закрыть в успех
-                    $currentReportStatus = 'expired';
-                }
-            }
-        }
-        // }
-
-
-        if ($this->isPresentationDone && $this->currentReportEventType !== 'presentation') { // проведенная презентация будет isUnplanned
-            //в current task не будет id сделки презентации
-            // в таком случае предполагается, что сделки презентация еще не существует
-            $currentBtxDeals = [];
-            $unplannedPresDeal = BitrixDealFlowService::unplannedPresflow(  //  создает - презентация
-                $this->hook,
-                null,
-                $this->portalDealData,
-                $this->currentDepartamentType,
-                $this->entityType,
-                $this->entityId,
-                'presentation', // xo warm presentation,
-                'Презентация',
-                'Запланирована',
-                'plan',  // plan done expired fail
-                $this->planResponsibleId,
-                true,
-                '$fields',
-                null // $relationSalePresDeal
-            );
-
-            Log::info('HOOK TEST unplannedPresDeal', [
-                'unplannedPresDeal' => $unplannedPresDeal,
-
-
-            ]);
-            Log::info('HOOK TEST currentBtxDeals', [
-                'currentBtxDeals' => $this->currentBtxDeals,
-
-
-            ]);
-            if (!empty($unplannedPresDeal)) {
-                if (isset($unplannedPresDeal['ID'])) {
-
-                    $unplannedPresDealId = $unplannedPresDeal['ID'];
-                    array_push($this->currentBtxDeals, $unplannedPresDeal);
-                    $unplannedPresResultStatus = 'done';
-                    $unplannedPresResultName = 'Проведена';
-                    if ($this->isFail) {
-                        $unplannedPresResultStatus = 'fail';
-                        $unplannedPresResultName = 'Отказ после презентации';
-                    }
-                    $unplannedPresDeals = BitrixDealFlowService::flow(  // закрывает сделку  - презентация обновляет базовую в соответствии с проведенной през
-                        $this->hook,
-                        $this->currentBtxDeals,
-                        $this->portalDealData,
-                        $this->currentDepartamentType,
-                        $this->entityType,
-                        $this->entityId,
-                        'presentation', // xo warm presentation,
-                        'Презентация',
-                        $unplannedPresResultName,
-                        $unplannedPresResultStatus,  // plan done expired fail
-                        $this->planResponsibleId,
-                        true,
-                        '$fields',
-                        null // $relationSalePresDeal
-                    );
-                    // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                    //     'unplannedPresDeals' => $unplannedPresDeals,
-
-
-                    // ]);
-                    // Log::info('HOOK TEST CURRENTENTITY', [
-                    //     'unplannedPresDeals' => $unplannedPresDeals,
-
-
-                    // ]);
-                    foreach ($this->currentBtxDeals as $cbtxdeal) {
-                        if ($cbtxdeal['ID'] !== $unplannedPresDealId) {
-                            sleep(1);
-                            $updtdbtxdeal = BitrixDealService::getDeal(
-                                $this->hook,
-                                ['id' => $cbtxdeal['ID']]
-                            );
-                            if (!empty($updtdbtxdeal)) {
-
-                                $cbtxdeal = $updtdbtxdeal;
-                            }
-                            array_push($currentBtxDeals, $cbtxdeal);
-                        }
-                    }
-                }
-            }
-        }
-        sleep(1);
-
-
-        //если был unplanned а потом plan ->
-        //если warm plan а report был xo 
-        // - то нужна обновленная стадия в базовой битрикс сделке что не пыталось повысить
-        // с xo в warm так как уже на самом деле pres 
-        // если plan pres -> планируется новая презентация и поэтому в  
-        // $this->currentBtxDeals должна отсутствовать сделка презентации созданная при unplanned, 
-        // которая пушится туда  при unplanned - чтобы были обработаны базовая сделка 
-        // в соответствии с проведенной през
-        // при этом у основной сделки должна быть обновлена стадия - например на през если была unplanned
-        Log::info('HOOK TEST currentBtxDeals', [
-            'currentBtxDeals' => $currentBtxDeals,
-            'this currentBtxDeals' => $this->currentBtxDeals,
-
-
-        ]);
-        $reportDeals = BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
-            $this->hook,
-            $currentBtxDeals,
-            $this->portalDealData,
-            $this->currentDepartamentType,
-            $this->entityType,
-            $this->entityId,
-            $this->currentReportEventType, // xo warm presentation, 
-            $this->currentReportEventName,
-            $this->currentPlanEventName,
-            $currentReportStatus,  // plan done expired fail success
-            $this->planResponsibleId,
-            $this->isResult,
-            '$fields',
-            $this->relationSalePresDeal
-        );
-        //todo plan flow
-
-        // if ($this->currentPlanEventType == 'warm') {
-        //     // найти или создать сделку base не sucess стадия теплый прозвон
-
-
-        // }
-        // if plan type = xo | cold
-
-        //если запланирован
-        //xo - создать или обновить ХО & Основная
-        //warm | money_await | in_progress - создать или обновить  Основная
-        //presentation - создать или обновить presentation & Основная
-
-
-        foreach ($currentBtxDeals as $currentBtxDeal) {
-            sleep(1);
-            Log::info('HOOK TEST currentBtxDeals', [
-                'currentBtxDeal' => $currentBtxDeal,
-
-            ]);
-            $this->getEntityFlow(true, $currentBtxDeal);
+        $this->getEntityFlow(true, $this->currentBaseDeal);
+        if ($this->currentPresDeal) {
+            $this->getEntityFlow(true, $this->currentPresDeal);
         }
 
 
-        if ($this->isPlanned) {
-            $currentBtxDeals = BitrixDealFlowService::getBaseDealFromCurrentBtxDeals(
-                $this->portalDealData,
-                $currentBtxDeals
-            );
-
-            $planDeals =  BitrixDealFlowService::flow( //создает сделку
-                $this->hook,
-                $currentBtxDeals,
-                $this->portalDealData,
-                $this->currentDepartamentType,
-                $this->entityType,
-                $this->entityId,
-                $this->currentPlanEventType, // xo warm presentation, hot moneyAwait
-                $this->currentPlanEventTypeName,
-                $this->currentPlanEventName,
-                'plan',  // plan done expired 
-                $this->planResponsibleId,
-                $this->isResult,
-                '$fields',
-                null // $relationSalePresDeal
-            );
-        }
-
-        // Log::channel('telegram')->info('presentationBtxList', [
-        //     'reportDeals' => $reportDeals,
-        //     'planDeals' => $planDeals,
-        //     // 'failReason' => $failReason,
-        //     // 'failType' => $failType,
-
-        // ]);
-
-        return [
-            'reportDeals' => $reportDeals,
-            'planDeals' => $planDeals,
-            'unplannedPresDeals' => $unplannedPresDeals,
-        ];
+        return true;
     }
 
 
