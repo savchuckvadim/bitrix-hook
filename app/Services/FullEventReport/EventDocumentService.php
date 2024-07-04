@@ -251,14 +251,7 @@ class EventDocumentService
 
 
 
-            // Log::info('HOOK TEST sessionData', [
-            //     'sessionData' => $sessionData
-
-            // ]);
-            // Log::channel('telegram')->info('HOOK TEST sessionData', [
-            //     'task from session' => $sessionData['currentTask']
-
-            // ]);
+            
             $portal = PortalController::getPortal($domain);
             $portal = $portal['data'];
             $this->portal = $portal;
@@ -325,8 +318,16 @@ class EventDocumentService
                     }
                 }
             }
+            Log::info('HOOK TEST sessionData', [
+                'isOfferDone' => $this->isOfferDone,
+                'isInvoiceDone' => $this->isInvoiceDone,
+                'currentBaseDeal' => $this->currentBaseDeal,
+                'currentPresDeal' => $this->currentPresDeal,
 
 
+            ]);
+     
+            
 
             // if (!isset($sessionData['currentCompany'])) {
             //     $currentBtxEntities =  BitrixEntityFlowService::getEntities(
@@ -605,8 +606,22 @@ class EventDocumentService
             $portalEntityData = $this->portalDealData;
         }
 
-
-
+        Log::channel('telegram')->error('APRIL_HOOK ', [
+            'data' => [
+                'message' => 'portal smart was not found 420',
+                'currentBtxEntity' => $currentBtxEntity,
+                'portalEntityData' => $portalEntityData,
+                'isDeal' => $isDeal,
+            ]
+        ]);
+        Log::error('APRIL_HOOK ', [
+            'data' => [
+                'message' => 'portal smart was not found 420',
+                'currentBtxEntity' => $currentBtxEntity,
+                'portalEntityData' => $portalEntityData,
+                'isDeal' => $isDeal,
+            ]
+        ]);
         //get current document counts
         if (!empty($currentBtxEntity['UF_CRM_OP_OFFER_Q'])) {
             $entityOfferCount  = $currentBtxEntity['UF_CRM_OP_OFFER_Q'];
@@ -704,7 +719,13 @@ class EventDocumentService
         $entityService = new BitrixEntityFlowService();
 
 
-
+        Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
+            'data' => [
+   
+                'reportFields' => $reportFields,
+  
+            ]
+        ]);
 
         $entityService->documentFlowflow(
             $currentBtxEntity,
