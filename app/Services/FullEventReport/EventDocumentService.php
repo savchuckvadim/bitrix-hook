@@ -508,11 +508,11 @@ class EventDocumentService
             //     $this->getSmartFlow();
             // }
 
-            if ($this->isDealFlow && $this->portalDealData) {
-                $currentDealsIds = $this->getDealFlow();
-                // обновляет основную сделку стадию в документ
-                // если менее чем документ
-            }
+            // if ($this->isDealFlow && $this->portalDealData) {
+            //     $currentDealsIds = $this->getDealFlow();
+            //     // обновляет основную сделку стадию в документ
+            //     // если менее чем документ
+            // }
 
             // $this->createTask($currentSmartId);
             // if ($this->isExpired || $this->isPlanned) {
@@ -699,53 +699,6 @@ class EventDocumentService
         //     $reportFields['pres_comments'] = $currentPresComments;
 
         // }
-
-
-
-        $currentFieldsForUpdate = [];
-        $offerFields = [
-            'op_offer_q', // Количество КП
-            'op_offer_pres_q', // Количество КП после презентаци
-            'op_offer_date',  // Дата отправки КП
-
-
-        ];
-
-        $invoiceFields = [
-            'op_invoice_q', // Количество КП
-            'op_invoice_pres_q', // Количество Счетов после презентаци
-            'op_invoice_date',  // Дата отправки Счета
-
-
-        ];
-
-        $statusesCodes = [
-            'op_work_status', //Статус Работы
-
-        ];
-        $generalSalesCode = [
-            'manager_op',  //Менеджер по продажам Гарант
-            'op_history',
-            'op_history_multiple',
-        ];
-
-        // $failSalesCode = [
-        //     'op_fail_comments',  //ОП Комментарии после отказов
-
-        // ];
-
-        $fieldsCallCodes = [
-            'call_next_date', //ОП Дата Следующего звонка
-            'call_next_name',    //ОП Тема Следующего звонка
-            'call_last_date',  //ОП Дата последнего звонка
-            // 'xo_created',
-            // 'manager_op',
-            // 'call_next_date',
-            // 'call_next_name',
-            // 'call_last_date',
-
-        ];
-
 
 
         $entityService = new BitrixEntityFlowService();
