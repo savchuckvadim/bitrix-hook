@@ -664,12 +664,11 @@ class EventReportService
 
     //entity
     protected function getEntityFlow(
-        $isDeal = false, 
-        $deal = null, 
+        $isDeal = false,
+        $deal = null,
         $dealType = 'base',  //presentation, xo
         $baseDealId = null
-        )
-    {
+    ) {
         $currentReportEventType = $this->currentReportEventType;
         $currentPlanEventType = $this->currentPlanEventType;
         $isPresentationDone = $this->isPresentationDone;
@@ -714,12 +713,9 @@ class EventReportService
             $entityId =  $deal['ID'];
             $portalEntityData = $this->portalDealData;
 
-            if($dealType == 'presentation'){
-                $reportFields['to_base_sales'] = $baseDealId ;
-
+            if ($dealType == 'presentation') {
+                $reportFields['to_base_sales'] = $baseDealId;
             }
-
-
         }
 
 
@@ -897,8 +893,8 @@ class EventReportService
         $entityService = new BitrixEntityFlowService();
 
 
-       
-     
+
+
         $entityService->flow(
             $this->portal,
             $currentBtxEntity,
@@ -1090,7 +1086,7 @@ class EventReportService
         $reportDeals = [];
         $planDeals = [];
         $currentBtxDeals = $this->currentBtxDeals;
-        
+
         $unplannedPresDeals = null;
         // report - закрывает сделки
         // plan - создаёт
@@ -1144,6 +1140,19 @@ class EventReportService
                 null // $relationSalePresDeal
             );
 
+            // $isDeal = false, 
+            // $deal = null, 
+            // $dealType = 'base',  //presentation, xo
+            // $baseDealId = null
+            $this->getEntityFlow(
+                true,
+                $unplannedPresDeal,
+                'presentation',
+                $this->currentBaseDeal['ID']
+            );
+
+
+
             Log::info('HOOK TEST unplannedPresDeal', [
                 'unplannedPresDeal' => $unplannedPresDeal,
 
@@ -1181,6 +1190,10 @@ class EventReportService
                         '$fields',
                         null // $relationSalePresDeal
                     );
+
+
+
+
                     // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
                     //     'unplannedPresDeals' => $unplannedPresDeals,
 
@@ -1260,8 +1273,8 @@ class EventReportService
         foreach ($currentBtxDeals as $currentBtxDeal) {
             sleep(1);
             Log::info('HOOK TEST currentBtxDeals', [
-                'currentBtxDeal' => $currentBtxDeal,    
-    
+                'currentBtxDeal' => $currentBtxDeal,
+
             ]);
             $this->getEntityFlow(true, $currentBtxDeal);
         }
