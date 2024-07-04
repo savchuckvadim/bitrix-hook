@@ -243,13 +243,13 @@ class EventDocumentService
             //         }
             //     }
             // }
-      
 
 
 
 
 
-            
+
+
             $portal = PortalController::getPortal($domain);
             $portal = $portal['data'];
             $this->portal = $portal;
@@ -279,18 +279,18 @@ class EventDocumentService
 
                 $this->entityType = 'company';
 
-                
-                if(isset($this->currentBtxEntity['ID'])){
+
+                if (isset($this->currentBtxEntity['ID'])) {
                     $this->entityId = $this->currentBtxEntity['ID'];
                 }
 
 
-                if(isset($this->currentBtxEntity['id'])){
+                if (isset($this->currentBtxEntity['id'])) {
                     $this->entityId = $this->currentBtxEntity['id'];
                 }
-                
 
-                
+
+
 
                 $sessionDeals = $sessionData['deals'];
             }
@@ -339,8 +339,8 @@ class EventDocumentService
 
 
             ]);
-     
-            
+
+
 
             // if (!isset($sessionData['currentCompany'])) {
             //     $currentBtxEntities =  BitrixEntityFlowService::getEntities(
@@ -619,22 +619,7 @@ class EventDocumentService
             $portalEntityData = $this->portalDealData;
         }
 
-        Log::channel('telegram')->error('APRIL_HOOK ', [
-            'data' => [
-                'message' => 'portal smart was not found 420',
-                'currentBtxEntity' => $currentBtxEntity,
-                'portalEntityData' => $portalEntityData,
-                'isDeal' => $isDeal,
-            ]
-        ]);
-        Log::error('APRIL_HOOK ', [
-            'data' => [
-                'message' => 'portal smart was not found 420',
-                'currentBtxEntity' => $currentBtxEntity,
-                'portalEntityData' => $portalEntityData,
-                'isDeal' => $isDeal,
-            ]
-        ]);
+
         //get current document counts
         if (!empty($currentBtxEntity['UF_CRM_OP_OFFER_Q'])) {
             $entityOfferCount  = $currentBtxEntity['UF_CRM_OP_OFFER_Q'];
@@ -701,10 +686,11 @@ class EventDocumentService
         if ($this->isOfferDone) {
 
             $reportFields['op_offer_q'] = $entityOfferCount + 1; //количество КП
+            $reportFields['op_current_status'] = 'Коммерческое предложение';
             if ($isFromPresentation) {
                 $reportFields['op_offer_pres_q'] =   $entityPresOfferCount + 1; //количество КП
                 $reportFields['pres_comments'] = $currentPresComments;
-
+                $reportFields['op_current_status'] = 'Коммерческое предложение после презентации';
             }
 
             $reportFields['op_offer_date'] = $this->nowDate;
@@ -712,16 +698,18 @@ class EventDocumentService
         if ($this->isInvoiceDone) {
 
             $reportFields['op_invoice_q'] = $entityInvoiceCount + 1; //количество 
+            $reportFields['op_current_status'] = 'Счет';
+
             if ($isFromPresentation) {
                 $reportFields['op_invoice_pres_q'] =   $entityPresInvoiceCount + 1; //количество после през
-
+                $reportFields['op_current_status'] = 'Счет предложение после презентации';
             }
 
             $reportFields['op_invoice_date'] = $this->nowDate;
         }
-
+        $reportFields['pres_comments'] = $currentComments . ' |' . $this->nowDate . ' ' . $reportFields['op_current_status'];
         // if ($this->isContractDone) {
-
+        // $reportFields['op_current_status'] = 'Договор';
         //     $reportFields['op_contract_q'] = $currentContractCount + 1; //количество 
         //     $reportFields['op_contract_date'] = $this->nowDate;
         //     $reportFields['pres_comments'] = $currentPresComments;
@@ -734,9 +722,9 @@ class EventDocumentService
 
         Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
             'data' => [
-   
+
                 'reportFields' => $reportFields,
-  
+
             ]
         ]);
 
