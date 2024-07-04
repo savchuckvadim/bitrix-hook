@@ -553,6 +553,8 @@ class BitrixEntityFlowService
                             case 'last_pres_done_responsible':
                             case 'pres_count':
                             case 'pres_comments':
+                            case 'to_base_sales':
+
                                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $value;
                                 break;
                             case 'op_history':

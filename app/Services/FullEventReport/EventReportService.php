@@ -663,7 +663,12 @@ class EventReportService
 
 
     //entity
-    protected function getEntityFlow($isDeal = false, $deal = null)
+    protected function getEntityFlow(
+        $isDeal = false, 
+        $deal = null, 
+        $dealType = 'base',  //presentation, xo
+        $baseDealId = null
+        )
     {
         $currentReportEventType = $this->currentReportEventType;
         $currentPlanEventType = $this->currentPlanEventType;
@@ -708,6 +713,13 @@ class EventReportService
             $entityType = 'deal';
             $entityId =  $deal['ID'];
             $portalEntityData = $this->portalDealData;
+
+            if($dealType == 'presentation'){
+                $reportFields['to_base_sales'] = $baseDealId ;
+
+            }
+
+
         }
 
 
@@ -916,6 +928,8 @@ class EventReportService
     }
 
 
+    // get deal relations flow
+
 
     //todo 
     //get clod report fields
@@ -1076,6 +1090,7 @@ class EventReportService
         $reportDeals = [];
         $planDeals = [];
         $currentBtxDeals = $this->currentBtxDeals;
+        
         $unplannedPresDeals = null;
         // report - закрывает сделки
         // plan - создаёт

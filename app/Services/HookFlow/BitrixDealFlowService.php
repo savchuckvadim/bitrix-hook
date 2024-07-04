@@ -62,12 +62,7 @@ class BitrixDealFlowService
                     $eventAction,
                     $isResult,
                 );
-                Log::info('HOOK TEST currentReportStatus', [
-                    'eventAction' => $eventAction,
-                    'currentCategoryData' => $currentCategoryData,
-                    'targetStageBtxId' => $targetStageBtxId
-
-                ]);
+             
 
                 // $currentDeal = BitrixDealService::getDealId(
                 //     $hook,
@@ -165,7 +160,7 @@ class BitrixDealFlowService
     static function unplannedPresflow(
 
         $hook,
-        $currentDeal,
+        $currentDeal, 
         $portalDealData,
         $currentDepartamentType,
         $entityType,
