@@ -524,7 +524,7 @@ class EventDocumentService
             $currentDeal = null;
             $currentDealId = null;
             $currentDealsIds = null;
-            Log::channel('telegram')->error('APRIL_HOOK getDocumentFlow', [
+            Log::error('APRIL_HOOK portalDealData', [
                 'data' => [
                     'currentPresDeal' =>  $this->currentPresDeal,
                     'portalDealData' =>  $this->portalDealData,
