@@ -520,11 +520,11 @@ class EventDocumentService
             //     $this->getSmartFlow();
             // }
 
-            // if ($this->isDealFlow && $this->portalDealData) {
-            //     $currentDealsIds = $this->getDealFlow();
-            //     // обновляет основную сделку стадию в документ
-            //     // если менее чем документ
-            // }
+            if ($this->isDealFlow && $this->portalDealData) {
+                $currentDealsIds = $this->getDealFlow();
+                // обновляет основную сделку стадию в документ
+                // если менее чем документ
+            }
 
             // $this->createTask($currentSmartId);
             // if ($this->isExpired || $this->isPlanned) {
