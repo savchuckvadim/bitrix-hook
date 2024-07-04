@@ -231,7 +231,7 @@ class BitrixGeneralService
 
             $resultLeadResponse = Http::get($url, $data);
 
-            $resultLeadData = APIBitrixController::getBitrixRespone($resultLeadResponse, 'general service: updateSmartItemCold');
+            $resultLeadData = APIBitrixController::getBitrixRespone($resultLeadResponse, 'general service: updateLead');
             $resultLead = $resultLeadData;
 
 
@@ -270,7 +270,7 @@ class BitrixGeneralService
     {
         $resultLead = null;
         try {
-            $methodSmart = '/crm.'.$entityType.'.update.json';
+            $methodSmart = '/crm.' . $entityType . '.update.json';
             $url = $hook . $methodSmart;
 
             $data = [
@@ -283,8 +283,8 @@ class BitrixGeneralService
 
             $resultLeadResponse = Http::get($url, $data);
 
-            $resultData = APIBitrixController::getBitrixRespone($resultLeadResponse, 'general service: updateSmartItemCold');
-            $result= $resultData;
+            $resultData = APIBitrixController::getBitrixRespone($resultLeadResponse, 'general service: updateEntity');
+            $result = $resultData;
 
 
             return $result;

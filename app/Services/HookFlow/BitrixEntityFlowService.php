@@ -217,7 +217,17 @@ class BitrixEntityFlowService
         $currentFieldsForUpdate,
 
     ) {
-
+        Log::channel('telegram')->error('APRIL_HOOK COLD currentFieldsForUpdate', [
+            'data' => [
+   
+                'entityType' => $entityType,
+                'entityId' => $entityId,
+                'responsibleId' => $responsibleId,
+                'resultStatus' => $resultStatus,
+                'currentFieldsForUpdate' => $currentFieldsForUpdate,
+  
+            ]
+        ]);
         try {
             $userId = 'user_' . $responsibleId;
 
@@ -284,7 +294,7 @@ class BitrixEntityFlowService
 
             BitrixGeneralService::updateEntity(
                 $hook,
-                $entityType,
+                'company',
                 $entityId,
                 $updatedFields
             );
