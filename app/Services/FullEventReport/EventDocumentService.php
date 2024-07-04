@@ -293,6 +293,18 @@ class EventDocumentService
 
 
                 $sessionDeals = $sessionData['deals'];
+                Log::channel('telegram')->info('HOOK TEST sessionData', [
+
+                    'sessionDeals' => $sessionDeals,
+    
+    
+                ]);
+                Log::channel('telegram')->info('HOOK TEST currentBaseDeal', [
+
+                    'session currentBaseDeal' => $sessionDeals['currentBaseDeal'],
+    
+    
+                ]);
             }
             if (
                 isset($sessionDeals['currentBaseDeal']) &&
@@ -601,7 +613,7 @@ class EventDocumentService
 
         $complectName = null;
         $supply = null;
-        $isFromPresentation = false;
+        $isFromPresentation = $this->isFromPresentation;
 
 
         $currentBtxEntity = $this->currentBtxEntity;
