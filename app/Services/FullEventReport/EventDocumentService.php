@@ -137,6 +137,15 @@ class EventDocumentService
     protected $relationColdDeals;
     protected $relationTMCDeals;
 
+
+    protected $isOfferDone = false;
+    protected $isInvoiceDone = false;
+    protected $isContractDone = false;
+    protected $isSupplyReportDone = false;
+
+
+
+
     public function __construct(
 
         $data,
@@ -240,12 +249,7 @@ class EventDocumentService
 
 
 
-            $this->isUnplannedPresentation = false;
 
-          if(isset($data['presentation'])){
-            $this->currentPresDeal = $data['presentation'];
-
-          }
 
             // Log::info('HOOK TEST sessionData', [
             //     'sessionData' => $sessionData
@@ -259,7 +263,7 @@ class EventDocumentService
             $portal = $portal['data'];
             $this->portal = $portal;
 
-          
+
 
 
             // $this->aprilSmartData = $portal['bitrixSmart'];
@@ -277,12 +281,7 @@ class EventDocumentService
 
             $sessionData = FullEventInitController::getSessionItem($sessionKey);
 
-            Log::info('HOOK TEST EventDocumentService sessionData try first', [
-                'sessionData' => $sessionData,
 
-
-
-            ]);
             if (isset($sessionData['currentCompany']) && isset($sessionData['deals'])) {
                 $this->currentBtxEntity  = $sessionData['currentCompany'];
 
@@ -317,13 +316,15 @@ class EventDocumentService
                 // $this->relationColdDeals = $sessionDeals['allXODeals'];
             }
 
+            $this->isOfferDone = true;
+            if (!empty($data['invoiceData'])) {
 
-            Log::info('HOOK TEST EventDocumentService', [
-                'sessionData' => $sessionData,
-                'currentBtxDeals' => $this->currentBtxDeals
-
-
-            ]);
+                if (!empty($data['invoiceData']['one'])) {
+                    if (!empty($data['invoiceData']['one']['value'])) {
+                        $isInvoiceDone = true;
+                    }
+                }
+            }
 
 
 
@@ -507,9 +508,11 @@ class EventDocumentService
             //     $this->getSmartFlow();
             // }
 
-            // if ($this->isDealFlow && $this->portalDealData) {
-            //     $currentDealsIds = $this->getDealFlow();
-            // }
+            if ($this->isDealFlow && $this->portalDealData) {
+                $currentDealsIds = $this->getDealFlow();
+                // обновляет основную сделку стадию в документ
+                // если менее чем документ
+            }
 
             // $this->createTask($currentSmartId);
             // if ($this->isExpired || $this->isPlanned) {
@@ -517,7 +520,8 @@ class EventDocumentService
             // } else {
             //     $result = $this->workStatus;
             // }
-            // $this->getEntityFlow();
+            $this->getEntityFlow();
+            // обновляет поля связанные с документом kpi
             // sleep(1);
 
 
@@ -543,12 +547,33 @@ class EventDocumentService
 
 
 
-    //entity
+    // document entity flow
     protected function getEntityFlow($isDeal = false, $deal = null)
     {
-        $currentReportEventType = $this->currentReportEventType;
-        $currentPlanEventType = $this->currentPlanEventType;
-        $isPresentationDone = $this->isPresentationDone;
+        // Количество КП	statistics_op	integer		op_offer_q
+        // Количество Счетов	statistics_op	integer		op_invoice_q
+        // Количество Договоров	statistics_op	integer		op_contract_q
+        // Количество Поставок	statistics_op	integer		op_supplies_q
+        // Количество КП после презентации	statistics_op	integer		op_offer_pres_q
+        // Количество Счетов после презентации	statistics_op	integer		op_invoice_pres_q
+        // Дата отправки КП	document	datetime		op_offer_date
+        // Дата отправки Счета	document	datetime		op_invoice_date
+        // Дата отправки Договора	document	datetime		op_contract_date
+        // Сумма предложения	only_deals	money		offer_sum
+        // Корневая сделка Продажи	only_deals	crm		to_base_sales
+        // Сделка ХО Продажи	only_deals	crm		to_xo_sales
+        // Сделка Презентации Продажи	only_deals	crm		to_presentation_sales
+        // Корневая сделка ТМЦ	only_deals	crm		to_base_tmc
+        // Сделка Презентации ТМЦ	only_deals	crm		to_presentation_tmc
+        // Корневая сделка Сервис	only_deals	crm		to_base_service
+        // ОП Текущий статус	op_current_status	string		op_current_status
+
+        $complectName = null;
+        $supply = null;
+        $isFromPresentation = false;
+        $presentationDeal = $this->currentPresDeal;
+        $baseDeal = $this->currentBaseDeal;
+        $recipient = null;
 
         $currentBtxEntity = $this->currentBtxEntity;
         $entityType = $this->entityType;
@@ -561,30 +586,19 @@ class EventDocumentService
         $reportFields['manager_op'] = $this->planResponsibleId;
         $reportFields['op_work_status'] = '';
         $reportFields['op_prospects_type'] = '';
-        $reportFields['op_work_status'] = '';
-        $reportFields['op_work_status'] = '';
-
-        $currentPresCount = 0;
-        $companyPresCount = 0;
-        $dealPresCount = 0;
-        // if (!empty($this->currentTask)) {
-        //     if (!empty($this->currentTask['presentation'])) {
-
-        //         if (!empty($this->currentTask['presentation']['company'])) {
-        //             $companyPresCount = (int)$this->currentTask['presentation']['company'];
-        //         }
-        //         if (!empty($this->currentTask['presentation']['deal'])) {
-        //             $dealPresCount = (int)$this->currentTask['presentation']['deal'];
-        //         }
-        //     }
-        // }
 
 
 
-        $currentPresCount =  $companyPresCount;
+        $entityOfferCount = 0;
+        $entityInvoiceCount = 0;
+        $entityContractCount = 0;
+        $entityPresOfferCount = 0;
+        $entityPresInvoiceCount = 0;
+
+
         if ($isDeal && !empty($deal) && !empty($deal['ID'])) {
+            $currentBtxEntity = $deal;
 
-            $currentPresCount =  $dealPresCount;
             $currentBtxEntity = $deal;
             $entityType = 'deal';
             $entityId =  $deal['ID'];
@@ -592,15 +606,57 @@ class EventDocumentService
         }
 
 
+
+        //get current document counts
+        if (!empty($currentBtxEntity['UF_CRM_OP_OFFER_Q'])) {
+            $entityOfferCount  = $currentBtxEntity['UF_CRM_OP_OFFER_Q'];
+        }
+        if (!empty($currentBtxEntity['UF_CRM_OP_INVOICE_Q'])) {
+            $entityInvoiceCount  = $currentBtxEntity['UF_CRM_OP_INVOICE_Q'];
+        }
+
+        if (!empty($currentBtxEntity['UF_CRM_OP_OFFER_PRES_Q'])) {
+            $entityPresOfferCount  = $currentBtxEntity['UF_CRM_OP_OFFER_PRES_Q'];
+        }
+        if (!empty($currentBtxEntity['UF_CRM_OP_INVOICE_PRES_Q'])) {
+            $entityPresInvoiceCount  = $currentBtxEntity['UF_CRM_OP_INVOICE_PRES_Q'];
+        }
+
+        if (!empty($deal['UF_CRM_OP_CONTRACT_Q'])) {
+            $entityContractCount  = $deal['UF_CRM_OP_CONTRACT_Q'];
+        }
+
+
+
         $currentPresComments = [];
         $currentFailComments = [];
+        $currentComments = [];
         if (isset($currentBtxEntity)) {
-            if (!empty($currentBtxEntity['UF_CRM_PRES_COMMENTS'])) {
-                $currentPresComments = $currentBtxEntity['UF_CRM_PRES_COMMENTS'];
+            if ($this->isPresentationDone) {
+                if (!empty($currentBtxEntity['UF_CRM_PRES_COMMENTS'])) {
+                    $currentPresComments = $currentBtxEntity['UF_CRM_PRES_COMMENTS'];
+                }
             }
 
-            if (!empty($currentBtxEntity['UF_CRM_OP_FAIL_COMMENTS'])) {
-                $currentFailComments = $currentBtxEntity['UF_CRM_OP_FAIL_COMMENTS'];
+
+            if (!empty($currentBtxEntity['UF_CRM_OP_MHISTORY'])) {
+                $currentComments = $currentBtxEntity['UF_CRM_OP_MHISTORY'];
+            }
+
+
+            if (!empty($currentBtxEntity['UF_CRM_OP_OFFER_Q'])) { //количество кп
+                $currentComments = $currentBtxEntity['UF_CRM_OP_OFFER_Q'];
+            }
+
+
+
+            if ($isFromPresentation) {
+                if (!empty($currentBtxEntity['UF_CRM_OP_OFFER_PRES_Q'])) { //количество кп
+                    $currentComments = $currentBtxEntity['UF_CRM_OP_OFFER_PRES_Q'];
+                }
+                if (!empty($currentBtxEntity['UF_CRM_OP_INVOICE_PRES_Q'])) { //количество кп
+                    $currentComments = $currentBtxEntity['UF_CRM_OP_INVOICE_PRES_Q'];
+                }
             }
         }
         // Log::channel('telegram')->info('TST', [
@@ -608,118 +664,65 @@ class EventDocumentService
         //     'currentFailComments' => $currentFailComments,
         // ]);
 
-        //обнуляем дату следующей презентации и звонка - они будут аполнены только если реально что-то запланировано
-        $reportFields['next_pres_plan_date'] = null;
-        $reportFields['call_next_date'] = null;
 
-        if ($currentReportEventType) {
+        // isOfferDone
+        // isInvoiceDone
+        // isContractDone
+        // isSupplyReportDone
+        $reportFields['pres_comments'] = $currentComments;
+        if ($this->isOfferDone) {
 
+            $reportFields['op_offer_q'] = $entityOfferCount + 1; //количество КП
+            if ($isFromPresentation) {
+                $reportFields['op_offer_pres_q'] =   $entityPresOfferCount + 1; //количество КП
 
-            //general
-            $reportFields['call_last_date'] = $this->nowDate;
-
-            switch ($currentReportEventType) {
-                case 'xo':
-                    $reportFields['xo_date'] = null;
-
-                    break;
-
-                default:
-                    # code...
-                    break;
             }
-        }
 
-        //presentation done with unplanned
-        if ($this->isPresentationDone) {
-            array_push($currentPresComments, $this->comment);
-
-
-            $reportFields['last_pres_done_date'] = $this->nowDate;
-            $reportFields['last_pres_done_responsible'] =  $this->planResponsibleId;
-            $reportFields['pres_count'] = $currentPresCount + 1;
+            $reportFields['op_offer_date'] = $this->nowDate;
             $reportFields['pres_comments'] = $currentPresComments;
-            if ($currentReportEventType !== 'presentation') {
-                $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
-                $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
-                $reportFields['next_pres_plan_date'] = $this->nowDate;  //дата на которую запланировали през
+        }
+        if ($this->isInvoiceDone) {
+
+            $reportFields['op_invoice_q'] = $entityInvoiceCount + 1; //количество 
+            if ($isFromPresentation) {
+                $reportFields['op_invoice_pres_q'] =   $entityPresInvoiceCount + 1; //количество после през
 
             }
-            $reportFields['op_current_status'] = 'Презентация проведена';
+
+            $reportFields['op_invoice_date'] = $this->nowDate;
+            $reportFields['pres_comments'] = $currentPresComments;
         }
 
+        // if ($this->isContractDone) {
 
-        //plan
-        $planFields = [];
+        //     $reportFields['op_contract_q'] = $currentContractCount + 1; //количество 
+        //     $reportFields['op_contract_date'] = $this->nowDate;
+        //     $reportFields['pres_comments'] = $currentPresComments;
 
-        if ($this->isPlanned) {
-
-
-            //general
-            $reportFields['call_next_date'] = $this->planDeadline;
-            $reportFields['call_next_name'] = $this->currentPlanEventName;
-            $reportFields['xo_responsible'] = $this->planResponsibleId;
-            $reportFields['xo_created'] = $this->planResponsibleId;
-            $reportFields['op_current_status'] = 'Звонок запланирован в работе';
-
-
-
-
-            switch ($currentPlanEventType) {
-                case 'xo':
-                    $reportFields['xo_date'] = $this->planDeadline;
-                    $reportFields['xo_name'] = $this->currentPlanEventName;
-                    break;
-
-                case 'presentation':
-
-                    $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
-                    $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
-                    $reportFields['next_pres_plan_date'] = $this->planDeadline;  //дата на которую запланировали през
-                    $reportFields['op_current_status'] = 'Презентация запланирована в работе';
-                    break;
-                default:
-                    # code...
-                    break;
-            }
-        } else {
-        }
-
-
-        // Log::channel('telegram')->info('TST', [
-        //     'currentPresComments' => $currentPresComments,
-        //     'currentFailComments' => $currentFailComments,
-        // ]);
-
-
-        // Log::channel('telegram')->info('TST', [
-        //     'reportFields' => $reportFields,
-
-        // ]);
-        $presentationFields = [];
-
-
+        // }
 
 
 
         $currentFieldsForUpdate = [];
-        $fieldsPresentationCodes = [
-            'next_pres_plan_date', // ОП Дата назначенной презентации
-            'last_pres_plan_date', //ОП Дата последней назначенной презентации
-            'last_pres_done_date',  //ОП Дата последней проведенной презентации
-            'last_pres_plan_responsible',  //ОП Кто назначил последнюю заявку на презентацию
-            'last_pres_done_responsible',   //ОП Кто провел последнюю презентацию
-            'pres_count', //ОП Проведено презентаций
-            'pres_comments', //ОП Комментарии после презентаций
-            'call_last_date',
+        $offerFields = [
+            'op_offer_q', // Количество КП
+            'op_offer_pres_q', // Количество КП после презентаци
+            'op_offer_date',  // Дата отправки КП
+
+
+        ];
+
+        $invoiceFields = [
+            'op_invoice_q', // Количество КП
+            'op_invoice_pres_q', // Количество Счетов после презентаци
+            'op_invoice_date',  // Дата отправки Счета
+
 
         ];
 
         $statusesCodes = [
             'op_work_status', //Статус Работы
-            'op_prospects_type', //тип отказа  ОП Неперспективная
-            'op_fail_reason', //причина отказа
-            'op_noresult_reason', //ОП Причины нерезультативности
+
         ];
         $generalSalesCode = [
             'manager_op',  //Менеджер по продажам Гарант
@@ -727,10 +730,10 @@ class EventDocumentService
             'op_history_multiple',
         ];
 
-        $failSalesCode = [
-            'op_fail_comments',  //ОП Комментарии после отказов
+        // $failSalesCode = [
+        //     'op_fail_comments',  //ОП Комментарии после отказов
 
-        ];
+        // ];
 
         $fieldsCallCodes = [
             'call_next_date', //ОП Дата Следующего звонка
@@ -745,55 +748,38 @@ class EventDocumentService
         ];
 
 
-        // $statusesCodesAssoc = array_fill_keys($statusesCodes, true);
-        // $generalSalesCodesAssoc = array_fill_keys($generalSalesCode, true);
-        // $fieldsCallCodesAssoc = array_fill_keys($fieldsCallCodes, true);
-
-        // $presentationCodesAssoc = array_fill_keys($fieldsPresentationCodes, true);
-
-
-        // Объединение массивов
-        // $currentFieldsForUpdate = [];
-        // $mergedFields = array_merge(
-        //     $presentationCodesAssoc,
-        //     $statusesCodesAssoc,
-        //     $generalSalesCodesAssoc,
-        //     $fieldsCallCodesAssoc
-        // );
-        // foreach ($mergedFields as $targedCode => $bool) {
-        //     array_push($currentFieldsForUpdate, $targedCode);
-        // }
+      
         $entityService = new BitrixEntityFlowService();
 
 
 
 
-        $entityService->flow(
-            $this->portal,
-            $currentBtxEntity,
-            $portalEntityData,
-            $this->hook,
-            $entityType,
-            $entityId,
-            $this->currentPlanEventType, // xo warm presentation,
-            'plan',  // plan done expired 
-            $this->planCreatedId,
-            $this->planResponsibleId,
-            $this->planDeadline,
-            $this->nowDate,
-            $this->isPresentationDone,
-            $this->isUnplannedPresentation,
-            $this->workStatus['current']['code'],  // inJob setAside ...
-            $this->resultStatus, //result | noresult ...
-            $this->failType,
-            $this->failReason,
-            $this->noresultReason,
-            $this->currentReportEventType,
-            $this->currentReportEventName,
-            $this->currentPlanEventName,
-            $this->comment,
-            $reportFields
-        );
+        // $entityService->flow(
+        //     $this->portal,
+        //     $currentBtxEntity,
+        //     $portalEntityData,
+        //     $this->hook,
+        //     $entityType,
+        //     $entityId,
+        //     $this->currentPlanEventType, // xo warm presentation,
+        //     'plan',  // plan done expired 
+        //     $this->planCreatedId,
+        //     $this->planResponsibleId,
+        //     $this->planDeadline,
+        //     $this->nowDate,
+        //     $this->isPresentationDone,
+        //     $this->isUnplannedPresentation,
+        //     $this->workStatus['current']['code'],  // inJob setAside ...
+        //     $this->resultStatus, //result | noresult ...
+        //     $this->failType,
+        //     $this->failReason,
+        //     $this->noresultReason,
+        //     $this->currentReportEventType,
+        //     $this->currentReportEventName,
+        //     $this->currentPlanEventName,
+        //     $this->comment,
+        //     $reportFields
+        // );
     }
 
 
