@@ -219,13 +219,13 @@ class BitrixEntityFlowService
     ) {
         Log::channel('telegram')->error('APRIL_HOOK COLD currentFieldsForUpdate', [
             'data' => [
-   
+
                 'entityType' => $entityType,
                 'entityId' => $entityId,
                 'responsibleId' => $responsibleId,
                 'resultStatus' => $resultStatus,
                 'currentFieldsForUpdate' => $currentFieldsForUpdate,
-  
+
             ]
         ]);
         try {
@@ -245,7 +245,7 @@ class BitrixEntityFlowService
 
 
                             if ($pFieldCode === $targetFieldCode) {
-                       
+
                                 switch ($pFieldCode) {
 
                                     case 'manager_op':
@@ -253,7 +253,7 @@ class BitrixEntityFlowService
                                     case 'op_offer_q':
                                     case 'op_offer_pres_q':
                                     case 'op_offer_date':
-
+                                    case 'op_current_status':
                                     case 'op_invoice_q':
                                     case 'op_invoice_pres_q':
                                     case 'op_invoice_date':
