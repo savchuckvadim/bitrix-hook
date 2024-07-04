@@ -305,12 +305,7 @@ class EventDocumentService
     
     
                 ]);
-                Log::info('HOOK TEST currentBaseDeal', [
-
-                    'session currentBaseDeal' => $sessionDeals['currentBaseDeal'],
-    
-    
-                ]);
+                
             }
             if (
                 isset($sessionDeals['currentBaseDeal']) &&
@@ -524,7 +519,13 @@ class EventDocumentService
             $currentDeal = null;
             $currentDealId = null;
             $currentDealsIds = null;
-            Log::error('APRIL_HOOK portalDealData', [
+            Log::info('HOOK TEST getDocumentFlow', [
+
+                'session currentBaseDeal' =>$this->currentBaseDeal,
+
+
+            ]);
+            Log::info('APRIL_HOOK portalDealData', [
                 'data' => [
                     'currentPresDeal' =>  $this->currentPresDeal,
                     'portalDealData' =>  $this->portalDealData,
