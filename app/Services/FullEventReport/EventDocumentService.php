@@ -111,7 +111,7 @@ class EventDocumentService
     protected $isDealFlow = false;
     protected $isSmartFlow = true;
 
-   
+
 
 
     protected $currentDepartamentType = null;
@@ -143,6 +143,7 @@ class EventDocumentService
     protected $isSupplyReportDone = false;
 
 
+    protected $isFromPresentation = false;
 
     protected $portalDealData = null;
     protected $portalCompanyData = null;
@@ -253,13 +254,13 @@ class EventDocumentService
             $portal = $portal['data'];
             $this->portal = $portal;
 
-
+            $this->isFromPresentation = $data['isFromPresentation'];
 
 
             // $this->aprilSmartData = $portal['bitrixSmart'];
             $this->portalCompanyData = $portal['company'];
             $this->portalDealData = $portal['bitrixDeal'];
-            
+
 
 
 
