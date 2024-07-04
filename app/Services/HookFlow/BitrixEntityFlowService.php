@@ -200,6 +200,114 @@ class BitrixEntityFlowService
         }
     }
 
+    public function documentFlowflow(
+        $currentBtxEntity,
+        $portalData,
+        $hook,
+        $entityType,
+        $entityId,
+
+        $responsibleId,
+        // $deadline,
+        // $nowdate,
+        $workStatus,  // inJob setAside ...
+        $resultStatus, //result | noresult ...
+
+        // $comment,
+        $currentFieldsForUpdate,
+
+    ) {
+
+        try {
+            $userId = 'user_' . $responsibleId;
+
+
+            //general report fields 
+            if (!empty($portalData['bitrixfields'])) {
+                $portalFields = $portalData['bitrixfields'];
+                foreach ($portalFields as $pField) {
+                    if (!empty($pField) && !empty($pField['code'])) {
+                        $pFieldCode = $pField['code'];
+
+
+                        foreach ($currentFieldsForUpdate as $targetFieldCode => $value) {  //массив кодов - которые нужно обновить
+
+
+
+                            if ($pFieldCode === $targetFieldCode) {
+                       
+                                switch ($pFieldCode) {
+
+                                    case 'manager_op':
+
+                                    case 'op_offer_q':
+                                    case 'op_offer_pres_q':
+                                    case 'op_offer_date':
+
+                                    case 'op_invoice_q':
+                                    case 'op_invoice_pres_q':
+                                    case 'op_invoice_date':
+                                    case 'pres_count':
+                                    case 'pres_comments':
+                                    case 'op_history':
+                                    case 'op_mhistory':
+                                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = $value;
+                                        break;
+
+                                        // /statusesCodes
+                                    case 'op_work_status':
+                                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getWorstatusFieldItemValue(
+                                            $pField, //with items
+                                            $workStatus,
+                                            'document' // only PLAN ! event type
+                                        );
+                                        break;
+                                    case 'op_prospects_type':  //Перспективность
+                                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getProspectsFieldItemValue(
+                                            $pField, //with items
+                                            $workStatus,
+                                            null // $failType
+                                        );
+                                        break;
+
+
+
+                                    default:
+                                        # code...
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            BitrixGeneralService::updateEntity(
+                $hook,
+                $entityType,
+                $entityId,
+                $updatedFields
+            );
+
+
+
+
+
+
+
+            return APIOnlineController::getSuccess(['result' => 'success']);
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR COLD: Exception caught',  $errorMessages);
+            Log::info('error COLD', ['error' => $th->getMessage()]);
+            return APIOnlineController::getError($th->getMessage(),  $errorMessages);
+        }
+    }
 
 
 

@@ -675,11 +675,11 @@ class EventDocumentService
             $reportFields['op_offer_q'] = $entityOfferCount + 1; //количество КП
             if ($isFromPresentation) {
                 $reportFields['op_offer_pres_q'] =   $entityPresOfferCount + 1; //количество КП
+                $reportFields['pres_comments'] = $currentPresComments;
 
             }
 
             $reportFields['op_offer_date'] = $this->nowDate;
-            $reportFields['pres_comments'] = $currentPresComments;
         }
         if ($this->isInvoiceDone) {
 
@@ -690,7 +690,6 @@ class EventDocumentService
             }
 
             $reportFields['op_invoice_date'] = $this->nowDate;
-            $reportFields['pres_comments'] = $currentPresComments;
         }
 
         // if ($this->isContractDone) {
@@ -748,38 +747,29 @@ class EventDocumentService
         ];
 
 
-      
+
         $entityService = new BitrixEntityFlowService();
 
 
 
 
-        // $entityService->flow(
-        //     $this->portal,
-        //     $currentBtxEntity,
-        //     $portalEntityData,
-        //     $this->hook,
-        //     $entityType,
-        //     $entityId,
-        //     $this->currentPlanEventType, // xo warm presentation,
-        //     'plan',  // plan done expired 
-        //     $this->planCreatedId,
-        //     $this->planResponsibleId,
-        //     $this->planDeadline,
-        //     $this->nowDate,
-        //     $this->isPresentationDone,
-        //     $this->isUnplannedPresentation,
-        //     $this->workStatus['current']['code'],  // inJob setAside ...
-        //     $this->resultStatus, //result | noresult ...
-        //     $this->failType,
-        //     $this->failReason,
-        //     $this->noresultReason,
-        //     $this->currentReportEventType,
-        //     $this->currentReportEventName,
-        //     $this->currentPlanEventName,
-        //     $this->comment,
-        //     $reportFields
-        // );
+        $entityService->documentFlowflow(
+            $currentBtxEntity,
+            $portalEntityData,
+            $this->hook,
+            $entityType,
+            $entityId,
+
+            $this->planResponsibleId,
+            // $this->planDeadline,
+            // $this->nowDate,
+
+            'inJob', // $this->workStatus['current']['code'],  // inJob setAside ...
+            'result', //result | noresult ...
+
+            // $this->comment,
+            $reportFields
+        );
     }
 
 
