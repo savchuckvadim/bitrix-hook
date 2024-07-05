@@ -1340,7 +1340,8 @@ class EventReportService
                 $this->planResponsibleId,
                 $this->isResult,
                 '$fields',
-                null // $relationSalePresDeal
+                null, // $relationSalePresDeal
+                $newPresDeal //for mutation - в эту переменную запишется новая созданная запланированная сделка презентации
             );
         }
 
