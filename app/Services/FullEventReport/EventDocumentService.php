@@ -699,8 +699,6 @@ class EventDocumentService
                         'resultRows' =>  $resultRows,
                     ]
                 ]);
-
-              
             }
         }
 
@@ -1196,10 +1194,20 @@ class EventDocumentService
         // "isDiscountShow": false,
         // "isSupplyLong": true,
         // "prepaymentStyle": "invoice"
-
+        Log::info('APRIL_HOOK getDealProductRows', [
+            'data' => [
+                'comming' =>  $rows,
+            ]
+        ]);
         $resultRows = [];
         foreach ($rows as $i => $product) {
             if (!empty($product)) {
+                Log::info('APRIL_HOOK getDealProductRows', [
+                    'data' => [
+                        'i' =>  $i,
+                        'product' =>  $product,
+                    ]
+                ]);
                 if (!empty($product['prepayment'])) {
                     $quantity = $product['prepayment'];
                     if (!empty($product['price'])) {
