@@ -778,7 +778,7 @@ class EventReportService
 
         //presentation done with unplanned
         if ($this->isPresentationDone) {
-            array_push($currentPresComments, $this->comment);
+            
 
 
             $reportFields['last_pres_done_date'] = $this->nowDate;
@@ -792,6 +792,7 @@ class EventReportService
 
             }
             $reportFields['op_current_status'] = 'Презентация проведена';
+            array_push($currentPresComments, $this->nowDate . 'Презентация проведена ' . $this->comment);
         }
 
 
@@ -825,7 +826,7 @@ class EventReportService
 
                     break;
                 case 'moneyAwait':
-                    $reportFields['op_current_status'] = 'Ждем оплаты: '. $this->currentPlanEventName;
+                    $reportFields['op_current_status'] = 'Ждем оплаты: ' . $this->currentPlanEventName;
                     break;
 
 
@@ -834,7 +835,9 @@ class EventReportService
                     $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
                     $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
                     $reportFields['next_pres_plan_date'] = $this->planDeadline;  //дата на которую запланировали през
-                    $reportFields['op_current_status'] = 'В работе: Презентация запланирована '.$this->currentPlanEventName;
+                    $reportFields['op_current_status'] = 'В работе: Презентация запланирована ' . $this->currentPlanEventName;
+                    array_push($currentPresComments, $this->nowDate . 'Презентация запланирована ' . $this->comment);
+
                     break;
                 default:
                     # code...
@@ -843,7 +846,7 @@ class EventReportService
         } else {
             if ($this->workStatus['current']['code'] === 'fail') {
                 $reportFields['op_current_status'] = 'Отказ';
-                array_push($currentPresComments, 'Отказ ' . $this->comment);
+                array_push($currentPresComments, $this->nowDate . 'Отказ ' . $this->comment);
                 $reportFields['op_fail_comments'] = $currentFailComments;
             }
 
