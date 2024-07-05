@@ -555,11 +555,11 @@ class BitrixEntityFlowService
                             case 'pres_comments':
                             case 'to_base_sales':
                             case 'op_current_status':
+                            case 'op_fail_comments':
                                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $value;
                                 break;
                             case 'op_history':
                             case 'op_mhistory':
-
                                 $stringComment = $nowdate . ' ' . $currentReportEventName . ' ' . $resultStatus;
                                 $updatedFields = $this->getCommentsWithEntity(
                                     $currentBtxEntity,

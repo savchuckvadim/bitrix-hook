@@ -821,11 +821,11 @@ class EventReportService
                     $reportFields['xo_name'] = $this->currentPlanEventName;
                     break;
                 case 'hot':
-                    $reportFields['op_current_status'] = 'В решении';
+                    $reportFields['op_current_status'] = 'В решении: ' . $this->currentPlanEventName;
 
                     break;
                 case 'moneyAwait':
-                    $reportFields['op_current_status'] = 'Ждем оплаты';
+                    $reportFields['op_current_status'] = 'Ждем оплаты: '. $this->currentPlanEventName;
                     break;
 
 
@@ -834,7 +834,7 @@ class EventReportService
                     $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
                     $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
                     $reportFields['next_pres_plan_date'] = $this->planDeadline;  //дата на которую запланировали през
-                    $reportFields['op_current_status'] = 'Презентация запланирована в работе';
+                    $reportFields['op_current_status'] = 'В работе: Презентация запланирована '.$this->currentPlanEventName;
                     break;
                 default:
                     # code...
