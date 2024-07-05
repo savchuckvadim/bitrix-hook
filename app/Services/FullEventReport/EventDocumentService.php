@@ -2,6 +2,7 @@
 
 namespace App\Services\FullEventReport;
 
+use App\Http\Controllers\APIBitrixController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\Front\Calling\FullEventInitController;
 use App\Http\Controllers\Front\Calling\ReportController;
@@ -17,6 +18,7 @@ use App\Services\HookFlow\BitrixListPresentationFlowService;
 use DateTime;
 use Illuminate\Console\View\Components\Task;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class EventDocumentService
@@ -693,12 +695,18 @@ class EventDocumentService
                 'presentation'
             );
             if (!empty($this->productRows)) {
-                $resultRows = $this->getDealProductRows($this->productRows, $this->currentPresDeal['ID']);
+                $productSetData = $this->getDealProductRows($this->productRows, $this->currentPresDeal['ID']);
                 Log::info('APRIL_HOOK resultRows', [
                     'data' => [
-                        'resultRows' =>  $resultRows,
+                        'resultRows' =>  $productSetData,
                     ]
                 ]);
+                $methodProductSet = '/crm.item.productrow.set.json';
+                $url = $this->hook . $methodProductSet;
+              
+                $response = Http::get($url, $productSetData);
+                return APIBitrixController::getBitrixRespone($response, 'EVENT DOCUMENT SERVICE gert deal flow products Set');
+
             }
         }
 
@@ -1209,68 +1217,73 @@ class EventDocumentService
                     ]
                 ]);
                 if (!empty($product['prepayment'])) {
+
                     $quantity = $product['prepayment'];
-                    if (!empty($product['price'])) {
-                        if (!empty($product['price']['default'])) {
-                            $price = $product['price']['default'];
-                            $priceCurrent = $product['price']['current'];
-                            $priceNetto = $product['price']['default'];
-                            $discountSum =  $priceNetto - $priceCurrent;
-                            $id = 0;
-                            if (isset($product['id'])) {
-                                $id = $product['id'];
-                            }
-                            if (isset($product['number'])) {
-                                $id = $product['number'];
-                            }
-
-                            $productName = $product['name'];
-                            $supplyName = '';
-                            if (!empty($product['supply'])) {
-                                if (isset($product['supply']['name'])) {
-                                    $supplyName = $product['supply']['name'];
-                                    $productName =  $productName . ' ' .  $supplyName;
-                                }
-                            }
+                }
+                if (!empty($product['price'])) {
+                    if (isset($product['price']['quantity'])) {
+                        $quantity = $product['price']['quantity'];
+                    }
+                }
 
 
 
-                            if (!empty($product['price'])) {
-                                if (isset($product['price']['quantity'])) {
-                                    $quantity = $product['price']['quantity'];
-                                }
-                            }
-
-                            $measureCode = 0;
-                            $measureId = 0;
-
-                            if (!empty($product['price'])) {
-                                if (isset($product['price']['measure'])) {
-                                    if (isset($product['price']['measure']['code'])) {
-                                        $measureCode = $product['price']['measure']['code'];
-                                        $measureId = $product['price']['measure']['id'];
-                                    }
-                                }
-                            }
-
-                            $row = [
-                                "id" => $id,
-                                "priceNetto" => $priceNetto,
-                                "price" => $priceCurrent,
-                                "discountSum" => $discountSum,
-                                "discountTypeId" => 1,
-                                "ownerId" => $dealId,
-                                "ownerType" => "D",
-                                "productName" => $productName,
-                                "quantity" => $quantity,
-                                "customized" => "Y",
-                                "supply" => $supplyName,
-                                "measureCode" => $measureCode,
-                                "measureId" => $measureId,
-                                "sort" => $i,
-                            ];
-                            array_push($resultRows, $row);
+                if (!empty($product['price'])) {
+                    if (!empty($product['price']['default'])) {
+                        $price = $product['price']['default'];
+                        $priceCurrent = $product['price']['current'];
+                        $priceNetto = $product['price']['default'];
+                        $discountSum =  $priceNetto - $priceCurrent;
+                        $id = 0;
+                        if (isset($product['id'])) {
+                            $id = $product['id'];
                         }
+                        if (isset($product['number'])) {
+                            $id = $product['number'];
+                        }
+
+                        $productName = $product['name'];
+                        $supplyName = '';
+                        if (!empty($product['supply'])) {
+                            if (isset($product['supply']['name'])) {
+                                $supplyName = $product['supply']['name'];
+                                $productName =  $productName . ' ' .  $supplyName;
+                            }
+                        }
+
+
+
+
+
+                        $measureCode = 0;
+                        $measureId = 0;
+
+                        if (!empty($product['price'])) {
+                            if (isset($product['price']['measure'])) {
+                                if (isset($product['price']['measure']['code'])) {
+                                    $measureCode = $product['price']['measure']['code'];
+                                    $measureId = $product['price']['measure']['id'];
+                                }
+                            }
+                        }
+
+                        $row = [
+                            "id" => $id,
+                            "priceNetto" => $priceNetto,
+                            "price" => $priceCurrent,
+                            "discountSum" => $discountSum,
+                            "discountTypeId" => 1,
+                            "ownerId" => $dealId,
+                            "ownerType" => "D",
+                            "productName" => $productName,
+                            "quantity" => $quantity,
+                            "customized" => "Y",
+                            "supply" => $supplyName,
+                            "measureCode" => $measureCode,
+                            "measureId" => $measureId,
+                            "sort" => $i,
+                        ];
+                        array_push($resultRows, $row);
                     }
                 }
             }
