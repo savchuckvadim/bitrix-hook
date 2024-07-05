@@ -872,7 +872,8 @@ class BitrixEntityFlowService
 
 
                     default:
-                        break;
+                       
+                        $resultCode = 'op_prospects_good';
                         break;
                 }
             }
@@ -889,14 +890,14 @@ class BitrixEntityFlowService
                 }
             }
         }
-        // Log::channel('telegram')->info('HOOK TEST getProspectsFieldItemValue', [
-        //     'resultCode' => $resultCode,
-        //     'failType' => $failType,
-        //     'workStatus' => $workStatus,
-        //     'resultItemBtxId' => $resultItemBtxId,
+        Log::channel('telegram')->info('HOOK TEST getProspectsFieldItemValue', [
+            'resultCode' => $resultCode,
+            'failType' => $failType,
+            'workStatus' => $workStatus,
+            'resultItemBtxId' => $resultItemBtxId,
 
 
-        // ]);
+        ]);
         return $resultItemBtxId;
     }
 
@@ -1000,7 +1001,7 @@ class BitrixEntityFlowService
                 $pitems = $portalField['items'];
                 foreach ($pitems as $pitem) {
                     if (!empty($pitem['code'])) {
-                        if ($pitem['code'] == $noresultReason) {
+                        if ($pitem['code'] == $noresultReason['code']) {
                             $resultItemBtxId = $pitem['bitrixId'];
                         }
                     }
@@ -1013,7 +1014,7 @@ class BitrixEntityFlowService
         //     'workStatus' => $workStatus,
         //     'resultItemBtxId' => $resultItemBtxId,
         // ]);
-      
+
         return $resultItemBtxId;
     }
 
@@ -1120,7 +1121,7 @@ class BitrixEntityFlowService
         // op_efield_fail_reason	Не хотят общаться	op_efield_fail_off
 
 
-        $resultCode = 'op_efield_fail_' . $failReason;
+        $resultCode = 'op_efield_fail_' . $failReason['code'];
 
         if (!empty($portalField)) {
             if (!empty($portalField['items'])) {
