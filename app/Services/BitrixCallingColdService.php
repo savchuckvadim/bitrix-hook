@@ -717,7 +717,7 @@ class BitrixCallingColdService
 
         $rand = rand(1, 2);
         sleep($rand);
-        $planDeals = BitrixDealFlowService::flow(
+        $flowResult =  BitrixDealFlowService::flow(
             $this->hook,
             null, // current btx deals for report
             $this->portalDealData,
@@ -732,7 +732,8 @@ class BitrixCallingColdService
             true, //is result for report
             '$fields'
         );
-
+        $planDeals = $flowResult['dealIds'];
+        
         Log::info('HOOK TEST COLD', [
             'planDeals' => $planDeals,
 

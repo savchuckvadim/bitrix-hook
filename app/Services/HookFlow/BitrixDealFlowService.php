@@ -34,11 +34,12 @@ class BitrixDealFlowService
         $responsibleId,
         $isResult,
         $fields,
-        $newPresDeal = null //for mutation
+       
 
 
     ) {
         sleep(1);
+        $newPresDeal = null; //for mutation
         //находит сначала целевые категиории сделок из portal   по eventType и eventAction - по тому что происходит
         //сюда могут при ходить массив текущих сделок и которых есть CATEGORY_ID такой как в portal->deal->category->bitrixId
         //
@@ -135,12 +136,7 @@ class BitrixDealFlowService
 
 
                             );
-                            Log::info('HOOK TEST currentBtxDeals', [
-                                'newPresDeal' => $newPresDeal,
-                             
-                    
-                    
-                            ]);
+
                         }
                     }
 
@@ -179,7 +175,7 @@ class BitrixDealFlowService
         }
 
 
-        return $currentDealIds;
+        return ['dealIds' => $currentDealIds, 'newPresDeal' => $newPresDeal];
     }
 
 

@@ -1107,6 +1107,7 @@ class EventReportService
         $currentBtxDeals = $this->currentBtxDeals;
 
         $unplannedPresDeals = null;
+        $newPresDeal = null;
         // report - закрывает сделки
         // plan - создаёт
         //todo report flow
@@ -1181,16 +1182,7 @@ class EventReportService
 
 
 
-            Log::info('HOOK TEST unplannedPresDeal', [
-                'unplannedPresDeal' => $unplannedPresDeal,
-
-
-            ]);
-            Log::info('HOOK TEST currentBtxDeals', [
-                'currentBtxDeals' => $this->currentBtxDeals,
-
-
-            ]);
+           
             if (!empty($unplannedPresDeal)) {
                 if (isset($unplannedPresDeal['ID'])) {
 
@@ -1202,7 +1194,7 @@ class EventReportService
                         $unplannedPresResultStatus = 'fail';
                         $unplannedPresResultName = 'Отказ после презентации';
                     }
-                    $unplannedPresDeals = BitrixDealFlowService::flow(  // закрывает сделку  - презентация обновляет базовую в соответствии с проведенной през
+                     $flowResult = BitrixDealFlowService::flow(  // закрывает сделку  - презентация обновляет базовую в соответствии с проведенной през
                         $this->hook,
                         $this->currentBtxDeals,
                         $this->portalDealData,
@@ -1218,6 +1210,7 @@ class EventReportService
                         '$fields',
                         null // $relationSalePresDeal
                     );
+                    $unplannedPresDeals = $flowResult['dealIds'];
 
 
 
@@ -1267,7 +1260,9 @@ class EventReportService
 
 
         ]);
-        $reportDeals = BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
+     
+
+        $flowResult = BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
             $this->hook,
             $currentBtxDeals,
             $this->portalDealData,
@@ -1283,6 +1278,7 @@ class EventReportService
             '$fields',
             $this->relationSalePresDeal
         );
+        $reportDeals = $flowResult['dealIds'];
         //todo plan flow
 
         // if ($this->currentPlanEventType == 'warm') {
@@ -1325,8 +1321,8 @@ class EventReportService
                 $this->portalDealData,
                 $currentBtxDeals
             );
-            $newPresDeal = null;
-            $planDeals =  BitrixDealFlowService::flow( //создает сделку
+           
+            $flowResult =  BitrixDealFlowService::flow( //создает сделку
                 $this->hook,
                 $currentBtxDeals,
                 $this->portalDealData,
@@ -1341,8 +1337,9 @@ class EventReportService
                 $this->isResult,
                 '$fields',
                 null, // $relationSalePresDeal
-                $newPresDeal //for mutation - в эту переменную запишется новая созданная запланированная сделка презентации
             );
+            $planDeals = $flowResult['dealIds'];
+            $newPresDeal = $flowResult['newPresDeal'];
         }
 
         Log::info('HOOK TEST currentBtxDeals', [
