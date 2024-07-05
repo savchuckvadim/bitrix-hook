@@ -166,6 +166,45 @@ class BitrixDealService
 
         return $resultFields;
     }
+
+
+    protected function productsSet(
+        $hook,
+        $dealId,
+        $fieldsData
+    )
+    {
+
+
+        try {
+            $method = '/crm.item.productrow.set.json';
+            $url = $hook . $method;
+            $fieldsData['ownerId'] = $dealId;
+            foreach ($fieldsData['productRows'] as $product) {
+                $product['ownerId'] = $dealId;
+            }
+            $response = Http::get($url, $fieldsData);
+            $responseData = APIBitrixController::getBitrixRespone($response, 'general service: update deal');
+       
+
+            return $responseData;
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::channel('telegram')->error('APRIL_ONLINE', [
+                'productsSet' => $errorMessages
+            ]);
+
+            return null;
+        }
+    }
+
+
+
     static function getDeal(
         $hook,
         $data,

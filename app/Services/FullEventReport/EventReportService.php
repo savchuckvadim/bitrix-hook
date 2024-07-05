@@ -101,8 +101,7 @@ class EventReportService
 
 
 
-    protected $currentBtxEntity;
-    protected $currentBtxDeals;
+
 
     protected $taskTitle;
 
@@ -135,6 +134,10 @@ class EventReportService
 
 
     // deals
+    protected $currentBtxEntity;
+    protected $currentBtxDeals;
+
+
     protected $currentBaseDeal;
     protected $currentPresDeal;
     protected $currentColdDeal;
@@ -625,7 +628,12 @@ class EventReportService
             // if ($this->isSmartFlow) {
             //     $this->getSmartFlow();
             // }
+            Log::info('HOOK TEST unplannedPresDeal', [
+                'currentBaseDeal' => $this->currentBaseDeal,
+                'currentPresDeal' => $this->currentPresDeal,
+                'currentBtxDeals' => $this->currentBtxDeals,
 
+            ]);
             if ($this->isDealFlow && $this->portalDealData) {
                 $currentDealsIds = $this->getDealFlow();
             }
@@ -667,7 +675,8 @@ class EventReportService
         $isDeal = false,
         $deal = null,
         $dealType = 'base',  //presentation, xo
-        $baseDealId = null
+        $baseDealId = null,
+        $dealEventType = false //plan done unplanned fail
     ) {
         $currentReportEventType = $this->currentReportEventType;
         $currentPlanEventType = $this->currentPlanEventType;
@@ -715,6 +724,10 @@ class EventReportService
 
             if ($dealType == 'presentation') {
                 $reportFields['to_base_sales'] = $baseDealId;
+                $currentPresCount = 1;
+                if($dealEventType == 'plan' || $dealEventType == 'fail'){
+                    $currentPresCount = 0;
+                }
             }
         }
 
@@ -1280,10 +1293,7 @@ class EventReportService
 
         foreach ($currentBtxDeals as $currentBtxDeal) {
             sleep(1);
-            Log::info('HOOK TEST currentBtxDeals', [
-                'currentBtxDeal' => $currentBtxDeal,
-
-            ]);
+          
             $this->getEntityFlow(true, $currentBtxDeal);
         }
 
