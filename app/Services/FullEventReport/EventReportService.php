@@ -878,7 +878,7 @@ class EventReportService
                     if (!empty($this->failType)) {
                         if (!empty($this->failType['code'])) {
                          
-                            $reportFields['op_prospects_type'] = $this->failType['code'];
+                            // $reportFields['op_prospects_type'] = $this->failType['code'];
 
 
                             if ($this->failType['code'] == 'failure') { //если тип провала - отказ
