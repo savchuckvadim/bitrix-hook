@@ -296,7 +296,7 @@ class BitrixCallingColdService
                             case 'op_work_status':
 
 
-                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $workStatusController->getWorstatusFieldItemValue(
+                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $workStatusController->getWorkstatusFieldItemValue(
                                     $pField, //with items
                                     $workStatus,
                                     'xo' // only PLAN ! event type

@@ -578,8 +578,7 @@ class BitrixEntityFlowService
                                 );
                                 break;
                             case 'op_prospects_type':  //Перспективность
-                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = 12511;
-                                $this->getProspectsFieldItemValue(
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getProspectsFieldItemValue(
                                     $pField, //with items
                                     $workStatus,
                                     $failType
@@ -781,7 +780,7 @@ class BitrixEntityFlowService
                 }
             }
         }
-        // Log::channel('telegram')->info('HOOK TEST getWorstatusFieldItemValue', [
+        // Log::channel('telegram')->info('HOOK TEST getWorkstatusFieldItemValue', [
         //     'resultCode' => $resultCode,
         //     'planEventType' => $planEventType,
         //     'workStatus' => $workStatus,
@@ -1010,7 +1009,7 @@ class BitrixEntityFlowService
                 }
             }
         }
-        // Log::channel('telegram')->info('HOOK TEST getWorstatusFieldItemValue', [
+        // Log::channel('telegram')->info('HOOK TEST getWorkstatusFieldItemValue', [
         //     'resultCode' => $resultCode,
         //     'planEventType' => $planEventType,
         //     'workStatus' => $workStatus,
@@ -1137,7 +1136,7 @@ class BitrixEntityFlowService
                 }
             }
         }
-        // Log::channel('telegram')->info('HOOK TEST getWorstatusFieldItemValue', [
+        // Log::channel('telegram')->info('HOOK TEST getWorkstatusFieldItemValue', [
         //     'resultCode' => $resultCode,
         //     'planEventType' => $planEventType,
         //     'workStatus' => $workStatus,
