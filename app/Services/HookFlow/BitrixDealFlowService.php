@@ -34,6 +34,7 @@ class BitrixDealFlowService
         $responsibleId,
         $isResult,
         $fields,
+        $newPresDeal = null //for mutation
 
 
     ) {
@@ -62,7 +63,7 @@ class BitrixDealFlowService
                     $eventAction,
                     $isResult,
                 );
-             
+
 
                 // $currentDeal = BitrixDealService::getDealId(
                 //     $hook,
@@ -118,6 +119,20 @@ class BitrixDealFlowService
                         $currentCategoryData
 
                     );
+
+                    if ($currentCategoryData['code'] === 'sales_presentation') {
+                        if (!empty($currentDealId)) {
+                            $rand = 1;
+                            sleep($rand);
+                            $newPresDeal = BitrixDealService::getDeal(
+                                $hook,
+                                ['id' => $currentDealId]
+
+
+                            );
+                        }
+                    }
+
                     // Log::info('DEAL TEST', [
                     //     'setDeal currentDealId' => $currentDealId,
 
@@ -160,7 +175,7 @@ class BitrixDealFlowService
     static function unplannedPresflow(
 
         $hook,
-        $currentDeal, 
+        $currentDeal,
         $portalDealData,
         $currentDepartamentType,
         $entityType,
@@ -329,8 +344,4 @@ class BitrixDealFlowService
         // ]);
         return $result;
     }
-
-
-
-    
 }

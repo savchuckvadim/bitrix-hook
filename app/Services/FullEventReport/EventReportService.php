@@ -445,19 +445,19 @@ class EventReportService
             $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
             $this->relationColdDeals = $sessionDeals['allXODeals'];
         }
-        Log::info('HOOK TEST unplannedPresDeal', [
-            'currentBaseDeal' => $this->currentBaseDeal,
-            'currentPresDeal' => $this->currentPresDeal,
-            'currentBtxDeals' => $this->currentBtxDeals,
+        // Log::info('HOOK TEST unplannedPresDeal', [
+        //     'currentBaseDeal' => $this->currentBaseDeal,
+        //     'currentPresDeal' => $this->currentPresDeal,
+        //     'currentBtxDeals' => $this->currentBtxDeals,
 
-        ]);
+        // ]);
 
-        Log::info('HOOK TEST sessionData total', [
-            'sessionData' => $sessionData,
-            'currentBtxDeals' => $this->currentBtxDeals
+        // Log::info('HOOK TEST sessionData total', [
+        //     'sessionData' => $sessionData,
+        //     'currentBtxDeals' => $this->currentBtxDeals
 
 
-        ]);
+        // ]);
 
 
 
@@ -634,12 +634,12 @@ class EventReportService
             // if ($this->isSmartFlow) {
             //     $this->getSmartFlow();
             // }
-            Log::info('HOOK TEST unplannedPresDeal', [
-                'currentBaseDeal' => $this->currentBaseDeal,
-                'currentPresDeal' => $this->currentPresDeal,
-                'currentBtxDeals' => $this->currentBtxDeals,
+            // Log::info('HOOK TEST unplannedPresDeal', [
+            //     'currentBaseDeal' => $this->currentBaseDeal,
+            //     'currentPresDeal' => $this->currentPresDeal,
+            //     'currentBtxDeals' => $this->currentBtxDeals,
 
-            ]);
+            // ]);
             if ($this->isDealFlow && $this->portalDealData) {
                 $currentDealsIds = $this->getDealFlow();
             }
@@ -730,9 +730,9 @@ class EventReportService
 
             if ($dealType == 'presentation') {
                 $reportFields['to_base_sales'] = $baseDealId;
-                $currentPresCount = 1;
-                if($dealEventType == 'plan' || $dealEventType == 'fail'){
-                    $currentPresCount = 0;
+                $currentPresCount = 0;
+                if ($dealEventType == 'plan' || $dealEventType == 'fail') {
+                    $currentPresCount = -1;
                 }
             }
         }
@@ -1151,7 +1151,7 @@ class EventReportService
                 $this->entityId,
                 'presentation', // xo warm presentation,
                 'Презентация',
-                'Запланирована',
+                'Спонтанная от ' . $this->nowDate,
                 'plan',  // plan done expired fail
                 $this->planResponsibleId,
                 true,
@@ -1174,7 +1174,8 @@ class EventReportService
                     true,
                     $unplannedPresDeal,
                     'presentation',
-                    $this->currentBaseDeal['ID']
+                    $this->currentBaseDeal['ID'],
+                    'unplanned'
                 );
             }
 
@@ -1296,11 +1297,26 @@ class EventReportService
         //warm | money_await | in_progress - создать или обновить  Основная
         //presentation - создать или обновить presentation & Основная
 
-
-        foreach ($currentBtxDeals as $currentBtxDeal) {
+        if (!empty($this->currentBaseDeal)) {
             sleep(1);
-          
-            $this->getEntityFlow(true, $currentBtxDeal);
+            $this->getEntityFlow(
+                true,
+                $this->currentBaseDeal,
+                'base',
+                $this->currentBaseDeal['ID'],
+                'unplanned'
+            );
+        }
+
+        if (!empty($this->currentPresDeal)) {  //report pres deal
+            sleep(1);
+            $this->getEntityFlow(
+                true,
+                $this->currentPresDeal,
+                'presentation',
+                $this->currentBaseDeal['ID'],
+                'done'
+            );
         }
 
 
@@ -1309,7 +1325,7 @@ class EventReportService
                 $this->portalDealData,
                 $currentBtxDeals
             );
-
+            $newPresDeal = null;
             $planDeals =  BitrixDealFlowService::flow( //создает сделку
                 $this->hook,
                 $currentBtxDeals,
@@ -1328,6 +1344,17 @@ class EventReportService
             );
         }
 
+
+        if (!empty($newPresDeal)) {  //plan pres deal
+            sleep(1);
+            $this->getEntityFlow(
+                true,
+                $newPresDeal,
+                'presentation',
+                $this->currentBaseDeal['ID'],
+                'plan'
+            );
+        }
         // Log::channel('telegram')->info('presentationBtxList', [
         //     'reportDeals' => $reportDeals,
         //     'planDeals' => $planDeals,
