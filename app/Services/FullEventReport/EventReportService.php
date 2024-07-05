@@ -843,6 +843,8 @@ class EventReportService
         } else {
             if ($this->workStatus['current']['code'] === 'fail') {
                 $reportFields['op_current_status'] = 'Отказ';
+                array_push($currentPresComments, 'Отказ ' . $this->comment);
+                $reportFields['op_fail_comments'] = $currentFailComments;
             }
 
             if ($this->workStatus['current']['code'] === 'success') {
