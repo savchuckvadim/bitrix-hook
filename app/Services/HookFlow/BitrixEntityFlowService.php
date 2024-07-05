@@ -121,12 +121,7 @@ class BitrixEntityFlowService
                 //     'currentBtxEntity' => $currentBtxEntity
 
                 // ]);
-                // Log::info('APRIL_HOOK updateCompany', [
-                //     'portal fields' => $fields,
-                //     'currentFieldsForUpdate' => $currentFieldsForUpdate,
-                //     'currentBtxEntity' => $currentBtxEntity
-
-                // ]);
+           
 
                 $updatedFields = $this->getReportFields(
                     [],
@@ -153,7 +148,12 @@ class BitrixEntityFlowService
                 );
 
                 // $entityFieldsUpdatingContent
+                Log::info('APRIL_HOOK updateCompany', [
+           
+                    'updatedFields' => $updatedFields,
 
+
+                ]);
                 BitrixGeneralService::updateEntity(
                     $hook,
                     $entityType,
@@ -578,7 +578,8 @@ class BitrixEntityFlowService
                                 );
                                 break;
                             case 'op_prospects_type':  //Перспективность
-                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getProspectsFieldItemValue(
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = 12511;
+                                $this->getProspectsFieldItemValue(
                                     $pField, //with items
                                     $workStatus,
                                     $failType
@@ -872,7 +873,7 @@ class BitrixEntityFlowService
 
 
                     default:
-                       
+
                         $resultCode = 'op_prospects_good';
                         break;
                 }
