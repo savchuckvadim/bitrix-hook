@@ -410,16 +410,17 @@ class EventReportService
             }
 
 
-            Log::info('HOOK TEST sessionData try self', [
-                'sessionData' => $sessionData,
+            Log::info('HOOK TEST sessionDeals', [
+                'sessionDeals' => $sessionDeals,
 
 
 
             ]);
         }
         if (
-            isset($sessionDeals['currentBaseDeal']) &&
-            isset($sessionDeals['allBaseDeals'])
+            isset($sessionDeals['currentBaseDeal'])
+            //  &&
+            // isset($sessionDeals['allBaseDeals'])
             // isset($sessionDeals['currentPresentationDeal']) &&
             // isset($sessionDeals['basePresentationDeals']) &&
             // isset($sessionDeals['allPresentationDeals']) &&
@@ -444,7 +445,12 @@ class EventReportService
             $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
             $this->relationColdDeals = $sessionDeals['allXODeals'];
         }
+        Log::info('HOOK TEST unplannedPresDeal', [
+            'currentBaseDeal' => $this->currentBaseDeal,
+            'currentPresDeal' => $this->currentPresDeal,
+            'currentBtxDeals' => $this->currentBtxDeals,
 
+        ]);
 
         Log::info('HOOK TEST sessionData total', [
             'sessionData' => $sessionData,
