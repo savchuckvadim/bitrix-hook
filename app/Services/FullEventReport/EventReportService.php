@@ -812,10 +812,22 @@ class EventReportService
 
 
             switch ($currentPlanEventType) {
+                    // 0: {id: 1, code: "warm", name: "Звонок"}
+                    // // 1: {id: 2, code: "presentation", name: "Презентация"}
+                    // // 2: {id: 3, code: "hot", name: "Решение"}
+                    // // 3: {id: 4, code: "moneyAwait", name: "Оплата"}
                 case 'xo':
                     $reportFields['xo_date'] = $this->planDeadline;
                     $reportFields['xo_name'] = $this->currentPlanEventName;
                     break;
+                case 'hot':
+                    $reportFields['op_current_status'] = 'В решении';
+
+                    break;
+                case 'moneyAwait':
+                    $reportFields['op_current_status'] = 'Ждем оплаты';
+                    break;
+
 
                 case 'presentation':
 
@@ -829,6 +841,13 @@ class EventReportService
                     break;
             }
         } else {
+            if ($this->workStatus['current']['code'] === 'fail') {
+                $reportFields['op_current_status'] = 'Отказ';
+            }
+
+            if ($this->workStatus['current']['code'] === 'success') {
+                $reportFields['op_current_status'] = 'Успех: продажа состоялась';
+            }
         }
 
 
@@ -1182,7 +1201,7 @@ class EventReportService
 
 
 
-           
+
             if (!empty($unplannedPresDeal)) {
                 if (isset($unplannedPresDeal['ID'])) {
 
@@ -1194,7 +1213,7 @@ class EventReportService
                         $unplannedPresResultStatus = 'fail';
                         $unplannedPresResultName = 'Отказ после презентации';
                     }
-                     $flowResult = BitrixDealFlowService::flow(  // закрывает сделку  - презентация обновляет базовую в соответствии с проведенной през
+                    $flowResult = BitrixDealFlowService::flow(  // закрывает сделку  - презентация обновляет базовую в соответствии с проведенной през
                         $this->hook,
                         $this->currentBtxDeals,
                         $this->portalDealData,
@@ -1260,7 +1279,7 @@ class EventReportService
 
 
         ]);
-     
+
 
         $flowResult = BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
             $this->hook,
@@ -1321,7 +1340,7 @@ class EventReportService
                 $this->portalDealData,
                 $currentBtxDeals
             );
-           
+
             $flowResult =  BitrixDealFlowService::flow( //создает сделку
                 $this->hook,
                 $currentBtxDeals,
@@ -1344,7 +1363,7 @@ class EventReportService
 
         Log::info('HOOK TEST currentBtxDeals', [
             'newPresDeal' => $newPresDeal,
-         
+
 
 
         ]);
