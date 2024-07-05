@@ -583,6 +583,7 @@ class BitrixEntityFlowService
                                     $workStatus,
                                     $failType
                                 );
+                                break;
                             case 'op_noresult_reason':  //Перспективность
                                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getNoresultReson(
                                     $pField, //with items
@@ -590,7 +591,7 @@ class BitrixEntityFlowService
                                     $isResult
                                 );
 
-
+                                break;
                             case 'op_fail_reason':  //Перспективность
                                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getFailReason(
                                     $pField, //with items
