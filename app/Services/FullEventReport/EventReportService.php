@@ -1345,7 +1345,12 @@ class EventReportService
             );
         }
 
+        Log::info('HOOK TEST currentBtxDeals', [
+            'newPresDeal' => $newPresDeal,
+         
 
+
+        ]);
         if (!empty($newPresDeal)) {  //plan pres deal
             sleep(1);
             $this->getEntityFlow(
