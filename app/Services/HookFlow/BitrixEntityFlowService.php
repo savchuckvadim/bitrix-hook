@@ -885,6 +885,7 @@ class BitrixEntityFlowService
                     if (!empty($pitem['code'])) {
                         if ($pitem['code'] == $resultCode) {
                             $resultItemBtxId = $pitem['bitrixId'];
+                            break;
                         }
                     }
                 }
@@ -894,7 +895,7 @@ class BitrixEntityFlowService
             'resultCode' => $resultCode,
             'failType' => $failType,
             'workStatus' => $workStatus,
-            'resultItemBtxId' => $resultItemBtxId,
+            'pitem' => $pitem,
 
 
         ]);
