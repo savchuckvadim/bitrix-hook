@@ -266,7 +266,7 @@ class BitrixEntityFlowService
 
                                         // /statusesCodes
                                     case 'op_work_status':
-                                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getWorstatusFieldItemValue(
+                                        $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getWorkstatusFieldItemValue(
                                             $pField, //with items
                                             $workStatus,
                                             'document' // only PLAN ! event type
@@ -523,7 +523,7 @@ class BitrixEntityFlowService
     ) {
 
         $userId = 'user_' . $responsibleId;
-
+        $isResult =  $resultStatus == 'result';
 
         //general report fields 
         foreach ($portalFields as $pField) {
@@ -536,8 +536,6 @@ class BitrixEntityFlowService
 
 
                     if ($portalFieldCode === $targetFieldCode) {
-                        if ($portalFieldCode == 'op_prospects_type') {
-                        }
 
 
                         switch ($portalFieldCode) {
@@ -573,7 +571,7 @@ class BitrixEntityFlowService
                                 break;
                                 // /statusesCodes
                             case 'op_work_status':
-                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getWorstatusFieldItemValue(
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getWorkstatusFieldItemValue(
                                     $pField, //with items
                                     $workStatus,
                                     $planEventType // only PLAN ! event type
@@ -585,6 +583,24 @@ class BitrixEntityFlowService
                                     $workStatus,
                                     $failType
                                 );
+                            case 'op_noresult_reason':  //Перспективность
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getNoresultReson(
+                                    $pField, //with items
+                                    $noResultReason,
+                                    $isResult
+                                );
+
+
+                            case 'op_fail_reason':  //Перспективность
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getFailReason(
+                                    $pField, //with items
+                                    $failReason,
+                                    $failType
+                                );
+
+
+                                //                                     op_noresult_reason
+                                // op_fail_reason
                                 break;
 
 
@@ -661,8 +677,7 @@ class BitrixEntityFlowService
         }
 
 
-        if ($workStatus == 'fail') {
-        }
+
         // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
         //     'updatedFields' => $updatedFields
         // ]);
@@ -707,7 +722,7 @@ class BitrixEntityFlowService
         return $fields;
     }
 
-    public function getWorstatusFieldItemValue(
+    public function getWorkstatusFieldItemValue(
         $portalField, //with items
         $workStatus,
         $planEventType // only PLAN ! event type
@@ -718,8 +733,10 @@ class BitrixEntityFlowService
         // success
         // fail
         // op_work_status
+
         // В работе	work
         // Отложена	long
+
         // В решении	in_progress
         // В оплате	money_await
         // Продажа	    op_status_success
@@ -813,7 +830,7 @@ class BitrixEntityFlowService
 
 
         $resultCode = 'op_prospects_good';
-        if ($workStatus !== 'inJob' && $workStatus !== 'success') {
+        if ($workStatus !== 'inJob' && $workStatus !== 'success' && $workStatus !== 'setAside') {
 
             if (!empty($failType) && !empty($failType['code'])) {
                 $failCode = $failType['code'];
@@ -882,6 +899,250 @@ class BitrixEntityFlowService
         // ]);
         return $resultItemBtxId;
     }
+
+
+    public function getNoresultReson(
+        $portalField, //with items
+        $noresultReason,  //причина нерезультативности
+        $isResult // only PLAN ! event type
+    ) {
+        $resultItemBtxId = null;
+        if ($isResult) {
+            return 0;
+        }
+        // items: [
+        //     {
+        //         id: 0,
+        //         code: 'secretar',
+        //         name: 'Секретарь',
+        //         isActive: true
+
+        //     },
+        //     {
+        //         id: 1,
+        //         code: 'nopickup',
+        //         name: 'Недозвон - трубку не берут',
+        //         isActive: true
+
+        //     },
+        //     {
+        //         id: 2,
+        //         code: 'nonumber',
+        //         name: 'Недозвон - номер не существует',
+        //         isActive: true
+
+        //     },
+        //     {
+        //         id: 3,
+        //         code: 'busy',
+        //         name: 'Занято',
+        //         isActive: true
+
+        //     },
+        //     {
+        //         id: 4,
+        //         code: 'noresult_notime',
+        //         name: 'Перенос - не было времени',
+        //         isActive: true
+
+        //     },
+        //     {
+        //         id: 5,
+        //         code: 'nocontact',
+        //         name: 'Контактера нет на месте',
+        //         isActive: true
+
+        //     },
+        //     {
+        //         id: 6,
+        //         code: 'giveup',
+        //         name: 'Просят оставить свой номер',
+        //         isActive: true
+
+        //     },
+        //     {
+        //         id: 7,
+        //         code: 'bay',
+        //         name: 'Не интересует, до свидания',
+        //         isActive: true
+
+        //     },
+        //     {
+        //         id: 8,
+        //         code: 'wrong',
+        //         name: 'По телефону отвечает не та организация',
+        //         isActive: true
+
+        //     },
+        //     {
+        //         id: 9,
+        //         code: 'auto',
+        //         name: 'Автоответчик',
+        //         isActive: true
+
+        //     },
+        // ],
+        // Причина нерезультатинвности	
+        //    	op_noresult_reason	Секретарь	secretar
+        // op_noresult_reason	Недозвон - трубку не берут	nopickup
+        // op_noresult_reason	Недозвон - номер не существует	nonumber
+        // op_noresult_reason	Занято	busy
+        // op_noresult_reason	Перенос - не было времени	notime
+        // op_noresult_reason	Контактера нет на месте	nocontact
+        // op_noresult_reason	Просят оставить свой номер	giveup
+        // op_noresult_reason	Не интересует, до свидания	bay
+        // op_noresult_reason	По телефону отвечает не та организация	wrong
+        // op_noresult_reason	Автоответчик	auto
+
+
+        if (!empty($portalField)) {
+            if (!empty($portalField['items'])) {
+                $pitems = $portalField['items'];
+                foreach ($pitems as $pitem) {
+                    if (!empty($pitem['code'])) {
+                        if ($pitem['code'] == $noresultReason) {
+                            $resultItemBtxId = $pitem['bitrixId'];
+                        }
+                    }
+                }
+            }
+        }
+        // Log::channel('telegram')->info('HOOK TEST getWorstatusFieldItemValue', [
+        //     'resultCode' => $resultCode,
+        //     'planEventType' => $planEventType,
+        //     'workStatus' => $workStatus,
+        //     'resultItemBtxId' => $resultItemBtxId,
+        // ]);
+      
+        return $resultItemBtxId;
+    }
+
+    public function getFailReason(
+        $portalField, //with items
+        $failReason,  //причина нерезультативности
+        $planEventType // only PLAN ! event type
+    ) {
+        $resultItemBtxId = null;
+        $front = [
+            // {
+            //     id: 0,
+            //     code: 'fail_notime',
+            //     name: 'Не было времени',
+            //     isActive: true
+
+            // },
+            // {
+            //     id: 1,
+            //     code: 'c_habit',
+            //     name: 'Конкуренты - привыкли',
+            //     isActive: true
+
+            // },
+            // {
+            //     id: 2,
+            //     code: 'c_prepay',
+            //     name: 'Конкуренты - оплачено',
+            //     isActive: true
+
+            // },
+            // {
+            //     id: 3,
+            //     code: 'c_price',
+            //     name: 'Конкуренты - цена',
+            //     isActive: true
+
+            // },
+
+            // {
+            //     id: 4,
+            //     code: 'money',
+            //     name: 'Дорого/нет Денег',
+            //     isActive: true
+
+            // },
+
+
+
+            // {
+            //     id: 5,
+            //     code: 'to_cheap',
+            //     name: 'Слишком дешево',
+            //     isActive: true
+
+            // },
+            // {
+            //     id: 6,
+            //     code: 'nomoney',
+            //     name: 'Нет денег',
+            //     isActive: true
+
+            // },
+            // {
+            //     id: 7,
+            //     code: 'noneed',
+            //     name: 'Не видят надобности',
+            //     isActive: true
+
+            // },
+            // {
+            //     id: 8,
+            //     code: 'lpr',
+            //     name: 'ЛПР против',
+            //     isActive: true
+
+            // },
+            // {
+            //     id: 9,
+            //     code: 'employee',
+            //     name: 'Ключевой сотрудник против',
+            //     isActive: true
+
+            // },
+            // {
+            //     id: 10,
+            //     code: 'fail_off',
+            //     name: 'Не хотят общаться',
+            //     isActive: true
+
+            // },
+        ];
+        // ОП Причина Отказа	
+        // op_efield_fail_reason	Не было времени	op_efield_fail_notime
+        // op_efield_fail_reason	Конкуренты - привыкли	op_efield_fail_c_habit
+        // op_efield_fail_reason	Конкуренты - оплачено	op_efield_fail_c_prepay
+        // op_efield_fail_reason	Конкуренты - цена	op_efield_fail_c_price
+        // op_efield_fail_reason	Слишком дорого	op_efield_fail_to_expensive
+        // op_efield_fail_reason	Слишком дешево	op_efield_fail_to_cheap
+        // op_efield_fail_reason	Нет денег	op_efield_fail_nomoney
+        // op_efield_fail_reason	Не видят надобности	op_efield_fail_noneed
+        // op_efield_fail_reason	ЛПР против	op_efield_fail_lpr
+        // op_efield_fail_reason	Ключевой сотрудник против	op_efield_fail_employee
+        // op_efield_fail_reason	Не хотят общаться	op_efield_fail_off
+
+
+        $resultCode = 'op_efield_fail_' . $failReason;
+
+        if (!empty($portalField)) {
+            if (!empty($portalField['items'])) {
+                $pitems = $portalField['items'];
+                foreach ($pitems as $pitem) {
+                    if (!empty($pitem['code'])) {
+                        if ($pitem['code'] == $resultCode) {
+                            $resultItemBtxId = $pitem['bitrixId'];
+                        }
+                    }
+                }
+            }
+        }
+        // Log::channel('telegram')->info('HOOK TEST getWorstatusFieldItemValue', [
+        //     'resultCode' => $resultCode,
+        //     'planEventType' => $planEventType,
+        //     'workStatus' => $workStatus,
+        //     'resultItemBtxId' => $resultItemBtxId,
+        // ]);
+        return $resultItemBtxId;
+    }
+
 
     //plan fields
     protected function getPlanFields(

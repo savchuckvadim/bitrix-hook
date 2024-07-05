@@ -725,7 +725,7 @@ class BitrixListPresentationFlowService
         $isDone,
         $isExpired,
         $isPlan,
-        $workStatus // inJob expired fail success
+        $workStatus // inJob expired fail success setAside?
 
     ) {
         // Заявка в рассмотрении	pres_result_status	pres_result_init_await
@@ -744,7 +744,7 @@ class BitrixListPresentationFlowService
         } else {
             if ($isDone) { // состоялась
                 $result = 'pres_result_init_done';
-                if ($workStatus == 'inJob' || $workStatus == 'expired') { //В работе после презентации
+                if ($workStatus == 'inJob' || $workStatus == 'inJob' || $workStatus == 'setAside') { //В работе после презентации
 
                     $result = 'pres_result_pres_in_work';
                 } else if ($workStatus == 'fail') {  //Отказ после презентации

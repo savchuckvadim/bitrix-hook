@@ -12,6 +12,7 @@ use App\Services\General\BitrixDealService;
 use App\Services\General\BitrixDepartamentService;
 use App\Services\HookFlow\BitrixDealFlowService;
 use App\Services\HookFlow\BitrixEntityFlowService;
+use App\Services\HookFlow\BitrixListFlowService;
 use App\Services\HookFlow\BitrixListPresentationFlowService;
 use DateTime;
 use Illuminate\Console\View\Components\Task;
@@ -698,9 +699,10 @@ class EventReportService
         $reportFields = [];
         $reportFields['manager_op'] = $this->planResponsibleId;
         $reportFields['op_work_status'] = '';
-        $reportFields['op_prospects_type'] = '';
-        $reportFields['op_work_status'] = '';
-        $reportFields['op_work_status'] = '';
+        $reportFields['op_prospects_type'] = 'op_prospects_good';
+        $reportFields['op_result_status'] = '';
+        $reportFields['op_noresult_reason'] = '';
+        $reportFields['op_fail_reason'] = '';
 
         $currentPresCount = 0;
         $companyPresCount = 0;
@@ -848,14 +850,50 @@ class EventReportService
                 $reportFields['op_current_status'] = 'Отказ';
                 array_push($currentPresComments, $this->nowDate . 'Отказ ' . $this->comment);
                 $reportFields['op_fail_comments'] = $currentFailComments;
+
+                
             }
 
             if ($this->workStatus['current']['code'] === 'success') {
                 $reportFields['op_current_status'] = 'Успех: продажа состоялась';
             }
         }
+        if ($this->resultStatus !== 'result') {
+            if (!empty($this->noresultReason)) {
+                if (!empty($noresultReason['code'])) {
+    
+                    $reportFields['op_noresult_reason'] = $noresultReason['code'];
+                }
+            }
+        }
 
 
+
+        if (!empty($this->workStatus)) {
+            if (!empty($this->workStatus['code'])) {
+                $workStatusCode = $this->workStatus['code'];
+
+
+                if ($workStatusCode === 'fail') {  //если провал
+                    if (!empty($this->failType)) {
+                        if (!empty($this->failType['code'])) {
+                         
+                            $reportFields['op_prospects_type'] = $this->failType['code'];
+
+
+                            if ($this->failType['code'] == 'failure') { //если тип провала - отказ
+                                if (!empty($this->failReason)) {
+                                    if (!empty($this->failReason['code'])) {
+                                      
+                                        $reportFields['op_fail_reason'] = $this->failReason['code'];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } 
+            }
+        }
         // Log::channel('telegram')->info('TST', [
         //     'currentPresComments' => $currentPresComments,
         //     'currentFailComments' => $currentFailComments,
