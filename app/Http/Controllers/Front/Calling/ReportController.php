@@ -30,7 +30,9 @@ class ReportController extends Controller
 
             ];
             $isFullData = true;
-
+            if (isset($request->currentTask)) {
+                $data['currentTask'] = $request->currentTask;
+            }
             
             if (isset($request->report)) {
                 $data['report'] = $request->report;

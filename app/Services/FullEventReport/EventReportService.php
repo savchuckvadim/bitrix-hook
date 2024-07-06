@@ -265,11 +265,11 @@ class EventReportService
         if ($data['report']['resultStatus'] === 'result') {
             $this->isResult  = true;
         }
-        if ($data['report']['resultStatus'] === 'new' || empty($data['currentTask'])) {
+        if ($data['report']['resultStatus'] === 'new') {
             $this->isNew  = true;
         }
 
-        Log::channel('telegram')->info('HOOK TEST sessionDeals', [
+        Log::info('HOOK TEST sessionDeals', [
             'isNew' => $this->isNew,
             'data' => $data['report']['resultStatus'],
             'currentTask' => $data['currentTask']
