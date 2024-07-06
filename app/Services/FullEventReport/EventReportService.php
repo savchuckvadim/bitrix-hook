@@ -265,7 +265,7 @@ class EventReportService
         if ($data['report']['resultStatus'] === 'result') {
             $this->isResult  = true;
         }
-        if ($data['report']['resultStatus'] === 'new') {
+        if ($data['report']['resultStatus'] === 'new' || empty($this->currentTask)) {
             $this->isNew  = true;
         }
 
@@ -412,7 +412,7 @@ class EventReportService
         // }
 
 
-        if (!$this->isNew) {
+        if (!$this->isNew && !empty($this->currentTask)) {
             $sessionKey = $domain . '_' . $this->currentTask['id'];
             $sessionData = FullEventInitController::getSessionItem($sessionKey);
 
