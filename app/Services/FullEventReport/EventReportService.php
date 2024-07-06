@@ -265,6 +265,11 @@ class EventReportService
         if ($data['report']['resultStatus'] === 'result') {
             $this->isResult  = true;
         }
+        if ($data['report']['resultStatus'] === 'new') {
+            $this->isNew  = true;
+        }
+
+
 
 
         if ($data['report']['workStatus']['current']['code'] === 'inJob' || $data['report']['workStatus']['current']['code'] === 'setAside') {
