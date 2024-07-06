@@ -121,7 +121,7 @@ class BitrixEntityFlowService
                 //     'currentBtxEntity' => $currentBtxEntity
 
                 // ]);
-           
+
 
                 $updatedFields = $this->getReportFields(
                     [],
@@ -149,7 +149,7 @@ class BitrixEntityFlowService
 
                 // $entityFieldsUpdatingContent
                 Log::info('APRIL_HOOK updateCompany', [
-           
+
                     'updatedFields' => $updatedFields,
 
 
@@ -1124,7 +1124,9 @@ class BitrixEntityFlowService
 
 
         $resultCode = 'op_efield_fail_' . $failReason['code'];
-
+        if ($failReason['code'] == 'fail_notime' || $failReason['code'] ==  'fail_off') {
+            $resultCode = 'op_efield_' . $failReason['code'];
+        }
         if (!empty($portalField)) {
             if (!empty($portalField['items'])) {
                 $pitems = $portalField['items'];
