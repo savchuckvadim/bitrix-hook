@@ -823,7 +823,11 @@ class ReportController extends Controller
                                     'COMPANY_ID' => $currentCompany['ID'],
                                     'CATEGORY_ID' => $currentBaseCategoryBtxId,
                                     'RESPONSIBLE_ID' => $responsibleId,
-                                    '!=STAGE_ID' => ['C' . $currentBaseCategoryBtxId . ':LOSE', 'C' . $currentBaseCategoryBtxId . ':APOLOGY']
+                                    '!=STAGE_ID' => [
+                                        'C' . $currentBaseCategoryBtxId . ':WON',
+                                        'C' . $currentBaseCategoryBtxId . ':LOSE',
+                                        'C' . $currentBaseCategoryBtxId . ':APOLOGY'
+                                    ]
                                 ],
                                 // 'select' => [
                                 //     'ID',
