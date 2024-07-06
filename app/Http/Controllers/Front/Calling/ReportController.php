@@ -729,9 +729,9 @@ class ReportController extends Controller
                 // !empty($data['userId'])  &&
                 // !empty($data['companyId']) &&
                 !empty($data['domain']) &&
-                !empty($data['baseDealId']) &&
-                !empty($data['company']) &&
-                !empty($data['userId']) &&
+                isset($data['baseDealId']) &&
+                isset($data['company']) &&
+                isset($data['userId']) &&
                 !empty($data['from']) //task //company  //deal //lead
 
 
@@ -770,7 +770,7 @@ class ReportController extends Controller
                 $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
                 $hook = 'https://' . $domain  . '/' . $webhookRestKey;
                 // $currentCompany = BitrixGeneralService::getEntity($hook, 'company', $companyId);
-                $sessionKey = 'newtask_' . $domain . '_'. $userId . '_' . $companyId;
+                $sessionKey = 'newtask_' . $domain . '_' . $userId . '_' . $companyId;
 
 
                 $presList = null;
@@ -840,7 +840,6 @@ class ReportController extends Controller
                                 $hook,
                                 $getAllBaseDealsData,
                             );
-
                         }
 
 
