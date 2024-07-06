@@ -301,9 +301,6 @@ Route::post('/full/session', function (Request $request) {
     return FullEventInitController::sessionGet($request);
 });
 
-Route::post('full/deals', function (Request $request) {
-    return ReportController::getFullDeals($request);
-});
 
 
 Route::post('/full', function (Request $request) {
@@ -325,6 +322,15 @@ Route::post('/pres/count', function (Request $request) {
     return ReportController::getPresCounts($request);
 });
 
+
+
+//////////////////////INIT EVENT FROM TASK ||  EVENT FROM NEW TASK || EVENT FROM FROM ONE MORE TASK || DOCUMENT
+Route::post('full/deals', function (Request $request) {
+    return ReportController::getFullDeals($request);
+});
+Route::post('full/newTask/init', function (Request $request) {
+    return ReportController::getDealsFromNewTaskInit($request);
+});
 
 
 // ............................... FULL EVENT Document PRES FRONT
