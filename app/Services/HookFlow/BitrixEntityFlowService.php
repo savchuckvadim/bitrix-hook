@@ -861,10 +861,11 @@ class BitrixEntityFlowService
                         break;
 
                         //todo
-                        // case 'op_prospects_nophone':  //недозвон
-                        // case 'op_prospects_company': //компания не существует
-                        // case 'op_prospects_off': //не хотят общаться
-
+                    case 'op_prospects_nophone':  //недозвон
+                    case 'op_prospects_company': //компания не существует
+                    case 'op_prospects_off': //не хотят общаться
+                        $resultCode = $failCode;
+                        break;
 
                     case 'failure':
                         $resultCode = 'op_prospects_fail';
@@ -879,6 +880,8 @@ class BitrixEntityFlowService
                 }
             }
         }
+
+
         if (!empty($portalField)) {
             if (!empty($portalField['items'])) {
                 $pitems = $portalField['items'];
