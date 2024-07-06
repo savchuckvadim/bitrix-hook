@@ -47,7 +47,7 @@ class EventReportService
     protected $currentReportEventName = '';
 
     protected $comment = '';
-
+    protected $currentTaskTitle = '';
 
     protected $isResult = false;     //boolean
     protected $isExpired = false;     //boolean перенос текущей задачи
@@ -212,6 +212,16 @@ class EventReportService
         $this->currentReportEventType = 'new';
         if (!empty($data['currentTask'])) {
             if (!empty($data['currentTask']['eventType'])) {
+
+                if (isset($data['currentTask']['TITLE'])) {
+                    $this->currentTaskTitle = $data['currentTask']['TITLE'];
+                }
+                if (isset($data['currentTask']['title'])) {
+                    $this->currentTaskTitle = $data['currentTask']['title'];
+                }
+
+
+
                 $this->currentReportEventType = $data['currentTask']['eventType'];
 
                 switch ($data['currentTask']['eventType']) {
@@ -864,6 +874,14 @@ class EventReportService
                 $reportFields['op_current_status'] = 'Отказ';
                 array_push($currentPresComments, $this->nowDate . 'Отказ ' . $this->comment);
                 $reportFields['op_fail_comments'] = $currentFailComments;
+                if ($this->isPresentationDone) {
+                    array_push($currentPresComments, $this->nowDate . 'Отказ после презентации ' . $this->currentTaskTitle . ' ' . $this->comment);
+                } else {
+                    if ($currentReportEventType === 'presentation') {
+
+                        array_push($currentPresComments, $this->nowDate . 'Отказ: Презентация не состоялась ' . $this->currentTaskTitle . ' ' . $this->comment);
+                    }
+                }
             }
 
             if ($this->workStatus['current']['code'] === 'success') {
@@ -877,9 +895,9 @@ class EventReportService
                     $reportFields['op_noresult_reason'] = $noresultReason['code'];
                 }
             }
-            array_push($currentPresComments, $this->nowDate . 'Нерезультативный');
+            array_push($currentMComments, $this->nowDate . 'Нерезультативный. ' . $this->currentReportEventName);
         } else {
-            array_push($currentPresComments, $this->nowDate . 'Результативный');
+            array_push($currentMComments, $this->nowDate . 'Результативный' . $this->currentReportEventName);
         }
 
 
@@ -922,9 +940,9 @@ class EventReportService
 
         //закидываем сформированные комментарии
         $reportFields['op_mhistory'] = $currentMComments;
-        if ($this->isPresentationDone || ($this->isPlanned && $currentPlanEventType == 'presentation')) {
-            $reportFields['pres_comments'] = $currentPresComments;
-        }
+        // if ($this->isPresentationDone || ($this->isPlanned && $currentPlanEventType == 'presentation')) {
+        $reportFields['pres_comments'] = $currentPresComments;
+        // }
 
 
         $entityService = new BitrixEntityFlowService();
