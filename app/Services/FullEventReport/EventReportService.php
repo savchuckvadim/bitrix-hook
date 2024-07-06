@@ -803,9 +803,9 @@ class EventReportService
                 $reportFields['next_pres_plan_date'] = $this->nowDate;  //дата на которую запланировали през
 
             }
-            $reportFields['op_current_status'] = 'Презентация проведена';
-            array_push($currentPresComments, $this->nowDate . 'Презентация проведена ' . $this->comment);
-            array_push($currentMComments, $this->nowDate . 'Презентация проведена ' . $this->comment);
+            $reportFields['op_current_status'] = ' Презентация проведена';
+            array_push($currentPresComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
+            array_push($currentMComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
 
             $reportFields['pres_comments'] = $currentPresComments;
 
@@ -858,8 +858,8 @@ class EventReportService
                     $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
                     $reportFields['next_pres_plan_date'] = $this->planDeadline;  //дата на которую запланировали през
                     $reportFields['op_current_status'] = 'В работе: Презентация запланирована ' . $this->currentPlanEventName;
-                    array_push($currentPresComments, $this->nowDate . 'Презентация запланирована ' . $this->currentPlanEventName);
-
+                    array_push($currentPresComments, $this->nowDate . ' Презентация запланирована ' . $this->currentPlanEventName);
+                    array_push($currentMComments, $this->nowDate . ' Презентация запланирована ' . $this->currentPlanEventName);
                     break;
                 default:
                     # code...
@@ -892,7 +892,7 @@ class EventReportService
             array_push($currentPresComments, $this->nowDate . 'Результативный');
         }
 
-        
+
         Log::channel('telegram')->info('TST', [
             'currentPresComments' => $currentPresComments,
             'currentFailComments' => $currentFailComments,
