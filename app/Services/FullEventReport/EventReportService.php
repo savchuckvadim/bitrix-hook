@@ -162,6 +162,11 @@ class EventReportService
 
 
         $domain = $data['domain'];
+        $portal = PortalController::getPortal($domain);
+        $portal = $portal['data'];
+        $this->portal = $portal;
+
+
         $placement = $data['placement'];
 
         $entityType = null;
@@ -260,6 +265,8 @@ class EventReportService
         if ($data['report']['resultStatus'] === 'result') {
             $this->isResult  = true;
         }
+
+
         if ($data['report']['workStatus']['current']['code'] === 'inJob' || $data['report']['workStatus']['current']['code'] === 'setAside') {
             $this->isInWork = true;
         } else  if ($data['report']['workStatus']['current']['code'] === 'fail') {
@@ -268,7 +275,7 @@ class EventReportService
             $this->isSuccessSale =  true;
         }
 
-        if ($data['report']['resultStatus'] !== 'result' && $data['plan']['isPlanned']) {
+        if ($data['report']['resultStatus'] !== 'result' && $data['report']['resultStatus'] !== 'new' && $data['plan']['isPlanned']) {
             $this->isExpired  = true;
         }
 
@@ -341,9 +348,7 @@ class EventReportService
         //     'task from session' => $sessionData['currentTask']
 
         // ]);
-        $portal = PortalController::getPortal($domain);
-        $portal = $portal['data'];
-        $this->portal = $portal;
+
 
         if ($domain === 'april-dev.bitrix24.ru' || $domain === 'gsr.bitrix24.ru') {
             $this->isDealFlow = true;
@@ -395,157 +400,90 @@ class EventReportService
 
         //     );
         // }
-        $sessionKey = $domain . '_' . $this->currentTask['id'];
-        $sessionData = FullEventInitController::getSessionItem($sessionKey);
-
-        Log::info('HOOK TEST sessionData try first', [
-            'sessionData' => $sessionData,
 
 
+        if (!$this->isNew) {
+            $sessionKey = $domain . '_' . $this->currentTask['id'];
+            $sessionData = FullEventInitController::getSessionItem($sessionKey);
 
-        ]);
-        if (isset($sessionData['currentCompany']) && isset($sessionData['deals'])) {
-            $this->currentBtxEntity  = $sessionData['currentCompany'];
+
+            if (isset($sessionData['currentCompany']) && isset($sessionData['deals'])) {
+                $this->currentBtxEntity  = $sessionData['currentCompany'];
 
 
-            $sessionDeals = $sessionData['deals'];
-        } else {
-            $sessionData = ReportController::getFullDealsInner(
-                $this->hook,
-                $portal,
-                $domain,
-                $this->currentTask
-            );
-            if (!empty($sessionData['deals'])) {
                 $sessionDeals = $sessionData['deals'];
+            } else {
+                $sessionData = ReportController::getFullDealsInner(
+                    $this->hook,
+                    $portal,
+                    $domain,
+                    $this->currentTask
+                );
+                if (!empty($sessionData['deals'])) {
+                    $sessionDeals = $sessionData['deals'];
+                }
+
+
+                Log::info('HOOK TEST sessionDeals', [
+                    'sessionDeals' => $sessionDeals,
+
+
+
+                ]);
+            }
+            if (
+                isset($sessionDeals['currentBaseDeal'])
+                //  &&
+                // isset($sessionDeals['allBaseDeals'])
+                // isset($sessionDeals['currentPresentationDeal']) &&
+                // isset($sessionDeals['basePresentationDeals']) &&
+                // isset($sessionDeals['allPresentationDeals']) &&
+                // // isset($sessionDeals['presList']) &&
+                // isset($sessionDeals['currentXODeal']) &&
+                // isset($sessionDeals['allXODeals']) &&
+                // isset($sessionDeals['currentTaskDeals'])
+
+
+            ) {
+
+
+                $this->currentBtxDeals  = $sessionDeals['currentTaskDeals'];
+
+                $this->currentBaseDeal = $sessionDeals['currentBaseDeal'];
+                $this->currentPresDeal = $sessionDeals['currentPresentationDeal'];
+                $this->currentColdDeal = $sessionDeals['currentXODeal'];
+
+
+                $this->relationBaseDeals = $sessionDeals['allBaseDeals'];
+                $this->relationCompanyUserPresDeals = $sessionDeals['allPresentationDeals']; //allPresDeal 
+                $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
+                $this->relationColdDeals = $sessionDeals['allXODeals'];
+            }
+        } else {
+            $sessionKey = 'newtask_' . $domain . '_' . $this->planResponsibleId . '_' . $entityId;
+            $sessionData = FullEventInitController::getSessionItem($sessionKey);
+
+            if (empty($sessionData)) {
+                $sessionData = ReportController::getDealsFromNewTaskInner($domain, $this->hook, $entityId, $this->planResponsibleId, 'company');
             }
 
-
-            Log::info('HOOK TEST sessionDeals', [
-                'sessionDeals' => $sessionDeals,
-
+            if (isset($sessionData['currentCompany']) && isset($sessionData['deals'])) {
+                $this->currentBtxEntity  = $sessionData['currentCompany'];
 
 
-            ]);
+                $sessionDeals = $sessionData['deals'];
+            }
+            if (isset($sessionDeals) && isset($sessionDeals['currentBaseDeals'])) {
+                $this->currentBtxEntity  = $sessionData['currentCompany'];
+
+                if (is_array($sessionDeals['currentBaseDeals']) && !empty($sessionDeals['currentBaseDeals'])) {
+                    $this->currentBtxDeals  = [$sessionDeals['currentBaseDeals'][0]];
+                } else {
+                    $this->currentBtxDeals  = [];
+                }
+            }
         }
-        if (
-            isset($sessionDeals['currentBaseDeal'])
-            //  &&
-            // isset($sessionDeals['allBaseDeals'])
-            // isset($sessionDeals['currentPresentationDeal']) &&
-            // isset($sessionDeals['basePresentationDeals']) &&
-            // isset($sessionDeals['allPresentationDeals']) &&
-            // // isset($sessionDeals['presList']) &&
-            // isset($sessionDeals['currentXODeal']) &&
-            // isset($sessionDeals['allXODeals']) &&
-            // isset($sessionDeals['currentTaskDeals'])
 
-
-        ) {
-
-
-            $this->currentBtxDeals  = $sessionDeals['currentTaskDeals'];
-
-            $this->currentBaseDeal = $sessionDeals['currentBaseDeal'];
-            $this->currentPresDeal = $sessionDeals['currentPresentationDeal'];
-            $this->currentColdDeal = $sessionDeals['currentXODeal'];
-
-
-            $this->relationBaseDeals = $sessionDeals['allBaseDeals'];
-            $this->relationCompanyUserPresDeals = $sessionDeals['allPresentationDeals']; //allPresDeal 
-            $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
-            $this->relationColdDeals = $sessionDeals['allXODeals'];
-        }
-        // Log::info('HOOK TEST unplannedPresDeal', [
-        //     'currentBaseDeal' => $this->currentBaseDeal,
-        //     'currentPresDeal' => $this->currentPresDeal,
-        //     'currentBtxDeals' => $this->currentBtxDeals,
-
-        // ]);
-
-        // Log::info('HOOK TEST sessionData total', [
-        //     'sessionData' => $sessionData,
-        //     'currentBtxDeals' => $this->currentBtxDeals
-
-
-        // ]);
-
-
-
-        // if (!isset($sessionData['currentCompany'])) {
-        //     $currentBtxEntities =  BitrixEntityFlowService::getEntities(
-        //         $this->hook,
-        //         $this->currentTask,
-        //     );
-
-        //     if (!empty($currentBtxEntities)) {
-        //         if (!empty($currentBtxEntities['companies'])) {
-        //             $currentBtxEntity = $currentBtxEntities['companies'][0];
-        //         }
-        //         if (!empty($currentBtxEntities['deals'])) {
-        //             $currentBtxDeals = $currentBtxEntities['deals'];
-        //         }
-        //     }
-        //     $this->currentBtxEntity  = $currentBtxEntity;
-        //     $this->currentBtxDeals  = $currentBtxDeals;
-        // }
-
-        $fieldsCallCodes = [
-            'call_next_date', //ОП Дата Следующего звонка
-            'call_next_name',    //ОП Тема Следующего звонка
-            'call_last_date',  //ОП Дата последнего звонка
-            'xo_created',
-            'manager_op',
-            'call_next_date', //дата следующего план звонка
-            'call_next_name',
-            'call_last_date', //дата последнего результативного звонка
-
-        ];
-
-        $fieldsPresentationCodes = [
-            'next_pres_plan_date', // ОП Дата назначенной презентации
-            'last_pres_plan_date', //ОП Дата последней назначенной презентации
-            'last_pres_done_date',  //ОП Дата последней проведенной презентации
-            'last_pres_plan_responsible',  //ОП Кто назначил последнюю заявку на презентацию
-            'last_pres_done_responsible',   //ОП Кто провел последнюю презентацию
-            'pres_count', //ОП Проведено презентаций
-            'pres_comments', //ОП Комментарии после презентаций
-            'call_last_date',
-            'op_history',
-            'op_history_multiple',
-        ];
-
-        $statusesCodes = [
-            'op_work_status', //Статус Работы
-            'op_fail_type', //тип отказа  ОП Неперспективная
-            'op_fail_reason', //причина отказа
-            'op_noresult_reason', //ОП Причины нерезультативности
-        ];
-        $generalSalesCode = [
-            'manager_op',  //Менеджер по продажам Гарант
-            'op_history',
-            'op_history_multiple',
-        ];
-
-        $failSalesCode = [
-            'op_fail_comments',  //ОП Комментарии после отказов
-
-        ];
-        $resultEntityFields = [];
-
-
-
-
-
-
-        $smartEntityId = null;
-        $targetCategoryId = null;
-        $targetStageId = null;
-
-        $lastCallDateField = '';
-        $callThemeField = '';
-        $lastCallDateFieldCold = '';
-        $callThemeFieldCold = '';
 
 
         if (!empty($portal['smarts'])) {
@@ -804,7 +742,7 @@ class EventReportService
             $reportFields['last_pres_done_responsible'] =  $this->planResponsibleId;
             $reportFields['pres_count'] = $currentPresCount + 1;
 
-            if ($currentReportEventType !== 'presentation') {
+            if ($currentReportEventType !== 'presentation' || $this->isNew) {
                 $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
                 $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
                 $reportFields['next_pres_plan_date'] = $this->nowDate;  //дата на которую запланировали през
@@ -891,26 +829,29 @@ class EventReportService
                 $reportFields['op_current_status'] = 'Успех: продажа состоялась ' . $this->nowDate;
             }
         }
-        if ($this->resultStatus !== 'result') {
-            if (!empty($this->noresultReason)) {
-                if (!empty($noresultReason['code'])) {
+        if (!$this->isNew) {
+            if ($this->resultStatus !== 'result') {
+                if (!empty($this->noresultReason)) {
+                    if (!empty($noresultReason['code'])) {
 
-                    $reportFields['op_noresult_reason'] = $noresultReason['code'];
+                        $reportFields['op_noresult_reason'] = $noresultReason['code'];
+                    }
                 }
-            }
 
-            if ($this->workStatus['current']['code'] === 'inJob' || $this->workStatus['current']['code'] === 'setAside') {
-                if ($currentReportEventType === 'presentation') {
+                if ($this->workStatus['current']['code'] === 'inJob' || $this->workStatus['current']['code'] === 'setAside') {
+                    if ($currentReportEventType === 'presentation') {
 
-                    array_push($currentPresComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
+                        array_push($currentPresComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
+                    }
+                    array_push($currentMComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
                 }
-                array_push($currentMComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
-            }
 
-            // array_push($currentMComments, $this->nowDate . ' Нерезультативный. ' . $this->currentTaskTitle);
-        } else {
-            array_push($currentMComments, $this->nowDate . ' Результативный ' . $this->currentTaskTitle);
+                // array_push($currentMComments, $this->nowDate . ' Нерезультативный. ' . $this->currentTaskTitle);
+            } else {
+                array_push($currentMComments, $this->nowDate . ' Результативный ' . $this->currentTaskTitle);
+            }
         }
+
 
 
         Log::channel('telegram')->info('TST', [
