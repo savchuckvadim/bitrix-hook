@@ -272,6 +272,7 @@ class EventReportService
         Log::channel('telegram')->info('HOOK TEST sessionDeals', [
             'isNew' => $this->isNew,
             'data' => $data['report']['resultStatus'],
+            'currentTask' => $this->currentTask
 
 
         ]);
