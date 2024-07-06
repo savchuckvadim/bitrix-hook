@@ -265,14 +265,14 @@ class EventReportService
         if ($data['report']['resultStatus'] === 'result') {
             $this->isResult  = true;
         }
-        if ($data['report']['resultStatus'] === 'new' || empty($this->currentTask)) {
+        if ($data['report']['resultStatus'] === 'new' || empty($data['currentTask'])) {
             $this->isNew  = true;
         }
 
         Log::channel('telegram')->info('HOOK TEST sessionDeals', [
             'isNew' => $this->isNew,
             'data' => $data['report']['resultStatus'],
-            'currentTask' => $this->currentTask
+            'currentTask' => $data['currentTask']
 
 
         ]);
@@ -413,62 +413,65 @@ class EventReportService
         // }
 
 
-        if (!empty($this->currentTask)) {
-            $sessionKey = $domain . '_' . $this->currentTask['id'];
-            $sessionData = FullEventInitController::getSessionItem($sessionKey);
+        if (!empty($data['currentTask'])) {
+            if (!empty($data['currentTask']['id'])) {
+
+                $sessionKey = $domain . '_' . $data['currentTask']['id'];
+                $sessionData = FullEventInitController::getSessionItem($sessionKey);
 
 
-            if (isset($sessionData['currentCompany']) && isset($sessionData['deals'])) {
-                $this->currentBtxEntity  = $sessionData['currentCompany'];
+                if (isset($sessionData['currentCompany']) && isset($sessionData['deals'])) {
+                    $this->currentBtxEntity  = $sessionData['currentCompany'];
 
 
-                $sessionDeals = $sessionData['deals'];
-            } else {
-                $sessionData = ReportController::getFullDealsInner(
-                    $this->hook,
-                    $portal,
-                    $domain,
-                    $this->currentTask
-                );
-                if (!empty($sessionData['deals'])) {
                     $sessionDeals = $sessionData['deals'];
+                } else {
+                    $sessionData = ReportController::getFullDealsInner(
+                        $this->hook,
+                        $portal,
+                        $domain,
+                        $this->currentTask
+                    );
+                    if (!empty($sessionData['deals'])) {
+                        $sessionDeals = $sessionData['deals'];
+                    }
+
+
+                    Log::info('HOOK TEST sessionDeals', [
+                        'sessionDeals' => $sessionDeals,
+
+
+
+                    ]);
                 }
+                if (
+                    isset($sessionDeals['currentBaseDeal'])
+                    //  &&
+                    // isset($sessionDeals['allBaseDeals'])
+                    // isset($sessionDeals['currentPresentationDeal']) &&
+                    // isset($sessionDeals['basePresentationDeals']) &&
+                    // isset($sessionDeals['allPresentationDeals']) &&
+                    // // isset($sessionDeals['presList']) &&
+                    // isset($sessionDeals['currentXODeal']) &&
+                    // isset($sessionDeals['allXODeals']) &&
+                    // isset($sessionDeals['currentTaskDeals'])
 
 
-                Log::info('HOOK TEST sessionDeals', [
-                    'sessionDeals' => $sessionDeals,
+                ) {
 
 
+                    $this->currentBtxDeals  = $sessionDeals['currentTaskDeals'];
 
-                ]);
-            }
-            if (
-                isset($sessionDeals['currentBaseDeal'])
-                //  &&
-                // isset($sessionDeals['allBaseDeals'])
-                // isset($sessionDeals['currentPresentationDeal']) &&
-                // isset($sessionDeals['basePresentationDeals']) &&
-                // isset($sessionDeals['allPresentationDeals']) &&
-                // // isset($sessionDeals['presList']) &&
-                // isset($sessionDeals['currentXODeal']) &&
-                // isset($sessionDeals['allXODeals']) &&
-                // isset($sessionDeals['currentTaskDeals'])
+                    $this->currentBaseDeal = $sessionDeals['currentBaseDeal'];
+                    $this->currentPresDeal = $sessionDeals['currentPresentationDeal'];
+                    $this->currentColdDeal = $sessionDeals['currentXODeal'];
 
 
-            ) {
-
-
-                $this->currentBtxDeals  = $sessionDeals['currentTaskDeals'];
-
-                $this->currentBaseDeal = $sessionDeals['currentBaseDeal'];
-                $this->currentPresDeal = $sessionDeals['currentPresentationDeal'];
-                $this->currentColdDeal = $sessionDeals['currentXODeal'];
-
-
-                $this->relationBaseDeals = $sessionDeals['allBaseDeals'];
-                $this->relationCompanyUserPresDeals = $sessionDeals['allPresentationDeals']; //allPresDeal 
-                $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
-                $this->relationColdDeals = $sessionDeals['allXODeals'];
+                    $this->relationBaseDeals = $sessionDeals['allBaseDeals'];
+                    $this->relationCompanyUserPresDeals = $sessionDeals['allPresentationDeals']; //allPresDeal 
+                    $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
+                    $this->relationColdDeals = $sessionDeals['allXODeals'];
+                }
             }
         } else {
             $sessionKey = 'newtask_' . $domain . '_' . $this->planResponsibleId . '_' . $entityId;
