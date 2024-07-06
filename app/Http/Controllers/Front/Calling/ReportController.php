@@ -729,7 +729,6 @@ class ReportController extends Controller
                 // !empty($data['userId'])  &&
                 // !empty($data['companyId']) &&
                 !empty($data['domain']) &&
-                isset($data['baseDealId']) &&
                 isset($data['company']) &&
                 isset($data['userId']) &&
                 !empty($data['from']) //task //company  //deal //lead
