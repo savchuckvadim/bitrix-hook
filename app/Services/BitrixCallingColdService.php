@@ -205,6 +205,11 @@ class BitrixCallingColdService
             'code' => "inJob", 'name' => "В работе"
         ];
         $workStatusController = new BitrixEntityFlowService();
+        // $now =  new DateTime();
+        // $now = $nowDate->format('d.m.Y H:i');
+        $nowOnlyDate = $nowDate->format('d.m.Y');
+
+
 
         if (!empty($portal[$data['entityType']])) {
             if (!empty($portal[$data['entityType']]['bitrixfields'])) {
@@ -259,9 +264,8 @@ class BitrixCallingColdService
                             case 'op_mhistory':
 
                                 $fullFieldId = 'UF_CRM_' . $pField['bitrixId'];  //UF_CRM_OP_MHISTORY
-                                $now =  new DateTime();
-                                $now = $nowDate->format('d.m.Y H:i');
-                                $stringComment = $now . ' ХО запланирован ' . $data['name'] . ' на ' . $data['deadline'];
+                                
+                                $stringComment = $nowOnlyDate . ' ХО запланирован ' . $data['name'] . ' на ' . $data['deadline'];
 
                                 $currentComments = '';
 
@@ -290,7 +294,7 @@ class BitrixCallingColdService
 
                                 break;
                             case 'op_current_status':
-                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] =  'Холодный в работе';
+                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] =  'Холодный в работе от' . $nowOnlyDate;
 
                                 break;
                             case 'op_work_status':
@@ -451,10 +455,10 @@ class BitrixCallingColdService
             //     'currentDealsIds' => $currentDealsIds
 
             // ]);
-            Log::info('currentDealsIds befor task ids', [
-                'currentDealsIds' => $currentDealsIds
+            // Log::info('currentDealsIds befor task ids', [
+            //     'currentDealsIds' => $currentDealsIds
 
-            ]);
+            // ]);
             if (!empty($currentDealsIds)) {
                 $rand = 1;
                 sleep($rand);
@@ -733,7 +737,7 @@ class BitrixCallingColdService
             '$fields'
         );
         $planDeals = $flowResult['dealIds'];
-        
+
         Log::info('HOOK TEST COLD', [
             'planDeals' => $planDeals,
 

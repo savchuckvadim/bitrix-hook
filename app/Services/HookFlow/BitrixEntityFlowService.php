@@ -550,12 +550,24 @@ class BitrixEntityFlowService
                             case 'last_pres_plan_responsible':
                             case 'last_pres_done_responsible':
                             case 'pres_count':
-                            case 'pres_comments':
+                                // case 'pres_comments':
                             case 'to_base_sales':
                             case 'op_current_status':
-                            case 'op_fail_comments':
+                                // case 'op_fail_comments':
                                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $value;
                                 break;
+
+
+                            case 'pres_comments':
+                            case 'op_fail_comments':
+                                Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                                    'updatedFields' => $updatedFields
+                                ]);
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $value;
+                                break;
+
+
+
                             case 'op_history':
                             case 'op_mhistory':
                                 $stringComment = $nowdate . ' ' . $currentReportEventName . ' ' . $resultStatus;
@@ -679,9 +691,12 @@ class BitrixEntityFlowService
 
 
 
-        // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-        //     'updatedFields' => $updatedFields
-        // ]);
+        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+            'updatedFields' => $updatedFields
+        ]);
+        Log::info('HOOK TEST CURRENTENTITY', [
+            'updatedFields' => $updatedFields
+        ]);
         return $updatedFields;
     }
 
@@ -707,11 +722,6 @@ class BitrixEntityFlowService
             if ($pField['code'] == 'op_mhistory') {
                 $currentComments = [];
                 array_push($currentComments, $stringComment);
-                // if (!empty($currentComments)) {
-                //     array_push($currentComments, $stringComment);
-                // } else {
-                //     $currentComments = $stringComment;
-                // }
             } else {
                 $currentComments = $currentComments  . ' | ' . $stringComment;
             }
