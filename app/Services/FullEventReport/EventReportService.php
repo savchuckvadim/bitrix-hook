@@ -867,13 +867,16 @@ class EventReportService
             }
         }
 
+        Log::channel('telegram')->info('HOOK TEST getWorkstatusFieldItemValue', [
+            'failType' => $this->failType,
+            'failReason' => $this->failReason,
+        ]);
 
+        if (!empty($this->workStatus['current'])) {
+            if (!empty($this->workStatus['current']['code'])) {
+                $workStatusCode = $this->workStatus['current']['code'];
 
-        if (!empty($this->workStatus)) {
-            if (!empty($this->workStatus['code'])) {
-                $workStatusCode = $this->workStatus['code'];
-
-
+              
                 if ($workStatusCode === 'fail') {  //если провал
                     if (!empty($this->failType)) {
                         if (!empty($this->failType['code'])) {

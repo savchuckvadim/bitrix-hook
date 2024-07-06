@@ -892,14 +892,7 @@ class BitrixEntityFlowService
                 }
             }
         }
-        Log::channel('telegram')->info('HOOK TEST getProspectsFieldItemValue', [
-            'resultCode' => $resultCode,
-            'failType' => $failType,
-            'workStatus' => $workStatus,
-            'pitem' => $pitem,
 
-
-        ]);
         return $resultItemBtxId;
     }
 
@@ -1122,7 +1115,7 @@ class BitrixEntityFlowService
         // op_efield_fail_reason	Ключевой сотрудник против	op_efield_fail_employee
         // op_efield_fail_reason	Не хотят общаться	op_efield_fail_off
 
-
+        $resultItemBtx = null;
         $resultCode = 'op_efield_fail_' . $failReason['code'];
         if ($failReason['code'] == 'fail_notime' || $failReason['code'] ==  'fail_off') {
             $resultCode = 'op_efield_' . $failReason['code'];
@@ -1133,18 +1126,22 @@ class BitrixEntityFlowService
                 foreach ($pitems as $pitem) {
                     if (!empty($pitem['code'])) {
                         if ($pitem['code'] == $resultCode) {
+                            $resultItemBtx = $pitem;
                             $resultItemBtxId = $pitem['bitrixId'];
+                            break;
                         }
                     }
                 }
             }
         }
-        // Log::channel('telegram')->info('HOOK TEST getWorkstatusFieldItemValue', [
-        //     'resultCode' => $resultCode,
-        //     'planEventType' => $planEventType,
-        //     'workStatus' => $workStatus,
-        //     'resultItemBtxId' => $resultItemBtxId,
-        // ]);
+        Log::channel('telegram')->info('HOOK TEST getWorkstatusFieldItemValue', [
+            'resultCode' => $resultCode,
+            // 'planEventType' => $planEventType,
+
+            'resultItemBtxId' => $resultItemBtxId,
+            'resultItemBtx' => $resultItemBtx,
+            'failReason' => $failReason
+        ]);
         return $resultItemBtxId;
     }
 
