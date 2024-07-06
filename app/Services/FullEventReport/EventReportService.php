@@ -872,7 +872,10 @@ class EventReportService
         } else {
             if ($this->workStatus['current']['code'] === 'fail') {
                 $reportFields['op_current_status'] = 'Отказ';
-                array_push($currentPresComments, $this->nowDate . ' Отказ ' . $this->comment);
+                array_push($currentMComments, $this->nowDate . ' Отказ ' . $this->comment);
+
+
+
                 $reportFields['op_fail_comments'] = $currentFailComments;
                 if ($this->isPresentationDone) {
                     array_push($currentPresComments, $this->nowDate . ' Отказ после презентации ' . $this->currentTaskTitle . ' ' . $this->comment);
@@ -904,7 +907,7 @@ class EventReportService
                 array_push($currentMComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
             }
 
-            array_push($currentMComments, $this->nowDate . ' Нерезультативный. ' . $this->currentTaskTitle);
+            // array_push($currentMComments, $this->nowDate . ' Нерезультативный. ' . $this->currentTaskTitle);
         } else {
             array_push($currentMComments, $this->nowDate . ' Результативный ' . $this->currentTaskTitle);
         }
