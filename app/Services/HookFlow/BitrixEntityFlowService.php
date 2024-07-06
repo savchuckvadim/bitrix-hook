@@ -560,6 +560,7 @@ class BitrixEntityFlowService
 
                             case 'pres_comments':
                             case 'op_fail_comments':
+                            case 'op_mhistory':
                                 Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
                                     'pres op_fail ...comments pField' => $pField
                                 ]);
@@ -569,7 +570,7 @@ class BitrixEntityFlowService
 
 
                             case 'op_history':
-                            case 'op_mhistory':
+
                                 $stringComment = $nowdate . ' ' . $currentReportEventName . ' ' . $resultStatus;
                                 $updatedFields = $this->getCommentsWithEntity(
                                     $currentBtxEntity,
