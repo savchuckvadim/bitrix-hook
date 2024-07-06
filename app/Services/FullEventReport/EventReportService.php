@@ -751,10 +751,10 @@ class EventReportService
                 $currentFailComments = $currentBtxEntity['UF_CRM_OP_FAIL_COMMENTS'];
             }
         }
-        // Log::channel('telegram')->info('TST', [
-        //     'currentPresComments' => $currentPresComments,
-        //     'currentFailComments' => $currentFailComments,
-        // ]);
+        Log::channel('telegram')->info('TST', [
+            'currentPresComments' => $currentPresComments,
+            'currentFailComments' => $currentFailComments,
+        ]);
 
         //обнуляем дату следующей презентации и звонка - они будут аполнены только если реально что-то запланировано
         $reportFields['next_pres_plan_date'] = null;
@@ -855,7 +855,7 @@ class EventReportService
             }
 
             if ($this->workStatus['current']['code'] === 'success') {
-                $reportFields['op_current_status'] = 'Успех: продажа состоялась';
+                $reportFields['op_current_status'] = 'Успех: продажа состоялась '.$this->nowDate;
             }
         }
         if ($this->resultStatus !== 'result') {
@@ -866,7 +866,10 @@ class EventReportService
                 }
             }
         }
-
+        Log::channel('telegram')->info('TST', [
+            'currentPresComments' => $currentPresComments,
+            'currentFailComments' => $currentFailComments,
+        ]);
         Log::channel('telegram')->info('HOOK TEST getWorkstatusFieldItemValue', [
             'failType' => $this->failType,
             'failReason' => $this->failReason,
@@ -897,16 +900,7 @@ class EventReportService
                 } 
             }
         }
-        // Log::channel('telegram')->info('TST', [
-        //     'currentPresComments' => $currentPresComments,
-        //     'currentFailComments' => $currentFailComments,
-        // ]);
 
-
-        // Log::channel('telegram')->info('TST', [
-        //     'reportFields' => $reportFields,
-
-        // ]);
         $presentationFields = [];
 
 

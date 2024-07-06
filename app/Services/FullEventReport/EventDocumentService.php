@@ -696,11 +696,7 @@ class EventDocumentService
             );
             if (!empty($this->productRows)) {
                 $productSetData = $this->getDealProductRows($this->productRows, $this->currentPresDeal['ID']);
-                Log::info('APRIL_HOOK resultRows', [
-                    'data' => [
-                        'resultRows' =>  $productSetData,
-                    ]
-                ]);
+       
                 $methodProductSet = '/crm.item.productrow.set.json';
                 $url = $this->hook . $methodProductSet;
               
