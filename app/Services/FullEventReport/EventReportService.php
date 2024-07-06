@@ -488,6 +488,7 @@ class EventReportService
 
                 if (is_array($sessionDeals['currentBaseDeals']) && !empty($sessionDeals['currentBaseDeals'])) {
                     $this->currentBtxDeals  = [$sessionDeals['currentBaseDeals'][0]];
+                    $this->currentBaseDeal = $sessionDeals['currentBaseDeals'][0];
                 } else {
                     $this->currentBtxDeals  = [];
                 }
