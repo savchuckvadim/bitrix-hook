@@ -767,8 +767,8 @@ class EventReportService
                 $currentFailComments = $currentBtxEntity['UF_CRM_OP_FAIL_COMMENTS'];
             }
 
-            if (!empty($currentBtxEntity['OP_MHISTORY'])) {
-                $currentMComments = $currentBtxEntity['OP_MHISTORY'];
+            if (!empty($currentBtxEntity['UF_CRM_OP_MHISTORY'])) {
+                $currentMComments = $currentBtxEntity['UF_CRM_OP_MHISTORY'];
             }
         }
 
@@ -872,14 +872,14 @@ class EventReportService
         } else {
             if ($this->workStatus['current']['code'] === 'fail') {
                 $reportFields['op_current_status'] = 'Отказ';
-                array_push($currentPresComments, $this->nowDate . 'Отказ ' . $this->comment);
+                array_push($currentPresComments, $this->nowDate . ' Отказ ' . $this->comment);
                 $reportFields['op_fail_comments'] = $currentFailComments;
                 if ($this->isPresentationDone) {
-                    array_push($currentPresComments, $this->nowDate . 'Отказ после презентации ' . $this->currentTaskTitle . ' ' . $this->comment);
+                    array_push($currentPresComments, $this->nowDate . ' Отказ после презентации ' . $this->currentTaskTitle . ' ' . $this->comment);
                 } else {
                     if ($currentReportEventType === 'presentation') {
 
-                        array_push($currentPresComments, $this->nowDate . 'Отказ: Презентация не состоялась ' . $this->currentTaskTitle . ' ' . $this->comment);
+                        array_push($currentPresComments, $this->nowDate . ' Отказ: Презентация не состоялась ' . $this->currentTaskTitle . ' ' . $this->comment);
                     }
                 }
             }
@@ -895,9 +895,18 @@ class EventReportService
                     $reportFields['op_noresult_reason'] = $noresultReason['code'];
                 }
             }
-            array_push($currentMComments, $this->nowDate . 'Нерезультативный. ' . $this->currentReportEventName);
+
+            if ($this->workStatus['current']['code'] === 'inJob' || $this->workStatus['current']['code'] === 'setAside') {
+                if ($currentReportEventType === 'presentation') {
+
+                    array_push($currentPresComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
+                }
+                array_push($currentЬComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
+            }
+
+            array_push($currentMComments, $this->nowDate . ' Нерезультативный. ' . $this->currentTaskTitle);
         } else {
-            array_push($currentMComments, $this->nowDate . 'Результативный' . $this->currentReportEventName);
+            array_push($currentMComments, $this->nowDate . ' Результативный' . $this->currentTaskTitle);
         }
 
 
