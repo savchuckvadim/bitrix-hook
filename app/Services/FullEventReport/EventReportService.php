@@ -703,10 +703,10 @@ class EventReportService
         $reportFields['op_result_status'] = '';
         $reportFields['op_noresult_reason'] = '';
         $reportFields['op_fail_reason'] = '';
-        $reportFields['pres_comments'] = '';
+
         $reportFields['op_fail_comments'] = '';
         $reportFields['op_history'] = '';
-     
+
 
 
         $currentPresCount = 0;
@@ -761,10 +761,7 @@ class EventReportService
                 $currentMComments = $currentBtxEntity['OP_MHISTORY'];
             }
         }
-        Log::channel('telegram')->info('TST', [
-            'currentPresComments' => $currentPresComments,
-            'currentFailComments' => $currentFailComments,
-        ]);
+
 
         //обнуляем дату следующей презентации и звонка - они будут аполнены только если реально что-то запланировано
         $reportFields['next_pres_plan_date'] = null;
@@ -790,13 +787,13 @@ class EventReportService
 
         //presentation done with unplanned
         if ($this->isPresentationDone) {
-            
+
 
 
             $reportFields['last_pres_done_date'] = $this->nowDate;
             $reportFields['last_pres_done_responsible'] =  $this->planResponsibleId;
             $reportFields['pres_count'] = $currentPresCount + 1;
-            
+
             if ($currentReportEventType !== 'presentation') {
                 $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
                 $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
@@ -806,9 +803,6 @@ class EventReportService
             $reportFields['op_current_status'] = ' Презентация проведена';
             array_push($currentPresComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
             array_push($currentMComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
-
-            $reportFields['pres_comments'] = $currentPresComments;
-
         }
 
 
@@ -839,7 +833,7 @@ class EventReportService
                 case 'xo':
                     $reportFields['xo_date'] = $this->planDeadline;
                     $reportFields['xo_name'] = $this->currentPlanEventName;
-          
+
                     break;
                 case 'hot':
                     $reportFields['op_current_status'] = 'В решении: ' . $this->currentPlanEventName;
@@ -870,25 +864,21 @@ class EventReportService
                 $reportFields['op_current_status'] = 'Отказ';
                 array_push($currentPresComments, $this->nowDate . 'Отказ ' . $this->comment);
                 $reportFields['op_fail_comments'] = $currentFailComments;
-
-                
             }
 
             if ($this->workStatus['current']['code'] === 'success') {
-                $reportFields['op_current_status'] = 'Успех: продажа состоялась '.$this->nowDate;
+                $reportFields['op_current_status'] = 'Успех: продажа состоялась ' . $this->nowDate;
             }
         }
         if ($this->resultStatus !== 'result') {
             if (!empty($this->noresultReason)) {
                 if (!empty($noresultReason['code'])) {
-    
-                    $reportFields['op_noresult_reason'] = $noresultReason['code'];
 
+                    $reportFields['op_noresult_reason'] = $noresultReason['code'];
                 }
             }
             array_push($currentPresComments, $this->nowDate . 'Нерезультативный');
-
-        }else{
+        } else {
             array_push($currentPresComments, $this->nowDate . 'Результативный');
         }
 
@@ -906,98 +896,37 @@ class EventReportService
             if (!empty($this->workStatus['current']['code'])) {
                 $workStatusCode = $this->workStatus['current']['code'];
 
-              
+
                 if ($workStatusCode === 'fail') {  //если провал
                     if (!empty($this->failType)) {
                         if (!empty($this->failType['code'])) {
-                         
+
                             // $reportFields['op_prospects_type'] = $this->failType['code'];
 
 
                             if ($this->failType['code'] == 'failure') { //если тип провала - отказ
                                 if (!empty($this->failReason)) {
                                     if (!empty($this->failReason['code'])) {
-                                      
+
                                         $reportFields['op_fail_reason'] = $this->failReason['code'];
                                     }
                                 }
                             }
                         }
                     }
-                } 
+                }
             }
         }
 
-        $presentationFields = [];
 
 
-
-
-
-        $currentFieldsForUpdate = [];
-        $fieldsPresentationCodes = [
-            'next_pres_plan_date', // ОП Дата назначенной презентации
-            'last_pres_plan_date', //ОП Дата последней назначенной презентации
-            'last_pres_done_date',  //ОП Дата последней проведенной презентации
-            'last_pres_plan_responsible',  //ОП Кто назначил последнюю заявку на презентацию
-            'last_pres_done_responsible',   //ОП Кто провел последнюю презентацию
-            'pres_count', //ОП Проведено презентаций
-            'pres_comments', //ОП Комментарии после презентаций
-            'call_last_date',
-
-        ];
-
-        $statusesCodes = [
-            'op_work_status', //Статус Работы
-            'op_prospects_type', //тип отказа  ОП Неперспективная
-            'op_fail_reason', //причина отказа
-            'op_noresult_reason', //ОП Причины нерезультативности
-        ];
-        $generalSalesCode = [
-            'manager_op',  //Менеджер по продажам Гарант
-            'op_history',
-            'op_history_multiple',
-        ];
-
-        $failSalesCode = [
-            'op_fail_comments',  //ОП Комментарии после отказов
-
-        ];
-
-        $fieldsCallCodes = [
-            'call_next_date', //ОП Дата Следующего звонка
-            'call_next_name',    //ОП Тема Следующего звонка
-            'call_last_date',  //ОП Дата последнего звонка
-            // 'xo_created',
-            // 'manager_op',
-            // 'call_next_date',
-            // 'call_next_name',
-            // 'call_last_date',
-
-        ];
-
-
-        // $statusesCodesAssoc = array_fill_keys($statusesCodes, true);
-        // $generalSalesCodesAssoc = array_fill_keys($generalSalesCode, true);
-        // $fieldsCallCodesAssoc = array_fill_keys($fieldsCallCodes, true);
-
-        // $presentationCodesAssoc = array_fill_keys($fieldsPresentationCodes, true);
-
-
-        // Объединение массивов
-        // $currentFieldsForUpdate = [];
-        // $mergedFields = array_merge(
-        //     $presentationCodesAssoc,
-        //     $statusesCodesAssoc,
-        //     $generalSalesCodesAssoc,
-        //     $fieldsCallCodesAssoc
-        // );
-        // foreach ($mergedFields as $targedCode => $bool) {
-        //     array_push($currentFieldsForUpdate, $targedCode);
-        // }
-
-
+        //закидываем сформированные комментарии
         $reportFields['op_mhistory'] = $currentMComments;
+        if ($this->isPresentationDone || ($this->isPlanned && $currentPlanEventType == 'presentation')) {
+            $reportFields['pres_comments'] = $currentPresComments;
+        }
+
+
         $entityService = new BitrixEntityFlowService();
 
 
