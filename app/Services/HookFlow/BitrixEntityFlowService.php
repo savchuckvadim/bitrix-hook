@@ -569,16 +569,16 @@ class BitrixEntityFlowService
 
 
 
-                            case 'op_history':
+                            // case 'op_history':
 
-                                $stringComment = $nowdate . ' ' . $currentReportEventName . ' ' . $resultStatus;
-                                $updatedFields = $this->getCommentsWithEntity(
-                                    $currentBtxEntity,
-                                    $pField,
-                                    $stringComment,
-                                    $updatedFields,
+                            //     $stringComment = $nowdate . ' ' . $currentReportEventName . ' ' . $resultStatus;
+                            //     $updatedFields = $this->getCommentsWithEntity(
+                            //         $currentBtxEntity,
+                            //         $pField,
+                            //         $stringComment,
+                            //         $updatedFields,
 
-                                );
+                            //     );
 
 
                                 break;
