@@ -561,9 +561,9 @@ class BitrixEntityFlowService
                             case 'pres_comments':
                             case 'op_fail_comments':
                             case 'op_mhistory':
-                                Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                                    'pres op_fail ...comments pField' => $pField
-                                ]);
+                                // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                                //     'pres op_fail ...comments pField' => $pField
+                                // ]);
                                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $value;
                                 break;
 
@@ -692,12 +692,12 @@ class BitrixEntityFlowService
 
 
 
-        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            'updatedFields' => $updatedFields
-        ]);
-        Log::info('HOOK TEST CURRENTENTITY', [
-            'updatedFields' => $updatedFields
-        ]);
+        // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+        //     'updatedFields' => $updatedFields
+        // ]);
+        // Log::info('HOOK TEST CURRENTENTITY', [
+        //     'updatedFields' => $updatedFields
+        // ]);
         return $updatedFields;
     }
 
@@ -1148,14 +1148,14 @@ class BitrixEntityFlowService
                 }
             }
         }
-        Log::channel('telegram')->info('HOOK TEST getWorkstatusFieldItemValue', [
-            'resultCode' => $resultCode,
-            // 'planEventType' => $planEventType,
+        // Log::channel('telegram')->info('HOOK TEST getWorkstatusFieldItemValue', [
+        //     'resultCode' => $resultCode,
+        //     // 'planEventType' => $planEventType,
 
-            'resultItemBtxId' => $resultItemBtxId,
-            'resultItemBtx' => $resultItemBtx,
-            'failReason' => $failReason
-        ]);
+        //     'resultItemBtxId' => $resultItemBtxId,
+        //     'resultItemBtx' => $resultItemBtx,
+        //     'failReason' => $failReason
+        // ]);
         return $resultItemBtxId;
     }
 

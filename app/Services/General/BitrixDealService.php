@@ -437,12 +437,12 @@ class BitrixDealService
 
                 if ($stage['code'] == $stagePrephicks . '_' . $stageSuphicks) {
                     $targetStageBtxId = $stage['bitrixId'];
-                    Log::channel('telegram')->info('DEAL TEST', [
-                        'stageCode' => $stage['code'],
-                        'stage' => $stage,
-                        'eventType' => $eventType,
+                    // Log::channel('telegram')->info('DEAL TEST', [
+                    //     'stageCode' => $stage['code'],
+                    //     'stage' => $stage,
+                    //     'eventType' => $eventType,
 
-                    ]);
+                    // ]);
                 }
                 // }
             }
@@ -460,18 +460,18 @@ class BitrixDealService
         // $eventAction,  // plan done expired fail
     ) {
         $result = false;
-        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            'currentDeal' => $currentDeal,
-            'targetStageBtxId' => $targetStageBtxId,
-            'currentCategoryData' => $currentCategoryData,
+        // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+        //     'currentDeal' => $currentDeal,
+        //     'targetStageBtxId' => $targetStageBtxId,
+        //     'currentCategoryData' => $currentCategoryData,
 
-        ]);
-        Log::info('HOOK TEST CURRENTENTITY', [
-            'currentDeal' => $currentDeal,
-            'targetStageBtxId' => $targetStageBtxId,
-            'currentCategoryData' => $currentCategoryData,
+        // ]);
+        // Log::info('HOOK TEST CURRENTENTITY', [
+        //     'currentDeal' => $currentDeal,
+        //     'targetStageBtxId' => $targetStageBtxId,
+        //     'currentCategoryData' => $currentCategoryData,
 
-        ]);
+        // ]);
         if (!empty($currentDeal) && !empty($targetStageBtxId)) {
 
             if ($currentCategoryData['code'] === 'sales_base') {

@@ -269,7 +269,12 @@ class EventReportService
             $this->isNew  = true;
         }
 
+        Log::channel('telegram')->info('HOOK TEST sessionDeals', [
+            'isNew' => $this->isNew,
+            'data' => $data['report']['resultStatus'],
 
+
+        ]);
 
 
         if ($data['report']['workStatus']['current']['code'] === 'inJob' || $data['report']['workStatus']['current']['code'] === 'setAside') {
@@ -859,14 +864,14 @@ class EventReportService
 
 
 
-        Log::channel('telegram')->info('TST', [
-            'currentPresComments' => $currentPresComments,
-            'currentFailComments' => $currentFailComments,
-        ]);
-        Log::channel('telegram')->info('HOOK TEST getWorkstatusFieldItemValue', [
-            'failType' => $this->failType,
-            'failReason' => $this->failReason,
-        ]);
+        // Log::channel('telegram')->info('TST', [
+        //     'currentPresComments' => $currentPresComments,
+        //     'currentFailComments' => $currentFailComments,
+        // ]);
+        // Log::channel('telegram')->info('HOOK TEST getWorkstatusFieldItemValue', [
+        //     'failType' => $this->failType,
+        //     'failReason' => $this->failReason,
+        // ]);
 
         if (!empty($this->workStatus['current'])) {
             if (!empty($this->workStatus['current']['code'])) {
