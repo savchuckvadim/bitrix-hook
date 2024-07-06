@@ -412,7 +412,7 @@ class EventReportService
         // }
 
 
-        if (!$this->isNew && !empty($this->currentTask)) {
+        if (!empty($this->currentTask)) {
             $sessionKey = $domain . '_' . $this->currentTask['id'];
             $sessionData = FullEventInitController::getSessionItem($sessionKey);
 
