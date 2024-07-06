@@ -561,7 +561,7 @@ class BitrixEntityFlowService
                             case 'pres_comments':
                             case 'op_fail_comments':
                                 Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                                    'updatedFields' => $updatedFields
+                                    'pres op_fail ...comments pField' => $pField
                                 ]);
                                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $value;
                                 break;

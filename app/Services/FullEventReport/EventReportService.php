@@ -703,6 +703,11 @@ class EventReportService
         $reportFields['op_result_status'] = '';
         $reportFields['op_noresult_reason'] = '';
         $reportFields['op_fail_reason'] = '';
+        $reportFields['pres_comments'] = '';
+        $reportFields['op_fail_comments'] = '';
+        $reportFields['op_history'] = '';
+        $reportFields['op_mhistory'] = '';
+
 
         $currentPresCount = 0;
         $companyPresCount = 0;
