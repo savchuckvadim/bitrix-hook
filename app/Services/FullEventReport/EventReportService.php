@@ -901,12 +901,12 @@ class EventReportService
 
                     array_push($currentPresComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
                 }
-                array_push($currentЬComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
+                array_push($currentMComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
             }
 
             array_push($currentMComments, $this->nowDate . ' Нерезультативный. ' . $this->currentTaskTitle);
         } else {
-            array_push($currentMComments, $this->nowDate . ' Результативный' . $this->currentTaskTitle);
+            array_push($currentMComments, $this->nowDate . ' Результативный ' . $this->currentTaskTitle);
         }
 
 
