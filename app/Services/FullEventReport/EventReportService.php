@@ -706,7 +706,7 @@ class EventReportService
         $reportFields['pres_comments'] = '';
         $reportFields['op_fail_comments'] = '';
         $reportFields['op_history'] = '';
-        $reportFields['op_mhistory'] = '';
+     
 
 
         $currentPresCount = 0;
@@ -747,6 +747,7 @@ class EventReportService
 
         $currentPresComments = [];
         $currentFailComments = [];
+        $currentMComments = [];
         if (isset($currentBtxEntity)) {
             if (!empty($currentBtxEntity['UF_CRM_PRES_COMMENTS'])) {
                 $currentPresComments = $currentBtxEntity['UF_CRM_PRES_COMMENTS'];
@@ -754,6 +755,10 @@ class EventReportService
 
             if (!empty($currentBtxEntity['UF_CRM_OP_FAIL_COMMENTS'])) {
                 $currentFailComments = $currentBtxEntity['UF_CRM_OP_FAIL_COMMENTS'];
+            }
+
+            if (!empty($currentBtxEntity['OP_MHISTORY'])) {
+                $currentMComments = $currentBtxEntity['OP_MHISTORY'];
             }
         }
         Log::channel('telegram')->info('TST', [
@@ -791,7 +796,7 @@ class EventReportService
             $reportFields['last_pres_done_date'] = $this->nowDate;
             $reportFields['last_pres_done_responsible'] =  $this->planResponsibleId;
             $reportFields['pres_count'] = $currentPresCount + 1;
-            $reportFields['pres_comments'] = $currentPresComments;
+            
             if ($currentReportEventType !== 'presentation') {
                 $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
                 $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
@@ -800,6 +805,10 @@ class EventReportService
             }
             $reportFields['op_current_status'] = 'Презентация проведена';
             array_push($currentPresComments, $this->nowDate . 'Презентация проведена ' . $this->comment);
+            array_push($currentMComments, $this->nowDate . 'Презентация проведена ' . $this->comment);
+
+            $reportFields['pres_comments'] = $currentPresComments;
+
         }
 
 
@@ -816,7 +825,10 @@ class EventReportService
             $reportFields['xo_created'] = $this->planResponsibleId;
             $reportFields['op_current_status'] = 'Звонок запланирован в работе';
 
+            Log::channel('telegram')->info('TST', [
+                'currentPlanEventType' => $currentPlanEventType,
 
+            ]);
 
 
             switch ($currentPlanEventType) {
@@ -827,13 +839,16 @@ class EventReportService
                 case 'xo':
                     $reportFields['xo_date'] = $this->planDeadline;
                     $reportFields['xo_name'] = $this->currentPlanEventName;
+          
                     break;
                 case 'hot':
                     $reportFields['op_current_status'] = 'В решении: ' . $this->currentPlanEventName;
+                    array_push($currentMComments, $this->nowDate . 'В решении: ' . $this->comment);
 
                     break;
                 case 'moneyAwait':
                     $reportFields['op_current_status'] = 'Ждем оплаты: ' . $this->currentPlanEventName;
+                    array_push($currentMComments, $this->nowDate . 'В оплате: ' . $this->comment);
                     break;
 
 
@@ -843,7 +858,7 @@ class EventReportService
                     $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
                     $reportFields['next_pres_plan_date'] = $this->planDeadline;  //дата на которую запланировали през
                     $reportFields['op_current_status'] = 'В работе: Презентация запланирована ' . $this->currentPlanEventName;
-                    array_push($currentPresComments, $this->nowDate . 'Презентация запланирована ' . $this->comment);
+                    array_push($currentPresComments, $this->nowDate . 'Презентация запланирована ' . $this->currentPlanEventName);
 
                     break;
                 default:
@@ -868,9 +883,16 @@ class EventReportService
                 if (!empty($noresultReason['code'])) {
     
                     $reportFields['op_noresult_reason'] = $noresultReason['code'];
+
                 }
             }
+            array_push($currentPresComments, $this->nowDate . 'Нерезультативный');
+
+        }else{
+            array_push($currentPresComments, $this->nowDate . 'Результативный');
         }
+
+        
         Log::channel('telegram')->info('TST', [
             'currentPresComments' => $currentPresComments,
             'currentFailComments' => $currentFailComments,
@@ -973,6 +995,9 @@ class EventReportService
         // foreach ($mergedFields as $targedCode => $bool) {
         //     array_push($currentFieldsForUpdate, $targedCode);
         // }
+
+
+        $reportFields['op_mhistory'] = $currentMComments;
         $entityService = new BitrixEntityFlowService();
 
 
