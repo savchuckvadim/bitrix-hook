@@ -269,7 +269,7 @@ class EventReportService
             $this->isNew  = true;
         }
 
-        Log::info('HOOK TEST sessionDeals', [
+        Log::channel('telegram')->info('HOOK TEST sessionDeals', [
             'isNew' => $this->isNew,
             'data' => $data['report']['resultStatus'],
             'currentTask' => $data['currentTask']
