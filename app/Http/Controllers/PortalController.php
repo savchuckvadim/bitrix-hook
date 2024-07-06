@@ -17,13 +17,13 @@ class PortalController extends Controller
             ];
             $cacheKey = 'portal_' . $domain;
             $cachedPortalData = Cache::get($cacheKey);
-            if (!$cachedPortalData) {
+            // if ($cachedPortalData) {
 
-                $result = $cachedPortalData;
-            } else {
+            //     $result = $cachedPortalData;
+            // } else {
                 $result = APIOnlineController::online('post', 'getportal', $requestPortalData, 'portal');
                 Cache::put($cacheKey, $result, now()->addMinutes(10)); // Кешируем данные портала
-            }
+            // }
 
 
             // return APIOnlineController::getResponse($portalsRespone['resultCode'], $portalsRespone['message'], $portalsRespone['data']);
