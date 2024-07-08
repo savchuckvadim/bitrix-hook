@@ -105,11 +105,11 @@ class BitrixListFlowService
                     'name' => 'Дата',
                     'value' => $nowDate->format('d.m.Y H:i:s'),
                 ],
-                [
-                    'code' => 'name',
-                    'name' => 'Название',
-                    'value' => $evTypeName . ' ' . $eventActionName
-                ],
+                // [
+                //     'code' => 'name',
+                //     'name' => 'Название',
+                //     'value' => $evTypeName . ' ' . $eventActionName
+                // ],
                 [
                     'code' => 'event_title',
                     'name' => 'Название',
