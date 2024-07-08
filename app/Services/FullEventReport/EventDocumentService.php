@@ -1351,7 +1351,7 @@ class EventDocumentService
             }
 
             Log::channel('telegram')->info('updateCompanyDone', [
-                'eventTypeCode' => $eventTypeCode,
+                'comment' => $this->comment,
                 'eventTypeName' => $eventTypeName,
                 ]
             );
@@ -1360,7 +1360,7 @@ class EventDocumentService
                 '$this->responsibleId' => $this->responsibleId,
                 'eventTypeName' => $eventTypeName,
                 'currentBxDealIds' => $currentBxDealIds,
-                'nowDate' => $this->nowDate,
+                'comment' => $this->comment,
 
                 ]
             );
@@ -1371,7 +1371,7 @@ class EventDocumentService
                 $eventTypeName,
                 'act_send',  // сделано, отправлено
                 // $this->stringType,
-                $this->nowDate,
+                // $this->nowDate,
                 $this->responsibleId,
                 $this->responsibleId,
                 $this->responsibleId,
@@ -1405,7 +1405,7 @@ class EventDocumentService
                 $eventTypeName,
                 'act_send',  // сделано, отправлено
                 // $this->stringType,
-                $this->nowDate,
+                // $this->nowDate,
                 $this->responsibleId,
                 $this->responsibleId,
                 $this->responsibleId,

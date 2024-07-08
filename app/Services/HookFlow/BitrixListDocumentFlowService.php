@@ -43,12 +43,13 @@ class BitrixListDocumentFlowService
         // Отправлен	event_action	act_send	ACT_SEND
         // Подписан	event_action	act_sign	ACT_SIGN
         // Оплачен	event_action	act_pay	ACT_PAY
-        $nowDate,
+        // $nowDate,
         $created,
         $responsible,
         $suresponsible,
         $companyId,
         $comment,
+        $dealIds
         // $workStatus, //inJob
         // $resultStatus,  // result noresult   .. without expired new !
         // $noresultReason,
@@ -62,8 +63,8 @@ class BitrixListDocumentFlowService
             date_default_timezone_set('Europe/Moscow');
             $nowDate = new DateTime();
 
-            $eventActionName = 'Запланирован';
-            $evTypeName = 'Звонок';
+            // $eventActionName = 'Запланирован';
+            // $evTypeName = 'Звонок';
             // $nextCommunication = $deadline;
 
             $crmValue = ['n0' => 'CO_' . $companyId];
@@ -93,7 +94,7 @@ class BitrixListDocumentFlowService
                 [
                     'code' => 'event_title',
                     'name' => 'Название',
-                    'value' => $evTypeName . ' ' . $eventActionName
+                    'value' => $eventAction . ' Создан'
                 ],
                 // [
                 //     'code' => 'plan_date',
@@ -187,7 +188,7 @@ class BitrixListDocumentFlowService
 
 
             $fieldsData = [
-                'NAME' => $evTypeName . ' ' . $eventActionName
+                'NAME' => $eventAction . ' Создан'
             ];
 
             foreach ($bitrixLists as $bitrixList) {
