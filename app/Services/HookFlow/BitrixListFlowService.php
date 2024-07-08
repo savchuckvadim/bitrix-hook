@@ -85,6 +85,7 @@ class BitrixListFlowService
             } else    if ($eventAction == 'nodone') {
                 $nextCommunication = null;
                 $eventActionName = 'Не Состоялся: отказ';
+                $eventAction == 'act_noresult_fail';
 
                 if ($eventType == 'presentation') {
                     $eventActionName = 'Не Состоялась: отказ';
