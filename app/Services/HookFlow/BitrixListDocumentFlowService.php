@@ -94,7 +94,7 @@ class BitrixListDocumentFlowService
                 [
                     'code' => 'event_title',
                     'name' => 'Название',
-                    'value' => $eventAction . ' Создан'
+                    'value' => $eventTypeName . ' Создан'
                 ],
                 // [
                 //     'code' => 'plan_date',
@@ -188,7 +188,7 @@ class BitrixListDocumentFlowService
 
 
             $fieldsData = [
-                'NAME' => $eventAction . ' Создан'
+                'NAME' => $eventTypeName . ' Создан'
             ];
 
             foreach ($bitrixLists as $bitrixList) {
