@@ -322,7 +322,7 @@ class EventDocumentService
                 $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
             }
 
-            if (!empty($data['presentation'])) {
+            if (!empty($data['presentation'])   && !empty($data['isFromPresentation'])) {
 
                 $this->currentPresDeal = $data['presentation'];
             }
