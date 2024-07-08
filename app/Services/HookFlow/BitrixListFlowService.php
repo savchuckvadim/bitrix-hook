@@ -139,9 +139,9 @@ class BitrixListFlowService
                     'value' => ['n0' => 'CO_' . $companyId],
                 ],
                 [
-                    'code' => 'crm',
+                    'code' => 'crm_company',
                     'name' => 'crm_company',
-                    'value' => $companyId,
+                    'value' => ['n0' => 'CO_' . $companyId],
                 ],
 
                 [
@@ -540,8 +540,7 @@ class BitrixListFlowService
 
     static function  getFailType(
         $failReason
-        )
-    {
+    ) {
         // не было времени	op_fail_reason	fail_notime
         // конкуренты - привыкли	op_fail_reason	c_habit
         // конкуренты - оплачено	op_fail_reason	c_prepay
