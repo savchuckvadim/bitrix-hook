@@ -275,13 +275,13 @@ class EventReportService
             $this->isNew  = true;
         }
 
-        Log::channel('telegram')->info('HOOK TEST sessionDeals', [
-            'isNew' => $this->isNew,
-            'data' => $data['report']['resultStatus'],
-            'currentTask' => $data['currentTask']
+        // Log::channel('telegram')->info('HOOK TEST sessionDeals', [
+        //     'isNew' => $this->isNew,
+        //     'data' => $data['report']['resultStatus'],
+        //     'currentTask' => $data['currentTask']
 
 
-        ]);
+        // ]);
 
 
         if ($data['report']['workStatus']['current']['code'] === 'inJob' || $data['report']['workStatus']['current']['code'] === 'setAside') {
@@ -467,12 +467,12 @@ class EventReportService
                     }
 
 
-                    Log::info('HOOK TEST sessionDeals', [
-                        'sessionDeals' => $sessionDeals,
+                    // Log::info('HOOK TEST sessionDeals', [
+                    //     'sessionDeals' => $sessionDeals,
 
 
 
-                    ]);
+                    // ]);
                 }
                 if (
                     isset($sessionDeals['currentBaseDeal'])

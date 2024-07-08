@@ -264,12 +264,12 @@ class BitrixListFlowService
                     }
                 }
             }
-
+            $fieldsData = [
+                'NAME' => $evTypeName . ' ' . $eventActionName
+            ];
             foreach ($bitrixLists as $bitrixList) {
                 if ($bitrixList['type'] !== 'presentation') {
-                    $fieldsData = [
-                        'NAME' => $evTypeName . ' ' . $eventActionName
-                    ];
+                   
                     foreach ($xoFields as $xoValue) {
                         $currentDataField = [];
                         $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $xoValue['code'];
