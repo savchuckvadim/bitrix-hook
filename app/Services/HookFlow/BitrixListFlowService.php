@@ -39,7 +39,7 @@ class BitrixListFlowService
         $companyId,
         $comment,
         $workStatus, //inJob
-        $resultStatus,  // result noresult   .. without expired
+        $resultStatus,  // result noresult   .. without expired new !
         $noresultReason,
         $failReason,
         $failType,
@@ -197,7 +197,7 @@ class BitrixListFlowService
             ];
 
 
-            if ($resultStatus !== 'result') {
+            if ($resultStatus !== 'result' && $resultStatus !== 'new') {
                 if (!empty($noresultReason)) {
                     if (!empty($noresultReason['code'])) {
                         $noresultReasoneItem = [
@@ -269,6 +269,8 @@ class BitrixListFlowService
             $fieldsData = [
                 'NAME' => $evTypeName . ' ' . $eventActionName
             ];
+            Log::channel('telegram')->info('HOOK TST', ['fieldsData' => $fieldsData]);
+
             foreach ($bitrixLists as $bitrixList) {
                 if ($bitrixList['type'] !== 'presentation') {
 
