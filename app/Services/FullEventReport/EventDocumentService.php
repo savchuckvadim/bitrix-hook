@@ -86,7 +86,7 @@ class EventDocumentService
     protected $currentPlanEventName; // name 
 
     protected $planCreatedId;
-    protected $planResponsibleId;
+    protected $responsibleId;
     protected $planDeadline;
     protected $nowDate;
 
@@ -178,6 +178,7 @@ class EventDocumentService
             $baseDealId = $data['dealId'];
             $companyId = $data['companyId'];
             $userId = $data['userId'];
+            $this->responsibleId = $userId ;
             // domain,
             // companyId: companyId,
             // placement: placement,
@@ -534,7 +535,7 @@ class EventDocumentService
 
 
         $reportFields = [];
-        $reportFields['manager_op'] = $this->planResponsibleId;
+        $reportFields['manager_op'] = $this->responsibleId;
         $reportFields['op_work_status'] = '';
         $reportFields['op_prospects_type'] = '';
 
@@ -645,7 +646,7 @@ class EventDocumentService
             $entityType,
             $entityId,
 
-            $this->planResponsibleId,
+            $this->responsibleId,
             // $this->planDeadline,
             // $this->nowDate,
 
@@ -1358,9 +1359,9 @@ class EventDocumentService
                 'act_send',  // сделано, отправлено
                 // $this->stringType,
                 $this->nowDate,
-                $this->planResponsibleId,
-                $this->planResponsibleId,
-                $this->planResponsibleId,
+                $this->responsibleId,
+                $this->responsibleId,
+                $this->responsibleId,
                 $this->entityId,
                 $this->comment,
                 $currentBxDealIds
@@ -1392,9 +1393,9 @@ class EventDocumentService
                 'act_send',  // сделано, отправлено
                 // $this->stringType,
                 $this->nowDate,
-                $this->planResponsibleId,
-                $this->planResponsibleId,
-                $this->planResponsibleId,
+                $this->responsibleId,
+                $this->responsibleId,
+                $this->responsibleId,
                 $this->entityId,
                 $this->comment,
                 $currentBxDealIds
@@ -1477,7 +1478,7 @@ class EventDocumentService
                 $eventType,
                 $this->planDeadline,
                 $this->planCreatedId,
-                $this->planResponsibleId,
+                $this->responsibleId,
                 $this->entityId,
                 $this->comment,
                 $this->currentPlanEventName,
@@ -1535,7 +1536,7 @@ class EventDocumentService
                     $this->isExpired,
                     $this->planDeadline,
                     $this->planCreatedId,
-                    $this->planResponsibleId,
+                    $this->responsibleId,
                     $this->entityId,
                     $this->comment,
                     $this->currentPlanEventName,
@@ -1572,7 +1573,7 @@ class EventDocumentService
                     'plan',
                     $this->planDeadline,
                     $this->planCreatedId,
-                    $this->planResponsibleId,
+                    $this->responsibleId,
                     $this->entityId,
                     $this->comment,
                     $this->currentPlanEventName,
@@ -1600,7 +1601,7 @@ class EventDocumentService
                 $this->isExpired,
                 $this->planDeadline,
                 $this->planCreatedId,
-                $this->planResponsibleId,
+                $this->responsibleId,
                 $this->entityId,
                 $this->comment,
                 $this->currentPlanEventName,
