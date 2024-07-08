@@ -264,7 +264,7 @@ class BitrixCallingColdService
                             case 'op_mhistory':
 
                                 $fullFieldId = 'UF_CRM_' . $pField['bitrixId'];  //UF_CRM_OP_MHISTORY
-                                
+
                                 $stringComment = $nowOnlyDate . ' ХО запланирован ' . $data['name'] . ' на ' . $data['deadline'];
 
                                 $currentComments = '';
@@ -496,7 +496,11 @@ class BitrixCallingColdService
                 $this->entityId,
                 'Холодный обзвон' . $this->name,
                 $workStatus,
-                'result'  // result noresult expired
+                'result',  // result noresult expired,
+                null, //$noresultReason = null,
+                null, //$failReason = null,
+                null, //$failType = null,
+                $currentDealsIds
 
             )->onQueue('low-priority');
             // BitrixListFlowService::getListsFlow(

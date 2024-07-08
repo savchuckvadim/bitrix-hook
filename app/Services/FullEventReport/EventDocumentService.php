@@ -14,6 +14,7 @@ use App\Services\General\BitrixDealService;
 use App\Services\General\BitrixDepartamentService;
 use App\Services\HookFlow\BitrixDealFlowService;
 use App\Services\HookFlow\BitrixEntityFlowService;
+use App\Services\HookFlow\BitrixListDocumentFlowService;
 use App\Services\HookFlow\BitrixListPresentationFlowService;
 use DateTime;
 use Illuminate\Console\View\Components\Task;
@@ -330,10 +331,10 @@ class EventDocumentService
                 $this->productRows = $data['rows'];
             }
 
-            Log::info('HOOK TEST rows', [
-                'comming rows' => $data['rows'],
+            // Log::info('HOOK TEST rows', [
+            //     'comming rows' => $data['rows'],
 
-            ]);
+            // ]);
 
             $this->isOfferDone = true;
             if (!empty($data['invoice'])) {
@@ -477,7 +478,7 @@ class EventDocumentService
             // sleep(1);
 
 
-            // $this->getListFlow();
+            $this->getListFlow();
             sleep(1);
             // $this->getListPresentationFlow(
             //     $currentDealsIds
@@ -696,13 +697,12 @@ class EventDocumentService
             );
             if (!empty($this->productRows)) {
                 $productSetData = $this->getDealProductRows($this->productRows, $this->currentPresDeal['ID']);
-       
+
                 $methodProductSet = '/crm.item.productrow.set.json';
                 $url = $this->hook . $methodProductSet;
-              
+
                 $response = Http::get($url, $productSetData);
                 return APIBitrixController::getBitrixRespone($response, 'EVENT DOCUMENT SERVICE gert deal flow products Set');
-
             }
         }
 
@@ -1206,12 +1206,7 @@ class EventDocumentService
         $resultRows = [];
         foreach ($rows as $i => $product) {
             if (!empty($product)) {
-                Log::info('APRIL_HOOK getDealProductRows', [
-                    'data' => [
-                        'i' =>  $i,
-                        'product' =>  $product,
-                    ]
-                ]);
+
                 if (!empty($product['prepayment'])) {
 
                     $quantity = $product['prepayment'];
@@ -1279,6 +1274,7 @@ class EventDocumentService
                             "measureId" => $measureId,
                             "sort" => $i,
                         ];
+                        $this->comment = $this->comment . ' ' . $productName . ' ' . $priceCurrent . ' р. Количество: ' . $quantity;
                         array_push($resultRows, $row);
                     }
                 }
@@ -1306,121 +1302,109 @@ class EventDocumentService
         $planEventTypeName = $this->currentPlanEventTypeName;
         $planEventType = $this->currentPlanEventType; //если перенос то тип будет автоматически взят из report - предыдущего события
         $eventAction = 'expired';  // не состоялся и двигается крайний срок 
-        $planComment = 'Перенесен';
-        if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
-            //report
-            $eventAction = 'plan';
-            $planComment = 'Запланирован';
+        $planComment = 'Сделан';
+
+        // Коммерческое Предлжение	event_type	ev_offer	EV_OFFER
+        // Счет	event_type	ev_invoice	EV_INVOICE
+        // Коммерческое Предлжение после презентации	event_type	ev_offer_pres	EV_OFFER_PRES
+        // Счет после презентации	event_type	ev_invoice_pres	EV_INVOICE_PRES
+        // Договор	event_type	ev_contract	EV_CONTRACT
+        // Поставка	event_type	ev_supply	EV_SUPPLY
+
+
+        // Отправлен	event_action	act_send	ACT_SEND
+        // Подписан	event_action	act_sign	ACT_SIGN
+        // Оплачен	event_action	act_pay	ACT_PAY
+
+
+        // protected $currentBaseDeal;
+        // protected $currentPresDeal;
+
+        $currentBxDealIds = [];
+        if (!empty($this->currentBaseDeal['ID'])) {
+
+            if (!empty($this->currentBaseDeal)) {
+
+                array_push($currentBxDealIds, $this->currentBaseDeal['ID']);
+            }
         }
+        if ($this->isFromPresentation) {  //если после презентации - вне зависимости от типа документа
+            if (!empty($this->currentPresDeal['ID'])) {
 
-        $planComment = $planComment . ' ' . $planEventTypeName . ' ' . $this->comment;
-
-        if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
-
-            $reportAction = 'done';
-            if ($this->resultStatus !== 'result') {
-                $reportAction = 'nodone';
-            }
-
-            if ($reportEventType !== 'presentation') {
-
-                //если текущий не презентация
-                BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию
-                    $this->hook,
-                    $this->bitrixLists,
-                    $reportEventType,
-                    $reportEventTypeName,
-                    $reportAction,
-                    // $this->stringType,
-                    $this->planDeadline,
-                    $this->planResponsibleId,
-                    $this->planResponsibleId,
-                    $this->planResponsibleId,
-                    $this->entityId,
-                    $this->comment,
-                    $this->workStatus['current'],
-                    $this->resultStatus, // result noresult expired,
-                    $this->noresultReason,
-                    $this->failReason,
-                    $this->failType
-
-                )->onQueue('low-priority');
-            }
-
-            //если была проведена презентация - не важно какое текущее report event
-
-            if ($this->isPresentationDone == true) {
-                //если была проведена през
-                if ($reportEventType !== 'presentation') {
-                    //если текущее событие не през - значит uplanned
-                    //значит надо запланировать през в холостую
-                    BtxCreateListItemJob::dispatch(  //запись о планировании и переносе
-                        $this->hook,
-                        $this->bitrixLists,
-                        'presentation',
-                        'Презентация',
-                        'plan',
-                        // $this->stringType,
-                        $this->nowDate,
-                        $this->planResponsibleId,
-                        $this->planResponsibleId,
-                        $this->planResponsibleId,
-                        $this->entityId,
-                        'не запланированая презентация',
-                        ['code' => 'inJob'], //$this->workStatus['current'],
-                        'result',  // result noresult expired
-                        $this->noresultReason,
-                        $this->failReason,
-                        $this->failType
-
-                    )->onQueue('low-priority');
+                if (!empty($this->currentPresDeal)) {
+    
+                    array_push($currentBxDealIds, $this->currentPresDeal['ID']);
                 }
-                BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию
-                    $this->hook,
-                    $this->bitrixLists,
-                    'presentation',
-                    'Презентация',
-                    'done',
-                    // $this->stringType,
-                    $this->planDeadline,
-                    $this->planResponsibleId,
-                    $this->planResponsibleId,
-                    $this->planResponsibleId,
-                    $this->entityId,
-                    $this->comment,
-                    $this->workStatus['current'],
-                    $this->resultStatus, // result noresult expired,
-                    $this->noresultReason,
-                    $this->failReason,
-                    $this->failType
-
-                )->onQueue('low-priority');
             }
         }
 
+        if ($this->isOfferDone) { //если сделано кп
+
+       
+            $eventTypeCode = 'ev_offer';
+            $eventTypeName = 'КП';
+            if ($this->isFromPresentation) { //кп после презентации
+                
+                $eventTypeCode = 'ev_offer_pres';
+                $eventTypeName = 'КП после презентации';
+            }
 
 
-        if ($this->isPlanned) {
-            BtxCreateListItemJob::dispatch(  //запись о планировании и переносе
+            BitrixListDocumentFlowService::getListsFlow(  //report - отчет по текущему событию
                 $this->hook,
                 $this->bitrixLists,
-                $planEventType,
-                $planEventTypeName,
-                $eventAction,
+                $eventTypeCode,
+                $eventTypeName,
+                'act_send',  // сделано, отправлено
                 // $this->stringType,
-                $this->planDeadline,
+                $this->nowDate,
                 $this->planResponsibleId,
                 $this->planResponsibleId,
                 $this->planResponsibleId,
                 $this->entityId,
-                $planComment,
-                $this->workStatus['current'],
-                $this->resultStatus,  // result noresult expired
-                $this->noresultReason,
-                $this->failReason,
-                $this->failType
+                $this->comment,
+                $currentBxDealIds
+                // $this->workStatus['current'], 
+                // $this->resultStatus, // result noresult expired,
+                // $this->noresultReason,
+                // $this->failReason,
+                // $this->failType
 
-            )->onQueue('low-priority');
+            );
+        }
+
+        if ($this->isInvoiceDone) { //если сделан счет
+
+        
+            $eventTypeCode = 'ev_invoice';
+            $eventTypeName = 'Счет';
+            if ($this->isFromPresentation) { //счет после презентации
+                $eventTypeCode = 'ev_invoice_pres';
+                $eventTypeName = 'Счет после презентации';
+            }
+
+   
+            BitrixListDocumentFlowService::getListsFlow(  //report - отчет по текущему событию
+                $this->hook,
+                $this->bitrixLists,
+                $eventTypeCode,
+                $eventTypeName,
+                'act_send',  // сделано, отправлено
+                // $this->stringType,
+                $this->nowDate,
+                $this->planResponsibleId,
+                $this->planResponsibleId,
+                $this->planResponsibleId,
+                $this->entityId,
+                $this->comment,
+                $currentBxDealIds
+                // $this->workStatus['current'], 
+                // $this->resultStatus, // result noresult expired,
+                // $this->noresultReason,
+                // $this->failReason,
+                // $this->failType
+
+            );
         }
     }
     protected function getListPresentationFlow(

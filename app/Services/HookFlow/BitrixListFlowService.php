@@ -43,6 +43,7 @@ class BitrixListFlowService
         $noresultReason,
         $failReason,
         $failType,
+        $dealIds
 
 
     ) {
@@ -54,6 +55,17 @@ class BitrixListFlowService
             $eventActionName = 'Запланирован';
             $evTypeName = 'Звонок';
             $nextCommunication = $deadline;
+
+
+            $crmValue = ['n0' => 'CO_' . $companyId];
+
+            if (!empty($dealIds)) {
+
+                foreach ($dealIds as $key => $dealId) {
+                    $crmValue['n' . $key + 1] = 'D_' . $dealId;
+                }
+            }
+
 
             if ($eventType == 'xo' || $eventType == 'cold') {
                 $evTypeName = 'Холодный звонок';
@@ -99,6 +111,7 @@ class BitrixListFlowService
                 }
             }
             Log::channel('telegram')->info('HOOK TST', ['eventAction' => $eventAction]);
+
             $xoFields = [
                 [
                     'code' => 'event_date',
@@ -138,7 +151,7 @@ class BitrixListFlowService
                 [
                     'code' => 'crm',
                     'name' => 'crm',
-                    'value' => ['n0' => 'CO_' . $companyId],
+                    'value' => $crmValue
                 ],
                 [
                     'code' => 'crm_company',
