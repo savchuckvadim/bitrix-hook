@@ -87,6 +87,7 @@ class BitrixListFlowService
                 $eventActionName = 'Не Состоялся: отказ';
                 $eventAction == 'act_noresult_fail';
 
+
                 if ($eventType == 'presentation') {
                     $eventActionName = 'Не Состоялась: отказ';
                 }
@@ -97,7 +98,7 @@ class BitrixListFlowService
                     $nextCommunication = null;
                 }
             }
-
+            Log::channel('telegram')->info('HOOK TST', ['eventAction' => $eventAction]);
             $xoFields = [
                 [
                     'code' => 'event_date',
@@ -166,7 +167,7 @@ class BitrixListFlowService
                     'name' => 'Событие Действие',
                     'list' =>  [
                         'code' => $eventAction,
-                        'name' => $eventActionName //Запланирован/на
+                        // 'name' => $eventActionName //Запланирован/на
                     ],
                 ],
 
@@ -270,7 +271,7 @@ class BitrixListFlowService
             ];
             foreach ($bitrixLists as $bitrixList) {
                 if ($bitrixList['type'] !== 'presentation') {
-                   
+
                     foreach ($xoFields as $xoValue) {
                         $currentDataField = [];
                         $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $xoValue['code'];
