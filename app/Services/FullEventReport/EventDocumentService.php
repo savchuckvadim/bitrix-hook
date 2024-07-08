@@ -1350,6 +1350,12 @@ class EventDocumentService
                 $eventTypeName = 'КП после презентации';
             }
 
+            Log::channel('telegram')->info('updateCompanyDone', [
+                'hook' => $this->hook,
+                'eventTypeCode' => $eventTypeCode,
+                'eventTypeName' => $eventTypeName,
+                ]
+            );
 
             BitrixListDocumentFlowService::getListsFlow(  //report - отчет по текущему событию
                 $this->hook,

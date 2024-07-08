@@ -1527,6 +1527,21 @@ class EventReportService
 
     protected function getListFlow()
     {
+
+        $currentDealIds = [];
+
+        if (!empty($this->currentBtxDeals)) {
+
+            foreach ($this->currentBtxDeals as $currentBtxDeals) {
+                if (isset($currentBtxDeals['ID'])) {
+
+                    array_push($currentDealIds, $currentBtxDeals['ID']);
+                }
+            }
+        }
+
+
+
         $reportEventType = $this->currentReportEventType;
         $reportEventTypeName = $this->currentReportEventName;
         $planEventTypeName = $this->currentPlanEventTypeName;
@@ -1574,7 +1589,8 @@ class EventReportService
                         $this->resultStatus, // result noresult expired,
                         $this->noresultReason,
                         $this->failReason,
-                        $this->failType
+                        $this->failType,
+                        $currentDealIds
 
                     )->onQueue('low-priority');
                 }
@@ -1585,18 +1601,7 @@ class EventReportService
         Log::channel('telegram')->info('HOOK TST', [
             'isPresentationDone' => $this->isPresentationDone
         ]);
-        $currentDealIds = [];
-
-        if (!empty($this->currentBtxDeals)) {
-
-            foreach ($this->currentBtxDeals as $currentBtxDeals) {
-                if (isset($currentBtxDeals['ID'])) {
-
-                    array_push($currentDealIds, $currentBtxDeals['ID']);
-                }
-            }
-        }
-
+ 
         if ($this->isPresentationDone == true) {
             //если была проведена през
             if ($reportEventType !== 'presentation') {

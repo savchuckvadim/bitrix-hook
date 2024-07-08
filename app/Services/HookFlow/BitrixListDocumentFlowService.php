@@ -108,7 +108,7 @@ class BitrixListDocumentFlowService
                 [
                     'code' => 'responsible',
                     'name' => 'Ответственный',
-                    'value' => $responsible,
+                    'value' => 'user_' . $responsible,
                 ],
                 [
                     'code' => 'su',
