@@ -108,7 +108,7 @@ class BitrixListDocumentFlowService
                 [
                     'code' => 'responsible',
                     'name' => 'Ответственный',
-                    'value' => 'user_' . $responsible,
+                    'value' => $responsible,
                 ],
                 [
                     'code' => 'su',
@@ -218,7 +218,9 @@ class BitrixListDocumentFlowService
                         }
                         // array_push($fieldsData, $currentDataField);
                     }
-                    Log::info('list document fieldsData', $fieldsData
+                    Log::info(
+                        'list document fieldsData',
+                        $fieldsData
                     );
                     BitrixListService::setItem(
                         $hook,
@@ -227,7 +229,6 @@ class BitrixListDocumentFlowService
                     );
                 }
             }
-
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
