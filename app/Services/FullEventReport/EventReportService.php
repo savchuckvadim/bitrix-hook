@@ -150,6 +150,12 @@ class EventReportService
     protected $relationColdDeals;
     protected $relationTMCDeals;
 
+
+    protected $btxDealBaseCategoryId;
+    protected $btxDealPresCategoryId;
+
+
+
     public function __construct(
 
         $data,
@@ -373,6 +379,30 @@ class EventReportService
             }
         }
 
+
+        $btxDealBaseCategoryId = null;
+        $btxDealPresCategoryId = null;
+
+        if (!empty($portal['bitrixDeal'])) {
+
+            if (!empty($portal['bitrixDeal']['categories'])) {
+
+                foreach ($portal['bitrixDeal']['categories'] as $pCategory) {
+                    if ($pCategory['code'] == 'sales_base') {
+                        $this->btxDealBaseCategoryId = $pCategory['bitrixId'];
+                        $btxDealBaseCategoryId = $pCategory['bitrixId'];
+                    }
+
+                    if ($pCategory['code'] == 'sales_presentation') {
+                        $this->btxDealPresCategoryId = $pCategory['bitrixId'];
+                        $btxDealPresCategoryId = $pCategory['bitrixId'];
+                    }
+                }
+            }
+        }
+
+
+
         if ($domain === 'gsr.bitrix24.ru') {
             $this->isSmartFlow = false;
         }
@@ -478,7 +508,13 @@ class EventReportService
             $sessionData = FullEventInitController::getSessionItem($sessionKey);
 
             if (empty($sessionData)) {
-                $sessionData = ReportController::getDealsFromNewTaskInner($domain, $this->hook, $entityId, $this->planResponsibleId, 'company');
+                $sessionData = ReportController::getDealsFromNewTaskInner(
+                    $domain,
+                    $this->hook,
+                    $entityId,
+                    $this->planResponsibleId,
+                    'company'
+                );
             }
 
             if (isset($sessionData['currentCompany']) && isset($sessionData['deals'])) {
@@ -494,6 +530,7 @@ class EventReportService
                     $this->currentBtxDeals  = [$sessionDeals['currentBaseDeals'][0]];
                     $this->currentBaseDeal = $sessionDeals['currentBaseDeals'][0];
                 } else {
+
                     $this->currentBtxDeals  = [];
                 }
             }
@@ -1109,6 +1146,35 @@ class EventReportService
         $reportDeals = [];
         $planDeals = [];
         $currentBtxDeals = $this->currentBtxDeals;
+
+
+        if (empty($currentBtxDeals)) {   //если текущие сделки отсутствуют значит надо сначала создать базовую - чтобы нормально отработал поток
+            $setNewDealData = [
+                'COMPANY_ID' => $this->entityId,
+                'CATEGORY_ID' => $this->btxDealBaseCategoryId,
+                'RESPONSIBLE_ID' => $this->planResponsibleId,
+            ];
+            $currentDealId = BitrixDealService::setDeal(
+                $this->hook,
+                $setNewDealData,
+
+            );
+
+            if (!empty($currentDealId)) {
+                $rand = 0.3;
+                sleep($rand);
+                $newBaseDeal = BitrixDealService::getDeal(
+                    $this->hook,
+                    ['id' => $currentDealId]
+
+
+                );
+                $this->currentBaseDeal = $newBaseDeal;
+                $currentBtxDeals = [$newBaseDeal];
+                $this->currentBtxDeals = [$newBaseDeal];
+            }
+        }
+
 
         $unplannedPresDeals = null;
         $newPresDeal = null;
