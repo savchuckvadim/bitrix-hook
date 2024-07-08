@@ -271,7 +271,7 @@ class EventDocumentService
             // $this->aprilSmartData = $portal['bitrixSmart'];
             $this->portalCompanyData = $portal['company'];
             $this->portalDealData = $portal['bitrixDeal'];
-
+            $this->bitrixLists = $portal['bitrixLists'];
 
 
 
@@ -1351,12 +1351,19 @@ class EventDocumentService
             }
 
             Log::channel('telegram')->info('updateCompanyDone', [
-                'hook' => $this->hook,
                 'eventTypeCode' => $eventTypeCode,
                 'eventTypeName' => $eventTypeName,
                 ]
             );
+            Log::info('updateCompanyDone', [
+                'eventTypeCode' => $eventTypeCode,
+                '$this->responsibleId' => $this->responsibleId,
+                'eventTypeName' => $eventTypeName,
+                'currentBxDealIds' => $currentBxDealIds,
+                'nowDate' => $this->nowDate,
 
+                ]
+            );
             BitrixListDocumentFlowService::getListsFlow(  //report - отчет по текущему событию
                 $this->hook,
                 $this->bitrixLists,

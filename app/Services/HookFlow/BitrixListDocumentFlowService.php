@@ -218,7 +218,8 @@ class BitrixListDocumentFlowService
                         }
                         // array_push($fieldsData, $currentDataField);
                     }
-
+                    Log::info('list document fieldsData', $fieldsData
+                    );
                     BitrixListService::setItem(
                         $hook,
                         $bitrixList['bitrixId'],
@@ -226,6 +227,7 @@ class BitrixListDocumentFlowService
                     );
                 }
             }
+
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
