@@ -138,6 +138,11 @@ class BitrixListFlowService
                     'name' => 'crm',
                     'value' => ['n0' => 'CO_' . $companyId],
                 ],
+                [
+                    'code' => 'crm',
+                    'name' => 'crm_company',
+                    'value' => $companyId,
+                ],
 
                 [
                     'code' => 'manager_comment',
