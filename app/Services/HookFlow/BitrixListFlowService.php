@@ -211,6 +211,16 @@ class BitrixListFlowService
                         array_push($xoFields, $noresultReasoneItem);
                     }
                 }
+            } else {
+                $noresultReasoneItem = [
+                    'code' => 'op_noresult_reason',
+                    'name' => 'Тип Нерезультативности',
+                    'list' =>  [
+                        'code' => null,
+                        // 'name' =>  'В работе' //'В работе'
+                    ],
+                ];
+                array_push($xoFields, $noresultReasoneItem);
             }
             if (!empty($workStatus)) {
                 if (!empty($workStatus['code'])) {

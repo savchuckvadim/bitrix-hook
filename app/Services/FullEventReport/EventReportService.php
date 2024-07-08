@@ -971,7 +971,7 @@ class EventReportService
             $this->isPresentationDone,
             $this->isUnplannedPresentation,
             $this->workStatus['current']['code'],  // inJob setAside ...
-            $this->resultStatus, //result | noresult ...
+            $this->resultStatus, //result | noresult ... new
             $this->failType,
             $this->failReason,
             $this->noresultReason,

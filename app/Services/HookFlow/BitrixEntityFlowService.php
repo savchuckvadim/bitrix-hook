@@ -69,7 +69,7 @@ class BitrixEntityFlowService
         $isPresentationDone,
         $isUnplannedPresentation,
         $workStatus,  // inJob setAside ...
-        $resultStatus, //result | noresult ...
+        $resultStatus, //result | noresult ... new
         $failType,
         $failReason,
         $noResultReason,
@@ -102,16 +102,16 @@ class BitrixEntityFlowService
 
 
         try {
-            if ($entityType == 'deal') {
-                Log::info('HOOK TEST currentBtxDeals', [
-                    'currentBtxEntity' => $currentBtxEntity,
-                    'entityType' => $entityType,
-                    'entityId' => $entityId,
-                    // 'reportFields' => $reportFields,  
+            // if ($entityType == 'deal') {
+                // Log::info('HOOK TEST currentBtxDeals', [
+                //     'currentBtxEntity' => $currentBtxEntity,
+                //     'entityType' => $entityType,
+                //     'entityId' => $entityId,
+                //     // 'reportFields' => $reportFields,  
 
 
-                ]);
-            }
+                // ]);
+            // }
             if (!empty($portalCompanyData) && !empty($portalCompanyData['bitrixfields'])) {
                 $fields = $portalCompanyData['bitrixfields'];
 
@@ -136,7 +136,7 @@ class BitrixEntityFlowService
                     $isPresentationDone,
                     $isUnplannedPresentation,
                     $workStatus,  // inJob setAside ...
-                    $resultStatus, //result | noresult ...
+                    $resultStatus, //result | noresult ... new
                     $failType,
                     $failReason,
                     $noResultReason,
@@ -511,7 +511,7 @@ class BitrixEntityFlowService
         $isPresentationDone,
         $isUnplannedPresentation,
         $workStatus,  // inJob setAside ...
-        $resultStatus, //result | noresult ...
+        $resultStatus, //result | noresult ... new
         $failType,
         $failReason,
         $noResultReason,
@@ -523,7 +523,7 @@ class BitrixEntityFlowService
     ) {
 
         $userId = 'user_' . $responsibleId;
-        $isResult =  $resultStatus == 'result';
+        $isResult =  $resultStatus == 'result' || $resultStatus == 'new';
 
         //general report fields 
         foreach ($portalFields as $pField) {
