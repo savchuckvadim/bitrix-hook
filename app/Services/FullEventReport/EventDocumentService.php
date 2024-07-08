@@ -178,7 +178,7 @@ class EventDocumentService
             $baseDealId = $data['dealId'];
             $companyId = $data['companyId'];
             $userId = $data['userId'];
-            $this->responsibleId = $userId ;
+            $this->responsibleId = $userId;
             // domain,
             // companyId: companyId,
             // placement: placement,
@@ -705,6 +705,18 @@ class EventDocumentService
                 $response = Http::get($url, $productSetData);
                 return APIBitrixController::getBitrixRespone($response, 'EVENT DOCUMENT SERVICE gert deal flow products Set');
             }
+        } else {
+
+            // if(!empty($this->currentBaseDeal['ID'])){
+            // if(!empty($this->currentBaseDeal['ID'])){
+            // /
+            $this->getDealProductRows($this->productRows, 0); //for update this-> comment with complect price
+            // }
+
+
+
+
+
         }
 
 
@@ -1199,11 +1211,11 @@ class EventDocumentService
         // "isDiscountShow": false,
         // "isSupplyLong": true,
         // "prepaymentStyle": "invoice"
-        Log::info('APRIL_HOOK getDealProductRows', [
-            'data' => [
-                'comming' =>  $rows,
-            ]
-        ]);
+        // Log::info('APRIL_HOOK getDealProductRows', [
+        //     'data' => [
+        //         'comming' =>  $rows,
+        //     ]
+        // ]);
         $resultRows = [];
         foreach ($rows as $i => $product) {
             if (!empty($product)) {
@@ -1333,7 +1345,7 @@ class EventDocumentService
             if (!empty($this->currentPresDeal['ID'])) {
 
                 if (!empty($this->currentPresDeal)) {
-    
+
                     array_push($currentBxDealIds, $this->currentPresDeal['ID']);
                 }
             }
@@ -1341,26 +1353,30 @@ class EventDocumentService
 
         if ($this->isOfferDone) { //если сделано кп
 
-       
+
             $eventTypeCode = 'ev_offer';
             $eventTypeName = 'КП';
             if ($this->isFromPresentation) { //кп после презентации
-                
+
                 $eventTypeCode = 'ev_offer_pres';
                 $eventTypeName = 'КП после презентации';
             }
 
-            Log::channel('telegram')->info('updateCompanyDone', [
-                'comment' => $this->comment,
-                'eventTypeName' => $eventTypeName,
+            Log::channel('telegram')->info(
+                'updateCompanyDone',
+                [
+                    'comment' => $this->comment,
+                    'eventTypeName' => $eventTypeName,
                 ]
             );
-            Log::info('updateCompanyDone', [
-                'eventTypeCode' => $eventTypeCode,
-                '$this->responsibleId' => $this->responsibleId,
-                'eventTypeName' => $eventTypeName,
-                'currentBxDealIds' => $currentBxDealIds,
-                'comment' => $this->comment,
+            Log::info(
+                'updateCompanyDone',
+                [
+                    'eventTypeCode' => $eventTypeCode,
+                    '$this->responsibleId' => $this->responsibleId,
+                    'eventTypeName' => $eventTypeName,
+                    'currentBxDealIds' => $currentBxDealIds,
+                    'comment' => $this->comment,
 
                 ]
             );
@@ -1389,7 +1405,7 @@ class EventDocumentService
 
         if ($this->isInvoiceDone) { //если сделан счет
 
-        
+
             $eventTypeCode = 'ev_invoice';
             $eventTypeName = 'Счет';
             if ($this->isFromPresentation) { //счет после презентации
@@ -1397,7 +1413,7 @@ class EventDocumentService
                 $eventTypeName = 'Счет после презентации';
             }
 
-   
+
             BitrixListDocumentFlowService::getListsFlow(  //report - отчет по текущему событию
                 $this->hook,
                 $this->bitrixLists,
