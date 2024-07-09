@@ -1943,7 +1943,7 @@ class ReportController extends Controller
                     foreach ($generalDepartment as $gDep) {
                         if (!empty($gDep)) {
                             if (!empty($gDep['ID'])) {
-                                array_push($departamentIds, $gDep['ID']);
+                                // array_push($departamentIds, $gDep['ID']);
                                 $gDep['users'] = $departamentService->getUsersByDepartment($gDep['ID']);
                                 $allUsers = array_merge($allUsers, $gDep['users']);
                             }
@@ -1955,7 +1955,7 @@ class ReportController extends Controller
                     foreach ($childrenDepartments as $chDep) {
                         if (!empty($chDep)) {
                             if (!empty($chDep['ID'])) {
-                                array_push($departamentIds, $chDep['ID']);
+                                // array_push($departamentIds, $chDep['ID']);
                                 $chDep['users'] = $departamentService->getUsersByDepartment($chDep['ID']);
                                 $allUsers = array_merge($allUsers, $chDep['users']);
                             }
