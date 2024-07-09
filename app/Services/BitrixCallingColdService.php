@@ -416,7 +416,7 @@ class BitrixCallingColdService
         $this->callThemeField = $callThemeField;
         $this->lastCallDateFieldCold = $lastCallDateFieldCold;
         $this->callThemeFieldCold = $callThemeFieldCold;
-
+$departmentService = 
         $this->currentDepartamentType = BitrixDepartamentService::getDepartamentTypeByUserId();
     }
 

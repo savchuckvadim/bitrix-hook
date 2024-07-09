@@ -10,6 +10,7 @@ use App\Jobs\EventJob;
 use App\Services\BitrixGeneralService;
 use App\Services\FullEventReport\EventReportService;
 use App\Services\General\BitrixDealService;
+use App\Services\General\BitrixDepartamentService;
 use App\Services\General\BitrixListService;
 use App\Services\HookFlow\BitrixEntityFlowService;
 use Illuminate\Http\Request;
@@ -1216,7 +1217,7 @@ class ReportController extends Controller
                     // 'LAST_PRES_DONE_DATE',
                     // 'LAST_PRES_PLAN_RESPONSIBLE',
                     // 'LAST_PRES_DONE_RESPONSIBLE',
-                 
+
                     'UF_CRM_PRES_COMMENTS',
                     // 'MANAGER_OP',
                     // 'MANAGER_TMC',
@@ -1226,8 +1227,8 @@ class ReportController extends Controller
                     // 'CALL_NEXT_NAME',
                     // 'CALL_LAST_DATE',
                     // 'GO_PLAN',
-                    // 'OP_HISTORY',
-                    // 'OP_MHISTORY',
+                    'UF_CRM_OP_HISTORY',
+                    'UF_CRM_OP_MHISTORY',
                     // 'OP_WORK_STATUS',
                     // 'OP_PROSPECTS_TYPE',
                     // 'OP_EFIELD_FAIL_REASON',
@@ -1896,6 +1897,75 @@ class ReportController extends Controller
             return null;
         } catch (\Throwable $th) {
             return null;
+        }
+    }
+
+
+    public static function getFullDepartment(Request $request)
+    {
+
+
+        $generalDepartment = null;
+
+        $childrenDepartments = null;
+        try {
+            //code...
+
+            // записывает в session подготовленную data department по domain
+            $data = $request->all();
+            $domain = $data['domain'];
+            $portal = PortalController::getPortal($domain);
+            $portal = $portal['data'];
+            $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+            $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+
+            $departamentService = new BitrixDepartamentService($hook);
+            $department =  $departamentService->getDepartamentIdByPortal($portal);
+
+            if (!empty($department)) {
+
+                if (!empty($department['bitrixId'])) {
+                    $departmentId =  $department['bitrixId'];
+                }
+            }
+
+            if ($departmentId) {
+                $generalDepartment = $departamentService->getDepartments([
+                    'ID' =>  $departmentId
+                ]);
+                $childrenDepartments = $departamentService->getDepartments([
+                    'PARENT' =>  $departmentId
+                ]);
+
+                Log::info('DEPART HOOK', [
+                    'generalDepartment' => $generalDepartment,
+                    'childrenDepartments' => $childrenDepartments,
+                ]);
+
+
+               $gptResult =  $departamentService->getAllUsersFromSalesIncludingSubdeps($departmentId);
+
+                Log::info('DEPART HOOK', [
+                    'gptResult' => $gptResult,
+         
+                ]);
+            }
+
+
+            return APIOnlineController::getSuccess(
+                [
+                    'generalDepartment' => $generalDepartment,
+                    'childrenDepartments' => $childrenDepartments,
+                ]
+            );
+        } catch (\Throwable $th) {
+            return APIOnlineController::getError(
+                $th->getMessage(),
+                [
+                    'generalDepartment' => $generalDepartment,
+                    'childrenDepartments' => $childrenDepartments,
+                ]
+            );
         }
     }
 }

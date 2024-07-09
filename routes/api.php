@@ -290,6 +290,11 @@ Route::post('/task/fail', function (Request $request) {
 
 
 // ............................... FULL EVENT CALING PRES FRONT
+Route::post('full/department', function (Request $request) {
+    return ReportController::getFullDepartment($request);
+});
+
+
 Route::post('/full/tasks', function (Request $request) {
     return FullEventInitController::getEventTasks($request);
 });
@@ -302,10 +307,6 @@ Route::post('/full/session', function (Request $request) {
 });
 
 
-
-Route::post('/full', function (Request $request) {
-    return ReportController::eventReport($request);
-});
 
 
 Route::post('/activity/test', function (Request $request) {
@@ -325,6 +326,10 @@ Route::post('/pres/count', function (Request $request) {
 
 
 //////////////////////INIT EVENT FROM TASK ||  EVENT FROM NEW TASK || EVENT FROM FROM ONE MORE TASK || DOCUMENT
+//TODO full department
+
+
+
 Route::post('full/deals', function (Request $request) {
     return ReportController::getFullDeals($request);
 });
@@ -353,6 +358,12 @@ Route::post('/full/document/flow', function (Request $request) {
     $data = $request->all();
     $service = new EventDocumentService($data);
     return $service->getDocumentFlow();
+});
+
+
+
+Route::post('/full', function (Request $request) {
+    return ReportController::eventReport($request);
 });
 
 // новй холодный звонка из Откуда Угодно
