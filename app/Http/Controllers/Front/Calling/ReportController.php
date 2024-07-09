@@ -1903,8 +1903,9 @@ class ReportController extends Controller
 
     public static function getFullDepartment(Request $request)
     {
-
-
+        date_default_timezone_set('Europe/Moscow'); // Установка временной зоны
+        $currentMonthDay = date('md');
+        $departmentResult = null;
         $generalDepartment = null;
 
         $childrenDepartments = null;
@@ -1922,75 +1923,85 @@ class ReportController extends Controller
             $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
 
-            $departamentService = new BitrixDepartamentService($hook);
-            $department =  $departamentService->getDepartamentIdByPortal($portal);
 
-            $allUsers = [];
-            if (!empty($department)) {
+            $sessionKey = 'department_' . $domain . '_' . $currentMonthDay;
+            $sessionData = FullEventInitController::getSessionItem($sessionKey);
 
-                if (!empty($department['bitrixId'])) {
-                    $departmentId =  $department['bitrixId'];
+            if (!empty($sessionData)) {
+
+                if (!empty($sessionData['department'])) {
+                    $departmentResult = $sessionData['department'];
                 }
             }
 
-            if ($departmentId) {
-                $generalDepartment = $departamentService->getDepartments([
-                    'ID' =>  $departmentId
-                ]);
-                $childrenDepartments = $departamentService->getDepartments([
-                    'PARENT' =>  $departmentId
-                ]);
+            if (empty($departmentResult)) {                               // если в сессии нет department
+                $departamentService = new BitrixDepartamentService($hook);
+                $department =  $departamentService->getDepartamentIdByPortal($portal);
+
+                $allUsers = [];
+                if (!empty($department)) {
+
+                    if (!empty($department['bitrixId'])) {
+                        $departmentId =  $department['bitrixId'];
+                    }
+                }
+
+                if ($departmentId) {
+                    $generalDepartment = $departamentService->getDepartments([
+                        'ID' =>  $departmentId
+                    ]);
+                    $childrenDepartments = $departamentService->getDepartments([
+                        'PARENT' =>  $departmentId
+                    ]);
 
 
-                if (!empty($generalDepartment)) {
-                    foreach ($generalDepartment as $gDep) {
-                        if (!empty($gDep)) {
-                            if (!empty($gDep['ID'])) {
-                                // array_push($departamentIds, $gDep['ID']);
-                                $departmentUsers = $departamentService->getUsersByDepartment($gDep['ID']);
+                    if (!empty($generalDepartment)) {
+                        foreach ($generalDepartment as $gDep) {
+                            if (!empty($gDep)) {
+                                if (!empty($gDep['ID'])) {
+                                    // array_push($departamentIds, $gDep['ID']);
+                                    $departmentUsers = $departamentService->getUsersByDepartment($gDep['ID']);
 
-                                $resultDep = $gDep;
-                                $resultDep['USERS'] = $departmentUsers;
-                                $allUsers = array_merge($allUsers, $departmentUsers);
-                                array_push($resultGeneralDepartment, $resultDep);
+                                    $resultDep = $gDep;
+                                    $resultDep['USERS'] = $departmentUsers;
+                                    $allUsers = array_merge($allUsers, $departmentUsers);
+                                    array_push($resultGeneralDepartment, $resultDep);
+                                }
+                            }
+                        }
+                    }
+
+                    if (!empty($childrenDepartments)) {
+                        foreach ($childrenDepartments as $chDep) {
+                            if (!empty($chDep)) {
+                                if (!empty($chDep['ID'])) {
+                                    // array_push($departamentIds, $chDep['ID']);
+                                    $departmentUsers  = $departamentService->getUsersByDepartment($chDep['ID']);
+                                    $resultDep = $gDep;
+                                    $resultDep['USERS'] = $departmentUsers;
+
+                                    $allUsers = array_merge($allUsers, $departmentUsers);
+                                    array_push($resultChildrenDepartments, $resultDep);
+                                }
                             }
                         }
                     }
                 }
-
-                if (!empty($childrenDepartments)) {
-                    foreach ($childrenDepartments as $chDep) {
-                        if (!empty($chDep)) {
-                            if (!empty($chDep['ID'])) {
-                                // array_push($departamentIds, $chDep['ID']);
-                                $departmentUsers  = $departamentService->getUsersByDepartment($chDep['ID']);
-                                $resultDep = $gDep;
-                                $resultDep['USERS'] = $departmentUsers;
-
-                                $allUsers = array_merge($allUsers, $departmentUsers);
-                                array_push($resultChildrenDepartments, $resultDep);
-                            }
-                        }
-                    }
-                }
+                $departmentResult = [
+                    'generalDepartment' => $resultGeneralDepartment,
+                    'childrenDepartments' => $resultChildrenDepartments,
+                    'allUsers' => $allUsers,
+                ];
             }
 
 
             return APIOnlineController::getSuccess(
-                [
-                    'generalDepartment' => $resultGeneralDepartment,
-                    'childrenDepartments' => $resultChildrenDepartments,
-                    'allUsers' => $allUsers,
-                ]
+                ['departament' => $departmentResult]
             );
         } catch (\Throwable $th) {
             return APIOnlineController::getError(
                 $th->getMessage(),
-                [
-                    'generalDepartment' => $generalDepartment,
-                    'childrenDepartments' => $childrenDepartments,
-                    'allUsers' => $allUsers,
-                ]
+                ['departament' => $departmentResult]
             );
         }
     }
