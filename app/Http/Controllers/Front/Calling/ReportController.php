@@ -1993,7 +1993,7 @@ class ReportController extends Controller
                     'childrenDepartments' => $resultChildrenDepartments,
                     'allUsers' => $allUsers,
                 ];
-                $result =  ['departament' => $departmentResult];
+                $result =  ['department' => $departmentResult];
                 FullEventInitController::setSessionItem(
                     $sessionKey,
                     $result
