@@ -658,7 +658,14 @@ class BitrixListPresentationFlowService
                 $bitrixList['bitrixId'],
                 $serchingListCode
             );
+            Log::channel('telegram')->info('pres lidt test update or create', [
+                'currentItemList' => $currentItemList,
+                'serchingListCode' => $serchingListCode
+         
 
+            ]);
+
+            
             if (!empty($currentItemList) && is_array($currentItemList)) {
                 $currentItemList = $currentItemList[0];
                 if (!empty($currentItemList)) {
@@ -781,14 +788,20 @@ class BitrixListPresentationFlowService
                 // array_push($fieldsData, $currentDataField);
             }
 
-            // Log::channel('telegram')->info('pres lidt test update or create', [
-            //     'currentItemList' => $currentItemList,
-            //     'fieldsData' => $fieldsData,
-            //     // 'failReason' => $failReason,
-            //     // 'failType' => $failType,
+            Log::channel('telegram')->info('pres lidt test update or create', [
+                'currentItemList' => $currentItemList,
+                'fieldsData' => $fieldsData,
+                // 'failReason' => $failReason,
+                // 'failType' => $failType,
 
-            // ]);
+            ]);
+            Log::info('pres lidt test update or create', [
+                'currentItemList' => $currentItemList,
+                'fieldsData' => $fieldsData,
+                // 'failReason' => $failReason,
+                // 'failType' => $failType,
 
+            ]);
             if ($currentItemList) {
                 BitrixListService::updateItem(
                     $hook,
