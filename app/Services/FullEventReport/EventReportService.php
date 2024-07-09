@@ -657,9 +657,9 @@ class EventReportService
 
             $this->getListFlow();
             sleep(1);
-            // $this->getListPresentationFlow(
-            //     $currentDealsIds
-            // );
+            $this->getListPresentationFlow(
+                $currentDealsIds
+            );
 
             return APIOnlineController::getSuccess(['result' => $result]);
         } catch (\Throwable $th) {
