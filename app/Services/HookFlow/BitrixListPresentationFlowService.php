@@ -725,35 +725,43 @@ class BitrixListPresentationFlowService
             'workStatus' => $workStatus
 
         ]);
+        $workStatusCode = $workStatus;
         if (!empty($workStatus)) {
             if (!empty($workStatus['code'])) {
-                $code = $workStatus['code'];
-                switch ($code) {
-                    case 'inJob':
-                        $resultCode = 'pres_status_in_work';
-
-                        if ($currentEventType == 'hot') {
-                            $resultCode = 'pres_status_in_progress';
-                        } else  if ($currentEventType == 'moneyAwait') {
-                            $resultCode = 'pres_status_money_await';
-                        }
-
-
-                        break;
-                    case 'setAside': //in_long
-                        $resultCode = 'pres_status_in_long';
-                        break;
-                    case 'fail':
-                        $resultCode = 'pres_status_fail';
-                        break;
-                    case 'success':
-                        $resultCode = 'pres_status_success';
-                        break;
-                    default:
-                        break;
+                $workStatusCode =  $workStatus['code'];
+            }
+            if (!empty($workStatus['current'])) {
+                if (!empty($workStatus['current']['code'])) {
+                    $workStatusCode =  $workStatus['current']['code'];
                 }
             }
         }
+
+        switch ($workStatusCode) {
+            case 'inJob':
+                $resultCode = 'pres_status_in_work';
+
+                if ($currentEventType == 'hot') {
+                    $resultCode = 'pres_status_in_progress';
+                } else  if ($currentEventType == 'moneyAwait') {
+                    $resultCode = 'pres_status_money_await';
+                }
+
+
+                break;
+            case 'setAside': //in_long
+                $resultCode = 'pres_status_in_long';
+                break;
+            case 'fail':
+                $resultCode = 'pres_status_fail';
+                break;
+            case 'success':
+                $resultCode = 'pres_status_success';
+                break;
+            default:
+                break;
+        }
+
 
         return $resultCode;
     }
@@ -955,14 +963,13 @@ class BitrixListPresentationFlowService
                     $result = 'pres_prospects_depend';
                     break;
 
-                case 'accountant':
-                    $result = 'pres_prospects_acountant';
-                    break;
+
                 case 'accountant':
                     $result = 'pres_prospects_acountant';
                     break;
 
                 case 'failure':
+                case 'fail':
                     $result = 'op_prospects_fail';
                     break;
 
