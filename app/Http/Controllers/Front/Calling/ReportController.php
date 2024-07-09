@@ -1993,11 +1993,16 @@ class ReportController extends Controller
                     'childrenDepartments' => $resultChildrenDepartments,
                     'allUsers' => $allUsers,
                 ];
+                $result =  ['departament' => $departmentResult];
+                FullEventInitController::setSessionItem(
+                    $sessionKey,
+                    $result
+                );
             }
 
 
             return APIOnlineController::getSuccess(
-                ['departament' => $departmentResult]
+                $result
             );
         } catch (\Throwable $th) {
             return APIOnlineController::getError(
