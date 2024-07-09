@@ -920,10 +920,7 @@ class BitrixListPresentationFlowService
         // Отказ	pres_prospects_type	pres_prospects_fail
 
         $result = 'pres_prospects_good';
-        Log::channel('telegram')->info('failTypeCode', [
-            'failTypeCode' => $failTypeCode
-
-        ]);
+     
 
         switch ($failTypeCode) {
             case 'op_prospects_good':
@@ -972,7 +969,7 @@ class BitrixListPresentationFlowService
 
             case 'failure':
             case 'fail':
-                $result = 'op_prospects_fail';
+                $result = 'pres_prospects_fail';
                 break;
 
             default:
@@ -980,10 +977,7 @@ class BitrixListPresentationFlowService
                 break;
         }
 
-        Log::channel('telegram')->info('failTypeCode', [
-            'result' => $result
-
-        ]);
+ 
 
         return $result;
     }
