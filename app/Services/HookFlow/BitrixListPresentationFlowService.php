@@ -192,8 +192,8 @@ class BitrixListPresentationFlowService
                         'n0' => 'CO_' . $companyId,
                         'n1' => 'D_' . $currentDealIds[0],
                         'n2' => 'D_' . $currentDealIds[1]
-                    
-                    
+
+
                     ], //base deal
                 ],
                 // [
@@ -241,7 +241,7 @@ class BitrixListPresentationFlowService
             ];
 
 
-           
+
             foreach ($presentatationPlanFields as $presValue) {
                 $currentDataField = [];
                 $fieldCode = $presPortalBtxList['group'] . '_' . $presPortalBtxList['type'] . '_' . $presValue['code'];
@@ -267,27 +267,9 @@ class BitrixListPresentationFlowService
                 }
                 // array_push($fieldsData, $currentDataField);
             }
-            Log::info('fieldsData after name', [
-                'fieldsData' => $fieldsData,
-                
+           
+            $fieldsData['NAME'] = $evTypeName . ' ' . $name;
 
-
-            ]);
-            Log::channel('telegram')->info('getListPresentationPlanFlow', [
-                'NAME' => $evTypeName . ' ' . $name,
-                'currentDealIds' => $currentDealIds,
-
-
-            ]);
-            $fieldsData = [
-                'NAME' => $evTypeName . ' ' . $name
-            ];
-            Log::info('fieldsData', [
-                'fieldsData' => $fieldsData,
-                
-
-
-            ]);
             BitrixListService::setItem(
                 $hook,
                 $bitrixList['bitrixId'],
