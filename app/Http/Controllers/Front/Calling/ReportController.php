@@ -1216,8 +1216,8 @@ class ReportController extends Controller
                     // 'LAST_PRES_DONE_DATE',
                     // 'LAST_PRES_PLAN_RESPONSIBLE',
                     // 'LAST_PRES_DONE_RESPONSIBLE',
-                    'PRES_COUNT',
-                    'PRES_COMMENTS',
+                 
+                    'UF_CRM_PRES_COMMENTS',
                     // 'MANAGER_OP',
                     // 'MANAGER_TMC',
                     // 'MANAGER_OS',
@@ -1243,13 +1243,13 @@ class ReportController extends Controller
                     // 'OP_SMART_LID',
                     // 'OP_SMART_LIDS',
                     // 'OFFER_SUM',
-                    'TO_BASE_SALES',
-                    'TO_XO_SALES',
-                    'TO_PRESENTATION_SALES',
+                    'UF_CRM_TO_BASE_SALES',
+                    'UF_CRM_TO_XO_SALES',
+                    'UF_CRM_TO_PRESENTATION_SALES',
                     'TO_BASE_TMC',
                     'TO_PRESENTATION_TMC',
                     'TO_BASE_SERVICE',
-                    'OP_CURRENT_STATUS',
+                    'UF_CRM_OP_CURRENT_STATUS',
 
                 ];
                 $responsibleId = 1;
@@ -1538,7 +1538,8 @@ class ReportController extends Controller
                     'STAGE_ID',
                     'UF_CRM_PRES_COMMENTS',
                     'UF_CRM_OP_FAIL_COMMENTS',
-                    'UF_CRM_TO_BASE_SALES'
+                    'UF_CRM_TO_BASE_SALES',
+                    'UF_CRM_TO_BASE_SALES',
 
                 ];
 
