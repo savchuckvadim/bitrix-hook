@@ -498,7 +498,7 @@ class BitrixListFlowService
         $failTypeCode
     ) {
 
-        $result = 'op_call_result_yes';
+        $result = 'op_prospects_good';
 
         switch ($failTypeCode) {
             case 'op_prospects_good':

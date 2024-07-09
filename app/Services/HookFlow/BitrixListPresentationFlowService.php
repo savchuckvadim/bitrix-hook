@@ -220,7 +220,7 @@ class BitrixListPresentationFlowService
                     'name' => 'Статус Работы',
                     'list' =>  [
                         'code' => BitrixListPresentationFlowService::getCurrentWorkStatusCode(
-                            $workStatus,
+                            ['code' => 'inJob'],
                             $eventType
                         ),  //'in_work',
                         // 'name' =>  'В работе' //'В работе'
@@ -322,6 +322,19 @@ class BitrixListPresentationFlowService
         try {
             $eventType = 'report';
             $isDone = $isPresentationDone;
+            $failTypeCode = null;
+
+            if (!empty($failType)) {
+                if (!empty($failType['code'])) {
+                    $failTypeCode = $failType['code'];
+                }
+                if (!empty($failType['cuurent'])) {
+                    if (!empty($failType['cuurent']['code'])) {
+                        $failTypeCode = $failType['cuurent']['code'];
+                    }
+                }
+            }
+
 
             if (isset($workStatus['code'])) {
                 $workStatus = $workStatus['code'];
@@ -417,16 +430,16 @@ class BitrixListPresentationFlowService
                         // 'name' =>  'В работе' //'В работе'
                     ],
                 ],
-                // [
-                //     'code' => 'op_result_status',
-                //     'name' => 'Результативность',
-                //     'list' =>  [
-                //         'code' => BitrixListFlowService::getResultStatus(
-                //             $resultStatus,
-                //         ),  //'in_work',
-                //         // 'name' =>  'В работе' //'В работе'
-                //     ],
-                // ],
+                [
+                    'code' => 'pres_prospects_type',
+                    'name' => 'Перспективная ?',
+                    'list' =>  [
+                        'code' => BitrixListPresentationFlowService::getPerspectStatus(
+                            $failTypeCode,
+                        ),  //'in_work',
+                        // 'name' =>  'В работе' //'В работе'
+                    ],
+                ],
 
 
             ];
@@ -447,7 +460,7 @@ class BitrixListPresentationFlowService
                 ];
                 array_push($presentatationReportFields, $isDoneItem);
             }
-            if ($resultStatus !== 'result') {
+            if ($resultStatus !== 'result' && $resultStatus !== 'new') {
                 if (!empty($noresultReason)) {
                     if (!empty($noresultReason['code'])) {
                         $noresultReasoneItem = [
@@ -465,38 +478,27 @@ class BitrixListPresentationFlowService
 
 
             if ($workStatus === 'fail') {  //если провал
-                if (!empty($failType)) {
-                    if (!empty($failType['code'])) {
-                        $failTypeItemItem = [
-                            'code' => 'op_fail_type',
-                            'name' => 'Тип провала',
-                            'list' =>  [
-                                'code' => $failType['code'],
-                                // 'name' =>  'В работе' //'В работе'
-                            ],
-                        ];
-                        array_push($presentatationReportFields, $failTypeItemItem);
-
-
-
-                        if ($failType['code'] == 'failure') { //если тип провала - отказ
-                            if (!empty($failReason)) {
-                                if (!empty($failReason['code'])) {
-                                    $failReasonItem = [
-                                        'code' => 'op_fail_reason',
-                                        'name' => 'ОП Причина Отказа',
-                                        'list' =>  [
-                                            'code' => $failReason['code'],
-                                            // 'name' =>  'В работе' //'В работе'
-                                        ],
-                                    ];
-                                    array_push($presentatationReportFields, $failReasonItem);
-                                }
+                if (!empty($failTypeCode)) {
+                    if ($failTypeCode == 'failure') { //если тип провала - отказ
+                        if (!empty($failReason)) {
+                            if (!empty($failReason['code'])) {
+                                $failReasonItem = [
+                                    'code' => 'pres_fail_reason',
+                                    'name' => 'ОП Причина Отказа',
+                                    'list' =>  [
+                                        'code' => BitrixListPresentationFlowService::getFailReason(
+                                            $failReason['code']
+                                        ),
+                                        // 'name' =>  'В работе' //'В работе'
+                                    ],
+                                ];
+                                array_push($presentatationReportFields, $failReasonItem);
                             }
                         }
                     }
                 }
             }
+
 
 
 
@@ -773,6 +775,243 @@ class BitrixListPresentationFlowService
             }
         }
 
+
+
+        return $result;
+    }
+
+
+    static function  getPerspectStatus(
+        $failTypeCode
+    ) {
+        // {
+        //     id: 0,
+        //     code: 'op_prospects_good',
+        //     name: 'Перспективная',
+        //      isActive: false
+
+        // },
+        // {
+        //     id: 1,
+        //     code: 'op_prospects_good',
+        //     name: 'Нет перспектив',
+        //      isActive: false
+
+        // },
+        // {
+        //     id: 2,
+        //     code: 'garant',
+        //     name: 'Гарант/Запрет',
+        //     isActive: true
+
+        // },
+        // {
+        //     id: 3,
+        //     code: 'go',
+        //     name: 'Покупает ГО',
+        //     isActive: true
+
+        // },
+        // {
+        //     id: 4,
+        //     code: 'territory',
+        //     name: 'Чужая территория',
+        //     isActive: true
+
+        // },
+        // {
+        //     id: 5,
+        //     code: 'accountant',
+        //     name: 'Бухприх',
+        //     isActive: true
+
+        // },
+        // {
+        //     id: 6,
+        //     code: 'autsorc',
+        //     name: 'Аутсорсинг',
+        //     isActive: true
+
+        // },
+        // {
+        //     id: 7,
+        //     code: 'depend',
+        //     name: 'Несамостоятельная организация',
+        //     isActive: true
+
+        // },
+        // {
+        //     id: 8,
+        //     code: 'op_prospects_nophone',
+        //     name: 'Недозвон',
+        //     isActive: true
+
+        // },
+        // {
+        //     id: 9,
+        //     code: 'op_prospects_company',
+        //     name: 'Компания не существует',
+        //     isActive: true
+
+        // },
+
+        // {
+        //     id: 10,
+        //     code: 'failure',
+        //     name: 'Отказ',
+        //     isActive: true
+
+        // },
+        // Перспективная	pres_prospects_type	pres_prospects_good
+        // Нет перспектив	pres_prospects_type	pres_prospects_nopersp
+        // Гарант/Запрет	pres_prospects_type	pres_prospects_garant
+        // Покупает ГО	pres_prospects_type	pres_prospects_go
+        // Чужая территория	pres_prospects_type	pres_prospects_territory
+        // Бухприх	pres_prospects_type	pres_prospects_acountant
+        // Аутсорсинг	pres_prospects_type	pres_prospects_autsorc
+        // Несамостоятельная организация	pres_prospects_type	pres_prospects_depend
+        // Недозвон	pres_prospects_type	pres_prospects_nophone
+        // Компания не существует	pres_prospects_type	pres_prospects_company
+        // Отказ	pres_prospects_type	pres_prospects_fail
+
+        $result = 'pres_prospects_good';
+
+        if (!empty($failTypeCode)) {
+            switch ($failTypeCode) {
+                case 'op_prospects_good':
+                    $result = 'pres_prospects_good';
+
+                    break;
+
+
+                case 'op_prospects_nopersp':
+
+                    $result = 'pres_prospects_nopersp';
+
+                    break;
+                case 'op_prospects_nophone':
+                    $result = 'pres_prospects_nophone';
+
+                    break;
+                case 'op_prospects_company':
+                    $result = 'pres_prospects_company';
+                    break;
+                case 'garant':
+                    $result = 'pres_prospects_garant';
+                    break;
+                case 'go':
+                    $result = 'pres_prospects_go';
+                    break;
+                case 'territory':
+                    $result = 'pres_prospects_territory';
+                    break;
+                case 'accountant':
+                    $result = 'pres_prospects_acountant';
+                    break;
+
+                case 'autsorc':
+                    $result = 'pres_prospects_autsorc';
+                    break;
+                case 'depend':
+
+                    $result = 'pres_prospects_depend';
+                    break;
+
+                case 'accountant':
+                    $result = 'pres_prospects_acountant';
+                    break;
+                case 'accountant':
+                    $result = 'pres_prospects_acountant';
+                    break;
+
+                case 'failure':
+                    $result = 'op_prospects_fail';
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        }
+
+
+        return $result;
+    }
+
+    static function  getFailReason(
+        $failReason
+    ) {
+        $failReasonType = [
+            // code: 'fail_notime',
+            // name: 'Не было времени',
+
+            // code: 'c_habit',
+            // name: 'Конкуренты - привыкли',
+
+            // code: 'c_prepay',
+            // name: 'Конкуренты - оплачено',
+
+            // code: 'c_price',
+            //     name: 'Конкуренты - цена',
+
+            //     code: 'money',
+            //     name: 'Дорого/нет Денег',
+
+            //     code: 'to_cheap',
+            //     name: 'Слишком дешево',
+
+            //     code: 'nomoney',
+            //     name: 'Нет денег',
+
+            //     code: 'noneed',
+            //     name: 'Не видят надобности',
+            //     code: 'lpr',
+            //     name: 'ЛПР против',
+            //     code: 'employee',
+            //     name: 'Ключевой сотрудник против',
+            //     code: 'fail_off',
+            //     name: 'Не хотят общаться',
+
+        ];
+        // не было времени	pres_fail_reason	pres_fail_notime
+        // конкуренты - привыкли	pres_fail_reason	pres_c_habit
+        // конкуренты - оплачено	pres_fail_reason	pres_c_prepay
+        // конкуренты - цена	pres_fail_reason	pres_c_price
+        // слишком дорого	pres_fail_reason	pres_to_expensive
+        // слишком дешево	pres_fail_reason	pres_to_cheap
+        // нет денег	pres_fail_reason	pres_nomoney
+        // не видят надобности	pres_fail_reason	pres_noneed
+        // лпр против	pres_fail_reason	pres_lpr
+        // ключевой сотрудник против	pres_fail_reason	pres_employee
+        // не хотят общаться	pres_fail_reason	fail_off
+        $result = 'op_call_result_yes';
+
+        switch ($failReason) {
+            case 'fail_notime':
+            case 'c_habit':
+            case 'c_prepay':
+            case 'c_price':
+            case 'to_cheap':
+            case 'money':
+            case 'to_expensive':
+            case 'noneed':
+            case 'lpr':
+            case 'employee':
+
+
+                $result = 'pres_' . $failReason;
+                break;
+
+            case 'fail_off':
+                $result = $failReason;
+
+                break;
+
+
+            default:
+                # code...
+                break;
+        }
 
 
         return $result;
