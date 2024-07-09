@@ -1453,6 +1453,10 @@ class EventDocumentService
         Log::channel('telegram')->info('CU PR DEAL', [
             'currentPresDeal' => $this->currentPresDeal
         ]);
+
+        Log::info('CU PR DEAL', [
+            'currentPresDeal' => $this->currentPresDeal
+        ]);
         $currentPresDeal =  $this->currentPresDeal;
         if (!empty($currentPresDeal)) {
             if (!empty($currentPresDeal['ID'])) {
