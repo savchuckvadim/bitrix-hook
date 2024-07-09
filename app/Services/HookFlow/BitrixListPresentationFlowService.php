@@ -226,6 +226,14 @@ class BitrixListPresentationFlowService
                         // 'name' =>  'В работе' //'В работе'
                     ],
                 ],
+                [
+                    'code' => 'pres_prospects_type',
+                    'name' => 'Перспективная ?',
+                    'list' =>  [
+                        'code' => 'pres_prospects_good',  //'in_work',
+                        // 'name' =>  'В работе' //'В работе'
+                    ],
+                ]
                 // [
                 //     'code' => 'op_result_status',
                 //     'name' => 'Результативность',
@@ -239,7 +247,6 @@ class BitrixListPresentationFlowService
 
 
             ];
-
 
 
             foreach ($presentatationPlanFields as $presValue) {
@@ -479,6 +486,24 @@ class BitrixListPresentationFlowService
 
             if ($workStatus === 'fail') {  //если провал
                 if (!empty($failTypeCode)) {
+
+                    $perspectItem = [
+                        'code' => 'pres_prospects_type',
+                        'name' => 'Перспективная ?',
+                        'list' =>  [
+                            'code' => BitrixListPresentationFlowService::getPerspectStatus(
+                                $failTypeCode,
+                            ),  //'in_work',
+                            // 'name' =>  'В работе' //'В работе'
+                        ],
+                    ];
+                    array_push($presentatationReportFields, $perspectItem);
+
+
+
+
+
+
                     if ($failTypeCode == 'failure') { //если тип провала - отказ
                         if (!empty($failReason)) {
                             if (!empty($failReason['code'])) {
@@ -496,6 +521,19 @@ class BitrixListPresentationFlowService
                             }
                         }
                     }
+                }
+            } else {
+                if (!empty($failTypeCode)) {
+
+                    $perspectItem = [
+                        'code' => 'pres_prospects_type',
+                        'name' => 'Перспективная ?',
+                        'list' =>  [
+                            'code' => 'pres_prospects_good',  //'in_work',
+                            // 'name' =>  'В работе' //'В работе'
+                        ],
+                    ];
+                    array_push($presentatationReportFields, $perspectItem);
                 }
             }
 
