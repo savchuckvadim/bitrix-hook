@@ -769,10 +769,12 @@ class BitrixListPresentationFlowService
     static function  getPresInitStatus($resultStatus)
     {
 
+        //TODO FLOW на прием заявки
+
         $result = 'pres_init_status_yes';
-        if ($resultStatus !== 'result') {
-            $result = 'pres_init_status_no';
-        }
+        // if ($resultStatus !== 'result' && $resultStatus !== 'new') {
+        //     $result = 'pres_init_status_no';
+        // }
 
 
         return $result;
