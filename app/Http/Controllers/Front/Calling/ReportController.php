@@ -1921,7 +1921,8 @@ class ReportController extends Controller
 
             $departamentService = new BitrixDepartamentService($hook);
             $department =  $departamentService->getDepartamentIdByPortal($portal);
-
+          
+            $allUsers = [];
             if (!empty($department)) {
 
                 if (!empty($department['bitrixId'])) {
@@ -1937,18 +1938,33 @@ class ReportController extends Controller
                     'PARENT' =>  $departmentId
                 ]);
 
-                Log::info('DEPART HOOK', [
-                    'generalDepartment' => $generalDepartment,
-                    'childrenDepartments' => $childrenDepartments,
-                ]);
 
+                if (!empty($generalDepartment)) {
+                    foreach ($generalDepartment as $gDep) {
+                        if (!empty($gDep)) {
+                            if (!empty($gDep['ID'])) {
+                                array_push($departamentIds, $gDep['ID']);
+                                $gDep['users'] = $departamentService->getUsersByDepartment($gDep['ID']);
+                                $allUsers = array_merge($allUsers, $gDep['users']);
+                            }
+                        }
+                    }
+                }
 
-               $gptResult =  $departamentService->getAllUsersFromSalesIncludingSubdeps($departmentId);
+                if (!empty($childrenDepartments)) {
+                    foreach ($childrenDepartments as $chDep) {
+                        if (!empty($chDep)) {
+                            if (!empty($chDep['ID'])) {
+                                array_push($departamentIds, $chDep['ID']);
+                                $chDep['users'] = $departamentService->getUsersByDepartment($chDep['ID']);
+                                $allUsers = array_merge($allUsers, $chDep['users']);
+                            }
+                        }
+                    }
+                }
 
-                Log::info('DEPART HOOK', [
-                    'gptResult' => $gptResult,
-         
-                ]);
+               
+
             }
 
 
@@ -1956,6 +1972,7 @@ class ReportController extends Controller
                 [
                     'generalDepartment' => $generalDepartment,
                     'childrenDepartments' => $childrenDepartments,
+                    'allUsers' => $allUsers,
                 ]
             );
         } catch (\Throwable $th) {
@@ -1964,6 +1981,7 @@ class ReportController extends Controller
                 [
                     'generalDepartment' => $generalDepartment,
                     'childrenDepartments' => $childrenDepartments,
+                    'allUsers' => $allUsers,
                 ]
             );
         }
