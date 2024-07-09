@@ -1770,17 +1770,29 @@ class EventReportService
             //если текущее событие по которому отчитываются - презентация
 
             $currentDealIds = [];
-            if (!empty($currentTask)) {
-                if (!empty($currentTask['ufCrmTask'])) {
+            // if (!empty($currentTask)) {
+            //     if (!empty($currentTask['ufCrmTask'])) {
+            //         $array = $currentTask['ufCrmTask'];
+            //         foreach ($array as $item) {
+            //             // Проверяем, начинается ли элемент с "D_"
+            //             if (strpos($item, "D_") === 0) {
+            //                 // Добавляем ID в массив, удаляя первые два символа "D_"
+            //                 $currentDealIds[] = substr($item, 2);
+            //             }
+            //         }
+            //     }
+            // }
+
+            if (!empty($this->currentBtxDeals)) {
+               
                     $array = $currentTask['ufCrmTask'];
-                    foreach ($array as $item) {
+                    foreach ($this->currentBtxDeals as $deal) {
                         // Проверяем, начинается ли элемент с "D_"
-                        if (strpos($item, "D_") === 0) {
                             // Добавляем ID в массив, удаляя первые два символа "D_"
-                            $currentDealIds[] = substr($item, 2);
-                        }
+                            $currentDealIds[] = $deal['ID'];
+                        
                     }
-                }
+                
             }
             $eventType = 'report';
 

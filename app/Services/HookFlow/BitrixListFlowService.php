@@ -110,7 +110,7 @@ class BitrixListFlowService
                     $nextCommunication = null;
                 }
             }
-            Log::channel('telegram')->info('HOOK TST', ['eventAction' => $eventAction]);
+            // Log::channel('telegram')->info('HOOK TST', ['eventAction' => $eventAction]);
 
             $xoFields = [
                 [

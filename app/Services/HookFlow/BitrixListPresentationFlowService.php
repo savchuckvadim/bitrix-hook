@@ -220,7 +220,7 @@ class BitrixListPresentationFlowService
                     'name' => 'Статус Работы',
                     'list' =>  [
                         'code' => BitrixListPresentationFlowService::getCurrentWorkStatusCode(
-                            ['code' => 'inJob'],
+                            $workStatus,
                             $eventType
                         ),  //'in_work',
                         // 'name' =>  'В работе' //'В работе'
@@ -267,7 +267,7 @@ class BitrixListPresentationFlowService
                 }
                 // array_push($fieldsData, $currentDataField);
             }
-           
+
             $fieldsData['NAME'] = $evTypeName . ' ' . $name;
 
             BitrixListService::setItem(
@@ -681,6 +681,10 @@ class BitrixListPresentationFlowService
         // 1: {id: 1, code: "setAside", name: "Отложено"}
         // 2: {id: 2, code: "success", name: "Продажа"}
         // 3: {id: 3, code: "fail", name: "Отказ"}
+        Log::channel('telegram')->info('plan deals ids', [
+            'workStatus' => $workStatus
+
+        ]);
         if (!empty($workStatus)) {
             if (!empty($workStatus['code'])) {
                 $code = $workStatus['code'];
