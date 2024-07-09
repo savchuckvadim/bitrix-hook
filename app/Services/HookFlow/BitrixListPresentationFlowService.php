@@ -171,8 +171,8 @@ class BitrixListPresentationFlowService
                     ]
                 ],
                 [
-                    'code' => 'pres_crm',
-                    'name' => 'pres_crm',
+                    'code' => 'pres_crm_company',
+                    'name' => 'pres_crm_company',
                     'value' => ['n0' => 'CO_' . $companyId],
                 ],
                 [
@@ -184,6 +184,17 @@ class BitrixListPresentationFlowService
                     'code' => 'pres_crm_deal',
                     'name' => 'crm',
                     'value' => ['n0' => 'D_' . $currentDealIds[1]], //base deal
+                ],
+                [
+                    'code' => 'pres_crm',
+                    'name' => 'crm',
+                    'value' => [
+                        'n0' => 'CO_' . $companyId,
+                        'n1' => 'D_' . $currentDealIds[0],
+                        'n2' => 'D_' . $currentDealIds[1]
+                    
+                    
+                    ], //base deal
                 ],
                 // [
                 //     'code' => 'pres_crm_tmc_deal',
@@ -230,9 +241,7 @@ class BitrixListPresentationFlowService
             ];
 
 
-            $fieldsData = [
-                'NAME' => $evTypeName . ' ' . $name
-            ];
+           
             foreach ($presentatationPlanFields as $presValue) {
                 $currentDataField = [];
                 $fieldCode = $presPortalBtxList['group'] . '_' . $presPortalBtxList['type'] . '_' . $presValue['code'];
@@ -259,13 +268,21 @@ class BitrixListPresentationFlowService
                 // array_push($fieldsData, $currentDataField);
             }
 
-            // Log::channel('telegram')->info('getListPresentationPlanFlow', [
-            //     'fieldsData' => $fieldsData,
-            //     'currentDealIds' => $currentDealIds,
+            Log::channel('telegram')->info('getListPresentationPlanFlow', [
+                'NAME' => $evTypeName . ' ' . $name,
+                'currentDealIds' => $currentDealIds,
 
 
-            // ]);
+            ]);
+            $fieldsData = [
+                'NAME' => $evTypeName . ' ' . $name
+            ];
+            Log::channel('telegram')->info('fieldsData', [
+                'fieldsData' => $fieldsData,
+                
 
+
+            ]);
             BitrixListService::setItem(
                 $hook,
                 $bitrixList['bitrixId'],
