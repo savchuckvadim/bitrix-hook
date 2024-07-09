@@ -811,12 +811,12 @@ class BitrixListPresentationFlowService
                 );
             } else { //это так на всякий случай по идее при репорте не должно нечего создаваться
                 // даже если unplanned
-                BitrixListService::setItem(
-                    $hook,
-                    $bitrixList['bitrixId'],
-                    $fieldsData,
-                    $code
-                );
+                // BitrixListService::setItem(
+                //     $hook,
+                //     $bitrixList['bitrixId'],
+                //     $fieldsData,
+                //     $code
+                // );
             }
 
             // $currentItemList = BitrixListService::getItem(
