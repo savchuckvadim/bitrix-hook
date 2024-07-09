@@ -721,10 +721,7 @@ class BitrixListPresentationFlowService
         // 1: {id: 1, code: "setAside", name: "Отложено"}
         // 2: {id: 2, code: "success", name: "Продажа"}
         // 3: {id: 3, code: "fail", name: "Отказ"}
-        Log::channel('telegram')->info('plan deals ids', [
-            'workStatus' => $workStatus
 
-        ]);
         $workStatusCode = $workStatus;
         if (!empty($workStatus)) {
             if (!empty($workStatus['code'])) {
@@ -923,64 +920,70 @@ class BitrixListPresentationFlowService
         // Отказ	pres_prospects_type	pres_prospects_fail
 
         $result = 'pres_prospects_good';
+        Log::channel('telegram')->info('failTypeCode', [
+            'failTypeCode' => $failTypeCode
 
-        if (!empty($failTypeCode)) {
-            switch ($failTypeCode) {
-                case 'op_prospects_good':
-                    $result = 'pres_prospects_good';
+        ]);
 
-                    break;
+        switch ($failTypeCode) {
+            case 'op_prospects_good':
+                $result = 'pres_prospects_good';
 
-
-                case 'op_prospects_nopersp':
-
-                    $result = 'pres_prospects_nopersp';
-
-                    break;
-                case 'op_prospects_nophone':
-                    $result = 'pres_prospects_nophone';
-
-                    break;
-                case 'op_prospects_company':
-                    $result = 'pres_prospects_company';
-                    break;
-                case 'garant':
-                    $result = 'pres_prospects_garant';
-                    break;
-                case 'go':
-                    $result = 'pres_prospects_go';
-                    break;
-                case 'territory':
-                    $result = 'pres_prospects_territory';
-                    break;
-                case 'accountant':
-                    $result = 'pres_prospects_acountant';
-                    break;
-
-                case 'autsorc':
-                    $result = 'pres_prospects_autsorc';
-                    break;
-                case 'depend':
-
-                    $result = 'pres_prospects_depend';
-                    break;
+                break;
 
 
-                case 'accountant':
-                    $result = 'pres_prospects_acountant';
-                    break;
+            case 'op_prospects_nopersp':
 
-                case 'failure':
-                case 'fail':
-                    $result = 'op_prospects_fail';
-                    break;
+                $result = 'pres_prospects_nopersp';
 
-                default:
-                    # code...
-                    break;
-            }
+                break;
+            case 'op_prospects_nophone':
+                $result = 'pres_prospects_nophone';
+
+                break;
+            case 'op_prospects_company':
+                $result = 'pres_prospects_company';
+                break;
+            case 'garant':
+                $result = 'pres_prospects_garant';
+                break;
+            case 'go':
+                $result = 'pres_prospects_go';
+                break;
+            case 'territory':
+                $result = 'pres_prospects_territory';
+                break;
+            case 'accountant':
+                $result = 'pres_prospects_acountant';
+                break;
+
+            case 'autsorc':
+                $result = 'pres_prospects_autsorc';
+                break;
+            case 'depend':
+
+                $result = 'pres_prospects_depend';
+                break;
+
+
+            case 'accountant':
+                $result = 'pres_prospects_acountant';
+                break;
+
+            case 'failure':
+            case 'fail':
+                $result = 'op_prospects_fail';
+                break;
+
+            default:
+                # code...
+                break;
         }
 
+        Log::channel('telegram')->info('failTypeCode', [
+            'result' => $result
+
+        ]);
 
         return $result;
     }
