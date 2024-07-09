@@ -1908,6 +1908,9 @@ class ReportController extends Controller
         $generalDepartment = null;
 
         $childrenDepartments = null;
+        $resultGeneralDepartment = [];
+
+        $resultChildrenDepartments = [];
         try {
             //code...
 
@@ -1921,7 +1924,7 @@ class ReportController extends Controller
 
             $departamentService = new BitrixDepartamentService($hook);
             $department =  $departamentService->getDepartamentIdByPortal($portal);
-          
+
             $allUsers = [];
             if (!empty($department)) {
 
@@ -1944,8 +1947,12 @@ class ReportController extends Controller
                         if (!empty($gDep)) {
                             if (!empty($gDep['ID'])) {
                                 // array_push($departamentIds, $gDep['ID']);
-                                $gDep['users'] = $departamentService->getUsersByDepartment($gDep['ID']);
-                                $allUsers = array_merge($allUsers, $gDep['users']);
+                                $departmentUsers = $departamentService->getUsersByDepartment($gDep['ID']);
+
+                                $resultDep = $gDep;
+                                $resultDep['USERS'] = $departmentUsers;
+                                $allUsers = array_merge($allUsers, $departmentUsers);
+                                array_push($resultGeneralDepartment, $resultDep);
                             }
                         }
                     }
@@ -1956,22 +1963,23 @@ class ReportController extends Controller
                         if (!empty($chDep)) {
                             if (!empty($chDep['ID'])) {
                                 // array_push($departamentIds, $chDep['ID']);
-                                $chDep['users'] = $departamentService->getUsersByDepartment($chDep['ID']);
-                                $allUsers = array_merge($allUsers, $chDep['users']);
+                                $departmentUsers  = $departamentService->getUsersByDepartment($chDep['ID']);
+                                $resultDep = $gDep;
+                                $resultDep['USERS'] = $departmentUsers;
+
+                                $allUsers = array_merge($allUsers, $departmentUsers);
+                                array_push($resultChildrenDepartments, $resultDep);
                             }
                         }
                     }
                 }
-
-               
-
             }
 
 
             return APIOnlineController::getSuccess(
                 [
-                    'generalDepartment' => $generalDepartment,
-                    'childrenDepartments' => $childrenDepartments,
+                    'generalDepartment' => $resultGeneralDepartment,
+                    'childrenDepartments' => $resultChildrenDepartments,
                     'allUsers' => $allUsers,
                 ]
             );
