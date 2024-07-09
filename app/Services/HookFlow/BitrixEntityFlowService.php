@@ -257,7 +257,7 @@ class BitrixEntityFlowService
                                     case 'op_invoice_q':
                                     case 'op_invoice_pres_q':
                                     case 'op_invoice_date':
-                                    case 'pres_count':
+                                    // case 'pres_count':
                                     case 'pres_comments':
                                     case 'op_history':
                                     case 'op_mhistory':
