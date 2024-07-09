@@ -1931,6 +1931,7 @@ class ReportController extends Controller
 
                 if (!empty($sessionData['department'])) {
                     $departmentResult = $sessionData['department'];
+                    $departmentResult['fromSession'] = true;
                 }
             }
 
