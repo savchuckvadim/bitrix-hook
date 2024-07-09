@@ -267,7 +267,12 @@ class BitrixListPresentationFlowService
                 }
                 // array_push($fieldsData, $currentDataField);
             }
+            Log::info('fieldsData after name', [
+                'fieldsData' => $fieldsData,
+                
 
+
+            ]);
             Log::channel('telegram')->info('getListPresentationPlanFlow', [
                 'NAME' => $evTypeName . ' ' . $name,
                 'currentDealIds' => $currentDealIds,
@@ -277,7 +282,7 @@ class BitrixListPresentationFlowService
             $fieldsData = [
                 'NAME' => $evTypeName . ' ' . $name
             ];
-            Log::channel('telegram')->info('fieldsData', [
+            Log::info('fieldsData', [
                 'fieldsData' => $fieldsData,
                 
 
