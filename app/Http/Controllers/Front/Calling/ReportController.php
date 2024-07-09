@@ -1905,6 +1905,7 @@ class ReportController extends Controller
     {
         date_default_timezone_set('Europe/Moscow'); // Установка временной зоны
         $currentMonthDay = date('md');
+        $result = [];
         $departmentResult = null;
         $generalDepartment = null;
 
@@ -1930,8 +1931,9 @@ class ReportController extends Controller
             if (!empty($sessionData)) {
 
                 if (!empty($sessionData['department'])) {
+                    $result = $departmentResult = $sessionData;
                     $departmentResult = $sessionData['department'];
-                    $departmentResult['fromSession'] = true;
+                    $result['fromSession'] = true;
                 }
             }
 
