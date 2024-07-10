@@ -1173,14 +1173,14 @@ Route::get('/alfa/activity', function (Request $request) {
         $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
         $hook = $fullDomain . $webhookRestKey;
 
-        $params = [
+        $data = [
             'filter' => [
                 'RESPONSIBLE_ID' => 502,
                 // '<CREATED' => $yearAgo
 
             ]
         ];
-        $response = Http::get($hook . $method, $params);
+        $response = Http::post($hook . $method, $data);
         $result =  APIBitrixController::getBitrixRespone($response, 'getDepartments');
 
         return  APIOnlineController::getSuccess(['result' => $result]);
