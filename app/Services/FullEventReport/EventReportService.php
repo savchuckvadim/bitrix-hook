@@ -1152,7 +1152,7 @@ class EventReportService
             $setNewDealData = [
                 'COMPANY_ID' => $this->entityId,
                 'CATEGORY_ID' => $this->btxDealBaseCategoryId,
-                'RESPONSIBLE_ID' => $this->planResponsibleId,
+                'ASSIGNED_BY_ID' => $this->planResponsibleId,
             ];
             $currentDealId = BitrixDealService::setDeal(
                 $this->hook,

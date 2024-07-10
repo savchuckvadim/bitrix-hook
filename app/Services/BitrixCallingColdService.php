@@ -416,8 +416,8 @@ class BitrixCallingColdService
         $this->callThemeField = $callThemeField;
         $this->lastCallDateFieldCold = $lastCallDateFieldCold;
         $this->callThemeFieldCold = $callThemeFieldCold;
-$departmentService = 
-        $this->currentDepartamentType = BitrixDepartamentService::getDepartamentTypeByUserId();
+        $departmentService =
+            $this->currentDepartamentType = BitrixDepartamentService::getDepartamentTypeByUserId();
     }
 
 
@@ -655,18 +655,20 @@ $departmentService =
 
         if (!empty($this->portalDealData['categories'])) {
             foreach ($this->portalDealData['categories'] as $category) {
+                $isBaseCategory = $category['code'] ===  'sales_base';
 
                 $includedStages = [];
 
 
                 $categoryId = $category['bitrixId'];
+
                 if (!empty($category['stages'])) {
                     foreach ($category['stages'] as $stage) {
                         if ($stage['code']) {
                             if (
                                 (strpos($stage['code'], 'fail') === false) &&
                                 (strpos($stage['code'], 'noresult') === false) &&
-                                (strpos($stage['code'], 'double') === false) &&
+                                ((strpos($stage['code'], 'double') === false) ) &&
                                 (strpos($stage['code'], 'success') === false)
                             ) {
                                 array_push($includedStages, "C" . $categoryId . ":" . $stage['bitrixId']);
@@ -709,7 +711,10 @@ $departmentService =
                                 BitrixDealService::updateDeal(
                                     $this->hook,
                                     $bxDeal['ID'],
-                                    ['STAGE_ID' => 'C' . $categoryId . ':APOLOGY']
+                                    [
+                                        'STAGE_ID' => 'C' . $categoryId . ':APOLOGY'
+
+                                    ]
                                 );
                             }
                         }
@@ -742,11 +747,7 @@ $departmentService =
         );
         $planDeals = $flowResult['dealIds'];
 
-        Log::info('HOOK TEST COLD', [
-            'planDeals' => $planDeals,
-
-
-        ]);
+      
         return [
             'planDeals' => $planDeals,
         ];
