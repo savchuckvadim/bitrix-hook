@@ -1196,6 +1196,7 @@ Route::get('/alfa/activity', function (Request $request) {
         $allActivities = []; // Массив для сохранения всех активностей
         $finish = false;
 
+        $pagesCount = 0;
         while (!$finish) {
             sleep(1);
             $data = [
@@ -1218,11 +1219,15 @@ Route::get('/alfa/activity', function (Request $request) {
             // $response =   APIBitrixController::getBitrixRespone($responseJson, 'getDepartments');
 
 
-            if (!empty($response['result'])) {
+            if (!empty($response['result'])   && $pagesCount < 4) {
                 foreach ($response['result'] as $activity) {
                     $allActivities[] = $activity;
                     $lastActivityID = $activity['ID']; // Обновление последнего ID для следующего запроса
+              
+              
+              
                 }
+                $pagesCount ++;
             } else {
                 $finish = true; // Завершаем цикл, если результаты закончились
             }
