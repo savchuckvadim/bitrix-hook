@@ -1234,7 +1234,8 @@ Route::get('/alfa/activity', function (Request $request) {
                             'company',
                             $companyId,
                             [
-                                'ASSIGNED_BY_ID' => 502
+                                'ASSIGNED_BY_ID' => 502,
+                                'UF_CRM_1720600919' => 'юрфорум'
                             ]
                         );
                         $responseJson = Http::post($hook . $method, $data);
