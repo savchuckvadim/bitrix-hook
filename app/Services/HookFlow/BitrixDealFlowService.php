@@ -121,12 +121,7 @@ class BitrixDealFlowService
                         $currentCategoryData
 
                     );
-                    Log::info('HOOK TEST currentBtxDeals', [
-                        'currentDealId' => $currentDealId,
-                     
-            
-            
-                    ]);
+
                     if ($currentCategoryData['code'] === 'sales_presentation') {
                         if (!empty($currentDealId)) {
                             $rand = 1;

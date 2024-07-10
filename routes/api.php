@@ -11,6 +11,7 @@ use App\Http\Controllers\Front\Calling\ReportController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\ReactAppController;
 use App\Models\Price;
+use App\Services\BitrixGeneralService;
 use App\Services\FullEventReport\EventDocumentService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
@@ -1219,15 +1220,27 @@ Route::get('/alfa/activity', function (Request $request) {
             // $response =   APIBitrixController::getBitrixRespone($responseJson, 'getDepartments');
 
 
-            if (!empty($response['result'])   && $pagesCount < 4) {
+            if (!empty($response['result'])   && $pagesCount < 1) {
                 foreach ($response['result'] as $activity) {
                     $allActivities[] = $activity;
                     $lastActivityID = $activity['ID']; // Обновление последнего ID для следующего запроса
-              
-              
-              
+
+                    if (isset($activity['OWNER_ID'])) {
+
+                        $companyId = $activity['OWNER_ID'];
+                        sleep(1);
+                        BitrixGeneralService::updateEntity(
+                            $hook,
+                            'company',
+                            $companyId,
+                            [
+                                'ASSIGNED_BY_ID' => 502
+                            ]
+                        );
+                        $responseJson = Http::post($hook . $method, $data);
+                    }
                 }
-                $pagesCount ++;
+                $pagesCount++;
             } else {
                 $finish = true; // Завершаем цикл, если результаты закончились
             }
