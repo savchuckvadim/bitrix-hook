@@ -1204,12 +1204,12 @@ Route::get('/alfa/activity', function (Request $request) {
                     '>ID' => $lastActivityID,
                     'RESPONSIBLE_ID' => 502,
                     '<CREATED' => $yearAgo,
-                    '!=PROVIDER_TYPE_ID' => 'TASK',
+                    // '!=PROVIDER_TYPE_ID' => 'TASK',
                     'OWNER_TYPE_ID' => 4,
-                    '%SUBJECT' => 'юр. форум'
+                    // '%SUBJECT' => 'юр. форум'
                 ],
-                'select' => ['ID', 'TITLE', 'DATE_CREATE', 'DESCRIPTION'],
-                'start' => -1 // Это значение использовать не нужно, оно для примера
+                // 'select' => ['ID', 'TITLE', 'DATE_CREATE', 'DESCRIPTION'],
+                // 'start' => -1 // Это значение использовать не нужно, оно для примера
             ];
 
             $responseJson = Http::post($hook . $method, $data);
@@ -1231,7 +1231,7 @@ Route::get('/alfa/activity', function (Request $request) {
         $count = count($allActivities);
         return  APIOnlineController::getSuccess([
             'result' => $allActivities,
-            'result' => $count,
+            'count' => $count,
 
 
         ]);
