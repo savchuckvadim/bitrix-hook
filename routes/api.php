@@ -1176,7 +1176,7 @@ Route::get('/alfa/activity', function (Request $request) {
         $data = [
             'filter' => [
                 'RESPONSIBLE_ID' => 502,
-                // '<CREATED' => $yearAgo
+                '<CREATED' => $yearAgo
 
             ]
         ];
