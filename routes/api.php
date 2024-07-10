@@ -1184,8 +1184,8 @@ Route::get('/alfa/activity', function (Request $request) {
             'filter' => [
                 'RESPONSIBLE_ID' => 502,
                 '<CREATED' => $yearAgo,
-                '<=PROVIDER_TYPE_ID' => 'TASK'
-
+                '!=PROVIDER_TYPE_ID' => 'TASK',
+                'OWNER_TYPE_ID' => 4
             ]
         ];
         $response = Http::post($hook . $method, $data);
