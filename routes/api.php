@@ -1185,13 +1185,15 @@ Route::get('/alfa/activity', function (Request $request) {
                 'RESPONSIBLE_ID' => 502,
                 '<CREATED' => $yearAgo,
                 '!=PROVIDER_TYPE_ID' => 'TASK',
-                'OWNER_TYPE_ID' => 4
+                'OWNER_TYPE_ID' => 4,
+                // '%SUBJECT' => 'юр. форум' // Поиск дел, где в названии есть "юр. форум"
+
             ]
         ];
         $response = Http::post($hook . $method, $data);
         $result =  APIBitrixController::getBitrixRespone($response, 'getDepartments');
 
-        return  APIOnlineController::getSuccess(['result' => $result]);
+        return  APIOnlineController::getSuccess(['result' => $response]);
     } catch (\Throwable $th) {
         return APIOnlineController::getSuccess(['result' => $th->getMessage()]);
     }
