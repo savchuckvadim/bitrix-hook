@@ -1156,6 +1156,39 @@ Route::post('/test/', function (Request $request) {
 
 
 
+
+
+Route::get('/alfa/activity', function (Request $request) {
+
+    $domain = 'alfacentr.bitrix24.ru';
+    $method = '/crm.activity.list.json';
+    $yearAgo = date('Y-m-d', strtotime('-1 year'));
+    $portal = PortalController::getPortal($domain);
+    $portal = $portal['data'];
+
+    $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+    $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+
+    $params = [
+        'FILTER' => [
+            'RESPONSIBLE_ID' => 502,
+            '<CREATED' => $yearAgo
+
+        ]
+    ];
+    $response = Http::get($this->hook . $method, $params);
+    $result =  APIBitrixController::getBitrixRespone($response, 'getDepartments');
+
+    return  $result;
+
+
+    return APIOnlineController::getSuccess(['result' => true]);
+});
+
+
+
+
+
 // Route::post('/update/smart/', function (Request $request) {
 
 //     $auth = $request['auth'];

@@ -96,7 +96,8 @@ class BitrixDealFlowService
 
                     'CATEGORY_ID' => $currentCategoryData['bitrixId'],
                     'STAGE_ID' => "C" . $currentCategoryData['bitrixId'] . ':' . $targetStageBtxId,
-                    "COMPANY_ID" => $entityId
+                    "COMPANY_ID" => $entityId,
+                    'ASSIGNED_BY_ID' => $responsibleId
                 ];
 
 
