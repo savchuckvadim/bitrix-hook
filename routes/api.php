@@ -1160,29 +1160,33 @@ Route::post('/test/', function (Request $request) {
 
 Route::get('/alfa/activity', function (Request $request) {
 
-    $domain = 'alfacentr.bitrix24.ru';
-    $method = '/crm.activity.list';
-    $yearAgo = date('Y-m-d', strtotime('-1 year'));
-    $portal = PortalController::getPortal($domain);
-    $portal = $portal['data'];
+    try {
+        //code...
 
-    $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
-    $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+        $domain = 'alfacentr.bitrix24.ru';
+        $fullDomain = 'https://' . $domain  . '/';
+        $method = '/crm.activity.list';
+        $yearAgo = date('Y-m-d', strtotime('-1 year'));
+        $portal = PortalController::getPortal($domain);
+        $portal = $portal['data'];
 
-    $params = [
-        'FILTER' => [
-            'RESPONSIBLE_ID' => 502,
-            '<CREATED' => $yearAgo
+        $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+        $hook = $fullDomain . $webhookRestKey;
 
-        ]
-    ];
-    $response = Http::get($hook . $method, $params);
-    $result =  APIBitrixController::getBitrixRespone($response, 'getDepartments');
+        $params = [
+            'FILTER' => [
+                'RESPONSIBLE_ID' => 502,
+                // '<CREATED' => $yearAgo
 
-    return  $result;
+            ]
+        ];
+        $response = Http::get($hook . $method, $params);
+        $result =  APIBitrixController::getBitrixRespone($response, 'getDepartments');
 
-
-    return APIOnlineController::getSuccess(['result' => true]);
+        return  APIOnlineController::getSuccess(['result' => $result]);
+    } catch (\Throwable $th) {
+        return APIOnlineController::getSuccess(['result' => $th->getMessage()]);
+    }
 });
 
 
