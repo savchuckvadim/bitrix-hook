@@ -1180,20 +1180,61 @@ Route::get('/alfa/activity', function (Request $request) {
         $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
         $hook = $fullDomain . $webhookRestKey;
 
-        $data = [
-            'filter' => [
-                'RESPONSIBLE_ID' => 502,
-                '<CREATED' => $yearAgo,
-                '!=PROVIDER_TYPE_ID' => 'TASK',
-                'OWNER_TYPE_ID' => 4,
-                // '%SUBJECT' => 'юр. форум' // Поиск дел, где в названии есть "юр. форум"
+        // $data = [
+        //     'filter' => [
+        //         'RESPONSIBLE_ID' => 502,
+        //         '<CREATED' => $yearAgo,
+        //         '!=PROVIDER_TYPE_ID' => 'TASK',
+        //         'OWNER_TYPE_ID' => 4,
+        //         '%SUBJECT' => 'юр. форум' // Поиск дел, где в названии есть "юр. форум"
 
-            ]
-        ];
-        $response = Http::post($hook . $method, $data);
-        $result =  APIBitrixController::getBitrixRespone($response, 'getDepartments');
+        //     ]
+        // ];
+        // $response = Http::post($hook . $method, $data);
 
-        return  APIOnlineController::getSuccess(['result' => $response]);
+        $lastActivityID = 0; // Используйте последний ID для пагинации
+        $allActivities = []; // Массив для сохранения всех активностей
+        $finish = false;
+
+        while (!$finish) {
+            sleep(1);
+            $data = [
+                'order' => ['ID' => 'ASC'],
+                'filter' => [
+                    '>ID' => $lastActivityID,
+                    'RESPONSIBLE_ID' => 502,
+                    '<CREATED' => $yearAgo,
+                    '!=PROVIDER_TYPE_ID' => 'TASK',
+                    'OWNER_TYPE_ID' => 4,
+                    '%SUBJECT' => 'юр. форум'
+                ],
+                'select' => ['ID', 'TITLE', 'DATE_CREATE', 'DESCRIPTION'],
+                'start' => -1 // Это значение использовать не нужно, оно для примера
+            ];
+
+            $responseJson = Http::post($hook . $method, $data);
+            $response =  $responseJson->json();
+
+            // $response =   APIBitrixController::getBitrixRespone($responseJson, 'getDepartments');
+
+
+            if (!empty($response['result'])) {
+                foreach ($response['result'] as $activity) {
+                    $allActivities[] = $activity;
+                    $lastActivityID = $activity['ID']; // Обновление последнего ID для следующего запроса
+                }
+            } else {
+                $finish = true; // Завершаем цикл, если результаты закончились
+            }
+        }
+
+        $count = count($allActivities);
+        return  APIOnlineController::getSuccess([
+            'result' => $allActivities,
+            'result' => $count,
+
+
+        ]);
     } catch (\Throwable $th) {
         return APIOnlineController::getSuccess(['result' => $th->getMessage()]);
     }
