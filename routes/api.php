@@ -1165,7 +1165,7 @@ Route::get('/alfa/activity', function (Request $request) {
 
         $domain = 'alfacentr.bitrix24.ru';
         $fullDomain = 'https://' . $domain  . '/';
-        $method = '/crm.activity.list';
+        $method = '/crm.activity.list.json';
         $yearAgo = date('Y-m-d', strtotime('-1 year'));
         $portal = PortalController::getPortal($domain);
         $portal = $portal['data'];
@@ -1174,7 +1174,7 @@ Route::get('/alfa/activity', function (Request $request) {
         $hook = $fullDomain . $webhookRestKey;
 
         $params = [
-            'FILTER' => [
+            'filter' => [
                 'RESPONSIBLE_ID' => 502,
                 // '<CREATED' => $yearAgo
 
