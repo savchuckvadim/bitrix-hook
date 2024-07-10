@@ -1159,7 +1159,14 @@ Route::post('/test/', function (Request $request) {
 
 
 Route::get('/alfa/activity', function (Request $request) {
-
+    // Лид	1	LEAD	L	CRM_LEAD
+    // Сделка	2	DEAL	D	CRM_DEAL
+    // Контакт	3	CONTACT	C	CRM_CONTACT
+    // Компания	4	COMPANY	CO	CRM_COMPANY
+    // Счет (старый)	5	INVOICE	I	CRM_INVOICE
+    // Счет (новый)	31	SMART_INVOICE	SI	CRM_SMART_INVOICE
+    // Предложение	7	QUOTE	Q	CRM_QUOTE
+    // Реквизит	8	REQUISITE	RQ	CRM_REQUISITE
     try {
         //code...
 
@@ -1176,7 +1183,8 @@ Route::get('/alfa/activity', function (Request $request) {
         $data = [
             'filter' => [
                 'RESPONSIBLE_ID' => 502,
-                '<CREATED' => $yearAgo
+                '<CREATED' => $yearAgo,
+                '<=PROVIDER_TYPE_ID' => 'TASK'
 
             ]
         ];
