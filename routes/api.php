@@ -1161,7 +1161,7 @@ Route::post('/test/', function (Request $request) {
 Route::get('/alfa/activity', function (Request $request) {
 
     $domain = 'alfacentr.bitrix24.ru';
-    $method = '/crm.activity.list.json';
+    $method = '/crm.activity.list';
     $yearAgo = date('Y-m-d', strtotime('-1 year'));
     $portal = PortalController::getPortal($domain);
     $portal = $portal['data'];
@@ -1176,7 +1176,7 @@ Route::get('/alfa/activity', function (Request $request) {
 
         ]
     ];
-    $response = Http::get($this->hook . $method, $params);
+    $response = Http::get($hook . $method, $params);
     $result =  APIBitrixController::getBitrixRespone($response, 'getDepartments');
 
     return  $result;
