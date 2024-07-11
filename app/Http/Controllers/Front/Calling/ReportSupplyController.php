@@ -46,7 +46,7 @@ class ReportSupplyController extends Controller
                 $sessionData = FullEventInitController::getSessionItem($sessionKey);
 
 
-                if (empty($sessionData)) {
+                if (!empty($sessionData)) {
                     if (!empty($sessionData['currentCompany'])) {
                         $currentCompany = $sessionData['currentCompany'];
                     }
