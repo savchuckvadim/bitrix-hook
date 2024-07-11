@@ -504,7 +504,7 @@ class EventReportService
                 }
             }
         } else {
-            $sessionKey = 'newtask_' . $domain . '_' . $this->planResponsibleId . '_' . $entityId;
+            $sessionKey = 'newtask_' . $domain  . '_' . $entityId;
             $sessionData = FullEventInitController::getSessionItem($sessionKey);
 
             if (empty($sessionData)) {

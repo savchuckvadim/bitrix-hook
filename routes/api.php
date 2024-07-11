@@ -7,6 +7,7 @@ use App\Http\Controllers\APIController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\BitrixHookController;
 use App\Http\Controllers\Front\Calling\FullEventInitController;
+use App\Http\Controllers\Front\Calling\ReportCompanyController;
 use App\Http\Controllers\Front\Calling\ReportController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\ReactAppController;
@@ -337,6 +338,13 @@ Route::post('full/deals', function (Request $request) {
 Route::post('full/newTask/init', function (Request $request) {
     return ReportController::getDealsFromNewTaskInit($request);
 });
+
+
+Route::post('full/rqform', function (Request $request) {
+    return ReportCompanyController::getCompanyForm($request);
+});
+
+
 
 
 // ............................... FULL EVENT Document PRES FRONT
@@ -1208,7 +1216,7 @@ Route::get('/alfa/activity', function (Request $request) {
                     '<CREATED' => $yearAgo,
                     'OWNER_TYPE_ID' => 4,
                 ],
-              
+
             ];
 
             $responseJson = Http::post($hook . $method, $data);

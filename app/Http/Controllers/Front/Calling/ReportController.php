@@ -768,7 +768,7 @@ class ReportController extends Controller
                 $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
                 $hook = 'https://' . $domain  . '/' . $webhookRestKey;
                 // $currentCompany = BitrixGeneralService::getEntity($hook, 'company', $companyId);
-                $sessionKey = 'newtask_' . $domain . '_' . $userId . '_' . $companyId;
+                $sessionKey = 'newtask_' . $domain  . '_' . $companyId;
 
 
                 $presList = null;
