@@ -1425,6 +1425,7 @@ class ReportController extends Controller
 
                     'currentCompany' => $currentCompany,
                     'deals' => [
+                        '$sessionKey' => $sessionKey ,
                         'currentBaseDeal' => $currentBaseDeal,
                         'basePresentationDeals' => $basePresentationDeals,
                         'allPresentationDeals' => $allPresentationDeals,
