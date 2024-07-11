@@ -74,8 +74,10 @@ class ReportSupplyController extends Controller
 
 
                 $rqGetData = [
-                    'ENTITY_TYPE_ID' =>  4,
-                    'ENTITY_ID' =>  $companyId,
+                    'filter' => [
+                        'ENTITY_TYPE_ID' =>  4,
+                        'ENTITY_ID' =>  $companyId,
+                    ]
                 ];
                 $responseJson = Http::post($hook . $method, $rqGetData);
                 $response =  $responseJson->json();
