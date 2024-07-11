@@ -59,6 +59,11 @@ class ReportSupplyController extends Controller
                         ) {
                             $currentDeal = $sessionDeals['currentBaseDeals'][0];
                         }
+
+                        if(!empty( $sessionDeals['currentBaseDeal'])){
+
+                            $currentDeal =  $sessionDeals['currentBaseDeal'];
+                        }
                     }
                 }
 
