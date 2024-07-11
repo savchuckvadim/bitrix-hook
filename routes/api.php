@@ -309,7 +309,7 @@ Route::post('/full/session', function (Request $request) {
 });
 
 
-Route::post('full/rqform', function (Request $request) {
+Route::post('fullreport/company', function (Request $request) {
     return ReportCompanyController::getCompanyForm($request);
 });
 
