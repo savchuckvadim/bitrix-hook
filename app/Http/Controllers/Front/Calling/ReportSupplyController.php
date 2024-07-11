@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Front\Calling;
 
+use App\Http\Controllers\APIBitrixController;
 use App\Http\Controllers\APIController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\Controller;
@@ -96,6 +97,23 @@ class ReportSupplyController extends Controller
                 $responseJson = Http::post($hook . $method, $rqGetData);
                 $response =  $responseJson->json();
 
+                if (!empty($currentDeal)) {
+                    if (!empty($currentDeal['ID'])) {
+
+
+                        $rqLinkGetData = [
+                            'filter' => [
+                                'ENTITY_TYPE_ID' =>  2,
+                                'ENTITY_ID' =>  $currentDeal['ID'],
+                            ]
+                        ];
+                        $rqLinkJson = Http::post($hook . $method, $rqLinkGetData);
+                        $rqLinkesponse = APIBitrixController::getBitrixRespone($rqLinkJson, 'rqLinkesponse');
+                    }
+                }
+
+
+
                 return APIOnlineController::getSuccess(
                     [
                         'currentCompany' => $currentCompany,
@@ -103,7 +121,7 @@ class ReportSupplyController extends Controller
                         'response' => $response,
                         'sessionKey' =>  $sessionKey,
                         'sessionData' =>  $sessionData,
-
+                        'rqlink' =>  $rqLinkesponse,
 
                     ]
 
