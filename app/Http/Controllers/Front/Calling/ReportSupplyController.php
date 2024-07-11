@@ -29,10 +29,10 @@ class ReportCompanyController extends Controller
             $isFullData = false;
 
             if (
-                !empty($data['domain']) &&
-                isset($data['isFromTask']) &&
-                isset($data['taskId']) &&
-                isset($data['companyId']) 
+                !empty($data['domain']) 
+                // isset($data['isFromTask']) &&
+                // isset($data['taskId']) &&
+                // isset($data['companyId']) 
 
             ) {
                 $isFullData = true;
