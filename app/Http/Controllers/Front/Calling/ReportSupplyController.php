@@ -76,7 +76,9 @@ class ReportSupplyController extends Controller
 
 
                 $fullDomain = 'https://' . $domain  . '/';
-                $method = '/crm.requisite.list.json';
+                // $method = '/crm.requisite.list.json';
+                $method = '/crm.requisite.link.get.json';
+
 
                 $portal = PortalController::getPortal($domain);
                 $portal = $portal['data'];
