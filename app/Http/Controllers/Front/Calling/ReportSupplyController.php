@@ -6,20 +6,14 @@ use App\Http\Controllers\APIController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PortalController;
-use App\Jobs\EventJob;
-use App\Services\BitrixGeneralService;
-use App\Services\FullEventReport\EventReportService;
-use App\Services\General\BitrixDealService;
-use App\Services\General\BitrixDepartamentService;
-use App\Services\General\BitrixListService;
-use App\Services\HookFlow\BitrixEntityFlowService;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-class ReportCompanyController extends Controller
+class ReportSupplyController extends Controller
 {
-    public static function getCompanyForm(Request $request)
+    public static function getSupplyForm(Request $request)
     {
         try {
 
