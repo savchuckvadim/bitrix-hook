@@ -24,15 +24,7 @@ class ReportCompanyController extends Controller
         try {
 
             //реквизиты компании и текущую base deal
-            $data = [
-                'companyId' => null,
-                'isFromTask' => null,
-                'taskId' => null,
-                'companyId' => null,
-                'userId' => null,
-
-
-            ];
+            
             $data = $request->all();
             $isFullData = false;
 
@@ -40,8 +32,7 @@ class ReportCompanyController extends Controller
                 !empty($data['domain']) &&
                 isset($data['isFromTask']) &&
                 isset($data['taskId']) &&
-                isset($data['companyId']) &&
-                !empty($data['userId'])
+                isset($data['companyId']) 
 
             ) {
                 $isFullData = true;
@@ -49,7 +40,7 @@ class ReportCompanyController extends Controller
                 $isFromTask = $data['isFromTask'];
                 $taskId = $data['taskId'];
                 $companyId = $data['companyId'];
-                $userId = $data['userId'];
+                // $userId = $data['userId'];
             }
             if ($isFullData) {
                 if (!empty($isFromTask) && !empty($taskId)) {
