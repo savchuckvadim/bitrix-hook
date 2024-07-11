@@ -672,7 +672,8 @@ class ReportController extends Controller
                             'btxDeals' => $btxDeals,
                             'currentCompany' => $currentCompany,
                             'fromSession' => $fromSession,
-                            // 'allDeals' => $allDeals
+                            'sessionKey' =>  $sessionKey,
+
 
                         ],
 

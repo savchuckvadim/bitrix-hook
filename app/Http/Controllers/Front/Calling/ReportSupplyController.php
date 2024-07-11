@@ -87,6 +87,9 @@ class ReportSupplyController extends Controller
                         'currentCompany' => $currentCompany,
                         'currentDeal' => $currentDeal,
                         'response' => $response,
+                        'sessionKey' =>  $sessionKey,
+                        'sessionData' =>  $sessionData,
+
 
                     ]
 
