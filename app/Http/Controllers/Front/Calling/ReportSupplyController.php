@@ -18,7 +18,8 @@ class ReportSupplyController extends Controller
         try {
 
             //реквизиты компании и текущую base deal
-            
+            $currentCompany =  null;
+            $currentDeal = null;
             $data = $request->all();
             $isFullData = false;
 
@@ -26,7 +27,7 @@ class ReportSupplyController extends Controller
                 !empty($data['domain']) &&
                 isset($data['isFromTask']) &&
                 isset($data['taskId']) &&
-                isset($data['companyId']) 
+                isset($data['companyId'])
 
             ) {
                 $isFullData = true;
