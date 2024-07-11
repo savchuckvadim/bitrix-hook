@@ -309,6 +309,10 @@ Route::post('/full/session', function (Request $request) {
 });
 
 
+Route::post('full/rqform', function (Request $request) {
+    return ReportCompanyController::getCompanyForm($request);
+});
+
 
 
 Route::post('/activity/test', function (Request $request) {
@@ -339,10 +343,6 @@ Route::post('full/newTask/init', function (Request $request) {
     return ReportController::getDealsFromNewTaskInit($request);
 });
 
-
-Route::post('full/rqform', function (Request $request) {
-    return ReportCompanyController::getCompanyForm($request);
-});
 
 
 
