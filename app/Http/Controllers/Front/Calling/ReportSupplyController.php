@@ -53,16 +53,23 @@ class ReportSupplyController extends Controller
 
                     if (!empty($sessionData['deals'])) {
                         $sessionDeals = $sessionData['deals'];
-                        if (
-                            is_array($sessionDeals['currentBaseDeals']) &&
-                            !empty($sessionDeals['currentBaseDeals'])
-                        ) {
-                            $currentDeal = $sessionDeals['currentBaseDeals'][0];
+
+                        if (isset($sessionDeals['currentBaseDeals'])) {
+                            if (
+                                !empty($sessionDeals['currentBaseDeals']) &&
+                                is_array($sessionDeals['currentBaseDeals'])
+
+                            ) {
+                                $currentDeal = $sessionDeals['currentBaseDeals'][0];
+                            }
                         }
 
-                        if(!empty( $sessionDeals['currentBaseDeal'])){
+                        if (isset($sessionDeals['currentBaseDeal'])) {
 
-                            $currentDeal =  $sessionDeals['currentBaseDeal'];
+                            if (!empty($sessionDeals['currentBaseDeal'])) {
+
+                                $currentDeal =  $sessionDeals['currentBaseDeal'];
+                            }
                         }
                     }
                 }
