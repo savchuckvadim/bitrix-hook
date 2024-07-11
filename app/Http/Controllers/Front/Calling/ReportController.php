@@ -1282,7 +1282,7 @@ class ReportController extends Controller
                 $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
                 $hook = 'https://' . $domain  . '/' . $webhookRestKey;
                 // $currentCompany = BitrixGeneralService::getEntity($hook, 'company', $companyId);
-                $sessionKey = 'document_' . $domain . $userId . '_' . $baseDealId;
+                $sessionKey = 'document_' . $domain . '_' . $baseDealId;
 
 
                 $presList = null;
@@ -1425,7 +1425,7 @@ class ReportController extends Controller
 
                     'currentCompany' => $currentCompany,
                     'deals' => [
-                        '$sessionKey' => $sessionKey ,
+                        // '$sessionKey' => $sessionKey ,
                         'currentBaseDeal' => $currentBaseDeal,
                         'basePresentationDeals' => $basePresentationDeals,
                         'allPresentationDeals' => $allPresentationDeals,

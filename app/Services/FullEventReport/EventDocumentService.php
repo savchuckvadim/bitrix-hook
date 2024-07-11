@@ -277,7 +277,7 @@ class EventDocumentService
             $this->hook = 'https://' . $domain  . '/' . $webhookRestKey;
 
 
-            $sessionKey = 'document_' . $domain . $userId . '_' . $baseDealId;
+            $sessionKey = 'document_' . $domain .  '_' . $baseDealId;
             Log::channel('telegram')->info('sessionKey', ['test done' => $sessionKey]);
 
             $sessionData = FullEventInitController::getSessionItem($sessionKey);
