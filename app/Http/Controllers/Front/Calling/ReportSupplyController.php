@@ -77,8 +77,8 @@ class ReportSupplyController extends Controller
 
 
                 $fullDomain = 'https://' . $domain  . '/';
-                // $method = '/crm.requisite.list.json';
-                $method = '/crm.requisite.link.get.json';
+                $method = '/crm.requisite.list.json';
+              
 
 
                 $portal = PortalController::getPortal($domain);
@@ -107,7 +107,8 @@ class ReportSupplyController extends Controller
                                 'ENTITY_ID' =>  $currentDeal['ID'],
                             ]
                         ];
-                        $rqLinkJson = Http::post($hook . $method, $rqLinkGetData);
+                        $rqLinkMethod = '/crm.requisite.link.get.json';
+                        $rqLinkJson = Http::post($hook . $rqLinkMethod, $rqLinkGetData);
                         $rqLinkesponse = APIBitrixController::getBitrixRespone($rqLinkJson, 'rqLinkesponse');
                     }
                 }
