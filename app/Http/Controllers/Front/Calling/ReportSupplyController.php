@@ -24,87 +24,89 @@ class ReportCompanyController extends Controller
         try {
 
             //реквизиты компании и текущую base deal
-            
+
             $data = $request->all();
             $isFullData = false;
 
-            if (
-                !empty($data['domain']) 
-                // isset($data['isFromTask']) &&
-                // isset($data['taskId']) &&
-                // isset($data['companyId']) 
+            // if (
+            //     !empty($request->domain) 
+            //     // isset($data['isFromTask']) &&
+            //     // isset($data['taskId']) &&
+            //     // isset($data['companyId']) 
 
-            ) {
-                $isFullData = true;
-                $domain = $data['domain'];
-                $isFromTask = $data['isFromTask'];
-                $taskId = $data['taskId'];
-                $companyId = $data['companyId'];
-                // $userId = $data['userId'];
-            }
-            if ($isFullData) {
-                if (!empty($isFromTask) && !empty($taskId)) {
-                    $sessionKey = $domain . '_' . $taskId;
-                } else {
-                    $sessionKey = 'newtask_' . $domain  . '_' . $companyId;
-                }
-                $sessionData = FullEventInitController::getSessionItem($sessionKey);
-
-
-                if (empty($sessionData)) {
-                    if (!empty($sessionData['currentCompany'])) {
-                        $currentCompany = $sessionData['currentCompany'];
-                    }
-
-                    if (!empty($sessionData['deals'])) {
-                        $sessionDeals = $sessionData['deals'];
-                        if (
-                            is_array($sessionDeals['currentBaseDeals']) &&
-                            !empty($sessionDeals['currentBaseDeals'])
-                        ) {
-                            $currentDeal = $sessionDeals['currentBaseDeals'][0];
-                        }
-                    }
-                }
-
-
-                $fullDomain = 'https://' . $domain  . '/';
-                $method = '/crm.requisite.list.json';
-
-                $portal = PortalController::getPortal($domain);
-                $portal = $portal['data'];
-
-                $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
-                $hook = $fullDomain . $webhookRestKey;
-
-
-                $rqGetData = [
-                    'ENTITY_TYPE_ID' =>  4,
-                    'ENTITY_ID' =>  $companyId,
-                ];
-                $responseJson = Http::post($hook . $method, $rqGetData);
-                $response =  $responseJson->json();
-
-                return APIOnlineController::getSuccess(
-                    [
-                        'currentCompany' => $currentCompany,
-                        'currentDeal' => $currentDeal,
-                        'response' => $response,
-
-                    ]
-
-                );
+            // ) {
+            $isFullData = true;
+            $domain = $data['domain'];
+            $isFromTask = $data['isFromTask'];
+            $taskId = $data['taskId'];
+            $companyId = $data['companyId'];
+            // $userId = $data['userId'];
+            // }
+            // if ($isFullData) {
+            if (!empty($isFromTask) && !empty($taskId)) {
+                $sessionKey = $domain . '_' . $taskId;
             } else {
-
-                return APIOnlineController::getError(
-                    'is not full data',
-                    [
-                        'rq' => $request->all()
-
-                    ]
-
-                );
+                $sessionKey = 'newtask_' . $domain  . '_' . $companyId;
             }
+            $sessionData = FullEventInitController::getSessionItem($sessionKey);
+
+
+            if (empty($sessionData)) {
+                if (!empty($sessionData['currentCompany'])) {
+                    $currentCompany = $sessionData['currentCompany'];
+                }
+
+                if (!empty($sessionData['deals'])) {
+                    $sessionDeals = $sessionData['deals'];
+                    if (
+                        is_array($sessionDeals['currentBaseDeals']) &&
+                        !empty($sessionDeals['currentBaseDeals'])
+                    ) {
+                        $currentDeal = $sessionDeals['currentBaseDeals'][0];
+                    }
+                }
+            }
+
+
+            $fullDomain = 'https://' . $domain  . '/';
+            $method = '/crm.requisite.list.json';
+
+            $portal = PortalController::getPortal($domain);
+            $portal = $portal['data'];
+
+            $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+            $hook = $fullDomain . $webhookRestKey;
+
+
+            $rqGetData = [
+                'ENTITY_TYPE_ID' =>  4,
+                'ENTITY_ID' =>  $companyId,
+            ];
+            $responseJson = Http::post($hook . $method, $rqGetData);
+            $response =  $responseJson->json();
+
+            return APIOnlineController::getSuccess(
+                [
+                    'data' => $data,
+
+                    'currentCompany' => $currentCompany,
+                    'currentDeal' => $currentDeal,
+                    'response' => $response,
+
+                ]
+
+            );
+            // } else {
+
+            //     return APIOnlineController::getError(
+            //         'is not full data',
+            //         [
+            //             'rq' => $request->all()
+
+            //         ]
+
+            //     );
+            // }
         } catch (\Throwable $th) {
             return APIOnlineController::getError(
                 $th->getMessage(),
