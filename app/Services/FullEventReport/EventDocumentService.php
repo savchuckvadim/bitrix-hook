@@ -281,7 +281,9 @@ class EventDocumentService
             Log::channel('telegram')->info('sessionKey', ['test done' => $sessionKey]);
 
             $sessionData = FullEventInitController::getSessionItem($sessionKey);
-            Log::channel('telegram')->info('sessionData', ['sessionData' => $sessionData]);
+            Log::info('sessionData', ['sessionKey' => $sessionKey]);
+
+            Log::info('sessionData', ['sessionData' => $sessionData]);
 
             if (isset($sessionData['currentCompany']) && isset($sessionData['deals'])) {
                 $this->currentBtxEntity  = $sessionData['currentCompany'];
