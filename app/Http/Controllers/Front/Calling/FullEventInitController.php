@@ -23,18 +23,43 @@ class FullEventInitController extends Controller
         $domain = $request->domain;
         $userId = $request->userId;
         $placement = $request->placement;
-
+        $currentTaskId = $request->currentTaskId;
 
         $portal = PortalController::getPortal($domain);
         $portal = $portal['data'];
         $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
         $hook = 'https://' . $domain  . '/' . $webhookRestKey;
         $method = '/tasks.task.list.json';
+
         $url = $hook . $method;
 
+        $select = [
+            'ID',
+            'UF_CRM_TASK',
+            'TITLE',
+            'DATE_START',
+            'CREATED_DATE',
+            'CHANGED_DATE',
+            'CLOSED_DATE',
+
+            'DEADLINE',
+            'PRIORITY',
+            'MARK',
+            'GROUP_ID',
+
+            'CREATED_BY',
+            'STATUS_CHANGED_BY',
+            'REAL_STATUS',
+            'STATUS',
+            'STAGE_ID',
+            'RESPONSIBLE_ID',
+            'CREATED_BY',
+            'TITLE',
+
+        ];
         try {
 
-
+           
 
 
             $tasksGroupId = FullEventInitController::getCallingGroupId($portal);
@@ -73,35 +98,15 @@ class FullEventInitController extends Controller
                         '!=STATUS' => 5, // Исключаем задачи со статусом "завершена"
                         'UF_CRM_TASK' => $crmItems,
                     ],
-                    'select' => [
-                        'ID',
-                        'UF_CRM_TASK',
-                        'TITLE',
-                        'DATE_START',
-                        'CREATED_DATE',
-                        'CHANGED_DATE',
-                        'CLOSED_DATE',
-
-                        'DEADLINE',
-                        'PRIORITY',
-                        'MARK',
-                        'GROUP_ID',
-
-                        'CREATED_BY',
-                        'STATUS_CHANGED_BY',
-                        'REAL_STATUS',
-                        'STATUS',
-                        'STAGE_ID',
-                        'RESPONSIBLE_ID',
-                        'CREATED_BY',
-                        'TITLE',
-
-                    ],
+                    'select' => $select,
 
                     // 'RESPONSIBLE_LAST_NAME' => $userId,
                     // 'GROUP_ID' => $date,
                 ];
-
+                if ($currentTaskId) {
+                    $data['filter']['ID'] = $currentTaskId;
+                }
+    
                 $response = Http::get($url, $data);
 
                 $bitrixResult = APIBitrixController::getBitrixRespone($response, 'getCallingTasksReport');
@@ -248,7 +253,7 @@ class FullEventInitController extends Controller
                     }
                 }
                 $sessionKey = $domain . '_' . $currentTask['id'];
-                
+
                 $sessionValue = [
                     // 'currentCompany' => $currentCompany,
                     // 'btxDeals' => $btxDeals,

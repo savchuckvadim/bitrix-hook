@@ -25,7 +25,7 @@ export const allEntities = [
                 method: API_METHOD.GET
             }
         },
-        relations: [1, 5, 11, 12, 13, 14, 19, 20, 21],
+        relations: [1, 5, 11, 12, 13, 14, 15, 16, 21, 22, 23],
 
     },
     {
@@ -187,7 +187,7 @@ export const allEntities = [
 
         },
         relations: [
-            7, 8, 9, 10, 15
+            7, 8, 9, 10, 17
         ]
 
 
@@ -377,11 +377,35 @@ export const allEntities = [
             }
 
         },
-        relations: [15, 17],
+        relations: [17, 19],
+    },
+    {
+        id: 14,
+        item: {
+            name: 'rpa',
+            title: 'RPA',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'rpa',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'rpas',
+            title: 'RPAS',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'rpas',
+                method: API_METHOD.GET
+            }
+
+        },
+        relations: [17, 19],
     },
     {
 
-        id: 13,
+        id: 15,
         item: {
             name: 'departament',
             title: 'Целевой отдел компании',
@@ -405,7 +429,7 @@ export const allEntities = [
     },
     {
 
-        id: 14,
+        id: 16,
         item: {
             name: 'bitrixlist',
             title: 'Универсальные списки Битрикс',
@@ -426,11 +450,11 @@ export const allEntities = [
             }
 
         },
-        relations: [15],
+        relations: [17],
     },
     {
 
-        id: 15,
+        id: 17,
         item: {
             name: 'bitrixfield',
             title: 'Поле Битрикс',
@@ -451,11 +475,11 @@ export const allEntities = [
             }
 
         },
-        relations: [16],
+        relations: [18],
     },
     {
 
-        id: 16,
+        id: 18,
         item: {
             name: 'bitrixfielditem',
             title: 'Элемент Битрикс Филда',
@@ -479,7 +503,7 @@ export const allEntities = [
     },
     {
 
-        id: 17,
+        id: 19,
         item: {
             name: 'category',
             title: 'Воронки, Категории в различных сущностях содержат стадии',
@@ -500,11 +524,11 @@ export const allEntities = [
             }
 
         },
-        relations: [18],
+        relations: [20],
 
     },
     {
-        id: 18,
+        id: 20,
         item: {
             name: 'stage',
             title: 'Воронки, Категории в различных сущностях содержат стадии',
@@ -529,7 +553,7 @@ export const allEntities = [
     },
 
     {
-        id: 19,
+        id: 21,
         item: {
             name: 'deal',
             title: 'Обобщаящая связи модель Сделок',
@@ -550,12 +574,12 @@ export const allEntities = [
             }
 
         },
-        relations: [15, 17],
+        relations: [17, 19],
 
     },
 
     {
-        id: 20,
+        id: 22,
         item: {
             name: 'company',
             title: 'Обобщаящая связи модель Компания',
@@ -576,11 +600,11 @@ export const allEntities = [
             }
 
         },
-        relations: [15],
+        relations: [17],
 
     },
     {
-        id: 20,
+        id: 23,
         item: {
             name: 'lead',
             title: 'Обобщаящая связи модель LEAD',
@@ -601,7 +625,7 @@ export const allEntities = [
             }
 
         },
-        relations: [15, 17],
+        relations: [17, 19],
 
     }
 ]
