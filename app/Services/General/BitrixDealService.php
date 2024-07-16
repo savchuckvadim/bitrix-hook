@@ -329,7 +329,7 @@ class BitrixDealService
         } else   if ($currentDepartamentType === 'tmc') {
             if (
                 $eventAction == 'plan' ||
-                ($eventAction == 'done' && $eventType == 'presentation') ||
+                // ($eventAction == 'done' && $eventType == 'presentation') ||
                 $eventAction == 'fail' ||
                 $eventAction == 'success'
             ) {
@@ -347,7 +347,9 @@ class BitrixDealService
         if (!empty($portalDealData['categories'])) {
 
             foreach ($portalDealData['categories'] as $category) {
-
+                Log::info('DEAL TEST', [
+                    'category code' => $category['code']
+                ]);
                 if (in_array($category['code'], $categoryPrephicks)) {
                     $currentCategory = $category;
                     array_push($resultCategoryDatas, $category);
@@ -357,6 +359,8 @@ class BitrixDealService
         Log::info('DEAL TEST', [
             'resultCategoryDatas' => $resultCategoryDatas,
             'eventType' => $eventType,
+            'eventAction' => $eventAction,
+            'categoryPrephicks' => $categoryPrephicks,
             // 'currentCategoryData' => "C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'],
             // 'isCurrentSearched' => $isCurrentSearched,
         ]);
@@ -438,7 +442,6 @@ class BitrixDealService
 
             if ($eventType == 'xo') {
                 $stagePrephicks = 'cold';
-                
             }
             //  else if ($eventType == 'warm') {
             //     $stagePrephicks = 'sales';
@@ -447,7 +450,7 @@ class BitrixDealService
                 $stagePrephicks = 'spres';
             }
 
-            if($group == 'tmc'){
+            if ($group == 'tmc') {
                 $stagePrephicks = 'sales_tmc';
             }
         }
