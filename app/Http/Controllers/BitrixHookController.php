@@ -135,7 +135,9 @@ class BitrixHookController extends Controller
             //     $name = $request['name'];
             // }
 
-
+            if (isset($request['isTmc'])) {
+                $isTmc  = $request['isTmc'];
+            }
 
             $data = [
                 'domain' => $domain,
@@ -145,6 +147,7 @@ class BitrixHookController extends Controller
                 'created' => $createdId,
                 'deadline' => $deadline,
                 'name' => $name,
+                'isTmc' => $isTmc
 
             ];
             Log::info('APRIL_HOOK pre rerdis', ['$data' => $data]);
