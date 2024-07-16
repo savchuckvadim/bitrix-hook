@@ -40,17 +40,20 @@ class EventJob implements ShouldQueue
             if (!empty($this->data['departament'])) {
 
                 if (!empty($this->data['departament']['mode'])) {
-                    if ($this->data['departament']['mode'] == 'tmc') {
-                        $isTmc = true;
+                    if (!empty($this->data['departament']['mode']['current'])) {
+                        if (!empty($this->data['departament']['mode']['current']['code'])) {
+                            if ($this->data['departament']['mode']['current']['code'] == 'tmc') {
+                                $isTmc = true;
+                            }
+                        }
                     }
                 }
             }
         }
-        if($isTmc){
+        if ($isTmc) {
             Log::channel('telegram')->info("Redis tmc queue.");
             $service = new EventReportTMCService($this->data);
-
-        }else{
+        } else {
             Log::channel('telegram')->info("Redis sale queue.");
             $service = new EventReportService($this->data);
         }
