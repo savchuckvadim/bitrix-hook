@@ -327,15 +327,15 @@ class BitrixDealService
                 array_push($categoryPrephicks, $currentDepartamentType . '_presentation');
             }
         } else   if ($currentDepartamentType === 'tmc') {
-            if (
-                $eventAction == 'plan' ||
-                // ($eventAction == 'done' && $eventType == 'presentation') ||
-                $eventAction == 'fail' ||
-                $eventAction == 'success'
-            ) {
+            // if (
+            //     $eventAction == 'plan' ||
+            //     // ($eventAction == 'done' && $eventType == 'presentation') ||
+            //     $eventAction == 'fail' ||
+            //     $eventAction == 'success'
+            // ) {
 
                 array_push($categoryPrephicks, $currentDepartamentType . '_base');
-            }
+            // }
 
 
             // if ($eventType == 'xo') {
