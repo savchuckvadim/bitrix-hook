@@ -338,10 +338,10 @@ class BitrixDealService
             }
 
 
-            if ($eventType == 'xo') {
-                // $categoryPrephicks = 'xo';
-                array_push($categoryPrephicks, 'sales_xo');
-            }
+            // if ($eventType == 'xo') {
+            //     // $categoryPrephicks = 'xo';
+            //     array_push($categoryPrephicks, 'sales_xo');
+            // }
         }
         $currentCategory = null;
         if (!empty($portalDealData['categories'])) {
