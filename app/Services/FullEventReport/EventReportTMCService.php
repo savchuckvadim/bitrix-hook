@@ -14,6 +14,7 @@ use App\Services\HookFlow\BitrixDealFlowService;
 use App\Services\HookFlow\BitrixEntityFlowService;
 use App\Services\HookFlow\BitrixListFlowService;
 use App\Services\HookFlow\BitrixListPresentationFlowService;
+use App\Services\HookFlow\BitrixRPAPresFlowService;
 use DateTime;
 use Illuminate\Console\View\Components\Task;
 use Illuminate\Support\Facades\Date;
@@ -154,7 +155,7 @@ class EventReportTMCService
     protected $btxDealBaseCategoryId;
     protected $btxDealPresCategoryId;
 
-
+    protected $portalRPAS;
 
     public function __construct(
 
@@ -382,6 +383,10 @@ class EventReportTMCService
 
         $btxDealBaseCategoryId = null;
         $btxDealPresCategoryId = null;
+        if (!empty($portal['rpas'])) {
+            $this->portalRPAS = $portal['rpas'];
+
+        }
 
         if (!empty($portal['bitrixDeal'])) {
 
@@ -1399,26 +1404,61 @@ class EventReportTMCService
             //     $this->portalDealData,
             //     $currentBtxDeals
             // );
+            if ($this->currentReportEventType !== 'presentation') {
+                $flowResult =  BitrixDealFlowService::flow( //создает или обновляет сделку
+                    $this->hook,
+                    $currentBtxDeals,
+                    $this->portalDealData,
+                    $this->currentDepartamentType,
+                    $this->entityType,
+                    $this->entityId,
+                    $this->currentPlanEventType, // xo warm presentation, hot moneyAwait
+                    $this->currentPlanEventTypeName,
+                    $this->currentPlanEventName,
+                    'plan',  // plan done expired 
+                    $this->planResponsibleId,
+                    $this->isResult,
+                    '$fields',
+                    null, // $relationSalePresDeal
+                );
+                $planDeals = $flowResult['dealIds'];
+                $newPresDeal = $flowResult['newPresDeal'];
+            }
+        } else {
 
-            $flowResult =  BitrixDealFlowService::flow( //создает или обновляет сделку
+
+            // todo RPA PRESENTATION INIT FLOW
+            // должен создавать item rpa presentation
+
+            $rpaFlowService = new BitrixRPAPresFlowService(
                 $this->hook,
-                $currentBtxDeals,
-                $this->portalDealData,
-                $this->currentDepartamentType,
-                $this->entityType,
-                $this->entityId,
-                $this->currentPlanEventType, // xo warm presentation, hot moneyAwait
-                $this->currentPlanEventTypeName,
-                $this->currentPlanEventName,
-                'plan',  // plan done expired 
-                $this->planResponsibleId,
-                $this->isResult,
-                '$fields',
-                null, // $relationSalePresDeal
+                $this->portalRPAS
+                
             );
-            $planDeals = $flowResult['dealIds'];
-            $newPresDeal = $flowResult['newPresDeal'];
+            if(!empty( $currentTMCDeal)){
+                if(!empty( $currentTMCDeal['ID'])){
+
+
+                    $rpaFlowService->getRPAPresInitFlow(
+                        $currentTMCDeal['ID'],
+                        $this->nowDate,
+                        $this->planDeadline,
+                        $this->planCreatedId,
+                        $this->planResponsibleId,
+                        // 1, //$bossId 
+                        $this->entityId,
+                        // $contactId,
+                        $this->comment,
+                        $this->currentPlanEventName,
+
+                    );
+                
+                }
+            }
+           
+
         }
+
 
         Log::info('HOOK TEST currentBtxDeals', [
             'newPresDeal' => $newPresDeal,
