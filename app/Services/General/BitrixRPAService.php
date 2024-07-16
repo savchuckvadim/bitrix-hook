@@ -58,7 +58,7 @@ class BitrixRPAService
 
         $response = Http::get($this->hook . $method, $data);
         
-        Log::channel('telegram')->info('plan deals ids', [
+        Log::channel('telegram')->info('rpa response', [
             'response' => $response
 
         ]);
