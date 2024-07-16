@@ -467,12 +467,12 @@ class EventReportTMCService
                     }
 
 
-                    // Log::info('HOOK TEST sessionDeals', [
-                    //     'sessionDeals' => $sessionDeals,
+                    Log::info('HOOK TEST TMC sessionDeals', [
+                        'sessionDeals' => $sessionDeals,
 
 
 
-                    // ]);
+                    ]);
                 }
                 if (
                     isset($sessionDeals['currentTMCDeal'])
@@ -489,7 +489,12 @@ class EventReportTMCService
 
                 ) {
 
+                    Log::info('HOOK TEST TMC sessionDeals', [
+                        'currentTMCDeal' => $sessionDeals['currentTMCDeal'],
 
+
+
+                    ]);
                     $this->currentBtxDeals  = $sessionDeals['currentTaskDeals'];
 
                     $this->currentBaseDeal = $sessionDeals['currentTMCDeal'];
@@ -682,7 +687,7 @@ class EventReportTMCService
     protected function getEntityFlow(
         $isDeal = false,
         $deal = null,
-        $dealType = 'base',  //presentation, xo
+        $dealType = 'tmc',  //presentation, xo
         $baseDealId = null,
         $dealEventType = false //plan done unplanned fail
     ) {
