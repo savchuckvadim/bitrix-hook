@@ -40,9 +40,9 @@ class EventJob implements ShouldQueue
             if (!empty($this->data['departament'])) {
 
                 if (!empty($this->data['departament']['mode'])) {
-                    if (!empty($this->data['departament']['mode']['current'])) {
-                        if (!empty($this->data['departament']['mode']['current']['code'])) {
-                            if ($this->data['departament']['mode']['current']['code'] == 'tmc') {
+                    if (!empty($this->data['departament']['mode']['code'])) {
+                        if (!empty($this->data['departament']['mode']['code'])) {
+                            if ($this->data['departament']['mode']['code'] == 'tmc') {
                                 $isTmc = true;
                             }
                         }
