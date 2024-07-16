@@ -24,7 +24,7 @@ class BitrixDealFlowService
         $hook,
         $currentBtxDeals,
         $portalDealData,
-        $currentDepartamentType,
+        $currentDepartamentType  = 'sales',
         $entityType,
         $entityId,
         $eventType, // xo warm presentation, 
@@ -34,6 +34,7 @@ class BitrixDealFlowService
         $responsibleId,
         $isResult,
         $fields,
+
        
 
 
@@ -59,7 +60,7 @@ class BitrixDealFlowService
                 $currentDealId = null;
                 $targetStageBtxId =  BitrixDealService::getTargetStage(
                     $currentCategoryData,
-                    'sales',
+                    $currentDepartamentType,
                     $eventType,
                     $eventAction,
                     $isResult,

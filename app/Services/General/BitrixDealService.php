@@ -172,8 +172,7 @@ class BitrixDealService
         $hook,
         $dealId,
         $fieldsData
-    )
-    {
+    ) {
 
 
         try {
@@ -185,7 +184,7 @@ class BitrixDealService
             }
             $response = Http::get($url, $fieldsData);
             $responseData = APIBitrixController::getBitrixRespone($response, 'general service: update deal');
-       
+
 
             return $responseData;
         } catch (\Throwable $th) {
@@ -299,6 +298,7 @@ class BitrixDealService
         $eventType, // xo warm presentation,
         $eventAction,  // plan done expired fail
 
+
     ) {
         // sales_base
         // sales_xo
@@ -323,6 +323,22 @@ class BitrixDealService
                 array_push($categoryPrephicks, $currentDepartamentType . '_xo');
             } else if ($eventType == 'presentation') {
                 array_push($categoryPrephicks, $currentDepartamentType . '_presentation');
+            }
+        } else   if ($currentDepartamentType === 'tmc') {
+            if (
+                $eventAction == 'plan' ||
+                ($eventAction == 'done' && $eventType == 'presentation') ||
+                $eventAction == 'fail' ||
+                $eventAction == 'success'
+            ) {
+
+                array_push($categoryPrephicks, $currentDepartamentType . '_base');
+            }
+
+
+            if ($eventType == 'xo') {
+                // $categoryPrephicks = 'xo';
+                array_push($categoryPrephicks, 'sales_xo');
             }
         }
         $currentCategory = null;

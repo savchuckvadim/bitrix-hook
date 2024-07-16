@@ -403,7 +403,20 @@ class ReportController extends Controller
                                         }
                                     }
                                 }
+                            }else  if ($btxDealPortalCategory['code'] == "tmc_base") {
+                                $currentTMCCategoryBtxId = $btxDealPortalCategory['bitrixId'];
+
+                                foreach ($btxDeals as $btxDeal) {
+                                    if (!empty($btxDeal['CATEGORY_ID'])) {
+                                        if ($btxDeal['CATEGORY_ID'] == $currentTMCCategoryBtxId) {
+                                            $currentTMCDeal = $btxDeal;      // сделка презентации из задачи
+
+                                        }
+                                    }
+                                }
                             }
+
+                            
                         }
                     }
 
@@ -586,7 +599,44 @@ class ReportController extends Controller
                                     $getAllXODealsData,
                                 );
                             }
-                        }
+                        } else  if ($btxDealPortalCategory['code'] == "tmc_base") {
+
+
+
+                            foreach ($btxDeals as $btxDeal) {
+                                $currenBaseCategoryBtxId = $btxDealPortalCategory['bitrixId'];
+
+                                if (!empty($btxDeal['CATEGORY_ID'])) {
+                                    if ($btxDeal['CATEGORY_ID'] == $btxDealPortalCategory['bitrixId']) {
+                                        $currentTMCDeal = $btxDeal;   //базовая сделка в задаче всегда должна быть одна
+                                    }
+                                }
+
+
+                                $getAllTMCDealsData =  [
+                                    'filter' => [
+                                        'COMPANY_ID' => $currentCompany['ID'],
+                                        'CATEGORY_ID' => $currenBaseCategoryBtxId,
+                                        'RESPONSIBLE_ID' => $responsibleId,
+                                        '!=STAGE_ID' => ['C' . $currenBaseCategoryBtxId . ':WON', 'C' . $currenBaseCategoryBtxId . ':LOSE', 'C' . $currenBaseCategoryBtxId . ':APOLOGY']
+                                    ],
+                                    'select' => [
+                                        'ID',
+                                        'TITLE',
+                                        'UF_CRM_PRES_COUNT',
+                                        'STAGE_ID',
+
+                                    ]
+
+                                ];
+
+
+                                $allTMCDeals =   BitrixDealService::getDealList(
+                                    $hook,
+                                    $getAllTMCDealsData,
+                                );
+                            }
+                        } 
                     }
                 }
 
@@ -654,7 +704,8 @@ class ReportController extends Controller
                             'currentXODeal' => $currentXODeal,
                             'allXODeals' => $allXODeals,
                             'currentTaskDeals' => $btxDeals,
-                            // 'allDeals' => $allDeals
+                            'allTMCDeals' => $allTMCDeals,
+                            'currentTMCDeal' => $currentTMCDeal
 
                         ],
 

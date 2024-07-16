@@ -140,7 +140,7 @@ class EventReportTMCService
 
 
     protected $currentBaseDeal;
-    protected $currentPresDeal;
+    // protected $currentPresDeal;
     protected $currentColdDeal;
     protected $currentTMCDeal;
 
@@ -475,7 +475,7 @@ class EventReportTMCService
                     // ]);
                 }
                 if (
-                    isset($sessionDeals['currentBaseDeal'])
+                    isset($sessionDeals['currentTMCDeal'])
                     //  &&
                     // isset($sessionDeals['allBaseDeals'])
                     // isset($sessionDeals['currentPresentationDeal']) &&
@@ -492,14 +492,15 @@ class EventReportTMCService
 
                     $this->currentBtxDeals  = $sessionDeals['currentTaskDeals'];
 
-                    $this->currentBaseDeal = $sessionDeals['currentBaseDeal'];
-                    $this->currentPresDeal = $sessionDeals['currentPresentationDeal'];
+                    $this->currentBaseDeal = $sessionDeals['currentTMCDeal'];
+                    // $this->currentPresDeal = $sessionDeals['currentPresentationDeal'];
+                    $this->currentTMCDeal = $sessionDeals['currentTMCDeal'];
                     $this->currentColdDeal = $sessionDeals['currentXODeal'];
 
 
                     $this->relationBaseDeals = $sessionDeals['allBaseDeals'];
-                    $this->relationCompanyUserPresDeals = $sessionDeals['allPresentationDeals']; //allPresDeal 
-                    $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
+                    // $this->relationCompanyUserPresDeals = $sessionDeals['allPresentationDeals']; //allPresDeal 
+                    // $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
                     $this->relationColdDeals = $sessionDeals['allXODeals'];
                 }
             }
@@ -602,7 +603,7 @@ class EventReportTMCService
         }
 
 
-        $this->currentDepartamentType = BitrixDepartamentService::getDepartamentTypeByUserId();
+        $this->currentDepartamentType = 'tmc';
 
 
         if (!empty($data['sale'])) {
@@ -697,7 +698,7 @@ class EventReportTMCService
 
 
         $reportFields = [];
-        $reportFields['manager_op'] = $this->planResponsibleId;
+        $reportFields['manager_tmc'] = $this->planResponsibleId;
         $reportFields['op_work_status'] = '';
         $reportFields['op_prospects_type'] = 'op_prospects_good';
         $reportFields['op_result_status'] = '';
@@ -735,13 +736,13 @@ class EventReportTMCService
             $entityId =  $deal['ID'];
             $portalEntityData = $this->portalDealData;
 
-            if ($dealType == 'presentation') {
-                $reportFields['to_base_sales'] = $baseDealId;
-                $currentPresCount = 0;
-                if ($dealEventType == 'plan' || $dealEventType == 'fail') {
-                    $currentPresCount = -1;
-                }
-            }
+            // if ($dealType == 'presentation') {
+            //     $reportFields['to_base_sales'] = $baseDealId;
+            //     $currentPresCount = 0;
+            //     if ($dealEventType == 'plan' || $dealEventType == 'fail') {
+            //         $currentPresCount = -1;
+            //     }
+            // }
         }
 
 
@@ -1374,16 +1375,16 @@ class EventReportTMCService
             );
         }
 
-        if (!empty($this->currentPresDeal)) {  //report pres deal
-            sleep(1);
-            $this->getEntityFlow(
-                true,
-                $this->currentPresDeal,
-                'presentation',
-                $this->currentBaseDeal['ID'],
-                'done'
-            );
-        }
+        // if (!empty($this->currentPresDeal)) {  //report pres deal
+        //     sleep(1);
+        //     $this->getEntityFlow(
+        //         true,
+        //         $this->currentPresDeal,
+        //         'presentation',
+        //         $this->currentBaseDeal['ID'],
+        //         'done'
+        //     );
+        // }
 
 
         if ($this->isPlanned) {
@@ -1418,16 +1419,16 @@ class EventReportTMCService
 
 
         ]);
-        if (!empty($newPresDeal)) {  //plan pres deal
-            sleep(1);
-            $this->getEntityFlow(
-                true,
-                $newPresDeal,
-                'presentation',
-                $this->currentBaseDeal['ID'],
-                'plan'
-            );
-        }
+        // if (!empty($newPresDeal)) {  //plan pres deal
+        //     sleep(1);
+        //     $this->getEntityFlow(
+        //         true,
+        //         $newPresDeal,
+        //         'presentation',
+        //         $this->currentBaseDeal['ID'],
+        //         'plan'
+        //     );
+        // }
         // Log::channel('telegram')->info('presentationBtxList', [
         //     'reportDeals' => $reportDeals,
         //     'planDeals' => $planDeals,
