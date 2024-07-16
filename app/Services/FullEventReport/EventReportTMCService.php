@@ -1342,6 +1342,11 @@ class EventReportTMCService
 
         ]);
 
+        Log::info('HOOK TEST currentBtxDeals', [
+            '$currentPlanEventType' => $this->currentPlanEventType,
+
+        ]);
+
         if ($currentReportStatus === 'fail') {
 
 
@@ -1376,16 +1381,16 @@ class EventReportTMCService
         //warm | money_await | in_progress - создать или обновить  Основная
         //presentation - создать или обновить presentation & Основная
 
-        if (!empty($this->currentBaseDeal)) {
-            sleep(1);
-            $this->getEntityFlow(
-                true,
-                $this->currentBaseDeal,
-                'base',
-                $this->currentBaseDeal['ID'],
-                'unplanned'
-            );
-        }
+        // if (!empty($this->currentBaseDeal)) {
+        //     sleep(1);
+        //     $this->getEntityFlow(
+        //         true,
+        //         $this->currentBaseDeal,
+        //         'base',
+        //         $this->currentBaseDeal['ID'],
+        //         'unplanned'
+        //     );
+        // }
 
         // if (!empty($this->currentPresDeal)) {  //report pres deal
         //     sleep(1);
