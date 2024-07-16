@@ -23,7 +23,7 @@ class BitrixRPAPresFlowService
     public function __construct(
         $hook,
         $portalRPAS,
-        
+
 
     ) {
         $this->hook = $hook;
@@ -169,6 +169,10 @@ class BitrixRPAPresFlowService
                 $this->hook
             );
 
+            Log::channel('telegram')->info('plan deals ids', [
+                'dataForCreate' => $dataForCreate
+
+            ]);
 
             $rpaService->setRPAItem(
                 $dataForCreate

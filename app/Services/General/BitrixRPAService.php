@@ -4,7 +4,7 @@ namespace App\Services\General;
 
 use App\Http\Controllers\APIBitrixController;
 use Illuminate\Support\Facades\Http;
-
+use Illuminate\Support\Facades\Log;
 
 class BitrixRPAService
 {
@@ -57,6 +57,11 @@ class BitrixRPAService
         $method = '/rpa.item.add';
 
         $response = Http::get($this->hook . $method, $data);
+        
+        Log::channel('telegram')->info('plan deals ids', [
+            'response' => $response
+
+        ]);
         $result =  APIBitrixController::getBitrixRespone($response, 'setRPAItem');
         return  $result;
     }
