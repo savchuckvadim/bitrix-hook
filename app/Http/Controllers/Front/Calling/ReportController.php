@@ -28,6 +28,7 @@ class ReportController extends Controller
                 'placement' => null,
                 'presentation' => null,
                 'domain' => null,
+                'departament' => null
 
             ];
             $isFullData = true;
@@ -57,6 +58,11 @@ class ReportController extends Controller
             }
             if (isset($request->presentation)) {
                 $data['presentation'] = $request->presentation;
+            } else {
+                $isFullData = false;
+            }
+            if (isset($request->departament)) {
+                $data['departament'] = $request->departament;
             } else {
                 $isFullData = false;
             }

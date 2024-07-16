@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Services\BitrixCallingColdService;
 use App\Services\FullEventReport\EventReportService;
+use App\Services\FullEventReport\EventReportTMCService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -34,7 +35,26 @@ class EventJob implements ShouldQueue
     public function handle(): void
     {
         Log::info("Event Job from Redis queue.");
-        $service = new EventReportService($this->data);
+        $isTmc = false;
+        if (!empty($this->data)) {
+            if (!empty($this->data['departament'])) {
+
+                if (!empty($this->data['departament']['mode'])) {
+                    if ($this->data['departament']['mode'] == 'tmc') {
+                        $isTmc = true;
+                    }
+                }
+            }
+        }
+        if($isTmc){
+            Log::channel('telegram')->info("Redis tmc queue.");
+            $service = new EventReportTMCService($this->data);
+
+        }else{
+            Log::channel('telegram')->info("Redis sale queue.");
+            $service = new EventReportService($this->data);
+        }
+
         $service->getEventFlow();
     }
 }

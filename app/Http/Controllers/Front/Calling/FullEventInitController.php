@@ -167,6 +167,8 @@ class FullEventInitController extends Controller
         }
     }
 
+   
+    
     public static function getCallingGroupId($portal)
     {
         $callingGroupId = 28;

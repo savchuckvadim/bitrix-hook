@@ -19,7 +19,7 @@ use Illuminate\Console\View\Components\Task;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Log;
 
-class EventReportService
+class EventReportTMCService
 
 {
     protected $portal;
