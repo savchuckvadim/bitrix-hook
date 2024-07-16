@@ -122,6 +122,7 @@ class BitrixCallingColdService
                 $this->name = $data['name'];
             }
         }
+        Log::channel('telegram')->info('TMC HOOK', $data);
 
         if (isset($data['isTmc'])) {
             Log::channel('telegram')->info('TMC HOOK', ['isTmc' => $data['isTmc']]);
@@ -425,9 +426,8 @@ class BitrixCallingColdService
         $this->callThemeFieldCold = $callThemeFieldCold;
 
         $this->currentDepartamentType = 'sales';
-        if(!empty($data['isTmc'])){
+        if (!empty($data['isTmc'])) {
             $this->currentDepartamentType = 'tmc';
-
         }
     }
 
