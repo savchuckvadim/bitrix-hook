@@ -1404,7 +1404,7 @@ class EventReportTMCService
             //     $this->portalDealData,
             //     $currentBtxDeals
             // );
-            if ($this->currentReportEventType !== 'presentation') {
+            if ($this->currentPlanEventType !== 'presentation') {
                 $flowResult =  BitrixDealFlowService::flow( //создает или обновляет сделку
                     $this->hook,
                     $currentBtxDeals,
@@ -1423,6 +1423,33 @@ class EventReportTMCService
                 );
                 $planDeals = $flowResult['dealIds'];
                 $newPresDeal = $flowResult['newPresDeal'];
+            }else{
+                $rpaFlowService = new BitrixRPAPresFlowService(
+                    $this->hook,
+                    $this->portalRPAS
+                    
+                );
+                if(!empty( $currentTMCDeal)){
+                    if(!empty( $currentTMCDeal['ID'])){
+    
+    
+                        $rpaFlowService->getRPAPresInitFlow(
+                            $currentTMCDeal['ID'],
+                            $this->nowDate,
+                            $this->planDeadline,
+                            $this->planCreatedId,
+                            $this->planResponsibleId,
+                            // 1, //$bossId 
+                            $this->entityId,
+                            // $contactId,
+                            $this->comment,
+                            $this->currentPlanEventName,
+    
+                        );
+                    
+                    }
+                }
+               
             }
         } else {
 
@@ -1430,31 +1457,6 @@ class EventReportTMCService
             // todo RPA PRESENTATION INIT FLOW
             // должен создавать item rpa presentation
 
-            $rpaFlowService = new BitrixRPAPresFlowService(
-                $this->hook,
-                $this->portalRPAS
-                
-            );
-            if(!empty( $currentTMCDeal)){
-                if(!empty( $currentTMCDeal['ID'])){
-
-
-                    $rpaFlowService->getRPAPresInitFlow(
-                        $currentTMCDeal['ID'],
-                        $this->nowDate,
-                        $this->planDeadline,
-                        $this->planCreatedId,
-                        $this->planResponsibleId,
-                        // 1, //$bossId 
-                        $this->entityId,
-                        // $contactId,
-                        $this->comment,
-                        $this->currentPlanEventName,
-
-                    );
-                
-                }
-            }
            
 
         }
