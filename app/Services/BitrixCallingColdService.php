@@ -82,7 +82,7 @@ class BitrixCallingColdService
     protected $bitrixLists = [];
 
     protected $nowDate = [];
-
+    protected $isTmc = false;
 
     public function __construct(
 
@@ -123,6 +123,13 @@ class BitrixCallingColdService
             }
         }
 
+        if (isset($data['isTmc'])) {
+            Log::channel('telegram')->info('TMC HOOK', ['isTmc' => $data['isTmc']]);
+
+            if (!empty($data['isTmc'])) {
+                $this->isTmc = $data['isTmc'];
+            }
+        }
 
         $this->stringType = 'Холодный обзвон  ';
         // $this->entityType = $entityType;
@@ -668,7 +675,7 @@ class BitrixCallingColdService
                             if (
                                 (strpos($stage['code'], 'fail') === false) &&
                                 (strpos($stage['code'], 'noresult') === false) &&
-                                ((strpos($stage['code'], 'double') === false) ) &&
+                                ((strpos($stage['code'], 'double') === false)) &&
                                 (strpos($stage['code'], 'success') === false)
                             ) {
                                 array_push($includedStages, "C" . $categoryId . ":" . $stage['bitrixId']);
@@ -747,7 +754,7 @@ class BitrixCallingColdService
         );
         $planDeals = $flowResult['dealIds'];
 
-      
+
         return [
             'planDeals' => $planDeals,
         ];
