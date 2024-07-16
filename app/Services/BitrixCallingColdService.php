@@ -423,8 +423,12 @@ class BitrixCallingColdService
         $this->callThemeField = $callThemeField;
         $this->lastCallDateFieldCold = $lastCallDateFieldCold;
         $this->callThemeFieldCold = $callThemeFieldCold;
-        $departmentService =
-            $this->currentDepartamentType = BitrixDepartamentService::getDepartamentTypeByUserId();
+
+        $this->currentDepartamentType = 'sales';
+        if(!empty($data['isTmc'])){
+            $this->currentDepartamentType = 'tmc';
+
+        }
     }
 
 
