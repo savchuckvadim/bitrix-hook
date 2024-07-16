@@ -304,6 +304,8 @@ class BitrixDealService
         // sales_xo
         // sales_presentation
         // tmc_base
+        Log::channel('telegram')->info("DEAL FLOW", ['currentDepartamentType' => $currentDepartamentType]);
+
         $resultCategoryDatas = [];
         $categoryPrephicks = [];
         if ($currentDepartamentType === 'sales') {
@@ -436,12 +438,17 @@ class BitrixDealService
 
             if ($eventType == 'xo') {
                 $stagePrephicks = 'cold';
+                
             }
             //  else if ($eventType == 'warm') {
             //     $stagePrephicks = 'sales';
             // }
-            else if ($eventType == 'presentation') {
+            else if ($eventType == 'presentation' && $group == 'tmc') {
                 $stagePrephicks = 'spres';
+            }
+
+            if($group == 'tmc'){
+                $stagePrephicks = 'sales_tmc';
             }
         }
 
