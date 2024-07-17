@@ -86,7 +86,7 @@ class BitrixListService
 
             $response = Http::get($url, $data);
             // $responseData = $response->json();
-            $responseData = APIBitrixController::getBitrixRespone($response, 'list service: setItem');
+            $responseData = APIBitrixController::getBitrixRespone($response, 'list service: updateItem');
             if (isset($responseData)) {
                 $result = $responseData;
             }
@@ -127,7 +127,7 @@ class BitrixListService
 
             $response = Http::get($url, $data);
             // $responseData = $response->json();
-            $responseData = APIBitrixController::getBitrixRespone($response, 'list service: setItem');
+            $responseData = APIBitrixController::getBitrixRespone($response, 'list service: getItem');
             if (isset($responseData)) {
                 $result = $responseData;
             }
@@ -163,7 +163,7 @@ class BitrixListService
 
             $response = Http::get($url, $data);
             // $responseData = $response->json();
-            $responseData = APIBitrixController::getBitrixRespone($response, 'list service: setItem');
+            $responseData = APIBitrixController::getBitrixRespone($response, 'list service: get list');
             if (isset($responseData)) {
                 $result = $responseData;
             }
