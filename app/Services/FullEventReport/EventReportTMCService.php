@@ -1488,7 +1488,7 @@ class EventReportTMCService
                             $this->currentPlanEventName,
 
                         );
-                        Log::channe('telegram')->info('HOOK TEST currentBtxDeals', [
+                        Log::channel('telegram')->info('HOOK TEST currentBtxDeals', [
                             'resultRpaItem' => $this->resultRpaItem,
             
             
