@@ -22,27 +22,25 @@ class BitrixRPAPresFlowService
 
     public function __construct(
         $hook,
-        $portalRPAS,
+        $pRPA,
 
 
     ) {
         $this->hook = $hook;
-        foreach ($portalRPAS as $pRPA) {
-            $this->portalRPA = $pRPA;
+        $this->portalRPA = $pRPA;
 
-            $this->rpaTypeId = $pRPA['bitrixId'];
-            if (!empty($pRPA['bitrixfields'])) {
+        $this->rpaTypeId = $pRPA['bitrixId'];
+        if (!empty($pRPA['bitrixfields'])) {
 
-                $this->portalRPAFields = $pRPA['bitrixfields'];
-            }
-            if (!empty($pRPA['categories']) && is_array($pRPA['categories'])) {
+            $this->portalRPAFields = $pRPA['bitrixfields'];
+        }
+        if (!empty($pRPA['categories']) && is_array($pRPA['categories'])) {
 
-                if (!empty($pRPA['categories'][0])) {
+            if (!empty($pRPA['categories'][0])) {
 
-                    if (!empty($pRPA['categories'][0]['stages'])) {
+                if (!empty($pRPA['categories'][0]['stages'])) {
 
-                        $this->portalRPAStages = $pRPA['categories'][0]['stages'];
-                    }
+                    $this->portalRPAStages = $pRPA['categories'][0]['stages'];
                 }
             }
         }
@@ -185,10 +183,7 @@ class BitrixRPAPresFlowService
                 $this->hook
             );
 
-            Log::info('plan deals ids', [
-                'dataForCreate' => $dataForCreate
 
-            ]);
 
             $rpaService->setRPAItem(
                 $dataForCreate

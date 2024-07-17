@@ -156,6 +156,13 @@ class EventReportTMCService
     protected $btxDealPresCategoryId;
 
     protected $portalRPAS;
+    protected $portalRPA;
+    protected $rpaTypeId;
+    protected $portalRPAFields;
+    protected $portalRPAStages;
+    protected $resultRpaItem;
+    protected $resultRpaLink;
+
 
     public function __construct(
 
@@ -386,7 +393,27 @@ class EventReportTMCService
         if (!empty($portal['rpas'])) {
             $this->portalRPAS = $portal['rpas'];
 
+            foreach ($portal['rpas'] as $pRPA) {
+                $this->portalRPA = $pRPA;
+
+                $this->rpaTypeId = $pRPA['bitrixId'];
+                if (!empty($pRPA['bitrixfields'])) {
+
+                    $this->portalRPAFields = $pRPA['bitrixfields'];
+                }
+                if (!empty($pRPA['categories']) && is_array($pRPA['categories'])) {
+
+                    if (!empty($pRPA['categories'][0])) {
+
+                        if (!empty($pRPA['categories'][0]['stages'])) {
+
+                            $this->portalRPAStages = $pRPA['categories'][0]['stages'];
+                        }
+                    }
+                }
+            }
         }
+
 
         if (!empty($portal['bitrixDeal'])) {
 
@@ -672,7 +699,7 @@ class EventReportTMCService
                 $currentDealsIds
             );
 
-            return APIOnlineController::getSuccess(['result' => $result]);
+            return APIOnlineController::getSuccess(['result' => $result, 'presInitLink' => $this->resultRpaLink]);
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
@@ -1335,19 +1362,19 @@ class EventReportTMCService
         // которая пушится туда  при unplanned - чтобы были обработаны базовая сделка 
         // в соответствии с проведенной през
         // при этом у основной сделки должна быть обновлена стадия - например на през если была unplanned
-        Log::info('HOOK TEST currentBtxDeals', [
-            'currentBtxDeals' => $currentBtxDeals,
-            'this currentBtxDeals' => $this->currentBtxDeals,
+        // Log::info('HOOK TEST currentBtxDeals', [
+        //     'currentBtxDeals' => $currentBtxDeals,
+        //     'this currentBtxDeals' => $this->currentBtxDeals,
 
 
-        ]);
+        // ]);
 
-        Log::info('HOOK TEST currentBtxDeals', [
-            '$currentPlanEventType' => $this->currentPlanEventType,
-            'isPlanned' => $this->isPlanned,
+        // Log::info('HOOK TEST currentBtxDeals', [
+        //     '$currentPlanEventType' => $this->currentPlanEventType,
+        //     'isPlanned' => $this->isPlanned,
 
 
-        ]);
+        // ]);
 
         if ($currentReportStatus === 'fail') {
 
@@ -1430,23 +1457,27 @@ class EventReportTMCService
                 );
                 $planDeals = $flowResult['dealIds'];
                 $newPresDeal = $flowResult['newPresDeal'];
-            }else{
+            } else {
                 Log::info('HOOK TEST currentBtxDeals', [
                     '$rpa case' => true,
                     'currentTMCDeal currentBaseDeal' => $this->currentBaseDeal,
-        
-        
+
+
                 ]);
                 $rpaFlowService = new BitrixRPAPresFlowService(
                     $this->hook,
-                    $this->portalRPAS
-                    
+                    $this->portalRPA
+
                 );
-                if(!empty( $this->currentBaseDeal)){
-                    if(!empty( $this->currentBaseDeal['ID'])){
-    
-    
-                        $rpaFlowService->getRPAPresInitFlow(
+
+
+                //todo get target rpa
+
+                if (!empty($this->currentBaseDeal)) {
+                    if (!empty($this->currentBaseDeal['ID'])) {
+
+
+                        $this->resultRpaItem =  $rpaFlowService->getRPAPresInitFlow(
                             $this->currentBaseDeal['ID'],
                             $this->nowDate,
                             $this->planDeadline,
@@ -1457,21 +1488,18 @@ class EventReportTMCService
                             // $contactId,
                             $this->comment,
                             $this->currentPlanEventName,
-    
+
                         );
-                    
+
+                        if (!empty($this->resultRpaItem)) {
+                            if (!empty($this->resultRpaItem['id'])) {
+                                $this->resultRpaLink = 'https://' . $this->domain . '/rpa/item/' . $this->rpaTypeId . '/' . $this->resultRpaItem['id'];
+                            }
+                        }
                     }
                 }
-               
             }
         } else {
-
-
-            // todo RPA PRESENTATION INIT FLOW
-            // должен создавать item rpa presentation
-
-           
-
         }
 
 
