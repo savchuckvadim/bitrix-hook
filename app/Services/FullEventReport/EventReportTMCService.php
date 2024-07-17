@@ -1344,6 +1344,8 @@ class EventReportTMCService
 
         Log::info('HOOK TEST currentBtxDeals', [
             '$currentPlanEventType' => $this->currentPlanEventType,
+            'isPlanned' => $this->isPlanned,
+
 
         ]);
 
@@ -1429,6 +1431,12 @@ class EventReportTMCService
                 $planDeals = $flowResult['dealIds'];
                 $newPresDeal = $flowResult['newPresDeal'];
             }else{
+                Log::info('HOOK TEST currentBtxDeals', [
+                    '$rpa case' => true,
+                    'currentTMCDeal' => $this->currentTMCDeal,
+        
+        
+                ]);
                 $rpaFlowService = new BitrixRPAPresFlowService(
                     $this->hook,
                     $this->portalRPAS
