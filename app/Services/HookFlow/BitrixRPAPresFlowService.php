@@ -158,8 +158,8 @@ class BitrixRPAPresFlowService
             ];
             $currentDataField = [];
             $currentDataField['stageId'] = 'NEW';
-            $fieldsData['TITLE'] = 'Заявка на презентацию ';
-            $fieldsData['NAME'] = 'Заявка на презентацию ' . $name;
+            $fieldsData['title'] = 'Заявка на презентацию ' . $name;
+            $fieldsData['name'] = 'Заявка на презентацию ' . $name;
 
             $fieldsData['createdBy'] =  $created;
             $fieldsData['UF_RPA_67_NAME'] =  $name;
