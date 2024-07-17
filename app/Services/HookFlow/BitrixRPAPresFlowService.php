@@ -160,7 +160,7 @@ class BitrixRPAPresFlowService
             $currentDataField['stageId'] = 'NEW';
             $fieldsData['title'] = 'Заявка на презентацию ' . $name;
             $fieldsData['name'] = 'Заявка на презентацию ' . $name;
-            
+
             $fieldsData['createdBy'] =  $created;
 
             foreach ($presentatationInitRPAFields as  $presValue) {
@@ -182,7 +182,7 @@ class BitrixRPAPresFlowService
                 $this->hook
             );
 
-            Log::channel('telegram')->info('plan deals ids', [
+            Log::info('plan deals ids', [
                 'dataForCreate' => $dataForCreate
 
             ]);
