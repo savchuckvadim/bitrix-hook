@@ -162,7 +162,7 @@ class BitrixRPAPresFlowService
             $fieldsData['name'] = 'Заявка на презентацию ' . $name;
 
             $fieldsData['createdBy'] =  $created;
-            $fieldsData['"rpa67Name'] =  $name;
+            $fieldsData['RPA_67_NAME'] =  $name;
             
             foreach ($presentatationInitRPAFields as  $presValue) {
 
@@ -170,7 +170,7 @@ class BitrixRPAPresFlowService
                 foreach ($this->portalRPAFields as $pField) {
                     if ($fieldCode == $pField['code']) {
 
-                        $fieldId = $this->convertFieldFormat($pField['bitrixId']);
+                        $fieldId = $pField['bitrixId'];
                         $fieldsData[$fieldId] = $presValue['value'];
                     }
                 }
