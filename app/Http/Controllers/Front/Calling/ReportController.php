@@ -9,6 +9,7 @@ use App\Http\Controllers\PortalController;
 use App\Jobs\EventJob;
 use App\Services\BitrixGeneralService;
 use App\Services\FullEventReport\EventReportService;
+use App\Services\FullEventReport\EventReportTMCService;
 use App\Services\General\BitrixDealService;
 use App\Services\General\BitrixDepartamentService;
 use App\Services\General\BitrixListService;
@@ -70,10 +71,31 @@ class ReportController extends Controller
                 // $service = new EventReportService($data);
                 // $result = $service->getEventFlow();
                 // return $result;
-                dispatch(
-                    new EventJob($data)
-                )->onQueue('high-priority');
+                $isTmc = false;
+                if (!empty($data)) {
+                    if (!empty($data['departament'])) {
 
+                        if (!empty($data['departament']['mode'])) {
+                            if (!empty($data['departament']['mode']['code'])) {
+                                if (!empty($data['departament']['mode']['code'])) {
+                                    if ($data['departament']['mode']['code'] == 'tmc') {
+                                        $isTmc = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if ($isTmc) {
+                    // Log::channel('telegram')->info("Redis tmc queue.");
+                    $service = new EventReportTMCService($data);
+                    return $service->getEventFlow();
+
+                } else {
+                    dispatch(
+                        new EventJob($data)
+                    )->onQueue('high-priority');
+                }
                 return APIOnlineController::getSuccess(
                     [
                         'result' => 'success',
@@ -403,7 +425,7 @@ class ReportController extends Controller
                                         }
                                     }
                                 }
-                            }else  if ($btxDealPortalCategory['code'] == "tmc_base") {
+                            } else  if ($btxDealPortalCategory['code'] == "tmc_base") {
                                 $currentTMCCategoryBtxId = $btxDealPortalCategory['bitrixId'];
 
                                 foreach ($btxDeals as $btxDeal) {
@@ -415,8 +437,6 @@ class ReportController extends Controller
                                     }
                                 }
                             }
-
-                            
                         }
                     }
 
@@ -636,7 +656,7 @@ class ReportController extends Controller
                                     $getAllTMCDealsData,
                                 );
                             }
-                        } 
+                        }
                     }
                 }
 
