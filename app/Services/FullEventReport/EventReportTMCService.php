@@ -1442,12 +1442,12 @@ class EventReportTMCService
                     $this->portalRPAS
                     
                 );
-                if(!empty( $currentBaseDeal)){
-                    if(!empty( $currentBaseDeal['ID'])){
+                if(!empty( $this->currentBaseDeal)){
+                    if(!empty( $this->currentBaseDeal['ID'])){
     
     
                         $rpaFlowService->getRPAPresInitFlow(
-                            $currentBaseDeal['ID'],
+                            $this->currentBaseDeal['ID'],
                             $this->nowDate,
                             $this->planDeadline,
                             $this->planCreatedId,
