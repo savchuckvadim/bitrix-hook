@@ -102,7 +102,19 @@ class BitrixRPAPresFlowService
             $eventActionName = 'Запланирована';
             $evTypeName = 'Презентация';
 
+            Log::info('HOOK TEST currentBtxDeals', [
+                '$rpa case' => true,
+                'tmcDealId' => $tmcDealId,
+                'nowDate' => $nowDate,
+                'deadline' => $deadline,
+                'created' => $created,
+                'responsible' => $responsible,
+                'companyId' => $companyId,
+                'comment' => $comment,
+                'name' => $name,
 
+
+            ]);
 
             $presentatationInitRPAFields = [
                 [
@@ -139,7 +151,7 @@ class BitrixRPAPresFlowService
                 [
                     'code' => 'rpa_crm_tmc_deal',
                     'name' => 'ТМЦ Сделка',
-                    'value' => 'Контактные данные', // []
+                    'value' => $tmcDealId, // []
                 ],
 
 
@@ -147,7 +159,8 @@ class BitrixRPAPresFlowService
             $currentDataField = [];
             $currentDataField['stageId'] = 'NEW';
             $fieldsData['title'] = 'Заявка на презентацию ' . $name;
-
+            $fieldsData['name'] = 'Заявка на презентацию ' . $name;
+            
             $fieldsData['createdBy'] =  $created;
 
             foreach ($presentatationInitRPAFields as  $presValue) {
