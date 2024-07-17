@@ -661,7 +661,7 @@ class EventReportService
                 $currentDealsIds
             );
 
-            return APIOnlineController::getSuccess(['result' => $result]);
+            return APIOnlineController::getSuccess(['data' => ['result' => $result, 'presInitLink' => null]]);
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
@@ -1601,7 +1601,7 @@ class EventReportService
         Log::channel('telegram')->info('HOOK TST', [
             'isPresentationDone' => $this->isPresentationDone
         ]);
- 
+
         if ($this->isPresentationDone == true) {
             //если была проведена през
             if ($reportEventType !== 'presentation') {
@@ -1784,15 +1784,13 @@ class EventReportService
             // }
 
             if (!empty($this->currentBtxDeals)) {
-               
-                    $array = $currentTask['ufCrmTask'];
-                    foreach ($this->currentBtxDeals as $deal) {
-                        // Проверяем, начинается ли элемент с "D_"
-                            // Добавляем ID в массив, удаляя первые два символа "D_"
-                            $currentDealIds[] = $deal['ID'];
-                        
-                    }
-                
+
+                $array = $currentTask['ufCrmTask'];
+                foreach ($this->currentBtxDeals as $deal) {
+                    // Проверяем, начинается ли элемент с "D_"
+                    // Добавляем ID в массив, удаляя первые два символа "D_"
+                    $currentDealIds[] = $deal['ID'];
+                }
             }
             $eventType = 'report';
 

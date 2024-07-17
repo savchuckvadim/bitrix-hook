@@ -481,8 +481,7 @@ class EventDocumentService
                 $this->getListPresentationFlow();
             }
 
-
-            return APIOnlineController::getSuccess(['result' => $this->workStatus]);
+            return APIOnlineController::getSuccess(['data' => ['result' => $this->workStatus, 'presInitLink' => null]]);
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
@@ -1453,7 +1452,7 @@ class EventDocumentService
         $searchedBaseDealId = null; //
         $searchedPresDealId = null; //
         $serchingListCode = '';
-      
+
         $currentPresDeal =  $this->currentPresDeal;
         if (!empty($currentPresDeal)) {
             if (!empty($currentPresDeal['ID'])) {

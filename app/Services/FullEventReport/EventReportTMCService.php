@@ -699,7 +699,7 @@ class EventReportTMCService
                 $currentDealsIds
             );
 
-            return APIOnlineController::getSuccess(['result' => $result, 'presInitLink' => $this->resultRpaLink]);
+            return APIOnlineController::getSuccess(['data' => ['result' => $result, 'presInitLink' => $this->resultRpaLink]]);
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
