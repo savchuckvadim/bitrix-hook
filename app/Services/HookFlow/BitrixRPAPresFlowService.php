@@ -162,7 +162,8 @@ class BitrixRPAPresFlowService
             $fieldsData['name'] = 'Заявка на презентацию ' . $name;
 
             $fieldsData['createdBy'] =  $created;
-
+            $fieldsData['RPA_67_NAME'] =  $name;
+            
             foreach ($presentatationInitRPAFields as  $presValue) {
 
                 $fieldCode = $presValue['code'];
