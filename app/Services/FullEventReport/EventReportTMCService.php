@@ -1433,7 +1433,7 @@ class EventReportTMCService
             }else{
                 Log::info('HOOK TEST currentBtxDeals', [
                     '$rpa case' => true,
-                    'currentTMCDeal' => $this->currentTMCDeal,
+                    'currentTMCDeal currentBaseDeal' => $this->currentBaseDeal,
         
         
                 ]);
@@ -1442,12 +1442,12 @@ class EventReportTMCService
                     $this->portalRPAS
                     
                 );
-                if(!empty( $currentTMCDeal)){
-                    if(!empty( $currentTMCDeal['ID'])){
+                if(!empty( $currentBaseDeal)){
+                    if(!empty( $currentBaseDeal['ID'])){
     
     
                         $rpaFlowService->getRPAPresInitFlow(
-                            $currentTMCDeal['ID'],
+                            $currentBaseDeal['ID'],
                             $this->nowDate,
                             $this->planDeadline,
                             $this->planCreatedId,
