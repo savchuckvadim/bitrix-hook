@@ -168,7 +168,9 @@ class BitrixRPAPresFlowService
                 $fieldCode = $presValue['code'];
                 foreach ($this->portalRPAFields as $pField) {
                     if ($fieldCode == $pField['code']) {
-                        $currentDataField[$pField['bitrixId']] = $presValue['value'];
+
+                        $fieldId = $this->convertFieldFormat($pField['bitrixId']);
+                        $fieldsData[$fieldId] = $presValue['value'];
                     }
                 }
             }
@@ -201,5 +203,18 @@ class BitrixRPAPresFlowService
 
             Log::channel('telegram')->error('APRIL_HOOK Pres Lists Flow', $errorMessages);
         }
+    }
+
+    protected function convertFieldFormat($string) {
+        // Удалить 'UF_' и разделить строку по '_'
+        $parts = explode('_', str_replace('UF_', '', $string));
+        
+        // Преобразовать части в нужный регистр
+        $result = strtolower(array_shift($parts));  // первая часть в нижний регистр
+        foreach ($parts as $part) {
+            $result .= ucfirst(strtolower($part));  // остальные с заглавной буквы
+        }
+        
+        return $result;
     }
 }
