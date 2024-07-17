@@ -158,12 +158,12 @@ class BitrixRPAPresFlowService
             ];
             $currentDataField = [];
             $currentDataField['stageId'] = 'NEW';
-            $fieldsData['title'] = 'Заявка на презентацию ' . $name;
-            $fieldsData['name'] = 'Заявка на презентацию ' . $name;
+            // $fieldsData['title'] = 'Заявка на презентацию ' . $name;
+            // $fieldsData['name'] = 'Заявка на презентацию ' . $name;
 
             $fieldsData['createdBy'] =  $created;
-            $fieldsData['UF_RPA_69_NAME'] = 'Заявка на презентацию ' . $name;
-            
+            $fieldsData['UF_RPA_69_NAME'] = 'Заявка' . $name . 'от ' . $nowDate;
+
             foreach ($presentatationInitRPAFields as  $presValue) {
 
                 $fieldCode = $presValue['code'];
@@ -206,16 +206,17 @@ class BitrixRPAPresFlowService
         }
     }
 
-    protected function convertFieldFormat($string) {
+    protected function convertFieldFormat($string)
+    {
         // Удалить 'UF_' и разделить строку по '_'
         $parts = explode('_', str_replace('UF_', '', $string));
-        
+
         // Преобразовать части в нужный регистр
         $result = strtolower(array_shift($parts));  // первая часть в нижний регистр
         foreach ($parts as $part) {
             $result .= ucfirst(strtolower($part));  // остальные с заглавной буквы
         }
-        
+
         return $result;
     }
 }
