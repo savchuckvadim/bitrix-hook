@@ -23,6 +23,7 @@ class ReportSupplyController extends Controller
             $currentDeal = null;
             $data = $request->all();
             $isFullData = false;
+            $rqLinkesponse = null;
 
             if (
                 !empty($data['domain']) &&
