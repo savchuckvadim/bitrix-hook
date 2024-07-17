@@ -1471,8 +1471,6 @@ class EventReportTMCService
                 );
 
 
-                //todo get target rpa
-
                 if (!empty($this->currentBaseDeal)) {
                     if (!empty($this->currentBaseDeal['ID'])) {
 
@@ -1490,7 +1488,12 @@ class EventReportTMCService
                             $this->currentPlanEventName,
 
                         );
-
+                        Log::channe('telegram')->info('HOOK TEST currentBtxDeals', [
+                            'resultRpaItem' => $this->resultRpaItem,
+            
+            
+                        ]);
+            
                         if (!empty($this->resultRpaItem)) {
                             if (!empty($this->resultRpaItem['id'])) {
                                 $this->resultRpaLink = 'https://' . $this->domain . '/rpa/item/' . $this->rpaTypeId . '/' . $this->resultRpaItem['id'];

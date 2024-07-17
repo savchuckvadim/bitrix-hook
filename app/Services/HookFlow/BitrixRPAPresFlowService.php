@@ -185,9 +185,13 @@ class BitrixRPAPresFlowService
 
 
 
-            $rpaService->setRPAItem(
+            $resultItem = $rpaService->setRPAItem(
                 $dataForCreate
             );
+
+            return $resultItem;
+
+            
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
