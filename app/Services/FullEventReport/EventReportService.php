@@ -536,7 +536,14 @@ class EventReportService
             }
         }
 
+        $sessionTMCDealKey = 'tmcInit_' . $domain . '_' . $this->planResponsibleId . '_' . $entityId;
+        $sessionData = FullEventInitController::getSessionItem($sessionTMCDealKey);
 
+        Log::info('HOOK TMC SESSION GET', $sessionData);
+
+        if (isset($sessionData['tmcDeal'])) {
+            $this->currentTMCDeal = $sessionData['tmcDeal'];
+        }
 
         if (!empty($portal['smarts'])) {
             // foreach ($portal['smarts'] as $smart) {

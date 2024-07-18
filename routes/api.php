@@ -293,24 +293,88 @@ Route::post('/task/fail', function (Request $request) {
 
 // ............................... FULL EVENT CALING PRES FRONT
 Route::post('/full/initpres/success', function (Request $request) {
-    Log::channel('telegram')->info('HOOK TST', [
-        'success' => 'yo'
-    ]);
-    $data = $request->all();
-    Log::channel('telegram')->info('HOOK TST', [
-        'data' => $data
-    ]);
+    //     https://april-hook/api/full/initpres/success
+    //     ?commentOwner={{Комментарий к заявке Руководитель}}&commentTMC={{Комментарий к заявке ТМЦ}
+    // }&commentManager={{Комментарий к заявке Менеджер}}&deadline={{ОП Дата назначенной презентации}}
+    //     &name={{Название}}&ownerId=user_1&managerId={{ОП Кто назначен ответственным}}
+    //     &tmcId={{ТМЦ Кто назначил последнюю заявку на презентацию}}&tmcDealId={{ТМЦ Сделка}}
+    $comedata = $request->all();
+
+    //     должен сделать полный цикл flow 
+    // как будто назначили презентацию
+    // найти существующую сделку по компании и сотруднику base или создать
+    // для этого контроллер подготовит data на основе request чтобы далее засунуть просто в event service
+    $data = [];
+
+    if (!empty($comedata['auth'])) {
+        if (!empty($comedata['auth']['domain'])) {
+            $domain =  $comedata['auth']['domain'];
+        }
+    }
+    $comment = '';
+    if (!empty($comedata['commentTMC'])) {
+        $comment = 'ТМЦ:' . $comedata['commentTMC'];
+    }
+    if (!empty($comedata['commentOwner'])) {
+        $comment = 'Руководитель: ' . $comedata['commentOwner'];
+    }
+    if (!empty($comedata['commentTMC'])) {
+        $comment = 'Менеджер: ' . $comedata['commentManager'];
+    }
+
+    $data['report']['description']  = $comment;
+
+    $partsCreated = explode("_", $comedata['ownerId']);
+    $partsResponsible = explode("_", $comedata['managerId']);
+    $createdId = $partsCreated[1];
+    $responsibleId = $partsResponsible[1];
+
+
+
+    $data['placement'];
+    $data['presentation'];
+    $data['currentTask'] = null;
+    $data['report']['resultStatus'] = 'new';
+    $data['report']['workStatus']['current']['code'] == 'inJob';
+    // $data['plan']['createdBy']
+    $data['plan']['createdBy']['ID']  = $createdId;
+    $data['plan']['responsibility']['ID']  = $responsibleId;
+    $data['plan']['deadline'] =  $comedata['deadline'];
+    $data['presentation']['isPresentationDone'] = false;
+
+    $data['domain'] =  $domain;
+    $tmcdealId = $comedata['tmcDealId'];
+    $companyId = $comedata['companyId'];
+
+
+    $hook = PortalController::getHook($domain);
+    //tmc init pres session 
+    $tmcDealSession = ReportController::getPresTMCInitDeal( //создается сессия со сделкой tmc
+        $domain,
+        $hook,
+        $tmcdealId,
+        $responsibleId,
+        $companyId
+    );
+    $baseDealSession =   ReportController::getDealsFromNewTaskInner( //создается сессия с base сделкой
+        $domain,
+        $hook,
+        $companyId,
+        $responsibleId,
+        'company' // $from да вроде оно и не нужно
+    );
+
+
+
     Log::info('HOOK TST', [
-        'data' => $data
+        'tmcDealSession' => $tmcDealSession,
+        'baseDealSession' => $baseDealSession,
+        '$data' => $data
+
     ]);
 });
 
-Route::get('/full/initpres/success', function () {
-    Log::channel('telegram')->info('HOOK TST', [
-        'success' => 'yo'
-    ]);
-  
-});
+
 
 
 Route::post('full/department', function (Request $request) {

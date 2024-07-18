@@ -90,7 +90,6 @@ class ReportController extends Controller
                     // Log::channel('telegram')->info("Redis tmc queue.");
                     $service = new EventReportTMCService($data);
                     return $service->getEventFlow();
-
                 } else {
                     dispatch(
                         new EventJob($data)
@@ -1089,7 +1088,13 @@ class ReportController extends Controller
         }
     }
 
-    public static function getDealsFromNewTaskInner($domain, $hook, $companyId, $userId, $from)  // GET DEALS AND INIT REDIS INIT EVENT FROM NEW TASK  
+    public static function getDealsFromNewTaskInner(
+        $domain,
+        $hook,
+        $companyId,
+        $userId,
+        $from
+    )  // GET DEALS AND INIT REDIS INIT EVENT FROM NEW TASK  
     {
 
         // entities [deal, smart ...]
@@ -1104,8 +1109,9 @@ class ReportController extends Controller
                 // !empty($data['companyId']) &&
                 !empty($domain) &&
                 !empty($companyId) &&
-                !empty($userId) &&
-                !empty($from) //task //company  //deal //lead
+                !empty($userId)
+                //  &&
+                // !empty($from) //task //company  //deal //lead
 
 
             ) {
@@ -2090,6 +2096,70 @@ class ReportController extends Controller
                 $th->getMessage(),
                 ['departament' => $departmentResult]
             );
+        }
+    }
+
+
+
+    public static function getPresTMCInitDeal(
+        $domain,
+        $hook,
+        $tmcdealId,
+        $userId,
+        $companyId
+    )  // GET DEALS AND INIT REDIS INIT EVENT FROM NEW TASK  
+    {
+
+        // entities [deal, smart ...]
+        //companyId
+        //userId
+        //currentTask
+        $sessionData = null;
+        try {
+
+            if (
+                // !empty($data['userId'])  &&
+                // !empty($data['companyId']) &&
+                !empty($domain) &&
+                !empty($hook) &&
+                !empty($tmcdealId) &&
+                !empty($userId) &&
+                !empty($companyId)
+
+
+            ) {
+                $responsibleId = $userId;
+                $allPresentationDeals = [];                  // все сделки презентации связанные с компанией и пользователем
+                $currentCompany = null;
+
+
+
+                $getAllPresDealsData = [];
+
+
+                $sessionKey = 'tmcInit_' . $domain . '_' . $userId . '_' . $companyId;
+                $tmcDeal = BitrixGeneralService::getEntity($hook, 'deal', $tmcdealId);
+
+                $sessionData = [
+
+                    'tmcDeal' => $tmcDeal,
+                ];
+
+
+                FullEventInitController::setSessionItem(
+                    $sessionKey,
+                    $sessionData
+                );
+                // $fromSession = FullEventInitController::getSessionItem(
+                //     $sessionKey
+                // );
+                return $sessionData;
+            }
+
+
+            return $sessionData;
+        } catch (\Throwable $th) {
+            return $sessionData;
         }
     }
 }

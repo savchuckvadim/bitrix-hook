@@ -39,4 +39,29 @@ class PortalController extends Controller
             return $result;
         }
     }
+
+
+    public static function getHook($domain)
+    {
+        $result = null;
+        try {
+            $portal = PortalController::getPortal($domain);
+            $portal = $portal['data'];
+            $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+            $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+
+
+            // return APIOnlineController::getResponse($portalsRespone['resultCode'], $portalsRespone['message'], $portalsRespone['data']);
+            return $hook;
+        } catch (\Throwable $th) {
+            $errorData = [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('API HOOK: Exception caught', $errorData);
+            return $result;
+        }
+    }
 }
