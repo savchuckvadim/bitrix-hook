@@ -317,12 +317,19 @@ Route::post('/full/initpres/success', function (Request $request) {
     $data = [];
     try {
         //code...
+        $tmcdealId = $comedata['tmcDealId'];
+        $companyId = $comedata['companyId'];
 
         if (!empty($comedata['auth'])) {
             if (!empty($comedata['auth']['domain'])) {
                 $domain =  $comedata['auth']['domain'];
             }
         }
+        $data['domain'] =  $domain;
+
+
+
+
         $comment = '';
         if (!empty($comedata['commentTMC'])) {
             $comment = 'ТМЦ:' . $comedata['commentTMC'];
@@ -359,17 +366,25 @@ Route::post('/full/initpres/success', function (Request $request) {
             "failReason" => [
                 "items" => [
                     ["id" => 0, "code" => "fail_notime", "name" => "Не было времени", "isActive" => true]
-                ]
+                ],
+                'current' =>   ["id" => 0, "code" => "fail_notime", "name" => "Не было времени", "isActive" => true]
+
             ],
             "failType" => [
                 "items" => [
+                    ["id" => 0, "code" => "op_prospects_good", "name" => "Перспективная", "isActive" => true],
                     ["id" => 2, "code" => "garant", "name" => "Гарант/Запрет", "isActive" => true]
-                ]
+                ],
+                'current' =>   ["id" => 0, "code" => "op_prospects_good", "name" => "Перспективная", "isActive" => true]
+
             ],
             "noresultReason" => [
                 "items" => [
                     ["id" => 0, "code" => "secretar", "name" => "Секретарь", "isActive" => true]
-                ]
+                ],
+                'current' =>  ["id" => 0, "code" => "secretar", "name" => "Секретарь", "isActive" => true]
+
+
             ],
             "workStatus" => [
                 "items" => [
@@ -396,6 +411,14 @@ Route::post('/full/initpres/success', function (Request $request) {
         // $data['plan']['createdBy']
 
         $data['plan'] = [
+            'type' => [
+                'current' => [
+                    "id" => 2,
+                    "code" => "presentation",
+                    "name" => "Презентация",
+                    "isActive" => true
+                ]
+            ],
             "createdBy" => [
                 "ID" => $createdId,
                 // "XML_ID" => "",
@@ -417,11 +440,8 @@ Route::post('/full/initpres/success', function (Request $request) {
             "name" => $comedata['name']
         ];
 
-        $data['presentation']['isPresentationDone'] = false;
 
-        $data['domain'] =  $domain;
-        $tmcdealId = $comedata['tmcDealId'];
-        $companyId = $comedata['companyId'];
+
 
 
         $data['placement'] = [
@@ -475,12 +495,10 @@ Route::post('/full/initpres/success', function (Request $request) {
 
         ]);
 
-        
+
         dispatch(
             new EventJob($data)
         )->onQueue('high-priority');
-
-
     } catch (\Throwable $th) {
         $errorData = [
             'message'   => $th->getMessage(),
