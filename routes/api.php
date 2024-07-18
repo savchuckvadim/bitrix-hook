@@ -333,7 +333,7 @@ Route::post('/full/initpres/success', function (Request $request) {
             $comment = 'Менеджер: ' . $comedata['commentManager'];
         }
 
-        $data['report']['description']  = $comment;
+
 
         $partsCreated = explode("_", $comedata['ownerId']);
         $partsResponsible = explode("_", $comedata['managerId']);
@@ -342,8 +342,53 @@ Route::post('/full/initpres/success', function (Request $request) {
 
 
 
-        $data['placement'];
-        $data['presentation'];
+        $data['presentation'] = [
+            "count" => [
+                "company" => 0,
+                "smart" => 0,
+                "deal" => 0
+            ],
+            "isPresentationDone" => false,
+            "isUnplannedPresentation" => false
+        ];
+
+        $data['report'] = [
+            "resultStatus" => "new",
+            "description" =>  $comment,
+            "failReason" => [
+                "items" => [
+                    ["id" => 0, "code" => "fail_notime", "name" => "Не было времени", "isActive" => true]
+                ]
+            ],
+            "failType" => [
+                "items" => [
+                    ["id" => 2, "code" => "garant", "name" => "Гарант/Запрет", "isActive" => true]
+                ]
+            ],
+            "noresultReason" => [
+                "items" => [
+                    ["id" => 0, "code" => "secretar", "name" => "Секретарь", "isActive" => true]
+                ]
+            ],
+            "workStatus" => [
+                "items" => [
+                    ["id" => 0, "code" => "inJob", "name" => "В работе", "isActive" => true]
+                ],
+                "current" => [
+                    "id" => 0,
+                    "code" => "inJob",
+                    "name" => "В работе",
+                    "isActive" => true
+                ],
+                "default" => [
+                    "id" => 0,
+                    "code" => "inJob",
+                    "name" => "В работе",
+                    "isActive" => true
+                ],
+                "isChanged" => false
+            ]
+        ];
         $data['currentTask'] = null;
         $data['report']['resultStatus'] = 'new';
         $data['report']['workStatus']['current']['code'] == 'inJob';
@@ -356,6 +401,15 @@ Route::post('/full/initpres/success', function (Request $request) {
         $data['domain'] =  $domain;
         $tmcdealId = $comedata['tmcDealId'];
         $companyId = $comedata['companyId'];
+
+
+        $data['placement'] = [
+            'options' => [
+                'ID' =>  $companyId
+            ],
+            'placement' => 'COMPANY'
+        ];
+
         Log::info('HOOK TST', [
 
             '$data' => $data
