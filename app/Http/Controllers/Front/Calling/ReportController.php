@@ -1262,12 +1262,22 @@ class ReportController extends Controller
 
             return $sessionData;
         } catch (\Throwable $th) {
-            return [
-                $domain,
-                $hook,
-                $companyId,
-                $userId
+            $errorData = [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+                'come' => [
+                    $domain,
+                    $hook,
+                    $companyId,
+                    $userId,
+                ]
             ];
+            Log::error('API HOOK: getDealsFromNewTaskInner', $errorData);
+            Log::channel('telegram')->error('API HOOK: getDealsFromNewTaskInner', $errorData);
+
+            return $sessionData;
         }
     }
     public static function getDocumentDealsInit(Request $request)
