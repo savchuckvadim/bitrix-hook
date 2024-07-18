@@ -1119,7 +1119,8 @@ class ReportController extends Controller
                 $allPresentationDeals = [];                  // все сделки презентации связанные с компанией и пользователем
                 $currentCompany = null;
 
-
+                $portal = PortalController::getPortal($domain);
+                $portal = $portal['data'];
 
                 $getAllPresDealsData = [];
 
