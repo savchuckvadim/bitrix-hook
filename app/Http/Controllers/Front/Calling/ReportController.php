@@ -295,7 +295,7 @@ class ReportController extends Controller
                 $allPresentationDeals = [];                  // все сделки презентации связанные с компанией и пользователем
                 $currentCompany = null;
                 $allXODeals = [];
-
+                $allTMCDeals = [];
                 // $companyId = $data['userId'];
                 // $userId = $data['companyId'];
                 $domain = $data['domain'];
