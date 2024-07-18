@@ -446,7 +446,7 @@ class BitrixDealService
             //  else if ($eventType == 'warm') {
             //     $stagePrephicks = 'sales';
             // }
-            else if ($eventType == 'presentation' && $group == 'tmc') {
+            else if ($eventType == 'presentation') {
                 $stagePrephicks = 'spres';
             }
 
