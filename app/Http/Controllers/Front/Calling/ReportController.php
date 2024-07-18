@@ -1262,7 +1262,12 @@ class ReportController extends Controller
 
             return $sessionData;
         } catch (\Throwable $th) {
-            return $sessionData;
+            return [
+                $domain,
+                $hook,
+                $companyId,
+                $userId
+            ];
         }
     }
     public static function getDocumentDealsInit(Request $request)
