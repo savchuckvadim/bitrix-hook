@@ -302,6 +302,12 @@ Route::post('/full/initpres/success', function (Request $request) {
     ]);
 });
 
+Route::get('/full/initpres/success', function () {
+    Log::channel('telegram')->info('HOOK TST', [
+        'success' => 'yo'
+    ]);
+  
+});
 
 
 Route::post('full/department', function (Request $request) {
