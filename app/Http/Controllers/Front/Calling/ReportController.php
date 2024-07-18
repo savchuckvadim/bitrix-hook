@@ -86,15 +86,15 @@ class ReportController extends Controller
                         }
                     }
                 }
-                if ($isTmc) {
-                    // Log::channel('telegram')->info("Redis tmc queue.");
-                    $service = new EventReportTMCService($data);
-                    return $service->getEventFlow();
-                } else {
+                // if ($isTmc) {
+                //     // Log::channel('telegram')->info("Redis tmc queue.");
+                //     $service = new EventReportTMCService($data);
+                //     return $service->getEventFlow();
+                // } else {
                     dispatch(
                         new EventJob($data)
                     )->onQueue('high-priority');
-                }
+                // }
                 return APIOnlineController::getSuccess(
                     [
                         'result' => 'success',
