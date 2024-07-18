@@ -1417,6 +1417,18 @@ class EventReportService
             );
             $planDeals = $flowResult['dealIds'];
             $newPresDeal = $flowResult['newPresDeal'];
+
+
+
+            if (!empty($this->currentTMCDeal) && $this->currentPlanEventType == 'presentation') {
+                BitrixDealFlowService::tmcPresentationRelation(
+                    $this->hook,
+                    $this->portalDealData,
+                    $this->currentBaseDeal,
+                    $newPresDeal,
+                    $this->currentTMCDeal['ID']
+                );
+            }
         }
 
         Log::info('HOOK TEST currentBtxDeals', [

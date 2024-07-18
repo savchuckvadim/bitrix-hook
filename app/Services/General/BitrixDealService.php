@@ -478,6 +478,8 @@ class BitrixDealService
         return $targetStageBtxId;
     }
 
+
+    
     static function getIsCanDealStageUpdate(
         $currentDeal, //with ID CATEGORY_ID STAGE_ID
         $targetStageBtxId,
