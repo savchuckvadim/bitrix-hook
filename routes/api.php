@@ -437,10 +437,18 @@ Route::post('/full/initpres/success', function (Request $request) {
             $responsibleId,
             'company' // $from да вроде оно и не нужно
         );
-
+        $currentBaseDeals = null;
+        if (!empty($baseDealSession)) {
+            if (!empty($baseDealSession['deals'])) {
+                if (!empty($baseDealSession['deals']['currentBaseDeals'])) {
+                    $currentBaseDeals = $baseDealSession['deals']['currentBaseDeals'];
+                }
+            }
+        }
 
 
         Log::info('HOOK TST', [
+            'currentBaseDeals' => $currentBaseDeals,
             'tmcDealSession' => $tmcDealSession,
             'baseDealSession' => $baseDealSession,
             '$data' => $data
