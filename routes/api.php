@@ -11,6 +11,7 @@ use App\Http\Controllers\Front\Calling\ReportController;
 use App\Http\Controllers\Front\Calling\ReportSupplyController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\ReactAppController;
+use App\Jobs\EventJob;
 use App\Models\Price;
 use App\Services\BitrixGeneralService;
 use App\Services\FullEventReport\EventDocumentService;
@@ -390,12 +391,32 @@ Route::post('/full/initpres/success', function (Request $request) {
             ]
         ];
         $data['currentTask'] = null;
-        $data['report']['resultStatus'] = 'new';
-        $data['report']['workStatus']['current']['code'] == 'inJob';
+        // $data['report']['resultStatus'] = 'new';
+        // $data['report']['workStatus']['current']['code'] == 'inJob';
         // $data['plan']['createdBy']
-        $data['plan']['createdBy']['ID']  = $createdId;
-        $data['plan']['responsibility']['ID']  = $responsibleId;
-        $data['plan']['deadline'] =  $comedata['deadline'];
+
+        $data['plan'] = [
+            "createdBy" => [
+                "ID" => $createdId,
+                // "XML_ID" => "",
+                // "ACTIVE" => true,
+                // "NAME" => "",
+                // "LAST_NAME" => "",
+                // "SECOND_NAME" => ""
+            ],
+            "responsibility" => [
+                "ID" => $responsibleId,
+                // "XML_ID" => "",
+                // "ACTIVE" => true,
+                // "NAME" => "",
+                // "LAST_NAME" => "",
+                // "SECOND_NAME" => ""
+            ],
+            "deadline" => $comedata['name'],
+            "isPlanned" => true,
+            "name" => $comedata['name']
+        ];
+
         $data['presentation']['isPresentationDone'] = false;
 
         $data['domain'] =  $domain;
@@ -410,18 +431,16 @@ Route::post('/full/initpres/success', function (Request $request) {
             'placement' => 'COMPANY'
         ];
 
-        Log::info('HOOK TST', [
-
-            '$data' => $data
-
-        ]);
+        $data['departament'] = [
+            "mode" => [
+                "id" => 1,
+                "code" => "sales",
+                "name" => "Менеджер по продажам"
+            ]
+        ];
 
         $hook = PortalController::getHook($domain);
-        Log::info('HOOK TST', [
 
-            '$hook' => $hook
-
-        ]);
         //tmc init pres session 
         $tmcDealSession = ReportController::getPresTMCInitDeal( //создается сессия со сделкой tmc
             $domain,
@@ -449,11 +468,19 @@ Route::post('/full/initpres/success', function (Request $request) {
 
         Log::info('HOOK TST', [
             'currentBaseDeals' => $currentBaseDeals,
-            'tmcDealSession' => $tmcDealSession,
             'baseDealSession' => $baseDealSession,
+
+            'tmcDealSession' => $tmcDealSession,
             '$data' => $data
 
         ]);
+
+        
+        dispatch(
+            new EventJob($data)
+        )->onQueue('high-priority');
+
+
     } catch (\Throwable $th) {
         $errorData = [
             'message'   => $th->getMessage(),
