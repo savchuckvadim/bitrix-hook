@@ -334,7 +334,7 @@ class BitrixDealService
             //     $eventAction == 'success'
             // ) {
 
-                array_push($categoryPrephicks, $currentDepartamentType . '_base');
+            array_push($categoryPrephicks, $currentDepartamentType . '_base');
             // }
 
 
@@ -452,6 +452,10 @@ class BitrixDealService
 
             if ($group == 'tmc') {
                 $stagePrephicks = 'sales_tmc';
+                if ( $eventAction == 'plan' && $eventType == 'presentation') {
+                        $stageSuphicks = 'pres_in_progress';
+                    
+                }
             }
         }
 
@@ -479,7 +483,7 @@ class BitrixDealService
     }
 
 
-    
+
     static function getIsCanDealStageUpdate(
         $currentDeal, //with ID CATEGORY_ID STAGE_ID
         $targetStageBtxId,
