@@ -1438,25 +1438,25 @@ class EventReportTMCService
             //     $this->portalDealData,
             //     $currentBtxDeals
             // );
+            $flowResult =  BitrixDealFlowService::flow( //создает или обновляет сделку
+                $this->hook,
+                $currentBtxDeals,
+                $this->portalDealData,
+                $this->currentDepartamentType,
+                $this->entityType,
+                $this->entityId,
+                $this->currentPlanEventType, // xo warm presentation, hot moneyAwait
+                $this->currentPlanEventTypeName,
+                $this->currentPlanEventName,
+                'plan',  // plan done expired 
+                $this->planResponsibleId,
+                $this->isResult,
+                '$fields',
+                null, // $relationSalePresDeal
+            );
+            $planDeals = $flowResult['dealIds'];
+            $newPresDeal = $flowResult['newPresDeal'];
             if ($this->currentPlanEventType !== 'presentation') {
-                $flowResult =  BitrixDealFlowService::flow( //создает или обновляет сделку
-                    $this->hook,
-                    $currentBtxDeals,
-                    $this->portalDealData,
-                    $this->currentDepartamentType,
-                    $this->entityType,
-                    $this->entityId,
-                    $this->currentPlanEventType, // xo warm presentation, hot moneyAwait
-                    $this->currentPlanEventTypeName,
-                    $this->currentPlanEventName,
-                    'plan',  // plan done expired 
-                    $this->planResponsibleId,
-                    $this->isResult,
-                    '$fields',
-                    null, // $relationSalePresDeal
-                );
-                $planDeals = $flowResult['dealIds'];
-                $newPresDeal = $flowResult['newPresDeal'];
             } else {
                 Log::info('HOOK TEST currentBtxDeals', [
                     '$rpa case' => true,
@@ -1490,10 +1490,10 @@ class EventReportTMCService
                         );
                         Log::channel('telegram')->info('HOOK TEST currentBtxDeals', [
                             'resultRpaItem' => $this->resultRpaItem,
-            
-            
+
+
                         ]);
-            
+
                         if (!empty($this->resultRpaItem)) {
                             if (!empty($this->resultRpaItem['id'])) {
                                 $this->resultRpaLink = 'https://' . $this->domain . '/rpa/item/' . $this->rpaTypeId . '/' . $this->resultRpaItem['id'];
