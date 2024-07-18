@@ -299,79 +299,103 @@ Route::post('/full/initpres/success', function (Request $request) {
     //     &name={{Название}}&ownerId=user_1&managerId={{ОП Кто назначен ответственным}}
     //     &tmcId={{ТМЦ Кто назначил последнюю заявку на презентацию}}&tmcDealId={{ТМЦ Сделка}}
     $comedata = $request->all();
+    Log::info('HOOK TST', [
+        'comedata' => $comedata,
 
+
+    ]);
     //     должен сделать полный цикл flow 
     // как будто назначили презентацию
     // найти существующую сделку по компании и сотруднику base или создать
     // для этого контроллер подготовит data на основе request чтобы далее засунуть просто в event service
     $data = [];
+    try {
+        //code...
 
-    if (!empty($comedata['auth'])) {
-        if (!empty($comedata['auth']['domain'])) {
-            $domain =  $comedata['auth']['domain'];
+        if (!empty($comedata['auth'])) {
+            if (!empty($comedata['auth']['domain'])) {
+                $domain =  $comedata['auth']['domain'];
+            }
         }
+        $comment = '';
+        if (!empty($comedata['commentTMC'])) {
+            $comment = 'ТМЦ:' . $comedata['commentTMC'];
+        }
+        if (!empty($comedata['commentOwner'])) {
+            $comment = 'Руководитель: ' . $comedata['commentOwner'];
+        }
+        if (!empty($comedata['commentTMC'])) {
+            $comment = 'Менеджер: ' . $comedata['commentManager'];
+        }
+
+        $data['report']['description']  = $comment;
+
+        $partsCreated = explode("_", $comedata['ownerId']);
+        $partsResponsible = explode("_", $comedata['managerId']);
+        $createdId = $partsCreated[1];
+        $responsibleId = $partsResponsible[1];
+
+
+
+        $data['placement'];
+        $data['presentation'];
+        $data['currentTask'] = null;
+        $data['report']['resultStatus'] = 'new';
+        $data['report']['workStatus']['current']['code'] == 'inJob';
+        // $data['plan']['createdBy']
+        $data['plan']['createdBy']['ID']  = $createdId;
+        $data['plan']['responsibility']['ID']  = $responsibleId;
+        $data['plan']['deadline'] =  $comedata['deadline'];
+        $data['presentation']['isPresentationDone'] = false;
+
+        $data['domain'] =  $domain;
+        $tmcdealId = $comedata['tmcDealId'];
+        $companyId = $comedata['companyId'];
+        Log::info('HOOK TST', [
+
+            '$data' => $data
+
+        ]);
+
+        $hook = PortalController::getHook($domain);
+        Log::info('HOOK TST', [
+
+            '$hook' => $hook
+
+        ]);
+        //tmc init pres session 
+        $tmcDealSession = ReportController::getPresTMCInitDeal( //создается сессия со сделкой tmc
+            $domain,
+            $hook,
+            $tmcdealId,
+            $responsibleId,
+            $companyId
+        );
+        $baseDealSession =   ReportController::getDealsFromNewTaskInner( //создается сессия с base сделкой
+            $domain,
+            $hook,
+            $companyId,
+            $responsibleId,
+            'company' // $from да вроде оно и не нужно
+        );
+
+
+
+        Log::info('HOOK TST', [
+            'tmcDealSession' => $tmcDealSession,
+            'baseDealSession' => $baseDealSession,
+            '$data' => $data
+
+        ]);
+    } catch (\Throwable $th) {
+        $errorData = [
+            'message'   => $th->getMessage(),
+            'file'      => $th->getFile(),
+            'line'      => $th->getLine(),
+            'trace'     => $th->getTraceAsString(),
+        ];
+        Log::error('API HOOK: Exception caught', $errorData);
     }
-    $comment = '';
-    if (!empty($comedata['commentTMC'])) {
-        $comment = 'ТМЦ:' . $comedata['commentTMC'];
-    }
-    if (!empty($comedata['commentOwner'])) {
-        $comment = 'Руководитель: ' . $comedata['commentOwner'];
-    }
-    if (!empty($comedata['commentTMC'])) {
-        $comment = 'Менеджер: ' . $comedata['commentManager'];
-    }
-
-    $data['report']['description']  = $comment;
-
-    $partsCreated = explode("_", $comedata['ownerId']);
-    $partsResponsible = explode("_", $comedata['managerId']);
-    $createdId = $partsCreated[1];
-    $responsibleId = $partsResponsible[1];
-
-
-
-    $data['placement'];
-    $data['presentation'];
-    $data['currentTask'] = null;
-    $data['report']['resultStatus'] = 'new';
-    $data['report']['workStatus']['current']['code'] == 'inJob';
-    // $data['plan']['createdBy']
-    $data['plan']['createdBy']['ID']  = $createdId;
-    $data['plan']['responsibility']['ID']  = $responsibleId;
-    $data['plan']['deadline'] =  $comedata['deadline'];
-    $data['presentation']['isPresentationDone'] = false;
-
-    $data['domain'] =  $domain;
-    $tmcdealId = $comedata['tmcDealId'];
-    $companyId = $comedata['companyId'];
-
-
-    $hook = PortalController::getHook($domain);
-    //tmc init pres session 
-    $tmcDealSession = ReportController::getPresTMCInitDeal( //создается сессия со сделкой tmc
-        $domain,
-        $hook,
-        $tmcdealId,
-        $responsibleId,
-        $companyId
-    );
-    $baseDealSession =   ReportController::getDealsFromNewTaskInner( //создается сессия с base сделкой
-        $domain,
-        $hook,
-        $companyId,
-        $responsibleId,
-        'company' // $from да вроде оно и не нужно
-    );
-
-
-
-    Log::info('HOOK TST', [
-        'tmcDealSession' => $tmcDealSession,
-        'baseDealSession' => $baseDealSession,
-        '$data' => $data
-
-    ]);
 });
 
 
