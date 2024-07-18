@@ -293,6 +293,9 @@ Route::post('/task/fail', function (Request $request) {
 
 // ............................... FULL EVENT CALING PRES FRONT
 Route::post('/full/initpres/success', function (Request $request) {
+    Log::channel('telegram')->info('HOOK TST', [
+        'success' => 'yo'
+    ]);
     $data = $request->all();
     Log::channel('telegram')->info('HOOK TST', [
         'data' => $data
