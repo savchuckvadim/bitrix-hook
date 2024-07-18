@@ -1259,6 +1259,16 @@ class ReportController extends Controller
                 return $sessionData;
             }
 
+            Log::channel('telegram')->error('API HOOK: getDealsFromNewTaskInner', [
+                'message' => 'not full data',
+                'come' => [
+                    'domain' =>  $domain,
+                    'hook' =>  $hook,
+                    'companyId' =>  $companyId,
+                    'userId' =>  $userId,
+                ]
+
+            ]);
 
             return $sessionData;
         } catch (\Throwable $th) {
