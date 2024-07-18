@@ -308,6 +308,16 @@ Route::post('/full/session', function (Request $request) {
     return FullEventInitController::sessionGet($request);
 });
 
+Route::post('/full/initpres/success', function (Request $request) {
+    $data = $request->all();
+    Log::channel('telegram')->info('HOOK TST', [
+        'data' => $data
+    ]);
+    Log::info('HOOK TST', [
+        'data' => $data
+    ]);
+});
+
 
 
 
@@ -1216,7 +1226,7 @@ Route::get('/alfa/activity', function (Request $request) {
                     '<CREATED' => $yearAgo,
                     'OWNER_TYPE_ID' => 4,
                 ],
-              
+
             ];
 
             $responseJson = Http::post($hook . $method, $data);
