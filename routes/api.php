@@ -292,22 +292,6 @@ Route::post('/task/fail', function (Request $request) {
 
 
 // ............................... FULL EVENT CALING PRES FRONT
-Route::post('full/department', function (Request $request) {
-    return ReportController::getFullDepartment($request);
-});
-
-
-Route::post('/full/tasks', function (Request $request) {
-    return FullEventInitController::getEventTasks($request);
-});
-Route::post('/full/init', function (Request $request) {
-    return FullEventInitController::fullEventSessionInit($request);
-});
-
-Route::post('/full/session', function (Request $request) {
-    return FullEventInitController::sessionGet($request);
-});
-
 Route::post('/full/initpres/success', function (Request $request) {
     $data = $request->all();
     Log::channel('telegram')->info('HOOK TST', [
@@ -317,6 +301,26 @@ Route::post('/full/initpres/success', function (Request $request) {
         'data' => $data
     ]);
 });
+
+
+
+Route::post('full/department', function (Request $request) {
+    return ReportController::getFullDepartment($request);
+});
+
+
+Route::post('/full/tasks', function (Request $request) {
+    return FullEventInitController::getEventTasks($request);
+});
+
+Route::post('/full/init', function (Request $request) {
+    return FullEventInitController::fullEventSessionInit($request);
+});
+
+Route::post('/full/session', function (Request $request) {
+    return FullEventInitController::sessionGet($request);
+});
+
 
 
 
