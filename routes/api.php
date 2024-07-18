@@ -304,6 +304,11 @@ Route::post('/full/initpres/success', function (Request $request) {
 
 
     ]);
+    Log::channel('telegram')->info('HOOK TST', [
+
+        '$comedata' => $comedata
+
+    ]);
     //     должен сделать полный цикл flow 
     // как будто назначили презентацию
     // найти существующую сделку по компании и сотруднику base или создать
