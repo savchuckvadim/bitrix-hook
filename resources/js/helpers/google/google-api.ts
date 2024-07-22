@@ -7,13 +7,13 @@ export const api = axios.create({
     baseURL: 'https://script.google.com/macros/s/',
 
     headers: {
-        // 'content-type': 'application/json',
+        'content-type': 'application/json',
         // 'accept': 'application/json',
-        "Content-Type": "text/plain;charset=utf-8",
+        // "Content-Type": "text/plain;charset=utf-8",
         'Access-Control-Allow-Origin' : '*',
-        
+
     },
-    // withCredentials:false
+    // withCredentials: false
 
 })
 // @ts-ignore
@@ -47,7 +47,7 @@ api.defaults.redirect = "follow";
 //     }
 
 // }
-    
+
 
 type ContractsDataType = {
     // contracts: Array<ContractType>
@@ -56,13 +56,14 @@ type ContractsDataType = {
 
 export const googleAPI = {
     async get(token = null) {
-        
+        debugger
         let googleToken = token || ''
         try {
             const res = await api.get(`${googleToken}/exec`);
-            
+            debugger
             return res.data;
         } catch (error) {
+            debugger
             console.error(error);
         }
     },

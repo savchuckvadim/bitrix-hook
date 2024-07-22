@@ -20,6 +20,8 @@ export const generateRoutes = (entities, basePath = '') => {
             entityTitle={entity.item.title}
           />
         })
+
+        
       }
 
       if (entity.items) {

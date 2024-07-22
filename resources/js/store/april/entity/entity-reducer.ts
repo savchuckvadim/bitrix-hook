@@ -81,7 +81,7 @@ export const updateEntities = (token = null, entityName: string) => async (dispa
     let savedfireData = null
     let onlineSavedData = null
     const firebaseAPI = state.app.firebaseBackend
-
+debugger
     //@ts-ignore
     if (fetchedData && fetchedData[`${entityName}`]) {
         //@ts-ignore
@@ -98,6 +98,7 @@ export const updateEntities = (token = null, entityName: string) => async (dispa
 
         } else {
             // savedfireData = await firebaseAPI?.setCollection(entityName, data)
+          debugger
             onlineSavedData = await onlineAPI.setCollection(entityName, data)
 
         }
@@ -115,7 +116,7 @@ export const getEntities = (url: string, method: string, collectionName: string,
         debugger
         const collection = await onlineAPI.service(url, API_METHOD.GET, collectionName, null)
 
-
+        debugger
         if (collection) {
             dispatch(entityActions.setEntityItems(collection))
         } else {

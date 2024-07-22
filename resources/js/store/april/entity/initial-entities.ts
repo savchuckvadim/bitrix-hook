@@ -1,5 +1,6 @@
 import { API_METHOD } from "../../../types/app/app-type";
 import { ENTITY_QUANTITY } from "../../../types/entity/entity-types";
+import { getEntityRoute, RouteInit } from "./measure-routes";
 
 export type ALL_ENTITIES = typeof allEntities
 export const allEntities = [
@@ -25,7 +26,7 @@ export const allEntities = [
                 method: API_METHOD.GET
             }
         },
-        relations: [1, 5, 11, 12, 13, 14, 15, 16, 21, 22, 23],
+        relations: [1, 5, 11, 12, 13, 14, 15, 16, 21, 22, 23, 25],
 
     },
     {
@@ -628,7 +629,26 @@ export const allEntities = [
         relations: [17, 19],
 
     }
-]
+] as Array<RouteInit>
+
+
+allEntities.push(
+    getEntityRoute(
+        24,
+        'measure',
+        'Единица измерения',
+        []
+    )
+)
+
+allEntities.push(
+    getEntityRoute(
+        25,
+        'measure',
+        'Единица измерения',
+        []
+    )
+)
 
 export const getRouteDataById = (id: number) => {
     return allEntities.find(routeData => routeData.id == id)
