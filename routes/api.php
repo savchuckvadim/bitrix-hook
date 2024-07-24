@@ -1435,9 +1435,11 @@ Route::get('/alfa/activity', function (Request $request) {
                 'order' => ['ID' => 'ASC'],
                 'filter' => [
                     '>ID' => $lastActivityID,
-                    'RESPONSIBLE_ID' => 502,
+                    // 'RESPONSIBLE_ID' => 502,
                     // '<CREATED' => $yearAgo,
                     'OWNER_TYPE_ID' => 4,
+                    '%QUERY' => 'юр форум | юрфорум | юр.форум | ВЮФ | юридический форум'
+
                 ],
 
             ];
