@@ -979,15 +979,15 @@ Route::post('/task', function (Request $request) {
     //     $smart = $request['smart'];
     //     $sale = $request['sale'];
     // }
-    Log::channel('telegram')->error('APRIL_HOOK', [
-        'cold task create api' => [
-            'domain' => $domain,
-            'deadline' => $deadline,
-            'name' => $name,
-            'companyId' => $companyId,
-            'crm' => $crm,
-        ]
-    ]);
+    // Log::channel('telegram')->error('APRIL_HOOK', [
+    //     'cold task create api' => [
+    //         'domain' => $domain,
+    //         'deadline' => $deadline,
+    //         'name' => $name,
+    //         'companyId' => $companyId,
+    //         'crm' => $crm,
+    //     ]
+    // ]);
 
     $controller = new BitrixHookController();
     return $controller->createColdTask(
@@ -1448,7 +1448,7 @@ Route::get('/alfa/activity', function (Request $request) {
             // $response =   APIBitrixController::getBitrixRespone($responseJson, 'getDepartments');
 
 
-            if (!empty($response['result'])   && $pagesCount < 1) {
+            if (!empty($response['result']) ) {
                 foreach ($response['result'] as $activity) {
                     $allActivities[] = $activity;
                     $lastActivityID = $activity['ID']; // Обновление последнего ID для следующего запроса
@@ -1462,7 +1462,7 @@ Route::get('/alfa/activity', function (Request $request) {
                             'company',
                             $companyId,
                             [
-                                'ASSIGNED_BY_ID' => 502,
+                                // 'ASSIGNED_BY_ID' => 502,
                                 'UF_CRM_1720600919' => 'юрфорум'
                             ]
                         );
@@ -1479,9 +1479,9 @@ Route::get('/alfa/activity', function (Request $request) {
         return  APIOnlineController::getSuccess([
             'result' => $allActivities,
             'count' => $count,
-
-
         ]);
+
+        
     } catch (\Throwable $th) {
         return APIOnlineController::getSuccess(['result' => $th->getMessage()]);
     }

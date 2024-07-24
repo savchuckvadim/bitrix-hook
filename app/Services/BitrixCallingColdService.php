@@ -147,6 +147,7 @@ class BitrixCallingColdService
         if ($domain === 'april-dev.bitrix24.ru' || $domain === 'gsr.bitrix24.ru') {
             $this->isDealFlow = true;
             $this->withLists = true;
+            $this->isSmartFlow = false;
             if (!empty($portal['deals'])) {
                 $this->portalDealData = $portal['bitrixDeal'];
             }
@@ -156,9 +157,9 @@ class BitrixCallingColdService
             }
         }
 
-        if ($domain === 'gsr.bitrix24.ru') {
-            $this->isSmartFlow = false;
-        }
+        // if ($domain === 'gsr.bitrix24.ru') {
+        //     $this->isSmartFlow = false;
+        // }
 
 
         $this->aprilSmartData = $portal['bitrixSmart'];
