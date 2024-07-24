@@ -1436,7 +1436,7 @@ Route::get('/alfa/activity', function (Request $request) {
                 'filter' => [
                     '>ID' => $lastActivityID,
                     'RESPONSIBLE_ID' => 502,
-                    '<CREATED' => $yearAgo,
+                    // '<CREATED' => $yearAgo,
                     'OWNER_TYPE_ID' => 4,
                 ],
 
