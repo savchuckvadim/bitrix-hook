@@ -91,9 +91,9 @@ class ReportController extends Controller
                 //     $service = new EventReportTMCService($data);
                 //     return $service->getEventFlow();
                 // } else {
-                    dispatch(
-                        new EventJob($data)
-                    )->onQueue('high-priority');
+                dispatch(
+                    new EventJob($data)
+                )->onQueue('high-priority');
                 // }
                 return APIOnlineController::getSuccess(
                     [
@@ -2057,60 +2057,61 @@ class ReportController extends Controller
 
                     if (!empty($department['bitrixId'])) {
                         $departmentId =  $department['bitrixId'];
-                    }
-                }
-
-                if ($departmentId) {
-                    $generalDepartment = $departamentService->getDepartments([
-                        'ID' =>  $departmentId
-                    ]);
-                    $childrenDepartments = $departamentService->getDepartments([
-                        'PARENT' =>  $departmentId
-                    ]);
 
 
-                    if (!empty($generalDepartment)) {
-                        foreach ($generalDepartment as $gDep) {
-                            if (!empty($gDep)) {
-                                if (!empty($gDep['ID'])) {
-                                    // array_push($departamentIds, $gDep['ID']);
-                                    $departmentUsers = $departamentService->getUsersByDepartment($gDep['ID']);
+                        if ($departmentId) {
+                            $generalDepartment = $departamentService->getDepartments([
+                                'ID' =>  $departmentId
+                            ]);
+                            $childrenDepartments = $departamentService->getDepartments([
+                                'PARENT' =>  $departmentId
+                            ]);
 
-                                    $resultDep = $gDep;
-                                    $resultDep['USERS'] = $departmentUsers;
-                                    $allUsers = array_merge($allUsers, $departmentUsers);
-                                    array_push($resultGeneralDepartment, $resultDep);
+
+                            if (!empty($generalDepartment)) {
+                                foreach ($generalDepartment as $gDep) {
+                                    if (!empty($gDep)) {
+                                        if (!empty($gDep['ID'])) {
+                                            // array_push($departamentIds, $gDep['ID']);
+                                            $departmentUsers = $departamentService->getUsersByDepartment($gDep['ID']);
+
+                                            $resultDep = $gDep;
+                                            $resultDep['USERS'] = $departmentUsers;
+                                            $allUsers = array_merge($allUsers, $departmentUsers);
+                                            array_push($resultGeneralDepartment, $resultDep);
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (!empty($childrenDepartments)) {
+                                foreach ($childrenDepartments as $chDep) {
+                                    if (!empty($chDep)) {
+                                        if (!empty($chDep['ID'])) {
+                                            // array_push($departamentIds, $chDep['ID']);
+                                            $departmentUsers  = $departamentService->getUsersByDepartment($chDep['ID']);
+                                            $resultDep = $gDep;
+                                            $resultDep['USERS'] = $departmentUsers;
+
+                                            $allUsers = array_merge($allUsers, $departmentUsers);
+                                            array_push($resultChildrenDepartments, $resultDep);
+                                        }
+                                    }
                                 }
                             }
                         }
-                    }
-
-                    if (!empty($childrenDepartments)) {
-                        foreach ($childrenDepartments as $chDep) {
-                            if (!empty($chDep)) {
-                                if (!empty($chDep['ID'])) {
-                                    // array_push($departamentIds, $chDep['ID']);
-                                    $departmentUsers  = $departamentService->getUsersByDepartment($chDep['ID']);
-                                    $resultDep = $gDep;
-                                    $resultDep['USERS'] = $departmentUsers;
-
-                                    $allUsers = array_merge($allUsers, $departmentUsers);
-                                    array_push($resultChildrenDepartments, $resultDep);
-                                }
-                            }
-                        }
+                        $departmentResult = [
+                            'generalDepartment' => $resultGeneralDepartment,
+                            'childrenDepartments' => $resultChildrenDepartments,
+                            'allUsers' => $allUsers,
+                        ];
+                        $result =  ['department' => $departmentResult];
+                        FullEventInitController::setSessionItem(
+                            $sessionKey,
+                            $result
+                        );
                     }
                 }
-                $departmentResult = [
-                    'generalDepartment' => $resultGeneralDepartment,
-                    'childrenDepartments' => $resultChildrenDepartments,
-                    'allUsers' => $allUsers,
-                ];
-                $result =  ['department' => $departmentResult];
-                FullEventInitController::setSessionItem(
-                    $sessionKey,
-                    $result
-                );
             }
 
 
