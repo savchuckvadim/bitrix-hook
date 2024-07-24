@@ -16,26 +16,30 @@ const mapState = (state, own) => {
 
     if (items && items.length > 0) {
         tableHeaders = []
+        
         items.forEach((item, index) => {
-            let itemProps = []
-            let entityId = item.id || item.number
-            if (index === 0) {
-                for (const itemHeader in item) {
-                    tableHeaders.push(itemHeader)
+            if (item) {
+                let itemProps = []
+                let entityId = item.id || item.number
+                if (index === 0) {
+                    for (const itemHeader in item) {
+                        tableHeaders.push(itemHeader)
+                    }
                 }
-            }
-            for (const itemHeader in item) {
+                for (const itemHeader in item) {
 
-                itemProps.push({
+                    itemProps.push({
 
-                    name: itemHeader,
-                    value: item[itemHeader]
+                        name: itemHeader,
+                        value: item[itemHeader]
+                    })
+                }
+                itemsArray.push({
+                    id: entityId,
+                    items: itemProps
                 })
             }
-            itemsArray.push({
-                id: entityId,
-                items: itemProps
-            })
+
         });
 
 
@@ -53,22 +57,22 @@ const mapState = (state, own) => {
 
 
 
-const EntityItemsContainer = ({ 
-    router, entityName, entityTitle, itemUrl,itemsUrl, items, tableHeaders,
+const EntityItemsContainer = ({
+    router, entityName, entityTitle, itemUrl, itemsUrl, items, tableHeaders,
     getEntities, getInitialEntityData, updateEntities,
 }) => {
 
     // const [currentItems, setCurrentItems] = useState(items)
 
     useEffect(() => {
-        debugger
+        
         getEntities(router.location.pathname, API_METHOD.GET, entityName, null)
     }, [router.location.pathname])
 
-  
 
 
-    
+
+
 
     return <EntityItems
         router={router}

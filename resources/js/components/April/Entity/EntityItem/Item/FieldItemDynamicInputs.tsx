@@ -17,7 +17,7 @@ type DynamicInputProps = {
     relationApiName: undefined | string
     getInitialRelationEntity: GetInitialRelationFunction
     addRelation: (groupName: string, relationIndex: number) => void
-    handleFileChange: (event: any, inputName: string, validation:any) => void
+    handleFileChange: (event: any, inputName: string, validation: any) => void
 
 }
 const EntityItemDynamicInput = ({
@@ -102,7 +102,7 @@ const EntityItemDynamicInput = ({
 
 
                 input = <div className="mb-3">
-                    <label className="col-md-2 col-form-label">Select</label>
+                    <label className="col-md-2 col-form-label">Select {field.title}</label>
                     <div className="col-md-10">
                         <select
                             name={fieldFormName}

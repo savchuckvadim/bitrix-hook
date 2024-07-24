@@ -327,7 +327,7 @@ export const onlineAPI = {
                 [name]: items
             }
             const response = await online.post(name, data)
-            debugger
+            
             if (response) {
                 if (response.data.resultCode === 0) {
                     result = response.data.data
@@ -335,7 +335,7 @@ export const onlineAPI = {
                     console.log(response.data.message)
                 }
             }
-            debugger
+            
             return result
         } catch (error) {
             console.log('error')
@@ -351,7 +351,7 @@ export const onlineAPI = {
             
             const response = await online[method](url, data)
             if(model === 'rqs'){
-                debugger
+                
 
             }
             

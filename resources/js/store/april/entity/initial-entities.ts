@@ -26,7 +26,7 @@ export const allEntities = [
                 method: API_METHOD.GET
             }
         },
-        relations: [1, 5, 11, 12, 13, 14, 15, 16, 21, 22, 23, 25],
+        relations: [1, 5, 11, 12, 13, 14, 15, 16, 21, 22, 23, 24, 25, 27],
 
     },
     {
@@ -188,7 +188,7 @@ export const allEntities = [
 
         },
         relations: [
-            7, 8, 9, 10, 17
+            7, 8, 9, 10, 15, 17
         ]
 
 
@@ -635,21 +635,38 @@ export const allEntities = [
 allEntities.push(
     getEntityRoute(
         24,
-        'measure',
+        'portalmeasure',
         'Единица измерения',
+        []
+    )
+)
+
+
+allEntities.push(
+    getEntityRoute(
+        25,
+        'contract',
+        'Общая Модель Contract',
         []
     )
 )
 
 allEntities.push(
     getEntityRoute(
-        25,
+        26,
         'measure',
         'Единица измерения',
         []
     )
 )
-
+allEntities.push(
+    getEntityRoute(
+        27,
+        'portalcontract',
+        'Договоры с bitrixId Портала',
+        []
+    )
+)
 export const getRouteDataById = (id: number) => {
     return allEntities.find(routeData => routeData.id == id)
 }

@@ -81,7 +81,7 @@ export const updateEntities = (token = null, entityName: string) => async (dispa
     let savedfireData = null
     let onlineSavedData = null
     const firebaseAPI = state.app.firebaseBackend
-debugger
+
     //@ts-ignore
     if (fetchedData && fetchedData[`${entityName}`]) {
         //@ts-ignore
@@ -98,7 +98,7 @@ debugger
 
         } else {
             // savedfireData = await firebaseAPI?.setCollection(entityName, data)
-          debugger
+          
             onlineSavedData = await onlineAPI.setCollection(entityName, data)
 
         }
@@ -113,10 +113,10 @@ debugger
 export const getEntities = (url: string, method: string, collectionName: string, data: any = null) => async (dispatch: AppDispatchType, getState: GetStateType) => {
 
     if (url) {
-        debugger
+        
         const collection = await onlineAPI.service(url, API_METHOD.GET, collectionName, null)
 
-        debugger
+        
         if (collection) {
             dispatch(entityActions.setEntityItems(collection))
         } else {
@@ -148,10 +148,10 @@ export const getEntityItem = (url: string, entityName: string, entityId: number)
 }
 export const setOrupdateEntityItem = (history: (url: string) => void,
     currentUrl: string, url: string, entityName: string, data: FormData) => async (dispatch: AppDispatchType, getState: GetStateType) => {
-        debugger
+        
 
         if (url) {
-            debugger
+            
             const formData = data as FormData
             let apiData = {} as { [key: string]: any };
             if (url == 'portal') {
@@ -177,7 +177,7 @@ export const setOrupdateEntityItem = (history: (url: string) => void,
                     }
 
                 }
-                debugger
+                
             } else {
                 apiData = formData
 
@@ -490,7 +490,7 @@ const initialAddEntity = (entityName: string) => async (dispatch: AppDispatchTyp
 export const setUpdatingEntity = (url: string, model: string, values: Array<any>) => async (dispatch: AppDispatchType, getState: GetStateType) => {
 
 
-    debugger
+    
     const state = getState() as AppStateType
 
     switch (model) {
