@@ -238,9 +238,10 @@ class BitrixCallingColdTaskService
             if ($this->leadId) {
 
                 $updatedLead = $this->updateLeadCold();
+                Log::info('COLD updatedLead', ['updatedLead' => $updatedLead]);
             }
 
-            Log::info('COLD updatedLead', ['updatedLead' => $updatedLead]);
+           
 
             // Log::info('COLD first updatedCompany', [
             //     'updatedCompany' => $updatedCompany,
