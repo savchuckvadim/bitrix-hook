@@ -437,6 +437,14 @@ class BitrixGeneralService
             $url = $hook . $methodTask;
 
             $responseData = Http::get($url, $taskData);
+            Log::channel('telegram')->error('APRIL_HOOK', [
+                'createColdTask' => [
+                    'url' => $url,
+                    'responseData' => $responseData,
+
+                ]
+            ]);
+
             $createdTask =  APIBitrixController::getBitrixRespone($responseData, $parentMethod);
 
             return $createdTask;

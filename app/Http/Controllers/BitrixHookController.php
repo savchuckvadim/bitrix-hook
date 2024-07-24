@@ -93,7 +93,7 @@ class BitrixHookController extends Controller
                 IntlDateFormatter::GREGORIAN,
                 $pattern
             );
-           
+
             $formattedStringNowDate = $formatter->format($nowDate);
             $name = 'от ' . $formattedStringNowDate;
             if (isset($request['name'])) {
@@ -198,19 +198,19 @@ class BitrixHookController extends Controller
         $stringType = 'Холодный обзвон  ';
 
         $gettedSmart = null;
-        // Log::channel('telegram')->error('APRIL_HOOK', [
-        //     'createColdTask' => [
-        //         'type' => $type,
-        //         'domain' => $domain,
-        //         'companyId' => $companyId,
-        //         'createdId' => $createdId,
-        //         'responsibleId' => $responsibleId,
-        //         'deadline' => $deadline,
-        //         'name' => $name,
-        //         'crm' => $crm,
-        //     ]
-        // ]);
-
+        Log::channel('telegram')->error('APRIL_HOOK', [
+            'createColdTask' => [
+                'type' => $type,
+                'domain' => $domain,
+                'companyId' => $companyId,
+                'createdId' => $createdId,
+                'responsibleId' => $responsibleId,
+                'deadline' => $deadline,
+                'name' => $name,
+                'crm' => $crm,
+            ]
+        ]);
+        Log::info('COLD portal', ['portal' => $portal]);
 
         try {
             $portal = $portal['data'];
@@ -241,7 +241,6 @@ class BitrixHookController extends Controller
 
 
 
-
             sleep($randomNumber);
             if (!$crm) { //если
                 $getSmartItemId = $this->getSmartItem($hook, $smart, $companyId, $responsibleId);
@@ -255,6 +254,13 @@ class BitrixHookController extends Controller
             }
 
             $crmItems = [$smartId  . $crm, 'CO_' . $companyId];
+            Log::channel('telegram')->error('APRIL_HOOK', [
+                'createColdTask' => [
+                    'hook' => $hook,
+                    'crmItems' => $crmItems,
+                    // 'crm' => $crm,
+                ]
+            ]);
 
             $moscowTime = $deadline;
             $nowDate = now();
@@ -284,7 +290,12 @@ class BitrixHookController extends Controller
                     // 'DESCRIPTION' => $description
                 ]
             ];
+            Log::channel('telegram')->error('APRIL_HOOK', [
+                'createColdTask' => [
+                    'taskData' => $taskData,
 
+                ]
+            ]);
             $createdTask = BitrixGeneralService::createTask(
                 'BitrixHookController create cold task',
                 $hook,
@@ -293,6 +304,13 @@ class BitrixHookController extends Controller
                 // $crmItems,
                 $taskData
             );
+
+            Log::channel('telegram')->error('APRIL_HOOK', [
+                'createColdTask' => [
+                    'createdTask' => $createdTask,
+
+                ]
+            ]);
 
             return APIOnlineController::getResponse(
                 0,
