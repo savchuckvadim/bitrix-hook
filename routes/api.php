@@ -1448,7 +1448,7 @@ Route::get('/alfa/activity', function (Request $request) {
             // $response =   APIBitrixController::getBitrixRespone($responseJson, 'getDepartments');
 
 
-            if (!empty($response['result']) ) {
+            if (!empty($response['result'])   && $pagesCount < 1) {
                 foreach ($response['result'] as $activity) {
                     $allActivities[] = $activity;
                     $lastActivityID = $activity['ID']; // Обновление последнего ID для следующего запроса
@@ -1462,14 +1462,17 @@ Route::get('/alfa/activity', function (Request $request) {
                             'company',
                             $companyId,
                             [
-                                // 'ASSIGNED_BY_ID' => 502,
-                                'UF_CRM_1720600919' => 'юрфорум'
+                                'ASSIGNED_BY_ID' => 502,
+                                'UF_CRM_1720600919' => 'юрфорум',
+                                'UF_CRM_1720600919' => 'юрфорум',
+                                'UF_CRM_1721825948' => [15638]
                             ]
                         );
                         $responseJson = Http::post($hook . $method, $data);
+                        $pagesCount++;
+
                     }
                 }
-                $pagesCount++;
             } else {
                 $finish = true; // Завершаем цикл, если результаты закончились
             }
@@ -1479,9 +1482,9 @@ Route::get('/alfa/activity', function (Request $request) {
         return  APIOnlineController::getSuccess([
             'result' => $allActivities,
             'count' => $count,
-        ]);
 
-        
+
+        ]);
     } catch (\Throwable $th) {
         return APIOnlineController::getSuccess(['result' => $th->getMessage()]);
     }
