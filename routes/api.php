@@ -1390,106 +1390,107 @@ Route::post('/test/', function (Request $request) {
 
 
 
-// Route::get('/alfa/activity', function (Request $request) {
-//     // Лид	1	LEAD	L	CRM_LEAD
-//     // Сделка	2	DEAL	D	CRM_DEAL
-//     // Контакт	3	CONTACT	C	CRM_CONTACT
-//     // Компания	4	COMPANY	CO	CRM_COMPANY
-//     // Счет (старый)	5	INVOICE	I	CRM_INVOICE
-//     // Счет (новый)	31	SMART_INVOICE	SI	CRM_SMART_INVOICE
-//     // Предложение	7	QUOTE	Q	CRM_QUOTE
-//     // Реквизит	8	REQUISITE	RQ	CRM_REQUISITE
-//     try {
-//         //code...
+Route::get('/alfa/activity', function (Request $request) {
+    // Лид	1	LEAD	L	CRM_LEAD
+    // Сделка	2	DEAL	D	CRM_DEAL
+    // Контакт	3	CONTACT	C	CRM_CONTACT
+    // Компания	4	COMPANY	CO	CRM_COMPANY
+    // Счет (старый)	5	INVOICE	I	CRM_INVOICE
+    // Счет (новый)	31	SMART_INVOICE	SI	CRM_SMART_INVOICE
+    // Предложение	7	QUOTE	Q	CRM_QUOTE
+    // Реквизит	8	REQUISITE	RQ	CRM_REQUISITE
+    try {
+        //code...
 
-//         $domain = 'alfacentr.bitrix24.ru';
-//         $fullDomain = 'https://' . $domain  . '/';
-//         $method = '/crm.activity.list.json';
-//         $yearAgo = date('Y-m-d', strtotime('-1 year'));
-//         $portal = PortalController::getPortal($domain);
-//         $portal = $portal['data'];
+        $domain = 'alfacentr.bitrix24.ru';
+        $fullDomain = 'https://' . $domain  . '/';
+        $method = '/crm.activity.list.json';
+        $yearAgo = date('Y-m-d', strtotime('-1 year'));
+        $portal = PortalController::getPortal($domain);
+        $portal = $portal['data'];
 
-//         $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
-//         $hook = $fullDomain . $webhookRestKey;
+        $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+        $hook = $fullDomain . $webhookRestKey;
 
-//         // $data = [
-//         //     'filter' => [
-//         //         'RESPONSIBLE_ID' => 502,
-//         //         '<CREATED' => $yearAgo,
-//         //         '!=PROVIDER_TYPE_ID' => 'TASK',
-//         //         'OWNER_TYPE_ID' => 4,
-//         //         '%SUBJECT' => 'юр. форум' // Поиск дел, где в названии есть "юр. форум"
+        // $data = [
+        //     'filter' => [
+        //         'RESPONSIBLE_ID' => 502,
+        //         '<CREATED' => $yearAgo,
+        //         '!=PROVIDER_TYPE_ID' => 'TASK',
+        //         'OWNER_TYPE_ID' => 4,
+        //         '%SUBJECT' => 'юр. форум' // Поиск дел, где в названии есть "юр. форум"
 
-//         //     ]
-//         // ];
-//         // $response = Http::post($hook . $method, $data);
+        //     ]
+        // ];
+        // $response = Http::post($hook . $method, $data);
 
-//         $lastActivityID = 0; // Используйте последний ID для пагинации
-//         $allActivities = []; // Массив для сохранения всех активностей
-//         $finish = false;
+        $lastActivityID = 0; // Используйте последний ID для пагинации
+        $allActivities = []; // Массив для сохранения всех активностей
+        $finish = false;
 
-//         $pagesCount = 0;
-//         while (!$finish) {
-//             sleep(1);
-//             $data = [
-//                 'order' => ['ID' => 'ASC'],
-//                 'filter' => [
-//                     '>ID' => $lastActivityID,
-//                     // 'RESPONSIBLE_ID' => 502,
-//                     // '<CREATED' => $yearAgo,
-//                     'OWNER_TYPE_ID' => 4,
-//                     '%QUERY' => 'юр форум | юрфорум | юр.форум | ВЮФ | юридический форум'
+        $pagesCount = 0;
+        while (!$finish) {
+            sleep(1);
+            $data = [
+                'order' => ['ID' => 'ASC'],
+                'filter' => [
+                    '>ID' => $lastActivityID,
+                    // 'RESPONSIBLE_ID' => 502,
+                    // '<CREATED' => $yearAgo,
+                    'OWNER_TYPE_ID' => 4,
+                    // '%QUERY' => 'юр форум | юрфорум | юр.форум | ВЮФ | юридический форум'
+                    '%SUBJECT' => 'ВЮФ'
 
-//                 ],
+                ],
 
-//             ];
+            ];
 
-//             $responseJson = Http::post($hook . $method, $data);
-//             $response =  $responseJson->json();
+            $responseJson = Http::post($hook . $method, $data);
+            $response =  $responseJson->json();
 
-//             // $response =   APIBitrixController::getBitrixRespone($responseJson, 'getDepartments');
-
-
-//             if (!empty($response['result'])) {
-//                 foreach ($response['result'] as $activity) {
-//                     $allActivities[] = $activity;
-//                     $lastActivityID = $activity['ID']; // Обновление последнего ID для следующего запроса
-
-//                     if (isset($activity['OWNER_ID'])) {
-
-//                         $companyId = $activity['OWNER_ID'];
-//                         sleep(1);
-//                         BitrixGeneralService::updateEntity(
-//                             $hook,
-//                             'company',
-//                             $companyId,
-//                             [
-//                                 // 'ASSIGNED_BY_ID' => 502,
-//                                 // 'UF_CRM_1720600919' => 'юрфорум',
-//                                 'UF_CRM_1720600919' => 'юрфорум',
-//                                 'UF_CRM_1721825948' => [15638]
-//                             ]
-//                         );
-//                         $responseJson = Http::post($hook . $method, $data);
-//                     }
-//                 }
-//                 $pagesCount++;
-//             } else {
-//                 $finish = true; // Завершаем цикл, если результаты закончились
-//             }
-//         }
-
-//         $count = count($allActivities);
-//         return  APIOnlineController::getSuccess([
-//             'result' => $allActivities,
-//             'count' => $count,
+            // $response =   APIBitrixController::getBitrixRespone($responseJson, 'getDepartments');
 
 
-//         ]);
-//     } catch (\Throwable $th) {
-//         return APIOnlineController::getSuccess(['result' => $th->getMessage()]);
-//     }
-// });
+            if (!empty($response['result'])) {
+                foreach ($response['result'] as $activity) {
+                    $allActivities[] = $activity;
+                    $lastActivityID = $activity['ID']; // Обновление последнего ID для следующего запроса
+
+                    if (isset($activity['OWNER_ID'])) {
+
+                        $companyId = $activity['OWNER_ID'];
+                        sleep(1);
+                        BitrixGeneralService::updateEntity(
+                            $hook,
+                            'company',
+                            $companyId,
+                            [
+                                // 'ASSIGNED_BY_ID' => 502,
+                                // 'UF_CRM_1720600919' => 'юрфорум',
+                                'UF_CRM_1720600919' => 'юрфорум',
+                                'UF_CRM_1721825948' => [15638]
+                            ]
+                        );
+                        $responseJson = Http::post($hook . $method, $data);
+                    }
+                }
+                $pagesCount++;
+            } else {
+                $finish = true; // Завершаем цикл, если результаты закончились
+            }
+        }
+
+        $count = count($allActivities);
+        return  APIOnlineController::getSuccess([
+            'result' => $allActivities,
+            'count' => $count,
+
+
+        ]);
+    } catch (\Throwable $th) {
+        return APIOnlineController::getSuccess(['result' => $th->getMessage()]);
+    }
+});
 
 
 
