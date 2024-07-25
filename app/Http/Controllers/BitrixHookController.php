@@ -254,18 +254,18 @@ class BitrixHookController extends Controller
             }
 
             $crmItems = [$smartId  . $crm, 'CO_' . $companyId];
-            Log::channel('telegram')->error('APRIL_HOOK', [
-                'createColdTask' => [
-                    'hook' => $hook,
-                    'crmItems' => $crmItems,
-                    // 'crm' => $crm,
-                ]
-            ]);
+            // Log::channel('telegram')->error('APRIL_HOOK', [
+            //     'createColdTask' => [
+            //         'hook' => $hook,
+            //         'crmItems' => $crmItems,
+            //         // 'crm' => $crm,
+            //     ]
+            // ]);
 
             $moscowTime = $deadline;
             $nowDate = now();
             if ($domain === 'alfacentr.bitrix24.ru') {
-                $crmItems = [$smartId . ''  . '' . $crm];
+                // $crmItems = [$smartId . ''  . '' . $crm];
 
                 $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
                 $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
