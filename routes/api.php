@@ -1427,7 +1427,7 @@ Route::get('/alfa/activity', function (Request $request) {
         $lastActivityID = 0; // Используйте последний ID для пагинации
         $allActivities = []; // Массив для сохранения всех активностей
         $finish = false;
-
+        $responses = [];
         $pagesCount = 0;
         while (!$finish) {
             sleep(1);
@@ -1472,6 +1472,7 @@ Route::get('/alfa/activity', function (Request $request) {
                             ]
                         );
                         $responseJson = Http::post($hook . $method, $data);
+                        array_push($responses, $responseJson);
                     }
                 }
                 $pagesCount++;
@@ -1484,6 +1485,7 @@ Route::get('/alfa/activity', function (Request $request) {
         return  APIOnlineController::getSuccess([
             'result' => $allActivities,
             'count' => $count,
+            'responses' => $responses
 
 
         ]);
