@@ -1439,7 +1439,7 @@ Route::get('/alfa/activity', function (Request $request) {
                     // '<CREATED' => $yearAgo,
                     'OWNER_TYPE_ID' => 4,
                     // '%QUERY' => 'юр форум | юрфорум | юр.форум | ВЮФ | юридический форум'
-                    '%SUBJECT' => 'юр форум'
+                    '%SUBJECT' => 'юрфорум'
 
                 ],
 
