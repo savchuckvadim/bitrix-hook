@@ -593,6 +593,13 @@ Route::post('/full/document/flow', function (Request $request) {
 });
 
 
+Route::post('/full/contract/flow', function (Request $request) {
+
+    $data = $request->all();
+    return APIOnlineController::getSuccess(
+        ['contractData' => $data, 'link' => $data]
+    );
+});
 
 Route::post('/full', function (Request $request) {
     return ReportController::eventReport($request);

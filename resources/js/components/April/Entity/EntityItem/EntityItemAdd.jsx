@@ -56,10 +56,7 @@ const EntityItemAdd = ({
                     <h4>{group.groupName}</h4>
 
                     {fields.map(field => {
-                        if(field.type === 'img'){
-                            
-
-                        }
+                      
                         
                         return (
                             <Row className="mb-4">
