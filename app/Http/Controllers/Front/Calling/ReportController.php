@@ -296,6 +296,7 @@ class ReportController extends Controller
                 $currentCompany = null;
                 $allXODeals = [];
                 $allTMCDeals = [];
+                $currentTMCDeal = null;
                 // $companyId = $data['userId'];
                 // $userId = $data['companyId'];
                 $domain = $data['domain'];
