@@ -242,7 +242,7 @@ Route::prefix('full')->group(function () {
 
 
     Route::post('/department', [ReportController::class, 'getFullDepartment']);
-    Route::post('/tasks', [ReportController::class, 'getEventTasks']);
+    Route::post('/tasks', [FullEventInitController::class, 'getEventTasks']);
     Route::post('/init', [FullEventInitController::class, 'fullEventSessionInit']);
     Route::post('/session', [FullEventInitController::class, 'sessionGet']);
 
