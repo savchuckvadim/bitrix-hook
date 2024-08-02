@@ -605,26 +605,27 @@ Route::post('/full', function (Request $request) {
     return ReportController::eventReport($request);
 });
 
-// новй холодный звонка из Откуда Угодно
-Route::post('cold', function (Request $request) {
+// // новй холодный звонка из Откуда Угодно
+// Route::post('cold', function (Request $request) {
 
-    //from anywhere
-    // https: //april-hook.ru/api/cold?
-    // created={=Template:Parameter2}&
-    // responsible={=Template:Parameter3}&
-    // deadline={=Template:Parameter1}&
-    // name={=Template:Parameter4}&
-    // entity_id={{ID}}
-    // &entity_type=smart | company | lead
-    // isOlyDeal ??
-    // Log::info('APRIL_HOOK ', ['cold' => 'yo']);
-    // Log::info('APRIL_HOOK cold', ['data' => $request->all()]);
-    $controller = new BitrixHookController();
-    return $controller->getColdCall(
-        $request
-    );
-});
+//     //from anywhere
+//     // https: //april-hook.ru/api/cold?
+//     // created={=Template:Parameter2}&
+//     // responsible={=Template:Parameter3}&
+//     // deadline={=Template:Parameter1}&
+//     // name={=Template:Parameter4}&
+//     // entity_id={{ID}}
+//     // &entity_type=smart | company | lead
+//     // isOlyDeal ??
+//     // Log::info('APRIL_HOOK ', ['cold' => 'yo']);
+//     // Log::info('APRIL_HOOK cold', ['data' => $request->all()]);
+//     $controller = new BitrixHookController();
+//     return $controller->getColdCall(
+//         $request
+//     );
+// });
 
+require __DIR__.'/rate/rate.php';
 
 
 
