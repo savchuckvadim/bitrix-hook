@@ -116,7 +116,7 @@ class BitrixRPAPresFlowService
 
             $presentatationInitRPAFields = [
                 [
-                    'code' => 'next_pres_name', //дата начала
+                    'code' => 'name', //дата начала
                     'name' => 'Название',
                     'value' =>'Заявка ' . $name . ' от ' . $nowDate
                 ],
