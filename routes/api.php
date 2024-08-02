@@ -292,318 +292,318 @@ Route::post('/task/fail', function (Request $request) {
 
 
 
-// ............................... FULL EVENT CALING PRES FRONT
-Route::post('/full/initpres/success', function (Request $request) {
-    //     https://april-hook/api/full/initpres/success
-    //     ?commentOwner={{Комментарий к заявке Руководитель}}&commentTMC={{Комментарий к заявке ТМЦ}
-    // }&commentManager={{Комментарий к заявке Менеджер}}&deadline={{ОП Дата назначенной презентации}}
-    //     &name={{Название}}&ownerId=user_1&managerId={{ОП Кто назначен ответственным}}
-    //     &tmcId={{ТМЦ Кто назначил последнюю заявку на презентацию}}&tmcDealId={{ТМЦ Сделка}}
-    $comedata = $request->all();
-    Log::info('HOOK TST', [
-        'comedata' => $comedata,
-
-
-    ]);
-    Log::channel('telegram')->info('HOOK TST', [
-
-        '$comedata' => $comedata
-
-    ]);
-    //     должен сделать полный цикл flow 
-    // как будто назначили презентацию
-    // найти существующую сделку по компании и сотруднику base или создать
-    // для этого контроллер подготовит data на основе request чтобы далее засунуть просто в event service
-    $data = [];
-    try {
-        //code...
-        $tmcdealId = $comedata['tmcDealId'];
-        $companyId = $comedata['companyId'];
-
-        if (!empty($comedata['auth'])) {
-            if (!empty($comedata['auth']['domain'])) {
-                $domain =  $comedata['auth']['domain'];
-            }
-        }
-        $data['domain'] =  $domain;
-
-
-
-
-        $comment = '';
-        if (!empty($comedata['commentTMC'])) {
-            $comment = 'ТМЦ:' . $comedata['commentTMC'];
-        }
-        if (!empty($comedata['commentOwner'])) {
-            $comment = 'Руководитель: ' . $comedata['commentOwner'];
-        }
-        if (!empty($comedata['commentTMC'])) {
-            $comment = 'Менеджер: ' . $comedata['commentManager'];
-        }
-
-
-
-        $partsCreated = explode("_", $comedata['ownerId']);
-        $partsResponsible = explode("_", $comedata['managerId']);
-        $createdId = $partsCreated[1];
-        $responsibleId = $partsResponsible[1];
-
-
-
-        $data['presentation'] = [
-            "count" => [
-                "company" => 0,
-                "smart" => 0,
-                "deal" => 0
-            ],
-            "isPresentationDone" => false,
-            "isUnplannedPresentation" => false
-        ];
-
-        $data['report'] = [
-            "resultStatus" => "new",
-            "description" =>  $comment,
-            "failReason" => [
-                "items" => [
-                    ["id" => 0, "code" => "fail_notime", "name" => "Не было времени", "isActive" => true]
-                ],
-                'current' =>   ["id" => 0, "code" => "fail_notime", "name" => "Не было времени", "isActive" => true]
-
-            ],
-            "failType" => [
-                "items" => [
-                    ["id" => 0, "code" => "op_prospects_good", "name" => "Перспективная", "isActive" => true],
-                    ["id" => 2, "code" => "garant", "name" => "Гарант/Запрет", "isActive" => true]
-                ],
-                'current' =>   ["id" => 0, "code" => "op_prospects_good", "name" => "Перспективная", "isActive" => true]
-
-            ],
-            "noresultReason" => [
-                "items" => [
-                    ["id" => 0, "code" => "secretar", "name" => "Секретарь", "isActive" => true]
-                ],
-                'current' =>  ["id" => 0, "code" => "secretar", "name" => "Секретарь", "isActive" => true]
-
-
-            ],
-            "workStatus" => [
-                "items" => [
-                    ["id" => 0, "code" => "inJob", "name" => "В работе", "isActive" => true]
-                ],
-                "current" => [
-                    "id" => 0,
-                    "code" => "inJob",
-                    "name" => "В работе",
-                    "isActive" => true
-                ],
-                "default" => [
-                    "id" => 0,
-                    "code" => "inJob",
-                    "name" => "В работе",
-                    "isActive" => true
-                ],
-                "isChanged" => false
-            ]
-        ];
-        $data['currentTask'] = null;
-        // $data['report']['resultStatus'] = 'new';
-        // $data['report']['workStatus']['current']['code'] == 'inJob';
-        // $data['plan']['createdBy']
-
-        $data['plan'] = [
-            'type' => [
-                'current' => [
-                    "id" => 2,
-                    "code" => "presentation",
-                    "name" => "Презентация",
-                    "isActive" => true
-                ]
-            ],
-            "createdBy" => [
-                "ID" => $createdId,
-                // "XML_ID" => "",
-                // "ACTIVE" => true,
-                // "NAME" => "",
-                // "LAST_NAME" => "",
-                // "SECOND_NAME" => ""
-            ],
-            "responsibility" => [
-                "ID" => $responsibleId,
-                // "XML_ID" => "",
-                // "ACTIVE" => true,
-                // "NAME" => "",
-                // "LAST_NAME" => "",
-                // "SECOND_NAME" => ""
-            ],
-            "deadline" => $comedata['name'],
-            "isPlanned" => true,
-            "name" => $comedata['name']
-        ];
-
-
-
-
-
-        $data['placement'] = [
-            'options' => [
-                'ID' =>  $companyId
-            ],
-            'placement' => 'COMPANY'
-        ];
-
-        $data['departament'] = [
-            "mode" => [
-                "id" => 1,
-                "code" => "sales",
-                "name" => "Менеджер по продажам"
-            ]
-        ];
-
-        $hook = PortalController::getHook($domain);
-
-        //tmc init pres session 
-        $tmcDealSession = ReportController::getPresTMCInitDeal( //создается сессия со сделкой tmc
-            $domain,
-            $hook,
-            $tmcdealId,
-            $responsibleId,
-            $companyId
-        );
-        $baseDealSession =   ReportController::getDealsFromNewTaskInner( //создается сессия с base сделкой
-            $domain,
-            $hook,
-            $companyId,
-            $responsibleId,
-            'company' // $from да вроде оно и не нужно
-        );
-        $currentBaseDeals = null;
-        if (!empty($baseDealSession)) {
-            if (!empty($baseDealSession['deals'])) {
-                if (!empty($baseDealSession['deals']['currentBaseDeals'])) {
-                    $currentBaseDeals = $baseDealSession['deals']['currentBaseDeals'];
-                }
-            }
-        }
-
-
-        Log::info('HOOK TST', [
-            'currentBaseDeals' => $currentBaseDeals,
-            'baseDealSession' => $baseDealSession,
-
-            'tmcDealSession' => $tmcDealSession,
-            '$data' => $data
-
-        ]);
-
-
-        dispatch(
-            new EventJob($data)
-        )->onQueue('high-priority');
-    } catch (\Throwable $th) {
-        $errorData = [
-            'message'   => $th->getMessage(),
-            'file'      => $th->getFile(),
-            'line'      => $th->getLine(),
-            'trace'     => $th->getTraceAsString(),
-        ];
-        Log::error('API HOOK: Exception caught', $errorData);
-    }
-});
-
-
-
-
-Route::post('full/department', function (Request $request) {
-    return ReportController::getFullDepartment($request);
-});
-
-
-Route::post('/full/tasks', function (Request $request) {
-    return FullEventInitController::getEventTasks($request);
-});
-
-Route::post('/full/init', function (Request $request) {
-    return FullEventInitController::fullEventSessionInit($request);
-});
-
-Route::post('/full/session', function (Request $request) {
-    return FullEventInitController::sessionGet($request);
-});
-
-
-
-
-
-Route::post('/activity/test', function (Request $request) {
-    Log::info('', [
-        'request' => $request->all()
-    ]);
-    Log::channel('telegram')->info('', [
-        'request' => $request->all()
-    ]);
-});
-
-
-Route::post('/pres/count', function (Request $request) {
-    return ReportController::getPresCounts($request);
-});
-
-
-
-//////////////////////INIT EVENT FROM TASK ||  EVENT FROM NEW TASK || EVENT FROM FROM ONE MORE TASK || DOCUMENT
-//TODO full department
-
-
-
-Route::post('full/deals', function (Request $request) {
-    return ReportController::getFullDeals($request);
-});
-Route::post('full/newTask/init', function (Request $request) {
-    return ReportController::getDealsFromNewTaskInit($request);
-});
-
-
-Route::post('full/supply', function (Request $request) {
-    return ReportSupplyController::getSupplyForm($request);
-});
-
-
-
-
-// ............................... FULL EVENT Document PRES FRONT
-Route::post('/full/document/init', function (Request $request) {
-
-    //засовывает в сессию текущую base сделку
-    //находит сделки презентации fromBase и fromCompany
-    //текущую компанию 
-
-    return ReportController::getDocumentDealsInit($request);
-    // return FullEventInitController::sessionGet($request);
-});
-
-
-Route::post('/full/document/flow', function (Request $request) {
-
-    //    получает информацию о текущем документе
-    //    записывает в entity и списки и обновляет стадию сделки
-    // document service flow
-    $data = $request->all();
-    $service = new EventDocumentService($data);
-    return $service->getDocumentFlow();
-});
-
-
-Route::post('/full/contract/flow', function (Request $request) {
-
-    $data = $request->all();
-    return APIOnlineController::getSuccess(
-        ['contractData' => $data, 'link' => $data]
-    );
-});
-
-Route::post('/full', function (Request $request) {
-    return ReportController::eventReport($request);
-});
+// // ............................... FULL EVENT CALING PRES FRONT
+// Route::post('/full/initpres/success', function (Request $request) {
+//     //     https://april-hook/api/full/initpres/success
+//     //     ?commentOwner={{Комментарий к заявке Руководитель}}&commentTMC={{Комментарий к заявке ТМЦ}
+//     // }&commentManager={{Комментарий к заявке Менеджер}}&deadline={{ОП Дата назначенной презентации}}
+//     //     &name={{Название}}&ownerId=user_1&managerId={{ОП Кто назначен ответственным}}
+//     //     &tmcId={{ТМЦ Кто назначил последнюю заявку на презентацию}}&tmcDealId={{ТМЦ Сделка}}
+//     $comedata = $request->all();
+//     Log::info('HOOK TST', [
+//         'comedata' => $comedata,
+
+
+//     ]);
+//     Log::channel('telegram')->info('HOOK TST', [
+
+//         '$comedata' => $comedata
+
+//     ]);
+//     //     должен сделать полный цикл flow 
+//     // как будто назначили презентацию
+//     // найти существующую сделку по компании и сотруднику base или создать
+//     // для этого контроллер подготовит data на основе request чтобы далее засунуть просто в event service
+//     $data = [];
+//     try {
+//         //code...
+//         $tmcdealId = $comedata['tmcDealId'];
+//         $companyId = $comedata['companyId'];
+
+//         if (!empty($comedata['auth'])) {
+//             if (!empty($comedata['auth']['domain'])) {
+//                 $domain =  $comedata['auth']['domain'];
+//             }
+//         }
+//         $data['domain'] =  $domain;
+
+
+
+
+//         $comment = '';
+//         if (!empty($comedata['commentTMC'])) {
+//             $comment = 'ТМЦ:' . $comedata['commentTMC'];
+//         }
+//         if (!empty($comedata['commentOwner'])) {
+//             $comment = 'Руководитель: ' . $comedata['commentOwner'];
+//         }
+//         if (!empty($comedata['commentTMC'])) {
+//             $comment = 'Менеджер: ' . $comedata['commentManager'];
+//         }
+
+
+
+//         $partsCreated = explode("_", $comedata['ownerId']);
+//         $partsResponsible = explode("_", $comedata['managerId']);
+//         $createdId = $partsCreated[1];
+//         $responsibleId = $partsResponsible[1];
+
+
+
+//         $data['presentation'] = [
+//             "count" => [
+//                 "company" => 0,
+//                 "smart" => 0,
+//                 "deal" => 0
+//             ],
+//             "isPresentationDone" => false,
+//             "isUnplannedPresentation" => false
+//         ];
+
+//         $data['report'] = [
+//             "resultStatus" => "new",
+//             "description" =>  $comment,
+//             "failReason" => [
+//                 "items" => [
+//                     ["id" => 0, "code" => "fail_notime", "name" => "Не было времени", "isActive" => true]
+//                 ],
+//                 'current' =>   ["id" => 0, "code" => "fail_notime", "name" => "Не было времени", "isActive" => true]
+
+//             ],
+//             "failType" => [
+//                 "items" => [
+//                     ["id" => 0, "code" => "op_prospects_good", "name" => "Перспективная", "isActive" => true],
+//                     ["id" => 2, "code" => "garant", "name" => "Гарант/Запрет", "isActive" => true]
+//                 ],
+//                 'current' =>   ["id" => 0, "code" => "op_prospects_good", "name" => "Перспективная", "isActive" => true]
+
+//             ],
+//             "noresultReason" => [
+//                 "items" => [
+//                     ["id" => 0, "code" => "secretar", "name" => "Секретарь", "isActive" => true]
+//                 ],
+//                 'current' =>  ["id" => 0, "code" => "secretar", "name" => "Секретарь", "isActive" => true]
+
+
+//             ],
+//             "workStatus" => [
+//                 "items" => [
+//                     ["id" => 0, "code" => "inJob", "name" => "В работе", "isActive" => true]
+//                 ],
+//                 "current" => [
+//                     "id" => 0,
+//                     "code" => "inJob",
+//                     "name" => "В работе",
+//                     "isActive" => true
+//                 ],
+//                 "default" => [
+//                     "id" => 0,
+//                     "code" => "inJob",
+//                     "name" => "В работе",
+//                     "isActive" => true
+//                 ],
+//                 "isChanged" => false
+//             ]
+//         ];
+//         $data['currentTask'] = null;
+//         // $data['report']['resultStatus'] = 'new';
+//         // $data['report']['workStatus']['current']['code'] == 'inJob';
+//         // $data['plan']['createdBy']
+
+//         $data['plan'] = [
+//             'type' => [
+//                 'current' => [
+//                     "id" => 2,
+//                     "code" => "presentation",
+//                     "name" => "Презентация",
+//                     "isActive" => true
+//                 ]
+//             ],
+//             "createdBy" => [
+//                 "ID" => $createdId,
+//                 // "XML_ID" => "",
+//                 // "ACTIVE" => true,
+//                 // "NAME" => "",
+//                 // "LAST_NAME" => "",
+//                 // "SECOND_NAME" => ""
+//             ],
+//             "responsibility" => [
+//                 "ID" => $responsibleId,
+//                 // "XML_ID" => "",
+//                 // "ACTIVE" => true,
+//                 // "NAME" => "",
+//                 // "LAST_NAME" => "",
+//                 // "SECOND_NAME" => ""
+//             ],
+//             "deadline" => $comedata['name'],
+//             "isPlanned" => true,
+//             "name" => $comedata['name']
+//         ];
+
+
+
+
+
+//         $data['placement'] = [
+//             'options' => [
+//                 'ID' =>  $companyId
+//             ],
+//             'placement' => 'COMPANY'
+//         ];
+
+//         $data['departament'] = [
+//             "mode" => [
+//                 "id" => 1,
+//                 "code" => "sales",
+//                 "name" => "Менеджер по продажам"
+//             ]
+//         ];
+
+//         $hook = PortalController::getHook($domain);
+
+//         //tmc init pres session 
+//         $tmcDealSession = ReportController::getPresTMCInitDeal( //создается сессия со сделкой tmc
+//             $domain,
+//             $hook,
+//             $tmcdealId,
+//             $responsibleId,
+//             $companyId
+//         );
+//         $baseDealSession =   ReportController::getDealsFromNewTaskInner( //создается сессия с base сделкой
+//             $domain,
+//             $hook,
+//             $companyId,
+//             $responsibleId,
+//             'company' // $from да вроде оно и не нужно
+//         );
+//         $currentBaseDeals = null;
+//         if (!empty($baseDealSession)) {
+//             if (!empty($baseDealSession['deals'])) {
+//                 if (!empty($baseDealSession['deals']['currentBaseDeals'])) {
+//                     $currentBaseDeals = $baseDealSession['deals']['currentBaseDeals'];
+//                 }
+//             }
+//         }
+
+
+//         Log::info('HOOK TST', [
+//             'currentBaseDeals' => $currentBaseDeals,
+//             'baseDealSession' => $baseDealSession,
+
+//             'tmcDealSession' => $tmcDealSession,
+//             '$data' => $data
+
+//         ]);
+
+
+//         dispatch(
+//             new EventJob($data)
+//         )->onQueue('high-priority');
+//     } catch (\Throwable $th) {
+//         $errorData = [
+//             'message'   => $th->getMessage(),
+//             'file'      => $th->getFile(),
+//             'line'      => $th->getLine(),
+//             'trace'     => $th->getTraceAsString(),
+//         ];
+//         Log::error('API HOOK: Exception caught', $errorData);
+//     }
+// });
+
+
+
+
+// Route::post('full/department', function (Request $request) {
+//     return ReportController::getFullDepartment($request);
+// });
+
+
+// Route::post('/full/tasks', function (Request $request) {
+//     return FullEventInitController::getEventTasks($request);
+// });
+
+// Route::post('/full/init', function (Request $request) {
+//     return FullEventInitController::fullEventSessionInit($request);
+// });
+
+// Route::post('/full/session', function (Request $request) {
+//     return FullEventInitController::sessionGet($request);
+// });
+
+
+
+
+
+// Route::post('/activity/test', function (Request $request) {
+//     Log::info('', [
+//         'request' => $request->all()
+//     ]);
+//     Log::channel('telegram')->info('', [
+//         'request' => $request->all()
+//     ]);
+// });
+
+
+// Route::post('/pres/count', function (Request $request) {
+//     return ReportController::getPresCounts($request);
+// });
+
+
+
+// //////////////////////INIT EVENT FROM TASK ||  EVENT FROM NEW TASK || EVENT FROM FROM ONE MORE TASK || DOCUMENT
+// //TODO full department
+
+
+
+// Route::post('full/deals', function (Request $request) {
+//     return ReportController::getFullDeals($request);
+// });
+// Route::post('full/newTask/init', function (Request $request) {
+//     return ReportController::getDealsFromNewTaskInit($request);
+// });
+
+
+// Route::post('full/supply', function (Request $request) {
+//     return ReportSupplyController::getSupplyForm($request);
+// });
+
+
+
+
+// // ............................... FULL EVENT Document PRES FRONT
+// Route::post('/full/document/init', function (Request $request) {
+
+//     //засовывает в сессию текущую base сделку
+//     //находит сделки презентации fromBase и fromCompany
+//     //текущую компанию 
+
+//     return ReportController::getDocumentDealsInit($request);
+//     // return FullEventInitController::sessionGet($request);
+// });
+
+
+// Route::post('/full/document/flow', function (Request $request) {
+
+//     //    получает информацию о текущем документе
+//     //    записывает в entity и списки и обновляет стадию сделки
+//     // document service flow
+//     $data = $request->all();
+//     $service = new EventDocumentService($data);
+//     return $service->getDocumentFlow();
+// });
+
+
+// Route::post('/full/contract/flow', function (Request $request) {
+
+//     $data = $request->all();
+//     return APIOnlineController::getSuccess(
+//         ['contractData' => $data, 'link' => $data]
+//     );
+// });
+
+// Route::post('/full', function (Request $request) {
+//     return ReportController::eventReport($request);
+// });
 
 // // новй холодный звонка из Откуда Угодно
 // Route::post('cold', function (Request $request) {
@@ -626,7 +626,7 @@ Route::post('/full', function (Request $request) {
 // });
 
 require __DIR__.'/rate/rate.php';
-
+require __DIR__.'/full/full_event.php';
 
 
 
