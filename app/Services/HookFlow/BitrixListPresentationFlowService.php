@@ -144,7 +144,7 @@ class BitrixListPresentationFlowService
                 [
                     'code' => 'pres_plan_author',
                     'name' => 'Автор Заявки',
-                    'value' => $created,
+                    'value' => $responsible,
                 ],
                 [
                     'code' => 'pres_responsible',

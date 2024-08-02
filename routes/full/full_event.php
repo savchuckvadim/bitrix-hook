@@ -26,7 +26,7 @@ Route::prefix('full')->group(function () {
         //     ?commentOwner={{Комментарий к заявке Руководитель}}&commentTMC={{Комментарий к заявке ТМЦ}
         // }&commentManager={{Комментарий к заявке Менеджер}}&deadline={{ОП Дата назначенной презентации}}
         //     &name={{Название}}&ownerId=user_1&managerId={{ОП Кто назначен ответственным}}
-        //     &tmcId={{ТМЦ Кто назначил последнюю заявку на презентацию}}&tmcDealId={{ТМЦ Сделка}}
+        //     &tmcId={{ТМЦ Кто назначил последнюю заявку на презентацию}}&tmcDealId={{ТМЦ Сделка}}&companyId
         $comedata = $request->all();
         Log::info('HOOK TST', [
             'comedata' => $comedata,
@@ -256,7 +256,7 @@ Route::prefix('full')->group(function () {
 
     // ............................... FULL EVENT Document PRES FRONT
 
-    Route::post('/document/ini', [ReportController::class, 'getDocumentDealsInit']);
+    Route::post('/document/init', [ReportController::class, 'getDocumentDealsInit']);
     //засовывает в сессию текущую base сделку
     //находит сделки презентации fromBase и fromCompany
     //текущую компанию 
