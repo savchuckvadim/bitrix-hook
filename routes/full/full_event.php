@@ -251,8 +251,8 @@ Route::prefix('full')->group(function () {
     //TODO full department
 
     Route::post('/deals', [ReportController::class, 'getFullDeals']);
-    Route::post('/session', [ReportController::class, 'getDealsFromNewTaskInit']);
-    Route::post('/session', [ReportSupplyController::class, 'getSupplyForm']);
+    Route::post('/newTask/init', [ReportController::class, 'getDealsFromNewTaskInit']);
+    Route::post('/full/supply', [ReportSupplyController::class, 'getSupplyForm']);
 
     // ............................... FULL EVENT Document PRES FRONT
 
@@ -281,6 +281,7 @@ Route::prefix('full')->group(function () {
             ['contractData' => $data, 'link' => $data]
         );
     }); //TODO |
+
 
 
     // Route::post('/contract/flow', [ReportController::class, 'eventReport']);
