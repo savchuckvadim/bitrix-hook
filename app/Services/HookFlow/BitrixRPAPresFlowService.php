@@ -116,6 +116,11 @@ class BitrixRPAPresFlowService
 
             $presentatationInitRPAFields = [
                 [
+                    'code' => 'next_pres_name', //дата начала
+                    'name' => 'Название',
+                    'value' =>'Заявка ' . $name . ' от ' . $nowDate
+                ],
+                [
                     'code' => 'next_pres_plan_date', //дата начала
                     'name' => 'ОП Дата назначенной презентации',
                     'value' => $nowDate //$nowDate->format('d.m.Y H:i:s'),
@@ -160,7 +165,7 @@ class BitrixRPAPresFlowService
             // $fieldsData['name'] = 'Заявка на презентацию ' . $name;
 
             $fieldsData['createdBy'] =  $created;
-            $fieldsData['UF_RPA_69_NAME'] = 'Заявка ' . $name . ' от ' . $nowDate;
+            // $fieldsData['UF_RPA_69_NAME'] = 'Заявка ' . $name . ' от ' . $nowDate;
 
             foreach ($presentatationInitRPAFields as  $presValue) {
 
