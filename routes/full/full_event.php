@@ -252,7 +252,7 @@ Route::prefix('full')->group(function () {
 
     Route::post('/deals', [ReportController::class, 'getFullDeals']);
     Route::post('/newTask/init', [ReportController::class, 'getDealsFromNewTaskInit']);
-    Route::post('/full/supply', [ReportSupplyController::class, 'getSupplyForm']);
+    Route::post('/supply', [ReportSupplyController::class, 'getSupplyForm']);
 
     // ............................... FULL EVENT Document PRES FRONT
 
