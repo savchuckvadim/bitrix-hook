@@ -18,6 +18,7 @@ Route::post('/pres/count', function (Request $request) {
 });
 
 Route::prefix('full')->group(function () {
+    Route::post('', [ReportController::class, 'eventReport']);
 
     // ............................... FULL EVENT CALING PRES FRONT
     Route::post('/initpres/success', function (Request $request) {
@@ -283,5 +284,4 @@ Route::prefix('full')->group(function () {
 
 
     // Route::post('/contract/flow', [ReportController::class, 'eventReport']);
-    Route::post('/', [ReportController::class, 'eventReport']);
 });
