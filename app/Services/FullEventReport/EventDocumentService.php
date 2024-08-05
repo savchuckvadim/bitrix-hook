@@ -694,6 +694,8 @@ class EventDocumentService
                 $this->currentPresDeal,
                 'presentation'
             );
+            Log::channel('telegram')->error('APRIL_HOOK get deal flow', ['$this->productRows' => $this->productRows]);
+
             if (!empty($this->productRows)) {
                 $productSetData = $this->getDealProductRows($this->productRows, $this->currentPresDeal['ID']);
 
