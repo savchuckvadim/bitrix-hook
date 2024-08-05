@@ -347,23 +347,23 @@ class BitrixDealService
         if (!empty($portalDealData['categories'])) {
 
             foreach ($portalDealData['categories'] as $category) {
-                Log::channel('telegram')->info('DEAL TEST', [
-                    'category code' => $category['code']
-                ]);
+                // Log::channel('telegram')->info('DEAL TEST', [
+                //     'category code' => $category['code']
+                // ]);
                 if (in_array($category['code'], $categoryPrephicks)) {
                     $currentCategory = $category;
                     array_push($resultCategoryDatas, $category);
                 }
             }
         }
-        Log::info('DEAL TEST', [
-            // 'resultCategoryDatas' => $resultCategoryDatas,
-            'eventType' => $eventType,
-            'eventAction' => $eventAction,
-            'categoryPrephicks' => $categoryPrephicks,
-            // 'currentCategoryData' => "C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'],
-            // 'isCurrentSearched' => $isCurrentSearched,
-        ]);
+        // Log::info('DEAL TEST', [
+        //     // 'resultCategoryDatas' => $resultCategoryDatas,
+        //     'eventType' => $eventType,
+        //     'eventAction' => $eventAction,
+        //     'categoryPrephicks' => $categoryPrephicks,
+        //     // 'currentCategoryData' => "C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'],
+        //     // 'isCurrentSearched' => $isCurrentSearched,
+        // ]);
         return $resultCategoryDatas;
     }
 

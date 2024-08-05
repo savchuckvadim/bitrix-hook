@@ -536,6 +536,14 @@ class EventReportService
             }
         }
 
+        if ($this->isSuccessSale) {
+            if (!empty($data['sale'])) {
+                if (!empty($data['sale']['relationSalePresDeal'])) {
+                    $this->currentPresDeal = $data['sale']['relationSalePresDeal'];
+                    array_push($this->currentBtxDeals,  $data['sale']['relationSalePresDeal']);
+                }
+            }
+        }
         $sessionTMCDealKey = 'tmcInit_' . $domain . '_' . $this->planResponsibleId . '_' . $entityId;
         $sessionData = FullEventInitController::getSessionItem($sessionTMCDealKey);
 

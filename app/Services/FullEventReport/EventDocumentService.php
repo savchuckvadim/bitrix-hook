@@ -615,13 +615,13 @@ class EventDocumentService
         $entityService = new BitrixEntityFlowService();
 
 
-        // Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
-        //     'data' => [
+        Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
+            'data' => [
 
-        //         'reportFields' => $reportFields,
+                'reportFields' => $reportFields,
 
-        //     ]
-        // ]);
+            ]
+        ]);
 
         $entityService->documentFlowflow(
             $currentBtxEntity,
@@ -682,6 +682,7 @@ class EventDocumentService
                 $this->currentPresDeal,
                 'presentation'
             );
+            Log::info('APRIL_HOOK get deal flow', ['$this->productRows' => $this->productRows]);
 
             if (!empty($this->productRows)) {
                 $productSetData = $this->getDealProductRows($this->productRows, $this->currentPresDeal['ID']);

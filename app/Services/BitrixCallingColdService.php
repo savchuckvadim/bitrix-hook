@@ -122,7 +122,6 @@ class BitrixCallingColdService
                 $this->name = $data['name'];
             }
         }
-        Log::channel('telegram')->info('TMC HOOK', $data);
 
         $this->currentDepartamentType = 'sales';
 
