@@ -627,7 +627,7 @@ Route::post('/task/fail', function (Request $request) {
 
 require __DIR__.'/rate/rate.php';
 require __DIR__.'/full/full_event.php';
-
+require __DIR__.'/full/full_report.php';
 
 
 
