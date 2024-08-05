@@ -3,8 +3,8 @@
 namespace App\Services\FullEventReport;
 
 use App\Http\Controllers\APIOnlineController;
-use App\Http\Controllers\Front\Calling\FullEventInitController;
-use App\Http\Controllers\Front\Calling\ReportController;
+use App\Http\Controllers\Front\EventCalling\FullEventInitController;
+use App\Http\Controllers\Front\EventCalling\ReportController;
 use App\Http\Controllers\PortalController;
 use App\Jobs\BtxCreateListItemJob;
 use App\Services\BitrixTaskService;

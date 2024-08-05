@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\APIOnlineController;
-use App\Http\Controllers\Front\Calling\FullEventInitController;
-use App\Http\Controllers\Front\Calling\ReportController;
-use App\Http\Controllers\Front\Calling\ReportSupplyController;
+use App\Http\Controllers\Front\EventCalling\FullEventInitController;
+use App\Http\Controllers\Front\EventCalling\ReportController;
+use App\Http\Controllers\Front\EventCalling\ReportSupplyController;
 use App\Http\Controllers\Front\Konstructor\ContractController;
 use App\Http\Controllers\PortalController;
 use App\Jobs\EventJob;

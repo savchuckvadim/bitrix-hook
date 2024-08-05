@@ -173,4 +173,39 @@ class BitrixListService
             return $result;
         }
     }
+
+    static function getListFieldsGet(
+        $hook,
+        $listBitrixId, // from portal db
+        // $filter
+
+    ) {
+
+        $result = false;
+
+
+
+        try {
+            $method = '/lists.field.get.json';
+            $url = $hook . $method;
+         
+            $data =  [
+                'IBLOCK_TYPE_ID' => 'lists',
+                'IBLOCK_ID' => $listBitrixId,
+
+            ];
+
+
+            $response = Http::get($url, $data);
+            // $responseData = $response->json();
+            $responseData = APIBitrixController::getBitrixRespone($response, 'list service: get list');
+            if (isset($responseData)) {
+                $result = $responseData;
+            }
+
+            return $result;
+        } catch (\Throwable $th) {
+            return $result;
+        }
+    }
 }
