@@ -531,7 +531,7 @@ class ReportKPIController extends Controller
     public function getListFilter(Request $request)
     {
 
-        $listId = $this->portalKPIList['bitrixId'];
+        // $listId = $this->portalKPIList['bitrixId'];
 
         try {
 
@@ -545,7 +545,8 @@ class ReportKPIController extends Controller
                 [
                     // 'filter' => $response,
                     'list' => $this->portalKPIList,
-                    
+                    'portal' => $this->portal
+
 
                 ]
             );
