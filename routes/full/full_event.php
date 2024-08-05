@@ -285,11 +285,17 @@ Route::prefix('full')->group(function () {
 
     Route::prefix('report')->group(function () {
 
-        Route::post('/init', [ReportKPIController::class, 'frontInit']);
-        // Route::post('/get', [ReportKPIController::class, 'getContractDocument']);
-        Route::post('/filter', [ReportKPIController::class, 'getListFilter']);
-    
-    
+        Route::post('/init', function (Request $request) {
+            $domain = $request->domain;
+            $controller = new ReportKPIController($domain);
+            return $controller->frontInit($request);
+        });
+        
+        Route::post('/filter', function (Request $request) {
+            $domain = $request->domain;
+            $controller = new ReportKPIController($domain);
+            return $controller->getListFilter($request);
+        });
     });
 
     // Route::post('/contract/flow', [ReportController::class, 'eventReport']);
