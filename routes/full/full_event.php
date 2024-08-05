@@ -5,6 +5,7 @@ use App\Http\Controllers\Front\EventCalling\FullEventInitController;
 use App\Http\Controllers\Front\EventCalling\ReportController;
 use App\Http\Controllers\Front\EventCalling\ReportSupplyController;
 use App\Http\Controllers\Front\Konstructor\ContractController;
+use App\Http\Controllers\Front\ReportKPI\ReportKPIController;
 use App\Http\Controllers\PortalController;
 use App\Jobs\EventJob;
 use App\Services\FullEventReport\EventDocumentService;
@@ -282,7 +283,14 @@ Route::prefix('full')->group(function () {
         );
     }); //TODO |
 
+    Route::prefix('report')->group(function () {
 
+        Route::post('/init', [ReportKPIController::class, 'frontInit']);
+        // Route::post('/get', [ReportKPIController::class, 'getContractDocument']);
+        Route::post('/filter', [ReportKPIController::class, 'getListFilter']);
+    
+    
+    });
 
     // Route::post('/contract/flow', [ReportController::class, 'eventReport']);
 });
