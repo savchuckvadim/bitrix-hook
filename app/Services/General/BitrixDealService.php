@@ -194,9 +194,9 @@ class BitrixDealService
                 'line'      => $th->getLine(),
                 'trace'     => $th->getTraceAsString(),
             ];
-            Log::channel('telegram')->error('APRIL_ONLINE', [
-                'productsSet' => $errorMessages
-            ]);
+            // Log::channel('telegram')->error('APRIL_ONLINE', [
+            //     'productsSet' => $errorMessages
+            // ]);
 
             return null;
         }
@@ -304,7 +304,7 @@ class BitrixDealService
         // sales_xo
         // sales_presentation
         // tmc_base
-        Log::channel('telegram')->info("DEAL FLOW", ['currentDepartamentType' => $currentDepartamentType]);
+        // Log::channel('telegram')->info("DEAL FLOW", ['currentDepartamentType' => $currentDepartamentType]);
 
         $resultCategoryDatas = [];
         $categoryPrephicks = [];

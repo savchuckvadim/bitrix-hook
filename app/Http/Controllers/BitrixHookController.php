@@ -198,19 +198,19 @@ class BitrixHookController extends Controller
         $stringType = 'Холодный обзвон  ';
 
         $gettedSmart = null;
-        Log::channel('telegram')->error('APRIL_HOOK', [
-            'createColdTask' => [
-                'type' => $type,
-                'domain' => $domain,
-                'companyId' => $companyId,
-                'createdId' => $createdId,
-                'responsibleId' => $responsibleId,
-                'deadline' => $deadline,
-                'name' => $name,
-                'crm' => $crm,
-            ]
-        ]);
-        Log::info('COLD portal', ['portal' => $portal]);
+        // Log::channel('telegram')->error('APRIL_HOOK', [
+        //     'createColdTask' => [
+        //         'type' => $type,
+        //         'domain' => $domain,
+        //         'companyId' => $companyId,
+        //         'createdId' => $createdId,
+        //         'responsibleId' => $responsibleId,
+        //         'deadline' => $deadline,
+        //         'name' => $name,
+        //         'crm' => $crm,
+        //     ]
+        // ]);
+        // Log::info('COLD portal', ['portal' => $portal]);
 
         try {
             $portal = $portal['data'];

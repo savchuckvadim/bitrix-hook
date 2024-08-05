@@ -435,19 +435,7 @@ class EventDocumentService
             $currentDeal = null;
             $currentDealId = null;
             $currentDealsIds = null;
-            Log::info('HOOK TEST getDocumentFlow', [
-
-                'session currentBaseDeal' => $this->currentBaseDeal,
-
-
-            ]);
-            Log::info('APRIL_HOOK portalDealData', [
-                'data' => [
-                    'currentPresDeal' =>  $this->currentPresDeal,
-                    'portalDealData' =>  $this->portalDealData,
-
-                ]
-            ]);
+           
             // if(!$this->smartId){
 
             // }
@@ -627,13 +615,13 @@ class EventDocumentService
         $entityService = new BitrixEntityFlowService();
 
 
-        Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
-            'data' => [
+        // Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
+        //     'data' => [
 
-                'reportFields' => $reportFields,
+        //         'reportFields' => $reportFields,
 
-            ]
-        ]);
+        //     ]
+        // ]);
 
         $entityService->documentFlowflow(
             $currentBtxEntity,
@@ -694,7 +682,6 @@ class EventDocumentService
                 $this->currentPresDeal,
                 'presentation'
             );
-            Log::info('APRIL_HOOK get deal flow', ['$this->productRows' => $this->productRows]);
 
             if (!empty($this->productRows)) {
                 $productSetData = $this->getDealProductRows($this->productRows, $this->currentPresDeal['ID']);
@@ -706,7 +693,6 @@ class EventDocumentService
                 return APIBitrixController::getBitrixRespone($response, 'EVENT DOCUMENT SERVICE gert deal flow products Set');
             }
         } else {
-            Log::info('APRIL_HOOK get deal flow', ['$this->productRows' => $this->productRows]);
 
             // if(!empty($this->currentBaseDeal['ID'])){
             // if(!empty($this->currentBaseDeal['ID'])){

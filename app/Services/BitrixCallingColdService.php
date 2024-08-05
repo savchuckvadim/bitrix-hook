@@ -823,7 +823,7 @@ class BitrixCallingColdService
                 'trace'     => $th->getTraceAsString(),
             ];
             Log::error('ERROR COLD: createColdTask',  $errorMessages);
-            Log::info('error COLD', ['error' => $th->getMessage()]);
+            Log::error('error COLD', ['error' => $th->getMessage()]);
             Log::channel('telegram')->error('APRIL_HOOK', $errorMessages);
             return $createdTask;
         }

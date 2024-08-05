@@ -195,10 +195,10 @@ class BitrixGeneralService
             $smartFieldsResponse = Http::get($url, $data);
             $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: updateCompany');
             $resultFields = $responseData;
-            Log::info('HOOK UPDT COMPANY ', [
-                'resultFields' => $resultFields,
-                'data' => $data
-            ]);
+            // Log::info('HOOK UPDT COMPANY ', [
+            //     'resultFields' => $resultFields,
+            //     'data' => $data
+            // ]);
 
             return $resultFields;
         } catch (\Throwable $th) {
@@ -437,13 +437,13 @@ class BitrixGeneralService
             $url = $hook . $methodTask;
 
             $responseData = Http::get($url, $taskData);
-            Log::channel('telegram')->error('APRIL_HOOK', [
-                'createColdTask' => [
-                    'url' => $url,
-                    'responseData' => $responseData,
+            // Log::channel('telegram')->error('APRIL_HOOK', [
+            //     'createColdTask' => [
+            //         'url' => $url,
+            //         'responseData' => $responseData,
 
-                ]
-            ]);
+            //     ]
+            // ]);
 
             $createdTask =  APIBitrixController::getBitrixRespone($responseData, $parentMethod);
 

@@ -857,10 +857,10 @@ class EventReportTMCService
             $reportFields['xo_created'] = $this->planResponsibleId;
             $reportFields['op_current_status'] = 'Звонок запланирован в работе';
 
-            Log::channel('telegram')->info('TST', [
-                'currentPlanEventType' => $currentPlanEventType,
+            // Log::channel('telegram')->info('TST', [
+            //     'currentPlanEventType' => $currentPlanEventType,
 
-            ]);
+            // ]);
 
 
             switch ($currentPlanEventType) {
@@ -1488,11 +1488,11 @@ class EventReportTMCService
                             $this->currentPlanEventName,
 
                         );
-                        Log::channel('telegram')->info('HOOK TEST currentBtxDeals', [
-                            'resultRpaItem' => $this->resultRpaItem,
+                        // Log::channel('telegram')->info('HOOK TEST currentBtxDeals', [
+                        //     'resultRpaItem' => $this->resultRpaItem,
 
 
-                        ]);
+                        // ]);
 
                         if (!empty($this->resultRpaItem)) {
                             if (!empty($this->resultRpaItem['id'])) {

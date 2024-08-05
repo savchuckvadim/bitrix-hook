@@ -826,10 +826,10 @@ class EventReportService
             $reportFields['xo_created'] = $this->planResponsibleId;
             $reportFields['op_current_status'] = 'Звонок запланирован в работе';
 
-            Log::channel('telegram')->info('TST', [
-                'currentPlanEventType' => $currentPlanEventType,
+            // Log::channel('telegram')->info('TST', [
+            //     'currentPlanEventType' => $currentPlanEventType,
 
-            ]);
+            // ]);
 
 
             switch ($currentPlanEventType) {
@@ -1242,11 +1242,11 @@ class EventReportService
             // $dealType = 'base',  //presentation, xo
             // $baseDealId = null
 
-            Log::info('HOOK TEST unplannedPresDeal', [
-                'currentBaseDeal' => $this->currentBaseDeal,
+            // Log::info('HOOK TEST unplannedPresDeal', [
+            //     'currentBaseDeal' => $this->currentBaseDeal,
 
 
-            ]);
+            // ]);
             if (!empty($this->currentBaseDeal)) {
                 $this->getEntityFlow(
                     true,
@@ -1617,9 +1617,9 @@ class EventReportService
                 //если была проведена презентация - не важно какое текущее report event
             }
         }
-        Log::channel('telegram')->info('HOOK TST', [
-            'isPresentationDone' => $this->isPresentationDone
-        ]);
+        // Log::channel('telegram')->info('HOOK TST', [
+        //     'isPresentationDone' => $this->isPresentationDone
+        // ]);
 
         if ($this->isPresentationDone == true) {
             //если была проведена през
