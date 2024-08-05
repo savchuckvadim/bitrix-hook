@@ -347,7 +347,7 @@ class BitrixDealService
         if (!empty($portalDealData['categories'])) {
 
             foreach ($portalDealData['categories'] as $category) {
-                Log::info('DEAL TEST', [
+                Log::channel('telegram')->info('DEAL TEST', [
                     'category code' => $category['code']
                 ]);
                 if (in_array($category['code'], $categoryPrephicks)) {

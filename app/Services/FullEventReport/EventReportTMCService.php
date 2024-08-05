@@ -673,12 +673,12 @@ class EventReportTMCService
             // if ($this->isSmartFlow) {
             //     $this->getSmartFlow();
             // }
-            // Log::info('HOOK TEST unplannedPresDeal', [
-            //     'currentBaseDeal' => $this->currentBaseDeal,
-            //     'currentPresDeal' => $this->currentPresDeal,
-            //     'currentBtxDeals' => $this->currentBtxDeals,
+            Log::info('HOOK TEST unplannedPresDeal', [
+                'currentBaseDeal' => $this->currentBaseDeal,
+                // 'currentPresDeal' => $this->currentPresDeal,
+                // 'currentBtxDeals' => $this->currentBtxDeals,
 
-            // ]);
+            ]);
             if ($this->isDealFlow && $this->portalDealData) {
                 $currentDealsIds = $this->getDealFlow();
             }
@@ -1376,7 +1376,7 @@ class EventReportTMCService
 
         // ]);
 
-        if ($currentReportStatus === 'fail') {
+        if ($currentReportStatus === 'fail' || $currentReportStatus === 'expired') {
 
 
             $flowResult = BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
