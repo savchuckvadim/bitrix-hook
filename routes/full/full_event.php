@@ -292,7 +292,11 @@ Route::prefix('full')->group(function () {
             $controller = new ReportKPIController($domain);
             return $controller->frontInit($request);
         });
-
+        Route::post('/get', function (Request $request) {
+            $domain = $request->domain;
+            $controller = new ReportKPIController($domain);
+            return $controller->getReport($request);
+        });
         Route::post('/filter', function (Request $request) {
             $domain = $request->domain;
             $controller = new ReportKPIController($domain);

@@ -138,7 +138,7 @@ class ReportKPIController extends Controller
             return APIOnlineController::getSuccess(
                 [
                     'report' =>  $report,
-                    // 'total' =>  $totalReport['total'],
+                    'total' =>  $totalReport['total'],
                     // 'medium' =>  $totalReport['medium'],
                     // 'getPortalReportData' =>  $getPortalReportData,
                     'listId' =>  $listId,
