@@ -38,10 +38,12 @@ class ReportKPIController extends Controller
         $this->domain = $domain;
 
         $portal = PortalController::getPortal($domain);
-        $this->portal = $portal;
+   
         if (!empty($portal['data'])) {
-            $this->portal = $portal['data'];
+            $portal = $portal['data'];
         }
+
+        $this->portal = $portal;
         $this->hook = PortalController::getHook($domain);
         if (!empty($portal['bitrixLists'])) {
 
@@ -56,6 +58,8 @@ class ReportKPIController extends Controller
                 }
             }
         }
+
+
     }
 
 
