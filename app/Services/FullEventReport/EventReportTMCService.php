@@ -1376,7 +1376,7 @@ class EventReportTMCService
 
         // ]);
 
-        if ($currentReportStatus === 'fail' || $currentReportStatus === 'expired') {
+        if ($currentReportStatus === 'fail') {
 
 
             $flowResult = BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
@@ -1438,6 +1438,10 @@ class EventReportTMCService
             //     $this->portalDealData,
             //     $currentBtxDeals
             // );
+            $currentPlanType = 'plan';
+            if( $this->isExpired){
+                $currentPlanType = 'expired';
+            }
             $flowResult =  BitrixDealFlowService::flow( //создает или обновляет сделку
                 $this->hook,
                 $currentBtxDeals,
@@ -1448,7 +1452,7 @@ class EventReportTMCService
                 $this->currentPlanEventType, // xo warm presentation, hot moneyAwait
                 $this->currentPlanEventTypeName,
                 $this->currentPlanEventName,
-                'plan',  // plan done expired 
+                $currentPlanType,  // plan done expired 
                 $this->planResponsibleId,
                 $this->isResult,
                 '$fields',
