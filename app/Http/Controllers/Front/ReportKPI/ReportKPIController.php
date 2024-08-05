@@ -535,15 +535,17 @@ class ReportKPIController extends Controller
 
         try {
 
-            $response = BitrixListService::getListFieldsGet(
-                $this->hook,
-                $listId
-            );
+            // $response = BitrixListService::getListFieldsGet(
+            //     $this->hook,
+            //     $listId
+            // );
 
             return APIOnlineController::getSuccess(
 
                 [
-                    'filter' => $response,
+                    // 'filter' => $response,
+                    'list' => $this->portalKPIList,
+                    
 
                 ]
             );

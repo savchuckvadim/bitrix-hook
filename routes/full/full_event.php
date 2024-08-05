@@ -283,6 +283,8 @@ Route::prefix('full')->group(function () {
         );
     }); //TODO |
 
+
+    //REPORT APP
     Route::prefix('report')->group(function () {
 
         Route::post('/init', function (Request $request) {
@@ -290,7 +292,7 @@ Route::prefix('full')->group(function () {
             $controller = new ReportKPIController($domain);
             return $controller->frontInit($request);
         });
-        
+
         Route::post('/filter', function (Request $request) {
             $domain = $request->domain;
             $controller = new ReportKPIController($domain);
