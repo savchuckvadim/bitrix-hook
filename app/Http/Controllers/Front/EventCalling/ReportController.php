@@ -67,6 +67,11 @@ class ReportController extends Controller
             } else {
                 $isFullData = false;
             }
+            if (isset($request->sale)) {
+                $data['sale'] = $request->sale;
+            } else {
+                $isFullData = false;
+            }
             if ($isFullData) {
                 // $service = new EventReportService($data);
                 // $result = $service->getEventFlow();
