@@ -694,7 +694,7 @@ class EventDocumentService
                 $this->currentPresDeal,
                 'presentation'
             );
-            Log::channel('telegram')->error('APRIL_HOOK get deal flow', ['$this->productRows' => $this->productRows]);
+            Log::info('APRIL_HOOK get deal flow', ['$this->productRows' => $this->productRows]);
 
             if (!empty($this->productRows)) {
                 $productSetData = $this->getDealProductRows($this->productRows, $this->currentPresDeal['ID']);
@@ -706,6 +706,7 @@ class EventDocumentService
                 return APIBitrixController::getBitrixRespone($response, 'EVENT DOCUMENT SERVICE gert deal flow products Set');
             }
         } else {
+            Log::info('APRIL_HOOK get deal flow', ['$this->productRows' => $this->productRows]);
 
             // if(!empty($this->currentBaseDeal['ID'])){
             // if(!empty($this->currentBaseDeal['ID'])){
@@ -725,6 +726,8 @@ class EventDocumentService
 
     protected function getDealProductRows($rows, $dealId)
     {
+        Log::info('APRIL_HOOK getDealProductRows', ['rows' => $rows]);
+
         // "cells": {
         //     "general": [
         //         {
