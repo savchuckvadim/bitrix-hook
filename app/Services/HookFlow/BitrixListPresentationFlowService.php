@@ -751,6 +751,7 @@ class BitrixListPresentationFlowService
 
 
 
+            Log::channel('telegram')->error('APRIL_HOOK currentItemList', ['perspectItem' => $perspectItem]);
 
 
 
@@ -780,6 +781,7 @@ class BitrixListPresentationFlowService
                 }
                 // array_push($fieldsData, $currentDataField);
             }
+            Log::channel('telegram')->error('APRIL_HOOK currentItemList', ['currentItemList' => $currentItemList]);
 
             if ($currentItemList) {
                 BitrixListService::updateItem(

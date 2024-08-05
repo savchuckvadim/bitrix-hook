@@ -686,6 +686,8 @@ class EventDocumentService
             $this->currentBaseDeal,
             'base'
         );
+        Log::channel('telegram')->error('APRIL_HOOK get deal flow', ['currentPresDeal' => $this->currentPresDeal]);
+
         if (!empty($this->currentPresDeal) && !empty($this->currentPresDeal['ID'])) {
             $this->getEntityFlow(
                 true,
