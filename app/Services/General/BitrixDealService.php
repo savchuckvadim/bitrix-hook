@@ -357,7 +357,7 @@ class BitrixDealService
             }
         }
         Log::info('DEAL TEST', [
-            'resultCategoryDatas' => $resultCategoryDatas,
+            // 'resultCategoryDatas' => $resultCategoryDatas,
             'eventType' => $eventType,
             'eventAction' => $eventAction,
             'categoryPrephicks' => $categoryPrephicks,
@@ -467,12 +467,13 @@ class BitrixDealService
 
                 if ($stage['code'] == $stagePrephicks . '_' . $stageSuphicks) {
                     $targetStageBtxId = $stage['bitrixId'];
-                    // Log::channel('telegram')->info('DEAL TEST', [
-                    //     'stageCode' => $stage['code'],
-                    //     'stage' => $stage,
-                    //     'eventType' => $eventType,
+                    Log::channel('telegram')->info('DEAL TEST', [
+                        'stageCode' => $stage['code'],
+                        'eventType' => $eventType,
 
-                    // ]);
+                        'stage' => $stage,
+                     
+                    ]);
                 }
                 // }
             }
