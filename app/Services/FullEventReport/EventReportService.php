@@ -535,6 +535,8 @@ class EventReportService
                 }
             }
         }
+        Log::channel('telegram')->info('HOOK TMC SESSION GET', ['isSuccessSale' => $this->isSuccessSale]);
+        Log::channel('telegram')->info('HOOK sale', ['sale' => $data['sale']]);
 
         if ($this->isSuccessSale) {
             if (!empty($data['sale'])) {
@@ -1388,7 +1390,12 @@ class EventReportService
                 'unplanned'
             );
         }
+        Log::info('HOOK TEST currentBtxDeals', [
+            'currentBtxDeals' => $currentBtxDeals,
+            '$this->currentPresDeal' => $this->currentPresDeal,
 
+
+        ]);
         if (!empty($this->currentPresDeal)) {  //report pres deal
             sleep(1);
             $this->getEntityFlow(

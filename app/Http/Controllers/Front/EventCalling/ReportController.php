@@ -284,6 +284,58 @@ class ReportController extends Controller
                 !empty($data['domain']) &&
                 !empty($data['currentTask'])
             ) {
+                $select = [
+                    'ID',
+                    'TITLE',
+                    'UF_CRM_PRES_COUNT',
+                    'CATEGORY_ID',
+                    // 'COMPANY_ID',
+                    'STAGE_ID',
+                    // 'XO_NAME',
+                    // 'XO_DATE',
+                    // 'XO_RESPONSIBLE',
+                    // 'XO_CREATED',
+                    // 'NEXT_PRES_PLAN_DATE',
+                    // 'LAST_PRES_PLAN_DATE',
+                    // 'LAST_PRES_DONE_DATE',
+                    // 'LAST_PRES_PLAN_RESPONSIBLE',
+                    // 'LAST_PRES_DONE_RESPONSIBLE',
+
+                    'UF_CRM_PRES_COMMENTS',
+                    // 'MANAGER_OP',
+                    // 'MANAGER_TMC',
+                    // 'MANAGER_OS',
+                    // 'MANAGER_EDU',
+                    // 'CALL_NEXT_DATE',
+                    // 'CALL_NEXT_NAME',
+                    // 'CALL_LAST_DATE',
+                    // 'GO_PLAN',
+                    'UF_CRM_OP_HISTORY',
+                    'UF_CRM_OP_MHISTORY',
+                    // 'OP_WORK_STATUS',
+                    // 'OP_PROSPECTS_TYPE',
+                    // 'OP_EFIELD_FAIL_REASON',
+                    // 'OP_FAIL_COMMENTS',
+                    // 'OP_NORESULT_REASON',
+                    // 'OP_CLIENT_STATUS',
+                    // 'OP_PROSPECTS',
+                    // 'OP_CLIENT_TYPE',
+                    // 'OP_CONCURENTS',
+                    // 'OP_CATEGORY',
+                    // 'OP_SMART_COMPANY_ID',
+                    // 'OP_SMART_ID',
+                    // 'OP_SMART_LID',
+                    // 'OP_SMART_LIDS',
+                    // 'OFFER_SUM',
+                    'UF_CRM_TO_BASE_SALES',
+                    'UF_CRM_TO_XO_SALES',
+                    'UF_CRM_TO_PRESENTATION_SALES',
+                    'TO_BASE_TMC',
+                    'TO_PRESENTATION_TMC',
+                    'TO_BASE_SERVICE',
+                    'UF_CRM_OP_CURRENT_STATUS',
+
+                ];
                 $responsibleId = 1;
                 $currentBaseDeal = null;               //базовая сделка в задаче всегда должна быть одна
                 $currentPresentationDeal = null;               // сделка презентации из задачи
@@ -508,13 +560,7 @@ class ReportController extends Controller
                                         'RESPONSIBLE_ID' => $responsibleId,
                                         '!=STAGE_ID' => ['C' . $currenBaseCategoryBtxId . ':WON', 'C' . $currenBaseCategoryBtxId . ':LOSE', 'C' . $currenBaseCategoryBtxId . ':APOLOGY']
                                     ],
-                                    'select' => [
-                                        'ID',
-                                        'TITLE',
-                                        'UF_CRM_PRES_COUNT',
-                                        'STAGE_ID',
-
-                                    ]
+                                    'select' => $select
 
                                 ];
 
@@ -543,13 +589,7 @@ class ReportController extends Controller
                                         'RESPONSIBLE_ID' => $responsibleId,
                                         '!=STAGE_ID' => ['C' . $currentPresentCategoryBtxId . ':LOSE', 'C' . $currentPresentCategoryBtxId . ':APOLOGY']
                                     ],
-                                    'select' => [
-                                        'ID',
-                                        'TITLE',
-                                        'UF_CRM_PRES_COUNT',
-                                        'STAGE_ID',
-
-                                    ]
+                                    'select' => $select
                                 ];
 
                                 // sleep(1);
@@ -568,13 +608,7 @@ class ReportController extends Controller
                                                 '!=STAGE_ID' => ['C' . $currentPresentCategoryBtxId . ':LOSE', 'C' . $currentPresentCategoryBtxId . ':APOLOGY'],
                                                 'UF_CRM_TO_BASE_SALES' => $currentBaseDeal['ID']
                                             ],
-                                            'select' => [
-                                                'ID',
-                                                'TITLE',
-                                                'UF_CRM_PRES_COUNT',
-                                                'STAGE_ID',
-
-                                            ]
+                                            'select' => $select
                                         ];
 
 
@@ -604,13 +638,7 @@ class ReportController extends Controller
                                         'RESPONSIBLE_ID' => $responsibleId,
                                         '!=STAGE_ID' => ['C' . $currentXOCategoryBtxId . ':LOSE', 'C' . $currentXOCategoryBtxId . ':APOLOGY']
                                     ],
-                                    'select' => [
-                                        'ID',
-                                        'TITLE',
-                                        'UF_CRM_PRES_COUNT',
-                                        'STAGE_ID',
-
-                                    ]
+                                    'select' => $select
                                 ];
 
                                 sleep(1);
@@ -640,13 +668,7 @@ class ReportController extends Controller
                                         'RESPONSIBLE_ID' => $responsibleId,
                                         '!=STAGE_ID' => ['C' . $currenBaseCategoryBtxId . ':WON', 'C' . $currenBaseCategoryBtxId . ':LOSE', 'C' . $currenBaseCategoryBtxId . ':APOLOGY']
                                     ],
-                                    'select' => [
-                                        'ID',
-                                        'TITLE',
-                                        'UF_CRM_PRES_COUNT',
-                                        'STAGE_ID',
-
-                                    ]
+                                    'select' => $select
 
                                 ];
 
