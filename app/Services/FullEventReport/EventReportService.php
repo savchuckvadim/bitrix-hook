@@ -536,7 +536,6 @@ class EventReportService
             }
         }
         Log::channel('telegram')->info('HOOK TMC SESSION GET', ['isSuccessSale' => $this->isSuccessSale]);
-        Log::channel('telegram')->info('HOOK sale', ['sale' => $data['sale']]);
 
         if ($this->isSuccessSale) {
             if (!empty($data['sale'])) {
