@@ -29,7 +29,9 @@ class ReportController extends Controller
                 'placement' => null,
                 'presentation' => null,
                 'domain' => null,
-                'departament' => null
+                'departament' => null,
+                'sale' => null,
+                'contact' => null
 
             ];
             $isFullData = true;
@@ -71,6 +73,9 @@ class ReportController extends Controller
                 $data['sale'] = $request->sale;
             } else {
                 $isFullData = false;
+            }
+            if (isset($request->contact)) {
+                $data['contact'] = $request->contact;
             }
             if ($isFullData) {
                 // $service = new EventReportService($data);

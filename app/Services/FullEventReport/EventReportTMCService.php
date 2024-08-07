@@ -307,7 +307,17 @@ class EventReportTMCService
         if (!empty($data['report']['description'])) {
             $this->comment  = $data['report']['description'];
         }
-
+        if (!empty($data['contact'])) {
+            if (!empty($data['contact']['name'])) {
+                $this->comment =  $this->comment . "\n" . "ФИО Контактного лица: " . $data['contact']['name'];
+            }
+            if (!empty($data['contact']['phone'])) {
+                $this->comment =  $this->comment . "\n" . "Телефон Контактного лица: " . $data['contact']['phone'];
+            }
+            if (!empty($data['contact']['email'])) {
+                $this->comment =  $this->comment . "\n" . "E-mail Контактного лица: " . $data['contact']['email'];
+            }
+        }
         if (!empty($data['report']['noresultReason'])) {
             $this->noresultReason  = $data['report']['noresultReason']['current'];
         }
@@ -1439,7 +1449,7 @@ class EventReportTMCService
             //     $currentBtxDeals
             // );
             $currentPlanType = 'plan';
-            if( $this->isExpired){
+            if ($this->isExpired) {
                 $currentPlanType = 'expired';
             }
             $flowResult =  BitrixDealFlowService::flow( //создает или обновляет сделку
