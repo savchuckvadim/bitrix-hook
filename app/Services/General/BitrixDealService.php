@@ -453,9 +453,11 @@ class BitrixDealService
 
             if ($group == 'tmc') {
                 $stagePrephicks = 'sales_tmc';
-                if ( $eventAction == 'plan' && $eventType == 'presentation') {
-                        $stageSuphicks = 'pres_in_progress';
-                    
+                if ($eventAction == 'plan' && $eventType == 'presentation') {
+                    $stageSuphicks = 'pres_in_progress';
+                }
+                if ($eventAction == 'done' && $eventType == 'presentation') {
+                    $stageSuphicks = 'success';
                 }
             }
         }
@@ -473,7 +475,7 @@ class BitrixDealService
                         'eventType' => $eventType,
 
                         'stage' => $stage,
-                     
+
                     ]);
                 }
                 // }
