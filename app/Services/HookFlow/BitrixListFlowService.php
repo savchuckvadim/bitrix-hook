@@ -43,8 +43,8 @@ class BitrixListFlowService
         $noresultReason,
         $failReason,
         $failType,
-        $dealIds
-
+        $dealIds,
+        $currentBaseDealId
 
     ) {
         try {
@@ -55,6 +55,8 @@ class BitrixListFlowService
             $eventActionName = 'Запланирован';
             $evTypeName = 'Звонок';
             $nextCommunication = $deadline;
+            $isUniqPresPlan = false;
+            $isUniqPresReport = false;
 
 
             $crmValue = ['n0' => 'CO_' . $companyId];
@@ -93,6 +95,15 @@ class BitrixListFlowService
                 $eventActionName = 'Состоялся';
                 if ($eventType == 'presentation') {
                     $eventActionName = 'Состоялась';
+
+                    $isUniqPresReport = true;
+                }
+            } else    if ($eventAction == 'plan') {
+
+
+                if ($eventType == 'presentation') {
+
+                    $isUniqPresPlan = true;
                 }
             } else    if ($eventAction == 'nodone') {
                 $nextCommunication = null;
@@ -292,7 +303,6 @@ class BitrixListFlowService
             $fieldsData = [
                 'NAME' => $evTypeName . ' ' . $eventActionName
             ];
-            Log::channel('telegram')->info('HOOK TST', ['fieldsData' => $fieldsData]);
 
             foreach ($bitrixLists as $bitrixList) {
                 if ($bitrixList['type'] !== 'presentation') {
@@ -328,6 +338,67 @@ class BitrixListFlowService
                         $bitrixList['bitrixId'],
                         $fieldsData
                     );
+                }
+            }
+
+
+
+            //for uniq pres
+            if ($resultStatus === 'result' || $resultStatus === 'new') {
+
+                if ($isUniqPresPlan || $isUniqPresReport) {
+                    $xoFields[9]['list']['code'] = 'presentation_uniq';
+
+                    if ($isUniqPresPlan) {
+
+                        $code = $companyId . '_' . $currentBaseDealId . '_plan';
+                    }
+
+                    if ($isUniqPresReport) {
+                        $code = $companyId . '_' . $currentBaseDealId . '_done';
+                    }
+
+                    foreach ($bitrixLists as $bitrixList) {
+                        if ($bitrixList['type'] === 'kpi') {
+
+                            foreach ($xoFields as $xoValue) {
+                                $currentDataField = [];
+                                $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $xoValue['code'];
+                                $btxId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, null);
+                                if (!empty($xoValue)) {
+
+
+
+                                    if (!empty($xoValue['value'])) {
+                                        $fieldsData[$btxId] = $xoValue['value'];
+                                        $currentDataField[$btxId] = $xoValue['value'];
+                                    }
+
+                                    if (!empty($xoValue['list'])) {
+                                        $btxItemId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, $xoValue['list']['code']);
+                                        $currentDataField[$btxId] = [
+
+                                            $btxItemId =>  $xoValue['list']['code']
+                                        ];
+
+                                        $fieldsData[$btxId] =  $btxItemId;
+                                    }
+                                }
+                                // array_push($fieldsData, $currentDataField);
+                            }
+
+                            BitrixListService::setItem(
+                                $hook,
+                                $bitrixList['bitrixId'],
+                                $fieldsData,
+                                $code
+                            );
+                        }
+                    }
+
+                   
+
+                  
                 }
             }
         } catch (\Throwable $th) {

@@ -1562,6 +1562,7 @@ class EventReportService
     {
 
         $currentDealIds = [];
+        $currentBaseDealId = null;
 
         if (!empty($this->currentBtxDeals)) {
 
@@ -1573,7 +1574,14 @@ class EventReportService
             }
         }
 
+        if (!empty($this->currentBaseDeal)) {
 
+                if (!empty($this->currentBaseDeal['ID'])) {
+                    $currentBaseDealId = $this->currentBaseDeal['ID'];
+              
+                }
+            
+        }
 
         $reportEventType = $this->currentReportEventType;
         $reportEventTypeName = $this->currentReportEventName;
@@ -1623,7 +1631,8 @@ class EventReportService
                         $this->noresultReason,
                         $this->failReason,
                         $this->failType,
-                        $currentDealIds
+                        $currentDealIds,
+                        $currentBaseDealId
 
                     )->onQueue('low-priority');
                 }
@@ -1658,7 +1667,8 @@ class EventReportService
                     $this->noresultReason,
                     $this->failReason,
                     $this->failType,
-                    $currentDealIds
+                    $currentDealIds,
+                    $currentBaseDealId
 
 
                 )->onQueue('low-priority');
@@ -1681,7 +1691,8 @@ class EventReportService
                 $this->noresultReason,
                 $this->failReason,
                 $this->failType,
-                $currentDealIds
+                $currentDealIds,
+                $currentBaseDealId
 
             )->onQueue('low-priority');
         }
@@ -1708,7 +1719,8 @@ class EventReportService
                 $this->noresultReason,
                 $this->failReason,
                 $this->failType,
-                $currentDealIds
+                $currentDealIds,
+                $currentBaseDealId
 
             )->onQueue('low-priority');
         }

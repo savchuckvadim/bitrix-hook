@@ -513,7 +513,8 @@ class BitrixCallingColdService
                 null, //$noresultReason = null,
                 null, //$failReason = null,
                 null, //$failType = null,
-                $currentDealsIds
+                $currentDealsIds,
+                null //current base deal id for uniq pres count
 
             )->onQueue('low-priority');
             // BitrixListFlowService::getListsFlow(

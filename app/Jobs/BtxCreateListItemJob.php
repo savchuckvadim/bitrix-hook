@@ -39,6 +39,7 @@ class BtxCreateListItemJob implements ShouldQueue
     protected $failReason;
     protected $failType;
     protected $dealIds;
+    protected $currentBaseDealId;
 
     public function __construct(
         $hook,
@@ -59,7 +60,8 @@ class BtxCreateListItemJob implements ShouldQueue
         $noresultReason = null,
         $failReason = null,
         $failType = null,
-        $dealIds
+        $dealIds,
+        $currentBaseDealId = null
     ) {
         $this->hook =  $hook;
         $this->bitrixLists =  $bitrixLists;
@@ -82,8 +84,7 @@ class BtxCreateListItemJob implements ShouldQueue
         $this->failReason = $failReason;
         $this->failType = $failType;
         $this->dealIds = $dealIds;
-
-        
+        $this->currentBaseDealId = $currentBaseDealId;
     }
 
     /**
@@ -112,9 +113,10 @@ class BtxCreateListItemJob implements ShouldQueue
             $this->noresultReason,
             $this->failReason,
             $this->failType,
-            $this->dealIds
+            $this->dealIds,
+            $this->currentBaseDealId
 
-            
+
 
         );
     }
