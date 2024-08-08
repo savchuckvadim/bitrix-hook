@@ -431,6 +431,8 @@ class BitrixDealService
         } else {
             if ($eventAction == 'done' || $eventAction == 'success') {
                 $stageSuphicks = 'success';
+
+                
             } else if ($eventAction == 'expired') {
                 $stageSuphicks = 'pending';
             } else if ($eventAction == 'fail') {

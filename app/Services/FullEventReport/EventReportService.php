@@ -1365,6 +1365,29 @@ class EventReportService
             $this->relationSalePresDeal
         );
         $reportDeals = $flowResult['dealIds'];
+
+
+        if (!empty($this->currentTMCDeal) && $this->resultStatus === 'result' && $this->currentReportEventType === 'presentation') {
+
+            BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
+                $this->hook,
+                [$this->currentTMCDeal],
+                $this->portalDealData,
+                'tmc',
+                $this->entityType,
+                $this->entityId,
+                $this->currentReportEventType, // xo warm presentation, 
+                $this->currentReportEventName,
+                $this->currentPlanEventName,
+                'done', //$currentReportStatus,  // plan done expired fail success
+                $this->planResponsibleId,
+                $this->isResult,
+                '$fields',
+                $this->relationSalePresDeal
+            );
+            //обновляет сделку тмц в успех если есть tmc deal и если през состоялась
+        }
+
         //todo plan flow
 
         // if ($this->currentPlanEventType == 'warm') {
@@ -1576,11 +1599,9 @@ class EventReportService
 
         if (!empty($this->currentBaseDeal)) {
 
-                if (!empty($this->currentBaseDeal['ID'])) {
-                    $currentBaseDealId = $this->currentBaseDeal['ID'];
-              
-                }
-            
+            if (!empty($this->currentBaseDeal['ID'])) {
+                $currentBaseDealId = $this->currentBaseDeal['ID'];
+            }
         }
 
         $reportEventType = $this->currentReportEventType;
