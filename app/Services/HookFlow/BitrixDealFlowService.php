@@ -221,7 +221,7 @@ class BitrixDealFlowService
 
         $fieldsData = [
             'CATEGORY_ID' => $categoryId,
-            'STAGE_ID' => "C" . $categoryId . ':' . 'WON',
+            'STAGE_ID' => "C" . $categoryId . ':' . 'PRES_PLAN',
             // "COMPANY_ID" => $entityId,
             // 'ASSIGNED_BY_ID' => $responsibleId
             'UF_CRM_TO_BASE_SALES' => $currentBaseDeal['ID'],

@@ -402,6 +402,7 @@ class BitrixDealService
         // sales_tmc_plan
         // sales_tmc_pending
         // sales_tmc_pres_in_progress
+        // sales_tmc_pres_plan
         // sales_tmc_success
         // sales_tmc_fail
         $targetStageBtxId = null;
