@@ -289,11 +289,18 @@ class ReportKPIController extends Controller
                 ]
             );
         } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
             return APIOnlineController::getError(
                 $th->getMessage(),
                 [
                     'list' => $this->portalKPIList,
-                    '$batchResults' => $batchResults
+                    '$batchResults' => $batchResults,
+                    'error' => $errorMessages 
                 ]
             );
         }
