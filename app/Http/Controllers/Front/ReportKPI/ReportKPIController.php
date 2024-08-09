@@ -232,7 +232,11 @@ class ReportKPIController extends Controller
                     foreach ($eventActionTypeField['items'] as $actionType) { //презентация звонок
                         foreach ($eventActionField['items'] as $action) { //plan, done
                             $actionData = $this->getActionWithTypeData($actionType, $action);
-                            array_push($currentActionsData, $actionData);
+                            if (!empty($actionData)) {
+                                if (!empty($actionData['actionTypeItem']) && !empty($actionData['actionItem'])) {
+                                    array_push($currentActionsData, $actionData);
+                                }
+                            }
                         }
                     }
                 }
@@ -300,7 +304,7 @@ class ReportKPIController extends Controller
                 [
                     'list' => $this->portalKPIList,
                     '$batchResults' => $batchResults,
-                    'error' => $errorMessages ,
+                    'error' => $errorMessages,
                     'currentActionsData' => $currentActionsData
                 ]
             );
