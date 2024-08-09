@@ -310,7 +310,7 @@ class ReportKPIController extends Controller
             // Отправляем batch запрос
             $batchResults = $batchService->sendBatchRequest($commands);
             $report = $batchService->processBatchResults($departament, $currentActionsData, $batchResults);
-            $report = $this->getReportWithMonoCall($report);
+            // $report = $this->getReportWithMonoCall($report);
             // $report = $this->cleanReport($report);
             // $totalReport = $this->addTotalAndMediumKPI($report);
 
