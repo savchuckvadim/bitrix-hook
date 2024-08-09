@@ -365,7 +365,7 @@ class ReportKPIController extends Controller
                 // case 'expired':
             case 'done':
                 // case 'pound':
-            case 'act_noresult_fail':
+                // case 'act_noresult_fail':
                 if (
                     $actionType['code'] == 'xo' ||
                     $actionType['code'] == 'call' ||
@@ -386,7 +386,7 @@ class ReportKPIController extends Controller
                     $actionType['code'] == 'presentation_uniq'
                 ) {
                     $innerCode = $actionType['code'] . '_' . $action['code'];
-                    $result['name'] = $actionType['name'] . $action['name'];
+                    $result['name'] = $actionType['name'] . ' ' . $this->getFeminineForm($action['name']);
                     $result['actionTypeItem'] = $actionType;
                     $result['actionItem'] = $action;
                     $result['innerCode'] = $innerCode;
