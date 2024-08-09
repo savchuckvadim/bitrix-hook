@@ -57,8 +57,9 @@ class BitrixBatchService
                 'kpi' => [],
                 'callings' => []
             ];
-            foreach ($currentActionsData as $actId => $actionTitle) {
-                $kpiKey = 'user_' . $user['ID'] . '_action_' . $actId;
+            foreach ($currentActionsData as $currentAction) {
+                $code = $currentAction['code'];
+                $kpiKey = "user_{$user['ID']}_action_{$code}";
                 $count = 0;
                 foreach ($batchResponseData as $cmdKey => $cmdResult) {
                     if ($cmdKey == $kpiKey) {
@@ -67,8 +68,8 @@ class BitrixBatchService
                 }
 
                 array_push($userKPI['kpi'], [
-                    'id' => $actId,
-                    'action' =>  $actionTitle,
+                    'id' => $code,
+                    'action' =>  $currentAction,
                     'count' =>  $count,
                     'items' => []
                 ]);
