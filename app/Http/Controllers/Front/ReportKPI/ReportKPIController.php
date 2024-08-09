@@ -65,6 +65,95 @@ class ReportKPIController extends Controller
     {
     }
 
+    // public  function getReport(Request $request)
+    // {
+    //     $callingsTotalCount = [
+    //         'all' => null,
+    //         '30' => 30,
+    //         '60' => 60,
+    //         '180' => 180
+    //     ];
+    //     $errors = [];
+    //     $responses = [];
+    //     $result = [];
+
+    //     try {
+    //         $domain = $request['domain'];
+    //         $userFieldId = $request['filters']['userFieldId'];
+    //         $userIds = $request['filters']['userIds'];
+    //         $departament = $request['filters']['departament'];
+
+
+    //         $actionFieldId = $request['filters']['actionFieldId'];
+    //         $currentActionsData = $request['filters']['currentActions'];
+    //         $dateFieldId = $request['filters']['dateFieldId'];
+    //         $dateFrom = $request['filters']['dateFrom'];
+    //         $dateTo = $request['filters']['dateTo'];
+
+    //         $dateFieldForHookFrom = ">DATE_CREATE";
+    //         $dateFieldForHookTo = "<DATE_CREATE";
+    //         // $currentActions = [];
+    //         // $lists = [];
+
+    //         // if ($currentActionsData) {
+    //         //     foreach ($currentActionsData as $id => $title) {
+    //         //         array_push($currentActions, $id);
+    //         //     }
+    //         // }
+
+
+
+    //         $listId = $this->portalKPIList['bitrixId'];
+
+    //         $listsResponses = [];
+
+    //         // Подготовка команд для batch запроса
+
+    //         $commands = [];
+    //         foreach ($departament as $user) {
+    //             $userId = $user['ID'];
+    //             $userName = $user['LAST_NAME'] . ' ' . $user['NAME'];
+
+    //             foreach ($currentActionsData as $actionId => $actionTitle) {
+    //                 // Формируем ключ команды, используя ID пользователя и ID действия для уникальности
+    //                 $cmdKey = "user_{$userId}_action_{$actionId}";
+
+    //                 // Добавляем команду в массив команд
+    //                 $commands[$cmdKey] =
+    //                     "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "&filter[$userFieldId]=$userId&filter[$actionFieldId]=$actionId&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
+    //             }
+    //         }
+    //         $batchService = new BitrixBatchService($this->hook);
+    //         //lists
+    //         // Отправляем batch запрос
+    //         $batchResults = $batchService->sendBatchRequest($commands);
+    //         $report = $batchService->processBatchResults($departament, $currentActionsData, $batchResults);
+    //         // $report = $this->addVoximplantInReport($dateFrom, $dateTo, $report);
+    //         // $report = $this->cleanReport($report);
+    //         $totalReport = $this->addTotalAndMediumKPI($report);
+
+    //         //voximplant
+    //         return APIOnlineController::getSuccess(
+    //             [
+    //                 'commands' => $commands,
+    //                 'report' =>  $report,
+    //                 'total' =>  $totalReport['total'],
+    //                 // 'medium' =>  $totalReport['medium'],
+    //                 // 'getPortalReportData' =>  $getPortalReportData,
+    //                 'listId' =>  $listId,
+    //                 // 'commands' =>  $commands
+
+    //             ]
+    //         );
+    //     } catch (\Throwable $th) {
+    //         return APIOnlineController::getError(
+    //             $th->getMessage(),
+    //             [
+    //                 '$batchResults' => $batchResults
+    //             ]
+    //         );
+    //     }
+    // }
     public  function getReport(Request $request)
     {
         $callingsTotalCount = [
@@ -91,7 +180,7 @@ class ReportKPIController extends Controller
             $dateTo = $request['filters']['dateTo'];
 
             $dateFieldForHookFrom = ">DATE_CREATE";
-            $dateFieldForHookTo = "<DATE_CREATE";
+            $dateFieldForHookTo = "<=DATE_CREATE";
             // $currentActions = [];
             // $lists = [];
 
@@ -104,23 +193,64 @@ class ReportKPIController extends Controller
 
 
             $listId = $this->portalKPIList['bitrixId'];
+            $listFields = $this->portalKPIList['bitrixfields'];
+            $eventActionField = null;
+            $eventActionTypeField = null;
+            $eventResponsibleField = null;
+            $eventDateField = null;
 
+            $actionTypeFieldId = $eventActionTypeField['bitrixCamelId']; //like PROPERTY_2119 
+            $actionFieldId = $eventActionField['bitrixCamelId']; //like PROPERTY_2119 
+            $eventResponsibleFieldId = $eventResponsibleField['bitrixCamelId']; //like PROPERTY_2119 
+            $eventDateFieldId = $eventDateField['bitrixCamelId']; //like PROPERTY_2119 
+
+
+            $currentActionsData = [];
+            foreach ($listFields as $plField) {
+                if ($plField['code'] === 'sales_kpi_event_action') {
+                    $eventActionField = $plField;
+                }
+                if ($plField['code'] === 'sales_kpi_event_type') {
+                    $eventActionTypeField = $plField;
+                }
+                if ($plField['code'] === 'sales_kpi_responsible') {
+                    $eventResponsibleField = $plField;
+                }
+                if ($plField['code'] === 'sales_kpi_plan_date') {
+                    $eventDateField = $plField;
+                }
+            }
+
+            foreach ($eventActionTypeField['items'] as $actionType) { //презентация звонок
+                foreach ($eventActionField['items'] as $action) { //plan, done
+                    $actionData = $this->getActionWithTypeData($actionType, $action);
+                    array_push($currentActionsData, $actionData);
+                }
+            }
             $listsResponses = [];
 
             // Подготовка команд для batch запроса
+         
+      
+        
+
 
             $commands = [];
             foreach ($departament as $user) {
                 $userId = $user['ID'];
                 $userName = $user['LAST_NAME'] . ' ' . $user['NAME'];
 
-                foreach ($currentActionsData as $actionId => $actionTitle) {
+                foreach ($currentActionsData as $currentAction) {
+                    $code = $currentAction['code'];
+                   $actionValuebitrixId = $currentAction['actionItem']['bitrixId'];
+                   $actionTypeValuebitrixId = $currentAction['actionTypeItem']['bitrixId'];
+                    
                     // Формируем ключ команды, используя ID пользователя и ID действия для уникальности
-                    $cmdKey = "user_{$userId}_action_{$actionId}";
+                    $cmdKey = "user_{$userId}_action_{$code}";
 
                     // Добавляем команду в массив команд
                     $commands[$cmdKey] =
-                        "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "&filter[$userFieldId]=$userId&filter[$actionFieldId]=$actionId&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
+                        "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId&filter[$actionTypeFieldId]=$actionTypeValuebitrixId&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
                 }
             }
             $batchService = new BitrixBatchService($this->hook);
@@ -155,6 +285,101 @@ class ReportKPIController extends Controller
         }
     }
 
+    protected function getActionWithTypeData($actionType, $action)
+    {
+        $result = [
+            'name' => '',
+            'actionTypeItem' => null,
+            'actionItem' => null,
+            'innerCode' => '',
+            'code' => ''
+        ];
+        switch ($action['code']) {
+            case 'plan':
+            case 'expired':
+            case 'done':
+            case 'pound':
+            case 'act_noresult_fail':
+                if (
+                    $actionType['code'] == 'xo' ||
+                    $actionType['code'] == 'call' ||
+                    $actionType['code'] == 'call_in_progress' ||
+                    $actionType['code'] == 'call_in_money'
+                ) {
+                    $innerCode = 'call_' . $action['code'];
+                    $result['name'] = 'Звонок ' . $action['name'];
+                    $result['actionTypeItem'] = $actionType;
+                    $result['actionItem'] = $action;
+                    $result['innerCode'] = $innerCode;
+
+                    $code = $actionType['code'] . '_' . $action['code'];
+                    $result['code'] = $code;
+                } else       if (
+
+                    $actionType['code'] == 'presentation' ||
+                    $actionType['code'] == 'presentation_uniq'
+                ) {
+                    $innerCode = $actionType['code'] . '_' . $action['code'];
+                    $result['name'] = $actionType['name'] . $action['name'];
+                    $result['actionTypeItem'] = $actionType;
+                    $result['actionItem'] = $action;
+                    $result['innerCode'] = $innerCode;
+
+                    $code = $actionType['code'] . '_' . $action['code'];
+                    $result['code'] = $code;
+                }
+
+                break;
+                // case 'act_init_send':
+                //     # code...
+                //     break;
+                // case 'act_init_done':
+                //     # code...
+                //     break;
+            case 'act_send':
+                if (
+                    $actionType['code'] == 'ev_offer' ||
+                    $actionType['code'] == 'ev_offer_pres' ||
+                    $actionType['code'] == 'ev_invoice' ||
+                    $actionType['code'] == 'ev_invoice_pres' ||
+                    $actionType['code'] == 'ev_contract'
+                ) {
+                    $code = $actionType['code'] . '_' . $action['code'];
+                    $result['code'] = $code;
+                    $innerCode = $actionType['code'] . '_' . $action['code'];
+                    $result['name'] = $actionType['name'] . $action['name'];
+                    $result['actionTypeItem'] = $actionType;
+                    $result['actionItem'] = $action;
+                    $result['innerCode'] = $innerCode;
+                }
+                break;
+                // case 'act_sign':
+                //     # code...
+                //     break;
+                // case 'act_pay':
+                //     # code...
+                //     break;
+
+            default:
+                # code...
+                break;
+        }
+    }
+    protected function getFeminineForm($actionName)
+    {
+        // Карта преобразования мужских форм в женские
+        $conversionMap = [
+            'Запланирован' => 'Запланирована',
+            'Просрочен' => 'Просрочена',
+            'Состоялся' => 'Состоялась',
+            'Перенос' => 'Перенесена',
+            'Не состоялся' => 'Не состоялась',
+
+            // Добавьте другие преобразования по мере необходимости
+        ];
+
+        return $conversionMap[$actionName] ?? $actionName;
+    }
     protected function addVoximplantInReport($dateFrom, $dateTo, $report)
     {
         $callingsTypes = [
@@ -548,7 +773,7 @@ class ReportKPIController extends Controller
                     'data' =>                [
                         'filter' => $response,
                         'list' => $this->portalKPIList,
-                        'portal' => $this->portal
+                        // 'portal' => $this->portal
 
 
                     ]
