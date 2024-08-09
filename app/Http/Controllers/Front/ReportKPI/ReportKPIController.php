@@ -300,7 +300,8 @@ class ReportKPIController extends Controller
                 [
                     'list' => $this->portalKPIList,
                     '$batchResults' => $batchResults,
-                    'error' => $errorMessages 
+                    'error' => $errorMessages ,
+                    'currentActionsData' => $currentActionsData
                 ]
             );
         }
