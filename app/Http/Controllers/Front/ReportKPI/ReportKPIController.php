@@ -38,7 +38,7 @@ class ReportKPIController extends Controller
         $this->domain = $domain;
 
         $portal = PortalController::getPortal($domain);
-   
+
         if (!empty($portal['data'])) {
             $portal = $portal['data'];
         }
@@ -58,8 +58,6 @@ class ReportKPIController extends Controller
                 }
             }
         }
-
-
     }
 
 
@@ -438,7 +436,7 @@ class ReportKPIController extends Controller
 
     // }
 
-   
+
     // public function getList(Request $request)
     // {
 
@@ -545,13 +543,14 @@ class ReportKPIController extends Controller
             );
 
             return APIOnlineController::getSuccess(
-
                 [
-                    'filter' => $response,
-                    'list' => $this->portalKPIList,
-                    'portal' => $this->portal
+                    'data' =>                [
+                        'filter' => $response,
+                        'list' => $this->portalKPIList,
+                        'portal' => $this->portal
 
 
+                    ]
                 ]
             );
         } catch (\Throwable $th) {
