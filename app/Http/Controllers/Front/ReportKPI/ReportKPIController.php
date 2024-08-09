@@ -265,7 +265,9 @@ class ReportKPIController extends Controller
 
                         // Добавляем команду в массив команд
                         $commands[$cmdKey] =
-                            "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId&filter[$actionTypeFieldId]=$actionTypeValuebitrixId&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
+                            // "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId&filter[$actionTypeFieldId]=$actionTypeValuebitrixId&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
+
+                            "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId&filter[$actionTypeFieldId]=$actionTypeValuebitrixId";
                     }
                 }
             }
