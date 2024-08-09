@@ -206,33 +206,40 @@ class ReportKPIController extends Controller
 
 
             $currentActionsData = [];
-            foreach ($listFields as $plField) {
-                if ($plField['code'] === 'sales_kpi_event_action') {
-                    $eventActionField = $plField;
-                }
-                if ($plField['code'] === 'sales_kpi_event_type') {
-                    $eventActionTypeField = $plField;
-                }
-                if ($plField['code'] === 'sales_kpi_responsible') {
-                    $eventResponsibleField = $plField;
-                }
-                if ($plField['code'] === 'sales_kpi_plan_date') {
-                    $eventDateField = $plField;
+            if (!empty($listFields)) {
+
+                foreach ($listFields as $plField) {
+                    if ($plField['code'] === 'sales_kpi_event_action') {
+                        $eventActionField = $plField;
+                    }
+                    if ($plField['code'] === 'sales_kpi_event_type') {
+                        $eventActionTypeField = $plField;
+                    }
+                    if ($plField['code'] === 'sales_kpi_responsible') {
+                        $eventResponsibleField = $plField;
+                    }
+                    if ($plField['code'] === 'sales_kpi_plan_date') {
+                        $eventDateField = $plField;
+                    }
                 }
             }
 
-            foreach ($eventActionTypeField['items'] as $actionType) { //презентация звонок
-                foreach ($eventActionField['items'] as $action) { //plan, done
-                    $actionData = $this->getActionWithTypeData($actionType, $action);
-                    array_push($currentActionsData, $actionData);
+            if (!empty($eventActionTypeField) && !empty($eventActionTypeField)) {
+                if (!empty($eventActionTypeField['items']) && !empty($eventActionTypeField['items'])) {
+                    foreach ($eventActionTypeField['items'] as $actionType) { //презентация звонок
+                        foreach ($eventActionField['items'] as $action) { //plan, done
+                            $actionData = $this->getActionWithTypeData($actionType, $action);
+                            array_push($currentActionsData, $actionData);
+                        }
+                    }
                 }
             }
             $listsResponses = [];
 
             // Подготовка команд для batch запроса
-         
-      
-        
+
+
+
 
 
             $commands = [];
@@ -240,17 +247,19 @@ class ReportKPIController extends Controller
                 $userId = $user['ID'];
                 $userName = $user['LAST_NAME'] . ' ' . $user['NAME'];
 
-                foreach ($currentActionsData as $currentAction) {
-                    $code = $currentAction['code'];
-                   $actionValuebitrixId = $currentAction['actionItem']['bitrixId'];
-                   $actionTypeValuebitrixId = $currentAction['actionTypeItem']['bitrixId'];
-                    
-                    // Формируем ключ команды, используя ID пользователя и ID действия для уникальности
-                    $cmdKey = "user_{$userId}_action_{$code}";
+                if (!empty($currentActionsData)) {
+                    foreach ($currentActionsData as $currentAction) {
+                        $code = $currentAction['code'];
+                        $actionValuebitrixId = $currentAction['actionItem']['bitrixId'];
+                        $actionTypeValuebitrixId = $currentAction['actionTypeItem']['bitrixId'];
 
-                    // Добавляем команду в массив команд
-                    $commands[$cmdKey] =
-                        "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId&filter[$actionTypeFieldId]=$actionTypeValuebitrixId&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
+                        // Формируем ключ команды, используя ID пользователя и ID действия для уникальности
+                        $cmdKey = "user_{$userId}_action_{$code}";
+
+                        // Добавляем команду в массив команд
+                        $commands[$cmdKey] =
+                            "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId&filter[$actionTypeFieldId]=$actionTypeValuebitrixId&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
+                    }
                 }
             }
             $batchService = new BitrixBatchService($this->hook);
@@ -271,7 +280,8 @@ class ReportKPIController extends Controller
                     // 'medium' =>  $totalReport['medium'],
                     // 'getPortalReportData' =>  $getPortalReportData,
                     'listId' =>  $listId,
-                    // 'commands' =>  $commands
+                    'commands' =>  $commands,
+                    'list' => $this->portalKPIList,
 
                 ]
             );
@@ -279,6 +289,7 @@ class ReportKPIController extends Controller
             return APIOnlineController::getError(
                 $th->getMessage(),
                 [
+                    'list' => $this->portalKPIList,
                     '$batchResults' => $batchResults
                 ]
             );
@@ -364,6 +375,8 @@ class ReportKPIController extends Controller
                 # code...
                 break;
         }
+
+        return $result;
     }
     protected function getFeminineForm($actionName)
     {
