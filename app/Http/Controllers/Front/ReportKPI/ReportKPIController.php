@@ -179,7 +179,7 @@ class ReportKPIController extends Controller
             $dateFrom = $request['filters']['dateFrom'];
             $dateTo = $request['filters']['dateTo'];
 
-            $dateFieldForHookFrom = ">DATE_CREATE";
+            $dateFieldForHookFrom = ">=DATE_CREATE";
             $dateFieldForHookTo = "<=DATE_CREATE";
             // $currentActions = [];
             // $lists = [];
@@ -267,7 +267,7 @@ class ReportKPIController extends Controller
                         $commands[$cmdKey] =
                             // "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId&filter[$actionTypeFieldId]=$actionTypeValuebitrixId&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
 
-                            "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "";
+                            "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId&filter[$actionTypeFieldId]=$actionTypeValuebitrixId&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
                     }
                 }
             }
