@@ -700,7 +700,7 @@ class BitrixCallingColdService
                             // "=assignedById" => $userId,
                             // "=CATEGORY_ID" => $currentCategoryBtxId,
                             'COMPANY_ID' => $this->entityId,
-                            "ASSIGNED_BY_ID" => $this->responsibleId,
+                            // "ASSIGNED_BY_ID" => $this->responsibleId,
                             "=STAGE_ID" =>  $includedStages
 
                         ],
@@ -720,7 +720,7 @@ class BitrixCallingColdService
                     foreach ($currentDeals as $bxDeal) {
                         if (!empty($bxDeal)) {
                             if (!empty($bxDeal['ID'])) {
-                                $rand = rand(1, 2);
+                                $rand = 1;
                                 sleep($rand);
                                 BitrixDealService::updateDeal(
                                     $this->hook,
@@ -742,7 +742,7 @@ class BitrixCallingColdService
 
         // ]);
 
-        $rand = rand(1, 2);
+        $rand = 1;
         sleep($rand);
         $flowResult =  BitrixDealFlowService::flow(
             $this->hook,
