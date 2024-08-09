@@ -165,7 +165,7 @@ class ReportKPIController extends Controller
         $errors = [];
         $responses = [];
         $result = [];
-
+        $batchResults = null;
         try {
             $domain = $request['domain'];
             $userFieldId = $request['filters']['userFieldId'];
