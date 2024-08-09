@@ -793,15 +793,63 @@ class ReportKPIController extends Controller
 
         try {
 
-            $response = BitrixListService::getListFieldsGet(
-                $this->hook,
-                $listId
-            );
+            // $response = BitrixListService::getListFieldsGet(
+            //     $this->hook,
+            //     $listId
+            // );
+            $listId = $this->portalKPIList['bitrixId'];
+            $listFields = $this->portalKPIList['bitrixfields'];
+            $eventActionField = null;
+            $eventActionTypeField = null;
+            $eventResponsibleField = null;
+            $eventDateField = null;
 
+
+
+
+            $currentActionsData = [];
+            if (!empty($listFields)) {
+
+                foreach ($listFields as $plField) {
+                    if ($plField['code'] === 'sales_kpi_event_action') {
+                        $eventActionField = $plField;
+                        $actionFieldId = $eventActionField['bitrixCamelId']; //like PROPERTY_2119 
+                    }
+                    if ($plField['code'] === 'sales_kpi_event_type') {
+                        $eventActionTypeField = $plField;
+                        $actionTypeFieldId = $eventActionTypeField['bitrixCamelId']; //like PROPERTY_2119 
+                    }
+                    if ($plField['code'] === 'sales_kpi_responsible') {
+                        $eventResponsibleField = $plField;
+                        $eventResponsibleFieldId = $eventResponsibleField['bitrixCamelId']; //like PROPERTY_2119 
+
+                    }
+                    if ($plField['code'] === 'sales_kpi_plan_date') {
+                        $eventDateField = $plField;
+                        $eventDateFieldId = $eventDateField['bitrixCamelId']; //like PROPERTY_2119 
+
+                    }
+                }
+            }
+
+            if (!empty($eventActionTypeField) && !empty($eventActionTypeField)) {
+                if (!empty($eventActionTypeField['items']) && !empty($eventActionTypeField['items'])) {
+                    foreach ($eventActionTypeField['items'] as $actionType) { //презентация звонок
+                        foreach ($eventActionField['items'] as $action) { //plan, done
+                            $actionData = $this->getActionWithTypeData($actionType, $action);
+                            if (!empty($actionData)) {
+                                if (!empty($actionData['actionTypeItem']) && !empty($actionData['actionItem'])) {
+                                    array_push($currentActionsData, $actionData);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             return APIOnlineController::getSuccess(
                 [
                     'data' =>                [
-                        'filter' => $response,
+                        'filter' => $currentActionsData,
                         'list' => $this->portalKPIList,
                         // 'portal' => $this->portal
 
