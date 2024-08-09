@@ -253,21 +253,55 @@ class ReportKPIController extends Controller
             foreach ($departament as $user) {
                 $userId = $user['ID'];
                 $userName = $user['LAST_NAME'] . ' ' . $user['NAME'];
+                $callingActionTypeFilter = '';
+
 
                 if (!empty($currentActionsData)) {
                     foreach ($currentActionsData as $currentAction) {
+                        $innerCode = $currentAction['innerCode'];
+                        if (strpos($innerCode, 'call') !== false) {
+                            $value = $currentAction['actionTypeItem']['bitrixId'];
+                            $callingActionTypeFilter .= "&filter[$actionTypeFieldId][]=$value";
+                        }
+                    }
+                    foreach ($currentActionsData as $currentAction) {
                         $code = $currentAction['code'];
-                        $actionValuebitrixId = $currentAction['actionItem']['bitrixId'];
-                        $actionTypeValuebitrixId = $currentAction['actionTypeItem']['bitrixId'];
+                        $innerCode = $currentAction['innerCode'];
+                        if (strpos($innerCode, 'call') === false) {  //только не звонки
+                          
 
-                        // Формируем ключ команды, используя ID пользователя и ID действия для уникальности
-                        $cmdKey = "user_{$userId}_action_{$code}";
+                            $actionValuebitrixId = $currentAction['actionItem']['bitrixId'];
+                            $actionTypeValuebitrixId = $currentAction['actionTypeItem']['bitrixId'];
 
-                        // Добавляем команду в массив команд
-                        $commands[$cmdKey] =
-                            // "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId&filter[$actionTypeFieldId]=$actionTypeValuebitrixId&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
+                            // Формируем ключ команды, используя ID пользователя и ID действия для уникальности
+                            $cmdKey = "user_{$userId}_action_{$code}";
 
-                            "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId&filter[$actionTypeFieldId]=$actionTypeValuebitrixId&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
+                            // Добавляем команду в массив команд
+                            $commands[$cmdKey] =
+                                // "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId&filter[$actionTypeFieldId]=$actionTypeValuebitrixId&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
+
+                                "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId&filter[$actionTypeFieldId]=$actionTypeValuebitrixId&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
+                        }
+                    }
+                    foreach ($currentActionsData as $currentAction) {
+                        $code = $currentAction['code'];
+                        if (strpos($code, 'call') !== false) {  //взять только звонок без прогресс и моней но использовать массив типов - всех звонков
+                            $actionValuebitrixId = $currentAction['actionItem']['bitrixId'];
+                            // $actionTypeValuebitrixId = $currentAction['actionTypeItem']['bitrixId'];
+
+                            // Формируем ключ команды, используя ID пользователя и ID действия для уникальности
+                            $cmdKey = "user_{$userId}_action_general{$code}";
+
+
+
+
+                            // Добавляем команду в массив команд
+                            $commands[$cmdKey] = "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID="
+                                . $listId
+                                . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId"
+                                . $callingActionTypeFilter
+                                . "&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
+                        }
                     }
                 }
             }
@@ -276,7 +310,7 @@ class ReportKPIController extends Controller
             // Отправляем batch запрос
             $batchResults = $batchService->sendBatchRequest($commands);
             $report = $batchService->processBatchResults($departament, $currentActionsData, $batchResults);
-            // $report = $this->addVoximplantInReport($dateFrom, $dateTo, $report);
+            $report = $this->getReportWithMonoCall($report);
             // $report = $this->cleanReport($report);
             // $totalReport = $this->addTotalAndMediumKPI($report);
 
@@ -324,9 +358,9 @@ class ReportKPIController extends Controller
         ];
         switch ($action['code']) {
             case 'plan':
-            case 'expired':
+                // case 'expired':
             case 'done':
-            case 'pound':
+                // case 'pound':
             case 'act_noresult_fail':
                 if (
                     $actionType['code'] == 'xo' ||
@@ -375,7 +409,7 @@ class ReportKPIController extends Controller
                     $code = $actionType['code'] . '_' . $action['code'];
                     $result['code'] = $code;
                     $innerCode = $actionType['code'] . '_' . $action['code'];
-                    $result['name'] = $actionType['name'] . $action['name'];
+                    $result['name'] = $actionType['name'];
                     $result['actionTypeItem'] = $actionType;
                     $result['actionItem'] = $action;
                     $result['innerCode'] = $innerCode;
@@ -410,6 +444,33 @@ class ReportKPIController extends Controller
 
         return $conversionMap[$actionName] ?? $actionName;
     }
+
+    // protected function getReportWithMonoCall($report)
+    // {
+    //     $result = [];
+    //     foreach ($report as $uReport) {
+    //         $resulURep = [
+    //             'user' => $uReport['user'],
+    //             'userName' => $uReport['user'],
+    //             'kpi' => []
+    //         ];
+    //         $resultKPI = [];
+    //         $resultCallKPI = [
+    //             'action' => [
+    //             'name' => '',
+    //             'actionTypeItem' => null,
+    //             'actionItem' => null,
+    //             'innerCode' => '',
+    //             'code' => ''
+    //             ],
+    //             'count' => 0,
+    //             'id'
+    //         ];
+    //         foreach ($uReport['kpi'] as $uReport) {
+    //             if($uReport)
+    //         }
+    //     }
+    // }
     protected function addVoximplantInReport($dateFrom, $dateTo, $report)
     {
         $callingsTypes = [
