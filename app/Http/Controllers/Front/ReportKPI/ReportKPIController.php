@@ -293,7 +293,7 @@ class ReportKPIController extends Controller
                                 // $actionTypeValuebitrixId = $currentAction['actionTypeItem']['bitrixId'];
 
                                 // Формируем ключ команды, используя ID пользователя и ID действия для уникальности
-                                $cmdKey = "user_{$userId}_action_general{$code}";
+                                $cmdKey = "user_{$userId}_action_{$code}";
 
 
 
