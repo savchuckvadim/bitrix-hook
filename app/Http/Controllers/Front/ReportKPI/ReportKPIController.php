@@ -199,10 +199,7 @@ class ReportKPIController extends Controller
             $eventResponsibleField = null;
             $eventDateField = null;
 
-            $actionTypeFieldId = $eventActionTypeField['bitrixCamelId']; //like PROPERTY_2119 
-            $actionFieldId = $eventActionField['bitrixCamelId']; //like PROPERTY_2119 
-            $eventResponsibleFieldId = $eventResponsibleField['bitrixCamelId']; //like PROPERTY_2119 
-            $eventDateFieldId = $eventDateField['bitrixCamelId']; //like PROPERTY_2119 
+
 
 
             $currentActionsData = [];
@@ -211,15 +208,21 @@ class ReportKPIController extends Controller
                 foreach ($listFields as $plField) {
                     if ($plField['code'] === 'sales_kpi_event_action') {
                         $eventActionField = $plField;
+                        $actionFieldId = $eventActionField['bitrixCamelId']; //like PROPERTY_2119 
                     }
                     if ($plField['code'] === 'sales_kpi_event_type') {
                         $eventActionTypeField = $plField;
+                        $actionTypeFieldId = $eventActionTypeField['bitrixCamelId']; //like PROPERTY_2119 
                     }
                     if ($plField['code'] === 'sales_kpi_responsible') {
                         $eventResponsibleField = $plField;
+                        $eventResponsibleFieldId = $eventResponsibleField['bitrixCamelId']; //like PROPERTY_2119 
+
                     }
                     if ($plField['code'] === 'sales_kpi_plan_date') {
                         $eventDateField = $plField;
+                        $eventDateFieldId = $eventDateField['bitrixCamelId']; //like PROPERTY_2119 
+
                     }
                 }
             }
