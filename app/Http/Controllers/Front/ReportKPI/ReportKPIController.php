@@ -427,6 +427,19 @@ class ReportKPIController extends Controller
                     $result['code'] = $code;
                     $innerCode = $actionType['code'] . '_' . $action['code'];
                     $result['name'] = $actionType['name'];
+
+                    if (
+                        $actionType['code'] == 'ev_offer' 
+                    ){
+                        $result['name'] = 'КП';
+                    }else   if (
+            
+                        $actionType['code'] == 'ev_offer_pres' 
+                    ){
+                        $result['name'] = 'КП с презентации';
+                    }
+
+
                     $result['actionTypeItem'] = $actionType;
                     $result['actionItem'] = $action;
                     $result['innerCode'] = $innerCode;
