@@ -166,16 +166,18 @@ class ReportKPIController extends Controller
         $responses = [];
         $result = [];
         $batchResults = null;
+        $currentActionsData = [];
+        $actionFieldId = null;
         try {
-            $domain = $request['domain'];
-            $userFieldId = $request['filters']['userFieldId'];
-            $userIds = $request['filters']['userIds'];
+            // $domain = $request['domain'];
+            // $userFieldId = $request['filters']['userFieldId'];
+            // $userIds = $request['filters']['userIds'];
             $departament = $request['filters']['departament'];
 
 
-            $actionFieldId = $request['filters']['actionFieldId'];
-            $currentActionsData = $request['filters']['currentActions'];
-            $dateFieldId = $request['filters']['dateFieldId'];
+            // $actionFieldId = $request['filters']['actionFieldId'];
+            // $currentActionsData = $request['filters']['currentActions'];
+            // $dateFieldId = $request['filters']['dateFieldId'];
             $dateFrom = $request['filters']['dateFrom'];
             $dateTo = $request['filters']['dateTo'];
 
@@ -202,7 +204,7 @@ class ReportKPIController extends Controller
 
 
 
-            $currentActionsData = [];
+           
             if (!empty($listFields)) {
 
                 foreach ($listFields as $plField) {
@@ -387,6 +389,19 @@ class ReportKPIController extends Controller
                 ) {
                     $innerCode = $actionType['code'] . '_' . $action['code'];
                     $result['name'] = $actionType['name'] . ' ' . $this->getFeminineForm($action['name']);
+                    $result['actionTypeItem'] = $actionType;
+                    $result['actionItem'] = $action;
+                    $result['innerCode'] = $innerCode;
+
+                    $code = $actionType['code'] . '_' . $action['code'];
+                    $result['code'] = $code;
+                }else       if (
+
+                   ( $actionType['code'] == 'success' ||
+                    $actionType['code'] == 'fail') &&  $action['code'] !== 'plan'
+                ) {
+                    $innerCode = $actionType['code'] . '_' . $action['code'];
+                    $result['name'] = $actionType['name'];
                     $result['actionTypeItem'] = $actionType;
                     $result['actionItem'] = $action;
                     $result['innerCode'] = $innerCode;
