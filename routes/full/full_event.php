@@ -164,7 +164,7 @@ Route::prefix('full')->group(function () {
                     // "LAST_NAME" => "",
                     // "SECOND_NAME" => ""
                 ],
-                "deadline" => $comedata['name'],
+                "deadline" => $comedata['deadline'],
                 "isPlanned" => true,
                 "name" => $comedata['name']
             ];
