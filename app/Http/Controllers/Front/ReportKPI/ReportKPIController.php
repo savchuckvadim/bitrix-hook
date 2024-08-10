@@ -61,9 +61,7 @@ class ReportKPIController extends Controller
     }
 
 
-    public function getInitReport()
-    {
-    }
+    public function getInitReport() {}
 
     // public  function getReport(Request $request)
     // {
@@ -204,7 +202,7 @@ class ReportKPIController extends Controller
 
 
 
-           
+
             if (!empty($listFields)) {
 
                 foreach ($listFields as $plField) {
@@ -395,10 +393,10 @@ class ReportKPIController extends Controller
 
                     $code = $actionType['code'] . '_' . $action['code'];
                     $result['code'] = $code;
-                }else       if (
+                } else       if (
 
-                   ( $actionType['code'] == 'success' ||
-                    $actionType['code'] == 'fail') &&  $action['code'] !== 'plan'
+                    ($actionType['code'] == 'ev_success' ||
+                        $actionType['code'] == 'ev_fail') &&  $action['code'] !== 'plan'
                 ) {
                     $innerCode = $actionType['code'] . '_' . $action['code'];
                     $result['name'] = $actionType['name'];
@@ -681,9 +679,7 @@ class ReportKPIController extends Controller
         ];
     }
     //protected report inner methods
-    protected function getReportCallings($userId)
-    {
-    }
+    protected function getReportCallings($userId) {}
     // protected function getReportLists(
     //     $domain,
     //     $userFieldId,
