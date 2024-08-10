@@ -12,9 +12,7 @@ class BitrixDealFlowService
 
 {
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
 
 
@@ -99,9 +97,14 @@ class BitrixDealFlowService
                     'CATEGORY_ID' => $currentCategoryData['bitrixId'],
                     'STAGE_ID' => "C" . $currentCategoryData['bitrixId'] . ':' . $targetStageBtxId,
                     "COMPANY_ID" => $entityId,
-                    'ASSIGNED_BY_ID' => $responsibleId
+                    // 'ASSIGNED_BY_ID' => $responsibleId
                 ];
-
+                if (!($currentCategoryData['code'] === 'tmc_base' && $eventType === 'presentation' && $eventAction === 'done')) {
+                    //если данная перебираемая сделка - тмц , при этом событие - сделана презентация
+                    //значит у презернтации была привязана тмц сделка и это она - надо у нее не менять ответственного а толкько закрыть - 
+                    // през по заявке состоялась
+                    $fieldsData['ASSIGNED_BY_ID'] = $responsibleId;
+                }
                 if (!empty($tmcPresRelationDealId)) {
                     if ($eventType === 'presentation' && $eventAction === 'plan') {
                         $fieldsData['UF_CRM_TO_BASE_TMC'] = $tmcPresRelationDealId;
@@ -210,7 +213,7 @@ class BitrixDealFlowService
 
             foreach ($portalDealData['categories'] as $category) {
                 if ($category['code'] == 'tmc_base') {
-                  
+
                     $categoryId = $category['bitrixId'];
                 }
             }
@@ -234,7 +237,7 @@ class BitrixDealFlowService
         ];
 
 
-       $result =  BitrixDealService::updateDeal(
+        $result =  BitrixDealService::updateDeal(
             $hook,
             $currentTmcDealId,
             $fieldsData,
