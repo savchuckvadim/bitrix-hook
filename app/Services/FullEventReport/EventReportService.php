@@ -900,9 +900,9 @@ class EventReportService
         if (!$this->isNew) {
             if ($this->resultStatus !== 'result') {
                 if (!empty($this->noresultReason)) {
-                    if (!empty($noresultReason['code'])) {
+                    if (!empty($this->noresultReason['code'])) {
 
-                        $reportFields['op_noresult_reason'] = $noresultReason['code'];
+                        $reportFields['op_noresult_reason'] = $this->noresultReason['code'];
                     }
                 }
 
@@ -1512,13 +1512,13 @@ class EventReportService
     ) {
 
 
-
-
+        $companyId  = null;
+        $leadId  = null;
+        $currentTaskId = null;
+        $createdTask = null;
         try {
             // Log::channel('telegram')->error('APRIL_HOOK', $this->portal);
-            $companyId  = null;
-            $leadId  = null;
-            $currentTaskId = null;
+          
             if (!empty($this->currentTask)) {
                 if (!empty($this->currentTask['id'])) {
                     $currentTaskId = $this->currentTask['id'];

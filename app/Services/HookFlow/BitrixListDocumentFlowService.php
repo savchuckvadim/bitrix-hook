@@ -18,9 +18,7 @@ class BitrixListDocumentFlowService
 
 
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
 
     //lists flow
@@ -49,7 +47,8 @@ class BitrixListDocumentFlowService
         $suresponsible,
         $companyId,
         $comment,
-        $dealIds
+        $dealIds,
+        $currentBaseDealId = null
         // $workStatus, //inJob
         // $resultStatus,  // result noresult   .. without expired new !
         // $noresultReason,
@@ -192,7 +191,7 @@ class BitrixListDocumentFlowService
             ];
 
             foreach ($bitrixLists as $bitrixList) {
-                if ($bitrixList['type'] !== 'presentation') {
+                if ($bitrixList['type'] === 'history') {
 
                     foreach ($xoFields as $xoValue) {
                         $currentDataField = [];
@@ -219,12 +218,53 @@ class BitrixListDocumentFlowService
                         }
                         // array_push($fieldsData, $currentDataField);
                     }
-               
+
                     BitrixListService::setItem(
                         $hook,
                         $bitrixList['bitrixId'],
                         $fieldsData
                     );
+                }
+            }
+
+            if ($companyId && $currentBaseDealId) {
+                foreach ($bitrixLists as $bitrixList) {
+                    if ($bitrixList['type'] === 'kpi') {
+
+                        foreach ($xoFields as $xoValue) {
+                            $currentDataField = [];
+                            $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $xoValue['code'];
+                            $btxId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, null);
+                            if (!empty($xoValue)) {
+
+
+
+                                if (!empty($xoValue['value'])) {
+                                    $fieldsData[$btxId] = $xoValue['value'];
+                                    $currentDataField[$btxId] = $xoValue['value'];
+                                }
+
+                                if (!empty($xoValue['list'])) {
+                                    $btxItemId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, $xoValue['list']['code']);
+                                    $currentDataField[$btxId] = [
+
+                                        $btxItemId =>  $xoValue['list']['code']
+                                    ];
+
+                                    $fieldsData[$btxId] =  $btxItemId;
+                                }
+                            }
+                            // array_push($fieldsData, $currentDataField);
+                        }
+                        $code = $companyId . '_' . $currentBaseDealId . '_' . $eventType;
+
+                        BitrixListService::setItem(
+                            $hook,
+                            $bitrixList['bitrixId'],
+                            $fieldsData,
+                            $code
+                        );
+                    }
                 }
             }
         } catch (\Throwable $th) {

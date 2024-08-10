@@ -18,9 +18,7 @@ class BitrixListFlowService
 
 
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
 
     //lists flow
@@ -98,6 +96,9 @@ class BitrixListFlowService
 
                     $isUniqPresReport = true;
                 }
+
+
+      
             } else    if ($eventAction == 'plan') {
 
 
@@ -395,10 +396,6 @@ class BitrixListFlowService
                             );
                         }
                     }
-
-                   
-
-                  
                 }
             }
         } catch (\Throwable $th) {
