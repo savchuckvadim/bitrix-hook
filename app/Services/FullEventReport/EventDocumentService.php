@@ -719,8 +719,8 @@ class EventDocumentService
             $this->currentPlanEventTypeName,
             $this->currentPlanEventName,
             'done',  // plan done expired 
-            $this->currentBaseDeal['ASSIGNED_BY_ID'],
-            $this->isResult,
+            $this->responsibleId,
+            true,
             '$fields',
             null, // $relationSalePresDeal
         );
