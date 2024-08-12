@@ -49,7 +49,12 @@ class BitrixListSuccessFlowService
 
             date_default_timezone_set('Europe/Moscow');
             $nowDate = new DateTime();
-
+            Log::channel('telegram')->info('HOOK TST SUCCESS', [
+                'nowDate' => $nowDate,
+                'message' => 'success service',
+    
+    
+            ]);
 
             $evTypeName = 'Продажа';
             $isSuccess = true;
@@ -253,9 +258,14 @@ class BitrixListSuccessFlowService
             $fieldsData = [
                 'NAME' => $evTypeName
             ];
-
+            Log::channel('telegram')->info('HOOK TST SUCCESS', [
+                'xoValue' => $xoFields,
+                'message' => 'success service',
+    
+    
+            ]);
             foreach ($bitrixLists as $bitrixList) {
-                if ($bitrixList['type'] === 'presentation') {
+                if ($bitrixList['type'] === 'kpi') {
 
                     foreach ($xoFields as $xoValue) {
                         $currentDataField = [];
@@ -282,7 +292,12 @@ class BitrixListSuccessFlowService
                         }
                         // array_push($fieldsData, $currentDataField);
                     }
-
+                    Log::channel('telegram')->info('HOOK TST SUCCESS', [
+                        'xoValue' => $xoFields,
+                        'message' => 'success service',
+            
+            
+                    ]);
                     BitrixListService::setItem(
                         $hook,
                         $bitrixList['bitrixId'],

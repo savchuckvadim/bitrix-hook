@@ -95,12 +95,7 @@ class BtxSuccessListItemJob implements ShouldQueue
     {
         $randomNumber = 5;
         sleep($randomNumber);
-        Log::channel('telegram')->info('HOOK TST SUCCESS JOB', [
-            'randomNumber' => $randomNumber,
-            'message' => 'success job',
-
-
-        ]);
+       
         BitrixListSuccessFlowService::getListsFlow(
             $this->hook,
             $this->bitrixLists,
