@@ -1519,7 +1519,7 @@ class EventReportService
         $createdTask = null;
         try {
             // Log::channel('telegram')->error('APRIL_HOOK', $this->portal);
-          
+
             if (!empty($this->currentTask)) {
                 if (!empty($this->currentTask['id'])) {
                     $currentTaskId = $this->currentTask['id'];
@@ -1721,33 +1721,32 @@ class EventReportService
 
 
 
+        if (!$this->isSuccessSale && !$this->isFail) {
+            if ($this->isPlanned) {
+                BtxCreateListItemJob::dispatch(  //запись о планировании и переносе
+                    $this->hook,
+                    $this->bitrixLists,
+                    $planEventType,
+                    $planEventTypeName,
+                    $eventAction,
+                    // $this->stringType,
+                    $this->planDeadline,
+                    $this->planResponsibleId,
+                    $this->planResponsibleId,
+                    $this->planResponsibleId,
+                    $this->entityId,
+                    $planComment,
+                    $this->workStatus['current'],
+                    $this->resultStatus,  // result noresult expired
+                    $this->noresultReason,
+                    $this->failReason,
+                    $this->failType,
+                    $currentDealIds,
+                    $currentBaseDealId
 
-        if ($this->isPlanned) {
-            BtxCreateListItemJob::dispatch(  //запись о планировании и переносе
-                $this->hook,
-                $this->bitrixLists,
-                $planEventType,
-                $planEventTypeName,
-                $eventAction,
-                // $this->stringType,
-                $this->planDeadline,
-                $this->planResponsibleId,
-                $this->planResponsibleId,
-                $this->planResponsibleId,
-                $this->entityId,
-                $planComment,
-                $this->workStatus['current'],
-                $this->resultStatus,  // result noresult expired
-                $this->noresultReason,
-                $this->failReason,
-                $this->failType,
-                $currentDealIds,
-                $currentBaseDealId
-
-            )->onQueue('low-priority');
+                )->onQueue('low-priority');
+            }
         }
-
-
 
 
         if ($this->isSuccessSale || $this->isFail) {
