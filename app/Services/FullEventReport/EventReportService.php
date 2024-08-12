@@ -7,6 +7,7 @@ use App\Http\Controllers\Front\EventCalling\FullEventInitController;
 use App\Http\Controllers\Front\EventCalling\ReportController;
 use App\Http\Controllers\PortalController;
 use App\Jobs\BtxCreateListItemJob;
+use App\Jobs\BtxSuccessListItemJob;
 use App\Services\BitrixTaskService;
 use App\Services\General\BitrixDealService;
 use App\Services\General\BitrixDepartamentService;
@@ -1750,7 +1751,7 @@ class EventReportService
 
 
         if ($this->isSuccessSale || $this->isFail) {
-            BtxCreateListItemJob::dispatch(  //запись о планировании и переносе
+            BtxSuccessListItemJob::dispatch(  //запись о планировании и переносе
                 $this->hook,
                 $this->bitrixLists,
                 $planEventType,

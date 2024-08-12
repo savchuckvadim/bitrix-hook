@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Services\HookFlow\BitrixListFlowService;
+use App\Services\HookFlow\BitrixListSuccessFlowService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -95,7 +96,7 @@ class BtxSuccessListItemJob implements ShouldQueue
         $randomNumber = 5;
         sleep($randomNumber);
 
-        BitrixListFlowService::getListsFlow(
+        BitrixListSuccessFlowService::getListsFlow(
             $this->hook,
             $this->bitrixLists,
             $this->eventType,
