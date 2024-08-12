@@ -1755,7 +1755,7 @@ class EventReportService
                 $this->bitrixLists,
                 $planEventType,
                 $planEventTypeName,
-                $eventAction,
+                'done',
                 // $this->stringType,
                 $this->planDeadline,
                 $this->planResponsibleId,
