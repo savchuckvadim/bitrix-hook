@@ -40,7 +40,7 @@ class MigrateCRMController extends Controller
             $googleData = GoogleInstallController::getData($this->token);
 
             if (!empty($googleData)) {
-                if (!empty($googleData['infoblocks'])) {
+                if (!empty($googleData['clients'])) {
                     $clients = $googleData['clients'];
                 }
             }
