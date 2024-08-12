@@ -205,24 +205,24 @@ Route::prefix('full')->group(function () {
                 $responsibleId,
                 'company' // $from да вроде оно и не нужно
             );
-            // $currentBaseDeals = null;
-            // if (!empty($baseDealSession)) {
-            //     if (!empty($baseDealSession['deals'])) {
-            //         if (!empty($baseDealSession['deals']['currentBaseDeals'])) {
-            //             $currentBaseDeals = $baseDealSession['deals']['currentBaseDeals'];
-            //         }
-            //     }
-            // }
+            $currentBaseDeals = null;
+            if (!empty($baseDealSession)) {
+                if (!empty($baseDealSession['deals'])) {
+                    if (!empty($baseDealSession['deals']['currentBaseDeals'])) {
+                        $currentBaseDeals = $baseDealSession['deals']['currentBaseDeals'];
+                    }
+                }
+            }
 
+            sleep(0.3);
+            Log::info('HOOK TST', [
+                'currentBaseDeals' => $currentBaseDeals,
+                'baseDealSession' => $baseDealSession,
 
-            // Log::info('HOOK TST', [
-            //     'currentBaseDeals' => $currentBaseDeals,
-            //     'baseDealSession' => $baseDealSession,
+                'tmcDealSession' => $tmcDealSession,
+                '$data' => $data
 
-            //     'tmcDealSession' => $tmcDealSession,
-            //     '$data' => $data
-
-            // ]);
+            ]);
 
 
             dispatch(
