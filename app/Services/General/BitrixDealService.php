@@ -308,10 +308,13 @@ class BitrixDealService
 
         $resultCategoryDatas = [];
         $categoryPrephicks = [];
+
         if ($currentDepartamentType === 'sales') {
             if (
+                ($eventType == 'document') ||
                 $eventAction == 'plan' ||
                 ($eventAction == 'done' && $eventType == 'presentation') ||
+
                 $eventAction == 'fail' ||
                 $eventAction == 'success'
             ) {
@@ -364,6 +367,7 @@ class BitrixDealService
         //     // 'currentCategoryData' => "C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'],
         //     // 'isCurrentSearched' => $isCurrentSearched,
         // ]);
+
         return $resultCategoryDatas;
     }
 
