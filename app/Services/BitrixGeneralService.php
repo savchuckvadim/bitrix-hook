@@ -180,17 +180,18 @@ class BitrixGeneralService
     static function updateCompany($hook, $companyId, $fieldsData)
     {
         $resultFields = null;
+        $data = [
+            'id' => $companyId,
+
+            'fields' =>  $fieldsData,
+            'params' =>  ["REGISTER_SONET_EVENT" => "Y"]
+
+        ];
         try {
             $methodSmart = '/crm.company.update.json';
             $url = $hook . $methodSmart;
 
-            $data = [
-                'id' => $companyId,
-
-                'fields' =>  $fieldsData,
-                'params' =>  ["REGISTER_SONET_EVENT" => "Y"]
-
-            ];
+           
 
             $smartFieldsResponse = Http::get($url, $data);
             $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: updateCompany');
@@ -243,6 +244,33 @@ class BitrixGeneralService
 
 
     // general simple entity
+    static function setEntity($hook, $entityType, $fieldsData)
+    {
+        $resultLead = null;
+        try {
+            $methodSmart = '/crm.' . $entityType . '.add.json';
+            $url = $hook . $methodSmart;
+
+            $data = [
+              
+                'fields' =>  $fieldsData
+
+            ];
+
+
+
+            $resultLeadResponse = Http::get($url, $data);
+
+            $resultData = APIBitrixController::getBitrixRespone($resultLeadResponse, 'general service: updateEntity');
+            $result = $resultData;
+
+
+            return $result;
+        } catch (\Throwable $th) {
+            return $resultLead;
+        }
+    }
+
     static function getEntity($hook, $entityType, $entityId, $filter = null, $select = null)
     {
         $resultFields = null;
