@@ -18,9 +18,7 @@ class BitrixListPresentationFlowService
 
 
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
 
     //lists flow
@@ -540,7 +538,6 @@ class BitrixListPresentationFlowService
 
 
 
-            // $fieldsData['NAME'] = $evTypeName . ' ' . $eventActionName;
             foreach ($presentatationReportFields as $prRepValue) {
                 $currentDataField = [];
                 $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $prRepValue['code'];
@@ -584,6 +581,8 @@ class BitrixListPresentationFlowService
                 );
             } else { //это так на всякий случай по идее при репорте не должно нечего создаваться
                 // даже если unplanned
+                $fieldsData['NAME'] = $evTypeName . ' ' . $name;
+
                 BitrixListService::setItem(
                     $hook,
                     $bitrixList['bitrixId'],

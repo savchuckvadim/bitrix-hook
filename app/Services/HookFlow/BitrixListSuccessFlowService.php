@@ -79,11 +79,11 @@ class BitrixListSuccessFlowService
                     'name' => 'Дата',
                     'value' => $nowDate->format('d.m.Y H:i:s'),
                 ],
-                [
-                    'code' => 'name',
-                    'name' => 'Название',
-                    'value' => $evTypeName
-                ],
+                // [
+                //     'code' => 'name',
+                //     'name' => 'Название',
+                //     'value' => $evTypeName
+                // ],
                 [
                     'code' => 'event_title',
                     'name' => 'Название',
@@ -130,7 +130,7 @@ class BitrixListSuccessFlowService
                     'name' => 'Тип События',
                     'list' =>  [
                         'code'  => BitrixListSuccessFlowService::getEventType(
-                            $eventType
+                            $isSuccess
                         ),
                         'name' => $eventTypeName,
 
