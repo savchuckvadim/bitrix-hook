@@ -1061,7 +1061,7 @@ class APIBitrixController extends Controller
 
     ) {
 
-
+        $response = null;
         $portal = PortalController::getPortal($domain);
         // Log::info('portal', ['portal' => $portal]);
         $resultCallings = [];

@@ -30,8 +30,9 @@ Route::get('/gsr/crm/{pass}/{domain}/{token}/', function ($pass, $domain, $token
     // ]);
 
     if ($pass == 'nmbrsdntl' && $domain) {
-        return MigrateCRMController::crm($token, $domain);
+        $controller = new  MigrateCRMController($token, $domain);
+        return  $controller->crm();
     } else {
-    return 'yo';
+        return 'yo';
     }
 });

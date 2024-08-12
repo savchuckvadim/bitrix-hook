@@ -22,7 +22,7 @@ class PortalController extends Controller
                 $result = $cachedPortalData;
             } else {
                 $result = APIOnlineController::online('post', 'getportal', $requestPortalData, 'portal');
-                Cache::put($cacheKey, $result, now()->addMinutes(10)); // Кешируем данные портала
+                Cache::put($cacheKey, $result, now()->addMinutes(360)); // Кешируем данные портала
             }
             Log::info('TEST PORTAL GET HOOK', [
                 ['$result' => $result]
