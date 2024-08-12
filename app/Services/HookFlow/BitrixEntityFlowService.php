@@ -292,6 +292,7 @@ class BitrixEntityFlowService
                 }
             }
 
+           
             BitrixGeneralService::updateEntity(
                 $hook,
                 $entityType,

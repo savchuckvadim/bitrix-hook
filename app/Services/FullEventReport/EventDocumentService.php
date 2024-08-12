@@ -640,6 +640,7 @@ class EventDocumentService
             // $this->comment,
             $reportFields
         );
+
     }
 
 
@@ -707,6 +708,22 @@ class EventDocumentService
 
         }
 
+        BitrixDealFlowService::flow( //создает сделку
+            $this->hook,
+            [$this->currentBaseDeal],
+            $this->portalDealData,
+            $this->currentDepartamentType,
+            $this->entityType,
+            $this->entityId,
+            'document', // xo warm presentation, hot moneyAwait
+            $this->currentPlanEventTypeName,
+            $this->currentPlanEventName,
+            'done',  // plan done expired 
+            $this->currentBaseDeal['ASSIGNED_BY_ID'],
+            $this->isResult,
+            '$fields',
+            null, // $relationSalePresDeal
+        );
 
         return true;
     }
