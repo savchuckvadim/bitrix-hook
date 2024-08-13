@@ -416,83 +416,83 @@ class BitrixDealService
         $stageSuphicks = 'plan';
         $stagePrephicks = 'warm';
 
-        if ($eventType !== 'document') {
-            if ($currentCategoryData['code'] === 'sales_base') {
-                $stagePrephicks = 'sales';
 
-                if ($eventAction == 'fail' || $eventAction == 'success') {
-                    $stageSuphicks = $eventAction;
-                } else {
-                    if ($eventType == 'xo') {
-                        $stageSuphicks = 'cold';
-                    } else if ($eventType == 'warm') {
-                        $stageSuphicks = 'warm';
-                    } else if ($eventType == 'presentation') {
-                        $stageSuphicks = 'pres';
-                    } else if ($eventType == 'hot') {
-                        $stageSuphicks = 'in_progress';
-                    } else if ($eventType == 'moneyAwait') {
-                        $stageSuphicks = 'money_await';
-                    }
-                }
+        if ($currentCategoryData['code'] === 'sales_base') {
+            $stagePrephicks = 'sales';
+
+            if ($eventAction == 'fail' || $eventAction == 'success') {
+                $stageSuphicks = $eventAction;
             } else {
-                if ($eventAction == 'done' || $eventAction == 'success') {
-                    $stageSuphicks = 'success';
-                } else if ($eventAction == 'expired') {
-                    $stageSuphicks = 'pending';
-                } else if ($eventAction == 'fail') {
-                    $stageSuphicks = 'fail';
-
-                    if (!$isResult) {
-                        $stageSuphicks = 'noresult';
-                    }
-                }
-
                 if ($eventType == 'xo') {
-                    $stagePrephicks = 'cold';
-                }
-                //  else if ($eventType == 'warm') {
-                //     $stagePrephicks = 'sales';
-                // }
-                else if ($eventType == 'presentation') {
-                    $stagePrephicks = 'spres';
-                }
-
-                if ($group == 'tmc') {
-                    $stagePrephicks = 'sales_tmc';
-                    if ($eventAction == 'plan' && $eventType == 'presentation') {
-                        $stageSuphicks = 'pres_in_progress';
-                    }
-                    if ($eventAction == 'done' && $eventType == 'presentation') {
-                        $stageSuphicks = 'success';
-                    }
+                    $stageSuphicks = 'cold';
+                } else if ($eventType == 'warm') {
+                    $stageSuphicks = 'warm';
+                } else if ($eventType == 'presentation') {
+                    $stageSuphicks = 'pres';
+                } else if ($eventType == 'hot') {
+                    $stageSuphicks = 'in_progress';
+                } else if ($eventType == 'moneyAwait') {
+                    $stageSuphicks = 'money_await';
                 }
             }
-
-            if (!empty($currentCategoryData['stages'])) {
-
-                foreach ($currentCategoryData['stages'] as $stage) {
-
-                    // if ($eventType === 'xo' || $eventType === 'cold') {
-
-                    if ($stage['code'] == $stagePrephicks . '_' . $stageSuphicks) {
-                        $targetStageBtxId = $stage['bitrixId'];
-                        Log::channel('telegram')->info('DEAL TEST', [
-                            'stageCode' => $stage['code'],
-                            'eventType' => $eventType,
-
-                            'stage' => $stage,
-
-                        ]);
-                    }
-                    // }
-                }
-            }
-
-            return $targetStageBtxId;
         } else {
-            return 'sales_offer_create';
+            if ($eventAction == 'done' || $eventAction == 'success') {
+                $stageSuphicks = 'success';
+            } else if ($eventAction == 'expired') {
+                $stageSuphicks = 'pending';
+            } else if ($eventAction == 'fail') {
+                $stageSuphicks = 'fail';
+
+                if (!$isResult) {
+                    $stageSuphicks = 'noresult';
+                }
+            }
+
+            if ($eventType == 'xo') {
+                $stagePrephicks = 'cold';
+            }
+            //  else if ($eventType == 'warm') {
+            //     $stagePrephicks = 'sales';
+            // }
+            else if ($eventType == 'presentation') {
+                $stagePrephicks = 'spres';
+            }
+
+            if ($group == 'tmc') {
+                $stagePrephicks = 'sales_tmc';
+                if ($eventAction == 'plan' && $eventType == 'presentation') {
+                    $stageSuphicks = 'pres_in_progress';
+                }
+                if ($eventAction == 'done' && $eventType == 'presentation') {
+                    $stageSuphicks = 'success';
+                }
+            }
         }
+        if ($eventType !== 'document') {
+            $stagePrephicks = 'sales_';
+            $stageSuphicks = 'offer_create';
+        }
+        if (!empty($currentCategoryData['stages'])) {
+
+            foreach ($currentCategoryData['stages'] as $stage) {
+
+                // if ($eventType === 'xo' || $eventType === 'cold') {
+
+                if ($stage['code'] == $stagePrephicks . '_' . $stageSuphicks) {
+                    $targetStageBtxId = $stage['bitrixId'];
+                    Log::channel('telegram')->info('DEAL TEST', [
+                        'stageCode' => $stage['code'],
+                        'eventType' => $eventType,
+
+                        'stage' => $stage,
+
+                    ]);
+                }
+                // }
+            }
+        }
+
+        return $targetStageBtxId;
     }
 
 
