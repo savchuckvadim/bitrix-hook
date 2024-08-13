@@ -346,6 +346,11 @@ class BitrixDealService
             //     array_push($categoryPrephicks, 'sales_xo');
             // }
         }
+        if  ($eventType == 'document') {
+            array_push($categoryPrephicks, 'sales' . '_base');
+
+
+        }
         $currentCategory = null;
         if (!empty($portalDealData['categories'])) {
 
@@ -560,17 +565,17 @@ class BitrixDealService
         }
 
 
-        // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-        //     'currentDeal' => $currentDeal,
+        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+            'currentDeal' => $currentDeal,
 
 
-        // ]);
+        ]);
 
-        // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-        //     'getIsCanDealStageUpdate' => $result,
+        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+            'getIsCanDealStageUpdate' => $result,
 
 
-        // ]);
+        ]);
         return $result;
     }
 }

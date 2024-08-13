@@ -44,7 +44,19 @@ class BitrixDealFlowService
         //сюда могут при ходить массив текущих сделок и которых есть CATEGORY_ID такой как в portal->deal->category->bitrixId
         //
         $currentDealIds = [];
+        if ($eventType == 'document') {
 
+            Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                'eventType' => $eventType,
+                'currentDepartamentType' => $currentDepartamentType,
+
+            ]);
+
+            Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                'currentBtxDeals' => $currentBtxDeals,
+
+            ]);
+        }
         $currentCategoryDatas =  BitrixDealService::getTargetCategoryData(
             $portalDealData,
             $currentDepartamentType,
@@ -111,6 +123,11 @@ class BitrixDealFlowService
 
                     ];
                 }
+
+                Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                    'fieldsData' => $fieldsData,
+    
+                ]);
                 if (!empty($tmcPresRelationDealId)) {
                     if ($eventType === 'presentation' && $eventAction === 'plan') {
                         $fieldsData['UF_CRM_TO_BASE_TMC'] = $tmcPresRelationDealId;
@@ -156,7 +173,10 @@ class BitrixDealFlowService
 
                     // ]);
                 } else {
-
+                    Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                        'currentDealId' => $currentDealId,
+        
+                    ]);
                     $isCanDealStageUpdate = BitrixDealService::getIsCanDealStageUpdate(
                         $currentDeal, //with ID CATEGORY_ID STAGE_ID
                         $targetStageBtxId,
@@ -164,7 +184,10 @@ class BitrixDealFlowService
                         // $eventType, // xo warm presentation,
                         // $eventAction,  // plan done expired fail
                     );
-
+                    Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                        'isCanDealStageUpdate' => $isCanDealStageUpdate,
+        
+                    ]);
                     if ($isCanDealStageUpdate) {
                         $rand = 1;
                         sleep($rand);

@@ -712,7 +712,7 @@ class EventDocumentService
             $this->hook,
             [$this->currentBaseDeal],
             $this->portalDealData,
-            $this->currentDepartamentType,
+            'sales',
             $this->entityType,
             $this->entityId,
             'document', // xo warm presentation, hot moneyAwait
