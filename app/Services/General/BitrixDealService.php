@@ -346,10 +346,8 @@ class BitrixDealService
             //     array_push($categoryPrephicks, 'sales_xo');
             // }
         }
-        if  ($eventType == 'document') {
+        if ($eventType == 'document') {
             array_push($categoryPrephicks, 'sales' . '_base');
-
-
         }
         $currentCategory = null;
         if (!empty($portalDealData['categories'])) {
@@ -544,18 +542,18 @@ class BitrixDealService
                         // if ($eventType === 'xo' || $eventType === 'cold') {
                         if ("C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'] ==  $currentDeal['STAGE_ID']) {
                             $isCurrentSearched = true;
-                            // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                            //     'isCurrentSearched' => $isCurrentSearched,
-                            //     'stage' => $stage,
-                            //     'currentCategoryData' => $currentCategoryData['code'],
+                            Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                                'isCurrentSearched' => $isCurrentSearched,
+                                'stage' => $stage,
+                                'currentCategoryData' => $currentCategoryData['code'],
 
-                            // ]);
+                            ]);
                         }
-                        // Log::channel('telegram')->info('DEAL TEST', [
-                        //     'bitrixId' => $stage['bitrixId'],
-                        //     'isCurrentSearched' => $isCurrentSearched,
-                        //     'result' => $result,
-                        // ]);
+                        Log::channel('telegram')->info('DEAL TEST', [
+                            'bitrixId' => $stage['bitrixId'],
+                            'isCurrentSearched' => $isCurrentSearched,
+                            'result' => $result,
+                        ]);
                         // }
                     }
                 }
