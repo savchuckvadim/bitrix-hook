@@ -469,7 +469,7 @@ class BitrixDealService
             }
         }
         if ($eventType === 'document') {
-            $stagePrephicks = 'sales_';
+            $stagePrephicks = 'sales';
             $stageSuphicks = 'offer_create';
         }
         if (!empty($currentCategoryData['stages'])) {
