@@ -801,7 +801,9 @@ class EventReportService
                     break;
             }
         }
-
+        Log::channel('telegram')->info('HOOK entity flow', [
+            'isPresentationDone' => $this->isPresentationDone
+        ]);
         //presentation done with unplanned
         if ($this->isPresentationDone) {
 
@@ -961,7 +963,7 @@ class EventReportService
 
 
         //закидываем сформированные комментарии
-        $reportFields['op_mhistory'] = $currentMComments;
+        // $reportFields['op_mhistory'] = $currentMComments;
         // if ($this->isPresentationDone || ($this->isPlanned && $currentPlanEventType == 'presentation')) {
         $reportFields['pres_comments'] = $currentPresComments;
         // }

@@ -80,7 +80,7 @@ class BitrixEntityFlowService
         $currentFieldsForUpdate,
 
     ) {
-        sleep(1);
+        sleep(0.5);
         // Log::channel('telegram')->info('APRIL_HOOK updateCompany', ['$entityFieldsUpdatingContent' => $entityFieldsUpdatingContent]);
         // Log::info('APRIL_HOOK updateCompany', ['$entityFieldsUpdatingContent' => $entityFieldsUpdatingContent]);
 
@@ -693,12 +693,12 @@ class BitrixEntityFlowService
 
 
 
-        // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-        //     'updatedFields' => $updatedFields
-        // ]);
-        // Log::info('HOOK TEST CURRENTENTITY', [
-        //     'updatedFields' => $updatedFields
-        // ]);
+        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+            'updatedFields' => $updatedFields
+        ]);
+        Log::info('HOOK TEST CURRENTENTITY', [
+            'updatedFields' => $updatedFields
+        ]);
         return $updatedFields;
     }
 
