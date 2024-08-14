@@ -651,7 +651,8 @@ class ReportController extends Controller
                                     'select' => $select
                                 ];
 
-                                sleep(1);
+                                $rand = mt_rand(300000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                                usleep($rand);
                                 $allXODeals =   BitrixDealService::getDealList(
                                     $hook,
                                     $getAllXODealsData,
