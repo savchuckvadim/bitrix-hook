@@ -101,7 +101,12 @@ class BitrixListPresentationFlowService
 
 
 
-
+            Log::channel('telegram')->error('APRIL_HOOK', [
+         
+                'code' => $code,
+              
+            
+        ]);
 
 
             if ($eventAction == 'expired') {
@@ -274,6 +279,12 @@ class BitrixListPresentationFlowService
             }
 
             $fieldsData['NAME'] = $evTypeName . ' ' . $name;
+            Log::channel('telegram')->error('APRIL_HOOK pres LIST', [
+         
+                'fieldsData' => $fieldsData,
+              
+            
+        ]);
 
             BitrixListService::setItem(
                 $hook,

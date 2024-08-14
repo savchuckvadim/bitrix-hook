@@ -673,8 +673,8 @@ class EventReportService
 
 
             $this->getListFlow();
-            $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-            usleep($rand);
+            // $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            usleep(1);
             $this->getListPresentationFlow(
                 $currentDealsIds
             );
@@ -1832,7 +1832,13 @@ class EventReportService
         // текущая дата - дата последнего изменения 
         // если была проведена презентация обновляется поле дата проведения презентации
         // все изменения записываются в множественное поле коммент после презентации
-
+        Log::channel('telegram')->error('APRIL_HOOK', [
+         
+                'currentPlanEventType' => $this->currentPlanEventType,
+                'isPlanned' => $this->isPlanned,
+                'isExpired' => $this->isExpired,
+            
+        ]);
 
         if (  //планируется презентация без переносов
             $this->currentPlanEventType == 'presentation' &&
