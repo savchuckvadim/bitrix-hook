@@ -73,10 +73,10 @@ class BitrixListPresentationFlowService
                 }
             }
 
-            // $fieldsData = [
-            //     'NAME' => 'Заявка на презентацию ' . $name,
+            $fieldsData = [
+                'NAME' => 'Презентация ' . $name,
 
-            // ];
+            ];
 
 
 
