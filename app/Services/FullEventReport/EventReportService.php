@@ -673,7 +673,8 @@ class EventReportService
 
 
             $this->getListFlow();
-            sleep(1);
+            $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            usleep($rand);
             $this->getListPresentationFlow(
                 $currentDealsIds
             );
@@ -1180,8 +1181,8 @@ class EventReportService
             );
 
             if (!empty($currentDealId)) {
-                $rand = 0.3;
-                sleep($rand);
+                $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                usleep($rand);
                 $newBaseDeal = BitrixDealService::getDeal(
                     $this->hook,
                     ['id' => $currentDealId]
@@ -1331,7 +1332,8 @@ class EventReportService
                 }
             }
         }
-        sleep(1);
+        $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        usleep($rand);
 
 
         //если был unplanned а потом plan ->
