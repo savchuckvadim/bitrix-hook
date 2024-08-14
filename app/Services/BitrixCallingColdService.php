@@ -761,14 +761,14 @@ class BitrixCallingColdService
         $planDeals = $flowResult['dealIds'];
 
         if (!empty($planDeals)) {
-            foreach ($planDeals as $deal) {
+            foreach ($planDeals as $dealId) {
                 $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                 usleep($rand);
                 BitrixEntityFlowService::coldflow(
                     $this->portal,
                     $this->hook,
                     'deal',
-                    $deal['ID'],
+                    $dealId,
                     'xo', // xo warm presentation,
                     'plan',  // plan done expired 
                     $this->entityFieldsUpdatingContent, //updting fields 
