@@ -191,7 +191,7 @@ class BitrixGeneralService
             $methodSmart = '/crm.company.update.json';
             $url = $hook . $methodSmart;
 
-           
+
 
             $smartFieldsResponse = Http::get($url, $data);
             $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: updateCompany');
@@ -252,7 +252,7 @@ class BitrixGeneralService
             $url = $hook . $methodSmart;
 
             $data = [
-              
+
                 'fields' =>  $fieldsData
 
             ];
@@ -294,8 +294,12 @@ class BitrixGeneralService
             return $resultFields;
         }
     }
-    static function updateEntity($hook, $entityType, $entityId, $fieldsData)
-    {
+    static function updateEntity(
+        $hook,
+        $entityType,
+        $entityId,
+        $fieldsData
+    ) {
         $resultLead = null;
         try {
             $methodSmart = '/crm.' . $entityType . '.update.json';

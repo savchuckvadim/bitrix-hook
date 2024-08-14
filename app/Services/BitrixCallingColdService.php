@@ -131,7 +131,6 @@ class BitrixCallingColdService
                 if ($data['isTmc'] == 'Y') {
                     $this->isTmc = true;
                     $this->currentDepartamentType = 'tmc';
-
                 }
             }
         }
@@ -215,7 +214,8 @@ class BitrixCallingColdService
 
         $workStatus = [
             'id' => 0,
-            'code' => "inJob", 'name' => "В работе"
+            'code' => "inJob",
+            'name' => "В работе"
         ];
         $workStatusController = new BitrixEntityFlowService();
         // $now =  new DateTime();
@@ -429,8 +429,6 @@ class BitrixCallingColdService
         $this->callThemeField = $callThemeField;
         $this->lastCallDateFieldCold = $lastCallDateFieldCold;
         $this->callThemeFieldCold = $callThemeFieldCold;
-
-       
     }
 
 
@@ -478,8 +476,8 @@ class BitrixCallingColdService
                 $this->createColdTask($currentSmartId, $currentDealsIds);
             }
 
-            $rand = rand(1, 3);
-            sleep($rand);
+            $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            usleep($rand);
 
             BitrixEntityFlowService::coldflow(
                 $this->portal,
@@ -493,7 +491,8 @@ class BitrixCallingColdService
             // if ($this->withLists) {
             $workStatus = [
                 'id' => 0,
-                'code' => "inJob", 'name' => "В работе"
+                'code' => "inJob",
+                'name' => "В работе"
             ];
             BtxCreateListItemJob::dispatch(
                 $this->hook,
@@ -690,8 +689,8 @@ class BitrixCallingColdService
                         }
                     }
                 }
-                $rand = rand(1, 2);
-                sleep($rand);
+                $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                usleep($rand);
                 $currentDeals = BitrixDealService::getDealList(
                     $this->hook,
                     [
@@ -720,8 +719,8 @@ class BitrixCallingColdService
                     foreach ($currentDeals as $bxDeal) {
                         if (!empty($bxDeal)) {
                             if (!empty($bxDeal['ID'])) {
-                                $rand = 1;
-                                sleep($rand);
+                                $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                                usleep($rand);
                                 BitrixDealService::updateDeal(
                                     $this->hook,
                                     $bxDeal['ID'],
@@ -761,6 +760,21 @@ class BitrixCallingColdService
         );
         $planDeals = $flowResult['dealIds'];
 
+        if (!empty($planDeals)) {
+            foreach ($planDeals as $deal) {
+                $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                usleep($rand);
+                BitrixEntityFlowService::coldflow(
+                    $this->portal,
+                    $this->hook,
+                    'deal',
+                    $deal['ID'],
+                    'xo', // xo warm presentation,
+                    'plan',  // plan done expired 
+                    $this->entityFieldsUpdatingContent, //updting fields 
+                );
+            }
+        }
 
         return [
             'planDeals' => $planDeals,
@@ -776,11 +790,12 @@ class BitrixCallingColdService
     public function createColdTask(
         $currentSmartItemId,
         $currentDealsItemIds = null
+
     ) {
 
-        $rand = rand(3, 5);
-        sleep($rand);
-
+        $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        usleep($rand);
+        $createdTask = null;
         try {
             // Log::channel('telegram')->error('APRIL_HOOK', $this->portal);
             $companyId  = null;

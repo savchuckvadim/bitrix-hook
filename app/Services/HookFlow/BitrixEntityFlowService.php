@@ -13,9 +13,7 @@ class BitrixEntityFlowService
 
 {
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
     static function coldflow(
         $portal,
         $hook,
@@ -34,6 +32,13 @@ class BitrixEntityFlowService
                 $updatedCompany = BitrixEntityFlowService::updateCompanyCold($hook, $entityId, $entityFieldsUpdatingContent);
             } else if ($entityType == 'lead') {
                 $updatedLead = BitrixEntityFlowService::updateLeadCold($hook, $entityId, $entityFieldsUpdatingContent);
+            } else { //deal
+                BitrixGeneralService::updateEntity(
+                    $hook,
+                    $entityType,
+                    $entityId,
+                    $entityFieldsUpdatingContent,
+                );
             }
 
 
@@ -103,14 +108,14 @@ class BitrixEntityFlowService
 
         try {
             // if ($entityType == 'deal') {
-                // Log::info('HOOK TEST currentBtxDeals', [
-                //     'currentBtxEntity' => $currentBtxEntity,
-                //     'entityType' => $entityType,
-                //     'entityId' => $entityId,
-                //     // 'reportFields' => $reportFields,  
+            // Log::info('HOOK TEST currentBtxDeals', [
+            //     'currentBtxEntity' => $currentBtxEntity,
+            //     'entityType' => $entityType,
+            //     'entityId' => $entityId,
+            //     // 'reportFields' => $reportFields,  
 
 
-                // ]);
+            // ]);
             // }
             if (!empty($portalCompanyData) && !empty($portalCompanyData['bitrixfields'])) {
                 $fields = $portalCompanyData['bitrixfields'];
@@ -257,7 +262,7 @@ class BitrixEntityFlowService
                                     case 'op_invoice_q':
                                     case 'op_invoice_pres_q':
                                     case 'op_invoice_date':
-                                    // case 'pres_count':
+                                        // case 'pres_count':
                                     case 'pres_comments':
                                     case 'op_history':
                                     case 'op_mhistory':
@@ -292,7 +297,7 @@ class BitrixEntityFlowService
                 }
             }
 
-           
+
             BitrixGeneralService::updateEntity(
                 $hook,
                 $entityType,
@@ -570,16 +575,16 @@ class BitrixEntityFlowService
 
 
 
-                            // case 'op_history':
+                                // case 'op_history':
 
-                            //     $stringComment = $nowdate . ' ' . $currentReportEventName . ' ' . $resultStatus;
-                            //     $updatedFields = $this->getCommentsWithEntity(
-                            //         $currentBtxEntity,
-                            //         $pField,
-                            //         $stringComment,
-                            //         $updatedFields,
+                                //     $stringComment = $nowdate . ' ' . $currentReportEventName . ' ' . $resultStatus;
+                                //     $updatedFields = $this->getCommentsWithEntity(
+                                //         $currentBtxEntity,
+                                //         $pField,
+                                //         $stringComment,
+                                //         $updatedFields,
 
-                            //     );
+                                //     );
 
 
                                 break;
