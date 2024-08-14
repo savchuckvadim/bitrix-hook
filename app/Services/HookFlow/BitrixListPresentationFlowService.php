@@ -68,9 +68,13 @@ class BitrixListPresentationFlowService
             }
 
             foreach ($bitrixLists as $bitrixList) {
-                if (!empty($bitrixList['type'] == 'presentation')) {
-                    $presPortalBtxList = $bitrixList;
+                if(!empty($bitrixList['type'])){
+                    if ($bitrixList['type'] == 'presentation') {
+                        $presPortalBtxList = $bitrixList;
+                    }
+
                 }
+              
             }
 
             $fieldsData = [
