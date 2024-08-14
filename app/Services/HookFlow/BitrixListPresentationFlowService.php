@@ -286,12 +286,19 @@ class BitrixListPresentationFlowService
             
         ]);
 
-            BitrixListService::setItem(
+        $responseData = BitrixListService::setItem(
                 $hook,
                 $bitrixList['bitrixId'],
                 $fieldsData,
                 $code
             );
+            Log::channel('telegram')->error('APRIL_HOOK pres list service: setItem', [
+         
+                'responseData' => $responseData,
+              
+            
+        ]);
+
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
