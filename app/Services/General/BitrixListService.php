@@ -48,7 +48,12 @@ class BitrixListService
             if (isset($responseData)) {
                 $result = $responseData;
             }
-
+            Log::channel('telegram')->error('APRIL_HOOK pres list service: setItem', [
+         
+                'responseData' => $responseData,
+              
+            
+        ]);
             return $result;
         } catch (\Throwable $th) {
             return $result;
