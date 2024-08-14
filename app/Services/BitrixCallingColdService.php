@@ -184,8 +184,8 @@ class BitrixCallingColdService
         $currentBtxCompany = null;
         $currentBtxEntity = null;
         if (!empty($data['entityType'])) {
-            $randomNumber = rand(1, 3);
-            sleep($randomNumber);
+            $rand = mt_rand(300000, 1500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            usleep($rand);
             $currentBtxEntity = BitrixGeneralService::getEntity(
                 $this->hook,
                 $data['entityType'],
@@ -452,8 +452,8 @@ class BitrixCallingColdService
             if ($this->isSmartFlow) {
                 $this->getSmartFlow();
             }
-            $rand = 1;
-            sleep($rand);
+            $rand = mt_rand(300000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            usleep($rand);
             if ($this->isDealFlow && $this->portalDealData) {
                 $currentDealsIds = $this->getDealFlow();
                 if (!empty($currentDealsIds)) {
@@ -741,8 +741,9 @@ class BitrixCallingColdService
 
         // ]);
 
-        $rand = 1;
-        sleep($rand);
+        $rand = mt_rand(300000, 1500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        usleep($rand);
+        
         $flowResult =  BitrixDealFlowService::flow(
             $this->hook,
             null, // current btx deals for report
