@@ -68,13 +68,11 @@ class BitrixListPresentationFlowService
             }
 
             foreach ($bitrixLists as $bitrixList) {
-                if(!empty($bitrixList['type'])){
+                if (!empty($bitrixList['type'])) {
                     if ($bitrixList['type'] == 'presentation') {
                         $presPortalBtxList = $bitrixList;
                     }
-
                 }
-              
             }
 
             $fieldsData = [
@@ -106,11 +104,13 @@ class BitrixListPresentationFlowService
 
 
             Log::channel('telegram')->error('APRIL_HOOK', [
-         
+
                 'code' => $code,
-              
-            
-        ]);
+                'getListPresentationPlanFlow' => 'getListPresentationPlanFlow',
+                'presPortalBtxList' => $presPortalBtxList
+
+
+            ]);
 
 
             if ($eventAction == 'expired') {
@@ -284,25 +284,24 @@ class BitrixListPresentationFlowService
 
             $fieldsData['NAME'] = $evTypeName . ' ' . $name;
             Log::channel('telegram')->error('APRIL_HOOK pres LIST', [
-         
-                'fieldsData' => $fieldsData,
-              
-            
-        ]);
 
-        $responseData = BitrixListService::setItem(
+                'fieldsData' => $fieldsData,
+
+
+            ]);
+
+            $responseData = BitrixListService::setItem(
                 $hook,
                 $bitrixList['bitrixId'],
                 $fieldsData,
                 $code
             );
             Log::channel('telegram')->error('APRIL_HOOK pres list service: setItem', [
-         
-                'responseData' => $responseData,
-              
-            
-        ]);
 
+                'responseData' => $responseData,
+
+
+            ]);
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
@@ -395,7 +394,7 @@ class BitrixListPresentationFlowService
             }
 
             foreach ($bitrixLists as $btxList) {
-                if (!empty($btxList['type'] == 'presentation')) {
+                if ($btxList['type'] == 'presentation') {
                     $bitrixList = $btxList;
                 }
             }
