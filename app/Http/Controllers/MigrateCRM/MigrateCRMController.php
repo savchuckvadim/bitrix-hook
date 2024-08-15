@@ -86,7 +86,7 @@ class MigrateCRMController extends Controller
                             'UF_CRM_OP_CATEGORY' => $category['UF_CRM_OP_CATEGORY'],  // ККК ..
                             'UF_CRM_OP_CURRENT_STATUS' => $client['perspect'], 
                             'ASSIGNED_BY_ID' =>  $userId,
-                            'ADDRESS' => $client['name'],
+                            'ADDRESS' => $client['adress'],
                         ];
 
                         $newCompany = BitrixGeneralService::setEntity(
@@ -110,7 +110,13 @@ class MigrateCRMController extends Controller
         } catch (\Throwable $th) {
             return APIOnlineController::getError(
                 $th->getMessage(),
-                null
+                [
+                    'portal' => $this->portal,
+                    'hook' => $this->hook,
+                    'portalBxLists' => $this->portalBxLists,
+                    'portalBxCompany' => $this->portalBxCompany,
+
+                ]
             );
         }
     }
