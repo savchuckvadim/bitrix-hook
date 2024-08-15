@@ -47,67 +47,67 @@ class MigrateCRMController extends Controller
         $googleData = null;
         // try {
 
-            $googleData = GoogleInstallController::getData($this->token);
+        $googleData = GoogleInstallController::getData($this->token);
 
-            if (!empty($googleData)) {
-                if (!empty($googleData['clients'])) {
-                    $clients = $googleData['clients'];
-                }
+        if (!empty($googleData)) {
+            if (!empty($googleData['clients'])) {
+                $clients = $googleData['clients'];
             }
+        }
 
-            if (!empty($clients)) {
+        if (!empty($clients)) {
 
 
-                foreach ($clients as $index => $client) {
-                    if ($index <= 3) {
+            foreach ($clients as $index => $client) {
+                if ($index <= 3) {
 
-                        $fullDepartment = $this->getFullDepartment();
-                        $userId = 1;
-                        if (!empty($fullDepartment)) {
-                            if (!empty($fullDepartment['allUsers'])) {
-                                foreach ($fullDepartment['allUsers'] as $user) {
-                                    if (strpos($client['assigned'], $user['LAST_NAME']) !== false) {
-                                        $userId = $user['ID'];
-                                    }
+                    $fullDepartment = $this->getFullDepartment();
+                    $userId = 1;
+                    if (!empty($fullDepartment)) {
+                        if (!empty($fullDepartment['allUsers'])) {
+                            foreach ($fullDepartment['allUsers'] as $user) {
+                                if (strpos($client['assigned'], $user['LAST_NAME']) !== false) {
+                                    $userId = $user['ID'];
                                 }
                             }
                         }
-                        $perspekt = $this->getCompanyPerspect($client['perspect']);
-                        $concurent = $this->getCompanyConcurent($client['concurent']);
-                        $statusk = $this->getCompanyStatus($client['statusk']);
-                        $category = $this->getCompanyCategory($client['category']);
-
-                        $newClientData = [
-                            'TITLE' => $client['name'],
-                            // 'UF_CRM_OP_WORK_STATUS' => $client['name'],
-                            'UF_CRM_OP_PROSPECTS_TYPE' => $perspekt['UF_CRM_OP_PROSPECTS_TYPE'],
-                            'UF_CRM_OP_CLIENT_STATUS' => $statusk['UF_CRM_OP_CLIENT_STATUS'], //ЧОК ОК
-                            'UF_CRM_OP_SMART_LID' => $client['id'], // сюда записывать id из старой crm
-                            'UF_CRM_OP_CONCURENTS' => $concurent['UF_CRM_OP_CONCURENTS'], // конкуренты
-                            'UF_CRM_OP_CATEGORY' => $category['UF_CRM_OP_CATEGORY'],  // ККК ..
-                            'UF_CRM_OP_CURRENT_STATUS' => $client['perspect'],
-                            'ASSIGNED_BY_ID' =>  $userId,
-                            'ADDRESS' => $client['adress'],
-                        ];
-
-                        $newCompany = BitrixGeneralService::setEntity(
-                            $this->hook,
-                            'company',
-                            $newClientData
-                        );
-
-                        Log::channel()->info('TEST CRM MIGRATE', [
-                            'newCompany' => $newCompany
-                        ]);
                     }
+                    $perspekt = $this->getCompanyPerspect($client['perspect']);
+                    $concurent = $this->getCompanyConcurent($client['concurent']);
+                    $statusk = $this->getCompanyStatus($client['statusk']);
+                    $category = $this->getCompanyCategory($client['category']);
+
+                    $newClientData = [
+                        'TITLE' => $client['name'],
+                        // 'UF_CRM_OP_WORK_STATUS' => $client['name'],
+                        'UF_CRM_OP_PROSPECTS_TYPE' => $perspekt['UF_CRM_OP_PROSPECTS_TYPE'],
+                        'UF_CRM_OP_CLIENT_STATUS' => $statusk['UF_CRM_OP_CLIENT_STATUS'], //ЧОК ОК
+                        'UF_CRM_OP_SMART_LID' => $client['id'], // сюда записывать id из старой crm
+                        'UF_CRM_OP_CONCURENTS' => $concurent['UF_CRM_OP_CONCURENTS'], // конкуренты
+                        'UF_CRM_OP_CATEGORY' => $category['UF_CRM_OP_CATEGORY'],  // ККК ..
+                        'UF_CRM_OP_CURRENT_STATUS' => $client['perspect'],
+                        'ASSIGNED_BY_ID' =>  $userId,
+                        'ADDRESS' => $client['adress'],
+                    ];
+
+                    $newCompany = BitrixGeneralService::setEntity(
+                        $this->hook,
+                        'company',
+                        $newClientData
+                    );
+
+                    Log::channel()->info('TEST CRM MIGRATE', [
+                        'newCompany' => $newCompany
+                    ]);
                 }
             }
+        }
 
 
-            return APIOnlineController::getError(
-                'infoblocks not found',
-                ['clients' => $clients, 'googleData' => $googleData]
-            );
+        return APIOnlineController::getError(
+            'infoblocks not found',
+            ['clients' => $clients, 'googleData' => $googleData]
+        );
         // } catch (\Throwable $th) {
         //     return APIOnlineController::getError(
         //         $th->getMessage(),
@@ -181,7 +181,8 @@ class MigrateCRMController extends Controller
                                 break;
 
                             default:
-                                # code...
+                                $result = ['UF_CRM_' . $pField['bitrixId'] => null];
+
                                 break;
                         }
                     }
