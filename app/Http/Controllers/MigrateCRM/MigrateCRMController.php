@@ -74,8 +74,8 @@ class MigrateCRMController extends Controller
                         }
                         $perspekt = $this->getCompanyPerspect($client['perspect']);
                         $concurent = $this->getCompanyConcurent($client['concurent']);
-                        $statusk = $this->getCompanyConcurent($client['statusk']);
-                        $category = $this->getCompanyConcurent($client['category']);
+                        $statusk = $this->getCompanyStatus($client['statusk']);
+                        $category = $this->getCompanyCategory($client['category']);
 
                         $newClientData = [
                             'TITLE' => $client['name'],
