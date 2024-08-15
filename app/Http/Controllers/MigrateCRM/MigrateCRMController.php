@@ -87,7 +87,7 @@ class MigrateCRMController extends Controller
                         'UF_CRM_OP_CONCURENTS' => $concurent['UF_CRM_OP_CONCURENTS'], // конкуренты
                         'UF_CRM_OP_CATEGORY' => $category['UF_CRM_OP_CATEGORY'],  // ККК ..
                         'UF_CRM_OP_CURRENT_STATUS' => $client['perspect'],
-                        'UF_CRM_OP_PROSPECTS' => $prognoz['UF_CRM_OP_CONCURENTS'],
+                        'UF_CRM_OP_PROSPECTS' => $prognoz['UF_CRM_OP_PROSPECTS'],
                         'UF_CRM_OP_CONTACTS' => $contacts['UF_CRM_OP_CONTACTS'],
 
                         'ASSIGNED_BY_ID' =>  $userId,
