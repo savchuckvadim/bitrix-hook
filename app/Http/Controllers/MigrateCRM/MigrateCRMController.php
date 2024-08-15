@@ -45,7 +45,7 @@ class MigrateCRMController extends Controller
         $result = null;
         $clients = [];
         $googleData = null;
-        try {
+        // try {
 
             $googleData = GoogleInstallController::getData($this->token);
 
@@ -108,20 +108,20 @@ class MigrateCRMController extends Controller
                 'infoblocks not found',
                 ['clients' => $clients, 'googleData' => $googleData]
             );
-        } catch (\Throwable $th) {
-            return APIOnlineController::getError(
-                $th->getMessage(),
-                [
-                    // 'portal' => $this->portal,
-                    // 'hook' => $this->hook,
-                    // 'portalBxLists' => $this->portalBxLists,
+        // } catch (\Throwable $th) {
+        //     return APIOnlineController::getError(
+        //         $th->getMessage(),
+        //         [
+        //             // 'portal' => $this->portal,
+        //             // 'hook' => $this->hook,
+        //             // 'portalBxLists' => $this->portalBxLists,
 
 
-                    'portalBxCompany' => $this->portalBxCompany,
-                    'googleData' => $googleData,
-                ]
-            );
-        }
+        //             'portalBxCompany' => $this->portalBxCompany,
+        //             'googleData' => $googleData,
+        //         ]
+        //     );
+        // }
     }
 
     protected function getCompanyConcurent($garusConcurent)
