@@ -81,7 +81,7 @@ class MigrateCRMController extends Controller
                             'TITLE' => $client['name'],
                             // 'UF_CRM_OP_WORK_STATUS' => $client['name'],
                             'UF_CRM_OP_PROSPECTS_TYPE' => $perspekt['UF_CRM_OP_PROSPECTS_TYPE'],
-                            'UF_CRM_OP_CLIENT_STATUS' => $statusk['UF_CRM_OP_CURRENT_STATUS'], //ЧОК ОК
+                            'UF_CRM_OP_CLIENT_STATUS' => $statusk['UF_CRM_OP_CLIENT_STATUS'], //ЧОК ОК
                             'UF_CRM_OP_SMART_LID' => $client['id'], // сюда записывать id из старой crm
                             'UF_CRM_OP_CONCURENTS' => $concurent['UF_CRM_OP_CONCURENTS'], // конкуренты
                             'UF_CRM_OP_CATEGORY' => $category['UF_CRM_OP_CATEGORY'],  // ККК ..
