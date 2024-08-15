@@ -44,6 +44,7 @@ class MigrateCRMController extends Controller
     {
         $result = null;
         $clients = [];
+        $googleData = null;
         try {
 
             $googleData = GoogleInstallController::getData($this->token);
@@ -75,7 +76,7 @@ class MigrateCRMController extends Controller
                         $concurent = $this->getCompanyConcurent($client['concurent']);
                         $statusk = $this->getCompanyConcurent($client['statusk']);
                         $category = $this->getCompanyConcurent($client['category']);
-                        
+
                         $newClientData = [
                             'TITLE' => $client['name'],
                             // 'UF_CRM_OP_WORK_STATUS' => $client['name'],
@@ -84,7 +85,7 @@ class MigrateCRMController extends Controller
                             'UF_CRM_OP_SMART_LID' => $client['id'], // сюда записывать id из старой crm
                             'UF_CRM_OP_CONCURENTS' => $concurent['UF_CRM_OP_CONCURENTS'], // конкуренты
                             'UF_CRM_OP_CATEGORY' => $category['UF_CRM_OP_CATEGORY'],  // ККК ..
-                            'UF_CRM_OP_CURRENT_STATUS' => $client['perspect'], 
+                            'UF_CRM_OP_CURRENT_STATUS' => $client['perspect'],
                             'ASSIGNED_BY_ID' =>  $userId,
                             'ADDRESS' => $client['adress'],
                         ];
@@ -111,11 +112,13 @@ class MigrateCRMController extends Controller
             return APIOnlineController::getError(
                 $th->getMessage(),
                 [
-                    'portal' => $this->portal,
-                    'hook' => $this->hook,
-                    'portalBxLists' => $this->portalBxLists,
-                    'portalBxCompany' => $this->portalBxCompany,
+                    // 'portal' => $this->portal,
+                    // 'hook' => $this->hook,
+                    // 'portalBxLists' => $this->portalBxLists,
 
+
+                    'portalBxCompany' => $this->portalBxCompany,
+                    'googleData' => $googleData,
                 ]
             );
         }
@@ -332,7 +335,7 @@ class MigrateCRMController extends Controller
     {
 
         $pFields =  $this->portalBxCompany['bitrixfields'];
-    
+
         $result = null;
         foreach ($pFields as $pField) {
             if ($pField['code'] === 'op_prospects_type') {
@@ -378,10 +381,10 @@ class MigrateCRMController extends Controller
                                 break;
 
                             default:
-                            if ($pItem['code'] === 'op_prospects_good') {
-                                $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
-                            }
-                            break;
+                                if ($pItem['code'] === 'op_prospects_good') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
                         }
                     }
                 }
