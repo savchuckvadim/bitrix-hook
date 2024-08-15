@@ -48,7 +48,8 @@ class BitrixListDocumentFlowService
         $companyId,
         $comment,
         $dealIds,
-        $currentBaseDealId = null
+        $currentBaseDealId = null,
+        $nowDate = null
         // $workStatus, //inJob
         // $resultStatus,  // result noresult   .. without expired new !
         // $noresultReason,
@@ -59,8 +60,11 @@ class BitrixListDocumentFlowService
     ) {
         try {
 
-            date_default_timezone_set('Europe/Moscow');
-            $nowDate = new DateTime();
+            if (!$nowDate) {
+                date_default_timezone_set('Europe/Moscow');
+                $nowDate = new DateTime();
+                $nowDate->format('d.m.Y H:i:s');
+            }
 
             // $eventActionName = 'Запланирован';
             // $evTypeName = 'Звонок';
@@ -83,7 +87,7 @@ class BitrixListDocumentFlowService
                 [
                     'code' => 'event_date',
                     'name' => 'Дата',
-                    'value' => $nowDate->format('d.m.Y H:i:s'),
+                    'value' => $nowDate,
                 ],
                 // [
                 //     'code' => 'name',

@@ -1,0 +1,83 @@
+Холодный звонок	event_type	xo	XO
+Звонок	event_type	call	CALL
+Презентация	event_type	presentation	PRESENTATION
+Презентация (уникальная)	event_type	presentation_uniq	PRESENTATION_UNIQ
+Информация	event_type	info	INFO
+Приглашение на семинар	event_type	seminar	SEMINAR
+Звонок по решению	event_type	call_in_progress	CALL_IN_PROGRESS
+Звонок по оплате	event_type	call_in_money	CALL_IN_MONEY
+Входящий звонок	event_type	come_call	COME_CALL
+Заявка с сайта	event_type	site	SITE
+Коммерческое Предложение	event_type	ev_offer	EV_OFFER
+Счет	event_type	ev_invoice	EV_INVOICE
+Коммерческое Предложение после презентации	event_type	ev_offer_pres	EV_OFFER_PRES
+Счет после презентации	event_type	ev_invoice_pres	EV_INVOICE_PRES
+Договор	event_type	ev_contract	EV_CONTRACT
+Поставка	event_type	ev_supply	EV_SUPPLY
+Продажа	event_type	ev_success	EV_SUCCESS
+Отказ	event_type	ev_fail	EV_FAIL
+
+
+
+Запланирован	event_action	plan
+Просрочен	event_action	expired
+Состоялся	event_action	done
+Перенос	event_action	pound
+Не состоялся	event_action	act_noresult_fail
+Заявка отправлена	event_action	act_init_send
+Заявка принята	event_action	act_init_done
+Отправлен	event_action	act_send
+Подписан	event_action	act_sign
+Оплачен	event_action	act_pay
+
+
+
+В работе	op_work_status	op_status_in_work
+На долгий период	op_work_status	op_status_in_long
+Продажа	op_work_status	op_status_success
+В решении	op_work_status	op_status_in_progress
+В оплате	op_work_status	op_status_money_await
+Отказ	op_work_status	op_status_fail
+
+
+
+Перспективная	op_prospects_type	op_prospects_good
+Нет перспектив	op_prospects_type	op_prospects_nopersp
+Гарант/Запрет	op_prospects_type	op_prospects_garant
+Покупает ГО	op_prospects_type	op_prospects_go
+Чужая территория	op_prospects_type	op_prospects_territory
+Бухприх	op_prospects_type	op_prospects_acountant
+Аутсорсинг	op_prospects_type	op_prospects_autsorc
+Несамостоятельная организация	op_prospects_type	op_prospects_depend
+Недозвон	op_prospects_type	op_prospects_nophone
+Компания не существует	op_prospects_type	op_prospects_company
+Отказ	op_prospects_type	op_prospects_fail
+
+
+не было времени	op_fail_reason	fail_notime
+конкуренты - привыкли	op_fail_reason	c_habit
+конкуренты - оплачено	op_fail_reason	c_prepay
+конкуренты - цена	op_fail_reason	c_price
+слишком дорого	op_fail_reason	to_expensive
+слишком дешево	op_fail_reason	to_cheap
+нет денег	op_fail_reason	nomoney
+не видят надобности	op_fail_reason	noneed
+лпр против	op_fail_reason	lpr
+ключевой сотрудник против	op_fail_reason	employee
+не хотят общаться	op_fail_reason	fail_off
+
+
+Да	op_result_status	op_call_result_yes
+Нет	op_result_status	op_call_result_no
+
+
+Секретарь 	op_noresult_reason	secretar
+Недозвон - трубку не берут	op_noresult_reason	nopickup
+Недозвон - номер не существует	op_noresult_reason	nonumber
+Занято 	op_noresult_reason	busy
+Перенос - не было времени	op_noresult_reason	noresult_notime
+Контактера нет на месте	op_noresult_reason	nocontact
+Просят оставить свой номер	op_noresult_reason	giveup
+Не интересует, до свидания	op_noresult_reason	bay
+По телефону отвечает не та организация	op_noresult_reason	wrong
+Автоответчик	op_noresult_reason	auto

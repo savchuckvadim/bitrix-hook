@@ -18,9 +18,7 @@ class BitrixListFlowService
 
 
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
 
     //lists flow
@@ -44,13 +42,19 @@ class BitrixListFlowService
         $failReason,
         $failType,
         $dealIds,
-        $currentBaseDealId
+        $currentBaseDealId,
+        $nowDate = null
 
     ) {
         try {
+            if (!$nowDate) {
+                date_default_timezone_set('Europe/Moscow');
+                $nowDate = new DateTime();
+                $nowDate->format('d.m.Y H:i:s');
+            }
 
-            date_default_timezone_set('Europe/Moscow');
-            $nowDate = new DateTime();
+
+
 
             $eventActionName = 'Запланирован';
             $evTypeName = 'Звонок';
@@ -98,9 +102,6 @@ class BitrixListFlowService
 
                     $isUniqPresReport = true;
                 }
-
-
-
             } else    if ($eventAction == 'plan') {
 
 
@@ -130,7 +131,7 @@ class BitrixListFlowService
                 [
                     'code' => 'event_date',
                     'name' => 'Дата',
-                    'value' => $nowDate->format('d.m.Y H:i:s'),
+                    'value' => $nowDate,
                 ],
                 // [
                 //     'code' => 'name',
@@ -398,10 +399,6 @@ class BitrixListFlowService
                             );
                         }
                     }
-
-                   
-
-                  
                 }
             }
         } catch (\Throwable $th) {

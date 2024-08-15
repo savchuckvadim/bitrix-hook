@@ -7,8 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Front\EventCalling\FullEventInitController;
 use App\Http\Controllers\InstallHelpers\GoogleInstallController;
 use App\Http\Controllers\PortalController;
+use App\Jobs\BtxCreateListItemJob;
 use App\Services\BitrixGeneralService;
 use App\Services\General\BitrixDepartamentService;
+use App\Services\HookFlow\BitrixListDocumentFlowService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class MigrateCRMController extends Controller
@@ -18,17 +21,23 @@ class MigrateCRMController extends Controller
     protected $domain;
     protected $hook;
     protected $portal;
+    protected $portalBxLists;
+    protected $portalBxCompany;
+
     public function __construct(
-        $token, $domain
+        $token,
+        $domain
 
     ) {
 
         $this->token = $token;
         $this->domain = $domain;
-        
+
         $portal = PortalController::getPortal($domain);
         $this->portal = $portal['data'];
         $this->hook = PortalController::getHook($domain);
+        $this->portalBxLists = $this->portal['bitrixlists'];
+        $this->portalBxCompany  = $portal['company'];
     }
 
     public function crm()
@@ -36,7 +45,7 @@ class MigrateCRMController extends Controller
         $result = null;
         $clients = [];
         try {
-            
+
             $googleData = GoogleInstallController::getData($this->token);
 
             if (!empty($googleData)) {
@@ -53,24 +62,29 @@ class MigrateCRMController extends Controller
 
                         $fullDepartment = $this->getFullDepartment();
                         $userId = 1;
-                        if(!empty($fullDepartment)){
-                            if(!empty($fullDepartment['allUsers'])){
-                            foreach ($fullDepartment['allUsers'] as $user) {
-                                if (strpos($client['assigned'], $user['LAST_NAME']) !== false) {
-                                    $userId = $user['ID'];
+                        if (!empty($fullDepartment)) {
+                            if (!empty($fullDepartment['allUsers'])) {
+                                foreach ($fullDepartment['allUsers'] as $user) {
+                                    if (strpos($client['assigned'], $user['LAST_NAME']) !== false) {
+                                        $userId = $user['ID'];
+                                    }
                                 }
                             }
-                            } 
                         }
+                        $perspekt = $this->getCompanyPerspect($client['perspect']);
+                        $concurent = $this->getCompanyConcurent($client['concurent']);
+                        $statusk = $this->getCompanyConcurent($client['statusk']);
+                        $category = $this->getCompanyConcurent($client['category']);
+                        
                         $newClientData = [
                             'TITLE' => $client['name'],
-                            'UF_CRM_OP_WORK_STATUS' => $client['name'],
-                            'UF_CRM_OP_PROSPECTS_TYPE' => $client['name'],
-                            'UF_CRM_OP_CLIENT_STATUS' => $client['name'], //ЧОК ОК
-                            'UF_CRM_OP_SMART_LID' => $client['name'], // сюда записывать id из старой crm
-                            'UF_CRM_OP_CONCURENTS' => $client['name'],  // конкуренты
-                            'UF_CRM_OP_CATEGORY' => $client['name'],  // ККК ..
-                            'UF_CRM_OP_WORK_STATUS' => $client['name'],
+                            // 'UF_CRM_OP_WORK_STATUS' => $client['name'],
+                            'UF_CRM_OP_PROSPECTS_TYPE' => $perspekt['UF_CRM_OP_PROSPECTS_TYPE'],
+                            'UF_CRM_OP_CLIENT_STATUS' => $statusk['UF_CRM_OP_CURRENT_STATUS'], //ЧОК ОК
+                            'UF_CRM_OP_SMART_LID' => $client['id'], // сюда записывать id из старой crm
+                            'UF_CRM_OP_CONCURENTS' => $concurent['UF_CRM_OP_CONCURENTS'], // конкуренты
+                            'UF_CRM_OP_CATEGORY' => $category['UF_CRM_OP_CATEGORY'],  // ККК ..
+                            'UF_CRM_OP_CURRENT_STATUS' => $client['perspect'], 
                             'ASSIGNED_BY_ID' =>  $userId,
                             'ADDRESS' => $client['name'],
                         ];
@@ -101,6 +115,274 @@ class MigrateCRMController extends Controller
         }
     }
 
+    protected function getCompanyConcurent($garusConcurent)
+    {
+
+        $pFields =  $this->portalBxCompany['bitrixfields'];
+        $result = null;
+        foreach ($pFields as $pField) {
+            if ($pField['code'] === 'op_concurents') {
+                // k
+                // action
+                // kodex
+                // bitrix
+                // kontur
+                // internet
+                // magazine
+                if (!empty($pField['items'])) {
+                    foreach ($pField['items'] as $pItem) {
+                        switch ($garusConcurent) {
+                            case 'К+':
+                                if ($pItem['code'] === 'k') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+                            case 'Актион':
+                                if ($pItem['code'] === 'action') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+                            case 'Кодекс':
+                                if ($pItem['code'] === 'kodex') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+
+                            case '1С':
+                                if ($pItem['code'] === 'bitrix') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+
+                            case 'Контур':
+                                if ($pItem['code'] === 'kontur') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+                            case 'Интернет':
+                                if ($pItem['code'] === 'internet') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+
+                            case 'Журналы':
+                                if ($pItem['code'] === 'magazine') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+
+                            default:
+                                # code...
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return  $result;
+    }
+    protected function getCompanyCategory($garusCategory)
+    {
+
+        $pFields =  $this->portalBxCompany['bitrixfields'];
+        foreach ($pFields as $pField) {
+            if ($pField['code'] === 'op_category') {
+                // kkk
+                // kk
+                // vip
+                // k
+                // c
+                if (!empty($pField['items'])) {
+                    foreach ($pField['items'] as $pItem) {
+                        switch ($garusCategory) {
+                            case 'ККК':
+                                if ($pItem['code'] === 'kkk') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+                            case 'КК':
+                                if ($pItem['code'] === 'kk') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+                            case 'VIP':
+                                if ($pItem['code'] === 'vip') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+
+                            case 'К':
+                                if ($pItem['code'] === 'k') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+
+                            case 'С':
+                                if ($pItem['code'] === 'c') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+                            case 'М':
+                                if ($pItem['code'] === 'm') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+
+
+                            default:
+                                # code...
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    protected function getCompanyStatus($garusConcurent)
+    {
+
+        $pFields =  $this->portalBxCompany['bitrixfields'];
+        $result = null;
+        foreach ($pFields as $pField) {
+            if ($pField['code'] === 'op_client_status') {
+                // free
+                // chok
+                // nok
+                // ok
+                // stranger_kup
+                // stranger_kupkk
+                // stranger_kgurp
+                // own_kup
+                // own_kupkk
+                // own_kgurp
+                if (!empty($pField['items'])) {
+                    foreach ($pField['items'] as $pItem) {
+                        switch ($garusConcurent) {
+                            case 'ЧОК':
+                                if ($pItem['code'] === 'chok') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+                            case 'НОК':
+                                if ($pItem['code'] === 'nok') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+                            case 'ОК':
+                                if ($pItem['code'] === 'ok') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+
+                            case 'Чужой КУП':
+                                if ($pItem['code'] === 'stranger_kup') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+                            case 'Чужой КУП КК':
+                                if ($pItem['code'] === 'stranger_kupkk') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+                            case 'Чужой КГУ РП':
+                                if ($pItem['code'] === 'stranger_kgurp') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+
+                                break;
+                            case 'Свой КУП':
+                                if ($pItem['code'] === 'own_kup') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+
+                                break;
+                            case 'Свой КУП КК':
+                                if ($pItem['code'] === 'own_kupkk') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+
+                                break;
+                            case 'Свой КГУ РП':
+                                if ($pItem['code'] === 'own_kgurp') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+
+                                break;
+                            default:
+                                if ($pItem['code'] === 'free') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return  $result;
+    }
+    protected function getCompanyPerspect($garusFailReasone)
+    {
+
+        $pFields =  $this->portalBxCompany['bitrixfields'];
+    
+        $result = null;
+        foreach ($pFields as $pField) {
+            if ($pField['code'] === 'op_prospects_type') {
+                // op_prospects_good
+                // op_prospects_nopersp
+                // op_prospects_garant
+                // op_prospects_go
+                // op_prospects_territory
+                // op_prospects_acountant
+                // op_prospects_autsorc
+                // op_prospects_depend
+                // op_prospects_nophone
+                // op_prospects_company
+                // op_prospects_fail
+                if (!empty($pField['items'])) {
+                    foreach ($pField['items'] as $pItem) {
+                        switch ($garusFailReasone) {
+                            case 'Гарант/Запрет':
+                                if ($pItem['code'] === 'op_prospects_garant') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+                            case 'Нет перспектив':
+                                if ($pItem['code'] === 'op_prospects_nopersp') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+                            case 'Покупает ГО':
+                                if ($pItem['code'] === 'op_prospects_go') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+
+                            case 'Чужая территория':
+                                if ($pItem['code'] === 'op_prospects_territory') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+                            case 'Отказ':
+                                if ($pItem['code'] === 'op_prospects_fail') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+
+                            default:
+                            if ($pItem['code'] === 'op_prospects_good') {
+                                $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return   $result;
+    }
     public function getWorkstatusFieldItemValue(
         $portalField, //with items
         $workStatus,
@@ -294,7 +576,7 @@ class MigrateCRMController extends Controller
 
             // записывает в session подготовленную data department по domain
 
-           
+
 
 
             $sessionKey = 'department_' . $this->domain . '_' . $currentMonthDay;
@@ -379,6 +661,209 @@ class MigrateCRMController extends Controller
             return $result;
         } catch (\Throwable $th) {
             return null;
+        }
+    }
+
+    protected function  getContactsField($contacts) //contacts
+    {
+        // op_contacts
+
+    }
+    protected function  getHistoryField($events) //events
+    {
+        //    ОП История (Комментарии)	general	multiple		op_mhistory
+
+    }
+
+    protected function getDateTimeValue($dateValue, $timeValue)
+    {
+
+        $date = Carbon::parse($dateValue);
+        $time = Carbon::parse($timeValue);
+        // Объединяем дату и время
+        $datetime = Carbon::create(
+            $date->year,
+            $date->month,
+            $date->day,
+            $time->hour,
+            $time->minute,
+            $time->second
+        );
+        $formattedDatetime = $datetime->format('d.m.Y H:i:s');
+
+        return $formattedDatetime;
+    }
+
+
+    protected function  getListFlowData($event, $companyId) //events
+    {
+        $flowdata = null;
+        $hook = $this->hook;
+        $bitrixLists = $this->portalBxLists;
+        // $eventType, // xo warm presentation, offer invoice
+        // $eventTypeName, //звонок по решению по оплате
+        // $eventAction,  // plan done //если будет репорт и при этом не было переноса придет done или nodone - типа состоялся или нет
+        // // $eventName,
+        // $deadline,
+        // $created,
+        // $responsible,
+        // $suresponsible,
+        // $companyId,
+        // $comment,
+        // $workStatus, //inJob
+        // $resultStatus,  // result noresult   .. without expired new !
+        // $noresultReason,
+        // $failReason,
+        // $failType,
+        // $dealIds,
+        // $currentBaseDealId
+
+        /**
+         * FOR DOCUMENT FLOW
+         */
+
+        //  $eventType, // ev_invoice,  ev_offer_pres ....
+
+        //  // Коммерческое Предлжение	event_type	ev_offer	EV_OFFER
+        //  // Счет	event_type	ev_invoice	EV_INVOICE
+        //  // Коммерческое Предлжение после презентации	event_type	ev_offer_pres	EV_OFFER_PRES
+        //  // Счет после презентации	event_type	ev_invoice_pres	EV_INVOICE_PRES
+        //  // Договор	event_type	ev_contract	EV_CONTRACT
+        //  // Поставка	event_type	ev_supply	EV_SUPPLY
+        //  $eventTypeName, //Коммерческое Предлжение   Счет после презентации Поставка
+
+
+        //  $eventAction,  // 
+        //  // Отправлен	event_action	act_send	ACT_SEND
+        //  // Подписан	event_action	act_sign	ACT_SIGN
+        //  // Оплачен	event_action	act_pay	ACT_PAY
+        //  // $nowDate,
+        //  $created,
+        //  $responsible,
+        //  $suresponsible,
+        //  $companyId,
+        //  $comment,
+        //  $dealIds,
+        //  $currentBaseDealId = null
+
+        return $flowdata;
+    }
+
+    protected function getListFlow($garusEventType, $companyId, $responsibleId, $comment,)
+    {
+
+        $resultEventType = 'warm';
+        $resultAction = 'done';
+        $isDocumentFlow = false;
+        $resultStatus = 'result';
+        $workStatus = ['code' => 'inJob']; //setAside fail
+        $noresultReason = '';
+        $failReason = '';
+        $nowDate = '';
+        switch ($garusEventType) {
+            case 'Звонок':
+                # code...
+                break;
+            case 'Пред.договоренность':
+                $resultAction = 'plan';
+                break;
+            case 'Заявка на презу':
+                $resultAction = 'plan';
+                $resultEventType = 'presentation';
+                break;
+            case 'Презентация':
+                $resultAction = 'done';
+                $resultEventType = 'presentation';
+                break;
+            case 'Перенос':
+            case 'Повтор':
+                $resultStatus = 'expired';
+                break;
+            case 'Отправлено КП':
+                $resultAction = 'act_send';
+                $resultEventType = 'ev_offer_pres';
+
+                $isDocumentFlow = true;
+                # code...
+                break;
+            case 'Отправлен договор':
+                $resultAction = 'act_send';
+                $resultEventType = 'ev_contract';
+                $isDocumentFlow = true;
+                # code...
+                break;
+            case 'Выставлен счет':
+                $resultAction = 'act_send';
+                $resultEventType = 'ev_invoice_pres';
+                $isDocumentFlow = true;
+                # code...
+                break;
+            case 'Договор подписан':
+                $resultAction = 'act_sign';
+                $resultEventType = 'ev_contract';
+                $isDocumentFlow = true;
+                # code...
+                break;
+            case 'Счет оплачен':
+                $resultAction = 'act_pay';
+                $resultEventType = 'ev_invoice_pres';
+                $isDocumentFlow = true;
+                # code...
+                break;
+            case 'Поставка':
+                $resultAction = 'done';
+                $resultEventType = 'ev_supply';
+                $isDocumentFlow = true;
+                break;
+            case 'Отмена':
+                $resultStatus = 'nodone';
+                $resultStatus = 'noresult';
+                break;
+            default:
+                # code...
+                break;
+        }
+
+        if ($isDocumentFlow) {
+            BitrixListDocumentFlowService::getListsFlow(  //report - отчет по текущему событию
+                $this->hook,
+                $this->portalBxLists,
+                $resultEventType,
+                $garusEventType,
+                $resultAction,  // сделано, отправлено
+                $responsibleId,
+                $responsibleId,
+                $responsibleId,
+                $companyId,
+                $comment,
+                null, // $currentBxDealIds,
+                null, //  $this->currentBaseDeal['ID']
+
+
+            );
+        } else {
+            BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию
+                $this->hook,
+                $this->portalBxLists,
+                $resultEventType,
+                $garusEventType,
+                $resultAction,
+                // $this->stringType,
+                '', //$this->planDeadline,
+                $responsibleId,
+                $responsibleId,
+                $responsibleId,
+                $companyId,
+                $comment,
+                $workStatus,
+                $resultStatus, // result noresult expired,
+                $noresultReason,
+                $failReason,
+                '', // $failType,
+                '', // $currentDealIds,
+                '', // $currentBaseDealId
+
+            )->onQueue('low-priority');
         }
     }
 }
