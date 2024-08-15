@@ -196,6 +196,7 @@ class MigrateCRMController extends Controller
     {
 
         $pFields =  $this->portalBxCompany['bitrixfields'];
+        $result =  null;
         foreach ($pFields as $pField) {
             if ($pField['code'] === 'op_category') {
                 // kkk
@@ -241,13 +242,16 @@ class MigrateCRMController extends Controller
 
 
                             default:
-                                # code...
+                                $result = ['UF_CRM_' . $pField['bitrixId'] => null];
+
                                 break;
                         }
                     }
                 }
             }
         }
+
+        return $result;
     }
     protected function getCompanyStatus($garusConcurent)
     {
