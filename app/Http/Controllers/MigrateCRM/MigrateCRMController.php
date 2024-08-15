@@ -37,7 +37,7 @@ class MigrateCRMController extends Controller
         $this->portal = $portal['data'];
         $this->hook = PortalController::getHook($domain);
         $this->portalBxLists = $this->portal['bitrixLists'];
-        $this->portalBxCompany  = $portal['company'];
+        $this->portalBxCompany  = $this->portal['company'];
     }
 
     public function crm()
