@@ -290,12 +290,16 @@ class MigrateCRMController extends Controller
         $pFields =  $this->portalBxCompany['bitrixfields'];
         $result = null;
         foreach ($pFields as $pField) {
+
             if ($pField['code'] === $fieldCode) {
                 $result = ['UF_CRM_' . $pField['bitrixId'] => null];
 
                 if (!empty($pField['items'])) {
                     foreach ($pField['items'] as $pItem) {
-                        if (trim($garusResultat) == trim($pItem['name'])) {
+                        $normalizedGarusResultat = $this->normalizeString($garusResultat);
+                        $normalizedPItemName = $this->normalizeString($pItem['name']);
+
+                        if ($normalizedGarusResultat == $normalizedPItemName) {
 
                             $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
                         }
@@ -305,6 +309,17 @@ class MigrateCRMController extends Controller
         }
 
         return  $result;
+    }
+
+    protected function normalizeString($string)
+    {
+        // Приведение к нижнему регистру
+        $string = mb_strtolower($string);
+
+        // Удаление пробелов и спецсимволов
+        $string = preg_replace('/[^a-z0-9]/u', '', $string);
+
+        return $string;
     }
     protected function getCompanyConcurent($garusConcurent)
     {
