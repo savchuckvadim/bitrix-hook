@@ -63,76 +63,76 @@ class MigrateCRMController extends Controller
             foreach ($clients as $index => $client) {
                 // if ($index <= 15) {
 
-                    $fullDepartment = $this->getFullDepartment();
-                    $userId = 13; //201 - man savchuk in rostov
-                    if (!empty($fullDepartment)) {
-                        if (!empty($fullDepartment['allUsers'])) {
-                            foreach ($fullDepartment['allUsers'] as $user) {
-                                if (strpos($client['assigned'], $user['LAST_NAME']) !== false) {
-                                    $userId = $user['ID'];
-                                }
+                $fullDepartment = $this->getFullDepartment();
+                $userId = 13; //201 - man savchuk in rostov
+                if (!empty($fullDepartment)) {
+                    if (!empty($fullDepartment['allUsers'])) {
+                        foreach ($fullDepartment['allUsers'] as $user) {
+                            if (strpos($client['assigned'], $user['LAST_NAME']) !== false) {
+                                $userId = $user['ID'];
                             }
                         }
                     }
-                    $perspekt = $this->getCompanyPerspect($client['perspect']);
-                    $concurent = $this->getCompanyConcurent($client['concurent']);
-                    $statusk = $this->getCompanyStatus($client['statusk']);
-                    $category = $this->getCompanyCategory($client['category']);
-                    $prognoz = $this->getCompanyPrognoz($client['prognoz']);
+                }
+                $perspekt = $this->getCompanyPerspect($client['perspect']);
+                $concurent = $this->getCompanyConcurent($client['concurent']);
+                $statusk = $this->getCompanyStatus($client['statusk']);
+                $category = $this->getCompanyCategory($client['category']);
+                $prognoz = $this->getCompanyPrognoz($client['prognoz']);
 
-                    $contacts = $this->getContactsField($client['contacts']);
-                    // $history = $this->getHistoryField($client['events']);
-
-
-                    $workStatus = $this->getCompanyWorkStatust($client['perspect']);
-                    $workResult = $this->getCompanyItemFromName($client['perspect'], 'op_work_result');
-                    $source = $this->getCompanyItemFromName($client['source'], 'op_source_select');
+                $contacts = $this->getContactsField($client['contacts']);
+                // $history = $this->getHistoryField($client['events']);
 
 
-                    $newClientData = [
-                        'TITLE' => $client['name'],
-                        // 'UF_CRM_OP_WORK_STATUS' => $client['name'],
-                        'UF_CRM_OP_PROSPECTS_TYPE' => $perspekt['UF_CRM_OP_PROSPECTS_TYPE'],
-                        'UF_CRM_OP_CLIENT_STATUS' => $statusk['UF_CRM_OP_CLIENT_STATUS'], //ЧОК ОК
-                        'UF_CRM_OP_SMART_LID' => $client['id'], // сюда записывать id из старой crm
-                        'UF_CRM_OP_CONCURENTS' => $concurent['UF_CRM_OP_CONCURENTS'], // конкуренты
+                $workStatus = $this->getCompanyWorkStatust($client['perspect']);
+                $workResult = $this->getCompanyItemFromName($client['perspect'], 'op_work_result');
+                $source = $this->getCompanyItemFromName($client['source'], 'op_source_select');
 
-                        'UF_CRM_OP_CATEGORY' => $category['UF_CRM_OP_CATEGORY'],  // ККК ..
-                        'UF_CRM_OP_CURRENT_STATUS' => $client['perspect'],
-                        'UF_CRM_OP_WORK_STATUS' => $workStatus['UF_CRM_OP_WORK_STATUS'],
 
-                        'UF_CRM_OP_PROSPECTS' => $prognoz['UF_CRM_OP_PROSPECTS'],
-                        'UF_CRM_OP_CONTACTS' => $contacts['UF_CRM_OP_CONTACTS'],
-                        'UF_CRM_OP_HISTORY' =>  $client['commaent'],
-                        'COMMENT' =>  $client['commaent'],
-                        // 'UF_CRM_OP_MHISTORY' =>  $history['UF_CRM_OP_MHISTORY'],
+                $newClientData = [
+                    'TITLE' => $client['name'],
+                    // 'UF_CRM_OP_WORK_STATUS' => $client['name'],
+                    'UF_CRM_OP_PROSPECTS_TYPE' => $perspekt['UF_CRM_OP_PROSPECTS_TYPE'],
+                    'UF_CRM_OP_CLIENT_STATUS' => $statusk['UF_CRM_OP_CLIENT_STATUS'], //ЧОК ОК
+                    'UF_CRM_OP_SMART_LID' => $client['id'], // сюда записывать id из старой crm
+                    'UF_CRM_OP_CONCURENTS' => $concurent['UF_CRM_OP_CONCURENTS'], // конкуренты
 
-                        //new
-                        'UF_CRM_OP_WORK_RESULT' =>  $workResult['UF_CRM_OP_WORK_RESULT'],
-                        'UF_CRM_OP_WORK_RESULT_STRING' =>  $client['perspect'],
-                        'UF_CRM_OP_SOURCE_SELECT' =>  $source['UF_CRM_OP_SOURCE_SELECT'],
-                        'UF_CRM_CLIENT_SOURCE' =>  $client['source'],
-                        'ASSIGNED_BY_ID' =>  $userId,
-                        'ADDRESS' => $client['adress'],
-                    ];
+                    'UF_CRM_OP_CATEGORY' => $category['UF_CRM_OP_CATEGORY'],  // ККК ..
+                    'UF_CRM_OP_CURRENT_STATUS' => $client['perspect'],
+                    'UF_CRM_OP_WORK_STATUS' => $workStatus['UF_CRM_OP_WORK_STATUS'],
 
-                    $newCompanyId = BitrixGeneralService::setEntity(
-                        $this->hook,
-                        'company',
-                        $newClientData
-                    );
+                    'UF_CRM_OP_PROSPECTS' => $prognoz['UF_CRM_OP_PROSPECTS'],
+                    'UF_CRM_OP_CONTACTS' => $contacts['UF_CRM_OP_CONTACTS'],
+                    'UF_CRM_OP_HISTORY' =>  $client['commaent'],
+                    'COMMENT' =>  $client['commaent'],
+                    // 'UF_CRM_OP_MHISTORY' =>  $history['UF_CRM_OP_MHISTORY'],
 
-                    usleep(0.3);
-                    if (!empty($newCompanyId)) {
-                        $newCompany = BitrixGeneralService::getEntity(
-                            $this->hook,
-                            'company',
-                            $newCompanyId
-                        );
-                    }
+                    //new
+                    'UF_CRM_OP_WORK_RESULT' =>  $workResult['UF_CRM_OP_WORK_RESULT'],
+                    'UF_CRM_OP_WORK_RESULT_STRING' =>  $client['perspect'],
+                    'UF_CRM_OP_SOURCE_SELECT' =>  $source['UF_CRM_OP_SOURCE_SELECT'],
+                    'UF_CRM_CLIENT_SOURCE' =>  $client['source'],
+                    'ASSIGNED_BY_ID' =>  $userId,
+                    'ADDRESS' => $client['adress'],
+                ];
+
+                $newCompanyId = BitrixGeneralService::setEntity(
+                    $this->hook,
+                    'company',
+                    $newClientData
+                );
+
+                usleep(0.3);
+                if (!empty($newCompanyId) && !empty($client['events'] )) {
+                    // $newCompany = BitrixGeneralService::getEntity(
+                    //     $this->hook,
+                    //     'company',
+                    //     $newCompanyId
+                    // );
+
                     foreach ($client['events'] as $garusEvent) {
                         // $updatedHistoryField = $this->getHistoryField($garusEvent, $newCompany['UF_CRM_OP_MHISTORY']);
-                        usleep(0.3);
+                        sleep(1);
                         // $updtdCompanyWithHistory = BitrixGeneralService::updateEntity(
                         //     $this->hook,
                         //     'company',
@@ -142,10 +142,10 @@ class MigrateCRMController extends Controller
                         // usleep(0.3);
                         $this->getListFlow($garusEvent, $newCompanyId, $userId);
                     }
-
-                    Log::channel()->info('TEST CRM MIGRATE', [
-                        'newCompany' => $newCompanyId
-                    ]);
+                }
+                Log::channel()->info('TEST CRM MIGRATE', [
+                    'newCompany' => $newCompanyId
+                ]);
                 // }
             }
         }
@@ -1043,7 +1043,7 @@ class MigrateCRMController extends Controller
 
         $date = $this->getDateTimeValue($event['date'], $event['time']);
         $comment = $event['comment'];
-    
+
 
         if ($event['planComment'] !== "" &&  $event['planComment'] !== null && $event['planComment'] !== "NULL"  && $event['planComment'] !== "-") {
 
