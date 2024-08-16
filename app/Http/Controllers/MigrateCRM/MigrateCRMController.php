@@ -109,7 +109,7 @@ class MigrateCRMController extends Controller
                         'UF_CRM_OP_WORK_RESULT' =>  $workResult['UF_CRM_OP_WORK_RESULT'],
                         'UF_CRM_OP_WORK_RESULT_STRING' =>  $client['perspect'],
                         'UF_CRM_OP_SOURCE_SELECT' =>  $source['UF_CRM_OP_SOURCE_SELECT'],
-                        'UF_CRM_OP_SOURCE' =>  $client['source'],
+                        'UF_CRM_SOURCE' =>  $client['source'],
                         'ASSIGNED_BY_ID' =>  $userId,
                         'ADDRESS' => $client['adress'],
                     ];
