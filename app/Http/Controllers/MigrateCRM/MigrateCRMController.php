@@ -47,126 +47,135 @@ class MigrateCRMController extends Controller
         $clients = [];
         $results = [];
         $googleData = null;
-        // try {
+        try {
 
-        $googleData = GoogleInstallController::getData($this->token);
+            $googleData = GoogleInstallController::getData($this->token);
 
-        if (!empty($googleData)) {
-            if (!empty($googleData['clients'])) {
-                $clients = $googleData['clients'];
+            if (!empty($googleData)) {
+                if (!empty($googleData['clients'])) {
+                    $clients = $googleData['clients'];
+                }
             }
-        }
 
-        if (!empty($clients)) {
+            if (!empty($clients)) {
 
 
-            foreach ($clients as $index => $client) {
-                // if ($index <= 15) {
+                foreach ($clients as $index => $client) {
+                    // if ($index <= 15) {
 
-                $fullDepartment = $this->getFullDepartment();
-                $userId = 13; //201 - man savchuk in rostov
-                if (!empty($fullDepartment)) {
-                    if (!empty($fullDepartment['allUsers'])) {
-                        foreach ($fullDepartment['allUsers'] as $user) {
-                            if (strpos($client['assigned'], $user['LAST_NAME']) !== false) {
-                                $userId = $user['ID'];
+                    $fullDepartment = $this->getFullDepartment();
+                    $userId = 13; //201 - man savchuk in rostov
+                    if (!empty($fullDepartment)) {
+                        if (!empty($fullDepartment['allUsers'])) {
+                            foreach ($fullDepartment['allUsers'] as $user) {
+                                if (strpos($client['assigned'], $user['LAST_NAME']) !== false) {
+                                    $userId = $user['ID'];
+                                }
                             }
                         }
                     }
-                }
-                $perspekt = $this->getCompanyPerspect($client['perspect']);
-                $concurent = $this->getCompanyConcurent($client['concurent']);
-                $statusk = $this->getCompanyStatus($client['statusk']);
-                $category = $this->getCompanyCategory($client['category']);
-                $prognoz = $this->getCompanyPrognoz($client['prognoz']);
+                    $perspekt = $this->getCompanyPerspect($client['perspect']);
+                    $concurent = $this->getCompanyConcurent($client['concurent']);
+                    $statusk = $this->getCompanyStatus($client['statusk']);
+                    $category = $this->getCompanyCategory($client['category']);
+                    $prognoz = $this->getCompanyPrognoz($client['prognoz']);
 
-                $contacts = $this->getContactsField($client['contacts']);
-                // $history = $this->getHistoryField($client['events']);
-
-
-                $workStatus = $this->getCompanyWorkStatust($client['perspect']);
-                $workResult = $this->getCompanyItemFromName($client['perspect'], 'op_work_result');
-                $source = $this->getCompanyItemFromName($client['source'], 'op_source_select');
+                    $contacts = $this->getContactsField($client['contacts']);
+                    // $history = $this->getHistoryField($client['events']);
 
 
-                $newClientData = [
-                    'TITLE' => $client['name'],
-                    // 'UF_CRM_OP_WORK_STATUS' => $client['name'],
-                    'UF_CRM_OP_PROSPECTS_TYPE' => $perspekt['UF_CRM_OP_PROSPECTS_TYPE'],
-                    'UF_CRM_OP_CLIENT_STATUS' => $statusk['UF_CRM_OP_CLIENT_STATUS'], //ЧОК ОК
-                    'UF_CRM_OP_SMART_LID' => $client['id'], // сюда записывать id из старой crm
-                    'UF_CRM_OP_CONCURENTS' => $concurent['UF_CRM_OP_CONCURENTS'], // конкуренты
+                    $workStatus = $this->getCompanyWorkStatust($client['perspect']);
+                    $workResult = $this->getCompanyItemFromName($client['perspect'], 'op_work_result');
+                    $source = $this->getCompanyItemFromName($client['source'], 'op_source_select');
 
-                    'UF_CRM_OP_CATEGORY' => $category['UF_CRM_OP_CATEGORY'],  // ККК ..
-                    'UF_CRM_OP_CURRENT_STATUS' => $client['perspect'],
-                    'UF_CRM_OP_WORK_STATUS' => $workStatus['UF_CRM_OP_WORK_STATUS'],
 
-                    'UF_CRM_OP_PROSPECTS' => $prognoz['UF_CRM_OP_PROSPECTS'],
-                    'UF_CRM_OP_CONTACTS' => $contacts['UF_CRM_OP_CONTACTS'],
-                    'UF_CRM_OP_HISTORY' =>  $client['commaent'],
-                    'COMMENT' =>  $client['commaent'],
-                    // 'UF_CRM_OP_MHISTORY' =>  $history['UF_CRM_OP_MHISTORY'],
+                    $newClientData = [
+                        'TITLE' => $client['name'],
+                        // 'UF_CRM_OP_WORK_STATUS' => $client['name'],
+                        'UF_CRM_OP_PROSPECTS_TYPE' => $perspekt['UF_CRM_OP_PROSPECTS_TYPE'],
+                        'UF_CRM_OP_CLIENT_STATUS' => $statusk['UF_CRM_OP_CLIENT_STATUS'], //ЧОК ОК
+                        'UF_CRM_OP_SMART_LID' => $client['id'], // сюда записывать id из старой crm
+                        'UF_CRM_OP_CONCURENTS' => $concurent['UF_CRM_OP_CONCURENTS'], // конкуренты
 
-                    //new
-                    'UF_CRM_OP_WORK_RESULT' =>  $workResult['UF_CRM_OP_WORK_RESULT'],
-                    'UF_CRM_OP_WORK_RESULT_STRING' =>  $client['perspect'],
-                    'UF_CRM_OP_SOURCE_SELECT' =>  $source['UF_CRM_OP_SOURCE_SELECT'],
-                    'UF_CRM_CLIENT_SOURCE' =>  $client['source'],
-                    'ASSIGNED_BY_ID' =>  $userId,
-                    'ADDRESS' => $client['adress'],
-                ];
-                sleep(3);
-                $newCompanyId = BitrixGeneralService::setEntity(
-                    $this->hook,
-                    'company',
-                    $newClientData
-                );
+                        'UF_CRM_OP_CATEGORY' => $category['UF_CRM_OP_CATEGORY'],  // ККК ..
+                        'UF_CRM_OP_CURRENT_STATUS' => $client['perspect'],
+                        'UF_CRM_OP_WORK_STATUS' => $workStatus['UF_CRM_OP_WORK_STATUS'],
 
-                sleep(1);
-                if (!empty($newCompanyId) && !empty($client['events'])) {
-                    // $newCompany = BitrixGeneralService::getEntity(
-                    //     $this->hook,
-                    //     'company',
-                    //     $newCompanyId
-                    // );
+                        'UF_CRM_OP_PROSPECTS' => $prognoz['UF_CRM_OP_PROSPECTS'],
+                        'UF_CRM_OP_CONTACTS' => $contacts['UF_CRM_OP_CONTACTS'],
+                        'UF_CRM_OP_HISTORY' =>  $client['commaent'],
+                        'COMMENT' =>  $client['commaent'],
+                        // 'UF_CRM_OP_MHISTORY' =>  $history['UF_CRM_OP_MHISTORY'],
 
-                    foreach ($client['events'] as $garusEvent) {
-                        // $updatedHistoryField = $this->getHistoryField($garusEvent, $newCompany['UF_CRM_OP_MHISTORY']);
-                        sleep(3);
-                        // $updtdCompanyWithHistory = BitrixGeneralService::updateEntity(
+                        //new
+                        'UF_CRM_OP_WORK_RESULT' =>  $workResult['UF_CRM_OP_WORK_RESULT'],
+                        'UF_CRM_OP_WORK_RESULT_STRING' =>  $client['perspect'],
+                        'UF_CRM_OP_SOURCE_SELECT' =>  $source['UF_CRM_OP_SOURCE_SELECT'],
+                        'UF_CRM_CLIENT_SOURCE' =>  $client['source'],
+                        'ASSIGNED_BY_ID' =>  $userId,
+                        'ADDRESS' => $client['adress'],
+                    ];
+                    sleep(3);
+                    $newCompanyId = BitrixGeneralService::setEntity(
+                        $this->hook,
+                        'company',
+                        $newClientData
+                    );
+
+                    sleep(1);
+                    if (!empty($newCompanyId) && !empty($client['events'])) {
+                        // $newCompany = BitrixGeneralService::getEntity(
                         //     $this->hook,
                         //     'company',
-                        //     $newCompanyId,
-                        //     $updatedHistoryField
+                        //     $newCompanyId
                         // );
-                        // usleep(0.3);
-                        $this->getListFlow($garusEvent, $newCompanyId, $userId);
+
+                        foreach ($client['events'] as $garusEvent) {
+                            // $updatedHistoryField = $this->getHistoryField($garusEvent, $newCompany['UF_CRM_OP_MHISTORY']);
+                            sleep(3);
+                            // $updtdCompanyWithHistory = BitrixGeneralService::updateEntity(
+                            //     $this->hook,
+                            //     'company',
+                            //     $newCompanyId,
+                            //     $updatedHistoryField
+                            // );
+                            // usleep(0.3);
+                            $this->getListFlow($garusEvent, $newCompanyId, $userId);
+                        }
                     }
+
+                    // }
                 }
-              
-                // }
             }
+
+
+            return APIOnlineController::getError(
+                'infoblocks not found',
+                ['clients' => $results]
+            );
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR COLD APIBitrixController: Exception caught',  $errorMessages);
+            Log::info('error COLD APIBitrixController', ['error' => $th->getMessage()]);
+            
+            return APIOnlineController::getError(
+                $th->getMessage(),
+                [
+                    // 'portal' => $this->portal,
+                    // 'hook' => $this->hook,
+                    // 'portalBxLists' => $this->portalBxLists,
+
+
+                    'portalBxCompany' => $this->portalBxCompany,
+                    'googleData' => $googleData,
+                ]
+            );
         }
-
-
-        return APIOnlineController::getError(
-            'infoblocks not found',
-            ['clients' => $results]
-        );
-        // } catch (\Throwable $th) {
-        //     return APIOnlineController::getError(
-        //         $th->getMessage(),
-        //         [
-        //             // 'portal' => $this->portal,
-        //             // 'hook' => $this->hook,
-        //             // 'portalBxLists' => $this->portalBxLists,
-
-
-        //             'portalBxCompany' => $this->portalBxCompany,
-        //             'googleData' => $googleData,
-        //         ]
-        //     );
-        // }
     }
 
     protected function  getContactsField($contacts) //contacts
