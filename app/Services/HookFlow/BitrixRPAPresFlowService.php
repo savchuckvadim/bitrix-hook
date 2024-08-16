@@ -164,7 +164,7 @@ class BitrixRPAPresFlowService
             // $fieldsData['title'] = 'Заявка на презентацию ' . $name;
             // $fieldsData['name'] = 'Заявка на презентацию ' . $name;
 
-            $fieldsData['createdBy'] =  67;
+           
             // $fieldsData['UF_RPA_69_NAME'] = 'Заявка ' . $name . ' от ' . $nowDate;
 
             foreach ($presentatationInitRPAFields as  $presValue) {
@@ -178,7 +178,7 @@ class BitrixRPAPresFlowService
                     }
                 }
             }
-
+            $fieldsData['createdBy'] =  67;
             $dataForCreate = [
                 'typeId' => $this->rpaTypeId,
                 'fields' => $fieldsData
@@ -193,7 +193,9 @@ class BitrixRPAPresFlowService
             $resultItem = $rpaService->setRPAItem(
                 $dataForCreate
             );
-
+            Log::channel('telegram')->info('TEST RPA', [
+                'resultItem' => $resultItem
+            ]);
             return $resultItem;
 
             
