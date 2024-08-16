@@ -1057,74 +1057,117 @@ class MigrateCRMController extends Controller
             $comment = $comment . "\n " . "Контакт: " . $event['contact'];
         }
 
+        $normalizedGarusResultat = $this->normalizeString($event['eventType']);
+        $actions = [
+            $this->normalizeString('Звонок') => 'call',
+            $this->normalizeString('Пред.договоренность') => 'plan',
+            $this->normalizeString('Заявка на презу') => 'presentation',
+            $this->normalizeString('Дист. заявка') => 'presentation',
+            $this->normalizeString('Тлф.Заявка') => 'presentation',
 
-        switch ($event['eventType']) {
-            case 'Звонок':
-                # code...
-                break;
-            case 'Пред.договоренность':
+        ];
+        $normalizedGarusResultat = $this->normalizeString($event['eventType']);
 
-                $resultAction = 'plan';
-                break;
-            case 'Заявка на презу':
-            case 'Дист. заявка':
-            case 'Тлф.Заявка':
+        $switchCases = [
+            'plan' => [
+                'cases' => [
+                    $this->normalizeString('Пред.договоренность'),
+                    $this->normalizeString('Заявка на презу'),
+                    $this->normalizeString('Дист. заявка'),
+                    $this->normalizeString('Тлф.Заявка')
+                ],
+                'action' => 'plan',
+                'eventType' => 'presentation'
+            ],
+            'done_presentation' => [
+                'cases' => [
+                    $this->normalizeString('Презентация')
+                ],
+                'action' => 'done',
+                'eventType' => 'presentation'
+            ],
+            'expired' => [
+                'cases' => [
+                    $this->normalizeString('Перенос'),
+                    $this->normalizeString('Повтор')
+                ],
+                'status' => 'expired'
+            ],
+            'act_send_offer' => [
+                'cases' => [
+                    $this->normalizeString('Отправлено КП')
+                ],
+                'action' => 'act_send',
+                'eventType' => 'ev_offer_pres',
+                'isDocumentFlow' => true
+            ],
+            'act_send_contract' => [
+                'cases' => [
+                    $this->normalizeString('Отправлен договор')
+                ],
+                'action' => 'act_send',
+                'eventType' => 'ev_contract',
+                'isDocumentFlow' => true
+            ],
+            'act_send_invoice' => [
+                'cases' => [
+                    $this->normalizeString('Выставлен счет')
+                ],
+                'action' => 'act_send',
+                'eventType' => 'ev_invoice_pres',
+                'isDocumentFlow' => true
+            ],
+            'act_sign_contract' => [
+                'cases' => [
+                    $this->normalizeString('Договор подписан')
+                ],
+                'action' => 'act_sign',
+                'eventType' => 'ev_contract',
+                'isDocumentFlow' => true
+            ],
+            'act_pay_invoice' => [
+                'cases' => [
+                    $this->normalizeString('Счет оплачен')
+                ],
+                'action' => 'act_pay',
+                'eventType' => 'ev_invoice_pres',
+                'isDocumentFlow' => true
+            ],
+            'done_supply' => [
+                'cases' => [
+                    $this->normalizeString('Поставка')
+                ],
+                'action' => 'done',
+                'eventType' => 'ev_supply',
+                'isDocumentFlow' => true
+            ],
+            'cancel' => [
+                'cases' => [
+                    $this->normalizeString('Отмена')
+                ],
+                'status' => 'nodone',
+                'resultStatus' => 'noresult'
+            ]
+        ];
 
-                $resultAction = 'plan';
-                $resultEventType = 'presentation';
+        foreach ($switchCases as $case) {
+            if (in_array($normalizedGarusResultat, $case['cases'])) {
+                if (isset($case['action'])) {
+                    $resultAction = $case['action'];
+                }
+                if (isset($case['eventType'])) {
+                    $resultEventType = $case['eventType'];
+                }
+                if (isset($case['status'])) {
+                    $resultStatus = $case['status'];
+                }
+                if (isset($case['isDocumentFlow'])) {
+                    $isDocumentFlow = $case['isDocumentFlow'];
+                }
                 break;
-            case 'Презентация':
-                $resultAction = 'done';
-                $resultEventType = 'presentation';
-                break;
-            case 'Перенос':
-            case 'Повтор':
-                $resultStatus = 'expired';
-                break;
-            case 'Отправлено КП':
-                $resultAction = 'act_send';
-                $resultEventType = 'ev_offer_pres';
-
-                $isDocumentFlow = true;
-                # code...
-                break;
-            case 'Отправлен договор':
-                $resultAction = 'act_send';
-                $resultEventType = 'ev_contract';
-                $isDocumentFlow = true;
-                # code...
-                break;
-            case 'Выставлен счет':
-                $resultAction = 'act_send';
-                $resultEventType = 'ev_invoice_pres';
-                $isDocumentFlow = true;
-                # code...
-                break;
-            case 'Договор подписан':
-                $resultAction = 'act_sign';
-                $resultEventType = 'ev_contract';
-                $isDocumentFlow = true;
-                # code...
-                break;
-            case 'Счет оплачен':
-                $resultAction = 'act_pay';
-                $resultEventType = 'ev_invoice_pres';
-                $isDocumentFlow = true;
-                # code...
-                break;
-            case 'Поставка':
-                $resultAction = 'done';
-                $resultEventType = 'ev_supply';
-                $isDocumentFlow = true;
-                break;
-            case 'Отмена':
-                $resultStatus = 'nodone';
-                $resultStatus = 'noresult';
-                break;
-            default:
-                # code...
-                break;
+            }
         }
+
 
         if ($isDocumentFlow) {
             BitrixListDocumentFlowService::getListsFlow(  //report - отчет по текущему событию
