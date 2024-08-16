@@ -11,6 +11,7 @@ use App\Jobs\BtxCreateListItemJob;
 use App\Services\BitrixGeneralService;
 use App\Services\General\BitrixDepartamentService;
 use App\Services\HookFlow\BitrixListDocumentFlowService;
+use App\Services\HookFlow\BitrixListFlowService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
@@ -80,7 +81,7 @@ class MigrateCRMController extends Controller
                     $prognoz = $this->getCompanyPrognoz($client['prognoz']);
 
                     $contacts = $this->getContactsField($client['contacts']);
-                    $history = $this->getHistoryField($client['events']);
+                    // $history = $this->getHistoryField($client['events']);
 
 
                     $workStatus = $this->getCompanyWorkStatust($client['perspect']);
@@ -104,7 +105,7 @@ class MigrateCRMController extends Controller
                         'UF_CRM_OP_CONTACTS' => $contacts['UF_CRM_OP_CONTACTS'],
                         'UF_CRM_OP_HISTORY' =>  $client['commaent'],
                         'COMMENT' =>  $client['commaent'],
-                        'UF_CRM_OP_MHISTORY' =>  $history['UF_CRM_OP_MHISTORY'],
+                        // 'UF_CRM_OP_MHISTORY' =>  $history['UF_CRM_OP_MHISTORY'],
 
                         //new
                         'UF_CRM_OP_WORK_RESULT' =>  $workResult['UF_CRM_OP_WORK_RESULT'],
@@ -115,19 +116,35 @@ class MigrateCRMController extends Controller
                         'ADDRESS' => $client['adress'],
                     ];
 
-                    $newCompany = BitrixGeneralService::setEntity(
+                    $newCompanyId = BitrixGeneralService::setEntity(
                         $this->hook,
                         'company',
                         $newClientData
                     );
-                    array_push($results, $newCompany);
-                    usleep(0.3);
-                    if(empty( $newCompany)){
-                        array_push($results, $newClientData);
 
+                    usleep(0.3);
+                    if (!empty($newCompanyId)) {
+                        $newCompany = BitrixGeneralService::getEntity(
+                            $this->hook,
+                            'company',
+                            $newCompanyId
+                        );
                     }
+                    foreach ($client['events'] as $garusEvent) {
+                        $updatedHistoryField = $this->getHistoryField($garusEvent, $newCompany['UF_CRM_OP_MHISTORY']);
+                        usleep(0.3);
+                        $updtdCompanyWithHistory = BitrixGeneralService::updateEntity(
+                            $this->hook,
+                            'company',
+                            $newCompanyId,
+                            $updatedHistoryField
+                        );
+                        usleep(0.3);
+                        $this->getListFlow($garusEvent, $newCompanyId, $userId);
+                    }
+
                     Log::channel()->info('TEST CRM MIGRATE', [
-                        'newCompany' => $newCompany
+                        'newCompany' => $newCompanyId
                     ]);
                 }
             }
@@ -192,14 +209,14 @@ class MigrateCRMController extends Controller
 
         return $result;
     }
-    protected function  getHistoryField($events) //events
+    protected function  getHistoryField($event, $currentFieldValue) //events
     {
         //    ОП История (Комментарии)	general	multiple		op_mhistory
 
         $pFields =  $this->portalBxCompany['bitrixfields'];
         $result = null;
         $pFieldBxId = null;
-        $resultValue = [];
+        $resultValue = $currentFieldValue;
         foreach ($pFields as $pField) {
             if ($pField['code'] === 'op_mhistory') {
                 $pFieldBxId = 'UF_CRM_' . $pField['bitrixId'];
@@ -207,26 +224,26 @@ class MigrateCRMController extends Controller
             }
         }
 
-        foreach ($events as $event) {
+        // foreach ($events as $event) {
 
-            $date = $this->getDateTimeValue($event['date'], $event['time']);
-            $eventValue = $date . ' ' . $event['eventType'];
-            if ($event['comment'] !== "" &&  $event['comment'] !== null && $event['comment'] !== "NULL"  && $event['comment'] !== "-") {
+        $date = $this->getDateTimeValue($event['date'], $event['time']);
+        $eventValue = $date . ' ' . $event['eventType'];
+        if ($event['comment'] !== "" &&  $event['comment'] !== null && $event['comment'] !== "NULL"  && $event['comment'] !== "-") {
 
-                $eventValue = $eventValue . "\n " . $event['comment'];
-            }
-
-            if ($event['planComment'] !== "" &&  $event['planComment'] !== null && $event['planComment'] !== "NULL"  && $event['planComment'] !== "-") {
-
-                $eventValue = $eventValue . "\n " . "План: " . $event['planComment'];
-            }
-            if ($event['contact'] !== "" &&  $event['contact'] !== null && $event['contact'] !== "NULL"  && $event['contact'] !== "-") {
-
-                $eventValue = $eventValue . "\n " . "Контакт: " . $event['contact'];
-            }
-
-            array_push($resultValue, $eventValue);
+            $eventValue = $eventValue . "\n " . $event['comment'];
         }
+
+        if ($event['planComment'] !== "" &&  $event['planComment'] !== null && $event['planComment'] !== "NULL"  && $event['planComment'] !== "-") {
+
+            $eventValue = $eventValue . "\n " . "План: " . $event['planComment'];
+        }
+        if ($event['contact'] !== "" &&  $event['contact'] !== null && $event['contact'] !== "NULL"  && $event['contact'] !== "-") {
+
+            $eventValue = $eventValue . "\n " . "Контакт: " . $event['contact'];
+        }
+
+        array_push($resultValue, $eventValue);
+        // }
 
         $result = [$pFieldBxId => $resultValue];
         return  $result;
@@ -1012,7 +1029,7 @@ class MigrateCRMController extends Controller
         return $flowdata;
     }
 
-    protected function getListFlow($garusEventType, $companyId, $responsibleId, $comment,)
+    protected function getListFlow($event, $companyId, $responsibleId)
     {
 
         $resultEventType = 'warm';
@@ -1023,7 +1040,25 @@ class MigrateCRMController extends Controller
         $noresultReason = '';
         $failReason = '';
         $nowDate = '';
-        switch ($garusEventType) {
+
+        $date = $this->getDateTimeValue($event['date'], $event['time']);
+        $comment = $event['comment'];
+        if ($event['comment'] !== "" &&  $event['comment'] !== null && $event['comment'] !== "NULL"  && $event['comment'] !== "-") {
+
+            $comment = $comment . "\n " . $event['comment'];
+        }
+
+        if ($event['planComment'] !== "" &&  $event['planComment'] !== null && $event['planComment'] !== "NULL"  && $event['planComment'] !== "-") {
+
+            $comment = $comment . "\n " . "План: " . $event['planComment'];
+        }
+        if ($event['contact'] !== "" &&  $event['contact'] !== null && $event['contact'] !== "NULL"  && $event['contact'] !== "-") {
+
+            $comment = $comment . "\n " . "Контакт: " . $event['contact'];
+        }
+
+
+        switch ($event['eventType']) {
             case 'Звонок':
                 # code...
                 break;
@@ -1092,7 +1127,7 @@ class MigrateCRMController extends Controller
                 $this->hook,
                 $this->portalBxLists,
                 $resultEventType,
-                $garusEventType,
+                $event['eventType'],
                 $resultAction,  // сделано, отправлено
                 $responsibleId,
                 $responsibleId,
@@ -1101,15 +1136,16 @@ class MigrateCRMController extends Controller
                 $comment,
                 null, // $currentBxDealIds,
                 null, //  $this->currentBaseDeal['ID']
+                $date
 
 
             );
         } else {
-            BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию
+            BitrixListFlowService::getListsFlow(  //report - отчет по текущему событию
                 $this->hook,
                 $this->portalBxLists,
                 $resultEventType,
-                $garusEventType,
+                $event['eventType'],
                 $resultAction,
                 // $this->stringType,
                 '', //$this->planDeadline,
@@ -1125,8 +1161,9 @@ class MigrateCRMController extends Controller
                 '', // $failType,
                 '', // $currentDealIds,
                 '', // $currentBaseDealId
+                $date
 
-            )->onQueue('low-priority');
+            );
         }
     }
 }
