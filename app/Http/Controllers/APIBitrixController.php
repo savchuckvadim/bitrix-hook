@@ -1313,21 +1313,21 @@ class APIBitrixController extends Controller
     {
         $response =  $bitrixResponse->json();
         if ($response) {
-            Log::channel('telegram')->error('APRIL_HOOK', [
-                $method => [
-                    'bitrixResponse' => $response,
-                    // 'btrx response' => $response['error_description']
-                ]
-            ]);
+            // Log::channel('telegram')->error('APRIL_HOOK', [
+            //     $method => [
+            //         'bitrixResponse' => $response,
+            //         // 'btrx response' => $response['error_description']
+            //     ]
+            // ]);
             if (isset($response['result'])) {
 
-                // Log::info('success btrx response', [
-                //     'BTRX_RESPONSE_SUCCESS' => [
-                //         'result' => $response['result'],
+                Log::info('success btrx response', [
+                    'BTRX_RESPONSE_SUCCESS' => [
+                        'result' => $response['result'],
 
-                //     ]
+                    ]
 
-                // ]);
+                ]);
                 return $response['result'];
             } else {
                 if (isset($response['error_description'])) {
