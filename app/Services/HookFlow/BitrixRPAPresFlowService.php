@@ -118,7 +118,7 @@ class BitrixRPAPresFlowService
                 [
                     'code' => 'name', //дата начала
                     'name' => 'Название',
-                    'value' =>'Заявка ' . $name . ' от ' . $nowDate
+                    'value' => 'Заявка ' . $name . ' от ' . $nowDate
                 ],
                 [
                     'code' => 'next_pres_plan_date', //дата начала
@@ -164,7 +164,7 @@ class BitrixRPAPresFlowService
             // $fieldsData['title'] = 'Заявка на презентацию ' . $name;
             // $fieldsData['name'] = 'Заявка на презентацию ' . $name;
 
-           
+
             // $fieldsData['UF_RPA_69_NAME'] = 'Заявка ' . $name . ' от ' . $nowDate;
 
             foreach ($presentatationInitRPAFields as  $presValue) {
@@ -193,12 +193,23 @@ class BitrixRPAPresFlowService
             $resultItem = $rpaService->setRPAItem(
                 $dataForCreate
             );
+
+            $fieldsData = [
+                'createdBy' => $responsible,
+                'updatedByBy' => $responsible,
+            ];
+            $dataForUpdate = [
+                'id' => $resultItem['id'],
+                'typeId' => $this->rpaTypeId,
+                'fields' => $fieldsData
+            ];
+            $resultItem = $rpaService->updateRPAItem(
+                $dataForUpdate
+            );
             Log::channel('telegram')->info('TEST RPA', [
                 'resultItem' => $resultItem
             ]);
             return $resultItem;
-
-            
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),

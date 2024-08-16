@@ -70,8 +70,10 @@ class BitrixRPAService
     }
 
     public function updateRPAItem(
-        $typeId,
-        $rpaItemId
+        // $typeId,
+        // $rpaItemId,
+        // $fields,
+        $data
         // typeId - идентификатор процесса
         // fields - значения пользовательских полей элемента. Все остальные поля будут проигнорированы. Не обязательный параметр
     ) {
@@ -79,11 +81,11 @@ class BitrixRPAService
         // fields[UF_RPA_...] - значения пользовательских полей
 
         $method = '/rpa.item.list';
-        $data = [
-            'typeId' => $typeId,
-            'id' => $rpaItemId,
-
-        ];
+        // $data = [
+        //     'typeId' => $typeId,
+        //     'id' => $rpaItemId,
+        //     'fields' => $fields
+        // ];
         $response = Http::get($this->hook . $method, $data);
         $result =  APIBitrixController::getBitrixRespone($response, 'getRPAList');
         return  $result;
