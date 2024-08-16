@@ -317,7 +317,7 @@ class MigrateCRMController extends Controller
         $string = mb_strtolower($string);
 
         // Удаление пробелов и спецсимволов
-        $string = preg_replace('/[^a-z0-9]/u', '', $string);
+        // $string = preg_replace('/[^a-z0-9]/u', '', $string);
 
         return $string;
     }
