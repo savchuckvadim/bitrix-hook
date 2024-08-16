@@ -239,6 +239,9 @@ class BitrixListDocumentFlowService
             }
 
             if ($companyId) {
+                /**
+                 * refact to install
+                 */
                 $dealId = '_';
                 if(!empty($currentBaseDealId)){
                     $dealId = $currentBaseDealId;
