@@ -59,7 +59,7 @@ class MigrateCRMController extends Controller
 
 
             foreach ($clients as $index => $client) {
-                if ($index <= 3) {
+                if ($index <= 15) {
 
                     $fullDepartment = $this->getFullDepartment();
                     $userId = 1;
@@ -107,8 +107,9 @@ class MigrateCRMController extends Controller
 
                         //new
                         'UF_CRM_OP_WORK_RESULT' =>  $workResult['UF_CRM_OP_WORK_RESULT'],
+                        'UF_CRM_OP_WORK_RESULT_STRING' =>  $client['perspect'],
                         'UF_CRM_OP_SOURCE_SELECT' =>  $source['UF_CRM_OP_SOURCE_SELECT'],
-
+                        'UF_CRM_OP_SOURCE' =>  $client['source'],
                         'ASSIGNED_BY_ID' =>  $userId,
                         'ADDRESS' => $client['adress'],
                     ];
@@ -215,7 +216,7 @@ class MigrateCRMController extends Controller
             }
             if ($event['contact'] !== "" &&  $event['contact'] !== null && $event['contact'] !== "NULL"  && $event['contact'] !== "-") {
 
-                $eventValue = $eventValue . "\n " . "Контакт: " . $event['planComment'];
+                $eventValue = $eventValue . "\n " . "Контакт: " . $event['contact'];
             }
 
             array_push($resultValue, $eventValue);
