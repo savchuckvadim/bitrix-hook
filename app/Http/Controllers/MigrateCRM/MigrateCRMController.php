@@ -119,7 +119,7 @@ class MigrateCRMController extends Controller
                         'company',
                         $newClientData
                     );
-
+                    usleep(0.3);
                     Log::channel()->info('TEST CRM MIGRATE', [
                         'newCompany' => $newCompany
                     ]);
@@ -296,7 +296,7 @@ class MigrateCRMController extends Controller
                 if (!empty($pField['items'])) {
                     foreach ($pField['items'] as $pItem) {
                         if ($garusResultat == $pItem['name']) {
-                         
+
                             $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
                         }
                     }
