@@ -238,7 +238,11 @@ class BitrixListDocumentFlowService
                 }
             }
 
-            if ($companyId && $currentBaseDealId) {
+            if ($companyId) {
+                $dealId = '_';
+                if(!empty($currentBaseDealId)){
+                    $dealId = $currentBaseDealId;
+                }
                 foreach ($bitrixLists as $bitrixList) {
                     if ($bitrixList['type'] === 'kpi') {
 
@@ -267,7 +271,7 @@ class BitrixListDocumentFlowService
                             }
                             // array_push($fieldsData, $currentDataField);
                         }
-                        // $code = $companyId . '_' . $currentBaseDealId . '_' . $eventType;
+                        $code = $companyId . '_' . $dealId . '_' . $eventType;
 
                         BitrixListService::setItem(
                             $hook,
