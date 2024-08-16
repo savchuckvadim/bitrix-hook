@@ -84,7 +84,7 @@ class MigrateCRMController extends Controller
 
                     $workStatus = $this->getCompanyWorkStatust($client['perspect']);
                     $workResult = $this->getCompanyItemFromName($client['perspect'], 'op_work_result');
-                    $source = $this->getCompanyItemFromName($client['perspect'], 'op_source_select');
+                    $source = $this->getCompanyItemFromName($client['source'], 'op_source_select');
 
 
                     $newClientData = [
@@ -157,7 +157,9 @@ class MigrateCRMController extends Controller
         $resultValue = [];
         foreach ($pFields as $pField) {
             if ($pField['code'] === 'op_contacts') {
-                $pFieldBxId = $pField['bitrixId'];
+
+                $pFieldBxId = 'UF_CRM_' . $pField['bitrixId'];
+                $result = [$pFieldBxId => $resultValue];
             }
         }
 
@@ -179,7 +181,7 @@ class MigrateCRMController extends Controller
                 array_push($resultValue, $resultContactstring);
             }
         }
-        $result = ['UF_CRM_' . $pFieldBxId => $resultValue];
+        $result = [$pFieldBxId => $resultValue];
 
         return $result;
     }
@@ -194,6 +196,7 @@ class MigrateCRMController extends Controller
         foreach ($pFields as $pField) {
             if ($pField['code'] === 'op_mhistory') {
                 $pFieldBxId = 'UF_CRM_' . $pField['bitrixId'];
+                $result = [$pFieldBxId => null];
             }
         }
 
@@ -228,6 +231,7 @@ class MigrateCRMController extends Controller
         $result = null;
         foreach ($pFields as $pField) {
             if ($pField['code'] === 'op_work_status') {
+                $result = ['UF_CRM_' . $pField['bitrixId'] => null];
 
                 if (!empty($pField['items'])) {
                     foreach ($pField['items'] as $pItem) {
@@ -286,6 +290,7 @@ class MigrateCRMController extends Controller
         $result = null;
         foreach ($pFields as $pField) {
             if ($pField['code'] === $fieldCode) {
+                $result = ['UF_CRM_' . $pField['bitrixId'] => null];
 
                 if (!empty($pField['items'])) {
                     foreach ($pField['items'] as $pItem) {
@@ -310,6 +315,9 @@ class MigrateCRMController extends Controller
         $result = null;
         foreach ($pFields as $pField) {
             if ($pField['code'] === 'op_concurents') {
+
+                $pFieldBxId = 'UF_CRM_' . $pField['bitrixId'];
+                $result = [$pFieldBxId => null];
                 // k
                 // action
                 // kodex
@@ -322,45 +330,45 @@ class MigrateCRMController extends Controller
                         switch ($garusConcurent) {
                             case 'К+':
                                 if ($pItem['code'] === 'k') {
-                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                    $result = [$pFieldBxId => $pItem['bitrixId']];
                                 }
                                 break;
                             case 'Актион':
                                 if ($pItem['code'] === 'action') {
-                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                    $result = [$pFieldBxId => $pItem['bitrixId']];
                                 }
                                 break;
                             case 'Кодекс':
                                 if ($pItem['code'] === 'kodex') {
-                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                    $result = [$pFieldBxId => $pItem['bitrixId']];
                                 }
                                 break;
 
                             case '1С':
                                 if ($pItem['code'] === 'bitrix') {
-                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                    $result = [$pFieldBxId => $pItem['bitrixId']];
                                 }
                                 break;
 
                             case 'Контур':
                                 if ($pItem['code'] === 'kontur') {
-                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                    $result = [$pFieldBxId => $pItem['bitrixId']];
                                 }
                                 break;
                             case 'Интернет':
                                 if ($pItem['code'] === 'internet') {
-                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                    $result = [$pFieldBxId => $pItem['bitrixId']];
                                 }
                                 break;
 
                             case 'Журналы':
                                 if ($pItem['code'] === 'magazine') {
-                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                    $result = [$pFieldBxId => $pItem['bitrixId']];
                                 }
                                 break;
 
                             default:
-                                $result = ['UF_CRM_' . $pField['bitrixId'] => null];
+                                $result = [$pFieldBxId => null];
 
                                 break;
                         }
@@ -378,6 +386,8 @@ class MigrateCRMController extends Controller
         $result =  null;
         foreach ($pFields as $pField) {
             if ($pField['code'] === 'op_category') {
+                $pFieldBxId = 'UF_CRM_' . $pField['bitrixId'];
+                $result = [$pFieldBxId => null];
                 // kkk
                 // kk
                 // vip
@@ -388,40 +398,40 @@ class MigrateCRMController extends Controller
                         switch ($garusCategory) {
                             case 'ККК':
                                 if ($pItem['code'] === 'kkk') {
-                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                    $result = [$pFieldBxId  => $pItem['bitrixId']];
                                 }
                                 break;
                             case 'КК':
                                 if ($pItem['code'] === 'kk') {
-                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                    $result = [$pFieldBxId => $pItem['bitrixId']];
                                 }
                                 break;
                             case 'VIP':
                                 if ($pItem['code'] === 'vip') {
-                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                    $result = [$pFieldBxId => $pItem['bitrixId']];
                                 }
                                 break;
 
                             case 'К':
                                 if ($pItem['code'] === 'k') {
-                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                    $result = [$pFieldBxId  => $pItem['bitrixId']];
                                 }
                                 break;
 
                             case 'С':
                                 if ($pItem['code'] === 'c') {
-                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                    $result = [$pFieldBxId  => $pItem['bitrixId']];
                                 }
                                 break;
                             case 'М':
                                 if ($pItem['code'] === 'm') {
-                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                    $result = [$pFieldBxId  => $pItem['bitrixId']];
                                 }
                                 break;
 
 
                             default:
-                                $result = ['UF_CRM_' . $pField['bitrixId'] => null];
+                                $result = [$pFieldBxId  => null];
 
                                 break;
                         }
