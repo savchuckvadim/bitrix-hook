@@ -316,8 +316,9 @@ class MigrateCRMController extends Controller
         // Приведение к нижнему регистру
         $string = mb_strtolower($string);
 
-        // Удаление пробелов и спецсимволов
-        // $string = preg_replace('/[^a-z0-9]/u', '', $string);
+
+        // Удаление пробелов и спецсимволов, оставляя буквы и цифры (как кириллицу, так и латиницу)
+        $string = preg_replace('/[^\p{L}\p{N}]/u', '', $string);
 
         return $string;
     }
