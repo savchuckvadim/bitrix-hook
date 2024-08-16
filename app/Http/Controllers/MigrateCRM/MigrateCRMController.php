@@ -77,7 +77,16 @@ class MigrateCRMController extends Controller
                     $statusk = $this->getCompanyStatus($client['statusk']);
                     $category = $this->getCompanyCategory($client['category']);
                     $prognoz = $this->getCompanyPrognoz($client['prognoz']);
+
                     $contacts = $this->getContactsField($client['contacts']);
+                    $history = $this->getHistoryField($client['events']);
+
+
+                    $workStatus = $this->getCompanyWorkStatust($client['perspect']);
+                    $workResult = $this->getCompanyItemFromName($client['perspect'], 'op_work_result');
+                    $source = $this->getCompanyItemFromName($client['perspect'], 'op_source_select');
+
+
                     $newClientData = [
                         'TITLE' => $client['name'],
                         // 'UF_CRM_OP_WORK_STATUS' => $client['name'],
@@ -85,10 +94,20 @@ class MigrateCRMController extends Controller
                         'UF_CRM_OP_CLIENT_STATUS' => $statusk['UF_CRM_OP_CLIENT_STATUS'], //ЧОК ОК
                         'UF_CRM_OP_SMART_LID' => $client['id'], // сюда записывать id из старой crm
                         'UF_CRM_OP_CONCURENTS' => $concurent['UF_CRM_OP_CONCURENTS'], // конкуренты
+
                         'UF_CRM_OP_CATEGORY' => $category['UF_CRM_OP_CATEGORY'],  // ККК ..
                         'UF_CRM_OP_CURRENT_STATUS' => $client['perspect'],
+                        'UF_CRM_OP_WORK_STATUS' => $workStatus['UF_CRM_OP_WORK_STATUS'],
+
                         'UF_CRM_OP_PROSPECTS' => $prognoz['UF_CRM_OP_PROSPECTS'],
                         'UF_CRM_OP_CONTACTS' => $contacts['UF_CRM_OP_CONTACTS'],
+                        'UF_CRM_OP_HISTORY' =>  $client['commaent'],
+                        'COMMENT' =>  $client['commaent'],
+                        'UF_CRM_OP_MHISTORY' =>  $history['UF_CRM_OP_MHISTORY'],
+
+                        //new
+                        'UF_CRM_OP_WORK_RESULT' =>  $workResult['UF_CRM_OP_WORK_RESULT'],
+                        'UF_CRM_OP_SOURCE_SELECT' =>  $source['UF_CRM_OP_SOURCE_SELECT'],
 
                         'ASSIGNED_BY_ID' =>  $userId,
                         'ADDRESS' => $client['adress'],
@@ -143,7 +162,7 @@ class MigrateCRMController extends Controller
         }
 
         foreach ($contacts as $contact) {
-            $resultContactstring = $contact['name'] . ' ' . $contact['position'] . ' ' . $contact['telefon'] . ' ' . $contact['position'];
+            $resultContactstring = $contact['name'] . ' ' . $contact['position'] . ' ' . $contact['telefon'];
             if (!empty($contact['dobTel']) && $contact['dobTel'] !== '-' && $contact['dobTel'] !== 'NULL'  && $contact['dobTel'] !== "\"NULL\"") {
                 $resultContactstring = $resultContactstring . ' доб: ' . $contact['dobTel'];
             }
@@ -168,6 +187,117 @@ class MigrateCRMController extends Controller
     {
         //    ОП История (Комментарии)	general	multiple		op_mhistory
 
+        $pFields =  $this->portalBxCompany['bitrixfields'];
+        $result = null;
+        $pFieldBxId = null;
+        $resultValue = [];
+        foreach ($pFields as $pField) {
+            if ($pField['code'] === 'op_contacts') {
+                $pFieldBxId = 'UF_CRM_' . $pField['bitrixId'];
+            }
+        }
+
+        foreach ($events as $event) {
+
+            $date = $this->getDateTimeValue($event['date'], $event['time']);
+            $eventValue = $date . ' ' . $event['eventType'];
+            if ($event['comment'] !== "" &&  $event['comment'] !== null && $event['comment'] !== "NULL"  && $event['comment'] !== "-") {
+
+                $eventValue = $eventValue . "\n " . $event['comment'];
+            }
+
+            if ($event['planComment'] !== "" &&  $event['planComment'] !== null && $event['planComment'] !== "NULL"  && $event['planComment'] !== "-") {
+
+                $eventValue = $eventValue . "\n " . "План: " . $event['planComment'];
+            }
+            if ($event['contact'] !== "" &&  $event['contact'] !== null && $event['contact'] !== "NULL"  && $event['contact'] !== "-") {
+
+                $eventValue = $eventValue . "\n " . "Контакт: " . $event['planComment'];
+            }
+
+            array_push($resultValue, $eventValue);
+        }
+
+        $result = [$pFieldBxId => $resultValue];
+        return  $result;
+    }
+    protected function getCompanyWorkStatust($garusResultat)
+    {
+
+        $pFields =  $this->portalBxCompany['bitrixfields'];
+        $result = null;
+        foreach ($pFields as $pField) {
+            if ($pField['code'] === 'op_work_status') {
+
+                if (!empty($pField['items'])) {
+                    foreach ($pField['items'] as $pItem) {
+                        if ($garusResultat == $pItem['name']) {
+                        }
+                        switch ($garusResultat) {
+                            case 'Отказ':
+                            case 'Гарант/ Запрет':
+                            case 'Конкурент':
+                            case 'Неверный контакт':
+                            case 'Нет финансирования':
+                            case 'Нет_ перспектив':
+                            case 'Пересечение':
+                            case 'Покупает ГО':
+                            case 'Потерявшиеся/Закрывшиеся':
+                            case 'ХВА':
+                            case 'чужая территория':
+                                if ($pItem['code'] === 'op_status_fail') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+                            case 'Клиенты':
+                            case 'Пользователи':
+                            case 'Должники':
+
+                                if ($pItem['code'] === 'op_status_success') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+                            case 'Чердак':
+                                if ($pItem['code'] === 'long') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+                                break;
+
+
+                            default:
+                                if ($pItem['code'] === 'work') {
+                                    $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                                }
+
+
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return  $result;
+    }
+    protected function getCompanyItemFromName($garusResultat, $fieldCode) //resulotat and source
+    {
+
+        $pFields =  $this->portalBxCompany['bitrixfields'];
+        $result = null;
+        foreach ($pFields as $pField) {
+            if ($pField['code'] === $fieldCode) {
+
+                if (!empty($pField['items'])) {
+                    foreach ($pField['items'] as $pItem) {
+                        if ($garusResultat == $pItem['name']) {
+                            $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
+                        }
+                    }
+                }
+            }
+        }
+
+        return  $result;
     }
     protected function getCompanyConcurent($garusConcurent)
     {
@@ -486,6 +616,11 @@ class MigrateCRMController extends Controller
         }
         return   $result;
     }
+
+
+    /**
+     * LIST
+     */
     public function getWorkstatusFieldItemValue(
         $portalField, //with items
         $workStatus,

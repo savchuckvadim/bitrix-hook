@@ -14,25 +14,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/{any?}', [App\Http\Controllers\HomeController::class, 'index'])->where('any', '^(?!api\/)[\/\w\.-]*');
+Route::get('/{any?}', [App\Http\Controllers\HomeController::class, 'index'])->where('any', '^(?!api\/)[\/\w\.-]*');
 
 // Auth::routes();
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
-Route::get('/gsr/crm/{pass}/{domain}/{token}/', function ($pass, $domain, $token) {
-    // $url = LinkController ::urlForRedirect($linkId);
-    // dd([
-    //     'pass' => $pass,
-    //     'domain' => $domain,
-    //     'token' => $token,
-    // ]);
+// Route::get('/gsr/crm/{pass}/{domain}/{token}/', function ($pass, $domain, $token) {
+//     // $url = LinkController ::urlForRedirect($linkId);
+//     // dd([
+//     //     'pass' => $pass,
+//     //     'domain' => $domain,
+//     //     'token' => $token,
+//     // ]);
 
-    if ($pass == 'nmbrsdntl' && $domain) {
-        $controller = new  MigrateCRMController($token, $domain);
-        return  $controller->crm();
-    } else {
-        return 'yo';
-    }
-});
+//     if ($pass == 'nmbrsdntl' && $domain) {
+//         $controller = new  MigrateCRMController($token, $domain);
+//         return  $controller->crm();
+//     } else {
+//         return 'yo';
+//     }
+// });
