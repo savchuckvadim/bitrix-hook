@@ -1105,7 +1105,8 @@ class MigrateCRMController extends Controller
             ],
             'act_send_offer' => [
                 'cases' => [
-                    $this->normalizeString('Отправлено КП')
+                    $this->normalizeString('Отправлено КП'),
+                    $this->normalizeString('Дист. Компред'),
                 ],
                 'action' => 'act_send',
                 'eventType' => 'ev_offer_pres',
@@ -1113,7 +1114,9 @@ class MigrateCRMController extends Controller
             ],
             'act_send_contract' => [
                 'cases' => [
-                    $this->normalizeString('Отправлен договор')
+                    $this->normalizeString('Отправлен договор'),
+                    $this->normalizeString('Подписан договор'),
+                    $this->normalizeString('договор'),
                 ],
                 'action' => 'act_send',
                 'eventType' => 'ev_contract',
@@ -1121,7 +1124,10 @@ class MigrateCRMController extends Controller
             ],
             'act_send_invoice' => [
                 'cases' => [
-                    $this->normalizeString('Выставлен счет')
+                    $this->normalizeString('Выставлен счет'),
+                    $this->normalizeString('Счет выписан'),
+                    $this->normalizeString('Счет'),
+
                 ],
                 'action' => 'act_send',
                 'eventType' => 'ev_invoice_pres',
@@ -1137,7 +1143,8 @@ class MigrateCRMController extends Controller
             ],
             'act_pay_invoice' => [
                 'cases' => [
-                    $this->normalizeString('Счет оплачен')
+                    $this->normalizeString('Счет оплачен'),
+                    $this->normalizeString('оплачен Счет'),
                 ],
                 'action' => 'act_pay',
                 'eventType' => 'ev_invoice_pres',
@@ -1180,24 +1187,24 @@ class MigrateCRMController extends Controller
 
 
         if ($isDocumentFlow) {
-            // BitrixListDocumentFlowService::getListsFlow(  //report - отчет по текущему событию
-            //     $this->hook,
-            //     $this->portalBxLists,
-            //     $resultEventType,
-            //     $event['eventType'],
-            //     'act_send',  // сделано, отправлено
-            //     $responsibleId,
-            //     $responsibleId,
-            //     $responsibleId,
-            //     $companyId,
-            //     $comment,
-            //     null, // $currentBxDealIds,
-            //     null, //  $this->currentBaseDeal['ID']
-            //     $date,
-            //     $event['eventType']
+            BitrixListDocumentFlowService::getListsFlow(  //report - отчет по текущему событию
+                $this->hook,
+                $this->portalBxLists,
+                $resultEventType,
+                $event['eventType'],
+                'act_send',  // сделано, отправлено
+                $responsibleId,
+                $responsibleId,
+                $responsibleId,
+                $companyId,
+                $comment,
+                null, // $currentBxDealIds,
+                null, //  $this->currentBaseDeal['ID']
+                $date,
+                $event['eventType']
 
 
-            // );
+            );
         } else {
             BitrixListFlowService::getListsFlow(  //report - отчет по текущему событию
                 $this->hook,

@@ -1317,7 +1317,8 @@ class EventReportService
                     // ]);
                     foreach ($this->currentBtxDeals as $cbtxdeal) {
                         if ($cbtxdeal['ID'] !== $unplannedPresDealId) {
-                            sleep(1);
+                            $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                            usleep($rand);
                             $updtdbtxdeal = BitrixDealService::getDeal(
                                 $this->hook,
                                 ['id' => $cbtxdeal['ID']]
@@ -1833,11 +1834,11 @@ class EventReportService
         // если была проведена презентация обновляется поле дата проведения презентации
         // все изменения записываются в множественное поле коммент после презентации
         Log::channel('telegram')->error('APRIL_HOOK', [
-         
-                'currentPlanEventType' => $this->currentPlanEventType,
-                'isPlanned' => $this->isPlanned,
-                'isExpired' => $this->isExpired,
-            
+
+            'currentPlanEventType' => $this->currentPlanEventType,
+            'isPlanned' => $this->isPlanned,
+            'isExpired' => $this->isExpired,
+
         ]);
 
         if (  //планируется презентация без переносов
