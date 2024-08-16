@@ -196,7 +196,8 @@ class BitrixRPAPresFlowService
 
             $fieldsData = [
                 'createdBy' => $responsible,
-                'updatedByBy' => $responsible,
+                'updatedBy' => $responsible,
+                'movedBy' => $responsible,
             ];
             $dataForUpdate = [
                 'id' => $resultItem['id'],
