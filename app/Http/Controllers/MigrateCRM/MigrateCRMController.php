@@ -115,14 +115,14 @@ class MigrateCRMController extends Controller
                     'ASSIGNED_BY_ID' =>  $userId,
                     'ADDRESS' => $client['adress'],
                 ];
-
+                sleep(3);
                 $newCompanyId = BitrixGeneralService::setEntity(
                     $this->hook,
                     'company',
                     $newClientData
                 );
 
-                usleep(1);
+                sleep(1);
                 if (!empty($newCompanyId) && !empty($client['events'])) {
                     // $newCompany = BitrixGeneralService::getEntity(
                     //     $this->hook,
@@ -132,7 +132,7 @@ class MigrateCRMController extends Controller
 
                     foreach ($client['events'] as $garusEvent) {
                         // $updatedHistoryField = $this->getHistoryField($garusEvent, $newCompany['UF_CRM_OP_MHISTORY']);
-                        sleep(1);
+                        sleep(3);
                         // $updtdCompanyWithHistory = BitrixGeneralService::updateEntity(
                         //     $this->hook,
                         //     'company',
