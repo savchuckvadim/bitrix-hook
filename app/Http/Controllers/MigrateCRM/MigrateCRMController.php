@@ -143,9 +143,7 @@ class MigrateCRMController extends Controller
                         $this->getListFlow($garusEvent, $newCompanyId, $userId);
                     }
                 }
-                Log::channel()->info('TEST CRM MIGRATE', [
-                    'newCompany' => $newCompanyId
-                ]);
+              
                 // }
             }
         }
