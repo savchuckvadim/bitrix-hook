@@ -309,7 +309,7 @@ class BitrixListFlowService
                 }
             }
             $fieldsData = [
-                'NAME' => $evTypeName . ' ' . $eventActionName
+                'NAME' => $hotName
             ];
 
             foreach ($bitrixLists as $bitrixList) {
