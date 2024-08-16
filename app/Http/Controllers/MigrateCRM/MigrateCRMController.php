@@ -61,10 +61,10 @@ class MigrateCRMController extends Controller
 
 
             foreach ($clients as $index => $client) {
-                if ($index <= 15) {
+                // if ($index <= 15) {
 
                     $fullDepartment = $this->getFullDepartment();
-                    $userId = 1;
+                    $userId = 13;
                     if (!empty($fullDepartment)) {
                         if (!empty($fullDepartment['allUsers'])) {
                             foreach ($fullDepartment['allUsers'] as $user) {
@@ -146,7 +146,7 @@ class MigrateCRMController extends Controller
                     Log::channel()->info('TEST CRM MIGRATE', [
                         'newCompany' => $newCompanyId
                     ]);
-                }
+                // }
             }
         }
 
@@ -1043,10 +1043,7 @@ class MigrateCRMController extends Controller
 
         $date = $this->getDateTimeValue($event['date'], $event['time']);
         $comment = $event['comment'];
-        if ($event['comment'] !== "" &&  $event['comment'] !== null && $event['comment'] !== "NULL"  && $event['comment'] !== "-") {
-
-            $comment = $comment . "\n " . $event['comment'];
-        }
+    
 
         if ($event['planComment'] !== "" &&  $event['planComment'] !== null && $event['planComment'] !== "NULL"  && $event['planComment'] !== "-") {
 
