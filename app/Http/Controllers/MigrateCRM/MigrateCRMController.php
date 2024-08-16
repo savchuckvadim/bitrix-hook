@@ -1170,7 +1170,7 @@ class MigrateCRMController extends Controller
                 $this->portalBxLists,
                 $resultEventType,
                 $event['eventType'],
-                $resultAction,  // сделано, отправлено
+                'act_send',  // сделано, отправлено
                 $responsibleId,
                 $responsibleId,
                 $responsibleId,

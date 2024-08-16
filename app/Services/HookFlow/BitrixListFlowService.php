@@ -48,7 +48,7 @@ class BitrixListFlowService
 
     ) {
         try {
-            if (!$nowDate) {
+            if (empty($nowDate)) {
                 date_default_timezone_set('Europe/Moscow');
                 $nowDate = new DateTime();
                 $nowDate->format('d.m.Y H:i:s');
