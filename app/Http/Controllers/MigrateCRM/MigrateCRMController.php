@@ -115,14 +115,15 @@ class MigrateCRMController extends Controller
                         'ASSIGNED_BY_ID' =>  $userId,
                         'ADDRESS' => $client['adress'],
                     ];
-                    sleep(3);
+                    $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                    usleep($rand);
                     $newCompanyId = BitrixGeneralService::setEntity(
                         $this->hook,
                         'company',
                         $newClientData
                     );
 
-                    sleep(1);
+                    sleep(2);
                     if (!empty($newCompanyId) && !empty($client['events'])) {
                         // $newCompany = BitrixGeneralService::getEntity(
                         //     $this->hook,
@@ -132,14 +133,15 @@ class MigrateCRMController extends Controller
 
                         foreach ($client['events'] as $garusEvent) {
                             // $updatedHistoryField = $this->getHistoryField($garusEvent, $newCompany['UF_CRM_OP_MHISTORY']);
-                            sleep(3);
+                            // sleep(3);
                             // $updtdCompanyWithHistory = BitrixGeneralService::updateEntity(
                             //     $this->hook,
                             //     'company',
                             //     $newCompanyId,
                             //     $updatedHistoryField
                             // );
-                            // usleep(0.3);
+                            $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                            usleep($rand);
                             $this->getListFlow($garusEvent, $newCompanyId, $userId);
                         }
                     }
@@ -162,7 +164,7 @@ class MigrateCRMController extends Controller
             ];
             Log::error('ERROR COLD APIBitrixController: Exception caught',  $errorMessages);
             Log::info('error COLD APIBitrixController', ['error' => $th->getMessage()]);
-            
+
             return APIOnlineController::getError(
                 $th->getMessage(),
                 [

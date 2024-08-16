@@ -674,7 +674,7 @@ class EventReportService
 
             $this->getListFlow();
             // $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-            usleep(1);
+            sleep(1);
             $this->getListPresentationFlow(
                 $currentDealsIds
             );

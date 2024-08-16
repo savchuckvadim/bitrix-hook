@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 class BitrixListService
 {
 
-    
+
     static function setItem(
         $hook,
         $listBitrixId, // from portal db
@@ -52,16 +52,16 @@ class BitrixListService
                 'IBLOCK_ID' => $listBitrixId,
                 'ELEMENT_CODE' => $code,
                 'responseData' => $responseData,
-            
-              
-            
-        ]);
-        Log::channel('telegram')->error('APRIL_HOOK pres list service: setItem', [
 
-            'FIELDS' => $fields
-          
-        
-    ]);
+
+
+            ]);
+            Log::channel('telegram')->error('APRIL_HOOK pres list service: setItem', [
+
+                'FIELDS' => $fields
+
+
+            ]);
             return $result;
         } catch (\Throwable $th) {
             return $result;
@@ -165,7 +165,7 @@ class BitrixListService
         try {
             $method = '/lists.element.get.json';
             $url = $hook . $method;
-         
+
             $data =  [
                 'IBLOCK_TYPE_ID' => 'lists',
                 'IBLOCK_ID' => $listBitrixId,
@@ -201,7 +201,7 @@ class BitrixListService
         try {
             $method = '/lists.field.get.json';
             $url = $hook . $method;
-         
+
             $data =  [
                 'IBLOCK_TYPE_ID' => 'lists',
                 'IBLOCK_ID' => $listBitrixId,
