@@ -28,9 +28,13 @@ class BitrixListService
         try {
             $method = '/lists.element.add.json';
             $url = $hook . $method;
-            $nowDate = now();
+            sleep(1);
 
-            $code = $listBitrixId . '_' . $nowDate;
+            $nowDate = now();
+            $uniqueHash = md5(uniqid(rand(), true));
+
+
+            $code = $listBitrixId . '_' . $nowDate.'_'.$uniqueHash;
             if (!empty($elementCode)) {
                 $code =  $elementCode;
             }
