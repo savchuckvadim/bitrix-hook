@@ -1177,24 +1177,24 @@ class MigrateCRMController extends Controller
 
 
         if ($isDocumentFlow) {
-            BitrixListDocumentFlowService::getListsFlow(  //report - отчет по текущему событию
-                $this->hook,
-                $this->portalBxLists,
-                $resultEventType,
-                $event['eventType'],
-                'act_send',  // сделано, отправлено
-                $responsibleId,
-                $responsibleId,
-                $responsibleId,
-                $companyId,
-                $comment,
-                null, // $currentBxDealIds,
-                null, //  $this->currentBaseDeal['ID']
-                $date,
-                $event['eventType']
+            // BitrixListDocumentFlowService::getListsFlow(  //report - отчет по текущему событию
+            //     $this->hook,
+            //     $this->portalBxLists,
+            //     $resultEventType,
+            //     $event['eventType'],
+            //     'act_send',  // сделано, отправлено
+            //     $responsibleId,
+            //     $responsibleId,
+            //     $responsibleId,
+            //     $companyId,
+            //     $comment,
+            //     null, // $currentBxDealIds,
+            //     null, //  $this->currentBaseDeal['ID']
+            //     $date,
+            //     $event['eventType']
 
 
-            );
+            // );
         } else {
             BitrixListFlowService::getListsFlow(  //report - отчет по текущему событию
                 $this->hook,

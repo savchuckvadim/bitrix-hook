@@ -34,7 +34,7 @@ class BitrixListService
             $uniqueHash = md5(uniqid(rand(), true));
 
 
-            $code = $listBitrixId . '_' . $nowDate.'_'.$uniqueHash;
+            $code = $uniqueHash;
             if (!empty($elementCode)) {
                 $code =  $elementCode;
             }

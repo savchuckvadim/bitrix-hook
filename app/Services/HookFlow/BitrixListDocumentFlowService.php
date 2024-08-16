@@ -85,7 +85,10 @@ class BitrixListDocumentFlowService
             }
 
 
+            $uniqueHash = md5(uniqid(rand(), true));
 
+
+            $code = $uniqueHash;
 
             $xoFields = [
                 [
@@ -264,7 +267,7 @@ class BitrixListDocumentFlowService
                             }
                             // array_push($fieldsData, $currentDataField);
                         }
-                        $code = $companyId . '_' . $currentBaseDealId . '_' . $eventType;
+                        // $code = $companyId . '_' . $currentBaseDealId . '_' . $eventType;
 
                         BitrixListService::setItem(
                             $hook,
