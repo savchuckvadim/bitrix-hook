@@ -43,7 +43,8 @@ class BitrixListFlowService
         $failType,
         $dealIds,
         $currentBaseDealId,
-        $nowDate = null
+        $nowDate = null,
+        $hotName = null
 
     ) {
         try {
@@ -126,7 +127,10 @@ class BitrixListFlowService
                 }
             }
             // Log::channel('telegram')->info('HOOK TST', ['eventAction' => $eventAction]);
+            if (empty($hotName)) {
 
+                $hotName = $evTypeName . ' ' . $eventActionName;
+            }
             $xoFields = [
                 [
                     'code' => 'event_date',
@@ -141,7 +145,7 @@ class BitrixListFlowService
                 [
                     'code' => 'event_title',
                     'name' => 'Название',
-                    'value' => $evTypeName . ' ' . $eventActionName
+                    'value' => $hotName
                 ],
                 [
                     'code' => 'plan_date',

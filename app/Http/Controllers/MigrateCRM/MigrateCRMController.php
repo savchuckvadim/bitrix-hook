@@ -1063,9 +1063,13 @@ class MigrateCRMController extends Controller
                 # code...
                 break;
             case 'Пред.договоренность':
+
                 $resultAction = 'plan';
                 break;
             case 'Заявка на презу':
+            case 'Дист. заявка':
+            case 'Тлф.Заявка':
+
                 $resultAction = 'plan';
                 $resultEventType = 'presentation';
                 break;
@@ -1136,7 +1140,8 @@ class MigrateCRMController extends Controller
                 $comment,
                 null, // $currentBxDealIds,
                 null, //  $this->currentBaseDeal['ID']
-                $date
+                $date,
+                $event['eventType']
 
 
             );
@@ -1161,7 +1166,8 @@ class MigrateCRMController extends Controller
                 '', // $failType,
                 '', // $currentDealIds,
                 '', // $currentBaseDealId
-                $date
+                $date,
+                $event['eventType'] //$hotName
 
             );
         }

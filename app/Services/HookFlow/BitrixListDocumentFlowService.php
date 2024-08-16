@@ -49,7 +49,8 @@ class BitrixListDocumentFlowService
         $comment,
         $dealIds,
         $currentBaseDealId = null,
-        $nowDate = null
+        $nowDate = null,
+        $hotName  = null,
         // $workStatus, //inJob
         // $resultStatus,  // result noresult   .. without expired new !
         // $noresultReason,
@@ -65,7 +66,10 @@ class BitrixListDocumentFlowService
                 $nowDate = new DateTime();
                 $nowDate->format('d.m.Y H:i:s');
             }
+            if (empty($hotName)) {
 
+                $hotName = $eventTypeName . ' Создан';
+            }
             // $eventActionName = 'Запланирован';
             // $evTypeName = 'Звонок';
             // $nextCommunication = $deadline;
@@ -97,7 +101,7 @@ class BitrixListDocumentFlowService
                 [
                     'code' => 'event_title',
                     'name' => 'Название',
-                    'value' => $eventTypeName . ' Создан'
+                    'value' => $hotName
                 ],
                 // [
                 //     'code' => 'plan_date',
@@ -191,7 +195,7 @@ class BitrixListDocumentFlowService
 
 
             $fieldsData = [
-                'NAME' => $eventTypeName . ' Создан'
+                'NAME' => $hotName
             ];
 
             foreach ($bitrixLists as $bitrixList) {
