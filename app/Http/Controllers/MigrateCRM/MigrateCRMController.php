@@ -192,7 +192,7 @@ class MigrateCRMController extends Controller
         $pFieldBxId = null;
         $resultValue = [];
         foreach ($pFields as $pField) {
-            if ($pField['code'] === 'op_contacts') {
+            if ($pField['code'] === 'op_mhistory') {
                 $pFieldBxId = 'UF_CRM_' . $pField['bitrixId'];
             }
         }
