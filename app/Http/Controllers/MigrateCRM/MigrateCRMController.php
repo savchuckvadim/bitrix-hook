@@ -122,6 +122,10 @@ class MigrateCRMController extends Controller
                     );
                     array_push($results, $newCompany);
                     usleep(0.3);
+                    if(empty( $newCompany)){
+                        array_push($results, $newClientData);
+
+                    }
                     Log::channel()->info('TEST CRM MIGRATE', [
                         'newCompany' => $newCompany
                     ]);
