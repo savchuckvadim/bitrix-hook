@@ -44,6 +44,7 @@ class MigrateCRMController extends Controller
     {
         $result = null;
         $clients = [];
+        $results = [];
         $googleData = null;
         // try {
 
@@ -119,6 +120,7 @@ class MigrateCRMController extends Controller
                         'company',
                         $newClientData
                     );
+                    array_push($results, $newCompany);
                     usleep(0.3);
                     Log::channel()->info('TEST CRM MIGRATE', [
                         'newCompany' => $newCompany
@@ -130,7 +132,7 @@ class MigrateCRMController extends Controller
 
         return APIOnlineController::getError(
             'infoblocks not found',
-            ['clients' => $clients, 'googleData' => $googleData]
+            ['clients' => $results]
         );
         // } catch (\Throwable $th) {
         //     return APIOnlineController::getError(
