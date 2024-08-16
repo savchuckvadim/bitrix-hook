@@ -204,6 +204,7 @@ class BitrixRPAPresFlowService
                 'typeId' => $this->rpaTypeId,
                 'fields' => $fieldsData
             ];
+            sleep(1);
             $resultItem = $rpaService->updateRPAItem(
                 $dataForUpdate
             );

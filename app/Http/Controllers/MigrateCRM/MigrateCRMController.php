@@ -122,8 +122,8 @@ class MigrateCRMController extends Controller
                     $newClientData
                 );
 
-                usleep(0.3);
-                if (!empty($newCompanyId) && !empty($client['events'] )) {
+                usleep(1);
+                if (!empty($newCompanyId) && !empty($client['events'])) {
                     // $newCompany = BitrixGeneralService::getEntity(
                     //     $this->hook,
                     //     'company',
