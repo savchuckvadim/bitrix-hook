@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MigrateCRM\MigrateCRMController;
+use App\Jobs\CRMMigrateJob;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,8 +31,9 @@ Route::get('/gsr/crm/{pass}/{domain}/{token}/', function ($pass, $domain, $token
     // ]);
 
     if ($pass == 'nmbrsdntl' && $domain) {
-        $controller = new  MigrateCRMController($token, $domain);
-        return  $controller->crm();
+        dispatch(
+            new CRMMigrateJob($token, $domain)
+        )->onQueue('high-priority');
     } else {
         return 'yo';
     }
