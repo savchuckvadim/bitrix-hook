@@ -295,10 +295,7 @@ class MigrateCRMController extends Controller
                 if (!empty($pField['items'])) {
                     foreach ($pField['items'] as $pItem) {
                         if ($garusResultat == $pItem['name']) {
-                            dd([
-                                'garusResultat' => $garusResultat,
-                                'pItem' => $pItem,
-                            ]);
+                         
                             $result = ['UF_CRM_' . $pField['bitrixId'] => $pItem['bitrixId']];
                         }
                     }
