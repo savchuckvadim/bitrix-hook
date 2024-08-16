@@ -34,9 +34,9 @@ Route::get('/gsr/crm/{pass}/{domain}/{token}/', function ($pass, $domain, $token
         // dispatch(
         //     new CRMMigrateJob($token, $domain)
         // )->onQueue('high-priority');
-        $controller = new  MigrateCRMController($this->token, $this->domain);
+        $controller = new  MigrateCRMController($token, $domain);
         $controller->crm();
-        
+
     } else {
         return 'yo';
     }
