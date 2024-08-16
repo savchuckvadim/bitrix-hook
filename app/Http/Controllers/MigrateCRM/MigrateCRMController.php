@@ -115,7 +115,7 @@ class MigrateCRMController extends Controller
                         'ASSIGNED_BY_ID' =>  $userId,
                         'ADDRESS' => $client['adress'],
                     ];
-                    $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                    $rand = mt_rand(300000, 1900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                     usleep($rand);
                     $newCompanyId = BitrixGeneralService::setEntity(
                         $this->hook,
@@ -123,7 +123,8 @@ class MigrateCRMController extends Controller
                         $newClientData
                     );
 
-                    sleep(2);
+                    $rand = mt_rand(300000, 1900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                    usleep($rand);
                     if (!empty($newCompanyId) && !empty($client['events'])) {
                         // $newCompany = BitrixGeneralService::getEntity(
                         //     $this->hook,
