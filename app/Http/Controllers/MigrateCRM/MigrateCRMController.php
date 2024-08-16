@@ -47,6 +47,7 @@ class MigrateCRMController extends Controller
         $clients = [];
         $results = [];
         $googleData = null;
+        $newCompanyId = null;
         try {
 
             $googleData = GoogleInstallController::getData($this->token);
@@ -62,7 +63,7 @@ class MigrateCRMController extends Controller
 
                 foreach ($clients as $index => $client) {
                     // if ($index <= 15) {
-
+                    $newCompanyId = null;
                     $fullDepartment = $this->getFullDepartment();
                     $userId = 13; //201 - man savchuk in rostov
                     if (!empty($fullDepartment)) {
@@ -154,7 +155,7 @@ class MigrateCRMController extends Controller
 
             return APIOnlineController::getError(
                 'infoblocks not found',
-                ['clients' => $results]
+                ['clients' => $results, 'newCompanyId' => $newCompanyId]
             );
         } catch (\Throwable $th) {
             $errorMessages =  [
@@ -163,6 +164,7 @@ class MigrateCRMController extends Controller
                 'line'      => $th->getLine(),
                 'trace'     => $th->getTraceAsString(),
             ];
+            Log::channel('telegram')->error('ERROR COLD APIBitrixController: Exception caught',  $errorMessages);
             Log::error('ERROR COLD APIBitrixController: Exception caught',  $errorMessages);
             Log::info('error COLD APIBitrixController', ['error' => $th->getMessage()]);
 
@@ -173,9 +175,10 @@ class MigrateCRMController extends Controller
                     // 'hook' => $this->hook,
                     // 'portalBxLists' => $this->portalBxLists,
 
-
-                    'portalBxCompany' => $this->portalBxCompany,
-                    'googleData' => $googleData,
+                    'clients' => $results,
+                    'newCompanyId' => $newCompanyId
+                    // 'portalBxCompany' => $this->portalBxCompany,
+                    // 'googleData' => $googleData,
                 ]
             );
         }
