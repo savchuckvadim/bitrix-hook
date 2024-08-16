@@ -29,15 +29,15 @@ Route::get('/gsr/crm/{pass}/{domain}/{token}/', function ($pass, $domain, $token
     //     'domain' => $domain,
     //     'token' => $token,
     // ]);
-    set_time_limit(0);
-    if ($pass == 'nmbrsdntl' && $domain) {
-        // dispatch(
-        //     new CRMMigrateJob($token, $domain)
-        // )->onQueue('high-priority');
-        $controller = new  MigrateCRMController($token, $domain);
-        $controller->crm();
+    // set_time_limit(0);
+    // if ($pass == 'nmbrsdntl' && $domain) {
+    //     // dispatch(
+    //     //     new CRMMigrateJob($token, $domain)
+    //     // )->onQueue('high-priority');
+    //     $controller = new  MigrateCRMController($token, $domain);
+    //     $controller->crm();
 
-    } else {
+    // } else {
         return 'yo';
-    }
+    // }
 });
