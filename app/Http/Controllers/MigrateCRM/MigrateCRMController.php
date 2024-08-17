@@ -114,7 +114,16 @@ class MigrateCRMController extends Controller
                             'UF_CRM_OP_SOURCE_SELECT' =>  $source['UF_CRM_OP_SOURCE_SELECT'],
                             'UF_CRM_CLIENT_SOURCE' =>  $client['source'],
                             'ASSIGNED_BY_ID' =>  $userId,
-                            'ADDRESS' => $client['adress'],
+                            'ADDRESS' => $client['adress']['fullAddress'],
+                            'ADDRESS' => $client['adress']['fullAddress'],
+
+                            'ADDRESS_CITY' => $client['adress']['gorod'],
+
+                            'ADDRESS_POSTAL_CODE' => $client['adress']['indeks'],
+
+                            'ADDRESS_REGION' => $client['adress']['region'],
+
+
                             'PHONE' => $phonesArray,
                         ];
                         $rand = mt_rand(300000, 1900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
@@ -233,12 +242,15 @@ class MigrateCRMController extends Controller
 
 
         $result = null;
+        Log::channel('telegram')->info('TEST PHONE', ['$contacts' => $contacts]);
 
-        if (!empty($contacts) && is_array($contacts)) {
+        if (!empty($contacts)) {
 
             $contact = $contacts[0];
 
             $phones =  $contact['telefons'];
+            Log::channel('telegram')->info('TEST PHONE', ['$phones' => $phones]);
+
             if (!empty($phones)) {
                 $phonesArray = explode(", ", $phones);
 
@@ -254,7 +266,7 @@ class MigrateCRMController extends Controller
 
                     // Замена первой '8' на '+7'
                     $processedPhone = '+7' . substr($phone, 1);
-
+                    Log::channel('telegram')->info('TEST PHONE', ['$processedPhone' => $processedPhone]);
                     // Добавление в массив только уникальных номеров
                     if (!in_array($processedPhone, $processedPhones)) {
                         $processedPhones[] = $processedPhone;
@@ -264,6 +276,7 @@ class MigrateCRMController extends Controller
             }
         }
 
+        Log::channel('telegram')->info('TEST PHONE', ['$result' => $result]);
 
         return $result;
     }
