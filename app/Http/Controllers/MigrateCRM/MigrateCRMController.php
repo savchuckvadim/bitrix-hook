@@ -65,7 +65,7 @@ class MigrateCRMController extends Controller
                     // if ($index <= 15) {
                     $newCompanyId = null;
                     $fullDepartment = $this->getFullDepartment();
-                    $userId = 13; //201 - man savchuk in rostov
+                    $userId = 201; //201 - man savchuk in rostov
                     if (!empty($fullDepartment)) {
                         if (!empty($fullDepartment['allUsers'])) {
                             foreach ($fullDepartment['allUsers'] as $user) {
