@@ -278,7 +278,7 @@ class MigrateCRMController extends Controller
                             'VALUE' => $processedPhone,
                             "VALUE_TYPE" => "WORK"
                         ];
-                        $processedPhones[] = $processedPhone;
+                        $processedPhones[] = $resultPhone;
                     }
                 }
                 $result = $processedPhones;
