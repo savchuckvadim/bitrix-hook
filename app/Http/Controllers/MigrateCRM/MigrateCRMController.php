@@ -134,29 +134,33 @@ class MigrateCRMController extends Controller
                             $newClientData
                         );
 
-                        $rand = mt_rand(300000, 1900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                        usleep($rand);
-                        if (!empty($newCompanyId) && !empty($client['events'])) {
-                            // $newCompany = BitrixGeneralService::getEntity(
-                            //     $this->hook,
-                            //     'company',
-                            //     $newCompanyId
-                            // );
 
-                            foreach ($client['events'] as $garusEvent) {
-                                // $updatedHistoryField = $this->getHistoryField($garusEvent, $newCompany['UF_CRM_OP_MHISTORY']);
-                                // sleep(3);
-                                // $updtdCompanyWithHistory = BitrixGeneralService::updateEntity(
-                                //     $this->hook,
-                                //     'company',
-                                //     $newCompanyId,
-                                //     $updatedHistoryField
-                                // );
-                                $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                                usleep($rand);
-                                $this->getListFlow($garusEvent, $newCompanyId, $userId);
-                            }
-                        }
+                        /**
+                         * LIST FLOW
+                         */
+                        // $rand = mt_rand(300000, 1900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                        // usleep($rand);
+                        // if (!empty($newCompanyId) && !empty($client['events'])) {
+                        //     // $newCompany = BitrixGeneralService::getEntity(
+                        //     //     $this->hook,
+                        //     //     'company',
+                        //     //     $newCompanyId
+                        //     // );
+
+                        //     foreach ($client['events'] as $garusEvent) {
+                        //         // $updatedHistoryField = $this->getHistoryField($garusEvent, $newCompany['UF_CRM_OP_MHISTORY']);
+                        //         // sleep(3);
+                        //         // $updtdCompanyWithHistory = BitrixGeneralService::updateEntity(
+                        //         //     $this->hook,
+                        //         //     'company',
+                        //         //     $newCompanyId,
+                        //         //     $updatedHistoryField
+                        //         // );
+                        //         $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                        //         usleep($rand);
+                        //         $this->getListFlow($garusEvent, $newCompanyId, $userId);
+                        //     }
+                        // }
                     }
                 }
             }
@@ -269,6 +273,11 @@ class MigrateCRMController extends Controller
                     Log::channel('telegram')->info('TEST PHONE', ['$processedPhone' => $processedPhone]);
                     // Добавление в массив только уникальных номеров
                     if (!in_array($processedPhone, $processedPhones)) {
+                        $resultPhone = [
+                            // { "VALUE": "555888", "VALUE_TYPE": "WORK" } 
+                            'VALUE' => $processedPhone,
+                            "VALUE_TYPE" => "WORK"
+                        ];
                         $processedPhones[] = $processedPhone;
                     }
                 }
