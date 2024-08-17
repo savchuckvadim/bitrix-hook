@@ -30,13 +30,13 @@ Route::get('/gsr/crm/{pass}/{domain}/{token}/', function ($pass, $domain, $token
     //     'token' => $token,
     // ]);
     // set_time_limit(0);
-    // if ($pass == 'nmbrsdntl' && $domain) {
-    //     // dispatch(
-    //     //     new CRMMigrateJob($token, $domain)
-    //     // )->onQueue('high-priority');
-    //     $controller = new  MigrateCRMController($token, $domain);
-    //     $controller->crm();
-    // } else {
+    if ($pass == 'nmbrsdntl' && $domain) {
+        // dispatch(
+        //     new CRMMigrateJob($token, $domain)
+        // )->onQueue('high-priority');
+        $controller = new  MigrateCRMController($token, $domain);
+        $controller->crm();
+    } else {
         return 'yo';
-    // }
+    }
 });

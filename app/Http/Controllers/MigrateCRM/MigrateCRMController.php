@@ -62,93 +62,93 @@ class MigrateCRMController extends Controller
 
 
                 foreach ($clients as $index => $client) {
-                    // if ($index <= 15) {
-                    $newCompanyId = null;
-                    $fullDepartment = $this->getFullDepartment();
-                    $userId = 201; //201 - man savchuk in rostov
-                    if (!empty($fullDepartment)) {
-                        if (!empty($fullDepartment['allUsers'])) {
-                            foreach ($fullDepartment['allUsers'] as $user) {
-                                if (strpos($client['assigned'], $user['LAST_NAME']) !== false) {
-                                    $userId = $user['ID'];
+                    if ($index <= 4) {
+                        $newCompanyId = null;
+                        $fullDepartment = $this->getFullDepartment();
+                        $userId = 201; //201 - man savchuk in rostov
+                        if (!empty($fullDepartment)) {
+                            if (!empty($fullDepartment['allUsers'])) {
+                                foreach ($fullDepartment['allUsers'] as $user) {
+                                    if (strpos($client['assigned'], $user['LAST_NAME']) !== false) {
+                                        $userId = $user['ID'];
+                                    }
                                 }
                             }
                         }
-                    }
-                    $perspekt = $this->getCompanyPerspect($client['perspect']);
-                    $concurent = $this->getCompanyConcurent($client['concurent']);
-                    $statusk = $this->getCompanyStatus($client['statusk']);
-                    $category = $this->getCompanyCategory($client['category']);
-                    $prognoz = $this->getCompanyPrognoz($client['prognoz']);
+                        $perspekt = $this->getCompanyPerspect($client['perspect']);
+                        $concurent = $this->getCompanyConcurent($client['concurent']);
+                        $statusk = $this->getCompanyStatus($client['statusk']);
+                        $category = $this->getCompanyCategory($client['category']);
+                        $prognoz = $this->getCompanyPrognoz($client['prognoz']);
 
-                    $contacts = $this->getContactsField($client['contacts']);
-                    // $history = $this->getHistoryField($client['events']);
-
-
-                    $workStatus = $this->getCompanyWorkStatust($client['perspect']);
-                    $workResult = $this->getCompanyItemFromName($client['perspect'], 'op_work_result');
-                    $source = $this->getCompanyItemFromName($client['source'], 'op_source_select');
+                        $contacts = $this->getContactsField($client['contacts']);
+                        // $history = $this->getHistoryField($client['events']);
 
 
-                    $newClientData = [
-                        'TITLE' => $client['name'],
-                        // 'UF_CRM_OP_WORK_STATUS' => $client['name'],
-                        'UF_CRM_OP_PROSPECTS_TYPE' => $perspekt['UF_CRM_OP_PROSPECTS_TYPE'],
-                        'UF_CRM_OP_CLIENT_STATUS' => $statusk['UF_CRM_OP_CLIENT_STATUS'], //ЧОК ОК
-                        'UF_CRM_OP_SMART_LID' => $client['id'], // сюда записывать id из старой crm
-                        'UF_CRM_OP_CONCURENTS' => $concurent['UF_CRM_OP_CONCURENTS'], // конкуренты
+                        $workStatus = $this->getCompanyWorkStatust($client['perspect']);
+                        $workResult = $this->getCompanyItemFromName($client['perspect'], 'op_work_result');
+                        $source = $this->getCompanyItemFromName($client['source'], 'op_source_select');
+                        $phonesArray = $this->getPhonesField($client['contacts']);
 
-                        'UF_CRM_OP_CATEGORY' => $category['UF_CRM_OP_CATEGORY'],  // ККК ..
-                        'UF_CRM_OP_CURRENT_STATUS' => $client['perspect'],
-                        'UF_CRM_OP_WORK_STATUS' => $workStatus['UF_CRM_OP_WORK_STATUS'],
+                        $newClientData = [
+                            'TITLE' => $client['name'],
+                            // 'UF_CRM_OP_WORK_STATUS' => $client['name'],
+                            'UF_CRM_OP_PROSPECTS_TYPE' => $perspekt['UF_CRM_OP_PROSPECTS_TYPE'],
+                            'UF_CRM_OP_CLIENT_STATUS' => $statusk['UF_CRM_OP_CLIENT_STATUS'], //ЧОК ОК
+                            'UF_CRM_OP_SMART_LID' => $client['id'], // сюда записывать id из старой crm
+                            'UF_CRM_OP_CONCURENTS' => $concurent['UF_CRM_OP_CONCURENTS'], // конкуренты
 
-                        'UF_CRM_OP_PROSPECTS' => $prognoz['UF_CRM_OP_PROSPECTS'],
-                        'UF_CRM_OP_CONTACTS' => $contacts['UF_CRM_OP_CONTACTS'],
-                        'UF_CRM_OP_HISTORY' =>  $client['commaent'],
-                        'COMMENT' =>  $client['commaent'],
-                        // 'UF_CRM_OP_MHISTORY' =>  $history['UF_CRM_OP_MHISTORY'],
+                            'UF_CRM_OP_CATEGORY' => $category['UF_CRM_OP_CATEGORY'],  // ККК ..
+                            'UF_CRM_OP_CURRENT_STATUS' => $client['perspect'],
+                            'UF_CRM_OP_WORK_STATUS' => $workStatus['UF_CRM_OP_WORK_STATUS'],
 
-                        //new
-                        'UF_CRM_OP_WORK_RESULT' =>  $workResult['UF_CRM_OP_WORK_RESULT'],
-                        'UF_CRM_OP_WORK_RESULT_STRING' =>  $client['perspect'],
-                        'UF_CRM_OP_SOURCE_SELECT' =>  $source['UF_CRM_OP_SOURCE_SELECT'],
-                        'UF_CRM_CLIENT_SOURCE' =>  $client['source'],
-                        'ASSIGNED_BY_ID' =>  $userId,
-                        'ADDRESS' => $client['adress'],
-                    ];
-                    $rand = mt_rand(300000, 1900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                    usleep($rand);
-                    $newCompanyId = BitrixGeneralService::setEntity(
-                        $this->hook,
-                        'company',
-                        $newClientData
-                    );
+                            'UF_CRM_OP_PROSPECTS' => $prognoz['UF_CRM_OP_PROSPECTS'],
+                            'UF_CRM_OP_CONTACTS' => $contacts['UF_CRM_OP_CONTACTS'],
+                            'UF_CRM_OP_HISTORY' =>  $client['commaent'],
+                            'COMMENT' =>  $client['commaent'],
+                            // 'UF_CRM_OP_MHISTORY' =>  $history['UF_CRM_OP_MHISTORY'],
 
-                    $rand = mt_rand(300000, 1900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                    usleep($rand);
-                    if (!empty($newCompanyId) && !empty($client['events'])) {
-                        // $newCompany = BitrixGeneralService::getEntity(
-                        //     $this->hook,
-                        //     'company',
-                        //     $newCompanyId
-                        // );
+                            //new
+                            'UF_CRM_OP_WORK_RESULT' =>  $workResult['UF_CRM_OP_WORK_RESULT'],
+                            'UF_CRM_OP_WORK_RESULT_STRING' =>  $client['perspect'],
+                            'UF_CRM_OP_SOURCE_SELECT' =>  $source['UF_CRM_OP_SOURCE_SELECT'],
+                            'UF_CRM_CLIENT_SOURCE' =>  $client['source'],
+                            'ASSIGNED_BY_ID' =>  $userId,
+                            'ADDRESS' => $client['adress'],
+                            'PHONE' => $phonesArray,
+                        ];
+                        $rand = mt_rand(300000, 1900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                        usleep($rand);
+                        $newCompanyId = BitrixGeneralService::setEntity(
+                            $this->hook,
+                            'company',
+                            $newClientData
+                        );
 
-                        foreach ($client['events'] as $garusEvent) {
-                            // $updatedHistoryField = $this->getHistoryField($garusEvent, $newCompany['UF_CRM_OP_MHISTORY']);
-                            // sleep(3);
-                            // $updtdCompanyWithHistory = BitrixGeneralService::updateEntity(
+                        $rand = mt_rand(300000, 1900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                        usleep($rand);
+                        if (!empty($newCompanyId) && !empty($client['events'])) {
+                            // $newCompany = BitrixGeneralService::getEntity(
                             //     $this->hook,
                             //     'company',
-                            //     $newCompanyId,
-                            //     $updatedHistoryField
+                            //     $newCompanyId
                             // );
-                            $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                            usleep($rand);
-                            $this->getListFlow($garusEvent, $newCompanyId, $userId);
+
+                            foreach ($client['events'] as $garusEvent) {
+                                // $updatedHistoryField = $this->getHistoryField($garusEvent, $newCompany['UF_CRM_OP_MHISTORY']);
+                                // sleep(3);
+                                // $updtdCompanyWithHistory = BitrixGeneralService::updateEntity(
+                                //     $this->hook,
+                                //     'company',
+                                //     $newCompanyId,
+                                //     $updatedHistoryField
+                                // );
+                                $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                                usleep($rand);
+                                $this->getListFlow($garusEvent, $newCompanyId, $userId);
+                            }
                         }
                     }
-
-                    // }
                 }
             }
 
@@ -201,7 +201,12 @@ class MigrateCRMController extends Controller
         }
 
         foreach ($contacts as $contact) {
-            $resultContactstring = $contact['name'] . ' ' . $contact['position'] . ' ' . $contact['telefon'];
+            $resultContactstring = $contact['name'] . ' ' . $contact['position'];
+            if (!empty($contact['telefon']) && $contact['telefon'] !== '8' && $contact['telefon'] !== '8( ) - -' && $contact['telefon'] !== '-' && $contact['telefon'] !== 'NULL'  && $contact['telefon'] !== "\"NULL\"") {
+
+                $phone = '+7' . substr($contact['telefon'], 1);
+                $resultContactstring = $resultContactstring . "\n " . ' тел: ' . $phone;
+            }
             if (!empty($contact['dobTel']) && $contact['dobTel'] !== '-' && $contact['dobTel'] !== 'NULL'  && $contact['dobTel'] !== "\"NULL\"") {
                 $resultContactstring = $resultContactstring . ' доб: ' . $contact['dobTel'];
             }
@@ -222,6 +227,47 @@ class MigrateCRMController extends Controller
 
         return $result;
     }
+    protected function  getPhonesField($contacts) //contacts
+    {
+        // phones
+
+
+        $result = null;
+
+        if (!empty($contacts) && is_array($contacts)) {
+
+            $contact = $contacts[0];
+
+            $phones =  $contact['telefons'];
+            if (!empty($phones)) {
+                $phonesArray = explode(", ", $phones);
+
+                // Новый массив для обработанных телефонов
+                $processedPhones = [];
+
+                // Перебор массива и замена первой '8' на '+7'
+                foreach ($phonesArray as $phone) {
+                    // Пропуск неправильно форматированных номеров
+                    if (trim($phone) === "8( ) - -") {
+                        continue;
+                    }
+
+                    // Замена первой '8' на '+7'
+                    $processedPhone = '+7' . substr($phone, 1);
+
+                    // Добавление в массив только уникальных номеров
+                    if (!in_array($processedPhone, $processedPhones)) {
+                        $processedPhones[] = $processedPhone;
+                    }
+                }
+                $result = $processedPhones;
+            }
+        }
+
+
+        return $result;
+    }
+
     protected function  getHistoryField($event, $currentFieldValue) //events
     {
         //    ОП История (Комментарии)	general	multiple		op_mhistory
