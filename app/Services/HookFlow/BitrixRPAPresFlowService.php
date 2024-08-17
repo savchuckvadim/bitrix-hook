@@ -53,8 +53,8 @@ class BitrixRPAPresFlowService
         $tmcDealId,
         $nowDate,
         $deadline,
-        $created,
-        $responsible,
+        $created,  //owner user - руководитель
+        $responsible, //tmc user
         // $bossId = 1,
         $companyId,
         // $contactId,
@@ -131,11 +131,11 @@ class BitrixRPAPresFlowService
                     'value' => $responsible
                 ],
 
-                // [
-                //     'code' => 'last_pres_done_responsible',
-                //     'name' => 'ОП Кто назначен ответственным',
-                //     'value' => $deadline
-                // ],
+                [
+                    'code' => 'owner_op',
+                    'name' => 'Руководитель',
+                    'value' => $created
+                ],
                 [
                     'code' => 'rpa_crm_company',
                     'name' => 'Компания',
@@ -195,9 +195,9 @@ class BitrixRPAPresFlowService
             );
 
             $fieldsData = [
-                'createdBy' => $responsible,
-                'updatedBy' => $responsible,
-                'movedBy' => $responsible,
+                'createdBy' => $created,
+                'updatedBy' => $created,
+                'movedBy' => $created,
             ];
             $dataForUpdate = [
                 'id' => $resultItem['id'],
