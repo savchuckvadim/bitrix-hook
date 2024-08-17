@@ -62,7 +62,7 @@ class MigrateCRMController extends Controller
 
 
                 foreach ($clients as $index => $client) {
-                    if ($index <= 4) {
+             
                         $newCompanyId = null;
                         $fullDepartment = $this->getFullDepartment();
                         $userId = 201; //201 - man savchuk in rostov
@@ -149,7 +149,7 @@ class MigrateCRMController extends Controller
                                 $this->getListFlow($garusEvent, $newCompanyId, $userId);
                             }
                         }
-                    }
+                
                 }
             }
 
