@@ -158,7 +158,7 @@ class BitrixDealFlowService
 
                     if ($currentCategoryData['code'] === 'sales_presentation') {
                         if (!empty($currentDealId)) {
-                            $rand = mt_rand(700000, 1100000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                            $rand = mt_rand(1000000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                             usleep($rand);
                             $newPresDeal = BitrixDealService::getDeal(
                                 $hook,
@@ -190,7 +190,7 @@ class BitrixDealFlowService
 
                     ]);
                     if ($isCanDealStageUpdate) {
-                        $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                        $rand = mt_rand(1000000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                         usleep($rand);
                         BitrixDealService::updateDeal(
                             $hook,
@@ -376,8 +376,7 @@ class BitrixDealFlowService
                     // }
                     // }
 
-                    $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                    usleep($rand);
+                    sleep(1);
 
                     if (!$currentDeal) {
 
