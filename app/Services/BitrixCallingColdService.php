@@ -184,8 +184,11 @@ class BitrixCallingColdService
         $currentBtxCompany = null;
         $currentBtxEntity = null;
         if (!empty($data['entityType'])) {
-            $rand = mt_rand(1000000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-            usleep($rand);
+            $randomNumber = rand(1, 3);
+
+
+
+            sleep($randomNumber);
             $currentBtxEntity = BitrixGeneralService::getEntity(
                 $this->hook,
                 $data['entityType'],
@@ -452,8 +455,11 @@ class BitrixCallingColdService
             if ($this->isSmartFlow) {
                 $this->getSmartFlow();
             }
-            $rand = mt_rand(1000000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-            usleep($rand);
+            $randomNumber = rand(1, 3);
+
+
+
+            sleep($randomNumber);
             if ($this->isDealFlow && $this->portalDealData) {
                 $currentDealsIds = $this->getDealFlow();
                 if (!empty($currentDealsIds)) {
@@ -475,8 +481,11 @@ class BitrixCallingColdService
                 $this->createColdTask($currentSmartId, $currentDealsIds);
             }
 
-            $rand = mt_rand(1000000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-            usleep($rand);
+            $randomNumber = rand(1, 3);
+
+
+
+            sleep($randomNumber);
 
             BitrixEntityFlowService::coldflow(
                 $this->portal,
@@ -688,8 +697,11 @@ class BitrixCallingColdService
                         }
                     }
                 }
-                $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                usleep($rand);
+                $randomNumber = rand(1, 3);
+
+
+
+                sleep($randomNumber);
                 $currentDeals = BitrixDealService::getDealList(
                     $this->hook,
                     [

@@ -42,9 +42,11 @@ class BitrixTaskService
     ) {
         date_default_timezone_set('Europe/Moscow');
         $nowDate = now();
-        $rand = mt_rand(500000, 1500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-        usleep($rand);
+        $randomNumber = rand(1, 3);
 
+
+
+        sleep($randomNumber);
 
         //TODO
         //type - cold warm presentation hot
@@ -178,8 +180,11 @@ class BitrixTaskService
             //         'isXO' => $isXO,
             //     ]
             // );
-            $rand = mt_rand(300000, 1500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-            usleep($rand);
+            $randomNumber = rand(1, 3);
+
+
+
+            sleep($randomNumber);
             if ($idsForComplete) {
                 $this->completeTask($hook, $idsForComplete);
             }

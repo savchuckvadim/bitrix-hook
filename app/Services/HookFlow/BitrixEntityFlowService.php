@@ -23,8 +23,11 @@ class BitrixEntityFlowService
         $eventAction,  // plan done expired 
         $entityFieldsUpdatingContent, //updting fields
     ) {
-        $rand = mt_rand(500000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-        usleep($rand);
+        $randomNumber = rand(1, 3);
+
+
+
+        sleep($randomNumber);
         // Log::channel('telegram')->info('APRIL_HOOK updateCompany', ['$entityFieldsUpdatingContent' => $entityFieldsUpdatingContent]);
         // Log::info('APRIL_HOOK updateCompany', ['$entityFieldsUpdatingContent' => $entityFieldsUpdatingContent]);
 
