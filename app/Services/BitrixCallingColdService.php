@@ -343,6 +343,7 @@ class BitrixCallingColdService
                 }
             }
         }
+        $updatedFields['ASSIGNED_BY_ID'] = $data['responsible'];
 
         if (!empty($resultEntityFields)) {
             $this->entityFieldsUpdatingContent = $resultEntityFields;
