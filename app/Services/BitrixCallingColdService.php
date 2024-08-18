@@ -184,11 +184,8 @@ class BitrixCallingColdService
         $currentBtxCompany = null;
         $currentBtxEntity = null;
         if (!empty($data['entityType'])) {
-            $randomNumber = rand(1, 3);
-
-
-
-            sleep($randomNumber);
+            $rand = mt_rand(500000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            usleep($rand);
             $currentBtxEntity = BitrixGeneralService::getEntity(
                 $this->hook,
                 $data['entityType'],
@@ -451,9 +448,10 @@ class BitrixCallingColdService
             // if(!$this->smartId){
 
             // }
-            $randomNumber = rand(1, 3);
-            sleep($randomNumber);
+         
             if ($this->isSmartFlow) {
+                $rand = mt_rand(1000000, 2500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                usleep($rand);
                 $this->getSmartFlow();
             }
             $randomNumber = rand(1, 3);
@@ -482,11 +480,8 @@ class BitrixCallingColdService
                 $this->createColdTask($currentSmartId, $currentDealsIds);
             }
 
-            $randomNumber = rand(1, 3);
-
-
-
-            sleep($randomNumber);
+            $rand = mt_rand(1000000, 2500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            usleep($rand);
 
             BitrixEntityFlowService::coldflow(
                 $this->portal,
@@ -731,7 +726,7 @@ class BitrixCallingColdService
                     foreach ($currentDeals as $bxDeal) {
                         if (!empty($bxDeal)) {
                             if (!empty($bxDeal['ID'])) {
-                                $rand = mt_rand(2000000, 4000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                                $rand = mt_rand(1500000, 4000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                                 usleep($rand);
                                 BitrixDealService::updateDeal(
                                     $this->hook,
