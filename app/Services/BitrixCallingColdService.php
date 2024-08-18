@@ -323,7 +323,7 @@ class BitrixCallingColdService
                                 );
                                 break;
                             case 'op_prospects_type':  //Перспективность
-                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $workStatusController->getProspectsFieldItemValue(
+                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $workStatusController->getProspectsFieldItemValue(
                                     $pField, //with items
                                     $workStatus,
                                     false //$failType
@@ -343,7 +343,7 @@ class BitrixCallingColdService
                 }
             }
         }
-        $updatedFields['ASSIGNED_BY_ID'] = $data['responsible'];
+        $resultEntityFields['ASSIGNED_BY_ID'] = $data['responsible'];
 
         if (!empty($resultEntityFields)) {
             $this->entityFieldsUpdatingContent = $resultEntityFields;
