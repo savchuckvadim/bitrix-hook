@@ -234,7 +234,6 @@ class MigrateCRMController extends Controller
 
 
         $result = null;
-        Log::channel('telegram')->info('TEST PHONE', ['$contacts' => $contacts]);
 
         if (!empty($contacts)) {
 

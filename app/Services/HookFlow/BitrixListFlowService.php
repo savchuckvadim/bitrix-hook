@@ -58,7 +58,9 @@ class BitrixListFlowService
             }
 
 
+            Log::channel('telegram')->info('TEST nowDate', ['$nowDate' => $nowDate]);
 
+            Log::channel('telegram')->info('TEST currentNowDate', ['$currentNowDate' => $currentNowDate]);
 
             $eventActionName = 'Запланирован';
             $evTypeName = 'Звонок';
