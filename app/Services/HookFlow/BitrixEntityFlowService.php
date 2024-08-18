@@ -158,12 +158,7 @@ class BitrixEntityFlowService
                 );
 
                 // $entityFieldsUpdatingContent
-                Log::info('APRIL_HOOK updateCompany', [
 
-                    'updatedFields' => $updatedFields,
-
-
-                ]);
                 BitrixGeneralService::updateEntity(
                     $hook,
                     $entityType,
@@ -535,6 +530,7 @@ class BitrixEntityFlowService
 
         $userId = 'user_' . $responsibleId;
         $isResult =  $resultStatus == 'result' || $resultStatus == 'new';
+        $updatedFields['ASSIGNED_BY_ID'] = $responsibleId;
 
         //general report fields 
         foreach ($portalFields as $pField) {
