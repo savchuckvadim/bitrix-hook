@@ -63,9 +63,10 @@ class BitrixListDocumentFlowService
 
             if (empty($nowDate)) {
                 date_default_timezone_set('Europe/Moscow');
-                $nowDate = new DateTime();
-                $nowDate =  $nowDate->format('d.m.Y H:i:s');
+                $currentNowDate = new DateTime();
+                $nowDate = $currentNowDate->format('d.m.Y H:i:s');
             }
+
             if (empty($hotName)) {
 
                 $hotName = $eventTypeName . ' Создан';

@@ -1421,7 +1421,10 @@ class EventDocumentService
                 $this->entityId,
                 $this->comment,
                 $currentBxDealIds,
-                $this->currentBaseDeal['ID']
+                $this->currentBaseDeal['ID'],
+                null,
+                null,
+         
                 // $this->workStatus['current'], 
                 // $this->resultStatus, // result noresult expired,
                 // $this->noresultReason,
