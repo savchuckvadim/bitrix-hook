@@ -85,7 +85,8 @@ class BitrixEntityFlowService
         $currentFieldsForUpdate,
 
     ) {
-        sleep(0.5);
+        $rand = mt_rand(100000, 500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        usleep($rand);
         // Log::channel('telegram')->info('APRIL_HOOK updateCompany', ['$entityFieldsUpdatingContent' => $entityFieldsUpdatingContent]);
         // Log::info('APRIL_HOOK updateCompany', ['$entityFieldsUpdatingContent' => $entityFieldsUpdatingContent]);
 

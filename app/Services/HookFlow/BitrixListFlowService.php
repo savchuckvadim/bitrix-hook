@@ -49,12 +49,12 @@ class BitrixListFlowService
     ) {
         try {
 
-            date_default_timezone_set('Europe/Moscow');
-            $currentNowDate = new DateTime();
-            $currentNowDate->format('d.m.Y H:i:s');
 
-            if (!empty($nowDate)) {
-                $currentNowDate = $nowDate;
+
+            if (empty($nowDate)) {
+                date_default_timezone_set('Europe/Moscow');
+                $currentNowDate = new DateTime();
+                $nowDate = $currentNowDate->format('d.m.Y H:i:s');
             }
 
 
@@ -140,7 +140,7 @@ class BitrixListFlowService
                 [
                     'code' => 'event_date',
                     'name' => 'Дата',
-                    'value' => $currentNowDate,
+                    'value' => $nowDate,
                 ],
                 // [
                 //     'code' => 'name',

@@ -17,9 +17,7 @@ class BitrixTaskService
 
 {
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function createTask(
 
@@ -44,8 +42,8 @@ class BitrixTaskService
     ) {
         date_default_timezone_set('Europe/Moscow');
         $nowDate = now();
-        $rand = rand(1, 3);
-        sleep($rand);
+        $rand = mt_rand(500000, 1500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        usleep($rand);
 
 
         //TODO
@@ -126,12 +124,12 @@ class BitrixTaskService
             $taskTitle = $stringType . '  ' . $name . '  ' . $deadline;
 
             // if (!$isXO) {
-                if (!empty($currentDealsItemIds)) {
-                    foreach ($currentDealsItemIds as $dealId) {
+            if (!empty($currentDealsItemIds)) {
+                foreach ($currentDealsItemIds as $dealId) {
 
-                        array_push($crmItems, 'D_' . $dealId);
-                    }
+                    array_push($crmItems, 'D_' . $dealId);
                 }
+            }
             // }
 
 
@@ -154,8 +152,8 @@ class BitrixTaskService
             $idsForComplete = null;
             if ($isNeedCompleteOtherTasks) {
                 if (empty($currentTaskId)) {
-                    $rand = rand(1, 3);
-                    sleep($rand);
+                    $rand = mt_rand(500000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                    usleep($rand);
                     $idsForComplete = $this->getCurrentTasksIds(
                         $hook,
                         $callingTaskGroupId,
@@ -180,8 +178,8 @@ class BitrixTaskService
             //         'isXO' => $isXO,
             //     ]
             // );
-            $rand = 1;
-            sleep($rand);
+            $rand = mt_rand(300000, 1500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            usleep($rand);
             if ($idsForComplete) {
                 $this->completeTask($hook, $idsForComplete);
             }

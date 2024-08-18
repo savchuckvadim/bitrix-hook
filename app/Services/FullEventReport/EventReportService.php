@@ -674,7 +674,8 @@ class EventReportService
 
             $this->getListFlow();
             // $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-            sleep(1);
+            $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            usleep($rand);
             $this->getListPresentationFlow(
                 $currentDealsIds
             );
@@ -1409,7 +1410,8 @@ class EventReportService
         //presentation - создать или обновить presentation & Основная
 
         if (!empty($this->currentBaseDeal)) {
-            sleep(1);
+            $rand = mt_rand(300000, 700000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            usleep($rand);
             $this->getEntityFlow(
                 true,
                 $this->currentBaseDeal,
@@ -1425,7 +1427,8 @@ class EventReportService
 
         ]);
         if (!empty($this->currentPresDeal)) {  //report pres deal
-            sleep(1);
+            $rand = mt_rand(300000, 700000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            usleep($rand);
             $this->getEntityFlow(
                 true,
                 $this->currentPresDeal,
@@ -1481,7 +1484,8 @@ class EventReportService
 
         ]);
         if (!empty($newPresDeal)) {  //plan pres deal
-            sleep(1);
+            $rand = mt_rand(200000, 700000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            usleep($rand);
             $this->getEntityFlow(
                 true,
                 $newPresDeal,

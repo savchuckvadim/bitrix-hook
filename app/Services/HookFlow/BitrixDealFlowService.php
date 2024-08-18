@@ -232,7 +232,8 @@ class BitrixDealFlowService
 
 
     ) {
-        sleep(1);
+        $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        usleep($rand);
         $newPresDeal = null; //for mutation
         //находит сначала целевые категиории сделок из portal   по eventType и eventAction - по тому что происходит
         //сюда могут при ходить массив текущих сделок и которых есть CATEGORY_ID такой как в portal->deal->category->bitrixId
@@ -375,8 +376,8 @@ class BitrixDealFlowService
                     // }
                     // }
 
-                    $rand = 1;
-                    sleep($rand);
+                    $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                    usleep($rand);
 
                     if (!$currentDeal) {
 
