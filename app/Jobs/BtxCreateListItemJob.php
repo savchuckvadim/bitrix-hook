@@ -114,7 +114,9 @@ class BtxCreateListItemJob implements ShouldQueue
             $this->failReason,
             $this->failType,
             $this->dealIds,
-            $this->currentBaseDealId
+            $this->currentBaseDealId,
+            null, // $nowDate = null,
+            null, // $hotName = null
 
 
 
