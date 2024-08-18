@@ -1518,7 +1518,7 @@ class BitrixHookController extends Controller
                 'trace'     => $th->getTraceAsString(),
             ];
             Log::error('ERROR: Exception caught',  $errorMessages);
-            Log::info('error', ['error' => $th->getMessage()]);
+            Log::error('error', ['error' => $th->getMessage()]);
             return APIOnlineController::getError($th->getMessage(),  $errorMessages);
         }
     }

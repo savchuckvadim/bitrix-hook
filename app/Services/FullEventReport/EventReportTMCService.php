@@ -509,12 +509,12 @@ class EventReportTMCService
                     }
 
 
-                    Log::info('HOOK TEST TMC sessionDeals', [
-                        'sessionDeals' => $sessionDeals,
+                    // Log::info('HOOK TEST TMC sessionDeals', [
+                    //     'sessionDeals' => $sessionDeals,
 
 
 
-                    ]);
+                    // ]);
                 }
                 if (
                     isset($sessionDeals['currentTMCDeal'])
@@ -531,12 +531,12 @@ class EventReportTMCService
 
                 ) {
 
-                    Log::info('HOOK TEST TMC sessionDeals', [
-                        'currentTMCDeal' => $sessionDeals['currentTMCDeal'],
+                    // Log::info('HOOK TEST TMC sessionDeals', [
+                    //     'currentTMCDeal' => $sessionDeals['currentTMCDeal'],
 
 
 
-                    ]);
+                    // ]);
                     $this->currentBtxDeals  = $sessionDeals['currentTaskDeals'];
 
                     $this->currentBaseDeal = $sessionDeals['currentTMCDeal'];
@@ -683,12 +683,12 @@ class EventReportTMCService
             // if ($this->isSmartFlow) {
             //     $this->getSmartFlow();
             // }
-            Log::info('HOOK TEST unplannedPresDeal', [
-                'currentBaseDeal' => $this->currentBaseDeal,
-                // 'currentPresDeal' => $this->currentPresDeal,
-                // 'currentBtxDeals' => $this->currentBtxDeals,
+            // Log::info('HOOK TEST unplannedPresDeal', [
+            //     'currentBaseDeal' => $this->currentBaseDeal,
+            //     // 'currentPresDeal' => $this->currentPresDeal,
+            //     // 'currentBtxDeals' => $this->currentBtxDeals,
 
-            ]);
+            // ]);
             if ($this->isDealFlow && $this->portalDealData) {
                 $currentDealsIds = $this->getDealFlow();
             }
@@ -1472,12 +1472,12 @@ class EventReportTMCService
             $newPresDeal = $flowResult['newPresDeal'];
             if ($this->currentPlanEventType !== 'presentation') {
             } else {
-                Log::info('HOOK TEST currentBtxDeals', [
-                    '$rpa case' => true,
-                    'currentTMCDeal currentBaseDeal' => $this->currentBaseDeal,
+                // Log::info('HOOK TEST currentBtxDeals', [
+                //     '$rpa case' => true,
+                //     'currentTMCDeal currentBaseDeal' => $this->currentBaseDeal,
 
 
-                ]);
+                // ]);
                 $rpaFlowService = new BitrixRPAPresFlowService(
                     $this->hook,
                     $this->portalRPA
@@ -1520,12 +1520,12 @@ class EventReportTMCService
         }
 
 
-        Log::info('HOOK TEST currentBtxDeals', [
-            'newPresDeal' => $newPresDeal,
+        // Log::info('HOOK TEST currentBtxDeals', [
+        //     'newPresDeal' => $newPresDeal,
 
 
 
-        ]);
+        // ]);
         // if (!empty($newPresDeal)) {  //plan pres deal
         //     sleep(1);
         //     $this->getEntityFlow(
@@ -1707,9 +1707,9 @@ class EventReportTMCService
                 //если была проведена презентация - не важно какое текущее report event
             }
         }
-        Log::channel('telegram')->info('HOOK TST', [
-            'isPresentationDone' => $this->isPresentationDone
-        ]);
+        // Log::channel('telegram')->info('HOOK TST', [
+        //     'isPresentationDone' => $this->isPresentationDone
+        // ]);
 
         if ($this->isPresentationDone == true) {
             //если была проведена през

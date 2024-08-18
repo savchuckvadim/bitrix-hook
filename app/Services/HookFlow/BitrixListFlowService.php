@@ -57,11 +57,6 @@ class BitrixListFlowService
                 $nowDate = $currentNowDate->format('d.m.Y H:i:s');
             }
 
-
-            Log::channel('telegram')->info('TEST nowDate', ['$nowDate' => $nowDate]);
-
-            Log::channel('telegram')->info('TEST currentNowDate', ['$currentNowDate' => $currentNowDate]);
-
             $eventActionName = 'Запланирован';
             $evTypeName = 'Звонок';
             $nextCommunication = $deadline;

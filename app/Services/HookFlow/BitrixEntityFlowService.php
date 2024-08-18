@@ -224,17 +224,17 @@ class BitrixEntityFlowService
         $currentFieldsForUpdate,
 
     ) {
-        Log::info('APRIL_HOOK COLD currentFieldsForUpdate', [
-            'data' => [
+        // Log::info('APRIL_HOOK COLD currentFieldsForUpdate', [
+        //     'data' => [
 
-                'entityType' => $entityType,
-                'entityId' => $entityId,
-                'responsibleId' => $responsibleId,
-                'resultStatus' => $resultStatus,
-                'currentFieldsForUpdate' => $currentFieldsForUpdate,
+        //         'entityType' => $entityType,
+        //         'entityId' => $entityId,
+        //         'responsibleId' => $responsibleId,
+        //         'resultStatus' => $resultStatus,
+        //         'currentFieldsForUpdate' => $currentFieldsForUpdate,
 
-            ]
-        ]);
+        //     ]
+        // ]);
         try {
             $userId = 'user_' . $responsibleId;
 
@@ -700,12 +700,12 @@ class BitrixEntityFlowService
 
 
 
-        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            'updatedFields' => $updatedFields
-        ]);
-        Log::info('HOOK TEST CURRENTENTITY', [
-            'updatedFields' => $updatedFields
-        ]);
+        // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+        //     'updatedFields' => $updatedFields
+        // ]);
+        // Log::info('HOOK TEST CURRENTENTITY', [
+        //     'updatedFields' => $updatedFields
+        // ]);
         return $updatedFields;
     }
 

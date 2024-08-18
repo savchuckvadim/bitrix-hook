@@ -103,14 +103,14 @@ class BitrixListPresentationFlowService
 
 
 
-            Log::channel('telegram')->error('APRIL_HOOK', [
+            // Log::channel('telegram')->error('APRIL_HOOK', [
 
-                'code' => $code,
-                'getListPresentationPlanFlow' => 'getListPresentationPlanFlow',
-                'presPortalBtxList' => $presPortalBtxList
+            //     'code' => $code,
+            //     'getListPresentationPlanFlow' => 'getListPresentationPlanFlow',
+            //     'presPortalBtxList' => $presPortalBtxList
 
 
-            ]);
+            // ]);
 
 
             if ($eventAction == 'expired') {
@@ -283,12 +283,12 @@ class BitrixListPresentationFlowService
             }
 
             $fieldsData['NAME'] = $evTypeName . ' ' . $name;
-            Log::channel('telegram')->error('APRIL_HOOK pres LIST', [
+            // Log::channel('telegram')->error('APRIL_HOOK pres LIST', [
 
-                'fieldsData' => $fieldsData,
+            //     'fieldsData' => $fieldsData,
 
 
-            ]);
+            // ]);
 
             $responseData = BitrixListService::setItem(
                 $hook,
@@ -296,12 +296,12 @@ class BitrixListPresentationFlowService
                 $fieldsData,
                 $code
             );
-            Log::channel('telegram')->error('APRIL_HOOK pres list service: setItem', [
+            // Log::channel('telegram')->error('APRIL_HOOK pres list service: setItem', [
 
-                'responseData' => $responseData,
+            //     'responseData' => $responseData,
 
 
-            ]);
+            // ]);
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
@@ -771,7 +771,7 @@ class BitrixListPresentationFlowService
 
 
 
-            Log::channel('telegram')->error('APRIL_HOOK currentItemList', ['perspectItem' => $perspectItem]);
+            // Log::channel('telegram')->error('APRIL_HOOK currentItemList', ['perspectItem' => $perspectItem]);
 
 
 
@@ -801,7 +801,7 @@ class BitrixListPresentationFlowService
                 }
                 // array_push($fieldsData, $currentDataField);
             }
-            Log::channel('telegram')->error('APRIL_HOOK currentItemList', ['currentItemList' => $currentItemList]);
+            // Log::channel('telegram')->error('APRIL_HOOK currentItemList', ['currentItemList' => $currentItemList]);
 
             if ($currentItemList) {
                 BitrixListService::updateItem(

@@ -480,13 +480,13 @@ class BitrixDealService
 
                 if ($stage['code'] == $stagePrephicks . '_' . $stageSuphicks) {
                     $targetStageBtxId = $stage['bitrixId'];
-                    Log::channel('telegram')->info('DEAL TEST', [
-                        'stageCode' => $stage['code'],
-                        'eventType' => $eventType,
+                    // Log::channel('telegram')->info('DEAL TEST', [
+                    //     'stageCode' => $stage['code'],
+                    //     'eventType' => $eventType,
 
-                        'stage' => $stage,
+                    //     'stage' => $stage,
 
-                    ]);
+                    // ]);
                 }
                 // }
             }
@@ -542,18 +542,18 @@ class BitrixDealService
                         // if ($eventType === 'xo' || $eventType === 'cold') {
                         if ("C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'] ==  $currentDeal['STAGE_ID']) {
                             $isCurrentSearched = true;
-                            Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                                'isCurrentSearched' => $isCurrentSearched,
-                                'stage' => $stage,
-                                'currentCategoryData' => $currentCategoryData['code'],
+                            // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                            //     'isCurrentSearched' => $isCurrentSearched,
+                            //     'stage' => $stage,
+                            //     'currentCategoryData' => $currentCategoryData['code'],
 
-                            ]);
+                            // ]);
                         }
-                        Log::channel('telegram')->info('DEAL TEST', [
-                            'bitrixId' => $stage['bitrixId'],
-                            'isCurrentSearched' => $isCurrentSearched,
-                            'result' => $result,
-                        ]);
+                        // Log::channel('telegram')->info('DEAL TEST', [
+                        //     'bitrixId' => $stage['bitrixId'],
+                        //     'isCurrentSearched' => $isCurrentSearched,
+                        //     'result' => $result,
+                        // ]);
                         // }
                     }
                 }
@@ -563,17 +563,17 @@ class BitrixDealService
         }
 
 
-        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            'currentDeal' => $currentDeal,
+        // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+        //     'currentDeal' => $currentDeal,
 
 
-        ]);
+        // ]);
 
-        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            'getIsCanDealStageUpdate' => $result,
+        // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+        //     'getIsCanDealStageUpdate' => $result,
 
 
-        ]);
+        // ]);
         return $result;
     }
 }

@@ -52,20 +52,20 @@ class BitrixListService
             if (isset($responseData)) {
                 $result = $responseData;
             }
-            Log::channel('telegram')->error('APRIL_HOOK pres list service: setItem', [
-                'IBLOCK_ID' => $listBitrixId,
-                'ELEMENT_CODE' => $code,
-                'responseData' => $responseData,
+            // Log::channel('telegram')->error('APRIL_HOOK pres list service: setItem', [
+            //     'IBLOCK_ID' => $listBitrixId,
+            //     'ELEMENT_CODE' => $code,
+            //     'responseData' => $responseData,
 
 
 
-            ]);
-            Log::channel('telegram')->error('APRIL_HOOK pres list service: setItem', [
+            // ]);
+            // Log::channel('telegram')->error('APRIL_HOOK pres list service: setItem', [
 
-                'FIELDS' => $fields
+            //     'FIELDS' => $fields
 
 
-            ]);
+            // ]);
             return $result;
         } catch (\Throwable $th) {
             return $result;

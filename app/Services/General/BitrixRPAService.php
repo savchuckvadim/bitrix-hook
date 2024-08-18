@@ -58,10 +58,10 @@ class BitrixRPAService
 
         $response = Http::get($this->hook . $method, $data);
 
-        Log::channel('telegram')->info('rpa response', [
-            'response' => $response
+        // Log::channel('telegram')->info('rpa response', [
+        //     'response' => $response
 
-        ]);
+        // ]);
         $result =  APIBitrixController::getBitrixRespone($response, 'setRPAItem');
         if (!empty($result['item'])) {
             $result = $result['item'];

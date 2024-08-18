@@ -536,7 +536,7 @@ class EventReportService
                 }
             }
         }
-        Log::channel('telegram')->info('HOOK TMC SESSION GET', ['isSuccessSale' => $this->isSuccessSale]);
+        // Log::channel('telegram')->info('HOOK TMC SESSION GET', ['isSuccessSale' => $this->isSuccessSale]);
 
         if ($this->isSuccessSale) {
             if (!empty($data['sale'])) {
@@ -549,7 +549,7 @@ class EventReportService
         $sessionTMCDealKey = 'tmcInit_' . $domain . '_' . $this->planResponsibleId . '_' . $entityId;
         $sessionData = FullEventInitController::getSessionItem($sessionTMCDealKey);
 
-        Log::info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
+        // Log::info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
 
         if (isset($sessionData['tmcDeal'])) {
             $this->currentTMCDeal = $sessionData['tmcDeal'];
@@ -1347,12 +1347,12 @@ class EventReportService
         // которая пушится туда  при unplanned - чтобы были обработаны базовая сделка 
         // в соответствии с проведенной през
         // при этом у основной сделки должна быть обновлена стадия - например на през если была unplanned
-        Log::info('HOOK TEST currentBtxDeals', [
-            'currentBtxDeals' => $currentBtxDeals,
-            'this currentBtxDeals' => $this->currentBtxDeals,
+        // Log::info('HOOK TEST currentBtxDeals', [
+        //     'currentBtxDeals' => $currentBtxDeals,
+        //     'this currentBtxDeals' => $this->currentBtxDeals,
 
 
-        ]);
+        // ]);
 
 
         $flowResult = BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
@@ -1420,12 +1420,12 @@ class EventReportService
                 'unplanned'
             );
         }
-        Log::info('HOOK TEST currentBtxDeals', [
-            'currentBtxDeals' => $currentBtxDeals,
-            '$this->currentPresDeal' => $this->currentPresDeal,
+        // Log::info('HOOK TEST currentBtxDeals', [
+        //     'currentBtxDeals' => $currentBtxDeals,
+        //     '$this->currentPresDeal' => $this->currentPresDeal,
 
 
-        ]);
+        // ]);
         if (!empty($this->currentPresDeal)) {  //report pres deal
             $rand = mt_rand(300000, 700000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
             usleep($rand);
@@ -1477,12 +1477,12 @@ class EventReportService
             }
         }
 
-        Log::info('HOOK TEST currentBtxDeals', [
-            'newPresDeal' => $newPresDeal,
+        // Log::info('HOOK TEST currentBtxDeals', [
+        //     'newPresDeal' => $newPresDeal,
 
 
 
-        ]);
+        // ]);
         if (!empty($newPresDeal)) {  //plan pres deal
             $rand = mt_rand(200000, 700000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
             usleep($rand);
@@ -1837,13 +1837,13 @@ class EventReportService
         // текущая дата - дата последнего изменения 
         // если была проведена презентация обновляется поле дата проведения презентации
         // все изменения записываются в множественное поле коммент после презентации
-        Log::channel('telegram')->error('APRIL_HOOK', [
+        // Log::channel('telegram')->error('APRIL_HOOK', [
 
-            'currentPlanEventType' => $this->currentPlanEventType,
-            'isPlanned' => $this->isPlanned,
-            'isExpired' => $this->isExpired,
+        //     'currentPlanEventType' => $this->currentPlanEventType,
+        //     'isPlanned' => $this->isPlanned,
+        //     'isExpired' => $this->isExpired,
 
-        ]);
+        // ]);
 
         if (  //планируется презентация без переносов
             $this->currentPlanEventType == 'presentation' &&
