@@ -480,13 +480,13 @@ class BitrixDealService
 
                 if ($stage['code'] == $stagePrephicks . '_' . $stageSuphicks) {
                     $targetStageBtxId = $stage['bitrixId'];
-                    // Log::channel('telegram')->info('DEAL TEST', [
-                    //     'stageCode' => $stage['code'],
-                    //     'eventType' => $eventType,
+                    Log::channel('telegram')->info('DEAL TEST', [
+                        'stageCode' => $stage['code'],
+                        'eventType' => $eventType,
 
-                    //     'stage' => $stage,
+                        'stage' => $stage,
 
-                    // ]);
+                    ]);
                 }
                 // }
             }
@@ -511,12 +511,12 @@ class BitrixDealService
         //     'currentCategoryData' => $currentCategoryData,
 
         // ]);
-        // Log::info('HOOK TEST CURRENTENTITY', [
-        //     'currentDeal' => $currentDeal,
-        //     'targetStageBtxId' => $targetStageBtxId,
-        //     'currentCategoryData' => $currentCategoryData,
+        Log::info('HOOK TEST CURRENTENTITY', [
+            'currentDeal' => $currentDeal,
+            'targetStageBtxId' => $targetStageBtxId,
+            'currentCategoryData' => $currentCategoryData,
 
-        // ]);
+        ]);
         if (!empty($currentDeal) && !empty($targetStageBtxId)) {
 
             if ($currentCategoryData['code'] === 'sales_base') {
@@ -549,11 +549,11 @@ class BitrixDealService
 
                             // ]);
                         }
-                        // Log::channel('telegram')->info('DEAL TEST', [
-                        //     'bitrixId' => $stage['bitrixId'],
-                        //     'isCurrentSearched' => $isCurrentSearched,
-                        //     'result' => $result,
-                        // ]);
+                        Log::channel('telegram')->info('DEAL TEST', [
+                            'bitrixId' => $stage['bitrixId'],
+                            'isCurrentSearched' => $isCurrentSearched,
+                            'result' => $result,
+                        ]);
                         // }
                     }
                 }

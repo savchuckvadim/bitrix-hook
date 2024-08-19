@@ -47,16 +47,16 @@ class BitrixDealFlowService
         $currentDealIds = [];
         if ($eventType == 'document') {
 
-            // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            //     'eventType' => $eventType,
-            //     'currentDepartamentType' => $currentDepartamentType,
+            Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                'eventType' => $eventType,
+                'currentDepartamentType' => $currentDepartamentType,
 
-            // ]);
+            ]);
 
-            // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-            //     'currentBtxDeals' => $currentBtxDeals,
+            Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                'currentBtxDeals' => $currentBtxDeals,
 
-            // ]);
+            ]);
         }
         $currentCategoryDatas =  BitrixDealService::getTargetCategoryData(
             $portalDealData,
