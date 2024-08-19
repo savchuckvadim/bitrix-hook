@@ -323,7 +323,7 @@ class BitrixDealFlowService
                     ];
                 }
 
-                Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                Log::channel('telegram')->info('HOOK TEST', [
                     'fieldsData' => $fieldsData,
                     'currentDealId' => $currentDealId,
                 ]);
