@@ -668,7 +668,8 @@ class BitrixCallingColdService
     protected function getDealFlow()
     {
 
-
+        $rand = mt_rand(300000, 2500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        usleep($rand);
 
         if (!empty($this->portalDealData['categories'])) {
             foreach ($this->portalDealData['categories'] as $category) {

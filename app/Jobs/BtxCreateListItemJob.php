@@ -92,7 +92,7 @@ class BtxCreateListItemJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $rand = mt_rand(300000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        $rand = rand(1, 5); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
         usleep($rand);
 
         BitrixListFlowService::getListsFlow(
