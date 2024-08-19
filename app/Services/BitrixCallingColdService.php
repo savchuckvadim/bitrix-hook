@@ -448,17 +448,18 @@ class BitrixCallingColdService
             // if(!$this->smartId){
 
             // }
-         
+
             if ($this->isSmartFlow) {
-                $rand = mt_rand(1000000, 2500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                usleep($rand);
+                $rand = rand(1, 2);
+                sleep($rand);
+                $urand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                usleep($urand);
                 $this->getSmartFlow();
             }
-            $randomNumber = rand(1, 3);
-
-
-
-            sleep($randomNumber);
+            $rand = rand(1, 2);
+            sleep($rand);
+            $urand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            usleep($urand);
             if ($this->isDealFlow && $this->portalDealData) {
                 $currentDealsIds = $this->getDealFlow();
                 if (!empty($currentDealsIds)) {
@@ -668,8 +669,10 @@ class BitrixCallingColdService
     protected function getDealFlow()
     {
 
-        $rand = mt_rand(300000, 2500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-        usleep($rand);
+        $rand = rand(1, 2);
+        sleep($rand);
+        $urand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        usleep($urand);
 
         if (!empty($this->portalDealData['categories'])) {
             foreach ($this->portalDealData['categories'] as $category) {
@@ -727,8 +730,10 @@ class BitrixCallingColdService
                     foreach ($currentDeals as $bxDeal) {
                         if (!empty($bxDeal)) {
                             if (!empty($bxDeal['ID'])) {
-                                $rand = mt_rand(1500000, 4000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                                usleep($rand);
+                                $rand = rand(1, 2);
+                                sleep($rand);
+                                $urand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                                usleep($urand);
                                 BitrixDealService::updateDeal(
                                     $this->hook,
                                     $bxDeal['ID'],
@@ -749,7 +754,9 @@ class BitrixCallingColdService
 
         // ]);
 
-        $rand = mt_rand(300000, 1500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        $rand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        usleep($rand);
+        $rand = rand(1, 2); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
         usleep($rand);
 
         $flowResult =  BitrixDealFlowService::flow(
@@ -771,8 +778,11 @@ class BitrixCallingColdService
 
         if (!empty($planDeals)) {
             foreach ($planDeals as $dealId) {
-                $rand = mt_rand(1000000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                $rand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                 usleep($rand);
+                $rand = rand(1, 2); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                usleep($rand);
+
                 BitrixEntityFlowService::coldflow(
                     $this->portal,
                     $this->hook,
@@ -802,7 +812,9 @@ class BitrixCallingColdService
 
     ) {
 
-        $rand = mt_rand(300000, 1700000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        $rand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        usleep($rand);
+        $rand = rand(1, 2); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
         usleep($rand);
         $createdTask = null;
         try {
