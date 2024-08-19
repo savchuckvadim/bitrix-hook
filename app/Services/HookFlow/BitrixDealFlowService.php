@@ -47,16 +47,16 @@ class BitrixDealFlowService
         $currentDealIds = [];
         if ($eventType == 'document') {
 
-            Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                'eventType' => $eventType,
-                'currentDepartamentType' => $currentDepartamentType,
+            // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+            //     'eventType' => $eventType,
+            //     'currentDepartamentType' => $currentDepartamentType,
 
-            ]);
+            // ]);
 
-            Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                'currentBtxDeals' => $currentBtxDeals,
+            // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+            //     'currentBtxDeals' => $currentBtxDeals,
 
-            ]);
+            // ]);
         }
         $currentCategoryDatas =  BitrixDealService::getTargetCategoryData(
             $portalDealData,
@@ -174,10 +174,10 @@ class BitrixDealFlowService
 
                     // ]);
                 } else {
-                    Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                        'currentDealId' => $currentDealId,
+                    // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                    //     'currentDealId' => $currentDealId,
 
-                    ]);
+                    // ]);
                     $isCanDealStageUpdate = BitrixDealService::getIsCanDealStageUpdate(
                         $currentDeal, //with ID CATEGORY_ID STAGE_ID
                         $targetStageBtxId,
@@ -185,10 +185,10 @@ class BitrixDealFlowService
                         // $eventType, // xo warm presentation,
                         // $eventAction,  // plan done expired fail
                     );
-                    Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                        'isCanDealStageUpdate' => $isCanDealStageUpdate,
+                    // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                    //     'isCanDealStageUpdate' => $isCanDealStageUpdate,
 
-                    ]);
+                    // ]);
                     if ($isCanDealStageUpdate) {
                         $rand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                         usleep($rand);
@@ -325,10 +325,10 @@ class BitrixDealFlowService
                     ];
                 }
 
-                Log::channel('telegram')->info('HOOK TEST', [
-                    'fieldsData' => $fieldsData,
-                    'currentDealId' => $currentDealId,
-                ]);
+                // Log::channel('telegram')->info('HOOK TEST', [
+                //     'fieldsData' => $fieldsData,
+                //     'currentDealId' => $currentDealId,
+                // ]);
                 if (!empty($tmcPresRelationDealId)) {
                     if ($eventType === 'presentation' && $eventAction === 'plan') {
                         $fieldsData['UF_CRM_TO_BASE_TMC'] = $tmcPresRelationDealId;
@@ -439,8 +439,8 @@ class BitrixDealFlowService
         foreach ($fieldsData as $key => $value) {
             $result = $result .  'fields[' . $key . ']=' . $value . '&';
         }
-        Log::info('HOOK BATCH getBatchCommand', ['result' => $result, 'fieldsData' => $fieldsData]);
-        Log::channel('telegram')->info('HOOK BATCH getBatchCommand', ['result' => $result, 'fieldsData' => $fieldsData]);
+        // Log::info('HOOK BATCH getBatchCommand', ['result' => $result, 'fieldsData' => $fieldsData]);
+        // Log::channel('telegram')->info('HOOK BATCH getBatchCommand', ['result' => $result, 'fieldsData' => $fieldsData]);
         return $result;
     }
     static function tmcPresentationRelation(
