@@ -278,12 +278,12 @@ class EventDocumentService
 
 
             $sessionKey = 'document_' . $domain .  '_' . $baseDealId;
-            Log::channel('telegram')->info('sessionKey', ['test done' => $sessionKey]);
+            // Log::channel('telegram')->info('sessionKey', ['test done' => $sessionKey]);
 
             $sessionData = FullEventInitController::getSessionItem($sessionKey);
-            Log::info('sessionData', ['sessionKey' => $sessionKey]);
+            // Log::info('sessionData', ['sessionKey' => $sessionKey]);
 
-            Log::info('sessionData', ['sessionData' => $sessionData]);
+            // Log::info('sessionData', ['sessionData' => $sessionData]);
 
             if (isset($sessionData['currentCompany']) && isset($sessionData['deals'])) {
                 $this->currentBtxEntity  = $sessionData['currentCompany'];

@@ -803,9 +803,9 @@ class EventReportService
                     break;
             }
         }
-        Log::channel('telegram')->info('HOOK entity flow', [
-            'isPresentationDone' => $this->isPresentationDone
-        ]);
+        // Log::channel('telegram')->info('HOOK entity flow', [
+        //     'isPresentationDone' => $this->isPresentationDone
+        // ]);
         //presentation done with unplanned
         if ($this->isPresentationDone) {
 

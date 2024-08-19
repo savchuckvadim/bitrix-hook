@@ -549,11 +549,11 @@ class BitrixDealService
 
                             // ]);
                         }
-                        Log::channel('telegram')->info('DEAL TEST', [
-                            'bitrixId' => $stage['bitrixId'],
-                            'isCurrentSearched' => $isCurrentSearched,
-                            'result' => $result,
-                        ]);
+                        // Log::channel('telegram')->info('DEAL TEST', [
+                        //     'bitrixId' => $stage['bitrixId'],
+                        //     'isCurrentSearched' => $isCurrentSearched,
+                        //     'result' => $result,
+                        // ]);
                         // }
                     }
                 }
