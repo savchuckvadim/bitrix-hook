@@ -174,10 +174,10 @@ class BitrixDealFlowService
 
                     // ]);
                 } else {
-                    // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                    //     'currentDealId' => $currentDealId,
+                    Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                        'currentDealId' => $currentDealId,
 
-                    // ]);
+                    ]);
                     $isCanDealStageUpdate = BitrixDealService::getIsCanDealStageUpdate(
                         $currentDeal, //with ID CATEGORY_ID STAGE_ID
                         $targetStageBtxId,
@@ -185,10 +185,10 @@ class BitrixDealFlowService
                         // $eventType, // xo warm presentation,
                         // $eventAction,  // plan done expired fail
                     );
-                    // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                    //     'isCanDealStageUpdate' => $isCanDealStageUpdate,
+                    Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                        'isCanDealStageUpdate' => $isCanDealStageUpdate,
 
-                    // ]);
+                    ]);
                     if ($isCanDealStageUpdate) {
                         $rand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                         usleep($rand);
