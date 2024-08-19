@@ -437,8 +437,8 @@ class BitrixDealFlowService
         foreach ($fieldsData as $key => $value) {
             $result = $result .  'fields[' . $key . ']=' . $value . '&';
         }
-        Log::info('HOOK BATCH getBatchCommand', ['result' => $result]);
-        Log::channel('telegram')->info('HOOK BATCH getBatchCommand', ['result' => $result]);
+        Log::info('HOOK BATCH getBatchCommand', ['result' => $result, 'fieldsData' => $fieldsData]);
+        Log::channel('telegram')->info('HOOK BATCH getBatchCommand', ['result' => $result, 'fieldsData' => $fieldsData]);
         return $result;
     }
     static function tmcPresentationRelation(
