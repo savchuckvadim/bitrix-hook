@@ -1285,7 +1285,7 @@ class EventReportService
                         $unplannedPresResultStatus = 'fail';
                         $unplannedPresResultName = 'Отказ после презентации';
                     }
-                    $flowResult = BitrixDealFlowService::flow(  // закрывает сделку  - презентация обновляет базовую в соответствии с проведенной през
+                    $flowResult = BitrixDealFlowService::batchFlow(  // закрывает сделку  - презентация обновляет базовую в соответствии с проведенной през
                         $this->hook,
                         $this->currentBtxDeals,
                         $this->portalDealData,
@@ -1355,7 +1355,7 @@ class EventReportService
         // ]);
 
 
-        $flowResult = BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
+        $flowResult = BitrixDealFlowService::batchFlow(  // редактирует сделки отчетности из currentTask основную и если есть xo
             $this->hook,
             $currentBtxDeals,
             $this->portalDealData,
@@ -1376,7 +1376,7 @@ class EventReportService
 
         if (!empty($this->currentTMCDeal) && $this->resultStatus === 'result' && $this->currentReportEventType === 'presentation') {
 
-            BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
+            BitrixDealFlowService::batchFlow(  // редактирует сделки отчетности из currentTask основную и если есть xo
                 $this->hook,
                 [$this->currentTMCDeal],
                 $this->portalDealData,
@@ -1445,7 +1445,7 @@ class EventReportService
                 $currentBtxDeals
             );
 
-            $flowResult =  BitrixDealFlowService::flow( //создает сделку
+            $flowResult =  BitrixDealFlowService::batchFlow( //создает сделку
                 $this->hook,
                 $currentBtxDeals,
                 $this->portalDealData,

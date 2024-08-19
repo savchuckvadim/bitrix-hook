@@ -146,4 +146,28 @@ class BitrixBatchService
         // array_push($usersKPI, $batchResponseData['errors']);
         return $usersKPI; // Возвращаем переиндексированный массив пользователей и их KPI
     }
+
+
+    public function sendBatch($commands)
+    {
+        $url = $this->hook . '/batch';
+        $maxCommandsPerBatch = 50; // Максимальное количество команд на один batch запрос
+        $batchRequests = array_chunk($commands, $maxCommandsPerBatch, true);
+        $result = [
+            // 'errors' => []
+        ];
+
+        foreach ($batchRequests as $batchCommands) {
+            $response = Http::post($url, [
+                'halt' => 0,
+                'cmd' => $batchCommands
+            ]);
+            $responseData = $response->json();
+
+            $result = $responseData;
+        };
+        Log::info('HOOK BATCH', ['result' => $result]);
+
+        return $result;
+    }
 }
