@@ -480,13 +480,13 @@ class BitrixDealService
 
                 if ($stage['code'] == $stagePrephicks . '_' . $stageSuphicks) {
                     $targetStageBtxId = $stage['bitrixId'];
-                    Log::channel('telegram')->info('DEAL TEST', [
-                        'stageCode' => $stage['code'],
-                        'eventType' => $eventType,
+                    // Log::channel('telegram')->info('DEAL TEST', [
+                    //     'stageCode' => $stage['code'],
+                    //     'eventType' => $eventType,
 
-                        'stage' => $stage,
+                    //     'stage' => $stage,
 
-                    ]);
+                    // ]);
                 }
                 // }
             }
