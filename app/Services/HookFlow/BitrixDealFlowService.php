@@ -323,10 +323,10 @@ class BitrixDealFlowService
                     ];
                 }
 
-                // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                //     'fieldsData' => $fieldsData,
-
-                // ]);
+                Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                    'fieldsData' => $fieldsData,
+                    'currentDealId' => $currentDealId,
+                ]);
                 if (!empty($tmcPresRelationDealId)) {
                     if ($eventType === 'presentation' && $eventAction === 'plan') {
                         $fieldsData['UF_CRM_TO_BASE_TMC'] = $tmcPresRelationDealId;
