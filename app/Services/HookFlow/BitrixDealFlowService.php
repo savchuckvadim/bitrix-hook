@@ -432,7 +432,7 @@ class BitrixDealFlowService
         $currentMethod = 'crm.deal.' . $method;
         $result = $currentMethod .'?';
         if ($method == 'update' || $method == 'get') {
-            $result = $result . 'dealId=' . $dealId;
+            $result = $result . 'ID=' . $dealId;
         }
         foreach ($fieldsData as $key => $value) {
             $result = $result .  '&fields[' . $key . ']=' . $value;
