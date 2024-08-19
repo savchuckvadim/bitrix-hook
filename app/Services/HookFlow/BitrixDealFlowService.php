@@ -418,8 +418,8 @@ class BitrixDealFlowService
         }
         $batchService =  new BitrixBatchService($hook);
         $result = $batchService->sendBatch($batchCommands);
-        Log::info('HOOK BATCH getBatchCommand', ['result' => $result]);
-        Log::channel('telegram')->info('HOOK BATCH getBatchCommand', ['result' => $result]);
+        Log::info('HOOK BATCH batchFlow', ['result' => $result]);
+        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $result]);
         return ['dealIds' => $result, 'newPresDeal' => $newPresDeal];
     }
 

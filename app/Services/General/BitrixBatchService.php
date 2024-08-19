@@ -166,8 +166,8 @@ class BitrixBatchService
 
             $result = $responseData;
         };
-        Log::info('HOOK BATCH', ['result' => $result, '$url' => $url]);
-        Log::channel('telegram')->info('HOOK BATCH', ['result' => $result]);
+        Log::info('HOOK BATCH sendBatch', ['result' => $result, '$url' => $url]);
+        Log::channel('telegram')->info('HOOK BATCH sendBatch', ['result' => $result]);
         return $result;
     }
 }
