@@ -396,7 +396,7 @@ class BitrixDealFlowService
                     if ($isCanDealStageUpdate) {
                         $rand = mt_rand(1000000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                         usleep($rand);
-                        $batchCommand = BitrixDealFlowService::getBatchCommand($fieldsData, 'add', null);
+                        $batchCommand = BitrixDealFlowService::getBatchCommand($fieldsData, 'update', null);
                         $batchCommands['update_' . $currentCategoryData['code']] = $batchCommand;
 
 
@@ -430,9 +430,9 @@ class BitrixDealFlowService
     ) {
 
         $currentMethod = 'crm.deal.' . $method;
-        $result = $currentMethod;
+        $result = $currentMethod .'?';
         if ($method == 'update' || $method == 'get') {
-            $result = $result . '?dealId=' . $dealId;
+            $result = $result . 'dealId=' . $dealId;
         }
         foreach ($fieldsData as $key => $value) {
             $result = $result .  '&fields[' . $key . ']=' . $value;
