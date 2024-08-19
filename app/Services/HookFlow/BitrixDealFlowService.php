@@ -430,12 +430,12 @@ class BitrixDealFlowService
     ) {
 
         $currentMethod = 'crm.deal.' . $method;
-        $result = $currentMethod .'?';
+        $result = $currentMethod . '?';
         if ($method == 'update' || $method == 'get') {
-            $result = $result . 'ID=' . $dealId;
+            $result = $result . 'ID=' . $dealId . '&';
         }
         foreach ($fieldsData as $key => $value) {
-            $result = $result .  '&fields[' . $key . ']=' . $value;
+            $result = $result .  'fields[' . $key . ']=' . $value . '&';
         }
         Log::info('HOOK BATCH getBatchCommand', ['result' => $result]);
         Log::channel('telegram')->info('HOOK BATCH getBatchCommand', ['result' => $result]);
