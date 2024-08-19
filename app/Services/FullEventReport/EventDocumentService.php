@@ -692,7 +692,7 @@ class EventDocumentService
                 $url = $this->hook . $methodProductSet;
 
                 $response = Http::get($url, $productSetData);
-                return APIBitrixController::getBitrixRespone($response, 'EVENT DOCUMENT SERVICE gert deal flow products Set');
+                // return APIBitrixController::getBitrixRespone($response, 'EVENT DOCUMENT SERVICE gert deal flow products Set');
             }
         } else {
 
