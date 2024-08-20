@@ -430,7 +430,7 @@ class EventReportTMCService
             if (!empty($portal['bitrixDeal']['categories'])) {
 
                 foreach ($portal['bitrixDeal']['categories'] as $pCategory) {
-                    if ($pCategory['code'] == 'sales_base') {
+                    if ($pCategory['code'] == 'tmc_base') {
                         $this->btxDealBaseCategoryId = $pCategory['bitrixId'];
                         $btxDealBaseCategoryId = $pCategory['bitrixId'];
                     }
@@ -1209,7 +1209,7 @@ class EventReportTMCService
             );
 
             if (!empty($currentDealId)) {
-                $rand = 0.3;
+                $rand = 1;
                 sleep($rand);
                 $newBaseDeal = BitrixDealService::getDeal(
                     $this->hook,
