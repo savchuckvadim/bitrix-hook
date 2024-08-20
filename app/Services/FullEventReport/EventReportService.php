@@ -652,12 +652,12 @@ class EventReportService
             // if ($this->isSmartFlow) {
             //     $this->getSmartFlow();
             // }
-            // Log::info('HOOK TEST unplannedPresDeal', [
-            //     'currentBaseDeal' => $this->currentBaseDeal,
-            //     'currentPresDeal' => $this->currentPresDeal,
-            //     'currentBtxDeals' => $this->currentBtxDeals,
+            Log::info('HOOK TEST unplannedPresDeal', [
+                'currentBaseDeal' => $this->currentBaseDeal,
+                'currentPresDeal' => $this->currentPresDeal,
+                'currentBtxDeals' => $this->currentBtxDeals,
 
-            // ]);
+            ]);
             if ($this->isDealFlow && $this->portalDealData) {
                 $currentDealsIds = $this->getDealFlow();
             }
