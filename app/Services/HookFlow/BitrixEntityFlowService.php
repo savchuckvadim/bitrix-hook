@@ -154,6 +154,7 @@ class BitrixEntityFlowService
                     $currentReportEventName,
                     $currentPlanEventName,
                     $comment,
+                    $entityType
 
                 );
 
@@ -525,12 +526,13 @@ class BitrixEntityFlowService
         $currentReportEventName,
         $currentPlanEventName,
         $comment,
+        $entityType
 
     ) {
 
         $userId = 'user_' . $responsibleId;
         $isResult =  $resultStatus == 'result' || $resultStatus == 'new';
-        $updatedFields['ASSIGNED_BY_ID'] = $responsibleId;
+
 
         //general report fields 
         foreach ($portalFields as $pField) {
@@ -698,7 +700,9 @@ class BitrixEntityFlowService
         }
 
 
-
+        if ($entityType == 'company') {
+            $updatedFields['ASSIGNED_BY_ID'] = $responsibleId;
+        }
         // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
         //     'updatedFields' => $updatedFields
         // ]);
