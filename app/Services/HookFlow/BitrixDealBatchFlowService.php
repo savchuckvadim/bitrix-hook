@@ -168,7 +168,7 @@ class BitrixDealBatchFlowService
                             // $batchCommands['newPresDeal'] = $batchCommand;
                             $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null, $tag);
 
-                            $batchCommands['new_pres_deal_get' . $currentCategoryData['code'] . '_' . $tag . '_' . $currentDealId] = $batchCommand;
+                            $resultBatchCommands['new_pres_deal_get' . $currentCategoryData['code'] . '_' . $tag . '_' . $currentDealId] = $batchCommand;
 
 
                             // $newPresDeal = BitrixDealService::getDeal(
@@ -180,7 +180,7 @@ class BitrixDealBatchFlowService
                         }
                     } else {
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
-                        $batchCommands['set_' . $currentCategoryData['code'] . '_' . $tag . '_' . $currentDealId] = $batchCommand; // в результате будет id
+                        $resultBatchCommands['set_' . $currentCategoryData['code'] . '_' . $tag . '_' . $currentDealId] = $batchCommand; // в результате будет id
                     }
 
                     Log::info('DEAL TEST', [
@@ -207,7 +207,7 @@ class BitrixDealBatchFlowService
                         $rand = mt_rand(1000000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                         usleep($rand);
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $currentDealId);
-                        $batchCommands['update_' . $currentCategoryData['code']. '_' . $tag . '_' . $currentDealId] = $batchCommand;
+                        $resultBatchCommands['update_' . $currentCategoryData['code']. '_' . $tag . '_' . $currentDealId] = $batchCommand;
                       
                         Log::info('HOOK BATCH batchFlow report DEAL', ['report batchCommands' => $batchCommands]);
                         Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $batchCommands]);
