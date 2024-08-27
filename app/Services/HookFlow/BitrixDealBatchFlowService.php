@@ -207,10 +207,11 @@ class BitrixDealBatchFlowService
                         $rand = mt_rand(1000000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                         usleep($rand);
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $currentDealId);
-                        $resultBatchCommands['update_' . $currentCategoryData['code']. '_' . $tag . '_' . $currentDealId] = $batchCommand;
-                      
-                        Log::info('HOOK BATCH batchFlow report DEAL', ['report batchCommands' => $batchCommands]);
-                        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $batchCommands]);
+                        $key = 'update_' . $currentCategoryData['code'] . '_' . $tag . '_' . $currentDealId;
+                        $resultBatchCommands[$key] = $batchCommand;
+
+                        Log::info('HOOK BATCH batchFlow report DEAL', ['report batchCommands' => $resultBatchCommands]);
+                        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $resultBatchCommands]);
                         // BitrixDealService::updateDeal(  //обновляю сделку - а теперь даже нет, будет создана batch command
                         //     $hook,
                         //     $currentDealId,
