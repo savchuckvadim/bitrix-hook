@@ -1898,6 +1898,10 @@ class EventReportService
         //     // 'failType' => $failType,
 
         // ]);
+        Log::info('HOOK BATCH batchFlow DEAL', ['batchCommands' => $batchCommands]);
+        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $batchCommands]);
+
+
         $batchService =  new BitrixBatchService($this->hook);
         $result = $batchService->sendGeneralBatchRequest($batchCommands);
         Log::info('HOOK BATCH batchFlow', ['result' => $result]);
