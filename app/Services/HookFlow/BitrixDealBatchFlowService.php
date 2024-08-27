@@ -234,7 +234,7 @@ class BitrixDealBatchFlowService
         // $result = $batchService->sendBatch($batchCommands);
         // Log::info('HOOK BATCH batchFlow', ['result' => $result]);
         // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $result]);
-        return ['dealIds' => ['$result'], 'newPresDeal' => $newPresDeal, 'commands' => $batchCommands];
+        return ['dealIds' => ['$result'], 'newPresDeal' => $newPresDeal, 'commands' => $resultBatchCommands];
     }
 
     static function getBatchCommand(
