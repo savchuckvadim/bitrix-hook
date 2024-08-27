@@ -1756,6 +1756,9 @@ class EventReportService
         );
         // $reportDeals = $flowResult['dealIds'];
         $batchCommands = $flowResult['commands'];
+        Log::info('HOOK BATCH batchFlow report DEAL', ['report batchCommands' => $batchCommands]);
+        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $batchCommands]);
+
 
         if (!empty($this->currentTMCDeal) && $this->resultStatus === 'result' && $this->currentReportEventType === 'presentation') {
 
