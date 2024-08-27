@@ -1559,7 +1559,7 @@ class EventReportService
 
             );
 
-            if (!empty($currentDealId)) {
+            if (!empty($currentDealId) && !$this->currentBaseDeal) {
                 $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                 usleep($rand);
                 $newBaseDeal = BitrixDealService::getDeal(

@@ -152,8 +152,7 @@ class BitrixDealBatchFlowService
                             $fieldsData['TITLE'] = $eventTypeName . ' ' .  $eventName;
                         }
                     }
-                    $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
-                    $batchCommands['set_' . $currentCategoryData['code']] = $batchCommand; // в результате будет id
+
                     // $currentDealId = BitrixDealService::setDeal(
                     //     $hook,
                     //     $fieldsData,
@@ -167,18 +166,21 @@ class BitrixDealBatchFlowService
                             usleep($rand);
                             // $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'get', $currentDealId);
                             // $batchCommands['newPresDeal'] = $batchCommand;
-                            // $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null, $tag);
+                            $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null, $tag);
 
-                            // $batchCommands['new_pres_deal' . $currentCategoryData['code'] . '_' . $tag] = $batchCommand;
-
-
-                            $newPresDeal = BitrixDealService::getDeal(
-                                $hook,
-                                ['id' => $currentDealId]
+                            $batchCommands['new_pres_deal_get' . $currentCategoryData['code'] . '_' . $tag . '_' . $currentDealId] = $batchCommand;
 
 
-                            );
+                            // $newPresDeal = BitrixDealService::getDeal(
+                            //     $hook,
+                            //     ['id' => $currentDealId]
+
+
+                            // );
                         }
+                    } else {
+                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
+                        $batchCommands['set_' . $currentCategoryData['code'] . '_' . $tag . '_' . $currentDealId] = $batchCommand; // в результате будет id
                     }
 
                     // Log::info('DEAL TEST', [
