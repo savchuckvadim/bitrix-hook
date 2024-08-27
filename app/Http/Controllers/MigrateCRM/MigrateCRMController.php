@@ -5,15 +5,17 @@ namespace App\Http\Controllers\MigrateCRM;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Front\EventCalling\FullEventInitController;
-use App\Http\Controllers\InstallHelpers\GoogleInstallController;
 use App\Http\Controllers\PortalController;
-use App\Jobs\BtxCreateListItemJob;
-use App\Services\BitrixGeneralService;
+
+use App\Services\General\BitrixBatchService;
 use App\Services\General\BitrixDepartamentService;
 use App\Services\HookFlow\BitrixListDocumentFlowService;
 use App\Services\HookFlow\BitrixListFlowService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Halaxa\JsonMachine\JsonMachine;
+use JsonMachine\Items;
+use JsonMachine\JsonDecoder\ExtJsonDecoder;
 
 class MigrateCRMController extends Controller
 {
@@ -24,7 +26,7 @@ class MigrateCRMController extends Controller
     protected $portal;
     protected $portalBxLists;
     protected $portalBxCompany;
-
+    protected $department;
     public function __construct(
         $token,
         $domain
@@ -39,6 +41,8 @@ class MigrateCRMController extends Controller
         $this->hook = PortalController::getHook($domain);
         $this->portalBxLists = $this->portal['bitrixLists'];
         $this->portalBxCompany  = $this->portal['company'];
+        sleep(1);
+        $this->department  = $this->getFullDepartment();
     }
 
     public function crm()
@@ -49,28 +53,94 @@ class MigrateCRMController extends Controller
         $googleData = null;
         $newCompanyId = null;
         try {
+            /**
+             * 
+             * 
+             * FROM GOOGLE VERSION
+             */
+            // $googleData = GoogleInstallController::getData($this->token);
 
-            $googleData = GoogleInstallController::getData($this->token);
+            // if (!empty($googleData)) {
+            //     if (!empty($googleData['clients'])) {
+            //         $clients = $googleData['clients'];
+            //     }
+            // }
+            $time_start = microtime(true);
+            ini_set('memory_limit', '2048M');  // Increase memory limit if needed
 
-            if (!empty($googleData)) {
-                if (!empty($googleData['clients'])) {
-                    $clients = $googleData['clients'];
-                }
-            }
+            set_time_limit(0);
+            $jsonFilePath = storage_path('app/public/clients/clients_data.json');
 
-            if (!empty($clients)) {
+            // Чтение данных из файла
+            // $jsonData = file_get_contents($jsonFilePath);
+
+            // // Преобразование JSON в массив
+            // $data = json_decode($jsonData, true);  // true преобразует данные в ассоциативный массив
 
 
-                foreach ($clients as $index => $client) {
-             
+            $decoder = new ExtJsonDecoder(true);  // true преобразует объекты JSON в ассоциативные массивы
+
+            $clients = Items::fromFile($jsonFilePath, ['pointer' => '/clients', 'decoder' => $decoder]);
+
+
+            // if (!empty($data['clients'])) {
+            //     $clients = $data['clients'];
+
+            $batchService = new BitrixBatchService($this->hook);
+            $commands = [];
+            $eventsCommands = [];
+            foreach ($clients as $index => $clientData) {
+                $client = $clientData['client'];
+                // sleep(1);
+                if (!empty($client)) {
+
+                    // $rand = mt_rand(100000, 300000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                    // usleep($rand);
+
+
+                    // if ($index < 1000) {
+
+
+
+
                         $newCompanyId = null;
-                        $fullDepartment = $this->getFullDepartment();
-                        $userId = 201; //201 - man savchuk in rostov
+                        // $fullDepartment = $this->getFullDepartment();
+                        $fullDepartment = $this->department;
+
+                        $userId = 13; //201 - man savchuk in rostov
+                        $fullDepartment =  $fullDepartment['department'];
+                        // print_r('<br>');
+                        // print_r($fullDepartment);
+                        // print_r('<br>');
                         if (!empty($fullDepartment)) {
+                            // print_r('<br>');
+                            // print_r($fullDepartment['allUsers']);
+                            // print_r('<br>');
                             if (!empty($fullDepartment['allUsers'])) {
                                 foreach ($fullDepartment['allUsers'] as $user) {
-                                    if (strpos($client['assigned'], $user['LAST_NAME']) !== false) {
+                                    $responsible = $client['assigned'];
+
+                                    $parts = explode(' ', $responsible);
+                                    $lastName = mb_strtolower(trim($parts[0])); // Приводим к нижнему регистру
+                                    $userLastName = mb_strtolower(trim($user['LAST_NAME'])); // Приводим фамилию пользователя к нижнему регистру
+
+                                    // print_r('<br>');
+                                    // print_r($responsible);
+                                    // print_r('<br>');
+                                    // print_r($lastName);
+                                    // print_r('<br>');
+
+
+                                    if ($lastName === $userLastName) {
                                         $userId = $user['ID'];
+                                        break; // Прекратить перебор после нахождения пользователя
+
+                                    } else {
+                                        // print_r('<br>');
+                                        // print_r($responsible);
+                                        // print_r('<br>');
+                                        // print_r($lastName);
+                                        // print_r('<br>');
                                     }
                                 }
                             }
@@ -81,15 +151,25 @@ class MigrateCRMController extends Controller
                         $category = $this->getCompanyCategory($client['category']);
                         $prognoz = $this->getCompanyPrognoz($client['prognoz']);
 
-                        $contacts = $this->getContactsField($client['contacts']);
+                        $contacts = $this->getContactsField($clientData['contacts']);
                         // $history = $this->getHistoryField($client['events']);
 
 
                         $workStatus = $this->getCompanyWorkStatust($client['perspect']);
                         $workResult = $this->getCompanyItemFromName($client['perspect'], 'op_work_result');
                         $source = $this->getCompanyItemFromName($client['source'], 'op_source_select');
-                        $phonesArray = $this->getPhonesField($client['contacts']);
+                        $phonesArray = $this->getPhonesField($clientData['contacts']);
 
+                        $isAutoCall = 'N';
+                        if (!empty($client['auto'])) {
+                            if (!empty($client['auto'] !== 'NULL') && $client['auto'] !== 'null') {
+                                $isAutoCall = 'Y';
+                            }
+                        }
+                        // print_r('<br>');
+                        // print_r($client['auto']);
+                        // print_r($isAutoCall);
+                        // print_r('<br>');
                         $newClientData = [
                             'TITLE' => $client['name'],
                             // 'UF_CRM_OP_WORK_STATUS' => $client['name'],
@@ -122,38 +202,200 @@ class MigrateCRMController extends Controller
                             'ADDRESS_POSTAL_CODE' => $client['adress']['indeks'],
 
                             'ADDRESS_REGION' => $client['adress']['region'],
-
+                            'UF_CRM_1724610536' => $isAutoCall,
 
                             'PHONE' => $phonesArray,
                         ];
-                        $rand = mt_rand(300000, 1900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                        usleep($rand);
-                        $newCompanyId = BitrixGeneralService::setEntity(
-                            $this->hook,
-                            'company',
-                            $newClientData
-                        );
 
+
+                        /**
+                         * SINGLE REQUEST
+                         */
+                        // sleep(1);
+                        // $rand = mt_rand(300000, 700000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                        // usleep($rand);
+                        // $newCompanyId = BitrixGeneralService::setEntity(
+                        //     $this->hook,
+                        //     'company',
+                        //     $newClientData
+                        // );
+
+
+                        /**
+                         * BATCH
+                         */
+                        $batchData = [
+                            'fields' => $newClientData
+                        ];
+
+                        $commands['add_client_' . $client['id']] = 'crm.company.add?' . http_build_query($batchData);
+                        // print_r('<br>');
+                        // print_r('add_client_' . $index . ': ' . $commands['add_client_' . $index]);
 
                         /**
                          * LIST FLOW
                          */
-                        $rand = mt_rand(300000, 1900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                        usleep($rand);
-                        if (!empty($newCompanyId) && !empty($client['events'])) {
-     
-                            foreach ($client['events'] as $garusEvent) {
-                        
-                                $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                                usleep($rand);
-                                $this->getListFlow($garusEvent, $newCompanyId, $userId);
-                            }
-                        }
-                
+
+                        // $rand = mt_rand(300000, 1900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                        // usleep($rand);
+                        // if (!empty($newCompanyId) && !empty($clientData['events'])) {
+
+                        //     foreach ($clientData['events'] as $garusEvent) {
+
+                        //         $rand = mt_rand(100000, 300000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                        //         usleep($rand);
+                        //         $this->getListFlow($garusEvent, $newCompanyId, $userId);
+                        //     }
+                        // }
+                        // }
+
+
+                    // }
                 }
             }
 
 
+            if (!empty($commands)) {
+                $results = $batchService->sendGeneralBatchRequest($commands);
+                $newCompanyIds = [];
+                foreach ($results as $batchKey => $batchResults) {
+                    if (isset($batchResults['result'])) {
+                        foreach ($batchResults['result'] as $key => $result) {
+                            if (preg_match('/add_client_(.+)$/', $key, $matches)) {
+                                $oldClientId = $matches[1];
+                                if (!empty($result)) {
+                                    $newCompanyIds[$oldClientId] = $result;
+                                }
+                            }
+                        }
+                    }
+                }
+                print_r("<br> newCompanyIds");
+                print_r($newCompanyIds);
+
+
+                $clients = Items::fromFile($jsonFilePath, ['pointer' => '/clients', 'decoder' => $decoder]);
+                $eventsCommands = [];
+                foreach ($clients as $index => $clientData) {
+                    // if ($index < 1000) {
+
+                        $companyId = $newCompanyIds[$clientData['client']['id']] ?? null;
+
+                        if (!empty($companyId) && !empty($clientData['events'])) {
+                            // print_r("<br> companyId    _  ");
+                            // print_r($companyId);
+
+                            foreach ($clientData['events'] as $garusEvent) {
+                                $eventsCommands = $this->getListFlow($garusEvent, $companyId, $userId, $eventsCommands);
+                            }
+                            // print_r("eventsCommands");
+                            // print_r("<br>");
+                            // print_r($eventsCommands);
+
+                            print_r($clientData['client']['id']);
+                        }
+                    // }
+                }
+
+                if (!empty($eventsCommands)) {
+                    $eventResults = $batchService->sendGeneralBatchRequest($eventsCommands);
+                }
+                print_r("<br>");
+                print_r("set list item");
+                print_r("<br>");
+
+
+
+
+                // Тут ваш код...
+
+                // Записываем время окончания выполнения скрипта
+                $time_end = microtime(true);
+
+                // Вычисляем продолжительность выполнения
+                $execution_time = ($time_end - $time_start);
+
+                // Продолжительность в минутах и часах
+                $execution_time_minutes = $execution_time / 60;
+                $execution_time_hours = $execution_time_minutes / 60;
+                // Выводим время начала, окончания и продолжительность выполнения
+                print_r("<br>");
+                print_r("Время начала: " . date('H:i:s', $time_start) . "<br>");
+                print_r("<br>");
+                print_r("Время окончания: " . date('H:i:s', $time_end) . "<br>");
+                print_r("<br>");
+                print_r("Продолжительность выполнения скрипта: " . $execution_time . " секунды.");
+
+                print_r("Продолжительность выполнения скрипта: " . $execution_time_minutes . " минут.<br>");
+                print_r("Продолжительность выполнения скрипта: " . $execution_time_hours . " часов.<br>");
+                // $eventResults = null;
+                // if (!empty($eventsCommands)) {
+                //     $eventResults = $batchService->sendGeneralBatchRequest($eventsCommands);
+                // }
+                // print_r("set list item");
+                // print_r("<br>");
+                //     // Обработка результатов пакетного запроса
+            }
+
+            // Отправка пакетного запроса
+            // if (!empty($commands)) {
+            //     $results = $batchService->sendGeneralBatchRequest($commands);
+            //     // print_r('<br> results');
+            //     // print_r($results);
+            //     $newCompanyIds = [];
+            //     print_r("<br>  results");
+            //     print_r($results);
+            //     print_r("<br> count results");
+            //     print_r(count($results));
+            //     foreach ($results as $key => $result) {
+            //         // print_r('<br> key');
+            //         // print_r($key);
+            //         if (preg_match('/add_client_(.+)$/', $key, $matches)) {
+            //             $oldClientId = $matches[1];
+            //             print_r("<br> oldClientId");
+            //             print_r($oldClientId);
+            //             if (!empty($result)) {
+            //                 $newCompanyIds[$oldClientId] = $result;
+            //             }
+            //         }
+            //     }
+            //     print_r("<br> newCompanyIds");
+            //     print_r($newCompanyIds);
+            //     $eventsCommands = [];
+            //     $clients = Items::fromFile($jsonFilePath, ['pointer' => '/clients', 'decoder' => $decoder]);
+
+            //     foreach ($clients as $index => $clientData) {
+            //         if ($index > 1 && $index < 200) {
+
+            //             $companyId = $newCompanyIds[$clientData['client']['id']] ?? null;
+
+            //             if (!empty($companyId) && !empty($clientData['events'])) {
+            //                 // print_r("<br> companyId    _  ");
+            //                 // print_r($companyId);
+
+            //                 foreach ($clientData['events'] as $garusEvent) {
+            //                     $eventsCommands = $this->getListFlow($garusEvent, $companyId, $userId, $eventsCommands);
+            //                 }
+            //                 // print_r("eventsCommands");
+            //                 // print_r("<br>");
+            //                 // print_r($eventsCommands);
+
+            //                 print_r($clientData['client']['id']);
+            //             }
+            //         }
+            //     }
+            //     $eventResults = null;
+            //     if (!empty($eventsCommands)) {
+            //         $eventResults = $batchService->sendGeneralBatchRequest($eventsCommands);
+            //     }
+            //     print_r("set list item");
+            //     // print_r("<br>");
+            //     // Обработка результатов пакетного запроса
+
+            // }
+
+
+            // }
             return APIOnlineController::getError(
                 'infoblocks not found',
                 ['clients' => $results, 'newCompanyId' => $newCompanyId]
@@ -165,6 +407,8 @@ class MigrateCRMController extends Controller
                 'line'      => $th->getLine(),
                 'trace'     => $th->getTraceAsString(),
             ];
+            print_r($errorMessages);
+
             Log::channel('telegram')->error('ERROR COLD APIBitrixController: Exception caught',  $errorMessages);
             Log::error('ERROR COLD APIBitrixController: Exception caught',  $errorMessages);
             Log::info('error COLD APIBitrixController', ['error' => $th->getMessage()]);
@@ -201,30 +445,46 @@ class MigrateCRMController extends Controller
             }
         }
 
-        foreach ($contacts as $contact) {
-            $resultContactstring = $contact['name'] . ' ' . $contact['position'];
-            if (!empty($contact['telefon']) && $contact['telefon'] !== '8' && $contact['telefon'] !== '8( ) - -' && $contact['telefon'] !== '-' && $contact['telefon'] !== 'NULL'  && $contact['telefon'] !== "\"NULL\"") {
+        if (!empty($contacts)) {
+            foreach ($contacts as $contact) {
+                $resultContactstring = $contact['name'] . ' ' . $contact['position'];
+                if (!empty($contact['telefon']) && $contact['telefon']  !== '(   )   -  -  '  && $contact['telefon'] !== '8' && $contact['telefon'] !== '( ) - -' && $contact['telefon'] !== '8( ) - -' && $contact['telefon'] !== '-'  && $contact['telefon'] !== ' ' && $contact['telefon'] !== 'NULL'  && $contact['telefon'] !== "\"NULL\"" && $contact['telefon'] !== "\"TELEFON\"") {
 
-                $phone = '+7' . substr($contact['telefon'], 1);
-                $resultContactstring = $resultContactstring . "\n " . ' тел: ' . $phone;
+                    if (preg_match('/^\d/', $contact['telefon'])) {
+                        // Если номер начинается с 8, заменяем первую '8' на '+7'
+                        if (strpos($contact['telefon'], '8') === 0) {
+                            $phone = '+7' . substr($contact['telefon'], 1);
+                        } else {
+                            // Добавляем '+7', если номер начинается не с '8'
+                            $phone = '+7' . $contact['telefon'];
+                        }
+                    } else {
+                        // Если номер начинается не с цифры (например, скобка или другой символ)
+                        $phone = '+7' . $contact['telefon'];
+                    }
+
+                    // $phone = '+7' . substr($contact['telefon'], 1);
+                    $resultContactstring = $resultContactstring . "\n " . ' тел: ' . $phone;
+                }
+                if (!empty($contact['dobTel']) && $contact['dobTel'] !== '-' && $contact['dobTel'] !== 'NULL'  && $contact['dobTel'] !== "\"NULL\"") {
+                    $resultContactstring = $resultContactstring . ' доб: ' . $contact['dobTel'];
+                }
+                if (!empty($contact['email']) && $contact['email'] !== '-' && $contact['email'] !== 'NULL'  && $contact['email'] !== "\"NULL\"") {
+                    $resultContactstring = $resultContactstring . "\n " . 'email: ' . $contact['email'];
+                }
+                if (!empty($contact['comment'])  && $contact['comment'] !== '-' && $contact['comment'] !== 'NULL'  && $contact['comment'] !== "\"NULL\"") {
+                    $resultContactstring = $resultContactstring . " \n" . '' . $contact['comment'];
+                }
+                if (!empty($contact['isLpr']) && $contact['isLpr'] !== '-' && $contact['isLpr'] !== 'NULL'  && $contact['isLpr'] !== "\"NULL\"") {
+                    $resultContactstring = $resultContactstring . " \n" . 'ЛПР';
+                }
+                if (!empty($resultContactstring)) {
+                    array_push($resultValue, $resultContactstring);
+                }
             }
-            if (!empty($contact['dobTel']) && $contact['dobTel'] !== '-' && $contact['dobTel'] !== 'NULL'  && $contact['dobTel'] !== "\"NULL\"") {
-                $resultContactstring = $resultContactstring . ' доб: ' . $contact['dobTel'];
-            }
-            if (!empty($contact['email']) && $contact['email'] !== '-' && $contact['email'] !== 'NULL'  && $contact['email'] !== "\"NULL\"") {
-                $resultContactstring = $resultContactstring . "\n " . 'email: ' . $contact['email'];
-            }
-            if (!empty($contact['comment'])  && $contact['comment'] !== '-' && $contact['comment'] !== 'NULL'  && $contact['comment'] !== "\"NULL\"") {
-                $resultContactstring = $resultContactstring . " \n" . '' . $contact['comment'];
-            }
-            if (!empty($contact['isLpr']) && $contact['isLpr'] !== '-' && $contact['isLpr'] !== 'NULL'  && $contact['isLpr'] !== "\"NULL\"") {
-                $resultContactstring = $resultContactstring . " \n" . 'ЛПР';
-            }
-            if (!empty($resultContactstring)) {
-                array_push($resultValue, $resultContactstring);
-            }
+            $result = [$pFieldBxId => $resultValue];
         }
-        $result = [$pFieldBxId => $resultValue];
+
 
         return $result;
     }
@@ -236,43 +496,66 @@ class MigrateCRMController extends Controller
         $result = null;
 
         if (!empty($contacts)) {
+            // $phones = [];
+            $processedPhones = [];
+            foreach ($contacts as $key => $contact) {
+                # code...
 
-            $contact = $contacts[0];
 
-            $phones =  $contact['telefons'];
-            Log::channel('telegram')->info('TEST PHONE', ['$phones' => $phones]);
 
-            if (!empty($phones)) {
-                $phonesArray = explode(", ", $phones);
+                $phone =  $contact['telefon'];
+                // Log::channel('telegram')->info('TEST PHONE', ['$phones' => $phones]);
 
-                // Новый массив для обработанных телефонов
-                $processedPhones = [];
+                if (!empty($phone)) {
+                    // $phonesArray = explode(", ", $phone);
 
-                // Перебор массива и замена первой '8' на '+7'
-                foreach ($phonesArray as $phone) {
+                    // Новый массив для обработанных телефонов
+
+
+                    // Перебор массива и замена первой '8' на '+7'
+                    // foreach ($phonesArray as $phone) {
+                    // Удаляем пробелы и проверяем формат номера
+                    // print_r($phone);
+
                     // Пропуск неправильно форматированных номеров
-                    if (trim($phone) === "8( ) - -") {
-                        continue;
-                    }
+                    if (!empty($phone) && $phone  !== '8' && $phone  !== '(   )   -  -  ' && $phone  !== '()' && $phone  !== '() '  && $phone  !== '( )'  && $phone  !== '() - ' && $phone  !== '() -' && $phone  !== '() --' && $phone  !== '( ) - -' && $phone  !== '8( ) - -' && $phone  !== '-'  && $contact['telefon'] !== ' ' && $contact['telefon'] !== 'NULL'  && $contact['telefon'] !== "\"NULL\"" && $contact['telefon'] !== "\"TELEFON\"") {
+                        $phone = trim($phone);
+                        // if ($phone === "+7() - -" ||  $phone === "(  )  -  - " || $phone === "( ) - -" || $phone === "8( ) - -" || $phone === "NULL" || $phone === "TELEFON" || $phone === "TELEPHON" || $phone == ""  || $phone == "-" || $phone == null) {
+                        //     continue;
+                        // }
 
-                    // Замена первой '8' на '+7'
-                    $processedPhone = '+7' . substr($phone, 1);
-                    Log::channel('telegram')->info('TEST PHONE', ['$processedPhone' => $processedPhone]);
-                    // Добавление в массив только уникальных номеров
-                    if (!in_array($processedPhone, $processedPhones)) {
-                        $resultPhone = [
-                            // { "VALUE": "555888", "VALUE_TYPE": "WORK" } 
-                            'VALUE' => $processedPhone,
-                            "VALUE_TYPE" => "WORK"
-                        ];
-                        $processedPhones[] = $resultPhone;
+                        // Проверяем, начинается ли номер с цифры, не учитывая код страны
+                        if (preg_match('/^\d/', $phone)) {
+                            // Если номер начинается с 8, заменяем первую '8' на '+7'
+                            if (strpos($phone, '8') === 0) {
+                                $processedPhone = '+7' . substr($phone, 1);
+                            } else {
+                                // Добавляем '+7', если номер начинается не с '8'
+                                $processedPhone = '+7' . $phone;
+                            }
+                        } else {
+                            // Если номер начинается не с цифры (например, скобка или другой символ)
+                            $processedPhone = '+7' . $phone;
+                        }
+                        if (!in_array($processedPhone, $processedPhones)) {
+                            $resultPhone = [
+                                // { "VALUE": "555888", "VALUE_TYPE": "WORK" } 
+                                'VALUE' => $processedPhone,
+                                "VALUE_TYPE" => "WORK"
+                            ];
+                            $processedPhones[] = $resultPhone;
+                        }
+                        // // Добавляем обработанный номер в массив
+                        // $processedPhones[] = $processedPhone;
+                        // }
                     }
                 }
-                $result = $processedPhones;
             }
+            // print_r($result);
+            $result = $processedPhones;
         }
 
-        Log::channel('telegram')->info('TEST PHONE', ['$result' => $result]);
+        // Log::channel('telegram')->info('TEST PHONE', ['$result' => $result]);
 
         return $result;
     }
@@ -678,7 +961,6 @@ class MigrateCRMController extends Controller
     {
 
         $pFields =  $this->portalBxCompany['bitrixfields'];
-
         $result = null;
         foreach ($pFields as $pField) {
             if ($pField['code'] === 'op_prospects_type') {
@@ -940,12 +1222,14 @@ class MigrateCRMController extends Controller
             $sessionData = FullEventInitController::getSessionItem($sessionKey);
 
             if (!empty($sessionData)) {
-
+                print_r('fromSession');
                 if (!empty($sessionData['department'])) {
                     $result =  $sessionData;
                     $departmentResult = $sessionData['department'];
                     $result['fromSession'] = true;
                 }
+            } else {
+                print_r('WITHOUT ession');
             }
 
             if (empty($departmentResult)) {                               // если в сессии нет department
@@ -1013,8 +1297,10 @@ class MigrateCRMController extends Controller
                     }
                 }
             }
-
-
+            // print_r('<br>');
+            // print_r('allUsers');
+            // print_r('<br>');
+            // print_r($result['department']['generalDepartment']);
             return $result;
         } catch (\Throwable $th) {
             return null;
@@ -1023,22 +1309,26 @@ class MigrateCRMController extends Controller
 
 
 
-    protected function getDateTimeValue($dateValue, $timeValue)
+    protected function getDateTimeValue($dateTimeValue)
     {
 
-        $date = Carbon::parse($dateValue);
-        $time = Carbon::parse($timeValue);
-        // Объединяем дату и время
-        $datetime = Carbon::create(
-            $date->year,
-            $date->month,
-            $date->day,
-            $time->hour,
-            $time->minute,
-            $time->second
-        );
-        $formattedDatetime = $datetime->format('d.m.Y H:i:s');
+        // $date = Carbon::parse($dateValue);
+        // $time = Carbon::parse($timeValue);
+        // // Объединяем дату и время
+        // $datetime = Carbon::create(
+        //     $date->year,
+        //     $date->month,
+        //     $date->day,
+        //     $time->hour,
+        //     $time->minute,
+        //     $time->second
+        // );
+        // $formattedDatetime = $datetime->format('d.m.Y H:i:s');
 
+        $datetime = Carbon::parse($dateTimeValue);
+
+        // Форматируем дату и время
+        $formattedDatetime = $datetime->format('d.m.Y H:i:s');
         return $formattedDatetime;
     }
 
@@ -1097,7 +1387,7 @@ class MigrateCRMController extends Controller
         return $flowdata;
     }
 
-    protected function getListFlow($event, $companyId, $responsibleId)
+    protected function getListFlow($event, $companyId, $responsibleId, $commands)
     {
 
         $resultEventType = 'warm';
@@ -1108,8 +1398,8 @@ class MigrateCRMController extends Controller
         $noresultReason = '';
         $failReason = '';
         $nowDate = '';
-
-        $date = $this->getDateTimeValue($event['date'], $event['time']);
+        $resultBatchCommands = '';
+        $date = $this->getDateTimeValue($event['dateTime']);
         $comment = $event['comment'];
 
 
@@ -1129,6 +1419,7 @@ class MigrateCRMController extends Controller
             $this->normalizeString('Заявка на презу') => 'presentation',
             $this->normalizeString('Дист. заявка') => 'presentation',
             $this->normalizeString('Тлф.Заявка') => 'presentation',
+            $this->normalizeString('Выезд') => 'presentation',
 
         ];
         $normalizedGarusResultat = $this->normalizeString($event['eventType']);
@@ -1139,14 +1430,16 @@ class MigrateCRMController extends Controller
                     $this->normalizeString('Пред.договоренность'),
                     $this->normalizeString('Заявка на презу'),
                     $this->normalizeString('Дист. заявка'),
-                    $this->normalizeString('Тлф.Заявка')
+                    $this->normalizeString('Тлф.Заявка'),
+
                 ],
                 'action' => 'plan',
                 'eventType' => 'presentation'
             ],
             'done_presentation' => [
                 'cases' => [
-                    $this->normalizeString('Презентация')
+                    $this->normalizeString('Презентация'),
+                    $this->normalizeString('Выезд')
                 ],
                 'action' => 'done',
                 'eventType' => 'presentation'
@@ -1239,29 +1532,59 @@ class MigrateCRMController extends Controller
                 break;
             }
         }
+        // $fullDepartment = $this->getFullDepartment();
+        $fullDepartment = $this->department;
+        $userId = 13; //201 - man savchuk in rostov
+        $fullDepartment =  $fullDepartment['department'];
+        if (!empty($fullDepartment)) {
+            if (!empty($fullDepartment['allUsers'])) {
 
+                foreach ($fullDepartment['allUsers'] as $user) {
+
+                    $responsible = $event['responsible'];
+
+                    $parts = explode(' ', $responsible);
+                    $lastName = mb_strtolower(trim($parts[0])); // Приводим к нижнему регистру
+                    $userLastName = mb_strtolower(trim($user['LAST_NAME'])); // Приводим фамилию пользователя к нижнему регистру
+
+
+                    if ($lastName === $userLastName) {
+                        $userId = $user['ID'];
+                        break; // Прекратить перебор после нахождения пользователя
+
+                    } else {
+                        // print_r('<br>');
+                        // print_r($responsible);
+                        // print_r('<br>');
+                        // print_r($lastName);
+                        // print_r('<br>');
+                    }
+                }
+            }
+        }
 
         if ($isDocumentFlow) {
-            BitrixListDocumentFlowService::getListsFlow(  //report - отчет по текущему событию
+            BitrixListDocumentFlowService::getBatchListFlow(  //report - отчет по текущему событию
                 $this->hook,
                 $this->portalBxLists,
                 $resultEventType,
                 $event['eventType'],
                 'act_send',  // сделано, отправлено
-                $responsibleId,
-                $responsibleId,
-                $responsibleId,
+                $userId,
+                $userId,
+                $userId,
                 $companyId,
                 $comment,
                 null, // $currentBxDealIds,
                 null, //  $this->currentBaseDeal['ID']
                 $date,
-                $event['eventType']
+                $event['eventType'],
+                $commands
 
 
             );
         } else {
-            BitrixListFlowService::getListsFlow(  //report - отчет по текущему событию
+            $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
                 $this->hook,
                 $this->portalBxLists,
                 $resultEventType,
@@ -1269,9 +1592,9 @@ class MigrateCRMController extends Controller
                 $resultAction,
                 // $this->stringType,
                 '', //$this->planDeadline,
-                $responsibleId,
-                $responsibleId,
-                $responsibleId,
+                $userId,
+                $userId,
+                $userId,
                 $companyId,
                 $comment,
                 $workStatus,
@@ -1282,9 +1605,12 @@ class MigrateCRMController extends Controller
                 '', // $currentDealIds,
                 '', // $currentBaseDealId
                 $date,
-                $event['eventType'] //$hotName
+                $event['eventType'], //$hotName
+                $commands
 
             );
         }
+
+        return $commands;
     }
 }

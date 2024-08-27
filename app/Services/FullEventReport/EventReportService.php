@@ -9,8 +9,10 @@ use App\Http\Controllers\PortalController;
 use App\Jobs\BtxCreateListItemJob;
 use App\Jobs\BtxSuccessListItemJob;
 use App\Services\BitrixTaskService;
+use App\Services\General\BitrixBatchService;
 use App\Services\General\BitrixDealService;
 use App\Services\General\BitrixDepartamentService;
+use App\Services\HookFlow\BitrixDealBatchFlowService;
 use App\Services\HookFlow\BitrixDealFlowService;
 use App\Services\HookFlow\BitrixEntityFlowService;
 use App\Services\HookFlow\BitrixListFlowService;
@@ -659,7 +661,9 @@ class EventReportService
 
             ]);
             if ($this->isDealFlow && $this->portalDealData) {
-                $currentDealsIds = $this->getDealFlow();
+                // $currentDealsIds = $this->getDealFlow();
+                $currentDealsIds = $this->getBatchDealFlow();
+                
             }
 
             // $this->createTask($currentSmartId);
@@ -1502,6 +1506,402 @@ class EventReportService
 
         // ]);
 
+        return [
+            'reportDeals' => $reportDeals,
+            'planDeals' => $planDeals,
+            'unplannedPresDeals' => $unplannedPresDeals,
+        ];
+    }
+
+
+    protected function getBatchDealFlow()
+    {
+
+        // должен собрать batch commands
+        // отправить send batch
+        // из резултатов вернуть объект с массивами созданных и обновленных сделок
+        // если при начале функции нет currentBtxDeals - сначала создается она
+
+        //сейчас есть
+        // protected $currentBaseDeal;
+        // protected $currentPresDeal;
+        // protected $currentColdDeal;
+        // protected $currentTMCDeal;
+
+        // protected $relationBaseDeals;  //базовые сделки пользователь-компания
+        // protected $relationCompanyUserPresDeals; //allPresDeals //през сделки пользователь-компания
+        // protected $relationFromBasePresDeals;
+        // protected $relationColdDeals;
+        // protected $relationTMCDeals;
+
+
+
+        // $currentBaseDeal - обновляется в любом случае если ее нет - создается
+        // $currentPresDeal - обновляется если през - done или planEventType - pres
+        // $currentColdDeal - обновляется если xo - done или planEventType - xo
+
+        // в зависимости от условий сделка в итоге попадает либо в plan либо в report deals
+
+        $reportDeals = [];
+        $planDeals = [];
+        $currentBtxDeals = $this->currentBtxDeals;
+        $batchCommands = [];
+
+        if (empty($currentBtxDeals)) {   //если текущие сделки отсутствуют значит надо сначала создать базовую - чтобы нормально отработал поток
+            $setNewDealData = [
+                'COMPANY_ID' => $this->entityId,
+                'CATEGORY_ID' => $this->btxDealBaseCategoryId,
+                'ASSIGNED_BY_ID' => $this->planResponsibleId,
+            ];
+            $currentDealId = BitrixDealService::setDeal(
+                $this->hook,
+                $setNewDealData,
+
+            );
+
+            if (!empty($currentDealId)) {
+                $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                usleep($rand);
+                $newBaseDeal = BitrixDealService::getDeal(
+                    $this->hook,
+                    ['id' => $currentDealId]
+
+
+                );
+                $this->currentBaseDeal = $newBaseDeal;
+                $currentBtxDeals = [$newBaseDeal];
+                $this->currentBtxDeals = [$newBaseDeal];
+            }
+        }
+
+
+        $unplannedPresDeals = null;
+        $newPresDeal = null;
+        // report - закрывает сделки
+        // plan - создаёт
+        //todo report flow
+
+        // if report type = xo | cold
+        $currentReportStatus = 'done';
+
+        // if ($this->currentReportEventType == 'xo') {
+
+        if ($this->isFail) {
+            //найти сделку хо -> закрыть в отказ , заполнить поля отказа по хо 
+            $currentReportStatus = 'fail';
+        } else if ($this->isSuccessSale) {
+            //найти сделку хо -> закрыть в отказ , заполнить поля отказа по хо 
+            $currentReportStatus = 'success';
+        } else {
+            if ($this->isResult) {                   // результативный
+
+                if ($this->isInWork) {                // в работе или успех
+                    //найти сделку хо и закрыть в успех
+                }
+            } else { //нерезультативный 
+                if ($this->isPlanned) {                // если запланирован нерезультативный - перенос 
+                    //найти сделку хо и закрыть в успех
+                    $currentReportStatus = 'expired';
+                }
+            }
+        }
+        // }
+
+
+        if ($this->isPresentationDone && $this->currentReportEventType !== 'presentation') { // проведенная презентация будет isUnplanned
+            //в current task не будет id сделки презентации
+            // в таком случае предполагается, что сделки презентация еще не существует
+            $currentBtxDeals = [];
+            $unplannedPresDeal = BitrixDealFlowService::unplannedPresflow(  //  создает - презентация
+                $this->hook,
+                null,
+                $this->portalDealData,
+                $this->currentDepartamentType,
+                $this->entityType,
+                $this->entityId,
+                'presentation', // xo warm presentation,
+                'Презентация',
+                'Спонтанная от ' . $this->nowDate,
+                'plan',  // plan done expired fail
+                $this->planResponsibleId,
+                true,
+                '$fields',
+                null // $relationSalePresDeal
+            );
+
+            // $isDeal = false, 
+            // $deal = null, 
+            // $dealType = 'base',  //presentation, xo
+            // $baseDealId = null
+
+            // Log::info('HOOK TEST unplannedPresDeal', [
+            //     'currentBaseDeal' => $this->currentBaseDeal,
+
+
+            // ]);
+            if (!empty($this->currentBaseDeal)) {
+                $this->getEntityFlow(
+                    true,
+                    $unplannedPresDeal,
+                    'presentation',
+                    $this->currentBaseDeal['ID'],
+                    'unplanned'
+                );
+            }
+
+
+
+
+            if (!empty($unplannedPresDeal)) {
+                if (isset($unplannedPresDeal['ID'])) {
+
+                    $unplannedPresDealId = $unplannedPresDeal['ID'];
+                    array_push($this->currentBtxDeals, $unplannedPresDeal);
+                    $unplannedPresResultStatus = 'done';
+                    $unplannedPresResultName = 'Проведена';
+                    if ($this->isFail) {
+                        $unplannedPresResultStatus = 'fail';
+                        $unplannedPresResultName = 'Отказ после презентации';
+                    }
+                    $flowResult = BitrixDealBatchFlowService::batchFlow(  // закрывает сделку  - презентация обновляет базовую в соответствии с проведенной през
+                        $this->hook,
+                        $this->currentBtxDeals,
+                        $this->portalDealData,
+                        $this->currentDepartamentType,
+                        $this->entityType,
+                        $this->entityId,
+                        'presentation', // xo warm presentation,
+                        'Презентация',
+                        $unplannedPresResultName,
+                        $unplannedPresResultStatus,  // plan done expired fail
+                        $this->planResponsibleId,
+                        true,
+                        '$fields',
+                        null, // $relationSalePresDeal
+                        $batchCommands,
+                        'unpres'
+                    );
+                    // $unplannedPresDeals = $flowResult['dealIds'];
+                    $batchCommands = $flowResult['commands'];
+
+
+
+                    // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                    //     'unplannedPresDeals' => $unplannedPresDeals,
+
+
+                    // ]);
+                    // Log::info('HOOK TEST CURRENTENTITY', [
+                    //     'unplannedPresDeals' => $unplannedPresDeals,
+
+
+                    // ]);
+                    foreach ($this->currentBtxDeals as $cbtxdeal) {
+                        if ($cbtxdeal['ID'] !== $unplannedPresDealId) {
+                            $rand = mt_rand(200000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                            usleep($rand);
+                            $updtdbtxdeal = BitrixDealService::getDeal(
+                                $this->hook,
+                                ['id' => $cbtxdeal['ID']]
+                            );
+                            if (!empty($updtdbtxdeal)) {
+
+                                $cbtxdeal = $updtdbtxdeal;
+                            }
+                            array_push($currentBtxDeals, $cbtxdeal);
+                        }
+                    }
+                }
+            }
+        }
+        // $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        // usleep($rand);
+
+
+        //если был unplanned а потом plan ->
+        //если warm plan а report был xo 
+        // - то нужна обновленная стадия в базовой битрикс сделке что не пыталось повысить
+        // с xo в warm так как уже на самом деле pres 
+        // если plan pres -> планируется новая презентация и поэтому в  
+        // $this->currentBtxDeals должна отсутствовать сделка презентации созданная при unplanned, 
+        // которая пушится туда  при unplanned - чтобы были обработаны базовая сделка 
+        // в соответствии с проведенной през
+        // при этом у основной сделки должна быть обновлена стадия - например на през если была unplanned
+        // Log::info('HOOK TEST currentBtxDeals', [
+        //     'currentBtxDeals' => $currentBtxDeals,
+        //     'this currentBtxDeals' => $this->currentBtxDeals,
+
+
+        // ]);
+
+
+        $flowResult = BitrixDealBatchFlowService::batchFlow(  // редактирует сделки отчетности из currentTask основную и если есть xo
+            $this->hook,
+            $currentBtxDeals,
+            $this->portalDealData,
+            $this->currentDepartamentType,
+            $this->entityType,
+            $this->entityId,
+            $this->currentReportEventType, // xo warm presentation, 
+            $this->currentReportEventName,
+            $this->currentPlanEventName,
+            $currentReportStatus,  // plan done expired fail success
+            $this->planResponsibleId,
+            $this->isResult,
+            '$fields',
+            $this->relationSalePresDeal,
+            $batchCommands,
+            'report'
+
+        );
+        // $reportDeals = $flowResult['dealIds'];
+        $batchCommands = $flowResult['commands'];
+
+        if (!empty($this->currentTMCDeal) && $this->resultStatus === 'result' && $this->currentReportEventType === 'presentation') {
+
+            $tmcflowResult =  BitrixDealBatchFlowService::batchFlow(  // редактирует сделки отчетности из currentTask основную и если есть xo
+                $this->hook,
+                [$this->currentTMCDeal],
+                $this->portalDealData,
+                'tmc',
+                $this->entityType,
+                $this->entityId,
+                $this->currentReportEventType, // xo warm presentation, 
+                $this->currentReportEventName,
+                $this->currentPlanEventName,
+                'done', //$currentReportStatus,  // plan done expired fail success
+                $this->planResponsibleId,
+                $this->isResult,
+                '$fields',
+                $this->relationSalePresDeal,
+                $batchCommands,
+                'tmc_report'
+            );
+            $batchCommands = $tmcflowResult['commands'];
+            //обновляет сделку тмц в успех если есть tmc deal и если през состоялась
+        }
+
+        //todo plan flow
+
+        // if ($this->currentPlanEventType == 'warm') {
+        //     // найти или создать сделку base не sucess стадия теплый прозвон
+
+
+        // }
+        // if plan type = xo | cold
+
+        //если запланирован
+        //xo - создать или обновить ХО & Основная
+        //warm | money_await | in_progress - создать или обновить  Основная
+        //presentation - создать или обновить presentation & Основная
+
+        if (!empty($this->currentBaseDeal)) {
+            $rand = mt_rand(300000, 700000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            usleep($rand);
+            $this->getEntityFlow(
+                true,
+                $this->currentBaseDeal,
+                'base',
+                $this->currentBaseDeal['ID'],
+                'unplanned'
+            );
+        }
+        // Log::info('HOOK TEST currentBtxDeals', [
+        //     'currentBtxDeals' => $currentBtxDeals,
+        //     '$this->currentPresDeal' => $this->currentPresDeal,
+
+
+        // ]);
+        if (!empty($this->currentPresDeal)) {  //report pres deal
+            $rand = mt_rand(300000, 700000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            usleep($rand);
+            $this->getEntityFlow(
+                true,
+                $this->currentPresDeal,
+                'presentation',
+                $this->currentBaseDeal['ID'],
+                'done'
+            );
+        }
+
+
+        if ($this->isPlanned) {
+            $currentBtxDeals = BitrixDealFlowService::getBaseDealFromCurrentBtxDeals(
+                $this->portalDealData,
+                $currentBtxDeals
+            );
+
+            $flowResult =   BitrixDealBatchFlowService::batchFlow( //создает сделку
+                $this->hook,
+                $currentBtxDeals,
+                $this->portalDealData,
+                $this->currentDepartamentType,
+                $this->entityType,
+                $this->entityId,
+                $this->currentPlanEventType, // xo warm presentation, hot moneyAwait
+                $this->currentPlanEventTypeName,
+                $this->currentPlanEventName,
+                'plan',  // plan done expired 
+                $this->planResponsibleId,
+                $this->isResult,
+                '$fields',
+                null, // $relationSalePresDeal
+                [], //тут я не эжу batch command а только созданная newpresdeal интересует, 
+                // чтобы связать ее с тмц сделкой если таковая имелась
+                // обновить поля в карточке презентационной сделки   
+                'report'
+            );
+            // $planDeals = $flowResult['dealIds'];
+            // $batchCommands = $tmcflowResult['commands'];
+
+
+            // WITHOUT NEW
+            $newPresDeal = $flowResult['newPresDeal'];
+
+            // Новая сделка созданная для презентации если есть тмц сделка
+            // новая сделка презентации нужна только здесь
+            //поэтому в batch commands - results будет 'new_pres_deal_id'
+            // и в этот момент я ее отдельным get возьму
+
+            if (!empty($this->currentTMCDeal) && $this->currentPlanEventType == 'presentation') {
+                BitrixDealFlowService::tmcPresentationRelation(
+                    $this->hook,
+                    $this->portalDealData,
+                    $this->currentBaseDeal,
+                    $newPresDeal,
+                    $this->currentTMCDeal['ID']
+                );
+            }
+        }
+
+        // Log::info('HOOK TEST currentBtxDeals', [
+        //     'newPresDeal' => $newPresDeal,
+
+
+
+        // ]);
+        if (!empty($newPresDeal)) {  //plan pres deal
+            $rand = mt_rand(200000, 700000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            usleep($rand);
+            $this->getEntityFlow(
+                true,
+                $newPresDeal,
+                'presentation',
+                $this->currentBaseDeal['ID'],
+                'plan'
+            );
+        }
+        // Log::channel('telegram')->info('presentationBtxList', [
+        //     'reportDeals' => $reportDeals,
+        //     'planDeals' => $planDeals,
+        //     // 'failReason' => $failReason,
+        //     // 'failType' => $failType,
+
+        // ]);
+        $batchService =  new BitrixBatchService($this->hook);
+        $result = $batchService->sendGeneralBatchRequest($batchCommands);
+        Log::info('HOOK BATCH batchFlow', ['result' => $result]);
+        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $result]);
         return [
             'reportDeals' => $reportDeals,
             'planDeals' => $planDeals,

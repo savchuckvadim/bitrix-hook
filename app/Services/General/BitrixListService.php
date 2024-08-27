@@ -41,6 +41,7 @@ class BitrixListService
             $data =  [
                 'IBLOCK_TYPE_ID' => 'lists',
                 'IBLOCK_ID' => $listBitrixId,
+               
                 'ELEMENT_CODE' => $code,
                 'FIELDS' => $fields
             ];
@@ -71,7 +72,27 @@ class BitrixListService
             return $result;
         }
     }
+    public static function getBatchCommandSetItem($hook, $listBitrixId, $fields, $elementCode = null)
+    {
+        $uniqueHash = md5(uniqid(rand(), true));
+        $secondUniqueHash = md5(uniqid(rand(1, 5), true));
 
+        $fullCode = $listBitrixId . '_' . $uniqueHash;
+        $code = $elementCode ?:  $fullCode;
+
+        $data = [
+            'IBLOCK_TYPE_ID' => 'lists',
+            'IBLOCK_ID' => $listBitrixId,
+            // 'IBLOCK_CODE' => $listBitrixId,
+            'ELEMENT_CODE' => $code,
+            'FIELDS' => $fields
+        ];
+
+
+
+
+        return 'lists.element.add?' . http_build_query($data);
+    }
     static function updateItem(
         $hook,
         $listBitrixId, // from portal db

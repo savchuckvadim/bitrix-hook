@@ -14,7 +14,50 @@ class BitrixBatchService
     {
         $this->hook = $hook;
     }
+    public function sendGeneralBatchRequest($commands)
+    {
+        $url = $this->hook . '/batch';
+        $maxCommandsPerBatch = 50; // Максимальное количество команд на один batch запрос
+        $batchRequests = array_chunk($commands, $maxCommandsPerBatch, true);
+        $result = [
+            // 'errors' => []
+        ];
 
+        foreach ($batchRequests as $key => $batchCommands) {
+            $response = Http::post($url, [
+                'halt' => 0,
+                'cmd' => $batchCommands
+            ]);
+            $responseData = $response->json();
+
+            // print_r("eventsCommands");
+            // print_r("<br>");
+            // print_r($batchCommands);
+            // print_r("<br>");
+            // print_r($responseData);
+            if (isset($responseData['result'])) {
+                $result[$key] = $responseData['result'];
+            }
+            if (isset($responseData['result_error'])) {
+                // $result['errors'][$key] = $responseData['result_error'];
+                print_r("<br>");
+                print_r($key);
+                print_r("<br>");
+                print_r($responseData['result_error']);
+                print_r("<br>");
+            }
+            usleep(mt_rand(1000, 400000));
+        };
+
+        // if (isset($result[0])) {
+        //     $result = $result[0];
+        // }
+
+        if (isset($result['result'])) {
+            $result = $result['result'];
+        }
+        return $result;
+    }
     public function sendBatchRequest($commands)
     {
         $url = $this->hook . '/batch';
@@ -40,7 +83,8 @@ class BitrixBatchService
                 // array_push($result['errors'], $responseData);
                 // return APIController::getError('batch result not found', $responseData);
             }
-            sleep(0.1);
+            $rand = mt_rand(100000, 400000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            usleep($rand);
         };
 
         return $result;
