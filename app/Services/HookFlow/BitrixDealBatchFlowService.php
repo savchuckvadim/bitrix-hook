@@ -207,7 +207,7 @@ class BitrixDealBatchFlowService
                         $rand = mt_rand(1000000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                         usleep($rand);
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $currentDealId);
-                        $batchCommands['update_' . $currentCategoryData['code']] = $batchCommand;
+                        $batchCommands['update_' . $currentCategoryData['code']. '_' . $tag . '_' . $currentDealId] = $batchCommand;
 
 
                         // BitrixDealService::updateDeal(  //обновляю сделку - а теперь даже нет, будет создана batch command

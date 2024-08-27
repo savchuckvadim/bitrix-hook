@@ -1559,7 +1559,7 @@ class EventReportService
 
             );
 
-            if (!empty($currentDealId) && !$this->currentBaseDeal) {
+            if (!empty($currentDealId) && empty($this->currentBaseDeal)) {
                 $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                 usleep($rand);
                 $newBaseDeal = BitrixDealService::getDeal(
@@ -1734,7 +1734,8 @@ class EventReportService
 
         // ]);
 
-
+        Log::info('HOOK BATCH batchFlow report DEAL', ['report currentBtxDeals' => $currentBtxDeals]);
+        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['currentBtxDeals' => $currentBtxDeals]);
         $flowResult = BitrixDealBatchFlowService::batchFlow(  // редактирует сделки отчетности из currentTask основную и если есть xo
             $this->hook,
             $currentBtxDeals,
