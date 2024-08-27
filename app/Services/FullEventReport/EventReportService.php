@@ -1850,13 +1850,13 @@ class EventReportService
                 $this->isResult,
                 '$fields',
                 null, // $relationSalePresDeal
-                [], //тут я не эжу batch command а только созданная newpresdeal интересует, 
+                $batchCommands, //тут я не эжу batch command а только созданная newpresdeal интересует, 
                 // чтобы связать ее с тмц сделкой если таковая имелась
                 // обновить поля в карточке презентационной сделки   
-                'report'
+                'plan'
             );
             // $planDeals = $flowResult['dealIds'];
-            // $batchCommands = $tmcflowResult['commands'];
+            $batchCommands = $flowResult['commands'];
 
 
             // WITHOUT NEW
