@@ -183,10 +183,10 @@ class BitrixDealBatchFlowService
                         $batchCommands['set_' . $currentCategoryData['code'] . '_' . $tag . '_' . $currentDealId] = $batchCommand; // в результате будет id
                     }
 
-                    // Log::info('DEAL TEST', [
-                    //     'setDeal currentDealId' => $currentDealId,
+                    Log::info('DEAL TEST', [
+                        'setDeal currentDealId' => $currentDealId,
 
-                    // ]);
+                    ]);
                 } else { // пришла уже созданная сделка
                     // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
                     //     'currentDealId' => $currentDealId,
@@ -199,17 +199,18 @@ class BitrixDealBatchFlowService
                         // $eventType, // xo warm presentation,
                         // $eventAction,  // plan done expired fail
                     );
-                    // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-                    //     'isCanDealStageUpdate' => $isCanDealStageUpdate,
+                    Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+                        'isCanDealStageUpdate' => $isCanDealStageUpdate,
 
-                    // ]);
+                    ]);
                     if ($isCanDealStageUpdate) {
                         $rand = mt_rand(1000000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                         usleep($rand);
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $currentDealId);
                         $batchCommands['update_' . $currentCategoryData['code']. '_' . $tag . '_' . $currentDealId] = $batchCommand;
-
-
+                      
+                        Log::info('HOOK BATCH batchFlow report DEAL', ['report batchCommands' => $batchCommands]);
+                        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $batchCommands]);
                         // BitrixDealService::updateDeal(  //обновляю сделку - а теперь даже нет, будет создана batch command
                         //     $hook,
                         //     $currentDealId,
