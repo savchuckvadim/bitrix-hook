@@ -265,27 +265,33 @@ class BitrixDealBatchFlowService
         foreach ($results as $key => $value) {
             // if ($value === true || is_numeric($value)) {  // Проверяем, что операция была успешной
             $parts = explode('_', $key);
-            $operation = $parts[0];  // 'update' или 'set' 'newpresdealget'
-            $category = $parts[1];  // категория, например 'sales'
-            $tag = $parts[2];  // тег, например 'report' или 'plan'
+            $operation = array_shift($parts);  // 'update', 'set' или 'newpresdealget', удаляем первый элемент
+            $tag = array_pop($parts);  // 'report' или 'plan', удаляем последний элемент
 
+            // Объединяем оставшиеся части обратно в строку для категории, так как они могут быть разделены подчеркиваниями
+            $category = implode('_', $parts);
             // Проверка наличия тега и успешность операции
-            if (strpos($key, 'report') !== false && $operation === 'update') {
+            if ($operation === 'update') {
                 $dealId = end($parts);  // ID сделки, предполагается, что всегда последний элемент
-                $reportDeals[] = $dealId;
-            } elseif (strpos($key, 'plan') !== false && $operation === 'set') {
-                $planDeals[] = $value;  // Добавляем ID новой сделки
-            } elseif (strpos($key, 'newpresdealget') !== false) {
-                $newPresDeal =  $value;
-                $unplannedPresDeals[] = $newPresDeal;
+            } elseif ($operation === 'set') {
+                $dealId = $value;  // Добавляем ID новой сделки
             }
+            // elseif (strpos($key, 'newpresdealget') !== false) {
+            //     $newPresDeal =  $value;
+            //     $unplannedPresDeals[] = $newPresDeal;
             // }
+
+            if (strpos($key, 'report') !== false) {
+                $reportDeals[] = $dealId;
+            } elseif (strpos($key, 'plan') !== false) {
+                $planDeals[] = $value;  // Добавляем ID новой сделки
+            }
         }
 
         return [
             'reportDeals' => $reportDeals,
             'planDeals' => $planDeals,
-            'unplannedPresDeals' => $unplannedPresDeals,
+            // 'unplannedPresDeals' => $unplannedPresDeals,
         ];
     }
 

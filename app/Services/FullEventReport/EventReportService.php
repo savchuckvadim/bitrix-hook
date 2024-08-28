@@ -1918,7 +1918,7 @@ class EventReportService
 
         Log::info('HOOK BATCH', ['result' => $result]);
         Log::channel('telegram')->info('HOOK BATCH', ['result' => $result]);
-
+        $result['unplannedPresDeals'] = $unplannedPresDeal;
 
         return  $result;
     }
