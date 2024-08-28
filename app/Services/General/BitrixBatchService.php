@@ -37,8 +37,12 @@ class BitrixBatchService
             // print_r($responseData);
             if (isset($responseData['result'])) {
                 $result[$key] = $responseData['result'];
+
+                if (isset($responseData['result']['result'])) {
+                    $result[$key] = $responseData['result']['result'];
+                }
             }
-            if (isset($responseData['result_error'])) {
+            if (!empty($responseData['result_error'])) {
                 // $result['errors'][$key] = $responseData['result_error'];
                 print_r("<br>");
                 print_r($key);
