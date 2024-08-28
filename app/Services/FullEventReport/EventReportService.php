@@ -1916,8 +1916,8 @@ class EventReportService
         // ];
         $result = BitrixDealBatchFlowService::handleBatchResults($results);
 
-        Log::info('HOOK BATCH batchFlow', ['result' => $result]);
-        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $result]);
+        Log::info('HOOK BATCH', ['result' => $result]);
+        Log::channel('telegram')->info('HOOK BATCH', ['result' => $result]);
 
 
         return  $result;
