@@ -1907,14 +1907,19 @@ class EventReportService
 
         $batchService =  new BitrixBatchService($this->hook);
         $results = $batchService->sendGeneralBatchRequest($batchCommands);
-        Log::info('HOOK BATCH batchFlow', ['result' => $results]);
-        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $results]);
+        // Log::info('HOOK BATCH batchFlow', ['result' => $results]);
+        // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $results]);
         // return [
         //     'reportDeals' => $reportDeals,
         //     'planDeals' => $planDeals,
         //     'unplannedPresDeals' => $unplannedPresDeals,
         // ];
         $result = BitrixDealBatchFlowService::handleBatchResults($results);
+
+        Log::info('HOOK BATCH batchFlow', ['result' => $results]);
+        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $results]);
+
+
         return  $result;
     }
 
