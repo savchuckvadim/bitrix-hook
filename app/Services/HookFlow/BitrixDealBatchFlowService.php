@@ -253,7 +253,7 @@ class BitrixDealBatchFlowService
         return $currentMethod . '?' . http_build_query($data);
     }
 
-    public static function handleBatchResults($batchResult)
+    static function handleBatchResults($batchResult)
     {
         $reportDeals = [];
         $planDeals = [];
@@ -264,21 +264,21 @@ class BitrixDealBatchFlowService
         $results = $batchResult['result'];  // Предполагаем, что структура такая, как в примере
         foreach ($results as $key => $value) {
             // if ($value === true || is_numeric($value)) {  // Проверяем, что операция была успешной
-                $parts = explode('_', $key);
-                $operation = $parts[0];  // 'update' или 'set' 'newpresdealget'
-                $category = $parts[1];  // категория, например 'sales'
-                $tag = $parts[2];  // тег, например 'report' или 'plan'
+            $parts = explode('_', $key);
+            $operation = $parts[0];  // 'update' или 'set' 'newpresdealget'
+            $category = $parts[1];  // категория, например 'sales'
+            $tag = $parts[2];  // тег, например 'report' или 'plan'
 
-                // Проверка наличия тега и успешность операции
-                if (strpos($key, 'report') !== false && $operation === 'update') {
-                    $dealId = end($parts);  // ID сделки, предполагается, что всегда последний элемент
-                    $reportDeals[] = $dealId;
-                } elseif (strpos($key, 'plan') !== false && $operation === 'set') {
-                    $planDeals[] = $value;  // Добавляем ID новой сделки
-                } elseif (strpos($key, 'newpresdealget') !== false) {
-                    $newPresDeal =  $value;
-                    $unplannedPresDeals[] = $newPresDeal;
-                }
+            // Проверка наличия тега и успешность операции
+            if (strpos($key, 'report') !== false && $operation === 'update') {
+                $dealId = end($parts);  // ID сделки, предполагается, что всегда последний элемент
+                $reportDeals[] = $dealId;
+            } elseif (strpos($key, 'plan') !== false && $operation === 'set') {
+                $planDeals[] = $value;  // Добавляем ID новой сделки
+            } elseif (strpos($key, 'newpresdealget') !== false) {
+                $newPresDeal =  $value;
+                $unplannedPresDeals[] = $newPresDeal;
+            }
             // }
         }
 
