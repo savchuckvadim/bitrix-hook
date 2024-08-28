@@ -162,13 +162,13 @@ class BitrixDealBatchFlowService
 
                     if ($currentCategoryData['code'] === 'sales_presentation') {
                         if (!empty($currentDealId)) {
-                            $rand = mt_rand(1000000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                            usleep($rand);
+                            // $rand = mt_rand(1000000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                            // usleep($rand);
                             // $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'get', $currentDealId);
                             // $batchCommands['newPresDeal'] = $batchCommand;
                             $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null, $tag);
-
-                            $resultBatchCommands['newpresdealget_' . $currentCategoryData['code'] . '_' . $tag . '_' . $currentDealId] = $batchCommand;
+                            $key = 'newpresdealget_' . $tag . '_' . $currentCategoryData['code'] . '_' . $currentDealId;
+                            $resultBatchCommands[$key] = $batchCommand;
 
 
                             // $newPresDeal = BitrixDealService::getDeal(
@@ -180,7 +180,8 @@ class BitrixDealBatchFlowService
                         }
                     } else {
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
-                        $resultBatchCommands['set_' . $currentCategoryData['code'] . '_' . $tag] = $batchCommand; // в результате будет id
+                        $key = 'set_' . $tag . '_' . $currentCategoryData['code'];
+                        $resultBatchCommands[$key] = $batchCommand; // в результате будет id
                     }
 
                     // Log::info('DEAL TEST', [
@@ -204,10 +205,10 @@ class BitrixDealBatchFlowService
 
                     // ]);
                     if ($isCanDealStageUpdate) {
-                        $rand = mt_rand(1000000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                        usleep($rand);
+                        // $rand = mt_rand(1000000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                        // usleep($rand);
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $currentDealId);
-                        $key = 'update_' . $currentCategoryData['code'] . '_' . $tag . '_' . $currentDealId;
+                        $key = 'update_' . $tag . '_' . $currentCategoryData['code'] . '_'  . $currentDealId;
                         $resultBatchCommands[$key] = $batchCommand;
 
                         // Log::info('HOOK BATCH batchFlow report DEAL', ['report batchCommands' => $resultBatchCommands]);
