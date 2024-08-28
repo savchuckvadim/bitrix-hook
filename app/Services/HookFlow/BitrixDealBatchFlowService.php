@@ -261,7 +261,7 @@ class BitrixDealBatchFlowService
         Log::info('HOOK BATCH handleBatchResults', ['batchResult' => $batchResult]);
         Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchResult' => $batchResult]);
         // Извлечение результатов
-        $results = $batchResult;  // Предполагаем, что структура такая, как в примере
+        $results = $batchResult[0];  // Предполагаем, что структура такая, как в примере
         foreach ($results as $key => $value) {
             // if ($value === true || is_numeric($value)) {  // Проверяем, что операция была успешной
             $parts = explode('_', $key);
