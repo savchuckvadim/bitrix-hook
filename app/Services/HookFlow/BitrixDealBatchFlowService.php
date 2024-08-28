@@ -238,7 +238,7 @@ class BitrixDealBatchFlowService
         return ['dealIds' => ['$result'], 'newPresDeal' => $newPresDeal, 'commands' => $resultBatchCommands];
     }
 
-    protected function getBatchCommand(
+    static function getBatchCommand(
         $fieldsData,
         $method, //update | add
         $dealId
