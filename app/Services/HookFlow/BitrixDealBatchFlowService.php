@@ -168,7 +168,7 @@ class BitrixDealBatchFlowService
                             // $batchCommands['newPresDeal'] = $batchCommand;
                             $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null, $tag);
 
-                            $resultBatchCommands['new_pres_deal_get' . $currentCategoryData['code'] . '_' . $tag . '_' . $currentDealId] = $batchCommand;
+                            $resultBatchCommands['newpresdealget_' . $currentCategoryData['code'] . '_' . $tag . '_' . $currentDealId] = $batchCommand;
 
 
                             // $newPresDeal = BitrixDealService::getDeal(
@@ -180,7 +180,7 @@ class BitrixDealBatchFlowService
                         }
                     } else {
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
-                        $resultBatchCommands['set_' . $currentCategoryData['code'] . '_' . $tag . '_' . $currentDealId] = $batchCommand; // в результате будет id
+                        $resultBatchCommands['set_' . $currentCategoryData['code'] . '_' . $tag] = $batchCommand; // в результате будет id
                     }
 
                     Log::info('DEAL TEST', [
@@ -238,7 +238,7 @@ class BitrixDealBatchFlowService
         return ['dealIds' => ['$result'], 'newPresDeal' => $newPresDeal, 'commands' => $resultBatchCommands];
     }
 
-    static function getBatchCommand(
+    protected function getBatchCommand(
         $fieldsData,
         $method, //update | add
         $dealId
@@ -251,6 +251,42 @@ class BitrixDealBatchFlowService
         }
 
         return $currentMethod . '?' . http_build_query($data);
+    }
+
+    public static function handleBatchResults($batchResult)
+    {
+        $reportDeals = [];
+        $planDeals = [];
+        $unplannedPresDeals = [];
+        Log::info('HOOK BATCH handleBatchResults', ['batchResult' => $batchResult]);
+        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchResult' => $batchResult]);
+        // Извлечение результатов
+        $results = $batchResult['result'];  // Предполагаем, что структура такая, как в примере
+        foreach ($results as $key => $value) {
+            // if ($value === true || is_numeric($value)) {  // Проверяем, что операция была успешной
+                $parts = explode('_', $key);
+                $operation = $parts[0];  // 'update' или 'set' 'newpresdealget'
+                $category = $parts[1];  // категория, например 'sales'
+                $tag = $parts[2];  // тег, например 'report' или 'plan'
+
+                // Проверка наличия тега и успешность операции
+                if (strpos($key, 'report') !== false && $operation === 'update') {
+                    $dealId = end($parts);  // ID сделки, предполагается, что всегда последний элемент
+                    $reportDeals[] = $dealId;
+                } elseif (strpos($key, 'plan') !== false && $operation === 'set') {
+                    $planDeals[] = $value;  // Добавляем ID новой сделки
+                } elseif (strpos($key, 'newpresdealget') !== false) {
+                    $newPresDeal =  $value;
+                    $unplannedPresDeals[] = $newPresDeal;
+                }
+            // }
+        }
+
+        return [
+            'reportDeals' => $reportDeals,
+            'planDeals' => $planDeals,
+            'unplannedPresDeals' => $unplannedPresDeals,
+        ];
     }
 
     static function tmcPresentationRelation(

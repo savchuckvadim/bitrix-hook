@@ -662,7 +662,7 @@ class EventReportService
             ]);
             if ($this->isDealFlow && $this->portalDealData) {
                 // $currentDealsIds = $this->getDealFlow();
-                $currentDealsIds = $this->getDealFlow();
+                $currentDealsIds = $this->getBatchDealFlow();
             }
 
             // $this->createTask($currentSmartId);
@@ -1906,14 +1906,16 @@ class EventReportService
 
 
         $batchService =  new BitrixBatchService($this->hook);
-        $result = $batchService->sendGeneralBatchRequest($batchCommands);
-        Log::info('HOOK BATCH batchFlow', ['result' => $result]);
-        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $result]);
-        return [
-            'reportDeals' => $reportDeals,
-            'planDeals' => $planDeals,
-            'unplannedPresDeals' => $unplannedPresDeals,
-        ];
+        $results = $batchService->sendGeneralBatchRequest($batchCommands);
+        Log::info('HOOK BATCH batchFlow', ['result' => $results]);
+        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $results]);
+        // return [
+        //     'reportDeals' => $reportDeals,
+        //     'planDeals' => $planDeals,
+        //     'unplannedPresDeals' => $unplannedPresDeals,
+        // ];
+        $result = BitrixDealBatchFlowService::handleBatchResults($results);
+        return  $result;
     }
 
 
