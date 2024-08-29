@@ -263,8 +263,8 @@ class BitrixDealBatchFlowService
         $unplannedPresDeals = [];
         $newPresDeal =null;
         // Логирование результатов обработки
-        Log::info('HOOK BATCH handleBatchResults', ['batchResult' => $batchResult]);
-        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchResult' => $batchResult]);
+        // Log::info('HOOK BATCH handleBatchResults', ['batchResult' => $batchResult]);
+        // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchResult' => $batchResult]);
 
         // Извлечение результатов
         $results = $batchResult[0];  // Предполагаем, что структура такая, как в примере
