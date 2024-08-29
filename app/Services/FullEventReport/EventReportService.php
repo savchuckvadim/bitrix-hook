@@ -1318,7 +1318,7 @@ class EventReportService
         );
 
 
-       
+
         return  $entityCommand;
     }
 
@@ -2117,13 +2117,13 @@ class EventReportService
         if (!empty($this->currentBaseDeal)) {
             // $rand = mt_rand(100000, 300000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
             // usleep($rand);
-            $this->getEntityFlow(
-                true,
-                $this->currentBaseDeal,
-                'base',
-                $this->currentBaseDeal['ID'],
-                'unplanned'
-            );
+            // $this->getEntityFlow(
+            //     true,
+            //     $this->currentBaseDeal,
+            //     'base',
+            //     $this->currentBaseDeal['ID'],
+            //     'unplanned'
+            // );
 
             $entityCommand =  $this->getEntityBatchFlowCommand(
                 true,
@@ -2132,7 +2132,7 @@ class EventReportService
                 $this->currentBaseDeal['ID'],
                 'unplanned'
             );
-            $key = 'entity_unplannedbase' . '_' . 'deal' . '_' . $unplannedPresDeal['ID'];
+            $key = 'entity_unplannedbase' . '_' . 'deal' . '_' .  $this->currentBaseDeal['ID'];
             $entityBatchCommands[$key] = $entityCommand; // в результате будет id
         }
         // Log::info('HOOK TEST currentBtxDeals', [
@@ -2154,12 +2154,12 @@ class EventReportService
 
             $entityCommand =  $this->getEntityBatchFlowCommand(
                 true,
-                $this->currentBaseDeal,
-                'base',
+                $this->currentPresDeal,
+                'presentation',
                 $this->currentBaseDeal['ID'],
-                'unplanned'
+                'done'
             );
-            $key = 'entity_pres' . '_' . 'deal' . '_' . $unplannedPresDeal['ID'];
+            $key = 'entity_pres' . '_' . 'deal' . '_' . $this->currentPresDeal['ID'];
             $entityBatchCommands[$key] = $entityCommand; // в результате будет id
         }
 
@@ -2263,17 +2263,17 @@ class EventReportService
 
             $entityCommand =  $this->getEntityBatchFlowCommand(
                 true,
-                $this->currentBaseDeal,
-                'base',
+                $newPresDeal,
+                'presentation',
                 $this->currentBaseDeal['ID'],
-                'unplanned'
+                'plan'
             );
-            $key = 'entity_newpres' . '_' . 'deal' . '_' . $unplannedPresDeal['ID'];
+            $key = 'entity_newpres' . '_' . 'deal' . '_' . $newPresDeal['ID'];
             $entityBatchCommands[$key] = $entityCommand; // в результате будет id
         }
-        $entityCommand =  $this->getEntityBatchFlowCommand( );
+        $companyCommand =  $this->getEntityBatchFlowCommand();
         $key = 'entity_newpres' . '_' . 'company' . '_' . $unplannedPresDeal['ID'];
-        $entityBatchCommands[$key] = $entityCommand; // в результате будет id
+        $entityBatchCommands[$key] = $companyCommand; // в результате будет id
         $batchService->sendGeneralBatchRequest($entityBatchCommands);
         // Log::channel('telegram')->info('presentationBtxList', [
         //     'reportDeals' => $reportDeals,
