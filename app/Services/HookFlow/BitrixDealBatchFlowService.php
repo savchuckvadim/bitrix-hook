@@ -279,10 +279,14 @@ class BitrixDealBatchFlowService
                 if ($tag === 'report') {
                     $reportDeals[] = $dealId;  // Добавляем ID в массив reportDeals
                 } elseif ($tag === 'plan') {
-                    $unplannedPresDeals[] = $dealId;  // Добавляем ID в массив planDeals
-                } else {
+                    if( $category  == 'sales_presentation'){
+                        $newPresDeal = $dealId;  // Добавляем ID в массив planDeals
 
-                }
+                    }else{
+                        $planDeals[] = $dealId;  // Добавляем ID в массив planDeals
+
+                    }
+                } 
             } else if ($operation === 'update') {
                 // Для 'update', ID сделки присутствует в последнем элементе ключа
                 $dealId = $parts[4];
@@ -297,7 +301,8 @@ class BitrixDealBatchFlowService
         return [
             'reportDeals' => $reportDeals,
             'planDeals' => $planDeals,
-            'unplannedPresDeals' => $unplannedPresDeals,  // Раскомментируйте, если нужно использовать
+            // 'unplannedPresDeals' => $unplannedPresDeals,  // Раскомментируйте, если нужно использовать,
+            'newPresDeal' =>  $newPresDeal
         ];
     }
 

@@ -1859,8 +1859,8 @@ class EventReportService
 
             Log::info('HOOK BATCH batchFlow DEAL', ['batchCommands' => $batchCommands]);
             Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $batchCommands]);
-    
-    
+
+
             $batchService =  new BitrixBatchService($this->hook);
             $results = $batchService->sendGeneralBatchRequest($batchCommands);
             // Log::info('HOOK BATCH batchFlow', ['result' => $results]);
@@ -1871,7 +1871,21 @@ class EventReportService
             //     'unplannedPresDeals' => $unplannedPresDeals,
             // ];
             $result = BitrixDealBatchFlowService::handleBatchResults($results);
-    
+            $newPresDealId = null;
+
+            if (!empty($result)) {
+                if (!empty($result['newPresDeal'])) {
+                    $newPresDealId = $result['newPresDeal'];
+                    $newPresDeal = BitrixDealService::getDeal(
+                        $this->hook,
+                        ['id' => $newPresDealId]
+
+
+                    );
+                }
+            }
+
+
             Log::info('HOOK BATCH', ['result' => $result]);
             Log::channel('telegram')->info('HOOK BATCH', ['result' => $result]);
             // WITHOUT NEW
@@ -1882,7 +1896,7 @@ class EventReportService
             //поэтому в batch commands - results будет 'new_pres_deal_id'
             // и в этот момент я ее отдельным get возьму
 
-            if (!empty($this->currentTMCDeal) && $this->currentPlanEventType == 'presentation') {
+            if (!empty($this->currentTMCDeal) && $this->currentPlanEventType == 'presentation' && $newPresDeal) {
                 BitrixDealFlowService::tmcPresentationRelation(
                     $this->hook,
                     $this->portalDealData,
@@ -1900,7 +1914,7 @@ class EventReportService
 
         // ]);
         if (!empty($newPresDeal)) {  //plan pres deal
-            $rand = mt_rand(200000, 700000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            $rand = mt_rand(200000, 400000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
             usleep($rand);
             $this->getEntityFlow(
                 true,
@@ -1917,7 +1931,7 @@ class EventReportService
         //     // 'failType' => $failType,
 
         // ]);
-     
+
         $result['unplannedPresDeals'] = $unplannedPresDeal;
 
         return  $result;
