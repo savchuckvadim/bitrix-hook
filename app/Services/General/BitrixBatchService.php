@@ -218,4 +218,21 @@ class BitrixBatchService
         Log::channel('telegram')->info('HOOK BATCH sendBatch', ['result' => $result]);
         return $result;
     }
+
+    static function batchCommand(
+        $fieldsData,
+        $entity,
+        $entityId = null,
+        $method, //update | add
+      
+    ) {
+
+        $currentMethod = 'crm.' . $entity . '.' . $method;
+        $data = ['FIELDS' => $fieldsData];
+        if (!empty($entityId)) {
+            $data['ID'] = $entityId;
+        }
+
+        return $currentMethod . '?' . http_build_query($data);
+    }
 }
