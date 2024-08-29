@@ -259,40 +259,41 @@ class BitrixDealBatchFlowService
         $reportDeals = [];
         $planDeals = [];
         $unplannedPresDeals = [];
+        // Логирование результатов обработки
         Log::info('HOOK BATCH handleBatchResults', ['batchResult' => $batchResult]);
         Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchResult' => $batchResult]);
+
         // Извлечение результатов
         $results = $batchResult[0];  // Предполагаем, что структура такая, как в примере
         foreach ($results as $key => $value) {
-            // if ($value === true || is_numeric($value)) {  // Проверяем, что операция была успешной
             $parts = explode('_', $key);
-            $operation = array_shift($parts);  // 'update', 'set' или 'newpresdealget', удаляем первый элемент
-            $tag = array_pop($parts);  // 'report' или 'plan', удаляем последний элемент
+            $operation = $parts[0];  // 'update' или 'set'
+            $tag = $parts[1];        // 'report' или 'plan'
+            $category = $parts[2] . '_' . $parts[3];  // Категория всегда состоит из двух слов
 
-            // Объединяем оставшиеся части обратно в строку для категории, так как они могут быть разделены подчеркиваниями
-            $category = implode('_', $parts);
-            // Проверка наличия тега и успешность операции
-            if ($operation === 'update') {
-                $dealId = end($parts);  // ID сделки, предполагается, что всегда последний элемент
-            } elseif ($operation === 'set') {
-                $dealId = $value;  // Добавляем ID новой сделки
-            }
-            // elseif (strpos($key, 'newpresdealget') !== false) {
-            //     $newPresDeal =  $value;
-            //     $unplannedPresDeals[] = $newPresDeal;
-            // }
-
-            if (strpos($key, 'report') !== false) {
-                $reportDeals[] = $dealId;
-            } elseif (strpos($key, 'plan') !== false) {
-                $planDeals[] = $value;  // Добавляем ID новой сделки
+            if ($operation === 'set') {
+                // Для 'set', значение представляет собой ID новой сделки
+                $dealId = $value;
+                if ($tag === 'report') {
+                    $reportDeals[] = $dealId;  // Добавляем ID в массив reportDeals
+                } elseif ($tag === 'plan') {
+                    $planDeals[] = $dealId;  // Добавляем ID в массив planDeals
+                }
+            } else {
+                // Для 'update', ID сделки присутствует в последнем элементе ключа
+                $dealId = $parts[4];
+                if ($tag === 'report') {
+                    $reportDeals[] = $dealId;  // Добавляем ID в массив reportDeals
+                } elseif ($tag === 'plan') {
+                    $planDeals[] = $dealId;  // Добавляем ID в массив planDeals
+                }
             }
         }
 
         return [
             'reportDeals' => $reportDeals,
             'planDeals' => $planDeals,
-            // 'unplannedPresDeals' => $unplannedPresDeals,
+            // 'unplannedPresDeals' => $unplannedPresDeals,  // Раскомментируйте, если нужно использовать
         ];
     }
 
