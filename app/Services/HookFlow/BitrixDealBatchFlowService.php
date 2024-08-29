@@ -38,8 +38,8 @@ class BitrixDealBatchFlowService
 
 
     ) {
-        $rand = rand(1, 3); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-        sleep($rand);
+        // $rand = rand(1, 3); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        // sleep($rand);
         $newPresDeal = null; //for mutation
         //находит сначала целевые категиории сделок из portal   по eventType и eventAction - по тому что происходит
         //сюда могут при ходить массив текущих сделок и которых есть CATEGORY_ID такой как в portal->deal->category->bitrixId
@@ -152,7 +152,9 @@ class BitrixDealBatchFlowService
                             $fieldsData['TITLE'] = $eventTypeName . ' ' .  $eventName;
                         }
                     }
-
+                    $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
+                    $key = 'set_' . $tag . '_' . $currentCategoryData['code'];
+                    $resultBatchCommands[$key] = $batchCommand; // в результате будет id
                     // $currentDealId = BitrixDealService::setDeal(
                     //     $hook,
                     //     $fieldsData,
@@ -179,9 +181,9 @@ class BitrixDealBatchFlowService
                             // );
                         }
                     } else {
-                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
-                        $key = 'set_' . $tag . '_' . $currentCategoryData['code'];
-                        $resultBatchCommands[$key] = $batchCommand; // в результате будет id
+                        // $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
+                        // $key = 'set_' . $tag . '_' . $currentCategoryData['code'];
+                        // $resultBatchCommands[$key] = $batchCommand; // в результате будет id
                     }
 
                     // Log::info('DEAL TEST', [
@@ -279,7 +281,15 @@ class BitrixDealBatchFlowService
                 } elseif ($tag === 'plan') {
                     $planDeals[] = $dealId;  // Добавляем ID в массив planDeals
                 }
-            } else {
+            } else if ($operation === 'update') {
+                // Для 'update', ID сделки присутствует в последнем элементе ключа
+                $dealId = $parts[4];
+                if ($tag === 'report') {
+                    $reportDeals[] = $dealId;  // Добавляем ID в массив reportDeals
+                } elseif ($tag === 'plan') {
+                    $planDeals[] = $dealId;  // Добавляем ID в массив planDeals
+                }
+            } else { // newPresDeal
                 // Для 'update', ID сделки присутствует в последнем элементе ключа
                 $dealId = $parts[4];
                 if ($tag === 'report') {

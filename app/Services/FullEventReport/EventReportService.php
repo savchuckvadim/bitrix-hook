@@ -661,8 +661,8 @@ class EventReportService
 
             ]);
             if ($this->isDealFlow && $this->portalDealData) {
+                $currentDealsIds = $this->getBatchDealFlow();
                 // $currentDealsIds = $this->getDealFlow();
-                $currentDealsIds = $this->getDealFlow();
             }
 
             // $this->createTask($currentSmartId);
@@ -1559,7 +1559,7 @@ class EventReportService
             );
 
             if (!empty($currentDealId) && empty($this->currentBaseDeal)) {
-                $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                $rand = mt_rand(100000, 300000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                 usleep($rand);
                 $newBaseDeal = BitrixDealService::getDeal(
                     $this->hook,
