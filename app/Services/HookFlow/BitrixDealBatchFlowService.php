@@ -261,6 +261,7 @@ class BitrixDealBatchFlowService
         $reportDeals = [];
         $planDeals = [];
         $unplannedPresDeals = [];
+        $newPresDeal =null;
         // Логирование результатов обработки
         Log::info('HOOK BATCH handleBatchResults', ['batchResult' => $batchResult]);
         Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchResult' => $batchResult]);
