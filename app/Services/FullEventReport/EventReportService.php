@@ -1697,7 +1697,7 @@ class EventReportService
                     // ]);
                     foreach ($this->currentBtxDeals as $cbtxdeal) {
                         if ($cbtxdeal['ID'] !== $unplannedPresDealId) {
-                            $rand = mt_rand(200000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                            $rand = mt_rand(100000, 300000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                             usleep($rand);
                             $updtdbtxdeal = BitrixDealService::getDeal(
                                 $this->hook,
@@ -1799,7 +1799,7 @@ class EventReportService
         //presentation - создать или обновить presentation & Основная
 
         if (!empty($this->currentBaseDeal)) {
-            $rand = mt_rand(300000, 700000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            $rand = mt_rand(100000, 300000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
             usleep($rand);
             $this->getEntityFlow(
                 true,
@@ -1816,7 +1816,7 @@ class EventReportService
 
         // ]);
         if (!empty($this->currentPresDeal)) {  //report pres deal
-            $rand = mt_rand(300000, 700000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            $rand = mt_rand(100000, 300000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
             usleep($rand);
             $this->getEntityFlow(
                 true,
