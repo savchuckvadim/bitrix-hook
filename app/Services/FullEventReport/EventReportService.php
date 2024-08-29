@@ -1857,9 +1857,25 @@ class EventReportService
             // $planDeals = $flowResult['dealIds'];
             $batchCommands = $flowResult['commands'];
 
-
+            Log::info('HOOK BATCH batchFlow DEAL', ['batchCommands' => $batchCommands]);
+            Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $batchCommands]);
+    
+    
+            $batchService =  new BitrixBatchService($this->hook);
+            $results = $batchService->sendGeneralBatchRequest($batchCommands);
+            // Log::info('HOOK BATCH batchFlow', ['result' => $results]);
+            // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $results]);
+            // return [
+            //     'reportDeals' => $reportDeals,
+            //     'planDeals' => $planDeals,
+            //     'unplannedPresDeals' => $unplannedPresDeals,
+            // ];
+            $result = BitrixDealBatchFlowService::handleBatchResults($results);
+    
+            Log::info('HOOK BATCH', ['result' => $result]);
+            Log::channel('telegram')->info('HOOK BATCH', ['result' => $result]);
             // WITHOUT NEW
-            $newPresDeal = $flowResult['newPresDeal'];
+            // $newPresDeal = $flowResult['newPresDeal'];
 
             // Новая сделка созданная для презентации если есть тмц сделка
             // новая сделка презентации нужна только здесь
@@ -1901,23 +1917,7 @@ class EventReportService
         //     // 'failType' => $failType,
 
         // ]);
-        Log::info('HOOK BATCH batchFlow DEAL', ['batchCommands' => $batchCommands]);
-        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $batchCommands]);
-
-
-        $batchService =  new BitrixBatchService($this->hook);
-        $results = $batchService->sendGeneralBatchRequest($batchCommands);
-        // Log::info('HOOK BATCH batchFlow', ['result' => $results]);
-        // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $results]);
-        // return [
-        //     'reportDeals' => $reportDeals,
-        //     'planDeals' => $planDeals,
-        //     'unplannedPresDeals' => $unplannedPresDeals,
-        // ];
-        $result = BitrixDealBatchFlowService::handleBatchResults($results);
-
-        Log::info('HOOK BATCH', ['result' => $result]);
-        Log::channel('telegram')->info('HOOK BATCH', ['result' => $result]);
+     
         $result['unplannedPresDeals'] = $unplannedPresDeal;
 
         return  $result;
