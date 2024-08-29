@@ -42,9 +42,9 @@ class BitrixTaskService
     ) {
         date_default_timezone_set('Europe/Moscow');
         $nowDate = now();
-        $rand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        $rand = mt_rand(10000, 700000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
         usleep($rand);
-        $rand = rand(1, 2); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        $rand = rand(1); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
         usleep($rand);
 
         //TODO
@@ -153,7 +153,7 @@ class BitrixTaskService
             $idsForComplete = null;
             if ($isNeedCompleteOtherTasks) {
                 if (empty($currentTaskId)) {
-                    $rand = mt_rand(500000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                    $rand = mt_rand(50000, 200000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                     usleep($rand);
                     $idsForComplete = $this->getCurrentTasksIds(
                         $hook,
@@ -179,11 +179,10 @@ class BitrixTaskService
             //         'isXO' => $isXO,
             //     ]
             // );
-            $randomNumber = rand(1, 3);
 
+            $rand = mt_rand(5000, 20000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            usleep($rand);
 
-
-            sleep($randomNumber);
             if ($idsForComplete) {
                 $this->completeTask($hook, $idsForComplete);
             }
