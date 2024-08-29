@@ -662,7 +662,7 @@ class EventReportService
             ]);
             if ($this->isDealFlow && $this->portalDealData) {
                 // $currentDealsIds = $this->getDealFlow();
-                $currentDealsIds = $this->getBatchDealFlow();
+                $currentDealsIds = $this->getDealFlow();
             }
 
             // $this->createTask($currentSmartId);
