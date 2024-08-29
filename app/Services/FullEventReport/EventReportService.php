@@ -1545,7 +1545,7 @@ class EventReportService
         $planDeals = [];
         $currentBtxDeals = $this->currentBtxDeals;
         $batchCommands = [];
-
+        $unplannedPresDeal =  null;
         if (empty($currentBtxDeals)) {   //если текущие сделки отсутствуют значит надо сначала создать базовую - чтобы нормально отработал поток
             $setNewDealData = [
                 'COMPANY_ID' => $this->entityId,
