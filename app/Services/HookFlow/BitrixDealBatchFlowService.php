@@ -262,10 +262,20 @@ class BitrixDealBatchFlowService
         $planDeals = [];
         $unplannedPresDeals = [];
         $newPresDeal = null;
+        $groupped = [];
         // Логирование результатов обработки
         // Log::info('HOOK BATCH handleBatchResults', ['batchResult' => $batchResult]);
         // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchResult' => $batchResult]);
         Log::channel('telegram')->info('HOOK cleanBatchCommands', ['batchCommands' => $batchCommands]);
+       // [
+            // {"update_unpres_sales_base_7267_PRESENTATION":true,
+            // "update_unpres_sales_presentation_7271_WON":true,
+            // "update_report_sales_xo_7269_WON":true,
+            // "update_plan_sales_base_7267_WARM":true}
+            // ]}
+
+            //перебираем комманды находим те что ч одинаковым dealId
+       
         // Извлечение результатов
         $results = $batchCommands;  // Предполагаем, что структура такая, как в примере
         foreach ($results as $key => $value) { // value в данном случае сделка, точнее ее поля для обновления
@@ -293,7 +303,11 @@ class BitrixDealBatchFlowService
                 $dealId = $parts[4];
                 $targetStageBtxId = $parts[5];
                 Log::channel('telegram')->info('HOOK cleanBatchCommands', ['result' => $targetStageBtxId]);
+                $groupped[$dealId][$targetStageBtxId] = $targetStageBtxId;
+              
+                Log::channel('telegram')->info('HOOK cleanBatchCommands', ['groupped' => $groupped]);
 
+              
                 if ($tag === 'report') {
                     $reportDeals[] = $dealId;  // Добавляем ID в массив reportDeals
                 } elseif ($tag === 'plan') {

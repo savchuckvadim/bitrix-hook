@@ -2202,6 +2202,9 @@ class EventReportService
             $results = $batchService->sendGeneralBatchRequest($batchCommands);
             Log::info('HOOK BATCH', ['results' => $results]);
             Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
+
+            
+
             // return [
             //     'reportDeals' => $reportDeals,
             //     'planDeals' => $planDeals,
@@ -2224,7 +2227,7 @@ class EventReportService
 
             // Log::info('HOOK BATCH entityBatchCommands DEAL', ['entityBatchCommands' => $entityBatchCommands]);
             // Log::channel('telegram')->info('HOOK BATCH entityBatchCommands', ['entityBatchCommands' => $entityBatchCommands]);
-    
+
 
             Log::info('HOOK BATCH', ['result' => $result]);
             Log::channel('telegram')->info('HOOK BATCH', ['result' => $result]);
