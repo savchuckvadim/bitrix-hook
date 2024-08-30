@@ -216,7 +216,8 @@ class BitrixDealBatchFlowService
                         'command' => $batchCommand,
                         'dealId' => $currentDealId,
                         'deal' => $currentDeal,
-                        'targetStage' => $targetStageBtxId
+                        'targetStage' => $targetStageBtxId,
+                        'isNeedUpdate' => true
 
 
                     ];
@@ -308,7 +309,14 @@ class BitrixDealBatchFlowService
 
             // Извлечение результатов
             $results = $batchCommands;  // Предполагаем, что структура такая, как в примере
-            foreach ($results as $key => $value) { // value в данном случае сделка, точнее ее поля для обновления
+            foreach ($results as $key => $batchData) { // value в данном случае сделка, точнее ее поля для обновления
+
+                // 'command' => $batchCommand,
+                //         'dealId' => $currentDealId,
+                //         'deal' => $currentDeal,
+                //         'targetStage' => $targetStageBtxId,
+                //         'isNeedUpdate' => true
+
                 $parts = explode('_', $key);
                 $operation = $parts[0];  // 'update' или 'set'
                 $tag = $parts[1];        // 'report' или 'plan'
@@ -331,8 +339,10 @@ class BitrixDealBatchFlowService
                 // } else
                 if ($operation === 'update') {
                     // Для 'update', ID сделки присутствует в последнем элементе ключа
-                    $dealId = $parts[4];
-                    $targetStageBtxId = $parts[5];
+                    $dealId = $batchData['dealId'];
+                    $targetStageBtxId = $batchData['dealId'];
+                    $currentStageBtxId = $batchData['deal']['STAGE_ID'];
+
 
                     if (count($parts) > 6) {
                         if (isset($parts[6])) {
@@ -383,16 +393,29 @@ class BitrixDealBatchFlowService
                             // Log::channel('telegram')->info('HOOK processesss', ['process' => $process]);
 
 
-                            if ($category['code'] === $process['category']) {
+                            if ($category['bitrixId'] === $process['deal']['CATEGORY_ID']) {
                                 // Log::channel('telegram')->info('HOOK process category code ===', ['process stage' => $category]);
 
                                 foreach ($category['stages'] as $stage) {
+                                Log::channel('telegram')->info('HOOK process category code ===', ['process stage bitrixId' => $stage['bitrixId']]);
+                                Log::channel('telegram')->info('HOOK process category code ===', ['process deal STAGE_ID' => $process['deal']['STAGE_ID']]);
+
+                                 
                                     if ($stage['bitrixId'] === $process['stage']) {
                                         Log::channel('telegram')->info('HOOK [bitrixId] ===', ['process stage' => $stage['bitrixId'], 'isCurrentSearched' => $isCurrentSearched]);
+                                        
+                                        
+                                        
                                         if ($isCurrentSearched == true) {
                                             $isProcessNeedUpdate = true;
                                         }
+                                        // $isCurrentSearched = true;
+                                    }
+
+                                    if ($stage['bitrixId'] === $process['deal']['STAGE_ID']) {
+
                                         $isCurrentSearched = true;
+
                                     }
                                 }
                             }
