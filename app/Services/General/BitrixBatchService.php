@@ -44,11 +44,11 @@ class BitrixBatchService
             // print_r("<br>");
             // print_r($responseData);
             if (isset($responseData['result'])) {
-                if (!empty($responseData['result']['result'])) {
-                    $result[$key] = $responseData['result']['result'];
-                } else {
+                // if (!empty($responseData['result']['result'])) {
+                //     $result[$key] = $responseData['result']['result'];
+                // } else {
                     $result[$key] = $responseData['result'];
-                }
+                // }
 
 
                 // Log::channel('telegram')->info('HOOK responseData', ['result' => $responseData['result']['result']]);
