@@ -27,7 +27,19 @@ class BitrixBatchService
         foreach ($batchRequests as $key => $batchCommands) {
 
             foreach ($batchCommands as $key => $value) {
-                $resultBatchCommands[$key] = $value['command'];
+                if(!empty($value['deal']) && !empty($value['dealId'])){
+                    if(!empty($value['isNeedUpdate']) ){
+                        $resultBatchCommands[$key] = $value['command'];
+
+
+                    }else{
+                        $result[$key] = $value['dealId'];
+                    }
+
+                }else{
+                    $resultBatchCommands[$key] = $value['command'];
+
+                }
             }
 
 
@@ -37,6 +49,7 @@ class BitrixBatchService
                 'cmd' => $resultBatchCommands
             ]);
             $responseData = $response->json();
+            Log::channel('telegram')->info('HOOK send', ['result return' => $responseData['result']]);
 
             // print_r("eventsCommands");
             // print_r("<br>");
