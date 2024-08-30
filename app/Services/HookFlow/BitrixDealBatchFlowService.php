@@ -353,19 +353,21 @@ class BitrixDealBatchFlowService
                     foreach ($groupped as $dealId => $processes) {
                         $resultProcesses = [];
                         $isCurrentSearched = false;
+                        $isProcessNeedUpdate = false;
+
 
                         foreach ($processes as $process) {
 
                             $resultProcess = [];
                             // Log::channel('telegram')->info('HOOK processesss', ['process' => $process]);
-                            $isProcessNeedUpdate = false;
+                          
 
                             if ($category['code'] === $process['category']) {
-                                Log::channel('telegram')->info('HOOK process category code ===', ['process stage' => $category]);
+                                // Log::channel('telegram')->info('HOOK process category code ===', ['process stage' => $category]);
 
                                 foreach ($category['stages'] as $stage) {
                                     if ($stage['bitrixId'] === $process['stage']) {
-                                        Log::channel('telegram')->info('HOOK process stage [bitrixId] ===', ['process stage' => $stage]);
+                                        Log::channel('telegram')->info('HOOK [bitrixId] ===', ['process stage' => $stage['bitrixId'], 'isCurrentSearched' => $isCurrentSearched]);
                                         if ($isCurrentSearched == true) {
                                             $isProcessNeedUpdate = true;
                                         }
