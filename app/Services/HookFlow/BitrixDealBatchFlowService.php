@@ -310,7 +310,10 @@ class BitrixDealBatchFlowService
                 $dealId = $parts[4];
                 $targetStageBtxId = $parts[5];
                 Log::channel('telegram')->info('HOOK cleanBatchCommands', ['result' => $targetStageBtxId]);
-                $groupped[$dealId][$category] = $targetStageBtxId;
+                $groupped[$dealId][] = [
+                    'category' => $category,
+                    'stage' => $targetStageBtxId,
+                ];
 
                 Log::channel('telegram')->info('HOOK cleanBatchCommands', ['groupped' => $groupped]);
 
@@ -324,13 +327,23 @@ class BitrixDealBatchFlowService
         }
 
 
-        // {"7287":{"PRESENTATION":"PRESENTATION","WARM":"WARM"},"7291":{"WON":"WON"},"7289":{"WON":"WON"}}
+
+        // {"7287":{"sales_base":"WARM"},"7293":{"sales_presentation":"WON"}}
 
         if (!empty($portalDealData['categories'])) {
 
             foreach ($portalDealData['categories'] as $category) {
-                foreach ($groupped as $dealId => $categoryStage) {
-                    // if($category['bitrixId'] === )
+                foreach ($groupped as $dealId => $process) {
+                    if ($category['code'] === $process['category']) {
+
+                        Log::channel('telegram')->info('HOOK process', ['process' => $process]);
+                        foreach ($category['stages'] as $stage) {
+                            if ($stage['bitrixId'] === $process['stage']) {
+                                Log::channel('telegram')->info('HOOK process stage', ['process stage' => $stage]);
+
+                            }
+                        }
+                    }
                 }
             }
         }
