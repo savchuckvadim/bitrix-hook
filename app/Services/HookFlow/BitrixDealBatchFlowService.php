@@ -309,7 +309,7 @@ class BitrixDealBatchFlowService
                 // Для 'update', ID сделки присутствует в последнем элементе ключа
                 $dealId = $parts[4];
                 $targetStageBtxId = $parts[5];
-                Log::channel('telegram')->info('HOOK cleanBatchCommands', ['result' => $targetStageBtxId]);
+                // Log::channel('telegram')->info('HOOK cleanBatchCommands', ['result' => $targetStageBtxId]);
                 $groupped[$dealId][] = [
                     'category' => $category,
                     'stage' => $targetStageBtxId,
@@ -328,22 +328,24 @@ class BitrixDealBatchFlowService
 
 
 
-        // {"7287":{"sales_base":"WARM"},"7293":{"sales_presentation":"WON"}}
+    //    groupped":{"7297":[{"category":"sales_base","stage":"PRESENTATION"}],"7301":[{"category":"sales_presentation","stage":"WON"}]}}
 
         if (!empty($portalDealData['categories'])) {
 
             foreach ($portalDealData['categories'] as $category) {
                 foreach ($groupped as $dealId => $processes) {
                     foreach ($processes as $process) {
-                        Log::channel('telegram')->info('HOOK processesss', ['process' => $process]);
+                        // Log::channel('telegram')->info('HOOK processesss', ['process' => $process]);
 
 
                         if ($category['code'] === $process['category']) {
 
-                            Log::channel('telegram')->info('HOOK process', ['process' => $process]);
+                            // Log::channel('telegram')->info('HOOK process', ['process' => $process]);
                             foreach ($category['stages'] as $stage) {
                                 if ($stage['bitrixId'] === $process['stage']) {
-                                    Log::channel('telegram')->info('HOOK process stage', ['process stage' => $stage]);
+                                    // Log::channel('telegram')->info('HOOK process stage', ['process stage' => $stage]);
+                             
+                             
                                 }
                             }
                         }
