@@ -309,10 +309,12 @@ class BitrixDealBatchFlowService
                 // Для 'update', ID сделки присутствует в последнем элементе ключа
                 $dealId = $parts[4];
                 $targetStageBtxId = $parts[5];
-                if(count($parts) > 5) {
-                    Log::channel('telegram')->info('HOOK 6', ['$parts  6' => $parts]);
-
-                    $targetStageBtxId = $targetStageBtxId . '_' . $parts[6];
+                if (count($parts) > 6) {
+                    if (isset($parts[6])) {
+                        $targetStageBtxId .= '_' . $parts[6]; // Объединяем с существующим ID, если часть существует
+                    } else {
+                        Log::channel('telegram')->warning('HOOK 6 missing', ['message' => 'Expected part 6 does not exist in the array']);
+                    }
                 }
                 // Log::channel('telegram')->info('HOOK cleanBatchCommands', ['result' => $targetStageBtxId]);
                 $groupped[$dealId][] = [
