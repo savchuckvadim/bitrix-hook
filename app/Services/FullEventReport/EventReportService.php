@@ -2200,7 +2200,8 @@ class EventReportService
 
             $batchService =  new BitrixBatchService($this->hook);
             $results = $batchService->sendGeneralBatchRequest($batchCommands);
-
+            Log::info('HOOK BATCH', ['results' => $results]);
+            Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
             // return [
             //     'reportDeals' => $reportDeals,
             //     'planDeals' => $planDeals,
@@ -2221,9 +2222,12 @@ class EventReportService
                 }
             }
 
+            Log::info('HOOK BATCH entityBatchCommands DEAL', ['entityBatchCommands' => $entityBatchCommands]);
+            Log::channel('telegram')->info('HOOK BATCH entityBatchCommands', ['entityBatchCommands' => $entityBatchCommands]);
+    
 
-            // Log::info('HOOK BATCH', ['result' => $result]);
-            // Log::channel('telegram')->info('HOOK BATCH', ['result' => $result]);
+            Log::info('HOOK BATCH', ['result' => $result]);
+            Log::channel('telegram')->info('HOOK BATCH', ['result' => $result]);
             // WITHOUT NEW
             // $newPresDeal = $flowResult['newPresDeal'];
 
@@ -2274,11 +2278,11 @@ class EventReportService
         $key = 'entity_newpres' . '_' . 'company' . '_';
         $entityBatchCommands[$key] = $companyCommand; // в результате будет id
         $entityResult =  $batchService->sendGeneralBatchRequest($entityBatchCommands);
-        Log::info('HOOK BATCH entityBatchCommands DEAL', ['entityBatchCommands' => $entityBatchCommands]);
-        Log::channel('telegram')->info('HOOK BATCH entityBatchCommands', ['entityBatchCommands' => $entityBatchCommands]);
+        // Log::info('HOOK BATCH entityBatchCommands DEAL', ['entityBatchCommands' => $entityBatchCommands]);
+        // Log::channel('telegram')->info('HOOK BATCH entityBatchCommands', ['entityBatchCommands' => $entityBatchCommands]);
 
-        Log::info('HOOK BATCH entity', ['result' => $entityResult]);
-        Log::channel('telegram')->info('HOOK BATCH entity', ['result' => $entityResult]);
+        // Log::info('HOOK BATCH entity', ['result' => $entityResult]);
+        // Log::channel('telegram')->info('HOOK BATCH entity', ['result' => $entityResult]);
         $result['unplannedPresDeals'] = $unplannedPresDeal;
 
         return  $result;
