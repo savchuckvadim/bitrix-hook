@@ -154,7 +154,14 @@ class BitrixDealBatchFlowService
                     }
                     $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
                     $key = 'set_' . $tag . '_' . $currentCategoryData['code'];
-                    $resultBatchCommands[$key] = $batchCommand; // в результате будет id
+                    $resultBatchCommands[$key] = [
+                        'command' => $batchCommand,
+                        'dealId' => null,
+                        'deal' => null,
+                        'targetStage' => $targetStageBtxId
+
+
+                    ];
                     // $currentDealId = BitrixDealService::setDeal(
                     //     $hook,
                     //     $fieldsData,
@@ -169,9 +176,16 @@ class BitrixDealBatchFlowService
                             // $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'get', $currentDealId);
                             // $batchCommands['newPresDeal'] = $batchCommand;
                             $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null, $tag);
-                            $key = 'newpresdealget_' . $tag . '_' . $currentCategoryData['code'] . '_' . $currentDealId . '_' . $targetStageBtxId;
-                            $resultBatchCommands[$key] = $batchCommand;
+                            $key = 'newpresdealget_' . $tag . '_' . $currentCategoryData['code'];
+                            // $resultBatchCommands[$key] = $batchCommand;
+                            $resultBatchCommands[$key] = [
+                                'command' => $batchCommand,
+                                'dealId' => $currentDealId,
+                                'deal' => null,
+                                'targetStage' => $targetStageBtxId
 
+
+                            ];
 
                             // $newPresDeal = BitrixDealService::getDeal(
                             //     $hook,
@@ -197,8 +211,15 @@ class BitrixDealBatchFlowService
                     // ]);
                     // Закидываю batch вск команды для update а определять какие обновлять
                     $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $currentDealId);
-                    $key = 'update_' . $tag . '_' . $currentCategoryData['code'] . '_'  . $currentDealId . '_' . $targetStageBtxId;
-                    $resultBatchCommands[$key] = $batchCommand;
+                    $key = 'update_' . $tag . '_' . $currentCategoryData['code'];
+                    $resultBatchCommands[$key] = [
+                        'command' => $batchCommand,
+                        'dealId' => $currentDealId,
+                        'deal' => $currentDeal,
+                        'targetStage' => $targetStageBtxId
+
+
+                    ];
 
                     $isCanDealStageUpdate = BitrixDealService::getIsCanDealStageUpdate(
                         $currentDeal, //with ID CATEGORY_ID STAGE_ID
@@ -360,7 +381,7 @@ class BitrixDealBatchFlowService
 
                             $resultProcess = [];
                             // Log::channel('telegram')->info('HOOK processesss', ['process' => $process]);
-                          
+
 
                             if ($category['code'] === $process['category']) {
                                 // Log::channel('telegram')->info('HOOK process category code ===', ['process stage' => $category]);

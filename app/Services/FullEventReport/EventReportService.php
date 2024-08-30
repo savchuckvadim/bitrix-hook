@@ -1319,7 +1319,7 @@ class EventReportService
 
 
 
-        return  $entityCommand;
+        return ['command' => $entityCommand];
     }
 
     // get deal relations flow
@@ -2199,7 +2199,7 @@ class EventReportService
             $batchCommands = BitrixDealBatchFlowService::cleanBatchCommands($batchCommands, $this->portalDealData);
 
             $batchService =  new BitrixBatchService($this->hook);
-            $results = $batchService->sendGeneralBatchRequest($batchCommands);
+            $results = $batchService->sendFlowBatchRequest($batchCommands);
             Log::info('HOOK BATCH', ['results' => $results]);
             Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
 
@@ -2280,7 +2280,7 @@ class EventReportService
         $companyCommand =  $this->getEntityBatchFlowCommand();
         $key = 'entity_newpres' . '_' . 'company' . '_';
         $entityBatchCommands[$key] = $companyCommand; // в результате будет id
-        $entityResult =  $batchService->sendGeneralBatchRequest($entityBatchCommands);
+        $entityResult =  $batchService->sendFlowBatchRequest($entityBatchCommands);
         // Log::info('HOOK BATCH entityBatchCommands DEAL', ['entityBatchCommands' => $entityBatchCommands]);
         // Log::channel('telegram')->info('HOOK BATCH entityBatchCommands', ['entityBatchCommands' => $entityBatchCommands]);
 

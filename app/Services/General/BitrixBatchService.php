@@ -14,6 +14,61 @@ class BitrixBatchService
     {
         $this->hook = $hook;
     }
+
+    public function sendFlowBatchRequest($commands)
+    {
+        $url = $this->hook . '/batch';
+        $maxCommandsPerBatch = 50; // Максимальное количество команд на один batch запрос
+        $batchRequests = array_chunk($commands, $maxCommandsPerBatch, true);
+        $result = [
+            // 'errors' => []
+        ];
+        $resultBatchCommands = [];
+        foreach ($batchRequests as $key => $batchCommands) {
+
+            foreach ($batchCommands as $key => $value) {
+                $resultBatchCommands[$key] = $value['command'];
+            }
+            $response = Http::post($url, [
+                'halt' => 0,
+                'cmd' => $resultBatchCommands
+            ]);
+            $responseData = $response->json();
+
+            // print_r("eventsCommands");
+            // print_r("<br>");
+            // print_r($batchCommands);
+            // print_r("<br>");
+            // print_r($responseData);
+            if (isset($responseData['result'])) {
+                $result[$key] = $responseData['result'];
+
+                if (isset($responseData['result']['result'])) {
+                    $result[$key] = $responseData['result']['result'];
+                }
+            }
+            if (!empty($responseData['result_error'])) {
+                // $result['errors'][$key] = $responseData['result_error'];
+                print_r("<br>");
+                print_r($key);
+                print_r("<br>");
+                print_r($responseData['result_error']);
+                print_r("<br>");
+            }
+            usleep(mt_rand(1000, 400000));
+        };
+
+        // if (isset($result[0])) {
+        //     $result = $result[0];
+        // }
+
+        if (isset($result['result'])) {
+            $result = $result['result'];
+        }
+        return $result;
+    }
+
+
     public function sendGeneralBatchRequest($commands)
     {
         $url = $this->hook . '/batch';
@@ -224,7 +279,7 @@ class BitrixBatchService
         $entity,
         $entityId = null,
         $method, //update | add
-      
+
     ) {
 
         $currentMethod = 'crm.' . $entity . '.' . $method;
