@@ -2200,8 +2200,7 @@ class EventReportService
 
 
 
-            Log::info('HOOK EVREP', ['result batchCommandss' => $batchCommands]);
-            Log::channel('telegram')->info('HOOK EVREP', ['result batchCommandss' => $batchCommands]);
+           
             $batchService =  new BitrixBatchService($this->hook);
             $results = $batchService->sendFlowBatchRequest($batchCommands);
             Log::info('HOOK BATCH', ['results' => $results]);

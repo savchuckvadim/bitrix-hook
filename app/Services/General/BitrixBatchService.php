@@ -29,6 +29,10 @@ class BitrixBatchService
             foreach ($batchCommands as $key => $value) {
                 $resultBatchCommands[$key] = $value['command'];
             }
+
+
+            Log::info('HOOK sendFlowBatchRequest', ['result resultBatchCommands' => $resultBatchCommands]);
+            Log::channel('telegram')->info('HOOK sendFlowBatchRequest', ['result resultBatchCommands' => $resultBatchCommands]);
             $response = Http::post($url, [
                 'halt' => 0,
                 'cmd' => $resultBatchCommands
