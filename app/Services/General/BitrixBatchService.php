@@ -47,10 +47,10 @@ class BitrixBatchService
             if (isset($responseData['result'])) {
                 $result[$key] = $responseData['result'];
 
-                Log::channel('telegram')->info('HOOK responseData', ['result resultBatchCommands' => $responseData['result']]);
+                Log::channel('telegram')->info('HOOK responseData', ['result resultBatchCommands' => $responseData['result']['result']]);
 
 
-                if (empty($responseData['result']['result'])) {
+                if (!empty($responseData['result']['result'])) {
                     $result[$key] = $responseData['result']['result'];
                 }
             }
