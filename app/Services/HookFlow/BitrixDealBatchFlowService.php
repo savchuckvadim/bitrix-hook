@@ -293,33 +293,33 @@ class BitrixDealBatchFlowService
                 $tag = $parts[1];        // 'report' или 'plan'
                 $category = $parts[2] . '_' . $parts[3];  // Категория всегда состоит из двух слов
 
-                if ($operation === 'set') {
-                    // Для 'set', значение представляет собой ID новой сделки
-                    $dealId = $value;
-                    if ($tag === 'report') {
-                        $reportDeals[] = $dealId;  // Добавляем ID в массив reportDeals
-                    } elseif ($tag === 'plan') {
-                        if ($category  == 'sales_presentation') {
-                            $newPresDeal = $dealId;  // Добавляем ID в массив planDeals
+                // if ($operation === 'set') {
+                //     // Для 'set', значение представляет собой ID новой сделки
+                //     $dealId = $value;
+                //     if ($tag === 'report') {
+                //         $reportDeals[] = $dealId;  // Добавляем ID в массив reportDeals
+                //     } elseif ($tag === 'plan') {
+                //         if ($category  == 'sales_presentation') {
+                //             $newPresDeal = $dealId;  // Добавляем ID в массив planDeals
 
-                        }
-                        $planDeals[] = $dealId;  // Добавляем ID в массив planDeals
+                //         }
+                //         $planDeals[] = $dealId;  // Добавляем ID в массив planDeals
 
 
-                    }
-                } else if ($operation === 'update') {
+                //     }
+                // } else
+                if ($operation === 'update') {
                     // Для 'update', ID сделки присутствует в последнем элементе ключа
                     $dealId = $parts[4];
                     $targetStageBtxId = $parts[5];
-                    Log::channel('telegram')->warning('HOOK 6 missing', ['message' => $parts]);
 
-                    // if (count($parts) > 6) {
-                    //     if (isset($parts[6])) {
-                    //         $targetStageBtxId .= '_' . $parts[6]; // Объединяем с существующим ID, если часть существует
-                    //     } else {
-                    //         Log::channel('telegram')->warning('HOOK 6 missing', ['message' => 'Expected part 6 does not exist in the array']);
-                    //     }
-                    // }
+                    if (count($parts) > 6) {
+                        if (isset($parts[6])) {
+                            $targetStageBtxId .= '_' . $parts[6]; // Объединяем с существующим ID, если часть существует
+                        } else {
+                            Log::channel('telegram')->warning('HOOK 6 missing', ['message' => 'Expected part 6 does not exist in the array']);
+                        }
+                    }
                     // Log::channel('telegram')->info('HOOK cleanBatchCommands', ['result' => $targetStageBtxId]);
                     $groupped[$dealId][] = [
                         'category' => $category,
