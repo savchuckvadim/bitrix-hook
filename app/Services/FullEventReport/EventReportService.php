@@ -2286,7 +2286,7 @@ class EventReportService
 
         // Log::info('HOOK BATCH entity', ['result' => $entityResult]);
         // Log::channel('telegram')->info('HOOK BATCH entity', ['result' => $entityResult]);
-        $result['unplannedPresDeals'] = $unplannedPresDeal;
+        $result['unplannedPresDeals'] = [$unplannedPresDeal];
 
         return  $result;
     }
