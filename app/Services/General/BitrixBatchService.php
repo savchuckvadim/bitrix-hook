@@ -63,7 +63,7 @@ class BitrixBatchService
                     // $result[$key] = $responseData['result'];
                 // }
                 foreach ($responseData['result'] as $resKey => $resValue) {
-                    $result[$resKey] = $resValue;
+                    $result[$resKey] = $resValue['result'];
                 }
 
                 // Log::channel('telegram')->info('HOOK responseData', ['result' => $responseData['result']['result']]);
