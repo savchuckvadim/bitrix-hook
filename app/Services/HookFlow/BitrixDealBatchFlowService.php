@@ -372,7 +372,11 @@ class BitrixDealBatchFlowService
                             }
                             $process['isNeedUpdate'] = $isProcessNeedUpdate;
                         }
+                        unset($process);  // Очистите ссылку после использования
+
                     }
+                    unset($processes);  // Очистите ссылку после использования
+
                 }
             }
             Log::channel('telegram')->info('HOOK RESULT groupped', ['groupped' => $groupped]);
