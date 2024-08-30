@@ -328,31 +328,43 @@ class BitrixDealBatchFlowService
 
 
 
-    //    groupped":{"7297":[{"category":"sales_base","stage":"PRESENTATION"}],"7301":[{"category":"sales_presentation","stage":"WON"}]}}
-
+        // groupped":{"7297":
+        //     [
+        // {"category":"sales_base","stage":"PRESENTATION"},
+        //     {"category":"sales_base","stage":"PRESENTATION"}
+        // ],
+        // "7303":[
+        //     {"category":"sales_presentation","stage":"WON"}
+        //     ]}}
         if (!empty($portalDealData['categories'])) {
 
             foreach ($portalDealData['categories'] as $category) {
                 foreach ($groupped as $dealId => $processes) {
+
+                    $isCurrentSearched = false;
+
                     foreach ($processes as $process) {
                         // Log::channel('telegram')->info('HOOK processesss', ['process' => $process]);
-
+                        $isProcessNeedUpdate = false;
 
                         if ($category['code'] === $process['category']) {
 
-                            // Log::channel('telegram')->info('HOOK process', ['process' => $process]);
                             foreach ($category['stages'] as $stage) {
                                 if ($stage['bitrixId'] === $process['stage']) {
                                     // Log::channel('telegram')->info('HOOK process stage', ['process stage' => $stage]);
-                             
-                             
+                                    if ($isCurrentSearched == true) {
+                                        $isProcessNeedUpdate = true;
+                                    }
+                                    $isCurrentSearched = true;
                                 }
                             }
                         }
+                        $process['category']['isNeedUpdate'] = $isProcessNeedUpdate;
                     }
                 }
             }
         }
+        Log::channel('telegram')->info('HOOK RESULT process', ['process' => $process]);
 
 
         return $batchCommands;
