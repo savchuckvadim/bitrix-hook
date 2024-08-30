@@ -195,6 +195,11 @@ class BitrixDealBatchFlowService
                     //     'currentDealId' => $currentDealId,
 
                     // ]);
+                    // Закидываю batch вск команды для update а определять какие обновлять
+                    $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $currentDealId);
+                    $key = 'update_' . $tag . '_' . $currentCategoryData['code'] . '_'  . $currentDealId . '_' . $targetStageBtxId;
+                    $resultBatchCommands[$key] = $batchCommand;
+
                     $isCanDealStageUpdate = BitrixDealService::getIsCanDealStageUpdate(
                         $currentDeal, //with ID CATEGORY_ID STAGE_ID
                         $targetStageBtxId,
@@ -209,9 +214,9 @@ class BitrixDealBatchFlowService
                     if ($isCanDealStageUpdate) {
                         // $rand = mt_rand(1000000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                         // usleep($rand);
-                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $currentDealId);
-                        $key = 'update_' . $tag . '_' . $currentCategoryData['code'] . '_'  . $currentDealId . '_' . $targetStageBtxId;
-                        $resultBatchCommands[$key] = $batchCommand;
+                        // $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $currentDealId);
+                        // $key = 'update_' . $tag . '_' . $currentCategoryData['code'] . '_'  . $currentDealId . '_' . $targetStageBtxId;
+                        // $resultBatchCommands[$key] = $batchCommand;
 
                         // Log::info('HOOK BATCH batchFlow report DEAL', ['report batchCommands' => $resultBatchCommands]);
                         // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $resultBatchCommands]);
