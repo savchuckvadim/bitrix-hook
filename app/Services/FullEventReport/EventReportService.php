@@ -2196,7 +2196,7 @@ class EventReportService
             // $planDeals = $flowResult['dealIds'];
             $batchCommands = $flowResult['commands'];
 
-
+            $batchCommands = BitrixDealBatchFlowService::cleanBatchCommands($batchCommands);
 
             $batchService =  new BitrixBatchService($this->hook);
             $results = $batchService->sendGeneralBatchRequest($batchCommands);

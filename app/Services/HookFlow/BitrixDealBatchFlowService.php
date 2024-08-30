@@ -169,7 +169,7 @@ class BitrixDealBatchFlowService
                             // $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'get', $currentDealId);
                             // $batchCommands['newPresDeal'] = $batchCommand;
                             $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null, $tag);
-                            $key = 'newpresdealget_' . $tag . '_' . $currentCategoryData['code'] . '_' . $currentDealId;
+                            $key = 'newpresdealget_' . $tag . '_' . $currentCategoryData['code'] . '_' . $currentDealId . '_' . $targetStageBtxId;
                             $resultBatchCommands[$key] = $batchCommand;
 
 
@@ -210,7 +210,7 @@ class BitrixDealBatchFlowService
                         // $rand = mt_rand(1000000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                         // usleep($rand);
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $currentDealId);
-                        $key = 'update_' . $tag . '_' . $currentCategoryData['code'] . '_'  . $currentDealId;
+                        $key = 'update_' . $tag . '_' . $currentCategoryData['code'] . '_'  . $currentDealId . '_' . $targetStageBtxId;
                         $resultBatchCommands[$key] = $batchCommand;
 
                         // Log::info('HOOK BATCH batchFlow report DEAL', ['report batchCommands' => $resultBatchCommands]);
@@ -256,12 +256,66 @@ class BitrixDealBatchFlowService
         return $currentMethod . '?' . http_build_query($data);
     }
 
+    static function cleanBatchCommands($batchCommands)
+    {
+        $reportDeals = [];
+        $planDeals = [];
+        $unplannedPresDeals = [];
+        $newPresDeal = null;
+        // Логирование результатов обработки
+        // Log::info('HOOK BATCH handleBatchResults', ['batchResult' => $batchResult]);
+        // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchResult' => $batchResult]);
+        Log::channel('telegram')->info('HOOK cleanBatchCommands', ['batchCommands' => $batchCommands]);
+        // Извлечение результатов
+        $results = $batchCommands;  // Предполагаем, что структура такая, как в примере
+        foreach ($results as $key => $value) { // value в данном случае сделка, точнее ее поля для обновления
+            $parts = explode('_', $key);
+            $operation = $parts[0];  // 'update' или 'set'
+            $tag = $parts[1];        // 'report' или 'plan'
+            $category = $parts[2] . '_' . $parts[3];  // Категория всегда состоит из двух слов
+
+            if ($operation === 'set') {
+                // Для 'set', значение представляет собой ID новой сделки
+                $dealId = $value;
+                if ($tag === 'report') {
+                    $reportDeals[] = $dealId;  // Добавляем ID в массив reportDeals
+                } elseif ($tag === 'plan') {
+                    if ($category  == 'sales_presentation') {
+                        $newPresDeal = $dealId;  // Добавляем ID в массив planDeals
+
+                    }
+                    $planDeals[] = $dealId;  // Добавляем ID в массив planDeals
+
+
+                }
+            } else if ($operation === 'update') {
+                // Для 'update', ID сделки присутствует в последнем элементе ключа
+                $dealId = $parts[4];
+                $targetStageBtxId = $parts[5];
+                Log::channel('telegram')->info('HOOK cleanBatchCommands', ['result' => $targetStageBtxId]);
+
+                if ($tag === 'report') {
+                    $reportDeals[] = $dealId;  // Добавляем ID в массив reportDeals
+                } elseif ($tag === 'plan') {
+                    $planDeals[] = $dealId;  // Добавляем ID в массив planDeals
+                }
+            }
+        }
+        return $batchCommands;
+        // return [
+        //     'reportDeals' => $reportDeals,
+        //     'planDeals' => $planDeals,
+        //     // 'unplannedPresDeals' => $unplannedPresDeals,  // Раскомментируйте, если нужно использовать,
+        //     'newPresDeal' =>  $newPresDeal
+        // ];
+    }
+
     static function handleBatchResults($batchResult)
     {
         $reportDeals = [];
         $planDeals = [];
         $unplannedPresDeals = [];
-        $newPresDeal =null;
+        $newPresDeal = null;
         // Логирование результатов обработки
         // Log::info('HOOK BATCH handleBatchResults', ['batchResult' => $batchResult]);
         // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchResult' => $batchResult]);
