@@ -47,7 +47,10 @@ class BitrixBatchService
             if (isset($responseData['result'])) {
                 $result[$key] = $responseData['result'];
 
-                if (isset($responseData['result']['result'])) {
+                Log::channel('telegram')->info('HOOK responseData', ['result resultBatchCommands' => $responseData['result']]);
+
+
+                if (empty($responseData['result']['result'])) {
                     $result[$key] = $responseData['result']['result'];
                 }
             }
@@ -66,9 +69,9 @@ class BitrixBatchService
         //     $result = $result[0];
         // }
 
-        if (isset($result['result'])) {
-            $result = $result['result'];
-        }
+        // if (isset($result['result'])) {
+        //     $result = $result['result'];
+        // }
         return $result;
     }
 
