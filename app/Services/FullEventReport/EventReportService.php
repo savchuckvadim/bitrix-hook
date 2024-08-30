@@ -2222,8 +2222,8 @@ class EventReportService
                 }
             }
 
-            Log::info('HOOK BATCH entityBatchCommands DEAL', ['entityBatchCommands' => $entityBatchCommands]);
-            Log::channel('telegram')->info('HOOK BATCH entityBatchCommands', ['entityBatchCommands' => $entityBatchCommands]);
+            // Log::info('HOOK BATCH entityBatchCommands DEAL', ['entityBatchCommands' => $entityBatchCommands]);
+            // Log::channel('telegram')->info('HOOK BATCH entityBatchCommands', ['entityBatchCommands' => $entityBatchCommands]);
     
 
             Log::info('HOOK BATCH', ['result' => $result]);
