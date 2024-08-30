@@ -2198,12 +2198,16 @@ class EventReportService
 
             $batchCommands = BitrixDealBatchFlowService::cleanBatchCommands($batchCommands, $this->portalDealData);
 
+
+
+            Log::info('HOOK EVREP', ['result batchCommandss' => $batchCommands]);
+            Log::channel('telegram')->info('HOOK EVREP', ['result batchCommandss' => $batchCommands]);
             $batchService =  new BitrixBatchService($this->hook);
             $results = $batchService->sendFlowBatchRequest($batchCommands);
             Log::info('HOOK BATCH', ['results' => $results]);
             Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
 
-            
+
 
             // return [
             //     'reportDeals' => $reportDeals,
