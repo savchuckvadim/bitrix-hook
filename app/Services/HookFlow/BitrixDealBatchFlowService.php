@@ -352,10 +352,7 @@ class BitrixDealBatchFlowService
                         }
                     }
                     // Log::channel('telegram')->info('HOOK cleanBatchCommands', ['result' => $targetStageBtxId]);
-                    $groupped[$dealId][] = [
-                        'category' => $category,
-                        'stage' => $targetStageBtxId,
-                    ];
+                    $groupped[$dealId][] = $batchData;
 
                     Log::channel('telegram')->info('HOOK cleanBatchCommands', ['groupped' => $groupped]);
 
