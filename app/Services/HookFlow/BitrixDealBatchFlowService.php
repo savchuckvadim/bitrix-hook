@@ -375,7 +375,7 @@ class BitrixDealBatchFlowService
                     }
                 }
             }
-            Log::channel('telegram')->info('HOOK RESULT process', ['process' => $process]);
+            Log::channel('telegram')->info('HOOK RESULT groupped', ['groupped' => $groupped]);
 
 
             return $batchCommands;
