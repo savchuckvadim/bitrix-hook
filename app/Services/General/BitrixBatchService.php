@@ -50,19 +50,21 @@ class BitrixBatchService
             ]);
             $responseData = $response->json();
             Log::channel('telegram')->info('HOOK send', ['result return' => $responseData['result']]);
-
+         
             // print_r("eventsCommands");
             // print_r("<br>");
             // print_r($batchCommands);
             // print_r("<br>");
             // print_r($responseData);
-            if (isset($responseData['result'])) {
+            if (!empty($responseData['result'])) {
                 // if (!empty($responseData['result']['result'])) {
                 //     $result[$key] = $responseData['result']['result'];
                 // } else {
-                    $result[$key] = $responseData['result'];
+                    // $result[$key] = $responseData['result'];
                 // }
-
+                foreach ($responseData['result'] as $resKey => $resValue) {
+                    $result[$resKey] = $resValue;
+                }
 
                 // Log::channel('telegram')->info('HOOK responseData', ['result' => $responseData['result']['result']]);
             }
