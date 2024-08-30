@@ -282,101 +282,115 @@ class BitrixDealBatchFlowService
         // ]}
 
         //перебираем комманды находим те что ч одинаковым dealId
+        try {
+            //code...
 
-        // Извлечение результатов
-        $results = $batchCommands;  // Предполагаем, что структура такая, как в примере
-        foreach ($results as $key => $value) { // value в данном случае сделка, точнее ее поля для обновления
-            $parts = explode('_', $key);
-            $operation = $parts[0];  // 'update' или 'set'
-            $tag = $parts[1];        // 'report' или 'plan'
-            $category = $parts[2] . '_' . $parts[3];  // Категория всегда состоит из двух слов
+            // Извлечение результатов
+            $results = $batchCommands;  // Предполагаем, что структура такая, как в примере
+            foreach ($results as $key => $value) { // value в данном случае сделка, точнее ее поля для обновления
+                $parts = explode('_', $key);
+                $operation = $parts[0];  // 'update' или 'set'
+                $tag = $parts[1];        // 'report' или 'plan'
+                $category = $parts[2] . '_' . $parts[3];  // Категория всегда состоит из двух слов
 
-            if ($operation === 'set') {
-                // Для 'set', значение представляет собой ID новой сделки
-                $dealId = $value;
-                if ($tag === 'report') {
-                    $reportDeals[] = $dealId;  // Добавляем ID в массив reportDeals
-                } elseif ($tag === 'plan') {
-                    if ($category  == 'sales_presentation') {
-                        $newPresDeal = $dealId;  // Добавляем ID в массив planDeals
+                if ($operation === 'set') {
+                    // Для 'set', значение представляет собой ID новой сделки
+                    $dealId = $value;
+                    if ($tag === 'report') {
+                        $reportDeals[] = $dealId;  // Добавляем ID в массив reportDeals
+                    } elseif ($tag === 'plan') {
+                        if ($category  == 'sales_presentation') {
+                            $newPresDeal = $dealId;  // Добавляем ID в массив planDeals
+
+                        }
+                        $planDeals[] = $dealId;  // Добавляем ID в массив planDeals
+
 
                     }
-                    $planDeals[] = $dealId;  // Добавляем ID в массив planDeals
+                } else if ($operation === 'update') {
+                    // Для 'update', ID сделки присутствует в последнем элементе ключа
+                    $dealId = $parts[4];
+                    $targetStageBtxId = $parts[5];
+                    Log::channel('telegram')->warning('HOOK 6 missing', ['message' => $parts]);
+
+                    // if (count($parts) > 6) {
+                    //     if (isset($parts[6])) {
+                    //         $targetStageBtxId .= '_' . $parts[6]; // Объединяем с существующим ID, если часть существует
+                    //     } else {
+                    //         Log::channel('telegram')->warning('HOOK 6 missing', ['message' => 'Expected part 6 does not exist in the array']);
+                    //     }
+                    // }
+                    // Log::channel('telegram')->info('HOOK cleanBatchCommands', ['result' => $targetStageBtxId]);
+                    $groupped[$dealId][] = [
+                        'category' => $category,
+                        'stage' => $targetStageBtxId,
+                    ];
+
+                    Log::channel('telegram')->info('HOOK cleanBatchCommands', ['groupped' => $groupped]);
 
 
-                }
-            } else if ($operation === 'update') {
-                // Для 'update', ID сделки присутствует в последнем элементе ключа
-                $dealId = $parts[4];
-                $targetStageBtxId = $parts[5];
-                Log::channel('telegram')->warning('HOOK 6 missing', ['message' => $parts]);
-
-                // if (count($parts) > 6) {
-                //     if (isset($parts[6])) {
-                //         $targetStageBtxId .= '_' . $parts[6]; // Объединяем с существующим ID, если часть существует
-                //     } else {
-                //         Log::channel('telegram')->warning('HOOK 6 missing', ['message' => 'Expected part 6 does not exist in the array']);
-                //     }
-                // }
-                // Log::channel('telegram')->info('HOOK cleanBatchCommands', ['result' => $targetStageBtxId]);
-                $groupped[$dealId][] = [
-                    'category' => $category,
-                    'stage' => $targetStageBtxId,
-                ];
-
-                Log::channel('telegram')->info('HOOK cleanBatchCommands', ['groupped' => $groupped]);
-
-
-                if ($tag === 'report') {
-                    $reportDeals[] = $dealId;  // Добавляем ID в массив reportDeals
-                } elseif ($tag === 'plan') {
-                    $planDeals[] = $dealId;  // Добавляем ID в массив planDeals
+                    if ($tag === 'report') {
+                        $reportDeals[] = $dealId;  // Добавляем ID в массив reportDeals
+                    } elseif ($tag === 'plan') {
+                        $planDeals[] = $dealId;  // Добавляем ID в массив planDeals
+                    }
                 }
             }
-        }
 
 
 
-        // groupped":{"7297":
-        //     [
-        // {"category":"sales_base","stage":"PRESENTATION"},
-        //     {"category":"sales_base","stage":"PRESENTATION"}
-        // ],
-        // "7303":[
-        //     {"category":"sales_presentation","stage":"WON"}
-        //     ]}}
-        if (!empty($portalDealData['categories'])) {
+            // groupped":{"7297":
+            //     [
+            // {"category":"sales_base","stage":"PRESENTATION"},
+            //     {"category":"sales_base","stage":"PRESENTATION"}
+            // ],
+            // "7303":[
+            //     {"category":"sales_presentation","stage":"WON"}
+            //     ]}}
+            if (!empty($portalDealData['categories'])) {
 
-            foreach ($portalDealData['categories'] as $category) {
-                foreach ($groupped as $dealId => $processes) {
+                foreach ($portalDealData['categories'] as $category) {
+                    foreach ($groupped as $dealId => $processes) {
 
-                    $isCurrentSearched = false;
+                        $isCurrentSearched = false;
 
-                    foreach ($processes as $process) {
-                        // Log::channel('telegram')->info('HOOK processesss', ['process' => $process]);
-                        $isProcessNeedUpdate = false;
+                        foreach ($processes as $process) {
+                            // Log::channel('telegram')->info('HOOK processesss', ['process' => $process]);
+                            $isProcessNeedUpdate = false;
 
-                        if ($category['code'] === $process['category']) {
+                            if ($category['code'] === $process['category']) {
 
-                            foreach ($category['stages'] as $stage) {
-                                if ($stage['bitrixId'] === $process['stage']) {
-                                    // Log::channel('telegram')->info('HOOK process stage', ['process stage' => $stage]);
-                                    if ($isCurrentSearched == true) {
-                                        $isProcessNeedUpdate = true;
+                                foreach ($category['stages'] as $stage) {
+                                    if ($stage['bitrixId'] === $process['stage']) {
+                                        // Log::channel('telegram')->info('HOOK process stage', ['process stage' => $stage]);
+                                        if ($isCurrentSearched == true) {
+                                            $isProcessNeedUpdate = true;
+                                        }
+                                        $isCurrentSearched = true;
                                     }
-                                    $isCurrentSearched = true;
                                 }
                             }
+                            $process['category']['isNeedUpdate'] = $isProcessNeedUpdate;
                         }
-                        $process['category']['isNeedUpdate'] = $isProcessNeedUpdate;
                     }
                 }
             }
+            Log::channel('telegram')->info('HOOK RESULT process', ['process' => $process]);
+
+
+            return $batchCommands;
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR COLD: Exception caught',  $errorMessages);
+            Log::info('error COLD', ['error' => $th->getMessage()]);
+            return $batchCommands;
         }
-        Log::channel('telegram')->info('HOOK RESULT process', ['process' => $process]);
 
-
-        return $batchCommands;
         // return [
         //     'reportDeals' => $reportDeals,
         //     'planDeals' => $planDeals,
