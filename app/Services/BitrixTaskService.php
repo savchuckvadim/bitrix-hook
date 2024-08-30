@@ -149,14 +149,7 @@ class BitrixTaskService
                 ]
             ];
 
-            $createdTask = BitrixGeneralService::createTask(
-                'Bitrix Task Service create task',
-                $hook,
-                $companyId,
-                $leadId,
-                // $crmItems,
-                $taskData
-            );
+        
 
             
             $idsForComplete = null;
@@ -179,7 +172,14 @@ class BitrixTaskService
                     ];
                 }
             }
-
+            $createdTask = BitrixGeneralService::createTask(
+                'Bitrix Task Service create task',
+                $hook,
+                $companyId,
+                $leadId,
+                // $crmItems,
+                $taskData
+            );
             // Log::channel('telegram')->info(
             //     'TST TASKS ID',
             //     [
