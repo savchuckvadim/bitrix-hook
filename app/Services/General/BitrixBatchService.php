@@ -49,7 +49,6 @@ class BitrixBatchService
                 'cmd' => $resultBatchCommands
             ]);
             $responseData = $response->json();
-            Log::channel('telegram')->info('HOOK send', ['result return' => $responseData['result']]);
          
             // print_r("eventsCommands");
             // print_r("<br>");
@@ -86,8 +85,7 @@ class BitrixBatchService
         // if (isset($result['result'])) {
         //     $result = $result['result'];
         // }4 Log::info('HOOK sendFlowBatchRequest', ['result resultBatchCommands' => $resultBatchCommands]);
-        Log::channel('telegram')->info('HOOK sendFlowBatchRequest', ['resultBatchCommands' => $resultBatchCommands]);
-
+      
         Log::channel('telegram')->info('HOOK send', ['result return' => $result]);
         return $result;
     }
