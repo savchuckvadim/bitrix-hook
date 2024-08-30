@@ -370,7 +370,7 @@ class BitrixDealBatchFlowService
                                     }
                                 }
                             }
-                            $process['category']['isNeedUpdate'] = $isProcessNeedUpdate;
+                            $process['isNeedUpdate'] = $isProcessNeedUpdate;
                         }
                     }
                 }
