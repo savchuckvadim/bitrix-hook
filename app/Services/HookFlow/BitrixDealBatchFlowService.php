@@ -176,7 +176,7 @@ class BitrixDealBatchFlowService
                             // $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'get', $currentDealId);
                             // $batchCommands['newPresDeal'] = $batchCommand;
                             $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null, $tag);
-                            $key = 'newpresdealget_' . $tag . '_' . $currentCategoryData['code'];
+                            $key = 'newpresdealget_' . $tag . '_' . $currentCategoryData['code'] . '_' . $currentDealId;
                             // $resultBatchCommands[$key] = $batchCommand;
                             $resultBatchCommands[$key] = [
                                 'command' => $batchCommand,
@@ -211,7 +211,7 @@ class BitrixDealBatchFlowService
                     // ]);
                     // Закидываю batch вск команды для update а определять какие обновлять
                     $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $currentDealId);
-                    $key = 'update_' . $tag . '_' . $currentCategoryData['code'];
+                    $key = 'update_' . $tag . '_' . $currentCategoryData['code'] . '_' . $currentDealId;
                     $resultBatchCommands[$key] = [
                         'command' => $batchCommand,
                         'dealId' => $currentDealId,
@@ -398,7 +398,7 @@ class BitrixDealBatchFlowService
                                 // Log::channel('telegram')->info('HOOK process category code ===', ['process stage' => $category]);
 
                                 foreach ($category['stages'] as $stage) {
-                                  
+
 
 
                                     if ($stage['bitrixId'] === $process['targetStage']) {
@@ -408,18 +408,16 @@ class BitrixDealBatchFlowService
                                         if ($isCurrentSearched == true) {
                                             $isProcessNeedUpdate = true;
                                             Log::channel('telegram')->info('HOOK isCurrentSearched', ['process stage' => $stage['bitrixId'], 'isProcessNeedUpdate' => $isProcessNeedUpdate]);
-
                                         }
                                         // $isCurrentSearched = true;
                                     }
                                     $stageBitrixId = "C" . $category['bitrixId'] . ':' . $stage['bitrixId'];
-                                  
-                                  
+
+
                                     if ($stageBitrixId === $process['deal']['STAGE_ID']) {
 
                                         $isCurrentSearched = true;
                                         Log::channel('telegram')->info('HOOK isCurrentSearched', ['process stage' => $stage['bitrixId'], 'isCurrentSearched' => $isCurrentSearched]);
-
                                     }
                                 }
                             }
