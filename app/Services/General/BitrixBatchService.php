@@ -31,8 +31,7 @@ class BitrixBatchService
             }
 
 
-            Log::info('HOOK sendFlowBatchRequest', ['result resultBatchCommands' => $resultBatchCommands]);
-            Log::channel('telegram')->info('HOOK sendFlowBatchRequest', ['result resultBatchCommands' => $resultBatchCommands]);
+           
             $response = Http::post($url, [
                 'halt' => 0,
                 'cmd' => $resultBatchCommands
@@ -45,14 +44,14 @@ class BitrixBatchService
             // print_r("<br>");
             // print_r($responseData);
             if (isset($responseData['result'])) {
-                $result[$key] = $responseData['result'];
-
-                Log::channel('telegram')->info('HOOK responseData', ['result resultBatchCommands' => $responseData['result']['result']]);
-
-
                 if (!empty($responseData['result']['result'])) {
                     $result[$key] = $responseData['result']['result'];
+                } else {
+                    $result[$key] = $responseData['result'];
                 }
+
+
+                // Log::channel('telegram')->info('HOOK responseData', ['result' => $responseData['result']['result']]);
             }
             if (!empty($responseData['result_error'])) {
                 // $result['errors'][$key] = $responseData['result_error'];
@@ -71,7 +70,10 @@ class BitrixBatchService
 
         // if (isset($result['result'])) {
         //     $result = $result['result'];
-        // }
+        // }4 Log::info('HOOK sendFlowBatchRequest', ['result resultBatchCommands' => $resultBatchCommands]);
+        Log::channel('telegram')->info('HOOK sendFlowBatchRequest', ['resultBatchCommands' => $resultBatchCommands]);
+
+        Log::channel('telegram')->info('HOOK send', ['result return' => $result]);
         return $result;
     }
 
