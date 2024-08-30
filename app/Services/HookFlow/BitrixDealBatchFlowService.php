@@ -351,10 +351,12 @@ class BitrixDealBatchFlowService
 
                 foreach ($portalDealData['categories'] as $category) {
                     foreach ($groupped as $dealId => $processes) {
-
+                        $resultProcesses = [];
                         $isCurrentSearched = false;
 
                         foreach ($processes as $process) {
+
+                            $resultProcess = [];
                             // Log::channel('telegram')->info('HOOK processesss', ['process' => $process]);
                             $isProcessNeedUpdate = false;
 
@@ -371,11 +373,14 @@ class BitrixDealBatchFlowService
                                 }
                             }
                             $process['isNeedUpdate'] = $isProcessNeedUpdate;
+                            $resultProcesses[] = $process;
                         }
-                        unset($process);  // Очистите ссылку после использования
+                        $groupped[$dealId] = $resultProcesses;
+
+                        // unset($process);  // Очистите ссылку после использования
 
                     }
-                    unset($processes);  // Очистите ссылку после использования
+                    // unset($processes);  // Очистите ссылку после использования
 
                 }
             }
