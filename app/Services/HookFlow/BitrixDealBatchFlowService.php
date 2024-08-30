@@ -412,8 +412,8 @@ class BitrixDealBatchFlowService
                                         }
                                         // $isCurrentSearched = true;
                                     }
-
-                                    if ($stage['bitrixId'] === $process['deal']['STAGE_ID']) {
+                                    $stageBitrixId = "C" . $category['bitrixId'] . ':' . $stage['bitrixId'];
+                                    if ($stageBitrixId === $process['deal']['STAGE_ID']) {
 
                                         $isCurrentSearched = true;
                                     }
