@@ -389,20 +389,24 @@ class BitrixDealBatchFlowService
                             $resultProcess = [];
                             // Log::channel('telegram')->info('HOOK processesss', ['process' => $process]);
 
-
+                            // 'command' => $batchCommand,
+                            //         'dealId' => $currentDealId,
+                            //         'deal' => $currentDeal,
+                            //         'targetStage' => $targetStageBtxId,
+                            //         'isNeedUpdate' => true
                             if ($category['bitrixId'] === $process['deal']['CATEGORY_ID']) {
                                 // Log::channel('telegram')->info('HOOK process category code ===', ['process stage' => $category]);
 
                                 foreach ($category['stages'] as $stage) {
-                                Log::channel('telegram')->info('HOOK process category code ===', ['process stage bitrixId' => $stage['bitrixId']]);
-                                Log::channel('telegram')->info('HOOK process category code ===', ['process deal STAGE_ID' => $process['deal']['STAGE_ID']]);
+                                    Log::channel('telegram')->info('HOOK process category code ===', ['process stage bitrixId' => $stage['bitrixId']]);
+                                    Log::channel('telegram')->info('HOOK process category code ===', ['process deal STAGE_ID' => $process['deal']['STAGE_ID']]);
 
-                                 
-                                    if ($stage['bitrixId'] === $process['stage']) {
+
+                                    if ($stage['bitrixId'] === $process['targetStage']) {
                                         Log::channel('telegram')->info('HOOK [bitrixId] ===', ['process stage' => $stage['bitrixId'], 'isCurrentSearched' => $isCurrentSearched]);
-                                        
-                                        
-                                        
+
+
+
                                         if ($isCurrentSearched == true) {
                                             $isProcessNeedUpdate = true;
                                         }
@@ -412,7 +416,6 @@ class BitrixDealBatchFlowService
                                     if ($stage['bitrixId'] === $process['deal']['STAGE_ID']) {
 
                                         $isCurrentSearched = true;
-
                                     }
                                 }
                             }
