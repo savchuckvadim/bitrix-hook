@@ -214,7 +214,7 @@ Route::prefix('full')->group(function () {
                 }
             }
 
-            sleep(0.3);
+            // sleep(0.3);
             Log::info('HOOK TST', [
                 'currentBaseDeals' => $currentBaseDeals,
                 'baseDealSession' => $baseDealSession,

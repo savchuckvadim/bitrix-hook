@@ -219,10 +219,16 @@ class ReportKPIController extends Controller
                         $eventResponsibleFieldId = $eventResponsibleField['bitrixCamelId']; //like PROPERTY_2119 
 
                     }
-                    if ($plField['code'] === 'sales_kpi_plan_date') {
+                    // if ($plField['code'] === 'sales_kpi_plan_date') {
+                    //     $eventDateField = $plField;
+                    //     $eventDateFieldId = $eventDateField['bitrixCamelId']; //like PROPERTY_2119 
+
+                    // }
+                    if ($plField['code'] === 'sales_kpi_event_date') {
                         $eventDateField = $plField;
                         $eventDateFieldId = $eventDateField['bitrixCamelId']; //like PROPERTY_2119 
-
+                        $dateFieldForHookFrom = ">=" . $eventDateFieldId;
+                        $dateFieldForHookTo = "<=" . $eventDateFieldId;
                     }
                 }
             }
@@ -429,13 +435,13 @@ class ReportKPIController extends Controller
                     $result['name'] = $actionType['name'];
 
                     if (
-                        $actionType['code'] == 'ev_offer' 
-                    ){
+                        $actionType['code'] == 'ev_offer'
+                    ) {
                         $result['name'] = 'КП';
-                    }else   if (
-            
-                        $actionType['code'] == 'ev_offer_pres' 
-                    ){
+                    } else   if (
+
+                        $actionType['code'] == 'ev_offer_pres'
+                    ) {
                         $result['name'] = 'КП с презентации';
                     }
 
