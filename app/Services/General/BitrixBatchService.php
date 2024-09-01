@@ -27,30 +27,26 @@ class BitrixBatchService
         foreach ($batchRequests as $key => $batchCommands) {
 
             foreach ($batchCommands as $key => $value) {
-                if(!empty($value['deal']) && !empty($value['dealId'])){
-                    if(!empty($value['isNeedUpdate']) ){
+                if (!empty($value['deal']) && !empty($value['dealId'])) {
+                    if (!empty($value['isNeedUpdate'])) {
                         $resultBatchCommands[$key] = $value['command'];
-
-
-                    }else{
+                    } else {
                         $result[$key] = $value['dealId'];
                     }
-
-                }else{
+                } else {
                     $resultBatchCommands[$key] = $value['command'];
-
                 }
             }
 
 
-           
+
             $response = Http::post($url, [
                 'halt' => 0,
                 'cmd' => $resultBatchCommands
             ]);
             $responseData = $response->json();
             Log::channel('telegram')->info('HOOK send', ['result return' => $responseData['result']]);
-         
+
             // print_r("eventsCommands");
             // print_r("<br>");
             // print_r($batchCommands);
@@ -60,13 +56,12 @@ class BitrixBatchService
                 // if (!empty($responseData['result']['result'])) {
                 //     $result[$key] = $responseData['result']['result'];
                 // } else {
-                    // $result[$key] = $responseData['result'];
+                // $result[$key] = $responseData['result'];
                 // }
                 foreach ($responseData['result'] as $resKey => $resValue) {
                     $result[$resKey] = $resValue;
-                    if(!empty($resValue['result'])){
+                    if (!empty($resValue['result'])) {
                         $result[$resKey] = $resValue['result'];
-
                     }
                 }
 
@@ -140,9 +135,12 @@ class BitrixBatchService
         //     $result = $result[0];
         // }
 
-        if (isset($result['result'])) {
-            $result = $result['result'];
-        }
+        // if (isset($result['result'])) {
+        //     $result = $result['result'];
+        // }
+
+        // print_r("<br>");
+        // print_r($result);
         return $result;
     }
     public function sendBatchRequest($commands)

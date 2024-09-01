@@ -662,8 +662,8 @@ class EventReportService
 
             ]);
             if ($this->isDealFlow && $this->portalDealData) {
-                $currentDealsIds = $this->getBatchDealFlow();
-                // $currentDealsIds = $this->getDealFlow();
+                // $currentDealsIds = $this->getBatchDealFlow();
+                $currentDealsIds = $this->getDealFlow();
             }
 
             // $this->createTask($currentSmartId);
@@ -672,7 +672,7 @@ class EventReportService
             } else {
                 $result = $this->workStatus;
             }
-            // $this->getEntityFlow();
+            $this->getEntityFlow();
             // sleep(1);
 
 
@@ -1651,8 +1651,7 @@ class EventReportService
                 }
             }
         }
-        $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-        usleep($rand);
+        sleep(1);
 
 
         //если был unplanned а потом plan ->

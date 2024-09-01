@@ -343,11 +343,29 @@ class BitrixListDocumentFlowService
                 $currentNowDate = new DateTime();
                 $nowDate = $currentNowDate->format('d.m.Y H:i:s');
             }
+            $actionStringName = 'Создан';
+            if ($eventAction === 'act_send') {
+                $actionStringName = 'Отправлен';
+            } else if ($eventAction === 'act_pay') {
+                $actionStringName = 'Оплачен';
+            } else if ($eventAction === 'act_sign') {
+                $actionStringName = 'Подписан';
+            }
+
 
             if (empty($hotName)) {
 
-                $hotName = $eventTypeName . ' Создан';
+                $hotName = $eventTypeName . ' ' . $actionStringName;
             }
+            print_r('<br>');
+            print_r($hotName);
+            print_r('<br>');
+            print_r($eventType);
+            print_r('<br>');
+
+            print_r('           <br> eventAction           ');
+            print_r($eventAction);
+            print_r('<br>');
             // $eventActionName = 'Запланирован';
             // $evTypeName = 'Звонок';
             // $nextCommunication = $deadline;
@@ -516,7 +534,7 @@ class BitrixListDocumentFlowService
 
                     $uniqueHash = md5(uniqid(rand(), true));
                     $code = $uniqueHash;
-                    $fullCode = $bitrixList['type'] . '_' . $companyId . '_' . $code;
+                    $fullCode = $bitrixList['type'] . '_' . $companyId . '_' . $eventAction . '_' . $code;
                     $command =  BitrixListService::getBatchCommandSetItem(
                         $hook,
                         $bitrixList['bitrixId'],
@@ -563,7 +581,7 @@ class BitrixListDocumentFlowService
                             }
                             // array_push($fieldsData, $currentDataField);
                         }
-                        $code = $companyId . '_' . $dealId . '_' . $eventType;
+                        $code = $companyId . '_' . $dealId . '_' . $eventType . '_' . $eventAction;
 
                         // BitrixListService::setItem(
                         //     $hook,
@@ -577,9 +595,7 @@ class BitrixListDocumentFlowService
                             $fieldsData,
                             $code
                         );
-                        $resultBatchCommands['set_list_item_' . $fullCode] = $command;
-
-
+                        $resultBatchCommands['set_list_item_' . $code] = $command;
                     }
                 }
             }

@@ -28,7 +28,7 @@ class CSVCommand extends Command
      */
     public function handle()
     {
-        $domain = 'april-garant.bitrix24.ru';
+        $domain = '';
         $portal = PortalController::getPortal($domain);
         // Log::info('portal', ['portal' => $portal]);
         $filePath = storage_path('app/public/clients/events.csv');

@@ -32,7 +32,7 @@ class MigrateCRMCommand extends Command
      */
     public function handle()
     {
-        $domain = 'april-dev.bitrix24.ru';
+        $domain = '';
        
         $migrateContraller = new MigrateCRMController('token', $domain);
         $migrateContraller->crm();

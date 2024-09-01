@@ -7,10 +7,12 @@ use App\Http\Controllers\MigrateCRM\MigrateCRMController;
 use App\Http\Controllers\PortalController;
 use App\Imports\ClientsImport;
 use App\Imports\ContactsImport;
+use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Illuminate\Console\Command;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Illuminate\Support\Facades\Http;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 class ExcelCommand extends Command
 {
@@ -33,66 +35,15 @@ class ExcelCommand extends Command
      */
     public function handle()
     {
-        $domain = 'april-dev.bitrix24.ru';
-        $portal = PortalController::getPortal($domain);
-        $this->info($portal['data']['id']);
+        // $domain = 'april-dev.bitrix24.ru';
+        // $portal = PortalController::getPortal($domain);
+        // $this->info($portal['data']['id']);
 
-        ini_set('memory_limit', '2048M');  // Increase memory limit if needed
+        ini_set('memory_limit', '6096M');  // Установка лимита в 4 ГБ
         $companiesPath = storage_path('app/public/clients/companies.xlsx');
         $contactsPath = storage_path('app/public/clients/contacts.xlsx');
-        $eventsPath = storage_path('app/public/clients/events_exel.xlsx');
+        $eventsPath = storage_path('app/public/clients/events.xlsx');
 
-        // if (!file_exists($companiesPath) || !file_exists($contactsPath) || !file_exists($eventsPath)) {
-        //     $this->error('File not found.');
-        //     return 1; // Возврат ошибки в консольной команде
-        // }
-
-        // $companiesData = Excel::toArray(new ClientsImport, $companiesPath)[0];
-        // $contactsData = Excel::toArray(new ContactsImport, $contactsPath)[0];
-        // $eventsData = Excel::toArray(new ClientsImport, $eventsPath)[0]; // Обработка файла Excel с событиями
-
-        // $companies = $this->createClients($companiesData);
-        // $contacts = $this->createContacts($contactsData);
-
-        // $indexedContacts = [];
-        // foreach ($contacts as $contact) {
-        //     $clientId = trim($contact['clientId']);
-        //     $clientId = sprintf("%06d",  $clientId);  // Форматирование ID
-        //     $indexedContacts[$clientId][] = $contact;
-        // }
-
-        // $clientsWithDetails = [];
-        // foreach ($eventsData as $eventRow) {
-        //     $clientId = trim($eventRow[0]);
-        //     $clientId = sprintf("%06d",  $clientId);  // Форматирование ID
-
-
-        //     if (!isset($clientsWithDetails[$clientId])) {
-        //         $clientsWithDetails[$clientId] = [
-        //             'client' => null, // Данные клиента будут добавлены позже
-        //             'contacts' => $indexedContacts[$clientId] ?? [],
-        //             'events' => []
-        //         ];
-        //     }
-
-        //     if (isset($eventRow[5])) { // Убедитесь, что это правильный индекс для вашего файла Excel
-        //         $clientsWithDetails[$clientId]['events'][] = $this->createEvent($eventRow);
-        //     }
-        // }
-
-        // // Добавление информации о компаниях
-        // foreach ($companies as $client) {
-        //     $clientId = trim($client['id']);
-        //     $clientId = sprintf("%06d",  $clientId);  // Форматирование ID
-
-        //     if (isset($clientsWithDetails[$clientId])) {
-        //         $clientsWithDetails[$clientId]['client'] = $client;
-        //     }
-        // }
-
-        // // Сохранение результатов в JSON файл
-        // $jsonFilePath = storage_path('app/public/clients/clients_data.json');
-        // file_put_contents($jsonFilePath, json_encode(['clients' => array_values($clientsWithDetails)], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
         // $this->info('Command executed successfully. Data saved to ' . $jsonFilePath);
         if (!file_exists($companiesPath) || !file_exists($contactsPath) || !file_exists($eventsPath)) {
@@ -107,6 +58,12 @@ class ExcelCommand extends Command
         $companies = $this->createClients($companiesData);
         $contacts = $this->createContacts($contactsData);
         $events = [];
+
+
+        // $companies = $this->readExcelFile($companiesPath, 'createClients');
+        // $contacts = $this->readExcelFile($contactsPath, 'createContacts');
+        // $eventsData = $this->readExcelFile($eventsPath, 'createEvents');
+        // $events = [];
         // Индексация контактов и событий
         $indexedContacts = $this->indexContacts($contacts);
 
@@ -117,42 +74,132 @@ class ExcelCommand extends Command
         $indexedEvents = $this->indexEvents($events);
         // Подготовка данных клиентов
         $clientsWithDetails = $this->prepareClientDetails($companies, $indexedContacts, $indexedEvents);
+        $chunks = array_chunk($clientsWithDetails, ceil(count($clientsWithDetails) / 10));
+        $fileNumber = 1;
 
-        // Сохранение данных в JSON
-        $jsonFilePath = storage_path('app/public/clients/clients_data.json');
-        file_put_contents($jsonFilePath, json_encode(['clients' => array_values($clientsWithDetails)], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        foreach ($chunks as $chunk) {
+            $jsonFilePath = storage_path('app/public/clients/clients_data_' . $fileNumber . '.json');
+            file_put_contents($jsonFilePath, json_encode(['clients' => $chunk], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            $this->info('Data saved to ' . $jsonFilePath);
+            $this->info('....... ');
 
-        $this->info('Command executed successfully. Data saved to ' . $jsonFilePath);
+            $jsonFilePath = storage_path('app/public/clients/clients_data_' . $fileNumber . '.json');
+
+            // Чтение данных из файла
+            $jsonData = file_get_contents($jsonFilePath);
+
+            // Преобразование JSON в массив
+            $data = json_decode($jsonData, true);  // true преобразует данные в ассоциативный массив
 
 
-        $jsonFilePath = storage_path('app/public/clients/clients_data.json');
+            if (!empty($data['clients'])) {
+                $clientsCount = count($data['clients']);
+                $contactsCount = 0;
+                $eventsCount = 0;
+                foreach ($data['clients'] as $client) {
+                    $contactsCount += count($client['contacts']);
+                    $eventsCount += count($client['events']);
+                }
 
-        // Чтение данных из файла
-        $jsonData = file_get_contents($jsonFilePath);
-
-        // Преобразование JSON в массив
-        $data = json_decode($jsonData, true);  // true преобразует данные в ассоциативный массив
-
-
-        if (!empty($data['clients'])) {
-            $clientsCount = count($data['clients']);
-            $contactsCount = 0;
-            $eventsCount = 0;
-            foreach ($data['clients'] as $client) {
-                $contactsCount += count($client['contacts']);
-                $eventsCount += count($client['events']);
+                $this->info('CHUNK: ' . $fileNumber . '  ClientsCount : ' . $clientsCount);
+                $this->info('CHUNK: ' . $fileNumber . '  ContactsCount : ' . $contactsCount);
+                $this->info('CHUNK: ' . $fileNumber . '  EventsCount : ' . $eventsCount);
             }
 
-            $this->info('ClientsCount : ' . $clientsCount);
-            $this->info('ContactsCount : ' . $contactsCount);
-            $this->info('EventsCount : ' . $eventsCount);
+            $this->info('................................................................ ');
+            $this->info('................................................................ ');
+            $this->info(' ');
+            $this->info(' ');
+            $this->info(' ');
+            $fileNumber++;
         }
+
+        // Сохранение данных в JSON
+        // $jsonFilePath = storage_path('app/public/clients/clients_data.json');
+        // file_put_contents($jsonFilePath, json_encode(['clients' => array_values($clientsWithDetails)], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+        // $this->info('Command executed successfully. Data saved to ' . $jsonFilePath);
+
+
+        // $jsonFilePath = storage_path('app/public/clients/clients_data.json');
+
+        // // Чтение данных из файла
+        // $jsonData = file_get_contents($jsonFilePath);
+
+        // // Преобразование JSON в массив
+        // $data = json_decode($jsonData, true);  // true преобразует данные в ассоциативный массив
+
+
+        // if (!empty($data['clients'])) {
+        //     $clientsCount = count($data['clients']);
+        //     $contactsCount = 0;
+        //     $eventsCount = 0;
+        //     foreach ($data['clients'] as $client) {
+        //         $contactsCount += count($client['contacts']);
+        //         $eventsCount += count($client['events']);
+        //     }
+
+        //     $this->info('ClientsCount : ' . $clientsCount);
+        //     $this->info('ContactsCount : ' . $contactsCount);
+        //     $this->info('EventsCount : ' . $eventsCount);
+        // }
 
 
         // $migrateContraller = new MigrateCRMController('token', $domain);
         // $migrateContraller->crm();
         return 0; // Успешное выполнение команды
     }
+
+    // public function handle()
+    // {
+    //     $domain = 'april-dev.bitrix24.ru';
+    //     $portal = PortalController::getPortal($domain);
+    //     $this->info($portal['data']['id']);
+
+    //     ini_set('memory_limit', '2048M');  // Increase memory limit if needed
+    //     $companiesPath = storage_path('app/public/clients/companies.xlsx');
+    //     $contactsPath = storage_path('app/public/clients/contacts.xlsx');
+    //     $eventsPath = storage_path('app/public/clients/events_exel.xlsx');
+
+
+    //     // $this->info('Command executed successfully. Data saved to ' . $jsonFilePath);
+    //     if (!file_exists($companiesPath) || !file_exists($contactsPath) || !file_exists($eventsPath)) {
+    //         $this->error('File not found.');
+    //         return 1; // Возврат ошибки в консольной команде
+    //     }
+
+    //     // Загрузка данных
+    //     $companiesData = Excel::toArray(new ClientsImport, $companiesPath)[0];
+    //     $contactsData = Excel::toArray(new ContactsImport, $contactsPath)[0];
+    //     $eventsData = Excel::toArray(new ClientsImport, $eventsPath)[0];
+    //     $companies = $this->createClients($companiesData);
+    //     $contacts = $this->createContacts($contactsData);
+    //     $events = [];
+    //     // Индексация контактов и событий
+    //     $indexedContacts = $this->indexContacts($contacts);
+
+    //     foreach ($eventsData as $eventRow) {
+    //         $event = $this->createEvent($eventRow);
+    //         array_push($events, $event);
+    //     }
+    //     $indexedEvents = $this->indexEvents($events);
+    //     // Подготовка данных клиентов
+    //     $clientsWithDetails = $this->prepareClientDetails($companies, $indexedContacts, $indexedEvents);
+    //     $chunks = array_chunk($clientsWithDetails, ceil(count($clientsWithDetails) / 10));
+    //     $fileNumber = 1;
+
+    //     foreach ($chunks as $chunk) {
+    //         $jsonFilePath = storage_path('app/public/clients/clients_data_' . $fileNumber . '.json');
+    //         file_put_contents($jsonFilePath, json_encode(['clients' => $chunk], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+    //         $this->info('Data saved to ' . $jsonFilePath);
+    //         $fileNumber++;
+    //     }
+
+    //     return 0; // Успешное выполнение команды
+    // }
+
+
+
     private function indexContacts($contactsData)
     {
         $indexedContacts = [];
@@ -233,6 +280,28 @@ class ExcelCommand extends Command
 
         ];
     }
+
+    private function readExcelFile($filePath, $processMethod)
+    {
+        $reader = ReaderEntityFactory::createXLSXReader();
+        $reader->open($filePath);
+        $results = [];
+
+        foreach ($reader->getSheetIterator() as $sheet) {
+            foreach ($sheet->getRowIterator() as $row) {
+                $cells = $row->getCells();
+                $rowData = array_map(function ($cell) {
+                    return $cell->getValue();
+                }, $cells);
+                $results[] = $this->$processMethod($rowData);
+            }
+        }
+
+        $reader->close();
+        return $results;
+    }
+
+
     private function createClients($rows)
     {
         // Анализируем данные клиента и возвращаем массив

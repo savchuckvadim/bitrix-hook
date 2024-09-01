@@ -60,22 +60,22 @@ class MigrateCRMController extends Controller
              */
             // $googleData = GoogleInstallController::getData($this->token);
 
-            // if (!empty($googleData)) {
-            //     if (!empty($googleData['clients'])) {
-            //         $clients = $googleData['clients'];
-            //     }
-            // }
+            if (!empty($googleData)) {
+                if (!empty($googleData['clients'])) {
+                    $clients = $googleData['clients'];
+                }
+            }
             $time_start = microtime(true);
-            ini_set('memory_limit', '2048M');  // Increase memory limit if needed
+            ini_set('memory_limit', '6048M');  // Increase memory limit if needed
 
             set_time_limit(0);
-            $jsonFilePath = storage_path('app/public/clients/clients_data.json');
+            $jsonFilePath = storage_path('app/public/clients/');
 
             // Чтение данных из файла
-            // $jsonData = file_get_contents($jsonFilePath);
+            $jsonData = file_get_contents($jsonFilePath);
 
-            // // Преобразование JSON в массив
-            // $data = json_decode($jsonData, true);  // true преобразует данные в ассоциативный массив
+            // Преобразование JSON в массив
+            $data = json_decode($jsonData, true);  // true преобразует данные в ассоциативный массив
 
 
             $decoder = new ExtJsonDecoder(true);  // true преобразует объекты JSON в ассоциативные массивы
@@ -98,7 +98,7 @@ class MigrateCRMController extends Controller
                     // usleep($rand);
 
 
-                    // if ($index < 1000) {
+                    // if ($index < 30) {
 
 
 
@@ -107,7 +107,7 @@ class MigrateCRMController extends Controller
                         // $fullDepartment = $this->getFullDepartment();
                         $fullDepartment = $this->department;
 
-                        $userId = 13; //201 - man savchuk in rostov
+                        $userId = 201; //201 - man savchuk in rostov
                         $fullDepartment =  $fullDepartment['department'];
                         // print_r('<br>');
                         // print_r($fullDepartment);
@@ -259,8 +259,8 @@ class MigrateCRMController extends Controller
                 $results = $batchService->sendGeneralBatchRequest($commands);
                 $newCompanyIds = [];
                 foreach ($results as $batchKey => $batchResults) {
-                    if (isset($batchResults['result'])) {
-                        foreach ($batchResults['result'] as $key => $result) {
+                    if (isset($batchResults)) {
+                        foreach ($batchResults as $key => $result) {
                             if (preg_match('/add_client_(.+)$/', $key, $matches)) {
                                 $oldClientId = $matches[1];
                                 if (!empty($result)) {
@@ -282,8 +282,8 @@ class MigrateCRMController extends Controller
                         $companyId = $newCompanyIds[$clientData['client']['id']] ?? null;
 
                         if (!empty($companyId) && !empty($clientData['events'])) {
-                            // print_r("<br> companyId    _  ");
-                            // print_r($companyId);
+                            print_r("<br> companyId    _  ");
+                            print_r($companyId);
 
                             foreach ($clientData['events'] as $garusEvent) {
                                 $eventsCommands = $this->getListFlow($garusEvent, $companyId, $userId, $eventsCommands);
@@ -1412,7 +1412,7 @@ class MigrateCRMController extends Controller
             $comment = $comment . "\n " . "Контакт: " . $event['contact'];
         }
 
-        $normalizedGarusResultat = $this->normalizeString($event['eventType']);
+        // $normalizedGarusResultat = $this->normalizeString($event['eventType']);
         $actions = [
             $this->normalizeString('Звонок') => 'call',
             $this->normalizeString('Пред.договоренность') => 'plan',
@@ -1431,6 +1431,7 @@ class MigrateCRMController extends Controller
                     $this->normalizeString('Заявка на презу'),
                     $this->normalizeString('Дист. заявка'),
                     $this->normalizeString('Тлф.Заявка'),
+                    $this->normalizeString('Заявка'),
 
                 ],
                 'action' => 'plan',
@@ -1455,18 +1456,34 @@ class MigrateCRMController extends Controller
                 'cases' => [
                     $this->normalizeString('Отправлено КП'),
                     $this->normalizeString('Дист. Компред'),
+                    $this->normalizeString('Компред'),
+                    $this->normalizeString('кп'),
+                    $this->normalizeString('коммерческое'),
+                    $this->normalizeString('Ком.пред'),
                 ],
                 'action' => 'act_send',
-                'eventType' => 'ev_offer_pres',
+                'eventType' => 'ev_offer',
                 'isDocumentFlow' => true
             ],
             'act_send_contract' => [
                 'cases' => [
                     $this->normalizeString('Отправлен договор'),
-                    $this->normalizeString('Подписан договор'),
-                    $this->normalizeString('договор'),
+                    $this->normalizeString('договор Отправлен'),
+                    // $this->normalizeString('договор'),
+                    // $this->normalizeString('Договор подписан')
                 ],
                 'action' => 'act_send',
+                'eventType' => 'ev_contract',
+                'isDocumentFlow' => true
+            ],
+            'act_send_contract' => [
+                'cases' => [
+                    // $this->normalizeString('Отправлен договор'),
+                    $this->normalizeString('Подписан договор'),
+                    // $this->normalizeString('договор'),
+                    $this->normalizeString('Договор подписан')
+                ],
+                'action' => 'act_sign',
                 'eventType' => 'ev_contract',
                 'isDocumentFlow' => true
             ],
@@ -1474,33 +1491,53 @@ class MigrateCRMController extends Controller
                 'cases' => [
                     $this->normalizeString('Выставлен счет'),
                     $this->normalizeString('Счет выписан'),
-                    $this->normalizeString('Счет'),
+                    // $this->normalizeString('Счет'),
+                    // $this->normalizeString('Счет оплачен'),
+                    // $this->normalizeString('оплачен Счет'),
 
                 ],
                 'action' => 'act_send',
-                'eventType' => 'ev_invoice_pres',
+                'eventType' => 'ev_invoice',
                 'isDocumentFlow' => true
             ],
-            'act_sign_contract' => [
+
+            'act_send_invoice' => [
                 'cases' => [
-                    $this->normalizeString('Договор подписан')
-                ],
-                'action' => 'act_sign',
-                'eventType' => 'ev_contract',
-                'isDocumentFlow' => true
-            ],
-            'act_pay_invoice' => [
-                'cases' => [
+                    // $this->normalizeString('Выставлен счет'),
+                    // $this->normalizeString('Счет выписан'),
+                    // $this->normalizeString('Счет'),
                     $this->normalizeString('Счет оплачен'),
                     $this->normalizeString('оплачен Счет'),
+                    $this->normalizeString('оплачен'),
+                    $this->normalizeString('оплата'),
+
                 ],
                 'action' => 'act_pay',
-                'eventType' => 'ev_invoice_pres',
+                'eventType' => 'ev_invoice',
                 'isDocumentFlow' => true
             ],
+            // 'act_sign_contract' => [
+            //     'cases' => [
+            //         $this->normalizeString('Договор подписан')
+            //     ],
+            //     'action' => 'act_sign',
+            //     'eventType' => 'ev_contract',
+            //     'isDocumentFlow' => true
+            // ],
+            // 'act_pay_invoice' => [
+            //     'cases' => [
+            //         $this->normalizeString('Счет оплачен'),
+            //         $this->normalizeString('оплачен Счет'),
+            //     ],
+            //     'action' => 'act_pay',
+            //     'eventType' => 'ev_invoice_pres',
+            //     'isDocumentFlow' => true
+            // ],
             'done_supply' => [
                 'cases' => [
-                    $this->normalizeString('Поставка')
+                    $this->normalizeString('Поставка'),
+                    $this->normalizeString('Установка'),
+
                 ],
                 'action' => 'done',
                 'eventType' => 'ev_supply',
@@ -1508,7 +1545,8 @@ class MigrateCRMController extends Controller
             ],
             'cancel' => [
                 'cases' => [
-                    $this->normalizeString('Отмена')
+                    $this->normalizeString('Отмена'),
+                    $this->normalizeString('Отказ'),
                 ],
                 'status' => 'nodone',
                 'resultStatus' => 'noresult'
@@ -1534,7 +1572,7 @@ class MigrateCRMController extends Controller
         }
         // $fullDepartment = $this->getFullDepartment();
         $fullDepartment = $this->department;
-        $userId = 13; //201 - man savchuk in rostov
+        $userId = 201; //201 - man savchuk in rostov
         $fullDepartment =  $fullDepartment['department'];
         if (!empty($fullDepartment)) {
             if (!empty($fullDepartment['allUsers'])) {
@@ -1564,12 +1602,12 @@ class MigrateCRMController extends Controller
         }
 
         if ($isDocumentFlow) {
-            BitrixListDocumentFlowService::getBatchListFlow(  //report - отчет по текущему событию
+            $commands =  BitrixListDocumentFlowService::getBatchListFlow(  //report - отчет по текущему событию
                 $this->hook,
                 $this->portalBxLists,
                 $resultEventType,
                 $event['eventType'],
-                'act_send',  // сделано, отправлено
+                $resultAction,// 'act_send',  // сделано, отправлено
                 $userId,
                 $userId,
                 $userId,

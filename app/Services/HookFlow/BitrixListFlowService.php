@@ -803,7 +803,7 @@ class BitrixListFlowService
                                 $fieldsData,
                                 $code
                             );
-                            $resultBatchCommands['set_list_item_' . $fullCode] = $command;
+                            $resultBatchCommands['set_list_item_' . $code] = $command;
                             // print_r("<br>");
                             // print_r("<resultBatchCommands bxlflowservice>");
                             // print_r("<br>");
