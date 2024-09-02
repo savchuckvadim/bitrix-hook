@@ -6,7 +6,7 @@ use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Front\EventCalling\FullEventInitController;
 use App\Http\Controllers\PortalController;
-use App\Jobs\Migrate\ColdMigrateJob;
+use App\Jobs\ColdMigrateJob;
 use App\Services\General\BitrixDepartamentService;
 use App\Services\HookFlow\BitrixListDocumentFlowService;
 use App\Services\HookFlow\BitrixListFlowService;

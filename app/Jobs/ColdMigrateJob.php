@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Migrate;
+namespace App\Jobs;
 
 use App\Services\BitrixCallingColdMigrateService;
 use App\Services\BitrixCallingColdService;
