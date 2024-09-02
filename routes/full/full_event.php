@@ -309,8 +309,32 @@ Route::prefix('full')->group(function () {
     // https://april-hook.ru/api/full/company/update?responsible={{ОП Кто назначен ответственным}}&companyId={{Компания}}
     Route::post('/company/update', function (Request $request) {
         $data = $request->all();
+        $domain = '';
+        $responsibleId = '';
+        $companyId = '';
+
+        if (!empty($data['auth'])) {
+
+            if (!empty($data['auth']['domain'])) {
+                $domain = $data['auth']['domain'];
+            }
+
+            if (!empty($data['companyId'])) {
+                $companyId = $data['companyId'];
+            }
+
+            if (!empty($data['responsible'])) {
+           
+                $partsResponsible = explode("_", $data['responsible']);
+                $responsibleId = $partsResponsible[1];
+     
+            }
+        }
         Log::channel('telegram')->error('APRIL_HOOK', [
-            'data'  =>  $data
+            'domain'  =>  $domain,
+            'responsibleId'  =>  $responsibleId,
+            'companyId'  =>  $companyId,
+
         ]);
     });
 });
