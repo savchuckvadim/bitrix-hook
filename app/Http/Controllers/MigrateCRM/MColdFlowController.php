@@ -66,8 +66,12 @@ class MColdFlowController extends Controller
             //     }
             // }
             $partsNumber = 1;
+
+
             $time_start = microtime(true);
             ini_set('memory_limit', '6048M');  // Increase memory limit if needed
+
+            set_time_limit(0);
 
             $storagePath = storage_path('app/public/result/'); // Убедитесь, что путь корректен
 
@@ -81,25 +85,42 @@ class MColdFlowController extends Controller
             $clients = json_decode($jsonData, true);  // true преобразует данные в ассоциативный массив
 
 
-       
+
             foreach ($clients as $index => $client) {
 
                 // sleep(1);
-                // if ($index < 5) {
-                    if (!empty($client)) {
-                        sleep(1);
-                        $rand = mt_rand(10000, 500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                        usleep($rand);
-                        ColdCallJob::dispatch(
-                            $client
-                        )->onQueue('high-priority');
-                    }
+                // if ($index < 100) {
+                if (!empty($client)) {
+                    
+                    sleep(2);
+                    $rand = mt_rand(10000, 1500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                    usleep($rand);
+                    ColdCallJob::dispatch(
+                        $client
+                    )->onQueue('high-priority');
+                }
                 // }
             }
 
 
 
+            $time_end = microtime(true);
 
+            // Вычисляем продолжительность выполнения
+            $execution_time = ($time_end - $time_start);
+
+            // Продолжительность в минутах и часах
+            $execution_time_minutes = $execution_time / 60;
+            $execution_time_hours = $execution_time_minutes / 60;
+            print_r("<br>");
+            print_r("Время начала: " . date('H:i:s', $time_start) . "<br>");
+            print_r("<br>");
+            print_r("Время окончания: " . date('H:i:s', $time_end) . "<br>");
+            print_r("<br>");
+            print_r("Продолжительность выполнения скрипта: " . $execution_time . " секунды.");
+
+            print_r("Продолжительность выполнения скрипта: " . $execution_time_minutes . " минут.<br>");
+            print_r("Продолжительность выполнения скрипта: " . $execution_time_hours . " часов.<br>");
 
             // Отправка пакетного запроса
             // if (!empty($commands)) {
