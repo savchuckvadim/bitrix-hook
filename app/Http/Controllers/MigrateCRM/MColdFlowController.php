@@ -63,7 +63,7 @@ class MColdFlowController extends Controller
             //         $clients = $googleData['clients'];
             //     }
             // }
-            $partsNumber = 7;
+            $partsNumber = 8;
 
 
             $time_start = microtime(true);
@@ -100,7 +100,7 @@ class MColdFlowController extends Controller
                             'isTmc' => $client['isTmc']
 
                         ];
-                        sleep(1);
+                        // sleep(1);
                         // $rand = mt_rand(10000, 100000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                         // usleep($rand);
                         ColdCallJob::dispatch(
