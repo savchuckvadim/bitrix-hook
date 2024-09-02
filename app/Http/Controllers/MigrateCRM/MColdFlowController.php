@@ -69,7 +69,7 @@ class MColdFlowController extends Controller
             $time_start = microtime(true);
             ini_set('memory_limit', '6048M');  // Increase memory limit if needed
 
-            $storagePath = storage_path('app/public/clients/result/'); // Убедитесь, что путь корректен
+            $storagePath = storage_path('app/public/result/'); // Убедитесь, что путь корректен
 
             // Сохранение каждого чанка в отдельный файл
             // foreach ($chunks as $index => $chunk) {
