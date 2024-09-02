@@ -39,10 +39,10 @@ class MColdFlowController extends Controller
         $portal = PortalController::getPortal($domain);
         $this->portal = $portal['data'];
         $this->hook = PortalController::getHook($domain);
-        $this->portalBxLists = $this->portal['bitrixLists'];
-        $this->portalBxCompany  = $this->portal['company'];
-        sleep(1);
-        $this->department  = $this->getFullDepartment();
+        // $this->portalBxLists = $this->portal['bitrixLists'];
+        // $this->portalBxCompany  = $this->portal['company'];
+        // sleep(1);
+        // $this->department  = $this->getFullDepartment();
     }
 
     public function crm()
@@ -85,7 +85,7 @@ class MColdFlowController extends Controller
             foreach ($clients as $index => $client) {
 
                 // sleep(1);
-                if ($index < 5) {
+                // if ($index < 5) {
                     if (!empty($client)) {
                         sleep(1);
                         $rand = mt_rand(10000, 500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
@@ -94,7 +94,7 @@ class MColdFlowController extends Controller
                             $client
                         )->onQueue('high-priority');
                     }
-                }
+                // }
             }
 
 
