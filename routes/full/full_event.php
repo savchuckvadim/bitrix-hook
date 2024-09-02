@@ -305,4 +305,12 @@ Route::prefix('full')->group(function () {
     });
 
     // Route::post('/contract/flow', [ReportController::class, 'eventReport']);
+
+    // https://april-hook.ru/api/full/company/update?responsible={{ОП Кто назначен ответственным}}&companyId={{Компания}}
+    Route::post('/company/update', function (Request $request) {
+        $data = $request->all();
+        Log::channel('telegram')->error('APRIL_HOOK', [
+            'data'  =>  $data
+        ]);
+    });
 });

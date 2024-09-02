@@ -29,6 +29,16 @@ Route::middleware(['rate.limit'])->group(function () {
             $request
         );
     });
+
+
+    Route::post('company/assigned', function (Request $request) {
+
+    
+        $controller = new BitrixHookController();
+        return $controller->getColdCall(
+            $request
+        );
+    });
 });
 
 

@@ -107,9 +107,9 @@ class BitrixBatchService
                 'cmd' => $batchCommands
             ]);
             $responseData = $response->json();
-
-            // print_r("eventsCommands");
-            // print_r("<br>");
+            print_r("<br>");
+            print_r($key);
+            print_r("<br>");
             // print_r($batchCommands);
             // print_r("<br>");
             // print_r($responseData);
@@ -119,6 +119,11 @@ class BitrixBatchService
                 if (isset($responseData['result']['result'])) {
                     $result[$key] = $responseData['result']['result'];
                 }
+                if (!empty($responseData['result']['result'][0])) {
+                    $result[$key] = $responseData['result']['result'][0];
+                }
+                // print_r($result[$key]);
+                // print_r("<br>");
             }
             if (!empty($responseData['result_error'])) {
                 // $result['errors'][$key] = $responseData['result_error'];

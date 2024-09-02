@@ -294,6 +294,31 @@ class BitrixGeneralService
             return $resultFields;
         }
     }
+
+    static function getEntityList($hook, $entityType, $filter = null, $select = null)
+    {
+        $resultFields = null;
+        try {
+            $methodSmart = '/crm.' . $entityType . '.get.json';
+            $url = $hook . $methodSmart;
+
+            $data = [
+                'filter' => $filter,
+
+
+            ];
+
+
+            $smartFieldsResponse = Http::get($url, $data);
+            $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: getEntity' . $entityType . ' hook: ' . $hook);
+            $resultFields = $responseData;
+
+            return $resultFields;
+        } catch (\Throwable $th) {
+            return $resultFields;
+        }
+    }
+
     static function updateEntity(
         $hook,
         $entityType,
