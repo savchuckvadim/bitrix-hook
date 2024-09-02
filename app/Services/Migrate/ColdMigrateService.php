@@ -485,15 +485,15 @@ class ColdMigrateService
             $rand = mt_rand(1000000, 2500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
             usleep($rand);
 
-            // BitrixEntityFlowService::coldflow(
-            //     $this->portal,
-            //     $this->hook,
-            //     $this->entityType,
-            //     $this->entityId,
-            //     'xo', // xo warm presentation,
-            //     'plan',  // plan done expired 
-            //     $this->entityFieldsUpdatingContent, //updting fields 
-            // );
+            BitrixEntityFlowService::coldflow(
+                $this->portal,
+                $this->hook,
+                $this->entityType,
+                $this->entityId,
+                'xo', // xo warm presentation,
+                'plan',  // plan done expired 
+                $this->entityFieldsUpdatingContent, //updting fields 
+            );
             // // if ($this->withLists) {
             // $workStatus = [
             //     'id' => 0,

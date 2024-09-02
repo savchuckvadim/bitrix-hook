@@ -481,8 +481,8 @@ class BitrixCallingColdService
                 $this->createColdTask($currentSmartId, $currentDealsIds);
             }
 
-            $rand = mt_rand(1000000, 2500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-            usleep($rand);
+            // $rand = mt_rand(1000000, 2500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            sleep(1);
 
             BitrixEntityFlowService::coldflow(
                 $this->portal,
@@ -499,28 +499,47 @@ class BitrixCallingColdService
                 'code' => "inJob",
                 'name' => "В работе"
             ];
-            BtxCreateListItemJob::dispatch(
-                $this->hook,
-                $this->bitrixLists,
-                'xo',
-                'Холодный обзвон',
-                'plan',
-                // $this->stringType,
-                $this->deadline,
-                $this->createdId,
-                $this->responsibleId,
-                $this->responsibleId,
-                $this->entityId,
-                'Холодный обзвон' . $this->name,
-                $workStatus,
-                'result',  // result noresult expired,
-                null, //$noresultReason = null,
-                null, //$failReason = null,
-                null, //$failType = null,
-                $currentDealsIds,
-                null //current base deal id for uniq pres count
 
-            )->onQueue('low-priority');
+
+
+            // TODO RETUR  LIST FLOW/
+
+
+
+
+
+            // BtxCreateListItemJob::dispatch(
+            //     $this->hook,
+            //     $this->bitrixLists,
+            //     'xo',
+            //     'Холодный обзвон',
+            //     'plan',
+            //     // $this->stringType,
+            //     $this->deadline,
+            //     $this->createdId,
+            //     $this->responsibleId,
+            //     $this->responsibleId,
+            //     $this->entityId,
+            //     'Холодный обзвон' . $this->name,
+            //     $workStatus,
+            //     'result',  // result noresult expired,
+            //     null, //$noresultReason = null,
+            //     null, //$failReason = null,
+            //     null, //$failType = null,
+            //     $currentDealsIds,
+            //     null //current base deal id for uniq pres count
+
+            // )->onQueue('low-priority');
+
+
+
+
+
+
+
+
+
+
             // BitrixListFlowService::getListsFlow(
             //     $this->hook,
             //     $this->bitrixLists,
