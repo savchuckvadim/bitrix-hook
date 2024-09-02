@@ -775,7 +775,9 @@ class BitrixCallingColdMigrateService
             '$fields'
         );
         $planDeals = $flowResult['dealIds'];
-
+        Log::channel('telegram')->error('APRIL_HOOK', [
+            'planDeals' => $planDeals
+        ]);
         // if (!empty($planDeals)) {
         //     foreach ($planDeals as $dealId) {
         //         $rand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
