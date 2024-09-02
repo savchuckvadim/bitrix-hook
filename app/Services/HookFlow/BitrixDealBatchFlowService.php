@@ -526,7 +526,12 @@ class BitrixDealBatchFlowService
         Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchResult' => $batchResult]);
 
         // Извлечение результатов
-        $results = $batchResult[0];  // Предполагаем, что структура такая, как в примере
+        $results = $batchResult;  // Предполагаем, что структура такая, как в примере
+
+        if(!empty( $batchResult['result'])){
+            $results = $batchResult['result'];
+
+        }
         foreach ($results as $key => $value) {
             $parts = explode('_', $key);
             $operation = $parts[0];  // 'update' или 'set'
