@@ -34,7 +34,7 @@ class ColdCallJob implements ShouldQueue
     {
         Log::info("Processing job from Redis queue.");
         // $rand = rand(1, 2);
-        sleep(2);
+        sleep(1);
         $urand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
         usleep($urand);
         $service = new BitrixCallingColdService($this->data);
