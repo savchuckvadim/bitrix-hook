@@ -87,7 +87,7 @@ class MColdFlowController extends Controller
             foreach ($clients as $index => $client) {
 
                 // sleep(1);
-                if ($index >= 100 && $index < 300) {
+                if ($index >= 200 && $index < 400) {
                     if (!empty($client)) {
                         $data = [
                             'domain' => $client['domain'],
