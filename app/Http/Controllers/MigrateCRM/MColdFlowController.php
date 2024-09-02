@@ -87,7 +87,7 @@ class MColdFlowController extends Controller
             foreach ($clients as $index => $client) {
 
                 // sleep(1);
-                if ($index >= 100) {
+                if ($index >= 100 && $index < 300) {
                     if (!empty($client)) {
                         $data = [
                             'domain' => $client['domain'],
@@ -100,7 +100,7 @@ class MColdFlowController extends Controller
                             'isTmc' => $client['isTmc']
 
                         ];
-                        sleep(2);
+                        sleep(1);
                         // $rand = mt_rand(10000, 100000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                         // usleep($rand);
                         ColdCallJob::dispatch(
