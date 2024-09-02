@@ -24,6 +24,8 @@ class BitrixBatchService
             // 'errors' => []
         ];
         $resultBatchCommands = [];
+        Log::channel('telegram')->info('HOOK send', ['result return' => $commands]);
+
         foreach ($batchRequests as $key => $batchCommands) {
 
             foreach ($batchCommands as $key => $value) {

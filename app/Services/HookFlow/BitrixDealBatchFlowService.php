@@ -447,6 +447,7 @@ class BitrixDealBatchFlowService
                             }
                         
                         $groupped[$dealId] = $maxProcessObject;
+            Log::channel('telegram')->info('HOOK RESULT groupped', ['groupped' => $groupped]);
 
                         // unset($process);  // Очистите ссылку после использования
 

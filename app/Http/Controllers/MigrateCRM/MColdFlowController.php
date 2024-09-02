@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Front\EventCalling\FullEventInitController;
 use App\Http\Controllers\PortalController;
 use App\Jobs\ColdCallJob;
+use App\Jobs\ColdCallMigrateJob;
 use App\Services\General\BitrixBatchService;
 use App\Services\General\BitrixDepartamentService;
 use App\Services\HookFlow\BitrixListDocumentFlowService;
@@ -89,7 +90,7 @@ class MColdFlowController extends Controller
             foreach ($clients as $index => $client) {
 
                 // sleep(1);
-                // if ($index < 100) {
+                if ($index < 100) {
                 if (!empty($client)) {
                     $data = [
                         'domain' => $client['domain'],
@@ -102,14 +103,14 @@ class MColdFlowController extends Controller
                         'isTmc' => $client['isTmc']
         
                     ];
-                    sleep(2);
+                    // sleep(2);
                     $rand = mt_rand(10000, 100000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                     usleep($rand);
-                    ColdCallJob::dispatch(
+                    ColdCallMigrateJob::dispatch(
                         $data
                     )->onQueue('high-priority');
                 }
-                // }
+                }
             }
 
 
