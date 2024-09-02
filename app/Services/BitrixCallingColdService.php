@@ -692,7 +692,7 @@ class BitrixCallingColdService
     {
 
         $rand = rand(1, 2);
-        sleep($rand);
+        sleep(1);
         $urand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
         usleep($urand);
 
@@ -719,7 +719,7 @@ class BitrixCallingColdService
                         }
                     }
                 }
-                $randomNumber = rand(1, 3);
+                $randomNumber = rand(1, 2);
 
 
 
@@ -778,8 +778,8 @@ class BitrixCallingColdService
 
         $rand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
         usleep($rand);
-        $rand = rand(1, 2); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-        usleep($rand);
+        // $rand = rand(1, 2); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        sleep(1);
 
         $flowResult =  BitrixDealFlowService::flow(
             $this->hook,

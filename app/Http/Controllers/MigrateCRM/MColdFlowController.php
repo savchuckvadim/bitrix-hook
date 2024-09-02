@@ -63,7 +63,7 @@ class MColdFlowController extends Controller
             //         $clients = $googleData['clients'];
             //     }
             // }
-            $partsNumber = 1;
+            $partsNumber = 7;
 
 
             $time_start = microtime(true);
@@ -87,7 +87,7 @@ class MColdFlowController extends Controller
             foreach ($clients as $index => $client) {
 
                 // sleep(1);
-                if ($index >= 200 && $index < 400) {
+                // if ($index >= 400) {
                     if (!empty($client)) {
                         $data = [
                             'domain' => $client['domain'],
@@ -107,7 +107,7 @@ class MColdFlowController extends Controller
                             $data
                         )->onQueue('high-priority');
                     }
-                }
+                // }
             }
 
 
