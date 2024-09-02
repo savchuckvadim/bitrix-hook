@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Migrate;
 
 use App\Services\BitrixCallingColdMigrateService;
 use App\Services\BitrixCallingColdService;
+use App\Services\Migrate\ColdMigrateService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -11,7 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class ColdCallMigrateJob implements ShouldQueue
+class ColdMigrateJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -38,7 +39,7 @@ class ColdCallMigrateJob implements ShouldQueue
         sleep($rand);
         $urand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
         usleep($urand);
-        $service = new BitrixCallingColdMigrateService($this->data);
+        $service = new ColdMigrateService($this->data);
         $reult =  $service->getCold();
     }
 }

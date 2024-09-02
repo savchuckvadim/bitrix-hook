@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Migrate;
 
 use App\Http\Controllers\APIBitrixController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\PortalController;
+use App\Services\BitrixGeneralService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;

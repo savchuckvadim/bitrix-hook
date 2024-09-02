@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Migrate;
 
 use App\Http\Controllers\APIBitrixController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\PortalController;
 use App\Jobs\BtxCreateListItemJob;
+use App\Services\BitrixGeneralService;
 use App\Services\General\BitrixDealService;
 use App\Services\General\BitrixDepartamentService;
 use App\Services\General\BitrixListService;
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use IntlDateFormatter;
 
-class BitrixCallingColdMigrateService
+class ColdMigrateService
 
 
 // на данный момент содержит методы для initial cold
