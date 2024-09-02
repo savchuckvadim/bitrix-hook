@@ -91,12 +91,22 @@ class MColdFlowController extends Controller
                 // sleep(1);
                 // if ($index < 100) {
                 if (!empty($client)) {
-                    
+                    $data = [
+                        'domain' => $client['domain'],
+                        'entityType' =>$client['entityType'],
+                        'entityId' => $client['entityId'],
+                        'responsible' => $client['responsible'],
+                        'created' => 1,
+                        'deadline' => $client['deadline'],
+                        'name' => $client['name'],
+                        'isTmc' => $client['isTmc']
+        
+                    ];
                     sleep(2);
-                    $rand = mt_rand(10000, 1500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                    $rand = mt_rand(10000, 100000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                     usleep($rand);
                     ColdCallJob::dispatch(
-                        $client
+                        $data
                     )->onQueue('high-priority');
                 }
                 // }
