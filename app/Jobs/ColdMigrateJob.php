@@ -2,8 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Services\BitrixCallingColdMigrateService;
-use App\Services\BitrixCallingColdService;
+
 use App\Services\Migrate\ColdMigrateService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
