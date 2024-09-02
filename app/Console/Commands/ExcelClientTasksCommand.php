@@ -76,7 +76,7 @@ class ExcelCommand extends Command
         $indexedEvents = $this->indexEvents($events);
         // Подготовка данных клиентов
         $clientsWithDetails = $this->prepareClientDetails($companies);
-        $chunks = array_chunk($clientsWithDetails, ceil(count($clientsWithDetails) / 1));
+        $chunks = array_chunk($clientsWithDetails, ceil(count($clientsWithDetails) / 10));
         $fileNumber = 1;
 
         foreach ($chunks as $chunk) {

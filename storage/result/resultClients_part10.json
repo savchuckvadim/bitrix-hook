@@ -1,0 +1,5562 @@
+[
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80729,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-23 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81907,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-23 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83951,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2024-10-23 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85595,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-10-23 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 86225,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-23 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 94915,
+        "responsible": 19,
+        "created": 201,
+        "deadline": "2024-10-23 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71205,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-24 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76349,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-10-24 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76913,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-24 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77323,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-10-24 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78581,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-24 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 79425,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-10-24 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80239,
+        "responsible": 207,
+        "created": 201,
+        "deadline": "2024-10-24 00:00:00",
+        "name": "прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83567,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-24 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 86355,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-24 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 86637,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-24 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 87397,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-10-24 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 94675,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-24 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71601,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-25 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73861,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2024-10-25 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 79237,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-25 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 84447,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-25 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 88709,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-25 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89973,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2024-10-25 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 93451,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-25 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80845,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-10-27 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 94319,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2024-10-27 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71297,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71443,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73219,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73695,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Клиенты ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75347,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75415,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76019,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76193,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76767,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78027,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78155,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78759,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 79271,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80073,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81517,
+        "responsible": 191,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Пред.договоренность ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82369,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 84227,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 87013,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 87311,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89011,
+        "responsible": 205,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89903,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89975,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 93269,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 93645,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-28 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72665,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-10-29 00:00:00",
+        "name": "Отказ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72755,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-10-29 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72831,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-10-29 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76135,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-10-29 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78495,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-10-29 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82395,
+        "responsible": 191,
+        "created": 201,
+        "deadline": "2024-10-29 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82793,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-10-29 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 87335,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-29 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 91823,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-10-29 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 93185,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-10-29 00:00:00",
+        "name": "Секретарь не пропускает ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 93885,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2024-10-29 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 93931,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2024-10-29 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 94111,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2024-10-29 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 94407,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-10-29 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73447,
+        "responsible": 191,
+        "created": 201,
+        "deadline": "2024-10-30 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75359,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-30 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75539,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-10-30 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78401,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-30 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78861,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-30 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81009,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-30 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82125,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-10-30 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 88669,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-10-30 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89613,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-10-30 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 91345,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-30 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 91499,
+        "responsible": 191,
+        "created": 201,
+        "deadline": "2024-10-30 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 91713,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-30 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71901,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-31 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72885,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-31 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73151,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-31 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73827,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-31 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76245,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-31 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76519,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-10-31 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76637,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-31 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77477,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-31 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77759,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-31 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77969,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-31 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80935,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-31 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82751,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-31 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85359,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-31 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89993,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-10-31 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 90013,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-10-31 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 90717,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-10-31 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 91747,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-10-31 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71485,
+        "responsible": 191,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Конкурент ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71719,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72283,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73221,
+        "responsible": 207,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74465,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75163,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Секретарь не пропускает ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75195,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75487,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76521,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77115,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77577,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77715,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78125,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78947,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 79085,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80009,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80999,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83223,
+        "responsible": 205,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Пред.договоренность ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83371,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83459,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83549,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83817,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85131,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85283,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 87399,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89261,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 90291,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 91517,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 92349,
+        "responsible": 191,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 92431,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82031,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-11-02 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75749,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-04 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78699,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-04 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80195,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-04 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80477,
+        "responsible": 191,
+        "created": 201,
+        "deadline": "2024-11-04 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81863,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-04 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85581,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-04 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89383,
+        "responsible": 33,
+        "created": 201,
+        "deadline": "2024-11-04 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 91839,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-04 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71807,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73361,
+        "responsible": 33,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73621,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73849,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75213,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75393,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75541,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76015,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76165,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77255,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77643,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78695,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78697,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80199,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81695,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82607,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83147,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83767,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83935,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 84719,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85191,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 86265,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 86805,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 86857,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 87195,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 87351,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 87385,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 91787,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 92375,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 92791,
+        "responsible": 33,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 93367,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 94211,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71731,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-06 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72173,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-06 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73501,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-06 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76631,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-06 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77353,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-06 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78609,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-06 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80927,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-06 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81289,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-11-06 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81359,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-06 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81965,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-06 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82439,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-06 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83235,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-06 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83411,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-06 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 87289,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-06 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 90377,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-06 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 94619,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-06 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71365,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-07 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71637,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2025-08-11 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77163,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-07 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77817,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-07 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78171,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-07 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78617,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-07 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80457,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-07 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81155,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-11-07 00:00:00",
+        "name": "Новое ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82087,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-07 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 84471,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-07 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 86577,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-07 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 88209,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-07 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 91249,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-07 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 93493,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-07 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 94993,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-07 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 84729,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-08 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71609,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72113,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72165,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72801,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73665,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73767,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73933,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74233,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74297,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74479,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74713,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74851,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75203,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75599,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75723,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76735,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76843,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76911,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Секретарь не пропускает ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77415,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77429,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77551,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77603,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77871,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78989,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 79199,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 79249,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80323,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80355,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81055,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82231,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82413,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82653,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82805,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83075,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83149,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83809,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83941,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83999,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85683,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 86137,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 86643,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 88043,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 88319,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 88727,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89587,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89605,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89713,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89771,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Новое ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 90343,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 94331,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Гарант\/Запрет ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 95651,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71747,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-12 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71855,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-12 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72069,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-12 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72999,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-11-12 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73607,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-12 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74707,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-12 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75427,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-12 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75949,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-11-12 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76651,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-12 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76727,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-12 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77085,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-12 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81443,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-12 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82777,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-12 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83343,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-12 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83437,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-12 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 84327,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-12 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 84631,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-12 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 86937,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-12 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 90467,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-12 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71469,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72345,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72361,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73963,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74081,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74223,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74389,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74751,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74873,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75413,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75977,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76323,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77137,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77439,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78091,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78357,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78525,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 79793,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80089,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80715,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82357,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82557,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83169,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83535,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83893,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 84891,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89139,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 92597,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 93387,
+        "responsible": 19,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 93675,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-13 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71593,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-14 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73109,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-14 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73377,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-14 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73635,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-14 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77461,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-14 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78255,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-14 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81589,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-14 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81889,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-14 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82177,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-14 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82843,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-14 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85939,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-14 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 86199,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-14 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89957,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-14 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 91487,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-14 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 94521,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-14 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76383,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-15 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78753,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-11-15 00:00:00",
+        "name": "Секретарь не пропускает ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 84537,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2024-11-15 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76293,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-11-17 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81445,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2024-11-17 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73203,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-18 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75095,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-18 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76071,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-18 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76233,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-18 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76405,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-18 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76985,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-18 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77427,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-18 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77819,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-18 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78259,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-18 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81177,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-18 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82077,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-18 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85555,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-18 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85941,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-18 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 86237,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-18 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 86569,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-18 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 86945,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-18 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89065,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-18 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89303,
+        "responsible": 191,
+        "created": 201,
+        "deadline": "2024-11-18 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 90779,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-18 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 94519,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-18 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76633,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-19 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78801,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-19 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85585,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-19 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 92653,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-19 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74783,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-20 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75843,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-20 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77225,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-11-20 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 79493,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-20 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81773,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-20 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82865,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-11-20 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85537,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2024-11-20 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 86557,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-20 00:00:00",
+        "name": "Гарант\/Запрет ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 88757,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-11-20 00:00:00",
+        "name": "Отказ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89035,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2024-11-20 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89547,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-20 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 91013,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-11-20 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 91819,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-20 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 93083,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-20 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 93837,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2024-11-20 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72141,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-21 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73213,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-21 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73401,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-21 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77401,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-21 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81133,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-21 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81479,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-11-21 00:00:00",
+        "name": "Отказ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83509,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-21 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85927,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-21 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 93301,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2024-11-21 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 94189,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-21 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74007,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-22 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 91501,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-11-22 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 94681,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-22 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 91827,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-11-23 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71699,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-11-25 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72703,
+        "responsible": 191,
+        "created": 201,
+        "deadline": "2024-11-25 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75923,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-25 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76029,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-25 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77569,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-25 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78383,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-25 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78655,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-25 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 84765,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-25 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 84817,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-25 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 94633,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-25 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 95015,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-25 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 95331,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-25 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74859,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-26 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 84783,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-11-26 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85215,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-26 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72815,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-27 00:00:00",
+        "name": "Гарант\/Запрет ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 92651,
+        "responsible": 191,
+        "created": 201,
+        "deadline": "2024-11-27 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78711,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-11-28 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80659,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-11-28 00:00:00",
+        "name": "Нет_перспектив ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 84115,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-28 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85957,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-28 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 87539,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-11-28 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 94363,
+        "responsible": 207,
+        "created": 201,
+        "deadline": "2024-11-28 00:00:00",
+        "name": "отказ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73297,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-29 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76907,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-29 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77345,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-11-29 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78205,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-29 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 79695,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2024-11-29 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80115,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-29 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85797,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-29 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 87741,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2024-11-29 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 91095,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-29 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 93571,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2024-11-29 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 93601,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2024-11-29 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 93975,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-11-29 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73139,
+        "responsible": 191,
+        "created": 201,
+        "deadline": "2024-12-01 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 88927,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-12-01 00:00:00",
+        "name": "Гарант\/Запрет ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73407,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-12-02 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73643,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-12-02 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74129,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-12-02 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76001,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-12-02 00:00:00",
+        "name": "Клиенты ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76333,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-12-02 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77235,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-12-02 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78251,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-12-02 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 79077,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-12-02 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80583,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-12-02 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82695,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-12-02 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 84269,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-12-02 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 90445,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-12-02 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 93489,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-12-02 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73469,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-12-03 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77745,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-12-03 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 79471,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-12-03 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81639,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-12-03 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75417,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-12-04 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81089,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-12-04 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83101,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-12-04 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83757,
+        "responsible": 19,
+        "created": 201,
+        "deadline": "2024-12-04 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 88857,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-12-04 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81949,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-12-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71269,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-12-09 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71449,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-12-09 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73085,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-12-09 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73801,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-12-09 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74201,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-12-09 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74311,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-12-09 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75847,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-12-09 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76615,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-12-09 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81319,
+        "responsible": 205,
+        "created": 201,
+        "deadline": "2024-12-09 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85291,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-12-09 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85691,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-12-09 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89527,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-12-09 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 95021,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-12-09 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71395,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-12-10 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89735,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-12-10 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 94777,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-12-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 94421,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2024-12-12 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 79845,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2024-12-15 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83201,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2024-12-15 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76159,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-12-16 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82377,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-12-16 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89321,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-12-16 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 92489,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2024-12-16 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75137,
+        "responsible": 207,
+        "created": 201,
+        "deadline": "2024-12-17 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 88065,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-12-17 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89983,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-12-17 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 93235,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-12-17 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 95281,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-12-17 00:00:00",
+        "name": "Гарант\/Запрет ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83245,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-12-18 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71529,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-12-19 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74667,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2024-12-19 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 84285,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2024-12-20 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71367,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-12-23 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78169,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-12-23 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81031,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-12-23 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73149,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-12-25 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75057,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2024-12-25 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85035,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2024-12-25 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 88455,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2024-12-30 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72177,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2025-01-09 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75313,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2025-01-09 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82139,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2025-01-09 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89005,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2025-01-09 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73749,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2025-01-13 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74189,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2025-01-13 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75765,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-01-13 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82035,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2025-01-13 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85979,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2025-01-13 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 87499,
+        "responsible": 195,
+        "created": 201,
+        "deadline": "2025-01-13 00:00:00",
+        "name": "Отказ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85619,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2025-01-14 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 90461,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2025-01-14 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77639,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-01-15 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80823,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2025-01-15 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 94909,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-01-15 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 87475,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2025-01-16 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 93135,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2025-01-18 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76191,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2025-01-20 00:00:00",
+        "name": "Гарант\/Запрет ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77839,
+        "responsible": 205,
+        "created": 201,
+        "deadline": "2025-01-20 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81119,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-01-20 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81609,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2025-01-20 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82161,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-01-20 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80351,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2025-01-21 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 88981,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-01-30 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73961,
+        "responsible": 33,
+        "created": 201,
+        "deadline": "2025-02-03 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74591,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-02-03 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81995,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-02-03 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83285,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-02-03 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 84583,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-02-03 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 79491,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2025-02-04 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77417,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2025-02-05 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78033,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-02-06 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78053,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-02-06 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78471,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-02-06 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78527,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-02-06 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 73355,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-02-10 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77021,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-02-10 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80463,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-02-10 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 87799,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-02-10 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77317,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2025-02-12 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89667,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-02-17 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71277,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2025-03-01 00:00:00",
+        "name": "Гарант\/Запрет ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82221,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-03-03 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78779,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-03-04 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 93027,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2025-03-04 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74135,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-03-05 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 74615,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-03-10 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81503,
+        "responsible": 193,
+        "created": 201,
+        "deadline": "2025-03-10 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76573,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2025-03-11 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 79805,
+        "responsible": 195,
+        "created": 201,
+        "deadline": "2025-03-11 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 94231,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2025-03-12 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 91705,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2025-03-14 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 79715,
+        "responsible": 191,
+        "created": 201,
+        "deadline": "2025-04-01 00:00:00",
+        "name": "Отключенные ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81947,
+        "responsible": 33,
+        "created": 201,
+        "deadline": "2025-04-02 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 81021,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2025-04-03 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77763,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2025-04-07 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72017,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2025-04-08 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 78863,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2025-04-09 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83139,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2025-04-10 00:00:00",
+        "name": "Гарант\/Запрет ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75757,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2025-04-22 00:00:00",
+        "name": "Гарант\/Запрет ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 90181,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2025-04-28 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 82447,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2025-05-13 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85947,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2025-05-13 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 79723,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2025-05-14 00:00:00",
+        "name": "Гарант\/Запрет ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 90163,
+        "responsible": 39,
+        "created": 201,
+        "deadline": "2025-05-19 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76449,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2025-06-02 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 77729,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2025-06-02 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72433,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2025-06-03 00:00:00",
+        "name": "Гарант\/Запрет ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 92585,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2025-06-03 00:00:00",
+        "name": "Гарант\/Запрет ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72147,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2025-06-04 00:00:00",
+        "name": "Гарант\/Запрет ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 79223,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2025-06-10 00:00:00",
+        "name": "Гарант\/Запрет ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83257,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2025-06-10 00:00:00",
+        "name": "Тлф. Переговоры ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 75283,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2025-06-11 00:00:00",
+        "name": "Гарант\/Запрет ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 80485,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2025-06-11 00:00:00",
+        "name": "Гарант\/Запрет ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 87313,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2025-06-11 00:00:00",
+        "name": "Гарант\/Запрет ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89283,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2025-06-11 00:00:00",
+        "name": "Гарант\/Запрет ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85273,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2025-06-16 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72893,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2025-06-17 00:00:00",
+        "name": "Гарант\/Запрет ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 89821,
+        "responsible": 201,
+        "created": 201,
+        "deadline": "2025-07-01 00:00:00",
+        "name": "Отказ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 91513,
+        "responsible": 139,
+        "created": 201,
+        "deadline": "2025-07-01 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 71637,
+        "responsible": 45,
+        "created": 201,
+        "deadline": "2025-08-11 00:00:00",
+        "name": "Тлф. Заявка ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 76299,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2025-08-17 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85249,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2025-08-17 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83795,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2025-08-22 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 85559,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2025-09-20 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 83815,
+        "responsible": 197,
+        "created": 201,
+        "deadline": "2025-11-20 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    },
+    {
+        "domain": "gsr.bitrix24.ru",
+        "entityType": "company",
+        "entityId": 72159,
+        "responsible": 35,
+        "created": 201,
+        "deadline": "2025-12-08 00:00:00",
+        "name": "Прозвон ТМЦ ",
+        "isTmc": "N"
+    }
+]

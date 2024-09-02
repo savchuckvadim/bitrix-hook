@@ -6,7 +6,7 @@ use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Front\EventCalling\FullEventInitController;
 use App\Http\Controllers\PortalController;
-
+use App\Jobs\ColdCallJob;
 use App\Services\General\BitrixBatchService;
 use App\Services\General\BitrixDepartamentService;
 use App\Services\HookFlow\BitrixListDocumentFlowService;
@@ -17,7 +17,7 @@ use Halaxa\JsonMachine\JsonMachine;
 use JsonMachine\Items;
 use JsonMachine\JsonDecoder\ExtJsonDecoder;
 
-class MColdController extends Controller
+class MColdFlowController extends Controller
 {
 
     protected $token;
@@ -65,347 +65,41 @@ class MColdController extends Controller
             //         $clients = $googleData['clients'];
             //     }
             // }
-            $partsNumber = 10;
+            $partsNumber = 1;
             $time_start = microtime(true);
             ini_set('memory_limit', '6048M');  // Increase memory limit if needed
 
-            set_time_limit(0);
-            $jsonFilePath = storage_path('app/public/clients/clients_events_data_' . $partsNumber . '.json');
+            $storagePath = storage_path('app/public/clients/result/'); // Убедитесь, что путь корректен
 
+            // Сохранение каждого чанка в отдельный файл
+            // foreach ($chunks as $index => $chunk) {
+            $jsonFilePath = $storagePath . 'resultClients_part' . $partsNumber . '.json';
             // Чтение данных из файла
             $jsonData = file_get_contents($jsonFilePath);
 
             // Преобразование JSON в массив
-            $data = json_decode($jsonData, true);  // true преобразует данные в ассоциативный массив
+            $clients = json_decode($jsonData, true);  // true преобразует данные в ассоциативный массив
 
 
-            $decoder = new ExtJsonDecoder(true);  // true преобразует объекты JSON в ассоциативные массивы
+       
+            foreach ($clients as $index => $client) {
 
-            $clients = Items::fromFile($jsonFilePath, ['pointer' => '/clients', 'decoder' => $decoder]);
-
-
-            // if (!empty($data['clients'])) {
-            //     $clients = $data['clients'];
-
-            $batchService = new BitrixBatchService($this->hook);
-            $commands = [];
-            $eventsCommands = [];
-            foreach ($clients as $index => $clientData) {
-                $client = $clientData['client'];
                 // sleep(1);
-                if (!empty($client)) {
-
-                    // $rand = mt_rand(100000, 300000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                    // usleep($rand);
-
-
-                    // if ($index < 30) {
-
-
-
-
-                    $newCompanyId = null;
-                    // $fullDepartment = $this->getFullDepartment();
-                    $fullDepartment = $this->department;
-
-                    $userId = 201; //201 - man savchuk in rostov
-                    $fullDepartment =  $fullDepartment['department'];
-                    // print_r('<br>');
-                    // print_r($fullDepartment);
-                    // print_r('<br>');
-                    if (!empty($fullDepartment)) {
-                        // print_r('<br>');
-                        // print_r($fullDepartment['allUsers']);
-                        // print_r('<br>');
-                        if (!empty($fullDepartment['allUsers'])) {
-                            foreach ($fullDepartment['allUsers'] as $user) {
-                                $responsible = $client['assigned'];
-
-                                $parts = explode(' ', $responsible);
-                                $lastName = mb_strtolower(trim($parts[0])); // Приводим к нижнему регистру
-                                $userLastName = mb_strtolower(trim($user['LAST_NAME'])); // Приводим фамилию пользователя к нижнему регистру
-
-                                // print_r('<br>');
-                                // print_r($responsible);
-                                // print_r('<br>');
-                                // print_r($lastName);
-                                // print_r('<br>');
-
-
-                                if ($lastName === $userLastName) {
-                                    $userId = $user['ID'];
-                                    break; // Прекратить перебор после нахождения пользователя
-
-                                } else {
-                                    // print_r('<br>');
-                                    // print_r($responsible);
-                                    // print_r('<br>');
-                                    // print_r($lastName);
-                                    // print_r('<br>');
-                                }
-                            }
-                        }
+                if ($index < 5) {
+                    if (!empty($client)) {
+                        sleep(1);
+                        $rand = mt_rand(10000, 500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                        usleep($rand);
+                        ColdCallJob::dispatch(
+                            $client
+                        )->onQueue('high-priority');
                     }
-                    // $perspekt = $this->getCompanyPerspect($client['perspect']);
-                    // $concurent = $this->getCompanyConcurent($client['concurent']);
-                    // $statusk = $this->getCompanyStatus($client['statusk']);
-                    // $category = $this->getCompanyCategory($client['category']);
-                    // $prognoz = $this->getCompanyPrognoz($client['prognoz']);
-
-                    // $contacts = $this->getContactsField($clientData['contacts']);
-                    // // $history = $this->getHistoryField($client['events']);
-
-
-                    // $workStatus = $this->getCompanyWorkStatust($client['perspect']);
-                    // $workResult = $this->getCompanyItemFromName($client['perspect'], 'op_work_result');
-                    // $source = $this->getCompanyItemFromName($client['source'], 'op_source_select');
-                    // $phonesArray = $this->getPhonesField($clientData['contacts']);
-
-                    // $isAutoCall = 'N';
-                    // if (!empty($client['auto'])) {
-                    //     if (!empty($client['auto'] !== 'NULL') && $client['auto'] !== 'null') {
-                    //         $isAutoCall = 'Y';
-                    //     }
-                    // }
-                    // print_r('<br>');
-                    // print_r($client['auto']);
-                    // print_r($isAutoCall);
-                    // print_r('<br>');
-                    $newClientData = [
-
-                        'filter' => [
-                            'UF_CRM_OP_SMART_LID' => $client['id'], // сюда записывать id из старой crm
-                        ],
-                        'select' => ['ID', 'TITLE', 'UF_CRM_OP_SMART_LID'] // Выборка полей, которые нужно получить
-
-
-                    ];
-
-
-                    /**
-                     * SINGLE REQUEST
-                     */
-                    // sleep(1);
-                    // $rand = mt_rand(300000, 700000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                    // usleep($rand);
-                    // $newCompanyId = BitrixGeneralService::setEntity(
-                    //     $this->hook,
-                    //     'company',
-                    //     $newClientData
-                    // );
-
-
-                    /**
-                     * BATCH
-                     */
-                    $batchData = [
-                        'FIELDS' => $newClientData
-                    ];
-
-                    $commands[$client['id']] = 'crm.company.list?' . http_build_query($newClientData);
-                    // print_r('<br>');
-                    // print_r('get_client_' . $index . ': ' . $commands['get_client_' . $client['id']]);
-
-                    /**
-                     * LIST FLOW
-                     */
-
-                    // $rand = mt_rand(300000, 1900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                    // usleep($rand);
-                    // if (!empty($newCompanyId) && !empty($clientData['events'])) {
-
-                    //     foreach ($clientData['events'] as $garusEvent) {
-
-                    //         $rand = mt_rand(100000, 300000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                    //         usleep($rand);
-                    //         $this->getListFlow($garusEvent, $newCompanyId, $userId);
-                    //     }
-                    // }
-                    // }
-
-
-                    // }
                 }
             }
 
 
-            if (!empty($commands)) {
-                $results = $batchService->sendGeneralBatchRequest($commands);
-                // print_r("<br> newCompanyIds");
-                // print_r($results);
-                $newCompanyIds = [];
-                $clients = Items::fromFile($jsonFilePath, ['pointer' => '/clients', 'decoder' => $decoder]);
-                $resultClients = [];
-                foreach ($results as $batchKey => $batchResults) {
-                    if (isset($batchResults)) {
-                        foreach ($batchResults as $key => $result) {
-                            // if (preg_match('/add_client_(.+)$/', $key, $matches)) {
-                            // $oldClientId = $matches[1];
-                            $resultClient = null;
-                            // print_r(' KEY      ');
-                            // print_r($key);
-                            // print_r("<br>");
-                            if (!empty($result)) {
-                                if (!empty($result[0])) {
-                                    // if (!empty($result[0][0])) {
-                                    $newCompanyIds[$key] = $result[0];
-                                    foreach ($clients as $index => $clientData) {
-                                        if ($clientData['client']['id'] ===  $result[0]['UF_CRM_OP_SMART_LID']) {
-                                            // print_r(' KEY      ');
-                                            // print_r($clientData['client']);
-                                            // print_r("<br>");
-                                            // print_r($result[0]);
-                                            // print_r("<br>");
-                                            $fullDepartment = $this->department;
-                                            $userId = 201; //201 - man savchuk in rostov
-                                            $fullDepartment =  $fullDepartment['department'];
-                                            if (!empty($fullDepartment)) {
-                                                if (!empty($fullDepartment['allUsers'])) {
-
-                                                    foreach ($fullDepartment['allUsers'] as $user) {
-
-                                                        $responsible = $clientData['client']['assigned'];
-
-                                                        $parts = explode(' ', $responsible);
-                                                        $lastName = mb_strtolower(trim($parts[0])); // Приводим к нижнему регистру
-                                                        $userLastName = mb_strtolower(trim($user['LAST_NAME'])); // Приводим фамилию пользователя к нижнему регистру
 
 
-                                                        if ($lastName === $userLastName) {
-                                                            $userId = $user['ID'];
-                                                            break; // Прекратить перебор после нахождения пользователя
-
-                                                        } else {
-                                                            // print_r('<br>');
-                                                            // print_r($responsible);
-                                                            // print_r('<br>');
-                                                            // print_r($lastName);
-                                                            // print_r('<br>');
-                                                        }
-                                                    }
-                                                }
-                                            }
-
-                                            $resultClient = [
-                                                'domain' => $this->domain,
-                                                'entityType' => 'company',
-                                                'entityId' => (int)$result[0]['ID'],
-                                                'responsible' => (int)$userId,
-                                                'created' => 201,
-                                                'deadline' => $clientData['client']['deadline'],
-                                                'name' => $clientData['client']['taskName'],
-                                                'isTmc' => 'N',
-
-
-                                                // 'companyId' => $result[0]['ID'],
-
-
-                                                // 'bxClient' => $result[0],
-                                                // 'garusClient' => [
-                                                //     'deadline' => $clientData['deadline'],
-
-                                                // ]
-                                            ];
-                                            array_push($resultClients, $resultClient);
-                                        }
-
-                                        $companyId = $newCompanyIds[$clientData['client']['id']] ?? null;
-                                    }
-                                    // }
-                                }
-                            }
-                            // }
-                        }
-                    }
-                }
-                print_r("<br> resultClients");
-                print_r($resultClients);
-
-
-
-                // // $eventsCommands = [];
-                // foreach ($clients as $index => $clientData) {
-                //     // if ($index < 1000) {
-
-                //     $companyId = $newCompanyIds[$clientData['client']['id']] ?? null;
-
-                //     if (!empty($companyId) && !empty($clientData['events'])) {
-                //         print_r("<br> companyId    _  ");
-                //         print_r($companyId);
-
-
-                //         // print_r("eventsCommands");
-                //         // print_r("<br>");
-                //         // print_r($eventsCommands);
-
-                //         print_r($clientData['client']['id']);
-                //     }
-                //     // }
-                // }
-
-                // // if (!empty($eventsCommands)) {
-                // //     // $eventResults = $batchService->sendGeneralBatchRequest($eventsCommands);
-                // // }
-                // print_r("<br>");
-                // print_r("set list item");
-                // print_r("<br>");
-
-                // $resultjsonFilePath = storage_path('app/public/result/resultClients.json');
-                // $chunks = array_chunk($resultClients, ceil(count($resultClients) / 10));
-
-                // Папка для сохранения файлов
-                $storagePath = storage_path('app/public/clients/result/'); // Убедитесь, что путь корректен
-
-                // Сохранение каждого чанка в отдельный файл
-                // foreach ($chunks as $index => $chunk) {
-                $chunkJsonData = json_encode($resultClients, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-                $chunkFilePath = $storagePath . 'resultClients_part' . $partsNumber . '.json';
-                file_put_contents($chunkFilePath, $chunkJsonData);
-                echo "Часть " . ($index + 1) . " сохранена в файл: " . $chunkFilePath . "<br>";
-                // }
-
-                // $jsonFilePath = storage_path('app/public/clients/clients_events_data_' . $partsNumber . '.json');
-
-                // Чтение данных из файла
-                $jsonData = file_get_contents($chunkFilePath);
-
-                // Преобразование JSON в массив
-                $data = json_decode($jsonData, true);  // true преобразует данные в ассоциативный массив
-
-
-                if (!empty($data['clients'])) {
-                    $clientsCount = count($data['clients']);
-                    $this->info('CHUNK: ' . $partsNumber . '  ClientsCount : ' . $clientsCount);
-                }
-                // Тут ваш код...
-
-                // Записываем время окончания выполнения скрипта
-                $time_end = microtime(true);
-
-                // Вычисляем продолжительность выполнения
-                $execution_time = ($time_end - $time_start);
-
-                // Продолжительность в минутах и часах
-                $execution_time_minutes = $execution_time / 60;
-                $execution_time_hours = $execution_time_minutes / 60;
-                // Выводим время начала, окончания и продолжительность выполнения
-                print_r("<br>");
-                print_r("Время начала: " . date('H:i:s', $time_start) . "<br>");
-                print_r("<br>");
-                print_r("Время окончания: " . date('H:i:s', $time_end) . "<br>");
-                print_r("<br>");
-                print_r("Продолжительность выполнения скрипта: " . $execution_time . " секунды.");
-
-                print_r("Продолжительность выполнения скрипта: " . $execution_time_minutes . " минут.<br>");
-                print_r("Продолжительность выполнения скрипта: " . $execution_time_hours . " часов.<br>");
-                // $eventResults = null;
-                // if (!empty($eventsCommands)) {
-                //     $eventResults = $batchService->sendGeneralBatchRequest($eventsCommands);
-                // }
-                // print_r("set list item");
-                // print_r("<br>");
-                //     // Обработка результатов пакетного запроса
-            }
 
             // Отправка пакетного запроса
             // if (!empty($commands)) {
