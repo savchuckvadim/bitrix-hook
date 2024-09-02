@@ -8,6 +8,7 @@ use App\Http\Controllers\Front\Konstructor\ContractController;
 use App\Http\Controllers\Front\ReportKPI\ReportKPIController;
 use App\Http\Controllers\PortalController;
 use App\Jobs\EventJob;
+use App\Services\BitrixGeneralService;
 use App\Services\FullEventReport\EventDocumentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -324,10 +325,9 @@ Route::prefix('full')->group(function () {
             }
 
             if (!empty($data['responsible'])) {
-           
+
                 $partsResponsible = explode("_", $data['responsible']);
                 $responsibleId = $partsResponsible[1];
-     
             }
         }
         Log::channel('telegram')->error('APRIL_HOOK', [
@@ -336,5 +336,13 @@ Route::prefix('full')->group(function () {
             'companyId'  =>  $companyId,
 
         ]);
+        if (!empty($domain) && $responsibleId && $companyId) {
+            $hook = PortalController::getHook($domain);
+            BitrixGeneralService::updateCompany(
+                $hook,
+                $companyId,
+                ["ASSIGNED_BY_ID" => $responsibleId]
+            );
+        }
     });
 });
