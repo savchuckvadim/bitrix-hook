@@ -509,30 +509,30 @@ class BitrixCallingColdService
 
 
 
+            sleep(3);
 
+            BtxCreateListItemJob::dispatch(
+                $this->hook,
+                $this->bitrixLists,
+                'xo',
+                'Холодный обзвон',
+                'plan',
+                // $this->stringType,
+                $this->deadline,
+                $this->createdId,
+                $this->responsibleId,
+                $this->responsibleId,
+                $this->entityId,
+                'Холодный обзвон' . $this->name,
+                $workStatus,
+                'result',  // result noresult expired,
+                null, //$noresultReason = null,
+                null, //$failReason = null,
+                null, //$failType = null,
+                $currentDealsIds,
+                null //current base deal id for uniq pres count
 
-            // BtxCreateListItemJob::dispatch(
-            //     $this->hook,
-            //     $this->bitrixLists,
-            //     'xo',
-            //     'Холодный обзвон',
-            //     'plan',
-            //     // $this->stringType,
-            //     $this->deadline,
-            //     $this->createdId,
-            //     $this->responsibleId,
-            //     $this->responsibleId,
-            //     $this->entityId,
-            //     'Холодный обзвон' . $this->name,
-            //     $workStatus,
-            //     'result',  // result noresult expired,
-            //     null, //$noresultReason = null,
-            //     null, //$failReason = null,
-            //     null, //$failType = null,
-            //     $currentDealsIds,
-            //     null //current base deal id for uniq pres count
-
-            // )->onQueue('low-priority');
+            )->onQueue('low-priority');
 
 
 
