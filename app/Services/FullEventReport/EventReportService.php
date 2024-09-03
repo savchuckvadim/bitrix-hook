@@ -1780,7 +1780,9 @@ class EventReportService
             $planDeals = $flowResult['dealIds'];
             $newPresDeal = $flowResult['newPresDeal'];
 
-
+            Log::channel('telegram')->info('HOOK', [
+                '$this->currentTMCDeal' => $this->currentTMCDeal
+            ]);
 
             if (!empty($this->currentTMCDeal) && $this->currentPlanEventType == 'presentation') {
                 BitrixDealFlowService::tmcPresentationRelation(
@@ -2199,7 +2201,7 @@ class EventReportService
 
 
 
-           
+
             $batchService =  new BitrixBatchService($this->hook);
             $results = $batchService->sendFlowBatchRequest($batchCommands);
             Log::info('HOOK BATCH', ['results' => $results]);
