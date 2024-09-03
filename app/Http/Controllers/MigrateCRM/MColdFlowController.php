@@ -63,7 +63,7 @@ class MColdFlowController extends Controller
             //         $clients = $googleData['clients'];
             //     }
             // }
-            $partsNumber = 5;
+            $partsNumber = 10;
 
 
             $time_start = microtime(true);
