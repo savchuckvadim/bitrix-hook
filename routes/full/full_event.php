@@ -313,15 +313,17 @@ Route::prefix('full')->group(function () {
         $domain = '';
         $responsibleId = '';
         $companyId = '';
-        Log::channel('telegram')->error('APRIL_HOOK', [
-            'data'  =>  $data,
-        ]);
+        // Log::channel('telegram')->error('APRIL_HOOK', [
+        //     'data'  =>  $data,
+        // ]);
         if (!empty($data['auth'])) {
 
             if (!empty($data['auth']['domain'])) {
                 $domain = $data['auth']['domain'];
             }
-
+            Log::channel('telegram')->error('APRIL_HOOK', [
+                'auth'  =>  $data['auth'],
+            ]);
             if (!empty($data['companyId'])) {
                 $companyId = $data['companyId'];
             }
