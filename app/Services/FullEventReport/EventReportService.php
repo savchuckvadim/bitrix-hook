@@ -558,6 +558,9 @@ class EventReportService
         if (isset($sessionData['tmcDeal'])) {
             $this->currentTMCDeal = $sessionData['tmcDeal'];
         }
+        Log::info('HOOK TMC SESSION GET', ['
+        $this->currentTMCDeal' => $this->currentTMCDeal]);
+        Log::channel('telegram')->info('HOOK TMC SESSION GET', ['sessionData' => $this->currentTMCDeal]);
 
         if (!empty($portal['smarts'])) {
             // foreach ($portal['smarts'] as $smart) {

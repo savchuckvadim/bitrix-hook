@@ -299,6 +299,7 @@ class ReportController extends Controller
                     'TITLE',
                     'UF_CRM_PRES_COUNT',
                     'CATEGORY_ID',
+                    'ASSIGNED_BY_ID',
                     // 'COMPANY_ID',
                     'STAGE_ID',
                     // 'XO_NAME',
