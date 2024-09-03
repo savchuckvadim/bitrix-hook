@@ -394,7 +394,13 @@ class BitrixDealBatchFlowService
                         $stageKey = 0;
                         foreach ($processes as $process) {
 
-                            $resultProcess = [];
+                            $resultProcess = [
+                                'dealId' => $process['dealId'],
+                                'deal' => $process['deal'],
+                                'targetStage' => $process['targetStage'],
+                                'isNeedUpdate' => $process['isNeedUpdate'],
+                                'stageKey' => ''
+                            ];
                             // Log::channel('telegram')->info('HOOK processesss', ['process' => $process]);
 
                             // 'command' => $batchCommand,
@@ -425,29 +431,29 @@ class BitrixDealBatchFlowService
 
 
                                     if ($stageBitrixId === $process['deal']['STAGE_ID']) {
-                                        $process['stageKey'] = $stageKey;
+                                        $resultProcess['stageKey'] = $stageKey;
                                         $isCurrentSearched = true;
                                         Log::channel('telegram')->info('HOOK isCurrentSearched', ['process stage' => $stage['bitrixId'], 'isCurrentSearched' => $isCurrentSearched]);
                                     }
                                 }
                             }
-                            $process['isNeedUpdate'] = $isProcessNeedUpdate;
-                            $resultProcesses[] = $process;
+                            $resultProcess['isNeedUpdate'] = $isProcessNeedUpdate;
+                            $resultProcesses[] = $resultProcess;
                         }
 
-                 
-                            $maxProcessObject = null;
 
-                            // Проходим по массиву объектов
-                            foreach ($resultProcesses as $resultProcess) {
-                                // Если maxObject ещё не установлен или текущее значение stageKey больше
-                                if ($maxProcessObject === null || $resultProcess['stageKey'] > $maxProcessObject['stageKey']) {
-                                    $maxProcessObject = $resultProcess;
-                                }
+                        $maxProcessObject = null;
+
+                        // Проходим по массиву объектов
+                        foreach ($resultProcesses as $resultProcess) {
+                            // Если maxObject ещё не установлен или текущее значение stageKey больше
+                            if ($maxProcessObject === null || $resultProcess['stageKey'] > $maxProcessObject['stageKey']) {
+                                $maxProcessObject = $resultProcess;
                             }
-                        
+                        }
+
                         $groupped[$dealId] = $maxProcessObject;
-            Log::channel('telegram')->info('HOOK RESULT groupped', ['groupped' => $groupped]);
+                        Log::channel('telegram')->info('HOOK RESULT groupped', ['groupped' => $groupped]);
 
                         // unset($process);  // Очистите ссылку после использования
 
@@ -529,9 +535,8 @@ class BitrixDealBatchFlowService
         // Извлечение результатов
         $results = $batchResult;  // Предполагаем, что структура такая, как в примере
 
-        if(!empty( $batchResult['result'])){
+        if (!empty($batchResult['result'])) {
             $results = $batchResult['result'];
-
         }
         foreach ($results as $key => $value) {
             $parts = explode('_', $key);

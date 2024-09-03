@@ -313,7 +313,9 @@ Route::prefix('full')->group(function () {
         $domain = '';
         $responsibleId = '';
         $companyId = '';
-
+        Log::channel('telegram')->error('APRIL_HOOK', [
+            'data'  =>  $data,
+        ]);
         if (!empty($data['auth'])) {
 
             if (!empty($data['auth']['domain'])) {

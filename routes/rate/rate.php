@@ -31,14 +31,14 @@ Route::middleware(['rate.limit'])->group(function () {
     });
 
 
-    Route::post('company/assigned', function (Request $request) {
+    // Route::post('company/assigned', function (Request $request) {
 
     
-        $controller = new BitrixHookController();
-        return $controller->getColdCall(
-            $request
-        );
-    });
+    //     $controller = new BitrixHookController();
+    //     return $controller->getColdCall(
+    //         $request
+    //     );
+    // });
 });
 
 
