@@ -341,7 +341,7 @@ class ReportController extends Controller
                     'UF_CRM_TO_BASE_SALES',
                     'UF_CRM_TO_XO_SALES',
                     'UF_CRM_TO_PRESENTATION_SALES',
-                    'TO_BASE_TMC',
+                    'UF_CRM_TO_BASE_TMC',
                     'TO_PRESENTATION_TMC',
                     'TO_BASE_SERVICE',
                     'UF_CRM_OP_CURRENT_STATUS',
@@ -694,7 +694,18 @@ class ReportController extends Controller
                     }
                 }
 
+                if (empty($currentTMCDeal) && !empty($currentPresentationDeal) && !empty($allTMCDeals)) {
 
+                    if (!empty($currentPresentationDeal['ID'])) {
+                        foreach ($allTMCDeals as $key => $tmcDeal) {
+                            if (!empty($tmcDeal['UF_CRM_TO_PRESENTATION_SALES'])) {
+                                if ($tmcDeal['UF_CRM_TO_PRESENTATION_SALES'] === $currentPresentationDeal['ID']) {
+                                    $currentTMCDeal = $tmcDeal;
+                                }
+                            }
+                        }
+                    }
+                }
 
                 if (!empty($currentBaseDeal) && !empty($currentCompany)) {
 
