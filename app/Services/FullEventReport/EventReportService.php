@@ -558,9 +558,6 @@ class EventReportService
         if (isset($sessionData['tmcDeal'])) {
             $this->currentTMCDeal = $sessionData['tmcDeal'];
         }
-        Log::info('HOOK TMC SESSION GET', ['
-        $this->currentTMCDeal' => $this->currentTMCDeal]);
-        Log::channel('telegram')->info('HOOK TMC SESSION GET', ['sessionData' => $this->currentTMCDeal]);
 
         if (!empty($portal['smarts'])) {
             // foreach ($portal['smarts'] as $smart) {
@@ -1694,25 +1691,47 @@ class EventReportService
         $reportDeals = $flowResult['dealIds'];
 
 
-        if (!empty($this->currentTMCDeal) && $this->resultStatus === 'result' && $this->currentReportEventType === 'presentation') {
+        if (!empty($this->currentTMCDeal) && $this->currentReportEventType === 'presentation') {
 
-            BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
-                $this->hook,
-                [$this->currentTMCDeal],
-                $this->portalDealData,
-                'tmc',
-                $this->entityType,
-                $this->entityId,
-                $this->currentReportEventType, // xo warm presentation, 
-                $this->currentReportEventName,
-                $this->currentPlanEventName,
-                'done', //$currentReportStatus,  // plan done expired fail success
-                $this->planResponsibleId,
-                $this->isResult,
-                '$fields',
-                $this->relationSalePresDeal
-            );
-            //обновляет сделку тмц в успех если есть tmc deal и если през состоялась
+            if (!$this->resultStatus === 'result') {
+
+                BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
+                    $this->hook,
+                    [$this->currentTMCDeal],
+                    $this->portalDealData,
+                    'tmc',
+                    $this->entityType,
+                    $this->entityId,
+                    $this->currentReportEventType, // xo warm presentation, 
+                    $this->currentReportEventName,
+                    $this->currentPlanEventName,
+                    'done', //$currentReportStatus,  // plan done expired fail success
+                    $this->planResponsibleId,
+                    $this->isResult,
+                    '$fields',
+                    $this->relationSalePresDeal
+                );
+                //обновляет сделку тмц в успех если есть tmc deal и если през состоялась
+            } else    if ($this->isFail) {
+
+                BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
+                    $this->hook,
+                    [$this->currentTMCDeal],
+                    $this->portalDealData,
+                    'tmc',
+                    $this->entityType,
+                    $this->entityId,
+                    $this->currentReportEventType, // xo warm presentation, 
+                    $this->currentReportEventName,
+                    $this->currentPlanEventName,
+                    'fail', //$currentReportStatus,  // plan done expired fail success
+                    $this->planResponsibleId,
+                    $this->isResult,
+                    '$fields',
+                    $this->relationSalePresDeal
+                );
+                //обновляет сделку тмц в успех если есть tmc deal и если през состоялась
+            }
         }
 
         //todo plan flow

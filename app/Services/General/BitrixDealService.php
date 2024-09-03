@@ -466,6 +466,9 @@ class BitrixDealService
                 if ($eventAction == 'done' && $eventType == 'presentation') {
                     $stageSuphicks = 'success';
                 }
+                if ($eventAction == 'fail' && $eventType == 'presentation') {
+                    $stageSuphicks = 'noresult';
+                }
             }
         }
         if ($eventType === 'document') {
