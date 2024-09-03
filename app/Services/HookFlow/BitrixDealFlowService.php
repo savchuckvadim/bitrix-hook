@@ -117,7 +117,7 @@ class BitrixDealFlowService
                     "COMPANY_ID" => $entityId,
                     'ASSIGNED_BY_ID' => $responsibleId
                 ];
-                if ($currentCategoryData['code'] === 'tmc_base' && $eventType === 'presentation' && $eventAction === 'done') {
+                if ($currentCategoryData['code'] === 'tmc_base' && $eventType === 'presentation' && ($eventAction === 'done' || $eventAction === 'fail')) {
                     //если данная перебираемая сделка - тмц , при этом событие - сделана презентация
                     //значит у презернтации была привязана тмц сделка и это она - надо у нее не менять ответственного а толкько закрыть - 
                     // през по заявке состоялась
