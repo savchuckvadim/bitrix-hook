@@ -11,7 +11,7 @@ use App\Http\Controllers\PortalController;
 use App\Services\General\BitrixBatchService;
 use App\Services\General\BitrixListService;
 use App\Services\HookFlow\BitrixEntityFlowService;
-
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -176,11 +176,26 @@ class ReportKPIController extends Controller
             // $actionFieldId = $request['filters']['actionFieldId'];
             // $currentActionsData = $request['filters']['currentActions'];
             // $dateFieldId = $request['filters']['dateFieldId'];
-            $dateFrom = $request['filters']['dateFrom'];
-            $dateTo = $request['filters']['dateTo'];
+            $dateFromInitial = $request['filters']['dateFrom'];
+            $dateToInitial = $request['filters']['dateTo'];
 
-            $dateFieldForHookFrom = ">=DATE_CREATE";
-            $dateFieldForHookTo = "<=DATE_CREATE";
+            // Создаем объект DateTime для начальной даты
+            $dateFromObj = new DateTime($dateFromInitial);
+            $dateToObj = new DateTime($dateToInitial);
+
+            // Отнимаем один день от начальной даты (для фильтра "больше")
+            $dateFromObj->modify('-1 day');
+
+            // Прибавляем один день к конечной дате (для фильтра "меньше")
+            $dateToObj->modify('+1 day');
+
+            // Форматируем дату обратно в строку формата Y-m-d
+            $dateFrom = $dateFromObj->format('Y-m-d');
+            $dateTo = $dateToObj->format('Y-m-d');
+
+
+            // $dateFieldForHookFrom = ">=DATE_CREATE";
+            // $dateFieldForHookTo = "<=DATE_CREATE";
             // $currentActions = [];
             // $lists = [];
 
@@ -227,11 +242,11 @@ class ReportKPIController extends Controller
                     if ($plField['code'] === 'sales_kpi_event_date') {
                         $eventDateField = $plField;
                         $eventDateFieldId = $eventDateField['bitrixCamelId']; //like PROPERTY_2119 
-                        // $dateFieldForHookFrom = ">=" . $eventDateFieldId;
-                        // $dateFieldForHookTo = "<=" . $eventDateFieldId;
+                        $dateFieldForHookFrom = ">" . $eventDateFieldId;
+                        $dateFieldForHookTo = "<" . $eventDateFieldId;
 
-                        $dateFieldForHookFrom =  $eventDateFieldId;
-                        $dateFieldForHookTo =  $eventDateFieldId;
+                        // $dateFieldForHookFrom =  $eventDateFieldId;
+                        // $dateFieldForHookTo =  $eventDateFieldId;
                     }
                 }
             }
@@ -312,7 +327,7 @@ class ReportKPIController extends Controller
                                     . $listId
                                     . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId"
                                     . $callingActionTypeFilter
-                                    . "&filter[$dateFieldForHookFrom][>=]=$dateFrom&filter[$dateFieldForHookTo][<=]=$dateTo";
+                                    . "&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
                             }
                         }
                     }
