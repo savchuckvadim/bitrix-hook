@@ -176,24 +176,24 @@ class ReportKPIController extends Controller
             // $actionFieldId = $request['filters']['actionFieldId'];
             // $currentActionsData = $request['filters']['currentActions'];
             // $dateFieldId = $request['filters']['dateFieldId'];
-            $dateFromInitial = $request['filters']['dateFrom'];
-            $dateToInitial = $request['filters']['dateTo'];
+            $dateFrom = $request['filters']['dateFrom'];
+            $dateTo = $request['filters']['dateTo'];
 
             // Создаем объект DateTime для начальной даты
-            $dateFromObj = DateTime::createFromFormat('d.m.Y', $dateFromInitial);
-            $dateToObj = DateTime::createFromFormat('d.m.Y', $dateToInitial);
+            // $dateFromObj = DateTime::createFromFormat('d.m.Y', $dateFromInitial);
+            // $dateToObj = DateTime::createFromFormat('d.m.Y', $dateToInitial);
 
-            // Отнимаем один день от начальной даты (для фильтра "больше")
-            $dateFromObj->modify('-1 day');
+            // // Отнимаем один день от начальной даты (для фильтра "больше")
+            // $dateFromObj->modify('-1 day');
 
-            // Прибавляем один день к конечной дате (для фильтра "меньше")
-            $dateToObj->modify('+1 day');
-            $dateFromObj->setTime(0, 0, 0);
-            $dateToObj->setTime(23, 59, 59);
+            // // Прибавляем один день к конечной дате (для фильтра "меньше")
+            // $dateToObj->modify('+1 day');
+            // $dateFromObj->setTime(0, 0, 0);
+            // $dateToObj->setTime(23, 59, 59);
             
-            // Форматируем дату обратно в формат "Y-m-d H:i:s"
-            $dateFrom = $dateFromObj->format('Y-m-d H:i:s');
-            $dateTo = $dateToObj->format('Y-m-d H:i:s');
+            // // Форматируем дату обратно в формат "Y-m-d H:i:s"
+            // $dateFrom = $dateFromObj->format('Y-m-d H:i:s');
+            // $dateTo = $dateToObj->format('Y-m-d H:i:s');
             
 
 
@@ -246,8 +246,8 @@ class ReportKPIController extends Controller
                     if ($plField['code'] === 'sales_kpi_event_date') {
                         $eventDateField = $plField;
                         $eventDateFieldId = $eventDateField['bitrixCamelId']; //like PROPERTY_2119 
-                        $dateFieldForHookFrom = ">" . $eventDateFieldId;
-                        $dateFieldForHookTo = "<" . $eventDateFieldId;
+                        $dateFieldForHookFrom = ">=" . $eventDateFieldId;
+                        $dateFieldForHookTo = "<=" . $eventDateFieldId;
 
                         // $dateFieldForHookFrom =  $eventDateFieldId;
                         // $dateFieldForHookTo =  $eventDateFieldId;
