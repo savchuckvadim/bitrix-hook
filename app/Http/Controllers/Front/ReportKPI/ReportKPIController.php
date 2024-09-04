@@ -227,8 +227,11 @@ class ReportKPIController extends Controller
                     if ($plField['code'] === 'sales_kpi_event_date') {
                         $eventDateField = $plField;
                         $eventDateFieldId = $eventDateField['bitrixCamelId']; //like PROPERTY_2119 
-                        $dateFieldForHookFrom = ">=" . $eventDateFieldId;
-                        $dateFieldForHookTo = "<=" . $eventDateFieldId;
+                        // $dateFieldForHookFrom = ">=" . $eventDateFieldId;
+                        // $dateFieldForHookTo = "<=" . $eventDateFieldId;
+
+                        $dateFieldForHookFrom =  $eventDateFieldId;
+                        $dateFieldForHookTo =  $eventDateFieldId;
                     }
                 }
             }
@@ -309,7 +312,7 @@ class ReportKPIController extends Controller
                                     . $listId
                                     . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId"
                                     . $callingActionTypeFilter
-                                    . "&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
+                                    . "&filter[$dateFieldForHookFrom][>=]=$dateFrom&filter[$dateFieldForHookTo][<=]=$dateTo";
                             }
                         }
                     }
