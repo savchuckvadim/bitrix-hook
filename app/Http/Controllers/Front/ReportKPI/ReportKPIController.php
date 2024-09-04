@@ -180,8 +180,8 @@ class ReportKPIController extends Controller
             $dateToInitial = $request['filters']['dateTo'];
 
             // Создаем объект DateTime для начальной даты
-            $dateFromObj = new DateTime($dateFromInitial);
-            $dateToObj = new DateTime($dateToInitial);
+            $dateFromObj = DateTime::createFromFormat('d.m.Y', $dateFromInitial);
+            $dateToObj = DateTime::createFromFormat('d.m.Y', $dateToInitial);
 
             // Отнимаем один день от начальной даты (для фильтра "больше")
             $dateFromObj->modify('-1 day');
