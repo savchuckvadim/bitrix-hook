@@ -68,7 +68,7 @@ class BitrixDepartamentService
     {
         $method = '/user.get';
         $params = [
-            'FILTER' => ['UF_DEPARTMENT' => $departmentId]
+            'FILTER' => ['UF_DEPARTMENT' => $departmentId,  'ACTIVE' => true]
         ];
         $response = Http::get($this->hook . $method, $params);
         $result =  APIBitrixController::getBitrixRespone($response, 'getDepartments');
