@@ -1664,12 +1664,7 @@ class EventReportService
         // которая пушится туда  при unplanned - чтобы были обработаны базовая сделка 
         // в соответствии с проведенной през
         // при этом у основной сделки должна быть обновлена стадия - например на през если была unplanned
-        // Log::info('HOOK TEST currentBtxDeals', [
-        //     'currentBtxDeals' => $currentBtxDeals,
-        //     'this currentBtxDeals' => $this->currentBtxDeals,
-
-
-        // ]);
+    
 
 
         $flowResult = BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
@@ -1692,8 +1687,13 @@ class EventReportService
 
 
         if (!empty($this->currentTMCDeal) && $this->currentReportEventType === 'presentation') {
-
-            if (!$this->resultStatus === 'result') {
+            Log::info('HOOK TEST currentBtxDeals', [
+                'currentBtxDeals' => $currentBtxDeals,
+                'this currentBtxDeals' => $this->currentBtxDeals,
+    
+    
+            ]);
+            if ($this->resultStatus === 'result') {
 
                 BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
                     $this->hook,
@@ -1713,7 +1713,7 @@ class EventReportService
                 );
                 //обновляет сделку тмц в успех если есть tmc deal и если през состоялась
             } else    if ($this->isFail) {
-
+             
                 BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
                     $this->hook,
                     [$this->currentTMCDeal],
