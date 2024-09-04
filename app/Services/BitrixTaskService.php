@@ -157,6 +157,8 @@ class BitrixTaskService
                 if (empty($currentTaskId)) {
                     // $rand = mt_rand(50000, 200000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
                     // usleep($rand);
+                    sleep(1);
+
                     $idsForComplete = $this->getCurrentTasksIds(
                         $hook,
                         $callingTaskGroupId,
@@ -181,6 +183,8 @@ class BitrixTaskService
             //         'isXO' => $isXO,
             //     ]
             // );
+            sleep(1);
+
             $createdTask = BitrixGeneralService::createTask(
                 'Bitrix Task Service create task',
                 $hook,
@@ -189,8 +193,8 @@ class BitrixTaskService
                 // $crmItems,
                 $taskData
             );
-            $rand = mt_rand(5000, 20000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-            usleep($rand);
+            sleep(1);
+
 
             if ($idsForComplete) {
                 $this->completeTask($hook, $idsForComplete);

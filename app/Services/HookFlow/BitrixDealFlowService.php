@@ -217,6 +217,7 @@ class BitrixDealFlowService
             }
         }
 
+        sleep(1);
 
         return ['dealIds' => $currentDealIds, 'newPresDeal' => $newPresDeal];
     }

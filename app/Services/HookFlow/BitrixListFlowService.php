@@ -394,7 +394,7 @@ class BitrixListFlowService
                                 }
                                 // array_push($fieldsData, $currentDataField);
                             }
-
+                            sleep(1);
                             BitrixListService::setItem(
                                 $hook,
                                 $bitrixList['bitrixId'],
@@ -796,7 +796,7 @@ class BitrixListFlowService
                                 // array_push($fieldsData, $currentDataField);
                             }
 
-                            
+
                             $command =  BitrixListService::getBatchCommandSetItem(
                                 $hook,
                                 $bitrixList['bitrixId'],

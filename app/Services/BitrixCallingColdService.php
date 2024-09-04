@@ -477,6 +477,7 @@ class BitrixCallingColdService
 
             // ]);
             if (!empty($currentDealsIds)) {
+                sleep(1);
 
                 $this->createColdTask($currentSmartId, $currentDealsIds);
             }
