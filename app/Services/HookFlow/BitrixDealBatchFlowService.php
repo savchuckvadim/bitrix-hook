@@ -501,7 +501,7 @@ class BitrixDealBatchFlowService
             Log::channel('telegram')->info('HOOK RESULT groupped', ['groupped' => $groupped]);
 
 
-            return $batchCommands;
+            return $groupped;
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
