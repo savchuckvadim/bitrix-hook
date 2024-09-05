@@ -393,6 +393,7 @@ class BitrixDealBatchFlowService
 
                         $stageKey = 0;
                         foreach ($processes as $process) {
+                            Log::info('HOOK processes', ['process' => $process]);
 
                             $resultProcess = [
                                 'dealId' => $process['dealId'],
