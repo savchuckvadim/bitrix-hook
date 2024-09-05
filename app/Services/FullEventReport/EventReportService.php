@@ -663,8 +663,8 @@ class EventReportService
 
             ]);
             if ($this->isDealFlow && $this->portalDealData) {
-                // $currentDealsIds = $this->getBatchDealFlow();
-                $currentDealsIds = $this->getDealFlow();
+                $currentDealsIds = $this->getBatchDealFlow();
+                // $currentDealsIds = $this->getDealFlow();
             }
 
             // $this->createTask($currentSmartId);
@@ -673,7 +673,7 @@ class EventReportService
             } else {
                 $result = $this->workStatus;
             }
-            $this->getEntityFlow();
+            // $this->getEntityFlow();
             // sleep(1);
 
 
@@ -836,14 +836,16 @@ class EventReportService
         $planFields = [];
 
         if ($this->isPlanned) {
-
-
-            //general
             $reportFields['call_next_date'] = $this->planDeadline;
             $reportFields['call_next_name'] = $this->currentPlanEventName;
-            $reportFields['xo_responsible'] = $this->planResponsibleId;
-            $reportFields['xo_created'] = $this->planResponsibleId;
             $reportFields['op_current_status'] = 'Звонок запланирован в работе';
+
+            //general
+            // $reportFields['call_next_date'] = $this->planDeadline;
+            // $reportFields['call_next_name'] = $this->currentPlanEventName;
+            // $reportFields['xo_responsible'] = $this->planResponsibleId;
+            // $reportFields['xo_created'] = $this->planResponsibleId;
+            // $reportFields['op_current_status'] = 'Звонок запланирован в работе';
 
             // Log::channel('telegram')->info('TST', [
             //     'currentPlanEventType' => $currentPlanEventType,
@@ -887,6 +889,8 @@ class EventReportService
                         break;
                 }
             } else {
+      
+
                 switch ($currentPlanEventType) {
                         // 0: {id: 1, code: "warm", name: "Звонок"}
                         // // 1: {id: 2, code: "presentation", name: "Презентация"}
