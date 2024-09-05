@@ -879,8 +879,8 @@ class EventReportService
                         // $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
                         $reportFields['next_pres_plan_date'] = $this->planDeadline;  //дата на которую запланировали през
                         $reportFields['op_current_status'] = 'Перенос: ' . $this->currentReportEventName;
-                        array_push($currentPresComments, $this->nowDate . 'Перенос: ' . $this->currentReportEventName . $this->comment);
-                        array_push($currentMComments, $this->nowDate . 'Перенос: ' . $this->currentReportEventName . $this->comment);
+                        // array_push($currentPresComments, $this->nowDate . 'Перенос: ' . $this->currentReportEventName . $this->comment);
+                        // array_push($currentMComments, $this->nowDate . 'Перенос: ' . $this->currentReportEventName . $this->comment);
                         break;
                     default:
                         # code...
