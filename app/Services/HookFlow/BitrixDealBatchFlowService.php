@@ -417,7 +417,7 @@ class BitrixDealBatchFlowService
 
                                     Log::channel('telegram')->info('HOOK stagebitrixId', ['stagebitrixId' => $stage['bitrixId'], '$process[targetStage]' => $process['targetStage']]);
 
-                                    if ($stage['bitrixId'] === $process['targetStage']) {
+                                    if ($stage['bitrixId'] == $process['targetStage']) {
 
 
 
@@ -425,7 +425,7 @@ class BitrixDealBatchFlowService
                                             $isProcessNeedUpdate = true;
                                             $resultProcess['stageKey'] = $stageKey;
 
-                                            Log::channel('telegram')->info('HOOK isCurrentSearched', ['resultProcess' => $resultProcess, 'isProcessNeedUpdate' => $isProcessNeedUpdate]);
+                                            Log::channel('telegram')->info('HOOK RESULT PROCESS', ['resultProcess' => $resultProcess, 'isProcessNeedUpdate' => $isProcessNeedUpdate]);
                                         }
                                         // $isCurrentSearched = true;
                                     }
@@ -501,6 +501,7 @@ class BitrixDealBatchFlowService
 
             }
             Log::channel('telegram')->info('HOOK RESULT groupped', ['groupped' => $groupped]);
+            Log::info('HOOK RESULT groupped', ['groupped' => $groupped]);
 
 
             return $groupped;
