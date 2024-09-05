@@ -2261,13 +2261,13 @@ class EventReportService
             // $planDeals = $flowResult['dealIds'];
             $batchCommands = $flowResult['commands'];
 
-            $batchCommands = BitrixDealBatchFlowService::cleanBatchCommands($batchCommands, $this->portalDealData);
+            $cleanBatchCommands = BitrixDealBatchFlowService::cleanBatchCommands($batchCommands, $this->portalDealData);
 
-
+            Log::channel('telegram')->info('HOOK BATCH', ['cleanBatchCommands' => $cleanBatchCommands]);
 
 
             $batchService =  new BitrixBatchService($this->hook);
-            $results = $batchService->sendFlowBatchRequest($batchCommands);
+            $results = $batchService->sendFlowBatchRequest($cleanBatchCommands);
             // Log::info('HOOK BATCH', ['results' => $results]);
             // Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
 
