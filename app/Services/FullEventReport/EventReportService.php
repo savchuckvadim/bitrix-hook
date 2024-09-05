@@ -849,41 +849,78 @@ class EventReportService
             //     'currentPlanEventType' => $currentPlanEventType,
 
             // ]);
+            if ($this->isExpired) {
+                switch ($this->currentReportEventType) {
+                        // 0: {id: 1, code: "warm", name: "Звонок"}
+                        // // 1: {id: 2, code: "presentation", name: "Презентация"}
+                        // // 2: {id: 3, code: "hot", name: "Решение"}
+                        // // 3: {id: 4, code: "moneyAwait", name: "Оплата"}
+                    case 'xo':
+                        $reportFields['xo_date'] = $this->planDeadline;
+                        $reportFields['op_current_status'] = 'Перенос: ' . $this->currentReportEventName;
+
+                        // $reportFields['xo_name'] = 'Перенос: ' $this->currentReportEventName;
+
+                        break;
+                    case 'hot':
+                        $reportFields['op_current_status'] = 'Перенос: ' . $this->currentReportEventName;
+                        array_push($currentMComments, $this->nowDate . 'Перенос: ' . $this->currentReportEventName . $this->comment);
+
+                        break;
+                    case 'moneyAwait':
+                        $reportFields['op_current_status'] = 'Перенос: ' . $this->currentReportEventName;
+                        array_push($currentMComments, $this->nowDate . 'Перенос: ' . $this->currentReportEventName . $this->comment);
+                        break;
 
 
-            switch ($currentPlanEventType) {
-                    // 0: {id: 1, code: "warm", name: "Звонок"}
-                    // // 1: {id: 2, code: "presentation", name: "Презентация"}
-                    // // 2: {id: 3, code: "hot", name: "Решение"}
-                    // // 3: {id: 4, code: "moneyAwait", name: "Оплата"}
-                case 'xo':
-                    $reportFields['xo_date'] = $this->planDeadline;
-                    $reportFields['xo_name'] = $this->currentPlanEventName;
+                    case 'presentation':
 
-                    break;
-                case 'hot':
-                    $reportFields['op_current_status'] = 'В решении: ' . $this->currentPlanEventName;
-                    array_push($currentMComments, $this->nowDate . 'В решении: ' . $this->comment);
+                        // $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
+                        // $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
+                        $reportFields['next_pres_plan_date'] = $this->planDeadline;  //дата на которую запланировали през
+                        $reportFields['op_current_status'] = 'Перенос: ' . $this->currentReportEventName;
+                        array_push($currentPresComments, $this->nowDate . 'Перенос: ' . $this->currentReportEventName . $this->comment);
+                        array_push($currentMComments, $this->nowDate . 'Перенос: ' . $this->currentReportEventName . $this->comment);
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+            } else {
+                switch ($currentPlanEventType) {
+                        // 0: {id: 1, code: "warm", name: "Звонок"}
+                        // // 1: {id: 2, code: "presentation", name: "Презентация"}
+                        // // 2: {id: 3, code: "hot", name: "Решение"}
+                        // // 3: {id: 4, code: "moneyAwait", name: "Оплата"}
+                    case 'xo':
+                        $reportFields['xo_date'] = $this->planDeadline;
+                        $reportFields['xo_name'] = $this->currentPlanEventName;
 
-                    break;
-                case 'moneyAwait':
-                    $reportFields['op_current_status'] = 'Ждем оплаты: ' . $this->currentPlanEventName;
-                    array_push($currentMComments, $this->nowDate . 'В оплате: ' . $this->comment);
-                    break;
+                        break;
+                    case 'hot':
+                        $reportFields['op_current_status'] = 'В решении: ' . $this->currentPlanEventName;
+                        array_push($currentMComments, $this->nowDate . 'В решении: ' . $this->comment);
+
+                        break;
+                    case 'moneyAwait':
+                        $reportFields['op_current_status'] = 'Ждем оплаты: ' . $this->currentPlanEventName;
+                        array_push($currentMComments, $this->nowDate . 'В оплате: ' . $this->comment);
+                        break;
 
 
-                case 'presentation':
+                    case 'presentation':
 
-                    $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
-                    $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
-                    $reportFields['next_pres_plan_date'] = $this->planDeadline;  //дата на которую запланировали през
-                    $reportFields['op_current_status'] = 'В работе: Презентация запланирована ' . $this->currentPlanEventName;
-                    array_push($currentPresComments, $this->nowDate . ' Презентация запланирована ' . $this->currentPlanEventName);
-                    array_push($currentMComments, $this->nowDate . ' Презентация запланирована ' . $this->currentPlanEventName);
-                    break;
-                default:
-                    # code...
-                    break;
+                        $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
+                        $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
+                        $reportFields['next_pres_plan_date'] = $this->planDeadline;  //дата на которую запланировали през
+                        $reportFields['op_current_status'] = 'В работе: Презентация запланирована ' . $this->currentPlanEventName;
+                        array_push($currentPresComments, $this->nowDate . ' Презентация запланирована ' . $this->currentPlanEventName);
+                        array_push($currentMComments, $this->nowDate . ' Презентация запланирована ' . $this->currentPlanEventName);
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
             }
         } else {
             if ($this->workStatus['current']['code'] === 'fail') {
@@ -1664,7 +1701,7 @@ class EventReportService
         // которая пушится туда  при unplanned - чтобы были обработаны базовая сделка 
         // в соответствии с проведенной през
         // при этом у основной сделки должна быть обновлена стадия - например на през если была unplanned
-    
+
 
 
         $flowResult = BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
@@ -1690,8 +1727,8 @@ class EventReportService
             Log::info('HOOK TEST currentBtxDeals', [
                 'currentBtxDeals' => $currentBtxDeals,
                 'this currentBtxDeals' => $this->currentBtxDeals,
-    
-    
+
+
             ]);
             if ($this->resultStatus === 'result') {
 
@@ -1713,7 +1750,7 @@ class EventReportService
                 );
                 //обновляет сделку тмц в успех если есть tmc deal и если през состоялась
             } else    if ($this->isFail) {
-             
+
                 BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
                     $this->hook,
                     [$this->currentTMCDeal],
