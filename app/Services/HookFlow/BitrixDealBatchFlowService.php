@@ -415,6 +415,7 @@ class BitrixDealBatchFlowService
                                     $stageKey =  $key;
                                    
 
+                                    Log::channel('telegram')->info('HOOK stagebitrixId', ['stagebitrixId' => $stage['bitrixId'], '$process[targetStage]' => $process['targetStage']]);
 
                                     if ($stage['bitrixId'] === $process['targetStage']) {
 
