@@ -2139,8 +2139,8 @@ class EventReportService
         );
         // $reportDeals = $flowResult['dealIds'];
         $batchCommands = $flowResult['commands'];
-        Log::info('HOOK BATCH batchFlow report DEAL', ['report batchCommands' => $batchCommands]);
-        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $batchCommands]);
+        // Log::info('HOOK BATCH batchFlow report DEAL', ['report batchCommands' => $batchCommands]);
+        // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $batchCommands]);
 
 
         if (!empty($this->currentTMCDeal) && $this->resultStatus === 'result' && $this->currentReportEventType === 'presentation') {
@@ -2268,8 +2268,8 @@ class EventReportService
 
             $batchService =  new BitrixBatchService($this->hook);
             $results = $batchService->sendFlowBatchRequest($batchCommands);
-            Log::info('HOOK BATCH', ['results' => $results]);
-            Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
+            // Log::info('HOOK BATCH', ['results' => $results]);
+            // Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
 
 
 

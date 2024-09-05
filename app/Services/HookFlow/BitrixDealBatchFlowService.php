@@ -423,6 +423,7 @@ class BitrixDealBatchFlowService
 
                                         if ($isCurrentSearched == true) {
                                             $isProcessNeedUpdate = true;
+                                            $resultProcess['stageKey'] = $stageKey;
                                             Log::channel('telegram')->info('HOOK isCurrentSearched', ['process stage' => $stage['bitrixId'], 'isProcessNeedUpdate' => $isProcessNeedUpdate]);
                                         }
                                         // $isCurrentSearched = true;
@@ -431,7 +432,7 @@ class BitrixDealBatchFlowService
 
 
                                     if ($stageBitrixId === $process['deal']['STAGE_ID']) {
-                                        $resultProcess['stageKey'] = $stageKey;
+                                     
                                         $isCurrentSearched = true;
                                         Log::channel('telegram')->info('HOOK isCurrentSearched', ['process stage' => $stage['bitrixId'], 'isCurrentSearched' => $isCurrentSearched]);
                                     }
