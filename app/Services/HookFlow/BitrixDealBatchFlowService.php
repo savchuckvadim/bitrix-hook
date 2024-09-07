@@ -296,6 +296,8 @@ class BitrixDealBatchFlowService
         // Log::info('HOOK BATCH handleBatchResults', ['batchResult' => $batchResult]);
         // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchResult' => $batchResult]);
         Log::channel('telegram')->info('HOOK cleanBatchCommands', ['batchCommands' => $batchCommands]);
+        Log::info('HOOK cleanBatchCommands', ['batchCommands' => $batchCommands]);
+
         // [
         // {"update_unpres_sales_base_7267_PRESENTATION":true,
         // "update_unpres_sales_presentation_7271_WON":true,
@@ -354,7 +356,7 @@ class BitrixDealBatchFlowService
                     // Log::channel('telegram')->info('HOOK cleanBatchCommands', ['result' => $targetStageBtxId]);
                     $groupped[$dealId][] = $batchData;
 
-                    Log::channel('telegram')->info('HOOK cleanBatchCommands', ['groupped' => $groupped]);
+                    Log::info('HOOK groupped cleanBatchCommands', ['groupped' => $groupped]);
 
 
                     if ($tag === 'report') {
