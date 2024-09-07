@@ -302,7 +302,7 @@ class BitrixDealBatchFlowService
         $planDeals = [];
         $unplannedPresDeals = [];
         $newPresDeal = null;
-        $groupped = []; 
+        $groupped = [];
         $resultGroupped = [];
         // Логирование результатов обработки
         // Log::info('HOOK BATCH handleBatchResults', ['batchResult' => $batchResult]);
@@ -355,12 +355,12 @@ class BitrixDealBatchFlowService
                 // Для 'update', ID сделки присутствует в последнем элементе ключа
                 $dealId = $batchData['dealId'];
                 $tag = $batchData['tag'];
-                if($tag == 'plan' || $tag == 'report'){
+                if ($tag == 'plan' || $tag == 'report') {
                     $groupKey = $dealId;
-                }else{
-                    $groupKey = $dealId.'_'.$tag;
+                } else {
+                    $groupKey = $dealId . '_' . $tag;
                 }
-              
+
                 // $targetStageBtxId = $batchData['dealId'];
                 // $currentStageBtxId = $batchData['deal']['STAGE_ID'];
 
@@ -608,7 +608,7 @@ class BitrixDealBatchFlowService
                 $dealId = $value;
                 if ($tag === 'report') {
                     $reportDeals[] = $dealId;  // Добавляем ID в массив reportDeals
-                } elseif ($tag === 'plan') {
+                } else if ($tag === 'plan') {
                     if ($category  == 'sales_presentation') {
                         $newPresDeal = $dealId;  // Добавляем ID в массив planDeals
 

@@ -889,7 +889,7 @@ class EventReportService
                         break;
                 }
             } else {
-      
+
 
                 switch ($currentPlanEventType) {
                         // 0: {id: 1, code: "warm", name: "Звонок"}
@@ -2260,63 +2260,56 @@ class EventReportService
             );
             // $planDeals = $flowResult['dealIds'];
             $batchCommands = $flowResult['commands'];
+        }
+        $cleanBatchCommands = BitrixDealBatchFlowService::cleanBatchCommands($batchCommands, $this->portalDealData);
 
-            $cleanBatchCommands = BitrixDealBatchFlowService::cleanBatchCommands($batchCommands, $this->portalDealData);
-
-            Log::channel('telegram')->info('HOOK BATCH', ['cleanBatchCommands' => $cleanBatchCommands]);
-
-
-            $batchService =  new BitrixBatchService($this->hook);
-            $results = $batchService->sendFlowBatchRequest($cleanBatchCommands);
-            Log::info('HOOK BATCH', ['results' => $results]);
-            Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
+        Log::channel('telegram')->info('HOOK BATCH', ['cleanBatchCommands' => $cleanBatchCommands]);
 
 
+        $batchService =  new BitrixBatchService($this->hook);
+        $results = $batchService->sendFlowBatchRequest($cleanBatchCommands);
+        Log::info('HOOK BATCH', ['results' => $results]);
+        Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
 
-            // return [
-            //     'reportDeals' => $reportDeals,
-            //     'planDeals' => $planDeals,
-            //     'unplannedPresDeals' => $unplannedPresDeals,
-            // ];
-            $result = BitrixDealBatchFlowService::handleBatchResults($results);
-            $newPresDealId = null;
+        $result = BitrixDealBatchFlowService::handleBatchResults($results);
+        $newPresDealId = null;
 
-            if (!empty($result)) {
-                if (!empty($result['newPresDeal'])) {
-                    $newPresDealId = $result['newPresDeal'];
-                    $newPresDeal = BitrixDealService::getDeal(
-                        $this->hook,
-                        ['id' => $newPresDealId]
-
-
-                    );
-                }
-            }
-
-            // Log::info('HOOK BATCH entityBatchCommands DEAL', ['entityBatchCommands' => $entityBatchCommands]);
-            // Log::channel('telegram')->info('HOOK BATCH entityBatchCommands', ['entityBatchCommands' => $entityBatchCommands]);
-
-
-            Log::info('HOOK BATCH', ['result' => $result]);
-            Log::channel('telegram')->info('HOOK BATCH', ['result' => $result]);
-            // WITHOUT NEW
-            // $newPresDeal = $flowResult['newPresDeal'];
-
-            // Новая сделка созданная для презентации если есть тмц сделка
-            // новая сделка презентации нужна только здесь
-            //поэтому в batch commands - results будет 'new_pres_deal_id'
-            // и в этот момент я ее отдельным get возьму
-
-            if (!empty($this->currentTMCDeal) && $this->currentPlanEventType == 'presentation' && $newPresDeal) {
-                BitrixDealFlowService::tmcPresentationRelation(
+        if (!empty($result)) {
+            if (!empty($result['newPresDeal'])) {
+                $newPresDealId = $result['newPresDeal'];
+                $newPresDeal = BitrixDealService::getDeal(
                     $this->hook,
-                    $this->portalDealData,
-                    $this->currentBaseDeal,
-                    $newPresDeal,
-                    $this->currentTMCDeal['ID']
+                    ['id' => $newPresDealId]
+
+
                 );
             }
         }
+
+        // Log::info('HOOK BATCH entityBatchCommands DEAL', ['entityBatchCommands' => $entityBatchCommands]);
+        // Log::channel('telegram')->info('HOOK BATCH entityBatchCommands', ['entityBatchCommands' => $entityBatchCommands]);
+
+
+        Log::info('HOOK BATCH', ['result' => $result]);
+        Log::channel('telegram')->info('HOOK BATCH', ['result' => $result]);
+        // WITHOUT NEW
+        // $newPresDeal = $flowResult['newPresDeal'];
+
+        // Новая сделка созданная для презентации если есть тмц сделка
+        // новая сделка презентации нужна только здесь
+        //поэтому в batch commands - results будет 'new_pres_deal_id'
+        // и в этот момент я ее отдельным get возьму
+
+        if (!empty($this->currentTMCDeal) && $this->currentPlanEventType == 'presentation' && $newPresDeal) {
+            BitrixDealFlowService::tmcPresentationRelation(
+                $this->hook,
+                $this->portalDealData,
+                $this->currentBaseDeal,
+                $newPresDeal,
+                $this->currentTMCDeal['ID']
+            );
+        }
+        // }
 
         // Log::info('HOOK TEST currentBtxDeals', [
         //     'newPresDeal' => $newPresDeal,
