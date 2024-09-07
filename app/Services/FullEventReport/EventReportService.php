@@ -2348,7 +2348,13 @@ class EventReportService
         $companyCommand =  $this->getEntityBatchFlowCommand();
         $key = 'entity_newpres' . '_' . 'company' . '_';
         $entityBatchCommands[$key] = $companyCommand; // в результате будет id
-        $entityResult =  $batchService->sendFlowBatchRequest($entityBatchCommands);
+
+
+        // ENTITY
+        // $entityResult =  $batchService->sendFlowBatchRequest($entityBatchCommands);
+
+
+
         // Log::info('HOOK BATCH entityBatchCommands DEAL', ['entityBatchCommands' => $entityBatchCommands]);
         // Log::channel('telegram')->info('HOOK BATCH entityBatchCommands', ['entityBatchCommands' => $entityBatchCommands]);
 
