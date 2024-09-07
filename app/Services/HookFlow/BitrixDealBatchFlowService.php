@@ -344,7 +344,7 @@ class BitrixDealBatchFlowService
 
                 //     }
                 // } else
-                if ($operation === 'update') {
+                // if ($operation === 'update') {
                     // Для 'update', ID сделки присутствует в последнем элементе ключа
                     $dealId = $batchData['dealId'];
                     // $targetStageBtxId = $batchData['dealId'];
@@ -369,7 +369,7 @@ class BitrixDealBatchFlowService
                     } elseif ($tag === 'plan') {
                         $planDeals[] = $dealId;  // Добавляем ID в массив planDeals
                     }
-                }
+                // }
             }
 
 
