@@ -24,17 +24,17 @@ class BitrixBatchService
             // 'errors' => []
         ];
         $resultBatchCommands = [];
-        Log::channel('telegram')->info('HOOK send', ['result return' => $commands]);
+        // Log::channel('telegram')->info('HOOK send', ['result return' => $commands]);
 
         foreach ($batchRequests as  $batchCommands) {
 
             foreach ($batchCommands as $key => $value) {
 
                 $batchKey = $value['batchKey'];
-                Log::channel('telegram')->info('HOOK send', ['batchKey' => $batchKey]);
-                Log::channel('telegram')->info('HOOK send', ['isNeedUpdate' => $value['isNeedUpdate']]);
+                // Log::channel('telegram')->info('HOOK send', ['batchKey' => $batchKey]);
+                // Log::channel('telegram')->info('HOOK send', ['isNeedUpdate' => $value['isNeedUpdate']]);
 
-                Log::channel('telegram')->info('HOOK send', ['command' => $value['command']]);
+                // Log::channel('telegram')->info('HOOK send', ['command' => $value['command']]);
 
                 if (!empty($value['deal']) && !empty($value['dealId'])) {
                     if (!empty($value['isNeedUpdate'])) {
@@ -54,7 +54,7 @@ class BitrixBatchService
                 'cmd' => $resultBatchCommands
             ]);
             $responseData = $response->json();
-            Log::channel('telegram')->info('HOOK send', ['result return' => $responseData['result']]);
+            // Log::channel('telegram')->info('HOOK send', ['result return' => $responseData['result']]);
 
             // print_r("eventsCommands");
             // print_r("<br>");
@@ -72,11 +72,11 @@ class BitrixBatchService
                 }else{
                     $searchedResult = $responseData['result'];
                 }
-                Log::channel('telegram')->info('HOOK send', ['rsearchedResultn' => $searchedResult]);
+                // Log::channel('telegram')->info('HOOK send', ['rsearchedResultn' => $searchedResult]);
 
                 foreach ($searchedResult as $resKey => $resValue) {
-                    Log::channel('telegram')->info('HOOK send', ['result resKey' => $resKey]);
-                    Log::channel('telegram')->info('HOOK send', ['result resValue' => $resValue]);
+                    // Log::channel('telegram')->info('HOOK send', ['result resKey' => $resKey]);
+                    // Log::channel('telegram')->info('HOOK send', ['result resValue' => $resValue]);
                     $result[$resKey] = $resValue;
                     if (!empty($resValue['result'])) {
                         $result[$resKey] = $resValue['result'];
