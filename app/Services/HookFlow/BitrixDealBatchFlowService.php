@@ -415,7 +415,7 @@ class BitrixDealBatchFlowService
                     $isCurrentSearched = false;
                     $isProcessNeedUpdate = false;
 
-                    Log::info('HOOK processes', ['process' => $process]);
+                   
 
                     if (empty($process['deal'])) {
                         $resultProcess = [
@@ -488,6 +488,7 @@ class BitrixDealBatchFlowService
                                     }
                                 }
                                 $resultProcess['isNeedUpdate'] = $isProcessNeedUpdate;
+                                Log::info('HOOK resultProcess', ['resultProcess' => $resultProcess]);
                             }
                         }
 
