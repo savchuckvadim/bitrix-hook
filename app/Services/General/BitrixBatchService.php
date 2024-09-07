@@ -67,7 +67,7 @@ class BitrixBatchService
                 // } else {
                 // $result[$key] = $responseData['result'];
                 // }
-                if (!empty($responseData['result']['result'])) {
+                if (isset($responseData['result']['result'])) {
                     $searchedResult = $responseData['result']['result'];
                 }else{
                     $searchedResult = $responseData['result'];
