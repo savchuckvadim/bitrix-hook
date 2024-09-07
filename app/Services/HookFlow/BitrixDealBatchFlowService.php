@@ -395,52 +395,69 @@ class BitrixDealBatchFlowService
                         foreach ($processes as $process) {
                             Log::info('HOOK processes', ['process' => $process]);
 
-                            $resultProcess = [
-                                'dealId' => $process['dealId'],
-                                'deal' => $process['deal'],
-                                'targetStage' => $process['targetStage'],
-                                'isNeedUpdate' => $process['isNeedUpdate'],
-                                'stageKey' => ''
-                            ];
-                            // Log::channel('telegram')->info('HOOK processesss', ['process' => $process]);
-
-                            // 'command' => $batchCommand,
-                            //         'dealId' => $currentDealId,
-                            //         'deal' => $currentDeal,
-                            //         'targetStage' => $targetStageBtxId,
-                            //         'isNeedUpdate' => true
-                            if ($category['bitrixId'] === $process['deal']['CATEGORY_ID']) {
-                                // Log::channel('telegram')->info('HOOK process category code ===', ['process stage' => $category]);
-
-                                foreach ($category['stages'] as $key => $stage) {
-                                    $stageKey =  $key;
-                                   
-
-                                    Log::channel('telegram')->info('HOOK stagebitrixId', ['stagebitrixId' => $stage['bitrixId'], '$process[targetStage]' => $process['targetStage']]);
-
-                                    if ($stage['bitrixId'] == $process['targetStage']) {
+                            if (empty($process['deal'])) {
+                                $resultProcess = [
+                                    'dealId' => $process['dealId'],
+                                    'command' => $process['command'],
+                                    'targetStage' => $process['targetStage'],
+                                    'isNeedUpdate' => $process['isNeedUpdate'],
+                                    'stageKey' => 0
+                                ];
+                            } else {
 
 
 
-                                        if ($isCurrentSearched == true) {
-                                            $isProcessNeedUpdate = true;
-                                            $resultProcess['stageKey'] = $stageKey;
+                                $resultProcess = [
+                                    'dealId' => $process['dealId'],
+                                    'deal' => $process['deal'],
+                                    'command' => $process['command'],
 
-                                            Log::channel('telegram')->info('HOOK RESULT PROCESS', ['resultProcess' => $resultProcess, 'isProcessNeedUpdate' => $isProcessNeedUpdate]);
+                                    'targetStage' => $process['targetStage'],
+                                    'isNeedUpdate' => $process['isNeedUpdate'],
+                                    'stageKey' => ''
+                                ];
+                                // Log::channel('telegram')->info('HOOK processesss', ['process' => $process]);
+
+                                // 'command' => $batchCommand,
+                                //         'dealId' => $currentDealId,
+                                //         'deal' => $currentDeal,
+                                //         'targetStage' => $targetStageBtxId,
+                                //         'isNeedUpdate' => true
+                                if ($category['bitrixId'] === $process['deal']['CATEGORY_ID']) {
+                                    // Log::channel('telegram')->info('HOOK process category code ===', ['process stage' => $category]);
+
+                                    foreach ($category['stages'] as $key => $stage) {
+                                        $stageKey =  $key;
+
+
+                                        Log::channel('telegram')->info('HOOK stagebitrixId', ['stagebitrixId' => $stage['bitrixId'], '$process[targetStage]' => $process['targetStage']]);
+
+                                        if ($stage['bitrixId'] == $process['targetStage']) {
+
+
+
+                                            if ($isCurrentSearched == true) {
+                                                $isProcessNeedUpdate = true;
+                                                $resultProcess['stageKey'] = $stageKey;
+
+                                                Log::channel('telegram')->info('HOOK RESULT PROCESS', ['resultProcess' => $resultProcess, 'isProcessNeedUpdate' => $isProcessNeedUpdate]);
+                                            }
+                                            // $isCurrentSearched = true;
                                         }
-                                        // $isCurrentSearched = true;
-                                    }
-                                    $stageBitrixId = "C" . $category['bitrixId'] . ':' . $stage['bitrixId'];
+                                        $stageBitrixId = "C" . $category['bitrixId'] . ':' . $stage['bitrixId'];
 
 
-                                    if ($stageBitrixId === $process['deal']['STAGE_ID']) {
-                                     
-                                        $isCurrentSearched = true;
-                                        Log::channel('telegram')->info('HOOK isCurrentSearched', ['process stage' => $stage['bitrixId'], 'isCurrentSearched' => $isCurrentSearched]);
+                                        if ($stageBitrixId === $process['deal']['STAGE_ID']) {
+
+                                            $isCurrentSearched = true;
+                                            Log::channel('telegram')->info('HOOK isCurrentSearched', ['process stage' => $stage['bitrixId'], 'isCurrentSearched' => $isCurrentSearched]);
+                                        }
                                     }
                                 }
+                                $resultProcess['isNeedUpdate'] = $isProcessNeedUpdate;
                             }
-                            $resultProcess['isNeedUpdate'] = $isProcessNeedUpdate;
+
+
                             $resultProcesses[] = $resultProcess;
                         }
 
