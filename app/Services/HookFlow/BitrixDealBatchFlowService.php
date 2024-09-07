@@ -377,54 +377,56 @@ class BitrixDealBatchFlowService
             // "7303":[
             //     {"category":"sales_presentation","stage":"WON"}
             //     ]}}
-            if (!empty($portalDealData['categories'])) {
 
-                foreach ($portalDealData['categories'] as $category) {
-                    foreach ($groupped as $dealId => $processes) {
-                        $resultProcesses = [];
-                        $isCurrentSearched = false;
-                        $isProcessNeedUpdate = false;
-                        // $stageOrder = [];
+            foreach ($groupped as $dealId => $processes) {
+                $resultProcesses = [];
+                $isCurrentSearched = false;
+                $isProcessNeedUpdate = false;
+                // $stageOrder = [];
 
-                        // foreach ($category['stages'] as $pStage) {
-                        //     array_push($stageOrder, $pStage['bitrixId']);
-                        // }
-                        $stageOrder = array_column($category['stages'], 'bitrixId');
-                        $maxStageIndex = -1;
+                // foreach ($category['stages'] as $pStage) {
+                //     array_push($stageOrder, $pStage['bitrixId']);
+                // }
+                // $stageOrder = array_column($category['stages'], 'bitrixId');
+                // $maxStageIndex = -1;
 
 
-                        $stageKey = 0;
-                        foreach ($processes as $process) {
-                            Log::info('HOOK processes', ['process' => $process]);
+                $stageKey = 0;
+                foreach ($processes as $process) {
+                    Log::info('HOOK processes', ['process' => $process]);
 
-                            if (empty($process['deal'])) {
-                                $resultProcess = [
-                                    'dealId' => $process['dealId'],
-                                    'command' => $process['command'],
-                                    'targetStage' => $process['targetStage'],
-                                    'isNeedUpdate' => $process['isNeedUpdate'],
-                                    'stageKey' => 0
-                                ];
-                            } else {
+                    if (empty($process['deal'])) {
+                        $resultProcess = [
+                            'dealId' => $process['dealId'],
+                            'command' => $process['command'],
+                            'targetStage' => $process['targetStage'],
+                            'isNeedUpdate' => $process['isNeedUpdate'],
+                            'stageKey' => 0
+                        ];
+                    } else {
 
 
 
-                                $resultProcess = [
-                                    'dealId' => $process['dealId'],
-                                    'deal' => $process['deal'],
-                                    'command' => $process['command'],
+                        $resultProcess = [
+                            'dealId' => $process['dealId'],
+                            'deal' => $process['deal'],
+                            'command' => $process['command'],
 
-                                    'targetStage' => $process['targetStage'],
-                                    'isNeedUpdate' => $process['isNeedUpdate'],
-                                    'stageKey' => ''
-                                ];
-                                // Log::channel('telegram')->info('HOOK processesss', ['process' => $process]);
+                            'targetStage' => $process['targetStage'],
+                            'isNeedUpdate' => $process['isNeedUpdate'],
+                            'stageKey' => ''
+                        ];
+                        // Log::channel('telegram')->info('HOOK processesss', ['process' => $process]);
 
-                                // 'command' => $batchCommand,
-                                //         'dealId' => $currentDealId,
-                                //         'deal' => $currentDeal,
-                                //         'targetStage' => $targetStageBtxId,
-                                //         'isNeedUpdate' => true
+                        // 'command' => $batchCommand,
+                        //         'dealId' => $currentDealId,
+                        //         'deal' => $currentDeal,
+                        //         'targetStage' => $targetStageBtxId,
+                        //         'isNeedUpdate' => true
+
+                        if (!empty($portalDealData['categories'])) {
+
+                            foreach ($portalDealData['categories'] as $category) {
                                 if ($category['bitrixId'] === $process['deal']['CATEGORY_ID']) {
                                     // Log::channel('telegram')->info('HOOK process category code ===', ['process stage' => $category]);
 
@@ -458,31 +460,32 @@ class BitrixDealBatchFlowService
                                 }
                                 $resultProcess['isNeedUpdate'] = $isProcessNeedUpdate;
                             }
-
-
-                            $resultProcesses[] = $resultProcess;
                         }
 
 
-                        $maxProcessObject = null;
-
-                        // Проходим по массиву объектов
-                        foreach ($resultProcesses as $resultProcess) {
-                            // Если maxObject ещё не установлен или текущее значение stageKey больше
-                            if ($maxProcessObject === null || $resultProcess['stageKey'] > $maxProcessObject['stageKey']) {
-                                $maxProcessObject = $resultProcess;
-                            }
-                        }
-
-                        $groupped[$dealId] = $maxProcessObject;
-                        Log::channel('telegram')->info('HOOK RESULT groupped', ['groupped' => $groupped]);
-
-                        // unset($process);  // Очистите ссылку после использования
-
+                        $resultProcesses[] = $resultProcess;
                     }
-                    // unset($processes);  // Очистите ссылку после использования
+
+
+                    $maxProcessObject = null;
+
+                    // Проходим по массиву объектов
+                    foreach ($resultProcesses as $resultProcess) {
+                        // Если maxObject ещё не установлен или текущее значение stageKey больше
+                        if ($maxProcessObject === null || $resultProcess['stageKey'] > $maxProcessObject['stageKey']) {
+                            $maxProcessObject = $resultProcess;
+                        }
+                    }
+
+                    $groupped[$dealId] = $maxProcessObject;
+                    Log::channel('telegram')->info('HOOK RESULT groupped', ['groupped' => $groupped]);
+
+                    // unset($process);  // Очистите ссылку после использования
 
                 }
+                // unset($processes);  // Очистите ссылку после использования
+
+                // }
                 // }
 
                 // foreach ($portalDealData['categories'] as $category) {
