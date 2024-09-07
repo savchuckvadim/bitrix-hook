@@ -31,6 +31,8 @@ class BitrixBatchService
             foreach ($batchCommands as $key => $value) {
 
                 $batchKey = $value['batchKey'];
+                Log::channel('telegram')->info('HOOK send', ['batchKey' => $batchKey]);
+                Log::channel('telegram')->info('HOOK send', ['command' => $value['command']]);
 
                 if (!empty($value['deal']) && !empty($value['dealId'])) {
                     if (!empty($value['isNeedUpdate'])) {
