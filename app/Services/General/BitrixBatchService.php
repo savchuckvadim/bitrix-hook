@@ -72,7 +72,11 @@ class BitrixBatchService
                 }else{
                     $searchedResult = $responseData['result'];
                 }
+                Log::channel('telegram')->info('HOOK send', ['rsearchedResultn' => $searchedResult]);
+
                 foreach ($searchedResult as $resKey => $resValue) {
+                    Log::channel('telegram')->info('HOOK send', ['result resKey' => $resKey]);
+                    Log::channel('telegram')->info('HOOK send', ['result resValue' => $resValue]);
                     $result[$resKey] = $resValue;
                     if (!empty($resValue['result'])) {
                         $result[$resKey] = $resValue['result'];
