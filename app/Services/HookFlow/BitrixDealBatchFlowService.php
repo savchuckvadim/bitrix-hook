@@ -159,7 +159,9 @@ class BitrixDealBatchFlowService
                         'dealId' => null,
                         'deal' => null,
                         'targetStage' => $targetStageBtxId,
-                        'batchKey' => $key
+                        'batchKey' => $key,
+                        'isNeedUpdate' => true,
+
 
 
 
@@ -185,7 +187,9 @@ class BitrixDealBatchFlowService
                                 'dealId' => $currentDealId,
                                 'deal' => null,
                                 'targetStage' => $targetStageBtxId,
-                                'batchKey' => $key
+                                'batchKey' => $key,
+                                'isNeedUpdate' => true,
+
 
 
 
