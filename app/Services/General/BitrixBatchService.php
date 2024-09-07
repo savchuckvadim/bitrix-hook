@@ -32,6 +32,8 @@ class BitrixBatchService
 
                 $batchKey = $value['batchKey'];
                 Log::channel('telegram')->info('HOOK send', ['batchKey' => $batchKey]);
+                Log::channel('telegram')->info('HOOK send', ['isNeedUpdate' => $value['isNeedUpdate']]);
+
                 Log::channel('telegram')->info('HOOK send', ['command' => $value['command']]);
 
                 if (!empty($value['deal']) && !empty($value['dealId'])) {
@@ -92,9 +94,9 @@ class BitrixBatchService
         // if (isset($result['result'])) {
         //     $result = $result['result'];
         // }4 Log::info('HOOK sendFlowBatchRequest', ['result resultBatchCommands' => $resultBatchCommands]);
-        Log::channel('telegram')->info('HOOK sendFlowBatchRequest', ['resultBatchCommands' => $resultBatchCommands]);
+        // Log::channel('telegram')->info('HOOK sendFlowBatchRequest', ['resultBatchCommands' => $resultBatchCommands]);
 
-        Log::channel('telegram')->info('HOOK send', ['result return' => $result]);
+        // Log::channel('telegram')->info('HOOK send', ['result return' => $result]);
         return $result;
     }
 
