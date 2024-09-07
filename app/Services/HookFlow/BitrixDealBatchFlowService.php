@@ -161,7 +161,7 @@ class BitrixDealBatchFlowService
                         'targetStage' => $targetStageBtxId,
                         'batchKey' => $key,
                         'isNeedUpdate' => true,
-
+                        'tag' => $tag
 
 
 
@@ -189,6 +189,7 @@ class BitrixDealBatchFlowService
                                 'targetStage' => $targetStageBtxId,
                                 'batchKey' => $key,
                                 'isNeedUpdate' => true,
+                                'tag' => $tag
 
 
 
@@ -226,7 +227,8 @@ class BitrixDealBatchFlowService
                         'deal' => $currentDeal,
                         'targetStage' => $targetStageBtxId,
                         'isNeedUpdate' => true,
-                        'batchKey' => $key
+                        'batchKey' => $key,
+                        'tag' => $tag
 
 
                     ];
@@ -300,7 +302,8 @@ class BitrixDealBatchFlowService
         $planDeals = [];
         $unplannedPresDeals = [];
         $newPresDeal = null;
-        $groupped = [];
+        $groupped = []; 
+        $resultGroupped = [];
         // Логирование результатов обработки
         // Log::info('HOOK BATCH handleBatchResults', ['batchResult' => $batchResult]);
         // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchResult' => $batchResult]);
@@ -351,6 +354,13 @@ class BitrixDealBatchFlowService
                 // if ($operation === 'update') {
                 // Для 'update', ID сделки присутствует в последнем элементе ключа
                 $dealId = $batchData['dealId'];
+                $tag = $batchData['tag'];
+                if($tag == 'plan' || $tag == 'report'){
+                    $groupKey = $dealId;
+                }else{
+                    $groupKey = $dealId.'_'.$tag;
+                }
+              
                 // $targetStageBtxId = $batchData['dealId'];
                 // $currentStageBtxId = $batchData['deal']['STAGE_ID'];
 
@@ -363,7 +373,7 @@ class BitrixDealBatchFlowService
                 //     }
                 // }
                 // Log::channel('telegram')->info('HOOK cleanBatchCommands', ['result' => $targetStageBtxId]);
-                $groupped[$dealId][] = $batchData;
+                $groupped[$groupKey][] = $batchData;
 
                 Log::info('HOOK groupped cleanBatchCommands', ['groupped' => $groupped]);
 
@@ -387,7 +397,7 @@ class BitrixDealBatchFlowService
             //     {"category":"sales_presentation","stage":"WON"}
             //     ]}}
 
-            foreach ($groupped as $dealId => $processes) {
+            foreach ($groupped as $groupKey => $processes) {
                 $resultProcesses = [];
 
                 // $stageOrder = [];
@@ -415,6 +425,8 @@ class BitrixDealBatchFlowService
                             'isNeedUpdate' => $process['isNeedUpdate'],
                             'stageKey' => 0,
                             'batchKey' => $process['batchKey'],
+                            'tag' => $process['tag'],
+
                         ];
                     } else {
 
@@ -429,6 +441,8 @@ class BitrixDealBatchFlowService
                             'isNeedUpdate' => $process['isNeedUpdate'],
                             'stageKey' => '',
                             'batchKey' => $process['batchKey'],
+                            'tag' => $process['tag'],
+
 
                         ];
                         // Log::channel('telegram')->info('HOOK processesss', ['process' => $process]);
@@ -492,7 +506,8 @@ class BitrixDealBatchFlowService
                         }
                     }
 
-                    $groupped[$dealId] = $maxProcessObject;
+                    $groupped[$groupKey] = $maxProcessObject;
+                    // $resultGroupped[$dealId] = $maxProcessObject;
                     Log::channel('telegram')->info('HOOK RESULT groupped', ['groupped' => $groupped]);
 
                     // unset($process);  // Очистите ссылку после использования

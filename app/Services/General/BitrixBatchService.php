@@ -24,17 +24,17 @@ class BitrixBatchService
             // 'errors' => []
         ];
         $resultBatchCommands = [];
-        // Log::channel('telegram')->info('HOOK send', ['result return' => $commands]);
+        Log::channel('telegram')->info('HOOK send', ['result return' => $commands]);
 
         foreach ($batchRequests as  $batchCommands) {
 
             foreach ($batchCommands as $key => $value) {
 
                 $batchKey = $value['batchKey'];
-                // Log::channel('telegram')->info('HOOK send', ['batchKey' => $batchKey]);
-                // Log::channel('telegram')->info('HOOK send', ['isNeedUpdate' => $value['isNeedUpdate']]);
+                Log::channel('telegram')->info('HOOK send', ['batchKey' => $batchKey]);
+                Log::channel('telegram')->info('HOOK send', ['isNeedUpdate' => $value['isNeedUpdate']]);
 
-                // Log::channel('telegram')->info('HOOK send', ['command' => $value['command']]);
+                Log::channel('telegram')->info('HOOK send', ['command' => $value['command']]);
 
                 if (!empty($value['deal']) && !empty($value['dealId'])) {
                     if (!empty($value['isNeedUpdate'])) {
