@@ -2268,8 +2268,8 @@ class EventReportService
 
             $batchService =  new BitrixBatchService($this->hook);
             $results = $batchService->sendFlowBatchRequest($cleanBatchCommands);
-            // Log::info('HOOK BATCH', ['results' => $results]);
-            // Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
+            Log::info('HOOK BATCH', ['results' => $results]);
+            Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
 
 
 

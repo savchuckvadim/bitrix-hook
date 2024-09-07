@@ -158,7 +158,9 @@ class BitrixDealBatchFlowService
                         'command' => $batchCommand,
                         'dealId' => null,
                         'deal' => null,
-                        'targetStage' => $targetStageBtxId
+                        'targetStage' => $targetStageBtxId,
+                        'batchKey' => $key
+
 
 
                     ];
@@ -182,7 +184,9 @@ class BitrixDealBatchFlowService
                                 'command' => $batchCommand,
                                 'dealId' => $currentDealId,
                                 'deal' => null,
-                                'targetStage' => $targetStageBtxId
+                                'targetStage' => $targetStageBtxId,
+                                'batchKey' => $key
+
 
 
                             ];
@@ -217,7 +221,8 @@ class BitrixDealBatchFlowService
                         'dealId' => $currentDealId,
                         'deal' => $currentDeal,
                         'targetStage' => $targetStageBtxId,
-                        'isNeedUpdate' => true
+                        'isNeedUpdate' => true,
+                        'batchKey' => $key
 
 
                     ];
@@ -401,7 +406,8 @@ class BitrixDealBatchFlowService
                             'command' => $process['command'],
                             'targetStage' => $process['targetStage'],
                             'isNeedUpdate' => $process['isNeedUpdate'],
-                            'stageKey' => 0
+                            'stageKey' => 0,
+                            'batchKey' => $process['batchKey'],
                         ];
                     } else {
 
@@ -414,7 +420,9 @@ class BitrixDealBatchFlowService
 
                             'targetStage' => $process['targetStage'],
                             'isNeedUpdate' => $process['isNeedUpdate'],
-                            'stageKey' => ''
+                            'stageKey' => '',
+                            'batchKey' => $process['batchKey'],
+
                         ];
                         // Log::channel('telegram')->info('HOOK processesss', ['process' => $process]);
 
@@ -525,7 +533,10 @@ class BitrixDealBatchFlowService
             }
             Log::channel('telegram')->info('HOOK RESULT groupped', ['groupped' => $groupped]);
             Log::info('HOOK RESULT groupped', ['groupped' => $groupped]);
-
+            foreach ($groupped as $dealId => $processes) {
+                foreach ($results as $key => $batchData) {
+                }
+            }
 
             return $groupped;
         } catch (\Throwable $th) {
