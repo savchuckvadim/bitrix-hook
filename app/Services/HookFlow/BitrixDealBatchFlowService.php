@@ -312,7 +312,7 @@ class BitrixDealBatchFlowService
             // Извлечение результатов
             $results = $batchCommands;  // Предполагаем, что структура такая, как в примере
             foreach ($results as $key => $batchData) { // value в данном случае сделка, точнее ее поля для обновления
-
+                Log::info('HOOK groupped BATCH DATA', [$key => $batchData]);
                 // 'command' => $batchCommand,
                 //         'dealId' => $currentDealId,
                 //         'deal' => $currentDeal,
