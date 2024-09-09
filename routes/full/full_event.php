@@ -440,9 +440,9 @@ Route::prefix('full')->group(function () {
                     // }
                 }
             }
-            Log::channel('telegram')->error('APRIL_HOOK', [
+            Log::info('APRIL_HOOK', [
                 'domain'  =>  $domain,
-                'lead'  =>  $lead,
+                // 'lead'  =>  $lead,
                 'companies'  =>  $companies,
 
             ]);
