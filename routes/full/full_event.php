@@ -354,6 +354,7 @@ Route::prefix('full')->group(function () {
         $data = $request->all();
         $domain = '';
         $lead = null;
+        $leadId = null;
         // $companyId = '';
         // Log::channel('telegram')->error('APRIL_HOOK', [
         //     'data'  =>  $data,
@@ -366,8 +367,8 @@ Route::prefix('full')->group(function () {
             Log::channel('telegram')->error('APRIL_HOOK', [
                 'auth companies/search'  =>  $data['auth'],
             ]);
-            if (!empty($data['lidId'])) {
-                $lidId = $data['lidId'];
+            if (!empty($data['leadId'])) {
+                $leadId = $data['leadId'];
             }
 
             // if (!empty($data['responsible'])) {
@@ -379,22 +380,22 @@ Route::prefix('full')->group(function () {
         Log::channel('telegram')->error('APRIL_HOOK', [
             'domain'  =>  $domain,
             // 'responsibleId'  =>  $responsibleId,
-            'lidId'  =>  $lidId,
+            'leadId'  =>  $leadId,
 
         ]);
-        if (!empty($domain) &&  $lidId) {
+        if (!empty($domain) &&  $leadId) {
             $hook = PortalController::getHook($domain);
             $lead = BitrixGeneralService::getEntity(
                 $hook,
                 'lead',
-                $lidId,
+                $leadId,
 
             );
 
             Log::channel('telegram')->error('APRIL_HOOK', [
                 'domain'  =>  $domain,
                 'lead'  =>  $lead,
-                'lidId'  =>  $lidId,
+                'leadId'  =>  $leadId,
     
             ]);
         }
