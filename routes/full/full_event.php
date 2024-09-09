@@ -398,7 +398,6 @@ Route::prefix('full')->group(function () {
             );
             Log::channel('telegram')->error('APRIL_HOOK', [
                 'domain'  =>  $domain,
-                'lead'  =>  $lead,
 
 
             ]);
@@ -406,7 +405,14 @@ Route::prefix('full')->group(function () {
             // {"ID":"407425","VALUE_TYPE":"WORK","VALUE":"+79620027991","TYPE_ID":"PHONE"},
             // {"ID":"407429","VALUE_TYPE":"WORK","VALUE":"+79678787898","TYPE_ID":"PHONE"}]},"leadId":"42669"}
             if (!empty($lead)) {
+                Log::channel('telegram')->error('APRIL_HOOK', [
+                    'domain'  =>  $domain,
+                    'lead'  =>  $lead,
+    
+    
+                ]);
                 if (!empty($lead['PHONE'])) {
+                    
                     $phones = [];
                     $emails = [];
 
@@ -433,7 +439,7 @@ Route::prefix('full')->group(function () {
 
                     // ];
                     $filter = [
-                        'PHONE' => $phones, // условие по телефонам
+                        'PHONE' => $phones[0], // условие по телефонам
 
                     ];
                     $companies = BitrixGeneralService::getEntityList(
@@ -442,6 +448,16 @@ Route::prefix('full')->group(function () {
                         $filter,
                         $select
                     );
+                    Log::channel('telegram')->error('APRIL_HOOK', [
+                        'filter'  =>  $filter,
+        
+        
+                    ]);
+                    Log::channel('telegram')->error('APRIL_HOOK', [
+                        'companies'  =>  $companies,
+        
+        
+                    ]);
                     // foreach ($phones as $phone) {
                     //     if(!empty($phone)){
                     //         $
@@ -449,6 +465,12 @@ Route::prefix('full')->group(function () {
                     // }
                 }
             }
+            Log::channel('telegram')->info('APRIL_HOOK', [
+                'domain'  =>  $domain,
+                // 'lead'  =>  $lead,
+                'companies'  =>  $companies,
+
+            ]);
             Log::info('APRIL_HOOK', [
                 'domain'  =>  $domain,
                 // 'lead'  =>  $lead,
