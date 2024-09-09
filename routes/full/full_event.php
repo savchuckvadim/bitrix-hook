@@ -353,7 +353,7 @@ Route::prefix('full')->group(function () {
     Route::post('/companies/search', function (Request $request) {
         $data = $request->all();
         $domain = '';
-        $responsibleId = '';
+        $lead = null;
         // $companyId = '';
         // Log::channel('telegram')->error('APRIL_HOOK', [
         //     'data'  =>  $data,
@@ -378,7 +378,7 @@ Route::prefix('full')->group(function () {
         }
         Log::channel('telegram')->error('APRIL_HOOK', [
             'domain'  =>  $domain,
-            'responsibleId'  =>  $responsibleId,
+            // 'responsibleId'  =>  $responsibleId,
             'lidId'  =>  $lidId,
 
         ]);
