@@ -392,23 +392,25 @@ Route::prefix('full')->group(function () {
                 'lead',
                 $leadId,
                 null,
-                $select 
+                $select
 
             );
             // PHONE":[
             // {"ID":"407425","VALUE_TYPE":"WORK","VALUE":"+79620027991","TYPE_ID":"PHONE"},
             // {"ID":"407429","VALUE_TYPE":"WORK","VALUE":"+79678787898","TYPE_ID":"PHONE"}]},"leadId":"42669"}
             if (!empty($lead)) {
-                if (!empty($lead['PHONE']) || !empty($lead['EMAIL']) ) {
+                if (!empty($lead['PHONE']) || !empty($lead['EMAIL'])) {
                     $phones = $lead['PHONE'];
                     $emails = $lead['EMAIL'];
                     $filter = [
+                        'LOGIC' => 'OR',
                         [
                             'PHONE' => $phones, // условие по телефонам
                         ],
                         [
                             'EMAIL' => $emails, // условие по e-mail
                         ]
+
                     ];
                     $companies = BitrixGeneralService::getEntityList(
                         $hook,

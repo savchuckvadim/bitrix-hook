@@ -284,7 +284,11 @@ class BitrixGeneralService
 
             ];
 
+            if (!empty($select)) {
+                $data['select'] = $select;
+            }
 
+            
             $smartFieldsResponse = Http::get($url, $data);
             $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: getEntity' . $entityType . ' hook: ' . $hook);
             $resultFields = $responseData;
