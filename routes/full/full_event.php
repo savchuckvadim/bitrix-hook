@@ -355,6 +355,7 @@ Route::prefix('full')->group(function () {
         $domain = '';
         $lead = null;
         $leadId = null;
+        $companies = null;
         // $companyId = '';
         // Log::channel('telegram')->error('APRIL_HOOK', [
         //     'data'  =>  $data,
@@ -383,7 +384,7 @@ Route::prefix('full')->group(function () {
             'leadId'  =>  $leadId,
 
         ]);
-        $select = ['TITLE', 'ASSIGNED_BY_ID',  'UF_CRM_LAST_CALL_DATE', 'EMAIL', 'PHONE'];
+        $select = ['TITLE',  'ID', 'EMAIL', 'PHONE'];
 
         if (!empty($domain) &&  $leadId) {
             $hook = PortalController::getHook($domain);
@@ -398,7 +399,7 @@ Route::prefix('full')->group(function () {
             Log::channel('telegram')->error('APRIL_HOOK', [
                 'domain'  =>  $domain,
                 'lead'  =>  $lead,
-      
+
 
             ]);
             // PHONE":[
@@ -406,8 +407,16 @@ Route::prefix('full')->group(function () {
             // {"ID":"407429","VALUE_TYPE":"WORK","VALUE":"+79678787898","TYPE_ID":"PHONE"}]},"leadId":"42669"}
             if (!empty($lead)) {
                 if (!empty($lead['PHONE']) || !empty($lead['EMAIL'])) {
-                    $phones = $lead['PHONE'];
-                    $emails = $lead['EMAIL'];
+                    $phones = [];
+                    $emails = [];
+
+
+                    foreach ($lead['PHONE'] as $phValue) {
+                        array_push($phones, $phValue);
+                    }
+                    foreach ($lead['EMAIL'] as $email) {
+                        array_push($emails, $email);
+                    }
                     $filter = [
                         'LOGIC' => 'OR',
                         [
