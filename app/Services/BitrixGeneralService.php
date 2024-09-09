@@ -288,7 +288,7 @@ class BitrixGeneralService
                 $data['select'] = $select;
             }
 
-            
+
             $smartFieldsResponse = Http::get($url, $data);
             $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: getEntity' . $entityType . ' hook: ' . $hook);
             $resultFields = $responseData;
@@ -303,7 +303,7 @@ class BitrixGeneralService
     {
         $resultFields = null;
         try {
-            $methodSmart = '/crm.' . $entityType . '.get.json';
+            $methodSmart = '/crm.' . $entityType . '.list.json';
             $url = $hook . $methodSmart;
 
             $data = [

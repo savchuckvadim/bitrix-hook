@@ -428,7 +428,7 @@ Route::prefix('full')->group(function () {
             Log::channel('telegram')->error('APRIL_HOOK', [
                 'domain'  =>  $domain,
                 'lead'  =>  $lead,
-                'leadId'  =>  $leadId,
+                'companies'  =>  $companies,
 
             ]);
         }
