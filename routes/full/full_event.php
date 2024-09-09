@@ -349,4 +349,55 @@ Route::prefix('full')->group(function () {
             );
         }
     });
+
+    Route::post('/companies/search', function (Request $request) {
+        $data = $request->all();
+        $domain = '';
+        $responsibleId = '';
+        // $companyId = '';
+        // Log::channel('telegram')->error('APRIL_HOOK', [
+        //     'data'  =>  $data,
+        // ]);
+        if (!empty($data['auth'])) {
+
+            if (!empty($data['auth']['domain'])) {
+                $domain = $data['auth']['domain'];
+            }
+            Log::channel('telegram')->error('APRIL_HOOK', [
+                'auth companies/search'  =>  $data['auth'],
+            ]);
+            if (!empty($data['lidId'])) {
+                $lidId = $data['lidId'];
+            }
+
+            // if (!empty($data['responsible'])) {
+
+            //     $partsResponsible = explode("_", $data['responsible']);
+            //     $responsibleId = $partsResponsible[1];
+            // }
+        }
+        Log::channel('telegram')->error('APRIL_HOOK', [
+            'domain'  =>  $domain,
+            'responsibleId'  =>  $responsibleId,
+            'lidId'  =>  $lidId,
+
+        ]);
+        if (!empty($domain) &&  $lidId) {
+            $hook = PortalController::getHook($domain);
+            $lead = BitrixGeneralService::getEntity(
+                $hook,
+                'lead',
+                $lidId,
+
+            );
+
+            Log::channel('telegram')->error('APRIL_HOOK', [
+                'domain'  =>  $domain,
+                'lead'  =>  $lead,
+                'lidId'  =>  $lidId,
+    
+            ]);
+        }
+        
+    });
 });
