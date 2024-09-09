@@ -406,7 +406,7 @@ Route::prefix('full')->group(function () {
             // {"ID":"407425","VALUE_TYPE":"WORK","VALUE":"+79620027991","TYPE_ID":"PHONE"},
             // {"ID":"407429","VALUE_TYPE":"WORK","VALUE":"+79678787898","TYPE_ID":"PHONE"}]},"leadId":"42669"}
             if (!empty($lead)) {
-                if (!empty($lead['PHONE']) || !empty($lead['EMAIL'])) {
+                if (!empty($lead['PHONE'])) {
                     $phones = [];
                     $emails = [];
 
@@ -414,17 +414,26 @@ Route::prefix('full')->group(function () {
                     foreach ($lead['PHONE'] as $phone) {
                         array_push($phones, $phone['VALUE']);
                     }
-                    foreach ($lead['EMAIL'] as $email) {
-                        array_push($emails, $email['VALUE']);
-                    }
+                    Log::channel('telegram')->info('APRIL_HOOK', [
+                        'phones'  =>  $phones,
+                      
+        
+                    ]);
+                    // foreach ($lead['EMAIL'] as $email) {
+                    //     array_push($emails, $email['VALUE']);
+                    // }
+                    // $filter = [
+                    //     'LOGIC' => 'OR',
+                    //     [
+                    //         'PHONE' => $phones, // условие по телефонам
+                    //     ],
+                    //     [
+                    //         'EMAIL' => $emails, // условие по e-mail
+                    //     ]
+
+                    // ];
                     $filter = [
-                        'LOGIC' => 'OR',
-                        [
-                            'PHONE' => $phones, // условие по телефонам
-                        ],
-                        [
-                            'EMAIL' => $emails, // условие по e-mail
-                        ]
+                        'PHONE' => $phones, // условие по телефонам
 
                     ];
                     $companies = BitrixGeneralService::getEntityList(
