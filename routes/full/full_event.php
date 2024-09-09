@@ -411,11 +411,11 @@ Route::prefix('full')->group(function () {
                     $emails = [];
 
 
-                    foreach ($lead['PHONE'] as $phValue) {
-                        array_push($phones, $phValue);
+                    foreach ($lead['PHONE'] as $phone) {
+                        array_push($phones, $phone['VALUE']);
                     }
                     foreach ($lead['EMAIL'] as $email) {
-                        array_push($emails, $email);
+                        array_push($emails, $email['VALUE']);
                     }
                     $filter = [
                         'LOGIC' => 'OR',

@@ -308,7 +308,7 @@ class BitrixGeneralService
 
             $data = [
                 'filter' => $filter,
-
+                'select' => $select
 
             ];
 
