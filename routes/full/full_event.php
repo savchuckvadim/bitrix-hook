@@ -383,22 +383,52 @@ Route::prefix('full')->group(function () {
             'leadId'  =>  $leadId,
 
         ]);
+        $select = ['TITLE', 'ASSIGNED_BY_ID', 'UF_CRM_OP_WORKSTATUS', 'RESPONSIBLE_ID', 'UF_CRM_LAST_CALL_DATE', 'EMAIL', 'PHONE'];
+
         if (!empty($domain) &&  $leadId) {
             $hook = PortalController::getHook($domain);
             $lead = BitrixGeneralService::getEntity(
                 $hook,
                 'lead',
                 $leadId,
+                null,
+                $select 
 
             );
-
+            // PHONE":[
+            // {"ID":"407425","VALUE_TYPE":"WORK","VALUE":"+79620027991","TYPE_ID":"PHONE"},
+            // {"ID":"407429","VALUE_TYPE":"WORK","VALUE":"+79678787898","TYPE_ID":"PHONE"}]},"leadId":"42669"}
+            if (!empty($lead)) {
+                if (!empty($lead['PHONE']) || !empty($lead['EMAIL']) ) {
+                    $phones = $lead['PHONE'];
+                    $emails = $lead['EMAIL'];
+                    $filter = [
+                        [
+                            'PHONE' => $phones, // условие по телефонам
+                        ],
+                        [
+                            'EMAIL' => $emails, // условие по e-mail
+                        ]
+                    ];
+                    $companies = BitrixGeneralService::getEntityList(
+                        $hook,
+                        'company',
+                        $filter,
+                        $select
+                    );
+                    // foreach ($phones as $phone) {
+                    //     if(!empty($phone)){
+                    //         $
+                    //     }
+                    // }
+                }
+            }
             Log::channel('telegram')->error('APRIL_HOOK', [
                 'domain'  =>  $domain,
                 'lead'  =>  $lead,
                 'leadId'  =>  $leadId,
-    
+
             ]);
         }
-        
     });
 });
