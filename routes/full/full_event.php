@@ -383,7 +383,7 @@ Route::prefix('full')->group(function () {
             'leadId'  =>  $leadId,
 
         ]);
-        $select = ['TITLE', 'ASSIGNED_BY_ID', 'UF_CRM_OP_WORKSTATUS', 'RESPONSIBLE_ID', 'UF_CRM_LAST_CALL_DATE', 'EMAIL', 'PHONE'];
+        $select = ['TITLE', 'ASSIGNED_BY_ID',  'UF_CRM_LAST_CALL_DATE', 'EMAIL', 'PHONE'];
 
         if (!empty($domain) &&  $leadId) {
             $hook = PortalController::getHook($domain);
@@ -395,6 +395,12 @@ Route::prefix('full')->group(function () {
                 $select
 
             );
+            Log::channel('telegram')->error('APRIL_HOOK', [
+                'domain'  =>  $domain,
+                'lead'  =>  $lead,
+      
+
+            ]);
             // PHONE":[
             // {"ID":"407425","VALUE_TYPE":"WORK","VALUE":"+79620027991","TYPE_ID":"PHONE"},
             // {"ID":"407429","VALUE_TYPE":"WORK","VALUE":"+79678787898","TYPE_ID":"PHONE"}]},"leadId":"42669"}
