@@ -420,7 +420,7 @@ Route::prefix('full')->group(function () {
                     foreach ($lead['PHONE'] as $phone) {
                         array_push($phones, $phone['VALUE']);
                         $filter = [
-                            'PHONE' => $phone
+                            'PHONE' => $phone['VALUE']
                         ];
                     
                         $result = BitrixGeneralService::getEntityList(
