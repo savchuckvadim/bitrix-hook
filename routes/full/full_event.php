@@ -355,7 +355,7 @@ Route::prefix('full')->group(function () {
         $domain = '';
         $lead = null;
         $leadId = null;
-        $companies = null;
+        $companies = [];
         // $companyId = '';
         // Log::channel('telegram')->error('APRIL_HOOK', [
         //     'data'  =>  $data,
