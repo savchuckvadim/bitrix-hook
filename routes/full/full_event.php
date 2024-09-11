@@ -456,12 +456,15 @@ Route::prefix('full')->group(function () {
                         foreach ($companies as $company) {
                             $companyId = $company['ID'];
                             $companyTitle = $company['TITLE'];
-                            $timeLineString .= "\n" . $company['TITLE'];
-                            $timeLineString .= "\n"  . $company['UF_CRM_OP_CURRENT_STATUS'];
                             $companyLink = 'https://' . $domain . '/crm/company/details/' . $companyId . '/';
+                            $message = '<a href="' . $companyLink . '" target="_blank">' . $companyTitle . '</a>';
 
-                            // Формируем сообщение с ссылкой
-                            $message = 'Ссылка на компанию: <a href="' . $companyLink . '" target="_blank">Компания #' . $companyId . '</a>';
+
+                            $timeLineString .= "\n" . $message;
+                            $timeLineString .= "\n"  . 'Статус: ' . $company['UF_CRM_OP_CURRENT_STATUS'];
+                           
+
+
                             $timeLineString .= "\n" . $message;
                             // if (!empty($company['UF_CRM_OP_MHISTORY'])) {
                             //     $timeLineString .= "\n" . 'История: ';
