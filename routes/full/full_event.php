@@ -384,7 +384,7 @@ Route::prefix('full')->group(function () {
             'leadId'  =>  $leadId,
 
         ]);
-        $select = ['TITLE',  'ID', 'EMAIL', 'PHONE'];
+        $select = ['TITLE',  'ID', 'EMAIL', 'PHONE', 'UF_CRM_OP_MHISTORY', 'UF_CRM_OP_CURRENT_STATUS'];
 
         if (!empty($domain) &&  $leadId) {
             $hook = PortalController::getHook($domain);
