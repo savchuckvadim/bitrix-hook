@@ -408,11 +408,11 @@ Route::prefix('full')->group(function () {
                 Log::channel('telegram')->error('APRIL_HOOK', [
                     'domain'  =>  $domain,
                     'lead'  =>  $lead,
-    
-    
+
+
                 ]);
                 if (!empty($lead['PHONE'])) {
-                    
+
                     $phones = [];
                     $emails = [];
 
@@ -422,8 +422,8 @@ Route::prefix('full')->group(function () {
                     }
                     Log::channel('telegram')->info('APRIL_HOOK', [
                         'phones'  =>  $phones,
-                      
-        
+
+
                     ]);
                     // foreach ($lead['EMAIL'] as $email) {
                     //     array_push($emails, $email['VALUE']);
@@ -439,7 +439,10 @@ Route::prefix('full')->group(function () {
 
                     // ];
                     $filter = [
-                        'PHONE' => $phones[0], // условие по телефонам
+                        'LOGIC' => 'OR',
+                        array_map(function ($phone) {
+                            return ['PHONE' => $phone];
+                        }, $phones)
 
                     ];
                     $companies = BitrixGeneralService::getEntityList(
@@ -450,13 +453,13 @@ Route::prefix('full')->group(function () {
                     );
                     Log::channel('telegram')->error('APRIL_HOOK', [
                         'filter'  =>  $filter,
-        
-        
+
+
                     ]);
                     Log::channel('telegram')->error('APRIL_HOOK', [
                         'companies'  =>  $companies,
-        
-        
+
+
                     ]);
                     // foreach ($phones as $phone) {
                     //     if(!empty($phone)){
