@@ -471,7 +471,7 @@ Route::prefix('full')->group(function () {
                     }
 
                     $bxTimeLineService = new BitrixTimeLineService($hook);
-                    $bxTimeLineService->setTimeline($timeLineString, 'lead', $leadId);
+                    // $bxTimeLineService->setTimeline($timeLineString, 'lead', $leadId);
                     Log::channel('telegram')->error('APRIL_HOOK', [
                         'filter'  =>  $filter,
 
