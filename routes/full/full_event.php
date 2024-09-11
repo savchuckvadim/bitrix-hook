@@ -454,16 +454,22 @@ Route::prefix('full')->group(function () {
                     if (!empty($companies)) {
                         $timeLineString = 'Возможно это:';
                         foreach ($companies as $company) {
+                            $companyId = $company['ID'];
                             $timeLineString .= "\n" . ' ' . $company['TITLE'];
                             $timeLineString .= "\n" . ' ' . $company['UF_CRM_OP_CURRENT_STATUS'];
+                            $companyLink = 'https://' . $domain . '/crm/company/details/' . $companyId . '/';
 
-                            if (!empty($company['UF_CRM_OP_MHISTORY'])) {
-                                $timeLineString .= "\n" . 'История: ';
-                                $mHistory = $company['UF_CRM_OP_MHISTORY'];
-                                foreach ($mHistory as $historyString) {
-                                    $timeLineString .= "\n" . $historyString;
-                                }
-                            }
+                            // Формируем сообщение с ссылкой
+                            $message = 'Ссылка на компанию: <a href="' . $companyLink . '" target="_blank">Компания #' . $companyId . '</a>';
+                            $timeLineString .= "\n" . $message;
+                            // if (!empty($company['UF_CRM_OP_MHISTORY'])) {
+                            //     $timeLineString .= "\n" . 'История: ';
+                            //     $mHistory = $company['UF_CRM_OP_MHISTORY'];
+                            //     foreach ($mHistory as $historyString) {
+                            //         $timeLineString .= "\n" . $historyString;
+                            //     }
+                            // }
+                            $timeLineString .= "\n";
                         }
                     }
                     if (empty($timeLineString)) {
@@ -471,7 +477,7 @@ Route::prefix('full')->group(function () {
                     }
 
                     $bxTimeLineService = new BitrixTimeLineService($hook);
-                    // $bxTimeLineService->setTimeline($timeLineString, 'lead', $leadId);
+                    $bxTimeLineService->setTimeline($timeLineString, 'lead', $leadId);
                     Log::channel('telegram')->error('APRIL_HOOK', [
                         'filter'  =>  $filter,
 
