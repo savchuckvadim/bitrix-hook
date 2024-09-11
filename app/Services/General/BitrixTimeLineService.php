@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Services\General;
+
+use App\Http\Controllers\APIBitrixController;
+use App\Http\Controllers\APIOnlineController;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+
+class BitrixTimeLineService
+{
+    protected $hook;
+
+    public function __construct($hook)
+    {
+        $this->hook = $hook;
+    }
+
+    public function setTimeline($resultText, $entityType, $entityId)
+    {
+
+
+        try {
+            $hook = $this->hook; // Предполагаем, что функция getHookUrl уже определена
+
+            $method = '/crm.timeline.comment.add';
+
+            $url = $hook . $method;
+            $fields = [
+                "ENTITY_ID" => $entityId,
+                "ENTITY_TYPE" => $entityType,
+                "COMMENT" => $resultText
+            ];
+            $data = [
+                'fields' => $fields
+            ];
+            $responseBitrix = Http::get($url, $data);
+            $responseData = APIBitrixController::getBitrixRespone($responseBitrix, 'TimeLine Service: setTimeline');
+            return $responseData;
+
+
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+}

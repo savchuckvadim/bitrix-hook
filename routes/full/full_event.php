@@ -10,6 +10,7 @@ use App\Http\Controllers\PortalController;
 use App\Jobs\EventJob;
 use App\Services\BitrixGeneralService;
 use App\Services\FullEventReport\EventDocumentService;
+use App\Services\General\BitrixTimeLineService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -416,20 +417,20 @@ Route::prefix('full')->group(function () {
                     $phones = [];
                     $emails = [];
 
-                       
+
                     foreach ($lead['PHONE'] as $phone) {
                         array_push($phones, $phone['VALUE']);
                         $filter = [
                             'PHONE' => $phone['VALUE']
                         ];
-                    
+
                         $result = BitrixGeneralService::getEntityList(
                             $hook,
                             'company',
                             $filter,
                             $select
                         );
-                    
+
                         if (!empty($result)) {
                             $companies = array_merge($companies, $result);
                         }
@@ -439,32 +440,38 @@ Route::prefix('full')->group(function () {
 
 
                     ]);
-                    // foreach ($lead['EMAIL'] as $email) {
-                    //     array_push($emails, $email['VALUE']);
-                    // }
-                    // $filter = [
-                    //     'LOGIC' => 'OR',
-                    //     [
-                    //         'PHONE' => $phones, // условие по телефонам
-                    //     ],
-                    //     [
-                    //         'EMAIL' => $emails, // условие по e-mail
-                    //     ]
+                    // companies":[
+                    // {"TITLE":"TEST 134",
+                    //     "ID":"171",
+                    // "UF_CRM_OP_MHISTORY":["14.08.2024 ХО запланирован от 14 августа 2024 на 27.08.2024 15:18:00","03.09.2024 12:14:37 Презентация запланирована weg"],
+                    // "UF_CRM_OP_CURRENT_STATUS":"В работе: Презентация запланирована Заявка weg от 03.09.2024 12:14:37",
+                    // "PHONE":
+                    // [{"ID":"104273","VALUE_TYPE":"WORK","VALUE":"+79620027991","TYPE_ID":"PHONE"}]},
+                    // {"TITLE":"Тест","ID":"95763","UF_CRM_OP_MHISTORY":["11.09.2024 ХО запланирован от 11 сентября 2024 на 11.09.2024 12:59:00","11.09.2024 12:01:18 Результативный Холодный обзвон   от 11 сентября 2024  11.09.2024 12:59:00"],"UF_CRM_OP_CURRENT_STATUS":"Звонок запланирован в работе","PHONE":[{"ID":"406655","VALUE_TYPE":"WORK","VALUE":"+79620027991","TYPE_ID":"PHONE"}]}]}
 
-                    // ];
-                    // $filter = [
-                    //     'LOGIC' => 'OR',
-                    //     array_map(function ($phone) {
-                    //         return ['PHONE' => $phone];
-                    //     }, $phones)
+                    $timeLineString = '';
 
-                    // ];
-                    // $companies = BitrixGeneralService::getEntityList(
-                    //     $hook,
-                    //     'company',
-                    //     $filter,
-                    //     $select
-                    // );
+                    if (!empty($companies)) {
+                        $timeLineString = 'Возможно это:';
+                        foreach ($companies as $company) {
+                            $timeLineString .= "\n" . ' ' . $company['TITLE'];
+                            $timeLineString .= "\n" . ' ' . $company['UF_CRM_OP_CURRENT_STATUS'];
+
+                            if (!empty($company['UF_CRM_OP_MHISTORY'])) {
+                                $timeLineString .= "\n" . 'История: ';
+                                $mHistory = $company['UF_CRM_OP_MHISTORY'];
+                                foreach ($mHistory as $historyString) {
+                                    $timeLineString .= "\n" . $historyString;
+                                }
+                            }
+                        }
+                    }
+                    if (empty($timeLineString)) {
+                        $timeLineString = 'Совпадений по компаниям не найдено';
+                    }
+
+                    $bxTimeLineService = new BitrixTimeLineService($hook);
+                    $bxTimeLineService->setTimeline($timeLineString, 'lead', $leadId);
                     Log::channel('telegram')->error('APRIL_HOOK', [
                         'filter'  =>  $filter,
 
