@@ -455,8 +455,9 @@ Route::prefix('full')->group(function () {
                         $timeLineString = 'Возможно это:';
                         foreach ($companies as $company) {
                             $companyId = $company['ID'];
-                            $timeLineString .= "\n" . ' ' . $company['TITLE'];
-                            $timeLineString .= "\n" . ' ' . $company['UF_CRM_OP_CURRENT_STATUS'];
+                            $companyTitle = $company['TITLE'];
+                            $timeLineString .= "\n" . $company['TITLE'];
+                            $timeLineString .= "\n"  . $company['UF_CRM_OP_CURRENT_STATUS'];
                             $companyLink = 'https://' . $domain . '/crm/company/details/' . $companyId . '/';
 
                             // Формируем сообщение с ссылкой
