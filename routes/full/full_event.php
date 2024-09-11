@@ -416,9 +416,23 @@ Route::prefix('full')->group(function () {
                     $phones = [];
                     $emails = [];
 
-
+                       
                     foreach ($lead['PHONE'] as $phone) {
                         array_push($phones, $phone['VALUE']);
+                        $filter = [
+                            'PHONE' => $phone
+                        ];
+                    
+                        $result = BitrixGeneralService::getEntityList(
+                            $hook,
+                            'company',
+                            $filter,
+                            $select
+                        );
+                    
+                        if (!empty($result)) {
+                            $companies = array_merge($companies, $result);
+                        }
                     }
                     Log::channel('telegram')->info('APRIL_HOOK', [
                         'phones'  =>  $phones,
@@ -438,19 +452,19 @@ Route::prefix('full')->group(function () {
                     //     ]
 
                     // ];
-                    $filter = [
-                        'LOGIC' => 'OR',
-                        array_map(function ($phone) {
-                            return ['PHONE' => $phone];
-                        }, $phones)
+                    // $filter = [
+                    //     'LOGIC' => 'OR',
+                    //     array_map(function ($phone) {
+                    //         return ['PHONE' => $phone];
+                    //     }, $phones)
 
-                    ];
-                    $companies = BitrixGeneralService::getEntityList(
-                        $hook,
-                        'company',
-                        $filter,
-                        $select
-                    );
+                    // ];
+                    // $companies = BitrixGeneralService::getEntityList(
+                    //     $hook,
+                    //     'company',
+                    //     $filter,
+                    //     $select
+                    // );
                     Log::channel('telegram')->error('APRIL_HOOK', [
                         'filter'  =>  $filter,
 
