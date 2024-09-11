@@ -457,7 +457,7 @@ Route::prefix('full')->group(function () {
                             $companyId = $company['ID'];
                             $companyTitle = $company['TITLE'];
                             $companyLink = 'https://' . $domain . '/crm/company/details/' . $companyId . '/';
-                            $message = '<a href="' . $companyLink . '" target="_blank">' . $companyTitle . '</a>';
+                            $message = 'Компания: <a href="' . $companyLink . '" target="_blank">' . $companyTitle . '</a>';
 
 
                             $timeLineString .= "\n" . $message;
@@ -465,7 +465,7 @@ Route::prefix('full')->group(function () {
                            
 
 
-                            $timeLineString .= "\n" . $message;
+                            // $timeLineString .= "\n" . $message;
                             // if (!empty($company['UF_CRM_OP_MHISTORY'])) {
                             //     $timeLineString .= "\n" . 'История: ';
                             //     $mHistory = $company['UF_CRM_OP_MHISTORY'];
