@@ -123,7 +123,7 @@ class BitrixRPAPresFlowService
                 [
                     'code' => 'next_pres_plan_date', //дата начала
                     'name' => 'ОП Дата назначенной презентации',
-                    'value' => $nowDate //$nowDate->format('d.m.Y H:i:s'),
+                    'value' => $deadline //$nowDate->format('d.m.Y H:i:s'),
                 ],
                 [
                     'code' => 'last_pres_plan_responsible',
