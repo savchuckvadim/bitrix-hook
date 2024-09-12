@@ -664,7 +664,11 @@ class EventReportService
             ]);
             if ($this->isDealFlow && $this->portalDealData) {
                 // $currentDealsIds = $this->getBatchDealFlow();
-                $currentDealsIds = $this->getDealFlow();
+                if ($this->domain == 'april-dev.bitrix24.ru') {
+                    $currentDealsIds = $this->getBatchDealFlow();
+                } else {
+                    $currentDealsIds = $this->getDealFlow();
+                }
             }
 
             // $this->createTask($currentSmartId);
@@ -673,7 +677,9 @@ class EventReportService
             } else {
                 $result = $this->workStatus;
             }
-            $this->getEntityFlow();
+            if ($this->domain !== 'april-dev.bitrix24.ru') {
+                $this->getEntityFlow();
+            }
             // sleep(1);
 
 
