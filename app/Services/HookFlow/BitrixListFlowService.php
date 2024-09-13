@@ -313,6 +313,8 @@ class BitrixListFlowService
             ];
 
             foreach ($bitrixLists as $bitrixList) {
+
+
                 if ($bitrixList['type'] === 'history') {
 
                     foreach ($xoFields as $xoValue) {
@@ -381,7 +383,7 @@ class BitrixListFlowService
                         }
                         // array_push($fieldsData, $currentDataField);
                     }
-                    sleep(1);
+                    sleep(5);
                     Log::info('HOOK LIST', ['data' => $fieldsData]);
                     BitrixListService::setItem(
                         $hook,
