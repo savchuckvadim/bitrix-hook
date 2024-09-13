@@ -315,7 +315,7 @@ class BitrixListFlowService
             foreach ($bitrixLists as $bitrixList) {
 
 
-                if ($bitrixList['type'] === 'history') {
+                if ($bitrixList['type'] === 'kpi') {
 
                     foreach ($xoFields as $xoValue) {
                         $currentDataField = [];
@@ -356,7 +356,7 @@ class BitrixListFlowService
              * KPI DOUBLE
              */
             foreach ($bitrixLists as $bitrixList) {
-                if ($bitrixList['type'] === 'kpi') {
+                if ($bitrixList['type'] === 'history') {
 
                     foreach ($xoFields as $xoValue) {
                         $currentDataField = [];
