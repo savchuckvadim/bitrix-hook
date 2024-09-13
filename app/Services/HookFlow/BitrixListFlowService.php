@@ -341,6 +341,7 @@ class BitrixListFlowService
                         // array_push($fieldsData, $currentDataField);
                     }
                     sleep(1);
+                    Log::info('HOOK LIST', ['data' => $fieldsData]);
                     BitrixListService::setItem(
                         $hook,
                         $bitrixList['bitrixId'],
