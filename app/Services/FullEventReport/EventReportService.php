@@ -2977,6 +2977,32 @@ class EventReportService
         //     )->onQueue('low-priority');
         // }
     }
+
+    protected function setTimeLine()
+    {
+        $timeLineString = '';
+        $planEventType = $this->currentPlanEventType; //если перенос то тип будет автоматически взят из report - предыдущего события
+        $eventAction = 'expired';  // не состоялся и двигается крайний срок 
+        $planComment = 'Перенесен';
+        $planEventTypeName = $this->currentPlanEventTypeName;
+
+        if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
+            //report
+            $eventAction = 'plan';
+            $planComment = 'Запланирован';
+        }
+        $planComment = $planComment . ' ' . $planEventTypeName. "\n" . $this->planDeadline . "\n" . $this->comment;
+
+
+        if (!empty($this->currentBaseDeal)) {
+            if (!empty($this->currentBaseDeal['ID'] && !empty($this->currentBaseDeal['TITLE']))) {
+                $dealId = $this->currentBaseDeal['ID'];
+                $companyTitle = $this->currentBaseDeal['TITLE'];
+                $dealLink = 'https://' . $this->domain . '/crm/company/details/' . $dealId . '/';
+                $message = 'Сделка: <a href="' . $dealLink . '" target="_blank">' . $companyTitle . '</a>';
+            }
+        }
+    }
 }
 
 
