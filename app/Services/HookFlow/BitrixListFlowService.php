@@ -313,7 +313,7 @@ class BitrixListFlowService
             ];
 
             foreach ($bitrixLists as $bitrixList) {
-                if ($bitrixList['type'] !== 'presentation') {
+                if ($bitrixList['type'] === 'history') {
 
                     foreach ($xoFields as $xoValue) {
                         $currentDataField = [];
@@ -350,7 +350,46 @@ class BitrixListFlowService
                 }
             }
 
+            /**
+             * KPI DOUBLE
+             */
+            foreach ($bitrixLists as $bitrixList) {
+                if ($bitrixList['type'] === 'kpi') {
 
+                    foreach ($xoFields as $xoValue) {
+                        $currentDataField = [];
+                        $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $xoValue['code'];
+                        $btxId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, null);
+                        if (!empty($xoValue)) {
+
+
+
+                            if (!empty($xoValue['value'])) {
+                                $fieldsData[$btxId] = $xoValue['value'];
+                                $currentDataField[$btxId] = $xoValue['value'];
+                            }
+
+                            if (!empty($xoValue['list'])) {
+                                $btxItemId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, $xoValue['list']['code']);
+                                $currentDataField[$btxId] = [
+
+                                    $btxItemId =>  $xoValue['list']['code']
+                                ];
+
+                                $fieldsData[$btxId] =  $btxItemId;
+                            }
+                        }
+                        // array_push($fieldsData, $currentDataField);
+                    }
+                    sleep(1);
+                    Log::info('HOOK LIST', ['data' => $fieldsData]);
+                    BitrixListService::setItem(
+                        $hook,
+                        $bitrixList['bitrixId'],
+                        $fieldsData
+                    );
+                }
+            }
 
             //for uniq pres
             if ($resultStatus === 'result' || $resultStatus === 'new') {
