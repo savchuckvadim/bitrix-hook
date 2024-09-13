@@ -686,8 +686,12 @@ class EventReportService
 
             // $this->getListFlow();
 
-
-            $this->getListBatchFlow();
+            if ($this->domain == 'april-dev.bitrix24.ru') {
+                $this->getListBatchFlow();
+            }else{
+                $this->getListFlow();
+            }
+          
 
             // $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
             $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
@@ -2486,7 +2490,10 @@ class EventReportService
             $planComment = 'Запланирован';
         }
 
-        $planComment = $planComment . ' ' . $planEventTypeName . ' ' . $this->comment;
+        $planComment = $planComment . ' ' . $planEventTypeName.' '.$this->currentPlanEventName;
+        if ($this->isNew || $this->isExpired) {
+            $planComment .=  ' ' . $this->comment;
+        }
         if (!$this->isNew) { //если новая то не отчитываемся
             // покачто
             // todo сделать чтобы в новой задаче можно было отчитаться что было
@@ -2679,7 +2686,7 @@ class EventReportService
             $planComment = 'Запланирован';
         }
 
-        $planComment = $planComment . ' ' . $planEventTypeName;
+        $planComment = $planComment . ' ' . $planEventTypeName.' '.$this->currentPlanEventName;
         if ($this->isNew || $this->isExpired) {
             $planComment .=  ' ' . $this->comment;
         }
