@@ -126,9 +126,9 @@ class BitrixBatchService
                 'cmd' => $batchCommands
             ]);
             $responseData = $response->json();
-            print_r("<br>");
-            print_r($key);
-            print_r("<br>");
+            // print_r("<br>");
+            // print_r($key);
+            // print_r("<br>");
             // print_r($batchCommands);
             // print_r("<br>");
             // print_r($responseData);

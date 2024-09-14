@@ -1381,7 +1381,8 @@ class EventReportService
 
 
 
-        return ['command' => $entityCommand];
+        // return ['command' => $entityCommand];
+        return $entityCommand;
     }
 
     // get deal relations flow
@@ -2161,8 +2162,8 @@ class EventReportService
         $batchCommands = $flowResult['commands'];
         Log::info('HOOK BATCH batchFlow report DEAL', ['report batchCommands' => $batchCommands]);
         Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $batchCommands]);
-        Log::info('HOOK BATCH $this->currentTMCDeal', ['report $this->currentTMCDeal' =>$this->currentTMCDeal]);
-        Log::channel('telegram')->info('HOOK BATCH $this->currentTMCDeal', ['report $this->currentTMCDeal' =>$this->currentTMCDeal]);
+        Log::info('HOOK BATCH $this->currentTMCDeal', ['report $this->currentTMCDeal' => $this->currentTMCDeal]);
+        Log::channel('telegram')->info('HOOK BATCH $this->currentTMCDeal', ['report $this->currentTMCDeal' => $this->currentTMCDeal]);
 
 
 
