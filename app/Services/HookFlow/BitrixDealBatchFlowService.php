@@ -518,7 +518,6 @@ class BitrixDealBatchFlowService
                                 }
                             }
                         }
-                       
                     }
 
                     $resultProcesses[] = $resultProcess;
@@ -530,6 +529,10 @@ class BitrixDealBatchFlowService
                         // Если maxObject ещё не установлен или текущее значение stageKey больше
                         if ($maxProcessObject === null || $resultProcess['stageKey'] > $maxProcessObject['stageKey']) {
                             $maxProcessObject = $resultProcess;
+                        }
+                        if ($maxProcessObject !== null && $resultProcess['stageKey'] <= $maxProcessObject['stageKey']) {
+                            $resultProcess['isNeedUpdate'] = false;
+                            $groupped[$groupKey . '_noneed'] = $resultProcess;
                         }
                     }
 
