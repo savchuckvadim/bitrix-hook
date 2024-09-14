@@ -669,9 +669,9 @@ class EventReportService
             if ($this->isDealFlow && $this->portalDealData) {
                 // $currentDealsIds = $this->getBatchDealFlow();
 
-                $currentDealsIds = $this->getBatchDealFlow();
+                // $currentDealsIds = $this->getBatchDealFlow();
 
-                // $currentDealsIds = $this->getDealFlow();
+                $currentDealsIds = $this->getDealFlow();
 
             }
 
@@ -682,7 +682,7 @@ class EventReportService
                 $result = $this->workStatus;
             }
 
-            // $this->getEntityFlow();
+            $this->getEntityFlow();
 
 
 
@@ -3356,7 +3356,7 @@ class EventReportService
 
             $timeLineString .= $message;
         }
-        Log::channel('telegram')->info('HOOK TIME LINE', ['set' => $timeLineString]);
+        // Log::channel('telegram')->info('HOOK TIME LINE', ['set' => $timeLineString]);
 
         Log::info('HOOK TIME LINE', ['set' => $timeLineString]);
         if (!empty($timeLineString)) {
