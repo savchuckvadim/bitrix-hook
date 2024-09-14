@@ -12,6 +12,7 @@ use App\Services\BitrixTaskService;
 use App\Services\General\BitrixBatchService;
 use App\Services\General\BitrixDealService;
 use App\Services\General\BitrixDepartamentService;
+use App\Services\General\BitrixTimeLineService;
 use App\Services\HookFlow\BitrixDealBatchFlowService;
 use App\Services\HookFlow\BitrixDealFlowService;
 use App\Services\HookFlow\BitrixEntityBatchFlowService;
@@ -688,10 +689,10 @@ class EventReportService
 
             if ($this->domain == 'april-dev.bitrix24.ru') {
                 $this->getListBatchFlow();
-            }else{
+            } else {
                 $this->getListFlow();
             }
-          
+
 
             // $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
             $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
@@ -1969,7 +1970,7 @@ class EventReportService
             }
         }
 
-
+        $this->setTimeLine();
         $unplannedPresDeals = null;
         $newPresDeal = null;
         // report - закрывает сделки
@@ -2490,7 +2491,7 @@ class EventReportService
             $planComment = 'Запланирован';
         }
 
-        $planComment = $planComment . ' ' . $planEventTypeName.' '.$this->currentPlanEventName;
+        $planComment = $planComment . ' ' . $planEventTypeName . ' ' . $this->currentPlanEventName;
         if ($this->isNew || $this->isExpired) {
             $planComment .=  ' ' . $this->comment;
         }
@@ -2686,16 +2687,13 @@ class EventReportService
             $planComment = 'Запланирован';
         }
 
-        $planComment = $planComment . ' ' . $planEventTypeName.' '.$this->currentPlanEventName;
+        $planComment = $planComment . ' ' . $planEventTypeName . ' ' . $this->currentPlanEventName;
         if ($this->isNew || $this->isExpired) {
             $planComment .=  ' ' . $this->comment;
         }
         if (!$this->isNew) { //если новая то не отчитываемся
             // покачто
             // todo сделать чтобы в новой задаче можно было отчитаться что было
-
-
-
 
             if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
 
@@ -3325,6 +3323,7 @@ class EventReportService
 
     protected function setTimeLine()
     {
+        $timeLineService = new BitrixTimeLineService($this->hook);
         $timeLineString = '';
         $planEventType = $this->currentPlanEventType; //если перенос то тип будет автоматически взят из report - предыдущего события
         $eventAction = 'expired';  // не состоялся и двигается крайний срок 
@@ -3342,10 +3341,20 @@ class EventReportService
         if (!empty($this->currentBaseDeal)) {
             if (!empty($this->currentBaseDeal['ID'] && !empty($this->currentBaseDeal['TITLE']))) {
                 $dealId = $this->currentBaseDeal['ID'];
-                $companyTitle = $this->currentBaseDeal['TITLE'];
-                $dealLink = 'https://' . $this->domain . '/crm/company/details/' . $dealId . '/';
-                $message = 'Сделка: <a href="' . $dealLink . '" target="_blank">' . $companyTitle . '</a>';
+                $dealTitle = $this->currentBaseDeal['TITLE'];
+                $dealLink = 'https://' . $this->domain . '/crm/deal/details/' . $dealId . '/';
+                $message = 'Сделка: <a href="' . $dealLink . '" target="_blank">' . $dealTitle . '</a>';
             }
+        }
+
+        $timeLineString =  $planComment;
+        if (!empty($message)) {
+
+            $timeLineString .= $message;
+        }
+
+        if (!empty($timeLineString)) {
+            $timeLineService->setTimeLine($timeLineString, $this->entityType, $this->entityId);
         }
     }
 }

@@ -307,7 +307,7 @@ class BitrixCallingColdService
 
                                 break;
                             case 'op_current_status':
-                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] =  'Холодный в работе от' . $nowOnlyDate;
+                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] =  'В работе: Холодный звонок от ' . $nowOnlyDate;
 
                                 break;
                             case 'op_work_status':
