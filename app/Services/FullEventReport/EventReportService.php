@@ -665,11 +665,11 @@ class EventReportService
             ]);
             if ($this->isDealFlow && $this->portalDealData) {
                 // $currentDealsIds = $this->getBatchDealFlow();
-                if ($this->domain == 'april-dev.bitrix24.ru') {
-                    $currentDealsIds = $this->getBatchDealFlow();
-                } else {
-                    $currentDealsIds = $this->getDealFlow();
-                }
+
+                $currentDealsIds = $this->getBatchDealFlow();
+
+                // $currentDealsIds = $this->getDealFlow();
+
             }
 
             // $this->createTask($currentSmartId);
@@ -678,20 +678,21 @@ class EventReportService
             } else {
                 $result = $this->workStatus;
             }
-            if ($this->domain !== 'april-dev.bitrix24.ru') {
-                $this->getEntityFlow();
-            }
+
+            // $this->getEntityFlow();
+
+
+
+
+
             // sleep(1);
 
             /** TESTING BATCH */
 
             // $this->getListFlow();
 
-            if ($this->domain == 'april-dev.bitrix24.ru') {
-                $this->getListBatchFlow();
-            } else {
-                $this->getListFlow();
-            }
+            $this->getListBatchFlow();
+            //   $this->getListFlow();
 
 
             // $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
