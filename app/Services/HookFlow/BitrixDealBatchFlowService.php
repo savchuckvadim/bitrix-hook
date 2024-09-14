@@ -440,11 +440,12 @@ class BitrixDealBatchFlowService
 
 
                     if (empty($process['deal'])) {
+                        $isProcessNeedUpdate = true;
                         $resultProcess = [
                             'dealId' => $process['dealId'],
                             'command' => $process['command'],
                             'targetStage' => $process['targetStage'],
-                            'isNeedUpdate' => $process['isNeedUpdate'],
+                            'isNeedUpdate' => true,
                             'stageKey' => 0,
                             'batchKey' => $process['batchKey'],
                             'tag' => $process['tag'],
@@ -517,10 +518,10 @@ class BitrixDealBatchFlowService
                                 }
                             }
                         }
-                        $resultProcesses[] = $resultProcess;
+                       
                     }
 
-
+                    $resultProcesses[] = $resultProcess;
                     $maxProcessObject = null;
                     Log::info('HOOK resultProcesses', ['resultProcesses' => $resultProcesses]);
 
