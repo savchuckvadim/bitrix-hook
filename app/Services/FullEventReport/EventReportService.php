@@ -173,6 +173,9 @@ class EventReportService
 
 
         $domain = $data['domain'];
+        $this->domain = $domain;
+
+
         $portal = PortalController::getPortal($domain);
         $portal = $portal['data'];
         $this->portal = $portal;
