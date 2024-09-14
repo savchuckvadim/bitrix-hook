@@ -2373,7 +2373,7 @@ class EventReportService
 
 
         // ENTITY
-        // $entityResult =  $batchService->sendFlowBatchRequest($entityBatchCommands);
+        $entityResult =  $batchService->sendGeneralBatchRequest($entityBatchCommands);
 
 
 
