@@ -156,7 +156,7 @@ class BitrixDealBatchFlowService
                     $key = 'set_' . $tag . '_' . $currentCategoryData['code'];
                     $resultBatchCommands[$key] = [
                         'command' => $batchCommand,
-                        'dealId' => null,
+                        'dealId' => $key,
                         'deal' => null,
                         'targetStage' => $targetStageBtxId,
                         'batchKey' => $key,
@@ -179,7 +179,7 @@ class BitrixDealBatchFlowService
                             // usleep($rand);
                             // $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'get', $currentDealId);
                             // $batchCommands['newPresDeal'] = $batchCommand;
-                            $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null, $tag);
+                            $batchCommand = BitrixDealBatchFlowService::getBatchCommand(['ID' => $currentDealId], 'get', null, $tag);
                             $key = 'newpresdealget_' . $tag . '_' . $currentCategoryData['code'] . '_' . $currentDealId;
                             // $resultBatchCommands[$key] = $batchCommand;
                             $resultBatchCommands[$key] = [
@@ -202,11 +202,33 @@ class BitrixDealBatchFlowService
 
 
                             // );
+                        } else {
+                            //поскольку в batch не делаю set dealId всегда будет равно null
+                            $searchingDealIdFromResult = '$result['.$key.']';
+                            $batchCommand = BitrixDealBatchFlowService::getBatchCommand(['ID' => $searchingDealIdFromResult], 'get', null, $tag);
+
+                            $newpreskey = 'newpresdealget_' . $tag . '_' . $currentCategoryData['code'] . '_' . $currentDealId;
+                            // $resultBatchCommands[$key] = $batchCommand;
+                            $resultBatchCommands[$newpreskey] = [
+                                'command' => $batchCommand,
+                                'dealId' => $searchingDealIdFromResult,
+                                'deal' => null,
+                                'targetStage' => $targetStageBtxId,
+                                'batchKey' => $newpreskey,
+                                'isNeedUpdate' => true,
+                                'tag' => $tag
+
+
+
+
+                            ];
                         }
                     } else {
                         // $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
                         // $key = 'set_' . $tag . '_' . $currentCategoryData['code'];
                         // $resultBatchCommands[$key] = $batchCommand; // в результате будет id
+
+
                     }
 
                     // Log::info('DEAL TEST', [
@@ -415,7 +437,7 @@ class BitrixDealBatchFlowService
                     $isCurrentSearched = false;
                     $isProcessNeedUpdate = false;
 
-                   
+
 
                     if (empty($process['deal'])) {
                         $resultProcess = [

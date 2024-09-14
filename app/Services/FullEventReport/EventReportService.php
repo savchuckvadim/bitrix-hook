@@ -2296,6 +2296,9 @@ class EventReportService
 
         $result = BitrixDealBatchFlowService::handleBatchResults($results);
         $newPresDealId = null;
+        Log::info('HOOK BATCH TARGET NEW PRES RESULT', ['results' => $results]);
+        Log::channel('telegram')->info('HOOK BATCH TARGET NEW PRES RESULT', ['results' => $results]);
+
 
         if (!empty($result)) {
             if (!empty($result['newPresDeal'])) {
