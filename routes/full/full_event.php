@@ -172,9 +172,6 @@ Route::prefix('full')->group(function () {
             ];
 
 
-
-
-
             $data['placement'] = [
                 'options' => [
                     'ID' =>  $companyId

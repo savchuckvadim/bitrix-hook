@@ -755,8 +755,8 @@ class ReportController extends Controller
                 FullEventInitController::setSessionItem(
                     $sessionKey,
                     [
-                        'hook' => $hook,
-                        'portal' => $portal,
+                        // 'hook' => $hook,
+                        // 'portal' => $portal,
                         'currentTask' => $currentTask,
                         'currentCompany' => $currentCompany,
                         'deals' => [
