@@ -669,9 +669,9 @@ class EventReportService
             if ($this->isDealFlow && $this->portalDealData) {
                 // $currentDealsIds = $this->getBatchDealFlow();
 
-                // $currentDealsIds = $this->getBatchDealFlow();
+                $currentDealsIds = $this->getBatchDealFlow();
 
-                $currentDealsIds = $this->getDealFlow();
+                // $currentDealsIds = $this->getDealFlow();
 
             }
 
@@ -682,7 +682,7 @@ class EventReportService
                 $result = $this->workStatus;
             }
 
-            $this->getEntityFlow();
+            // $this->getEntityFlow();
 
 
 
@@ -2159,8 +2159,11 @@ class EventReportService
         );
         // $reportDeals = $flowResult['dealIds'];
         $batchCommands = $flowResult['commands'];
-        // Log::info('HOOK BATCH batchFlow report DEAL', ['report batchCommands' => $batchCommands]);
-        // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $batchCommands]);
+        Log::info('HOOK BATCH batchFlow report DEAL', ['report batchCommands' => $batchCommands]);
+        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $batchCommands]);
+        Log::info('HOOK BATCH $this->currentTMCDeal', ['report $this->currentTMCDeal' =>$this->currentTMCDeal]);
+        Log::channel('telegram')->info('HOOK BATCH $this->currentTMCDeal', ['report $this->currentTMCDeal' =>$this->currentTMCDeal]);
+
 
 
         if (!empty($this->currentTMCDeal) && $this->resultStatus === 'result' && $this->currentReportEventType === 'presentation') {
@@ -2305,6 +2308,9 @@ class EventReportService
                 );
             }
         }
+        Log::info('HOOK BATCH', ['newPresDealId' => $newPresDealId]);
+        Log::channel('telegram')->info('HOOK BATCH newPresDealId', ['newPresDealId' => $newPresDealId]);
+
 
         // Log::info('HOOK BATCH entityBatchCommands DEAL', ['entityBatchCommands' => $entityBatchCommands]);
         // Log::channel('telegram')->info('HOOK BATCH entityBatchCommands', ['entityBatchCommands' => $entityBatchCommands]);
