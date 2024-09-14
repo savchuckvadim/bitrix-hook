@@ -204,7 +204,7 @@ class BitrixDealBatchFlowService
                             // );
                         } else {
                             //поскольку в batch не делаю set dealId всегда будет равно null
-                            $searchingDealIdFromResult = '$result['.$key.']';
+                            $searchingDealIdFromResult = '$result[' . $key . ']';
                             $batchCommand = BitrixDealBatchFlowService::getBatchCommand(['ID' => $searchingDealIdFromResult], 'get', null, $tag);
 
                             $newpreskey = 'newpresdealget_' . $tag . '_' . $currentCategoryData['code'] . '_' . $currentDealId;
@@ -474,52 +474,55 @@ class BitrixDealBatchFlowService
                         //         'deal' => $currentDeal,
                         //         'targetStage' => $targetStageBtxId,
                         //         'isNeedUpdate' => true
-
-                        if (!empty($portalDealData['categories'])) {
-
-                            foreach ($portalDealData['categories'] as $category) {
-                                if ($category['bitrixId'] === $process['deal']['CATEGORY_ID']) {
-                                    // Log::channel('telegram')->info('HOOK process category code ===', ['process stage' => $category]);
-
-                                    foreach ($category['stages'] as $key => $stage) {
-                                        $stageKey =  $key;
-
-
-                                        Log::channel('telegram')->info('HOOK stagebitrixId', ['stagebitrixId' => $stage['bitrixId'], '$process[targetStage]' => $process['targetStage']]);
-
-                                        if ($stage['bitrixId'] == $process['targetStage']) {
+                        if (preg_match('/\b(update)\b/', $process['batchKey'])) {
 
 
 
-                                            if ($isCurrentSearched == true) {
-                                                $isProcessNeedUpdate = true;
-                                                $resultProcess['stageKey'] = $stageKey;
+                            if (!empty($portalDealData['categories'])) {
 
-                                                Log::channel('telegram')->info('HOOK RESULT PROCESS', ['resultProcess' => $resultProcess, 'isProcessNeedUpdate' => $isProcessNeedUpdate]);
+                                foreach ($portalDealData['categories'] as $category) {
+                                    if ($category['bitrixId'] === $process['deal']['CATEGORY_ID']) {
+                                        // Log::channel('telegram')->info('HOOK process category code ===', ['process stage' => $category]);
+
+                                        foreach ($category['stages'] as $key => $stage) {
+                                            $stageKey =  $key;
+
+
+                                            Log::channel('telegram')->info('HOOK stagebitrixId', ['stagebitrixId' => $stage['bitrixId'], '$process[targetStage]' => $process['targetStage']]);
+
+                                            if ($stage['bitrixId'] == $process['targetStage']) {
+
+
+
+                                                if ($isCurrentSearched == true) {
+                                                    $isProcessNeedUpdate = true;
+                                                    $resultProcess['stageKey'] = $stageKey;
+
+                                                    Log::channel('telegram')->info('HOOK RESULT PROCESS', ['resultProcess' => $resultProcess, 'isProcessNeedUpdate' => $isProcessNeedUpdate]);
+                                                }
+                                                // $isCurrentSearched = true;
                                             }
-                                            // $isCurrentSearched = true;
-                                        }
-                                        $stageBitrixId = "C" . $category['bitrixId'] . ':' . $stage['bitrixId'];
+                                            $stageBitrixId = "C" . $category['bitrixId'] . ':' . $stage['bitrixId'];
 
 
-                                        if ($stageBitrixId === $process['deal']['STAGE_ID']) {
+                                            if ($stageBitrixId === $process['deal']['STAGE_ID']) {
 
-                                            $isCurrentSearched = true;
-                                            Log::channel('telegram')->info('HOOK isCurrentSearched', ['process stage' => $stage['bitrixId'], 'isCurrentSearched' => $isCurrentSearched]);
+                                                $isCurrentSearched = true;
+                                                Log::channel('telegram')->info('HOOK isCurrentSearched', ['process stage' => $stage['bitrixId'], 'isCurrentSearched' => $isCurrentSearched]);
+                                            }
                                         }
                                     }
+                                    $resultProcess['isNeedUpdate'] = $isProcessNeedUpdate;
+                                    Log::info('HOOK resultProcess', ['resultProcess' => $resultProcess]);
                                 }
-                                $resultProcess['isNeedUpdate'] = $isProcessNeedUpdate;
-                                Log::info('HOOK resultProcess', ['resultProcess' => $resultProcess]);
                             }
                         }
-
-
                         $resultProcesses[] = $resultProcess;
                     }
 
 
                     $maxProcessObject = null;
+                    Log::info('HOOK resultProcesses', ['resultProcesses' => $resultProcesses]);
 
                     // Проходим по массиву объектов
                     foreach ($resultProcesses as $resultProcess) {
