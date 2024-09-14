@@ -3347,7 +3347,7 @@ class EventReportService
                 $dealId = $this->currentBaseDeal['ID'];
                 $dealTitle = $this->currentBaseDeal['TITLE'];
                 $dealLink = 'https://' . $this->domain . '/crm/deal/details/' . $dealId . '/';
-                $message = 'Сделка: <a href="' . $dealLink . '" target="_blank">' . $dealTitle . '</a>';
+                $message = "\n" . 'Сделка: <a href="' . $dealLink . '" target="_blank">' . $dealTitle . '</a>';
             }
         }
 
