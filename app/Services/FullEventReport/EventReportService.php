@@ -3354,7 +3354,7 @@ class EventReportService
         }
 
         if (!empty($timeLineString)) {
-            $timeLineService->setTimeLine($timeLineString, $this->entityType, $this->entityId);
+            $timeLineService->setTimeLine($timeLineString, 'company', $this->entityId);
         }
     }
 }
