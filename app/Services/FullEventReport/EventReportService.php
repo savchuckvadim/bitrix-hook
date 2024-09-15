@@ -3410,9 +3410,9 @@ class EventReportService
 
                 if ($this->currentReportEventName == 'Презентация') {
                     if ($reportComment == 'Coстоялся') {
-                        $reportComment == 'Coстоялась';
+                        $reportComment = 'Coстоялась';
                     } else if ($reportComment == 'Не состоялся') {
-                        $reportComment == 'Не состоялась';
+                        $reportComment = 'Не состоялась';
                     }
                 }
                 $planComment = $reportComment . ' ' . $this->currentReportEventName;
