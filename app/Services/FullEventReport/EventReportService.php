@@ -512,7 +512,7 @@ class EventReportService
                     $this->relationColdDeals = $sessionDeals['allXODeals'];
                     $this->currentTMCDealFromCurrentPres = $sessionDeals['currentTMCDeal'];
                     Log::info('HOOK TMC SESSION', ['sessionDeals' => $sessionDeals]);
-                    Log::info('HOOK TMC SESSION currentTMCDeal', ['session currentTMCDeal' => $sessionDeals]['currentTMCDeal']);
+                    Log::info('HOOK TMC SESSION currentTMCDeal', ['session currentTMCDeal' => $sessionDeals['currentTMCDeal']]);
         
                 }
             }
