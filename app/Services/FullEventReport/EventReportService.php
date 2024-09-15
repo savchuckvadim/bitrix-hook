@@ -510,6 +510,10 @@ class EventReportService
                     $this->relationCompanyUserPresDeals = $sessionDeals['allPresentationDeals']; //allPresDeal 
                     $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
                     $this->relationColdDeals = $sessionDeals['allXODeals'];
+                    $this->currentTMCDealFromCurrentPres = $sessionDeals['currentTMCDeal'];
+                    Log::info('HOOK TMC SESSION', ['sessionDeals' => $sessionDeals]);
+                    Log::info('HOOK TMC SESSION currentTMCDeal', ['session currentTMCDeal' => $sessionDeals]['currentTMCDeal']);
+        
                 }
             }
         } else {
@@ -532,16 +536,14 @@ class EventReportService
 
                 $sessionDeals = $sessionData['deals'];
             }
-            Log::info('HOOK TMC SESSION', ['sessionDeals' => $sessionDeals]);
-            Log::info('HOOK TMC SESSION currentTMCDeal', ['session currentTMCDeal' => $sessionDeals]['currentTMCDeal']);
-
+         
             if (isset($sessionDeals) && isset($sessionDeals['currentBaseDeals'])) {
                 $this->currentBtxEntity  = $sessionData['currentCompany'];
 
                 if (is_array($sessionDeals['currentBaseDeals']) && !empty($sessionDeals['currentBaseDeals'])) {
                     $this->currentBtxDeals  = [$sessionDeals['currentBaseDeals'][0]];
                     $this->currentBaseDeal = $sessionDeals['currentBaseDeals'][0];
-                    $this->currentTMCDealFromCurrentPres = $sessionDeals['currentTMCDeal'];
+                  
                 } else {
 
                     $this->currentBtxDeals  = [];
