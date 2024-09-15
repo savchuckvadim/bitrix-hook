@@ -329,8 +329,8 @@ class BitrixDealBatchFlowService
         // Логирование результатов обработки
         // Log::info('HOOK BATCH handleBatchResults', ['batchResult' => $batchResult]);
         // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchResult' => $batchResult]);
-        Log::channel('telegram')->info('HOOK cleanBatchCommands', ['batchCommands' => $batchCommands]);
-        Log::info('HOOK cleanBatchCommands', ['batchCommands' => $batchCommands]);
+        // Log::channel('telegram')->info('HOOK cleanBatchCommands', ['batchCommands' => $batchCommands]);
+        // Log::info('HOOK cleanBatchCommands', ['batchCommands' => $batchCommands]);
 
         // [
         // {"update_unpres_sales_base_7267_PRESENTATION":true,
@@ -583,12 +583,12 @@ class BitrixDealBatchFlowService
                 // }
 
             }
-            Log::channel('telegram')->info('HOOK RESULT groupped', ['groupped' => $groupped]);
-            Log::info('HOOK RESULT groupped', ['groupped' => $groupped]);
-            foreach ($groupped as $dealId => $processes) {
-                foreach ($results as $key => $batchData) {
-                }
-            }
+            // Log::channel('telegram')->info('HOOK RESULT groupped', ['groupped' => $groupped]);
+            // Log::info('HOOK RESULT groupped', ['groupped' => $groupped]);
+            // foreach ($groupped as $dealId => $processes) {
+            //     foreach ($results as $key => $batchData) {
+            //     }
+            // }
 
             return $groupped;
         } catch (\Throwable $th) {
@@ -618,8 +618,8 @@ class BitrixDealBatchFlowService
         $unplannedPresDeals = [];
         $newPresDeal = null;
         // Логирование результатов обработки
-        Log::info('HOOK BATCH COME DATA handleBatchResults', ['batchResult' => $batchResult]);
-        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchResult' => $batchResult]);
+        // Log::info('HOOK BATCH COME DATA handleBatchResults', ['batchResult' => $batchResult]);
+        // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchResult' => $batchResult]);
 
         // Извлечение результатов
         $results = $batchResult;  // Предполагаем, что структура такая, как в примере

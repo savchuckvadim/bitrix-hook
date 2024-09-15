@@ -511,8 +511,8 @@ class EventReportService
                     $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
                     $this->relationColdDeals = $sessionDeals['allXODeals'];
                     $this->currentTMCDealFromCurrentPres = $sessionDeals['currentTMCDeal'];
-                    Log::info('HOOK TMC SESSION', ['sessionDeals' => $sessionDeals]);
-                    Log::info('HOOK TMC SESSION currentTMCDeal', ['session currentTMCDeal' => $sessionDeals['currentTMCDeal']]);
+                    // Log::info('HOOK TMC SESSION', ['sessionDeals' => $sessionDeals]);
+                    // Log::info('HOOK TMC SESSION currentTMCDeal', ['session currentTMCDeal' => $sessionDeals['currentTMCDeal']]);
         
                 }
             }
@@ -563,8 +563,8 @@ class EventReportService
         $sessionTMCDealKey = 'tmcInit_' . $domain . '_' . $this->planResponsibleId . '_' . $entityId;
         $sessionData = FullEventInitController::getSessionItem($sessionTMCDealKey);
 
-        Log::info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
-        Log::channel('telegram')->info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
+        // Log::info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
+        // Log::channel('telegram')->info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
 
         if (isset($sessionData['tmcDeal'])) {
             $this->currentTMCDeal = $sessionData['tmcDeal'];
@@ -667,12 +667,12 @@ class EventReportService
             // if ($this->isSmartFlow) {
             //     $this->getSmartFlow();
             // }
-            Log::info('HOOK TEST unplannedPresDeal', [
-                'currentBaseDeal' => $this->currentBaseDeal,
-                'currentPresDeal' => $this->currentPresDeal,
-                'currentBtxDeals' => $this->currentBtxDeals,
+            // Log::info('HOOK TEST unplannedPresDeal', [
+            //     'currentBaseDeal' => $this->currentBaseDeal,
+            //     'currentPresDeal' => $this->currentPresDeal,
+            //     'currentBtxDeals' => $this->currentBtxDeals,
 
-            ]);
+            // ]);
             if ($this->isDealFlow && $this->portalDealData) {
                 // $currentDealsIds = $this->getBatchDealFlow();
 
@@ -2144,8 +2144,8 @@ class EventReportService
 
         // ]);
 
-        Log::info('HOOK BATCH batchFlow report DEAL', ['report currentBtxDeals' => $currentBtxDeals]);
-        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['currentBtxDeals' => $currentBtxDeals]);
+        // Log::info('HOOK BATCH batchFlow report DEAL', ['report currentBtxDeals' => $currentBtxDeals]);
+        // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['currentBtxDeals' => $currentBtxDeals]);
         $flowResult = BitrixDealBatchFlowService::batchFlow(  // редактирует сделки отчетности из currentTask основную и если есть xo
             $this->hook,
             $currentBtxDeals,
@@ -2167,13 +2167,13 @@ class EventReportService
         );
         // $reportDeals = $flowResult['dealIds'];
         $batchCommands = $flowResult['commands'];
-        Log::info('HOOK BATCH batchFlow report DEAL', ['report batchCommands' => $batchCommands]);
-        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $batchCommands]);
-        Log::info('HOOK BATCH $this->currentTMCDeal', ['report $this->currentTMCDeal' => $this->currentTMCDeal]);
-        Log::channel('telegram')->info('HOOK BATCH $this->currentTMCDeal', ['report $this->currentTMCDeal' => $this->currentTMCDeal]);
+        // Log::info('HOOK BATCH batchFlow report DEAL', ['report batchCommands' => $batchCommands]);
+        // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $batchCommands]);
+        // Log::info('HOOK BATCH $this->currentTMCDeal', ['report $this->currentTMCDeal' => $this->currentTMCDeal]);
+        // Log::channel('telegram')->info('HOOK BATCH $this->currentTMCDeal', ['report $this->currentTMCDeal' => $this->currentTMCDeal]);
 
-        Log::info('HOOK BATCH $this->currentTMCDealFromCurrentPres', ['report $this->currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres]);
-        Log::channel('telegram')->info('HOOK BATCH $this->currentTMCDealFromCurrentPres', ['report $this->currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres]);
+        // Log::info('HOOK BATCH $this->currentTMCDealFromCurrentPres', ['report $this->currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres]);
+        // Log::channel('telegram')->info('HOOK BATCH $this->currentTMCDealFromCurrentPres', ['report $this->currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres]);
 
 
 
@@ -2306,18 +2306,18 @@ class EventReportService
         }
         $cleanBatchCommands = BitrixDealBatchFlowService::cleanBatchCommands($batchCommands, $this->portalDealData);
 
-        Log::channel('telegram')->info('HOOK BATCH', ['cleanBatchCommands' => $cleanBatchCommands]);
+        // Log::channel('telegram')->info('HOOK BATCH', ['cleanBatchCommands' => $cleanBatchCommands]);
 
 
         $batchService =  new BitrixBatchService($this->hook);
         $results = $batchService->sendFlowBatchRequest($cleanBatchCommands);
-        Log::info('HOOK BATCH', ['results' => $results]);
-        Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
+        // Log::info('HOOK BATCH', ['results' => $results]);
+        // Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
 
         $result = BitrixDealBatchFlowService::handleBatchResults($results);
         $newPresDealId = null;
-        Log::info('HOOK BATCH TARGET NEW PRES RESULT', ['results' => $results]);
-        Log::channel('telegram')->info('HOOK BATCH TARGET NEW PRES RESULT', ['results' => $results]);
+        // Log::info('HOOK BATCH TARGET NEW PRES RESULT', ['results' => $results]);
+        // Log::channel('telegram')->info('HOOK BATCH TARGET NEW PRES RESULT', ['results' => $results]);
 
 
         if (!empty($result)) {
