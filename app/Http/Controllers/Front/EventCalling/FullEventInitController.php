@@ -59,7 +59,7 @@ class FullEventInitController extends Controller
         ];
         try {
 
-           
+
 
 
             $tasksGroupId = FullEventInitController::getCallingGroupId($portal);
@@ -106,7 +106,7 @@ class FullEventInitController extends Controller
                 if ($currentTaskId) {
                     $data['filter']['ID'] = $currentTaskId;
                 }
-    
+
                 $response = Http::get($url, $data);
 
                 $bitrixResult = APIBitrixController::getBitrixRespone($response, 'getCallingTasksReport');
@@ -167,8 +167,8 @@ class FullEventInitController extends Controller
         }
     }
 
-   
-    
+
+
     public static function getCallingGroupId($portal)
     {
         $callingGroupId = 28;
@@ -443,6 +443,28 @@ class FullEventInitController extends Controller
             return $result;
         } catch (\Throwable $th) {
             return $result;
+        }
+    }
+
+    public static function clearSessionItem($key)
+    {
+        try {
+            $hashedKey = md5($key);
+
+            // Удаление данных из Redis по ключу
+            Redis::del($hashedKey);
+
+            return [
+                'result' => 'success',
+                'message' => 'Session cleared!',
+                'sessionKey' => $hashedKey
+            ];
+        } catch (\Throwable $th) {
+            return [
+                'result' => 'error',
+                'message' => 'Failed to clear session!',
+                'error' => $th->getMessage()
+            ];
         }
     }
 }

@@ -2174,7 +2174,7 @@ class EventReportService
 
             $tmcflowResult =  BitrixDealBatchFlowService::batchFlow(  // редактирует сделки отчетности из currentTask основную и если есть xo
                 $this->hook,
-                [$this->currentTMCDeal],
+                [$this->currentTMCDealFromCurrentPres],
                 $this->portalDealData,
                 'tmc',
                 $this->entityType,
@@ -2333,7 +2333,7 @@ class EventReportService
         //поэтому в batch commands - results будет 'new_pres_deal_id'
         // и в этот момент я ее отдельным get возьму
 
-        if (!empty($this->currentTMCDealFromCurrentPres) && $this->currentPlanEventType == 'presentation' && $newPresDeal) {
+        if (!empty($this->currentTMCDeal) && $this->currentPlanEventType == 'presentation' && $newPresDeal) {
             BitrixDealFlowService::tmcPresentationRelation(
                 $this->hook,
                 $this->portalDealData,
@@ -2341,6 +2341,9 @@ class EventReportService
                 $newPresDeal,
                 $this->currentTMCDeal['ID']
             );
+            $sessionTMCDealKey = 'tmcInit_' . $this->domain . '_' . $this->planResponsibleId . '_' . $this->entityId;
+            FullEventInitController::clearSessionItem($sessionTMCDealKey);
+
         }
         // }
 
