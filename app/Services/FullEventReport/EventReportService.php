@@ -3377,7 +3377,7 @@ class EventReportService
         $formattedDate = $carbonDate->isoFormat('D MMMM HH:mm');
 
 
-        if (!$this->isPlanned) {
+        if ($this->isPlanned) {
             if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
                 //report
                 $eventAction = 'plan';
