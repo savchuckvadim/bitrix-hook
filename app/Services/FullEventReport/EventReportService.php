@@ -2167,6 +2167,9 @@ class EventReportService
         Log::info('HOOK BATCH $this->currentTMCDeal', ['report $this->currentTMCDeal' => $this->currentTMCDeal]);
         Log::channel('telegram')->info('HOOK BATCH $this->currentTMCDeal', ['report $this->currentTMCDeal' => $this->currentTMCDeal]);
 
+        Log::info('HOOK BATCH $this->currentTMCDealFromCurrentPres', ['report $this->currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres]);
+        Log::channel('telegram')->info('HOOK BATCH $this->currentTMCDealFromCurrentPres', ['report $this->currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres]);
+
 
 
         // обновляет стадию тмц сделку
