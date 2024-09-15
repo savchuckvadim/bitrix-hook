@@ -2721,6 +2721,9 @@ class EventReportService
             //report
             $eventAction = 'plan';
             $planComment = 'Запланирован';
+        }else{
+            $planEventTypeName = $this->currentReportEventName;
+            $planEventType = $this->currentReportEventType; 
         }
 
         $planComment = $planComment . ' ' . $planEventTypeName . ' ' . $this->currentPlanEventName;
@@ -3388,7 +3391,9 @@ class EventReportService
             } else {
                 $eventAction = 'expired';  // не состоялся и двигается крайний срок 
                 $planComment = 'Перенесен';
-                if ($this->currentPlanEventTypeName == 'Презентация') {
+                $planEventTypeName = $this->currentReportEventName;
+
+                if ($this->currentReportEventName == 'Презентация') {
                     $planComment = 'Перенесена';
                 }
             }
