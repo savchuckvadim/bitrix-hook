@@ -532,6 +532,9 @@ class EventReportService
 
                 $sessionDeals = $sessionData['deals'];
             }
+            Log::info('HOOK TMC SESSION', ['sessionDeals' => $sessionDeals]);
+            Log::info('HOOK TMC SESSION currentTMCDeal', ['session currentTMCDeal' => $sessionDeals]['currentTMCDeal']);
+
             if (isset($sessionDeals) && isset($sessionDeals['currentBaseDeals'])) {
                 $this->currentBtxEntity  = $sessionData['currentCompany'];
 
