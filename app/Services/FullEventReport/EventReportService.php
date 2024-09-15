@@ -19,6 +19,7 @@ use App\Services\HookFlow\BitrixEntityBatchFlowService;
 use App\Services\HookFlow\BitrixEntityFlowService;
 use App\Services\HookFlow\BitrixListFlowService;
 use App\Services\HookFlow\BitrixListPresentationFlowService;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Console\View\Components\Task;
 use Illuminate\Support\Facades\Date;
@@ -513,7 +514,7 @@ class EventReportService
                     $this->currentTMCDealFromCurrentPres = $sessionDeals['currentTMCDeal'];
                     // Log::info('HOOK TMC SESSION', ['sessionDeals' => $sessionDeals]);
                     // Log::info('HOOK TMC SESSION currentTMCDeal', ['session currentTMCDeal' => $sessionDeals['currentTMCDeal']]);
-        
+
                 }
             }
         } else {
@@ -536,14 +537,13 @@ class EventReportService
 
                 $sessionDeals = $sessionData['deals'];
             }
-         
+
             if (isset($sessionDeals) && isset($sessionDeals['currentBaseDeals'])) {
                 $this->currentBtxEntity  = $sessionData['currentCompany'];
 
                 if (is_array($sessionDeals['currentBaseDeals']) && !empty($sessionDeals['currentBaseDeals'])) {
                     $this->currentBtxDeals  = [$sessionDeals['currentBaseDeals'][0]];
                     $this->currentBaseDeal = $sessionDeals['currentBaseDeals'][0];
-                  
                 } else {
 
                     $this->currentBtxDeals  = [];
@@ -2907,7 +2907,7 @@ class EventReportService
 
 
         if (!$this->isSuccessSale && !$this->isFail) {
-       
+
             if ($this->isPlanned) {
                 // BtxCreateListItemJob::dispatch(  //запись о планировании и переносе
                 //     $this->hook,
@@ -2985,7 +2985,7 @@ class EventReportService
             //     $currentBaseDealId
 
             // )->onQueue('low-priority');
-           
+
             $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
                 $this->hook,
                 $this->bitrixLists,
@@ -3363,16 +3363,62 @@ class EventReportService
         $timeLineService = new BitrixTimeLineService($this->hook);
         $timeLineString = '';
         $planEventType = $this->currentPlanEventType; //если перенос то тип будет автоматически взят из report - предыдущего события
-        $eventAction = 'expired';  // не состоялся и двигается крайний срок 
-        $planComment = 'Перенесен';
+        $eventAction = '';  // не состоялся и двигается крайний срок 
+        $planComment = '';
         $planEventTypeName = $this->currentPlanEventTypeName;
+        $date = $this->planDeadline; // Предположим, это ваша дата
+        // Создаем объект Carbon из строки
+        $carbonDate = Carbon::createFromFormat('d.m.Y H:i:s', $date);
 
-        if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
-            //report
-            $eventAction = 'plan';
-            $planComment = 'Запланирован';
+        // Устанавливаем локализацию
+        $carbonDate->locale('ru');
+
+        // Преобразуем в нужный формат: "1 ноября 12:30"
+        $formattedDate = $carbonDate->isoFormat('D MMMM HH:mm');
+
+
+        if (!$this->isPlanned) {
+            if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
+                //report
+                $eventAction = 'plan';
+                $planComment = 'Запланирован';
+                if ($this->currentPlanEventTypeName == 'Презентация') {
+                    $planComment = 'Запланирована';
+                }
+            } else {
+                $eventAction = 'expired';  // не состоялся и двигается крайний срок 
+                $planComment = 'Перенесен';
+                if ($this->currentPlanEventTypeName == 'Презентация') {
+                    $planComment = 'Перенесена';
+                }
+            }
+            $planComment = $planComment . ' ' . $planEventTypeName . "\n" . 'на ' . $formattedDate;
+        } else {
+            $reportAction = 'done';
+            $reportComment = 'Coстоялся';
+            if ($this->resultStatus !== 'result') {
+                $reportAction = 'nodone';
+                $reportComment = 'Не состоялся';
+            }
+
+            if (!empty($this->currentReportEventName)) {
+
+                if ($this->currentReportEventName == 'Презентация') {
+                    if ($reportComment == 'Coстоялся') {
+                        $reportComment == 'Coстоялась';
+                    } else if ($reportComment == 'Не состоялся') {
+                        $reportComment == 'Не состоялась';
+                    }
+                }
+                $planComment = $reportComment . ' ' . $this->currentReportEventName;
+            }
         }
-        $planComment = $planComment . ' ' . $planEventTypeName . "\n" . $this->planDeadline . "\n" . $this->comment;
+
+
+
+
+
+        $planComment = $planComment .  "\n" . $this->comment;
 
 
         if (!empty($this->currentBaseDeal)) {
