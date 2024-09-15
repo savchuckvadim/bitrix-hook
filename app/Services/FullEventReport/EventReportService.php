@@ -2907,6 +2907,7 @@ class EventReportService
 
 
         if (!$this->isSuccessSale && !$this->isFail) {
+       
             if ($this->isPlanned) {
                 // BtxCreateListItemJob::dispatch(  //запись о планировании и переносе
                 //     $this->hook,
@@ -2984,13 +2985,13 @@ class EventReportService
             //     $currentBaseDealId
 
             // )->onQueue('low-priority');
-
+           
             $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
                 $this->hook,
                 $this->bitrixLists,
-                $planEventType,
-                $planEventTypeName,
-                'done',
+                $reportEventType,
+                $reportEventTypeName,
+                $reportAction,
                 // $this->stringType,
                 $this->planDeadline, //'', //$this->planDeadline,
                 $this->planResponsibleId,
