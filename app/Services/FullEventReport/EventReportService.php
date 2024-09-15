@@ -539,7 +539,6 @@ class EventReportService
                     $this->currentBtxDeals  = [$sessionDeals['currentBaseDeals'][0]];
                     $this->currentBaseDeal = $sessionDeals['currentBaseDeals'][0];
                     $this->currentTMCDealFromCurrentPres = $sessionDeals['currentTMCDeal'];
-                    
                 } else {
 
                     $this->currentBtxDeals  = [];
@@ -2170,11 +2169,20 @@ class EventReportService
 
 
 
-        if (!empty($this->currentTMCDealFromCurrentPres) && $this->resultStatus === 'result' && $this->currentReportEventType === 'presentation') {
-
+        // обновляет стадию тмц сделку
+        // если есть из tmc init pres или relation tmc from session 
+        // пытается подставить если есть связанную если нет - из init
+        // обновляет сделку 
+        // из инит - заявка принята
+        // из relation - состоялась или fail
+        if ((!empty($this->currentTMCDealFromCurrentPres) || !empty($this->currentTMCDeal)) && $this->resultStatus === 'result' && $this->currentReportEventType === 'presentation') {
+            $curTMCDeal = $this->currentTMCDeal;
+            if (!empty($this->currentTMCDealFromCurrentPres)) {
+                $curTMCDeal = $this->currentTMCDealFromCurrentPres;
+            }
             $tmcflowResult =  BitrixDealBatchFlowService::batchFlow(  // редактирует сделки отчетности из currentTask основную и если есть xo
                 $this->hook,
-                [$this->currentTMCDealFromCurrentPres],
+                [$curTMCDeal],
                 $this->portalDealData,
                 'tmc',
                 $this->entityType,
@@ -2333,6 +2341,7 @@ class EventReportService
         //поэтому в batch commands - results будет 'new_pres_deal_id'
         // и в этот момент я ее отдельным get возьму
 
+        // Устанавливает связь с переданной тмц сделкой из init pres и новой созданной pres deal
         if (!empty($this->currentTMCDeal) && $this->currentPlanEventType == 'presentation' && $newPresDeal) {
             BitrixDealFlowService::tmcPresentationRelation(
                 $this->hook,
@@ -2343,7 +2352,6 @@ class EventReportService
             );
             $sessionTMCDealKey = 'tmcInit_' . $this->domain . '_' . $this->planResponsibleId . '_' . $this->entityId;
             FullEventInitController::clearSessionItem($sessionTMCDealKey);
-
         }
         // }
 
