@@ -3026,7 +3026,7 @@ class EventReportService
                 $this->planResponsibleId,
                 $this->planResponsibleId,
                 $this->entityId,
-                $planComment,
+                $this->comment,
                 $this->workStatus['current'],
                 $this->resultStatus, // result noresult expired,
                 $this->noresultReason,
