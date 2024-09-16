@@ -342,12 +342,14 @@ class EventReportService
         };
 
 
-        // $this->isPresentationDone = $data['presentation']['isPresentationDone'];
+        $this->isPresentationDone = $data['presentation']['isPresentationDone'];
 
-        $this->isPresentationDone = false;
-        if ($data['report']['resultStatus'] !== 'result' && $this->currentReportEventType == 'presentation') {
-            $this->isPresentationDone  = true;
-        }
+
+        // TODO FXD IS PRES
+        // $this->isPresentationDone = false;
+        // if ($data['report']['resultStatus'] !== 'result' && $this->currentReportEventType == 'presentation') {
+        //     $this->isPresentationDone  = true;
+        // }
 
 
         $this->isUnplannedPresentation = false;
