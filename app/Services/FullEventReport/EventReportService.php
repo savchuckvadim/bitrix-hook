@@ -2191,6 +2191,10 @@ class EventReportService
             if (!empty($this->currentTMCDealFromCurrentPres)) {
                 $curTMCDeal = $this->currentTMCDealFromCurrentPres;
             }
+            $tmcAction = 'done';
+            if($this->resultStatus !== 'result' && $this->isFail){
+                $tmcAction = 'nodone';
+            }
             $tmcflowResult =  BitrixDealBatchFlowService::batchFlow(  // редактирует сделки отчетности из currentTask основную и если есть xo
                 $this->hook,
                 [$curTMCDeal],
@@ -2201,7 +2205,7 @@ class EventReportService
                 $this->currentReportEventType, // xo warm presentation, 
                 $this->currentReportEventName,
                 $this->currentPlanEventName,
-                $this->currentReportEventType, //$currentReportStatus,  // plan done expired fail success
+                $tmcAction, //$currentReportStatus,  // plan done expired fail success
                 $this->planResponsibleId,
                 $this->isResult,
                 '$fields',
