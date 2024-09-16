@@ -700,11 +700,13 @@ class EventReportTMCService
             } else {
                 $result = $this->workStatus;
             }
-            // $this->getEntityFlow();
+            $this->getEntityFlow();
             // sleep(1);
+
+
             $this->getListBatchFlow();
 
-            $this->getListFlow();
+            // $this->getListFlow();
             sleep(1);
             $this->getListPresentationFlow(
                 $currentDealsIds
