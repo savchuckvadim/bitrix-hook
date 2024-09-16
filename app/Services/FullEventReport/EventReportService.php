@@ -2183,7 +2183,10 @@ class EventReportService
         // обновляет сделку 
         // из инит - заявка принята
         // из relation - состоялась или fail
-        if ((!empty($this->currentTMCDealFromCurrentPres) || !empty($this->currentTMCDeal)) && $this->resultStatus === 'result' && $this->currentReportEventType === 'presentation') {
+        if ((!empty($this->currentTMCDealFromCurrentPres) || !empty($this->currentTMCDeal)) &&
+            ($this->resultStatus === 'result' || $this->isFail || $this->isSuccessSale) &&
+            $this->currentReportEventType === 'presentation'
+        ) {
             $curTMCDeal = $this->currentTMCDeal;
             if (!empty($this->currentTMCDealFromCurrentPres)) {
                 $curTMCDeal = $this->currentTMCDealFromCurrentPres;
@@ -2198,7 +2201,7 @@ class EventReportService
                 $this->currentReportEventType, // xo warm presentation, 
                 $this->currentReportEventName,
                 $this->currentPlanEventName,
-                'done', //$currentReportStatus,  // plan done expired fail success
+                $this->currentReportEventType, //$currentReportStatus,  // plan done expired fail success
                 $this->planResponsibleId,
                 $this->isResult,
                 '$fields',
