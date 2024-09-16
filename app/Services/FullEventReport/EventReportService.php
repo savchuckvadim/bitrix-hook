@@ -342,10 +342,12 @@ class EventReportService
         };
 
 
-        $this->isPresentationDone = $data['presentation']['isPresentationDone'];
+        // $this->isPresentationDone = $data['presentation']['isPresentationDone'];
 
-
-
+        $this->isPresentationDone = false;
+        if ($data['report']['resultStatus'] !== 'result' && $this->currentReportEventType == 'presentation') {
+            $this->isPresentationDone  = true;
+        }
 
 
         $this->isUnplannedPresentation = false;
@@ -2192,7 +2194,7 @@ class EventReportService
                 $curTMCDeal = $this->currentTMCDealFromCurrentPres;
             }
             $tmcAction = 'done';
-            if($this->resultStatus !== 'result' && $this->isFail){
+            if ($this->resultStatus !== 'result' && $this->isFail) {
                 $tmcAction = 'fail';
             }
             $tmcflowResult =  BitrixDealBatchFlowService::batchFlow(  // редактирует сделки отчетности из currentTask основную и если есть xo
