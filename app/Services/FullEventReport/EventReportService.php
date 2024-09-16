@@ -2694,6 +2694,14 @@ class EventReportService
         $currentDealIds = [];
         $currentBaseDealId = null;
         $commands = [];
+
+        date_default_timezone_set('Europe/Moscow');
+        $currentNowDate = new DateTime();
+        $nowDate = $currentNowDate->format('d.m.Y H:i:s');
+
+
+
+
         if (!empty($this->currentBtxDeals)) {
 
             foreach ($this->currentBtxDeals as $currentBtxDeals) {
@@ -2721,9 +2729,9 @@ class EventReportService
             //report
             $eventAction = 'plan';
             $planComment = 'Запланирован';
-        }else{
+        } else {
             $planEventTypeName = $this->currentReportEventName;
-            $planEventType = $this->currentReportEventType; 
+            $planEventType = $this->currentReportEventType;
         }
 
         $planComment = $planComment . ' ' . $planEventTypeName . ' ' . $this->currentPlanEventName;
@@ -2766,7 +2774,8 @@ class EventReportService
                     //     $currentBaseDealId
 
                     // )->onQueue('low-priority');
-
+                    $currentNowDate->modify('+1 second');
+                    $nowDate = $currentNowDate->format('d.m.Y H:i:s');
                     $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
                         $this->hook,
                         $this->bitrixLists,
@@ -2787,7 +2796,7 @@ class EventReportService
                         $this->failType,
                         $currentDealIds,
                         $currentBaseDealId,
-                        null, // $date,
+                        $nowDate, // $date,
                         null, // $event['eventType'], //$hotName
                         $commands
 
@@ -2830,7 +2839,8 @@ class EventReportService
 
                 // )->onQueue('low-priority');
 
-
+                $currentNowDate->modify('+2 second');
+                $nowDate = $currentNowDate->format('d.m.Y H:i:s');
 
                 $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
                     $this->hook,
@@ -2852,7 +2862,7 @@ class EventReportService
                     $this->failType,
                     $currentDealIds,
                     $currentBaseDealId,
-                    null, // $date,
+                    $nowDate, // $date,
                     null, // $event['eventType'], //$hotName
                     $commands
 
@@ -2880,6 +2890,8 @@ class EventReportService
             //     $currentBaseDealId
 
             // )->onQueue('low-priority');
+            $currentNowDate->modify('+3 second');
+            $nowDate = $currentNowDate->format('d.m.Y H:i:s');
             $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
                 $this->hook,
                 $this->bitrixLists,
@@ -2900,7 +2912,7 @@ class EventReportService
                 $this->failType,
                 $currentDealIds,
                 $currentBaseDealId,
-                null, // $date,
+                $nowDate, // $date,
                 null, // $event['eventType'], //$hotName
                 $commands
 
@@ -2935,7 +2947,8 @@ class EventReportService
 
                 // )->onQueue('low-priority');
 
-
+                $currentNowDate->modify('+5 second');
+                $nowDate = $currentNowDate->format('d.m.Y H:i:s');
                 $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
                     $this->hook,
                     $this->bitrixLists,
@@ -2956,7 +2969,7 @@ class EventReportService
                     $this->failType,
                     $currentDealIds,
                     $currentBaseDealId,
-                    null, // $date,
+                    $nowDate, // $date,
                     null, // $event['eventType'], //$hotName
                     $commands
 
@@ -2988,7 +3001,8 @@ class EventReportService
             //     $currentBaseDealId
 
             // )->onQueue('low-priority');
-
+            $currentNowDate->modify('+7 second');
+            $nowDate = $currentNowDate->format('d.m.Y H:i:s');
             $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
                 $this->hook,
                 $this->bitrixLists,
@@ -3009,7 +3023,7 @@ class EventReportService
                 $this->failType,
                 $currentDealIds,
                 $currentBaseDealId,
-                null, // $date,
+                $nowDate,  // $date,
                 null, // $event['eventType'], //$hotName
                 $commands
 
