@@ -2167,13 +2167,13 @@ class EventReportService
         );
         // $reportDeals = $flowResult['dealIds'];
         $batchCommands = $flowResult['commands'];
-        // Log::info('HOOK BATCH batchFlow report DEAL', ['report batchCommands' => $batchCommands]);
-        // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $batchCommands]);
-        // Log::info('HOOK BATCH $this->currentTMCDeal', ['report $this->currentTMCDeal' => $this->currentTMCDeal]);
-        // Log::channel('telegram')->info('HOOK BATCH $this->currentTMCDeal', ['report $this->currentTMCDeal' => $this->currentTMCDeal]);
+        Log::info('HOOK BATCH batchFlow report DEAL', ['report batchCommands' => $batchCommands]);
+        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $batchCommands]);
+        Log::info('HOOK BATCH $this->currentTMCDeal', ['report $this->currentTMCDeal' => $this->currentTMCDeal]);
+        Log::channel('telegram')->info('HOOK BATCH $this->currentTMCDeal', ['report $this->currentTMCDeal' => $this->currentTMCDeal]);
 
-        // Log::info('HOOK BATCH $this->currentTMCDealFromCurrentPres', ['report $this->currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres]);
-        // Log::channel('telegram')->info('HOOK BATCH $this->currentTMCDealFromCurrentPres', ['report $this->currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres]);
+        Log::info('HOOK BATCH $this->currentTMCDealFromCurrentPres', ['report $this->currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres]);
+        Log::channel('telegram')->info('HOOK BATCH $this->currentTMCDealFromCurrentPres', ['report $this->currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres]);
 
 
 
@@ -2193,7 +2193,7 @@ class EventReportService
             }
             $tmcAction = 'done';
             if($this->resultStatus !== 'result' && $this->isFail){
-                $tmcAction = 'nodone';
+                $tmcAction = 'fail';
             }
             $tmcflowResult =  BitrixDealBatchFlowService::batchFlow(  // редактирует сделки отчетности из currentTask основную и если есть xo
                 $this->hook,
