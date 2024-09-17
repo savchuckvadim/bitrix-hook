@@ -712,14 +712,14 @@ class EventReportTMCService
                 sleep(1);
                 $currentDealsIds = $this->getDealFlow();
             }
-
+            $this->setTimeLine();
             // $this->createTask($currentSmartId);
             if ($this->isExpired || $this->isPlanned) {
                 $result = $this->taskFlow(null, $currentDealsIds['planDeals']);
             } else {
                 $result = $this->workStatus;
             }
-            $this->setTimeLine();
+          
             $this->getEntityFlow();
             // sleep(1);
 
