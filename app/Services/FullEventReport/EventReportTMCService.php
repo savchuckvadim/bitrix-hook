@@ -707,12 +707,13 @@ class EventReportTMCService
             //     // 'currentBtxDeals' => $this->currentBtxDeals,
 
             // ]);
+            $this->setTimeLine();
             if ($this->isDealFlow && $this->portalDealData) {
                 $this->closeNoTMCDeals();
                 sleep(1);
                 $currentDealsIds = $this->getDealFlow();
             }
-            $this->setTimeLine();
+          
             // $this->createTask($currentSmartId);
             if ($this->isExpired || $this->isPlanned) {
                 $result = $this->taskFlow(null, $currentDealsIds['planDeals']);
