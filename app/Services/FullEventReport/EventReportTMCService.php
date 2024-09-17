@@ -11,11 +11,13 @@ use App\Services\BitrixTaskService;
 use App\Services\General\BitrixBatchService;
 use App\Services\General\BitrixDealService;
 use App\Services\General\BitrixDepartamentService;
+use App\Services\General\BitrixTimeLineService;
 use App\Services\HookFlow\BitrixDealFlowService;
 use App\Services\HookFlow\BitrixEntityFlowService;
 use App\Services\HookFlow\BitrixListFlowService;
 use App\Services\HookFlow\BitrixListPresentationFlowService;
 use App\Services\HookFlow\BitrixRPAPresFlowService;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Console\View\Components\Task;
 use Illuminate\Support\Facades\Date;
@@ -177,6 +179,7 @@ class EventReportTMCService
 
 
         $domain = $data['domain'];
+        $this->domain = $domain;
         $portal = PortalController::getPortal($domain);
         $portal = $portal['data'];
         $this->portal = $portal;
@@ -346,6 +349,10 @@ class EventReportTMCService
         if (!empty($data['plan']['responsibility']) && !empty($data['plan']['responsibility']['ID'])) {
             $this->planResponsibleId = $data['plan']['responsibility']['ID'];
         };
+
+
+
+
         if (!empty($data['plan']['deadline'])) {
             $this->planDeadline = $data['plan']['deadline'];
         };
@@ -697,6 +704,8 @@ class EventReportTMCService
 
             // ]);
             if ($this->isDealFlow && $this->portalDealData) {
+                $this->closeNoTMCDeals();
+                sleep(1);
                 $currentDealsIds = $this->getDealFlow();
             }
 
@@ -706,6 +715,7 @@ class EventReportTMCService
             } else {
                 $result = $this->workStatus;
             }
+            $this->setTimeLine();
             $this->getEntityFlow();
             // sleep(1);
 
@@ -1561,6 +1571,91 @@ class EventReportTMCService
     }
 
 
+    protected function closeNoTMCDeals()
+    {
+        if (!empty($this->portalDealData['categories'])) {
+            foreach ($this->portalDealData['categories'] as $category) {
+
+                if ($category['code'] !==  'tmc_base') {
+
+
+                    $isBaseCategory = $category['code'] ===  'sales_base';
+
+                    $includedStages = [];
+
+
+                    $categoryId = $category['bitrixId'];
+
+                    if (!empty($category['stages'])) {
+                        foreach ($category['stages'] as $stage) {
+                            if ($stage['code']) {
+                                if (
+                                    (strpos($stage['code'], 'fail') === false) &&
+                                    (strpos($stage['code'], 'noresult') === false) &&
+                                    ((strpos($stage['code'], 'double') === false)) &&
+                                    (strpos($stage['code'], 'success') === false)
+                                ) {
+                                    array_push($includedStages, "C" . $categoryId . ":" . $stage['bitrixId']);
+                                }
+                            }
+                        }
+                    }
+                    $randomNumber = rand(1, 2);
+
+
+                    $userId  = $this->planResponsibleId;
+
+
+
+                    sleep($randomNumber);
+                    $currentDeals = BitrixDealService::getDealList(
+                        $this->hook,
+                        [
+                            'filter' => [
+                                // "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
+                                // "=assignedById" => $userId,
+                                // "=CATEGORY_ID" => $currentCategoryBtxId,
+                                'COMPANY_ID' => $this->entityId,
+                                "ASSIGNED_BY_ID" => $this->planResponsibleId,
+                                "=STAGE_ID" =>  $includedStages
+
+                            ],
+                            'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
+
+                        ]
+
+
+                    );
+                    // Log::info('HOOK TEST CURRENTENTITY', [
+                    //     'currentDeals' => $currentDeals,
+
+
+                    // ]);
+
+                    if (!empty($currentDeals)) {
+                        foreach ($currentDeals as $bxDeal) {
+                            if (!empty($bxDeal)) {
+                                if (!empty($bxDeal['ID'])) {
+                                    $rand = rand(1, 2);
+                                    sleep($rand);
+                                    $urand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                                    usleep($urand);
+                                    BitrixDealService::updateDeal(
+                                        $this->hook,
+                                        $bxDeal['ID'],
+                                        [
+                                            'STAGE_ID' => 'C' . $categoryId . ':APOLOGY'
+
+                                        ]
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 
     //tasks for complete
@@ -1595,36 +1690,36 @@ class EventReportTMCService
             }
             $taskService = new BitrixTaskService();
 
-            if (!$this->isExpired) {
-                $createdTask =  $taskService->createTask(
-                    $this->currentPlanEventType,       //$type,   //cold warm presentation hot 
-                    $this->currentPlanEventTypeName,
-                    $this->portal,
-                    $this->domain,
-                    $this->hook,
-                    $companyId,  //may be null
-                    $leadId,     //may be null
-                    // $this->planCreatedId,
-                    $this->planResponsibleId,
-                    $this->planResponsibleId,
-                    $this->planDeadline,
-                    $this->currentPlanEventName,
-                    $currentSmartItemId,
-                    false, //$isNeedCompleteOtherTasks
-                    $currentTaskId,
-                    $currentDealsIds,
+            // if (!$this->isExpired) {
+            $createdTask =  $taskService->createTask(
+                $this->currentPlanEventType,       //$type,   //cold warm presentation hot 
+                $this->currentPlanEventTypeName,
+                $this->portal,
+                $this->domain,
+                $this->hook,
+                $companyId,  //may be null
+                $leadId,     //may be null
+                // $this->planCreatedId,
+                $this->planResponsibleId,
+                $this->planResponsibleId,
+                $this->planDeadline,
+                $this->currentPlanEventName,
+                $currentSmartItemId,
+                false, //$isNeedCompleteOtherTasks
+                $currentTaskId,
+                $currentDealsIds,
 
-                );
-            } else {
-                $createdTask =  $taskService->updateTask(
+            );
+            // } else {
+            //     $createdTask =  $taskService->updateTask(
 
-                    $this->domain,
-                    $this->hook,
-                    $currentTaskId,
-                    $this->planDeadline,
-                    $this->currentPlanEventName,
-                );
-            }
+            //         $this->domain,
+            //         $this->hook,
+            //         $currentTaskId,
+            //         $this->planDeadline,
+            //         $this->currentPlanEventName,
+            //     );
+            // }
 
 
             return $createdTask;
@@ -1810,7 +1905,7 @@ class EventReportTMCService
         $currentNowDate = new DateTime();
         $nowDate = $currentNowDate->format('d.m.Y H:i:s');
 
-    
+
 
 
         if (!empty($this->currentBtxDeals)) {
@@ -2480,6 +2575,100 @@ class EventReportTMCService
 
         //     )->onQueue('low-priority');
         // }
+    }
+
+    protected function setTimeLine()
+    {
+        $timeLineService = new BitrixTimeLineService($this->hook);
+        $timeLineString = '';
+        $planEventType = $this->currentPlanEventType; //если перенос то тип будет автоматически взят из report - предыдущего события
+        $eventAction = '';  // не состоялся и двигается крайний срок 
+        
+
+
+        $planComment = $this->getFullEventComment();
+
+      
+
+
+        if (!empty($this->currentBaseDeal)) {
+            if (!empty($this->currentBaseDeal['ID'] && !empty($this->currentBaseDeal['TITLE']))) {
+                $dealId = $this->currentBaseDeal['ID'];
+                $dealTitle = $this->currentBaseDeal['TITLE'];
+                $dealLink = 'https://' . $this->domain . '/crm/deal/details/' . $dealId . '/';
+                $message = "\n" . 'Сделка: <a href="' . $dealLink . '" target="_blank">' . $dealTitle . '</a>';
+            }
+        }
+
+        $timeLineString =  $planComment;
+        if (!empty($message)) {
+
+            $timeLineString .= $message;
+        }
+        // Log::channel('telegram')->info('HOOK TIME LINE', ['set' => $timeLineString]);
+
+        // Log::info('HOOK TIME LINE', ['set' => $timeLineString]);
+        if (!empty($timeLineString)) {
+            $timeLineService->setTimeLine($timeLineString, 'company', $this->entityId);
+        }
+    }
+
+    protected function getFullEventComment() {
+
+        $planComment = '';
+        $planEventTypeName = $this->currentPlanEventTypeName;
+        $date = $this->planDeadline; // Предположим, это ваша дата
+        // Создаем объект Carbon из строки
+        $carbonDate = Carbon::createFromFormat('d.m.Y H:i:s', $date);
+
+        // Устанавливаем локализацию
+        $carbonDate->locale('ru');
+
+        // Преобразуем в нужный формат: "1 ноября 12:30"
+        $formattedDate = $carbonDate->isoFormat('D MMMM HH:mm');
+
+
+        if ($this->isPlanned) {
+            if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
+                //report
+                $eventAction = 'plan';
+                $planComment = 'Запланирован';
+                if ($this->currentPlanEventTypeName == 'Презентация') {
+                    $planComment = 'Запланирована';
+                }
+            } else {
+                $eventAction = 'expired';  // не состоялся и двигается крайний срок 
+                $planComment = 'Перенесен';
+                $planEventTypeName = $this->currentReportEventName;
+
+                if ($this->currentReportEventName == 'Презентация') {
+                    $planComment = 'Перенесена';
+                }
+            }
+            $planComment = $planComment . ' ' . $planEventTypeName . 'на ' . $formattedDate;
+        } else {
+            $reportAction = 'done';
+            $reportComment = 'Coстоялся';
+            if ($this->resultStatus !== 'result') {
+                $reportAction = 'nodone';
+                $reportComment = 'Не состоялся';
+            }
+
+            if (!empty($this->currentReportEventName)) {
+                if ($this->currentReportEventName == 'Презентация') {
+                    if ($reportComment == 'Coстоялся') {
+                        $reportComment = 'Coстоялась';
+                    } else if ($reportComment == 'Не состоялся') {
+                        $reportComment = 'Не состоялась';
+                    }
+                }
+                $planComment = $reportComment . ' ' . $this->currentReportEventName;
+            }
+        }
+
+        $planComment = 'ТМЦ ' . $planComment .  "\n" . $this->comment;
+        return $planComment;
+
     }
 }
 

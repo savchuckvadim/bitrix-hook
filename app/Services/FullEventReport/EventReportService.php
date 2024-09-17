@@ -3467,7 +3467,7 @@ class EventReportService
         }
         // Log::channel('telegram')->info('HOOK TIME LINE', ['set' => $timeLineString]);
 
-        Log::info('HOOK TIME LINE', ['set' => $timeLineString]);
+        // Log::info('HOOK TIME LINE', ['set' => $timeLineString]);
         if (!empty($timeLineString)) {
             $timeLineService->setTimeLine($timeLineString, 'company', $this->entityId);
         }
