@@ -557,7 +557,7 @@ class EventReportTMCService
             $sessionData = FullEventInitController::getSessionItem($sessionKey);
 
             if (empty($sessionData)) {
-                $sessionData = ReportController::getDealsFromNewTaskInner(
+                $sessionData = ReportController::getDealsFromNewTaskInnerTMC(
                     $domain,
                     $this->hook,
                     $entityId,
@@ -578,12 +578,18 @@ class EventReportTMCService
                 if (is_array($sessionDeals['currentBaseDeals']) && !empty($sessionDeals['currentBaseDeals'])) {
                     $this->currentBtxDeals  = [$sessionDeals['currentBaseDeals'][0]];
                     $this->currentBaseDeal = $sessionDeals['currentBaseDeals'][0];
+                    $this->currentTMCDeal =  $sessionDeals['currentBaseDeals'][0];
                 } else {
 
                     $this->currentBtxDeals  = [];
                 }
             }
         }
+        Log::info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
+        Log::channel('telegram')->info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
+
+        Log::info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
+        Log::channel('telegram')->info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
 
 
 
