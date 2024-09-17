@@ -2645,7 +2645,7 @@ class EventReportTMCService
                     $planComment = 'Перенесена';
                 }
             }
-            $planComment = $planComment . ' ' . $planEventTypeName . 'на ' . $formattedDate;
+            $planComment = $planComment . ' ' . $planEventTypeName . ' на ' . $formattedDate;
         } else {
             $reportAction = 'done';
             $reportComment = 'Coстоялся';

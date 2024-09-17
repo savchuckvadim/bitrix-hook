@@ -149,6 +149,11 @@ class BitrixTaskService
                 ]
             ];
 
+
+
+
+            $idsForComplete = null;
+
             if (!empty($currentTaskId)) {
                 $idsForComplete = [
                     $currentTaskId
@@ -156,7 +161,6 @@ class BitrixTaskService
             }
 
 
-            $idsForComplete = null;
             if ($isNeedCompleteOtherTasks) {
                 if (empty($currentTaskId)) {
                     // $rand = mt_rand(50000, 200000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
