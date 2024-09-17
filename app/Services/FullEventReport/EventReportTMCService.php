@@ -246,6 +246,10 @@ class EventReportTMCService
 
 
                 $this->currentReportEventType = $data['currentTask']['eventType'];
+                // Log::channel('telegram')->info();
+                if (!empty($data['currentTask']['eventType'])) {
+                    $this->currentReportEventName = 'Звонок';
+                }
 
                 switch ($data['currentTask']['eventType']) {
                     case 'xo':
@@ -2583,12 +2587,12 @@ class EventReportTMCService
         $timeLineString = '';
         $planEventType = $this->currentPlanEventType; //если перенос то тип будет автоматически взят из report - предыдущего события
         $eventAction = '';  // не состоялся и двигается крайний срок 
-        
+
 
 
         $planComment = $this->getFullEventComment();
 
-      
+
 
 
         if (!empty($this->currentBaseDeal)) {
@@ -2613,7 +2617,8 @@ class EventReportTMCService
         }
     }
 
-    protected function getFullEventComment() {
+    protected function getFullEventComment()
+    {
 
         $planComment = '';
         $planEventTypeName = $this->currentPlanEventTypeName;
@@ -2668,7 +2673,6 @@ class EventReportTMCService
 
         $planComment = 'ТМЦ ' . $planComment .  "\n" . $this->comment;
         return $planComment;
-
     }
 }
 

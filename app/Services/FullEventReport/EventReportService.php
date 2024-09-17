@@ -245,6 +245,10 @@ class EventReportService
 
                 $this->currentReportEventType = $data['currentTask']['eventType'];
 
+                if (!empty($data['currentTask']['eventType'])) {
+                    $this->currentReportEventName = 'Звонок';
+                }
+
                 switch ($data['currentTask']['eventType']) {
                     case 'xo':
                     case 'cold':
