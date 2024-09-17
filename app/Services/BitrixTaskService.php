@@ -149,7 +149,11 @@ class BitrixTaskService
                 ]
             ];
 
-
+            if (!empty($currentTaskId)) {
+                $idsForComplete = [
+                    $currentTaskId
+                ];
+            }
 
 
             $idsForComplete = null;

@@ -2470,7 +2470,7 @@ class EventReportService
                     $this->planDeadline,
                     $this->currentPlanEventName,
                     $currentSmartItemId,
-                    true, //$isNeedCompleteOtherTasks
+                    false, //$isNeedCompleteOtherTasks
                     $currentTaskId,
                     $currentDealsIds,
 
