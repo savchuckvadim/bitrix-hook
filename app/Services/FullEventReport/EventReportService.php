@@ -3016,14 +3016,20 @@ class EventReportService
             //     $currentBaseDealId
 
             // )->onQueue('low-priority');
+            $eventType = '';
+            if (!empty($this->isSuccessSale)) {
+                $eventType = 'success';
+            } else  if (!empty($this->isFail)) {
+                $eventType = 'fail';
+            }
             $currentNowDate->modify('+7 second');
             $nowDate = $currentNowDate->format('d.m.Y H:i:s');
             $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
                 $this->hook,
                 $this->bitrixLists,
-                $reportEventType,
+                $eventType,
                 $reportEventTypeName,
-                $reportAction,
+               'done',
                 // $this->stringType,
                 $this->planDeadline, //'', //$this->planDeadline,
                 $this->planResponsibleId,

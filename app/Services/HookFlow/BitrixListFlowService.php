@@ -569,6 +569,12 @@ class BitrixListFlowService
 
                 $hotName = $evTypeName . ' ' . $eventActionName;
             }
+
+            if ($eventType == 'success') {
+                $hotName = 'Продажа';
+            } else   if ($eventType == 'fail') {
+                $hotName = 'Отказ';
+            }
             $xoFields = [
                 [
                     'code' => 'event_date',
@@ -929,12 +935,21 @@ class BitrixListFlowService
         // Холодный звонок	event_type	xo
         // Звонок	event_type	call
         // Презентация	event_type	presentation
+        // Презентация (уникальная)	event_type	presentation_uniq
         // Информация	event_type	info
         // Приглашение на семинар	event_type	seminar
         // Звонок по решению	event_type	call_in_progress
         // Звонок по оплате	event_type	call_in_money
         // Входящий звонок	event_type	come_call
         // Заявка с сайта	event_type	site
+        // Коммерческое Предложение	event_type	ev_offer
+        // Счет	event_type	ev_invoice
+        // Коммерческое Предложение после презентации	event_type	ev_offer_pres
+        // Счет после презентации	event_type	ev_invoice_pres
+        // Договор	event_type	ev_contract
+        // Поставка	event_type	ev_supply
+        // Продажа	event_type	ev_success
+        // Отказ	event_type	ev_fail
 
         $result = 'xo';
         if ($eventType === 'call' || $eventType === 'warm') {
@@ -945,6 +960,10 @@ class BitrixListFlowService
             $result = 'call_in_progress';
         } else if ($eventType === 'moneyAwait' || $eventType === 'money_await' || $eventType === 'money') {
             $result = 'call_in_money';
+        } else if ($eventType === 'fail') {
+            $result = 'ev_fail';
+        } else if ($eventType === 'success') {
+            $result = 'ev_success';
         }
 
 
