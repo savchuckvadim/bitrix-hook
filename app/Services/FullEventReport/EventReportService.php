@@ -1116,7 +1116,7 @@ class EventReportService
 
         $reportFields['op_fail_comments'] = '';
         $reportFields['op_history'] = '';
-
+        $reportFields['op_mhistory'] = [];
 
 
         $currentPresCount = 0;
@@ -1249,12 +1249,12 @@ class EventReportService
                     break;
                 case 'hot':
                     $reportFields['op_current_status'] = 'В решении: ' . $this->currentPlanEventName;
-                    array_push($currentMComments, $this->nowDate . 'В решении: ' . $this->comment);
+                    array_unshift($currentMComments, $this->nowDate . 'В решении: ' . $this->comment);
 
                     break;
                 case 'moneyAwait':
                     $reportFields['op_current_status'] = 'Ждем оплаты: ' . $this->currentPlanEventName;
-                    array_push($currentMComments, $this->nowDate . 'В оплате: ' . $this->comment);
+                    array_unshift($currentMComments, $this->nowDate . 'В оплате: ' . $this->comment);
                     break;
 
 
@@ -1265,7 +1265,7 @@ class EventReportService
                     $reportFields['next_pres_plan_date'] = $this->planDeadline;  //дата на которую запланировали през
                     $reportFields['op_current_status'] = 'В работе: Презентация запланирована ' . $this->currentPlanEventName;
                     array_push($currentPresComments, $this->nowDate . ' Презентация запланирована ' . $this->currentPlanEventName);
-                    array_push($currentMComments, $this->nowDate . ' Презентация запланирована ' . $this->currentPlanEventName);
+                    array_unshift($currentMComments, $this->nowDate . ' Презентация запланирована ' . $this->currentPlanEventName);
                     break;
                 default:
                     # code...
@@ -1274,7 +1274,7 @@ class EventReportService
         } else {
             if ($this->workStatus['current']['code'] === 'fail') {
                 $reportFields['op_current_status'] = 'Отказ';
-                array_push($currentMComments, $this->nowDate . ' Отказ ' . $this->comment);
+                array_unshift($currentMComments, $this->nowDate . ' Отказ ' . $this->comment);
 
 
 
@@ -1307,12 +1307,12 @@ class EventReportService
 
                         array_push($currentPresComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
                     }
-                    array_push($currentMComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
+                    array_unshift($currentMComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
                 }
 
                 // array_push($currentMComments, $this->nowDate . ' Нерезультативный. ' . $this->currentTaskTitle);
             } else {
-                array_push($currentMComments, $this->nowDate . ' Результативный ' . $this->currentTaskTitle);
+                array_unshift($currentMComments, $this->nowDate . ' Результативный ' . $this->currentTaskTitle. ' ' . $this->comment);
             }
         }
 
@@ -1353,10 +1353,13 @@ class EventReportService
             }
         }
 
+        if (count($currentMComments) > 5) {
+            $currentMComments = array_slice($currentMComments, 0, 5);
+        }
 
 
         //закидываем сформированные комментарии
-        // $reportFields['op_mhistory'] = $currentMComments;
+        $reportFields['op_mhistory'] = $currentMComments;
         // if ($this->isPresentationDone || ($this->isPlanned && $currentPlanEventType == 'presentation')) {
         $reportFields['pres_comments'] = $currentPresComments;
         // }
