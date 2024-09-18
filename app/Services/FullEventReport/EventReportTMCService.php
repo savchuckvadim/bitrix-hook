@@ -1640,7 +1640,7 @@ class EventReportTMCService
                     ];
 
                     if (!empty($currentDealId) && $category['code'] ===  'tmc_base') {
-                        $getDealsData['!=ID'] = $currentDealId;
+                        $getDealsData['filter']['!=ID'] = $currentDealId;
                     }
                     sleep($randomNumber);
                     $currentDeals = BitrixDealService::getDealList(
