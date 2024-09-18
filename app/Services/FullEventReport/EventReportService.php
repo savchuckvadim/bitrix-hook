@@ -2179,13 +2179,13 @@ class EventReportService
         );
         // $reportDeals = $flowResult['dealIds'];
         $batchCommands = $flowResult['commands'];
-        Log::info('HOOK BATCH batchFlow report DEAL', ['report batchCommands' => $batchCommands]);
-        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $batchCommands]);
-        Log::info('HOOK BATCH $this->currentTMCDeal', ['report $this->currentTMCDeal' => $this->currentTMCDeal]);
-        Log::channel('telegram')->info('HOOK BATCH $this->currentTMCDeal', ['report $this->currentTMCDeal' => $this->currentTMCDeal]);
+        // Log::info('HOOK BATCH batchFlow report DEAL', ['report batchCommands' => $batchCommands]);
+        // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchCommands' => $batchCommands]);
+        // Log::info('HOOK BATCH $this->currentTMCDeal', ['report $this->currentTMCDeal' => $this->currentTMCDeal]);
+        // Log::channel('telegram')->info('HOOK BATCH $this->currentTMCDeal', ['report $this->currentTMCDeal' => $this->currentTMCDeal]);
 
-        Log::info('HOOK BATCH $this->currentTMCDealFromCurrentPres', ['report $this->currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres]);
-        Log::channel('telegram')->info('HOOK BATCH $this->currentTMCDealFromCurrentPres', ['report $this->currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres]);
+        // Log::info('HOOK BATCH $this->currentTMCDealFromCurrentPres', ['report $this->currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres]);
+        // Log::channel('telegram')->info('HOOK BATCH $this->currentTMCDealFromCurrentPres', ['report $this->currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres]);
 
 
 
@@ -2350,16 +2350,16 @@ class EventReportService
                 );
             }
         }
-        Log::info('HOOK BATCH', ['newPresDealId' => $newPresDealId]);
-        Log::channel('telegram')->info('HOOK BATCH newPresDealId', ['newPresDealId' => $newPresDealId]);
+        // Log::info('HOOK BATCH', ['newPresDealId' => $newPresDealId]);
+        // Log::channel('telegram')->info('HOOK BATCH newPresDealId', ['newPresDealId' => $newPresDealId]);
 
 
         // Log::info('HOOK BATCH entityBatchCommands DEAL', ['entityBatchCommands' => $entityBatchCommands]);
         // Log::channel('telegram')->info('HOOK BATCH entityBatchCommands', ['entityBatchCommands' => $entityBatchCommands]);
 
 
-        Log::info('HOOK BATCH', ['result' => $result]);
-        Log::channel('telegram')->info('HOOK BATCH', ['result' => $result]);
+        // Log::info('HOOK BATCH', ['result' => $result]);
+        // Log::channel('telegram')->info('HOOK BATCH', ['result' => $result]);
         // WITHOUT NEW
         // $newPresDeal = $flowResult['newPresDeal'];
 

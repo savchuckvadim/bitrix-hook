@@ -1588,10 +1588,7 @@ class EventReportTMCService
                 $currentDealId = $this->currentBaseDeal['ID'];
             }
         }
-        Log::channel('telegram')->info('HOOK', [
-            'tst' => $currentDealId,
-            'dl' => $this->currentBaseDeal
-        ]);
+       
         if (!empty($this->portalDealData['categories'])) {
             foreach ($this->portalDealData['categories'] as $category) {
 

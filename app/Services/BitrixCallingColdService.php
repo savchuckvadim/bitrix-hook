@@ -502,9 +502,9 @@ class BitrixCallingColdService
             ];
 
 
-            Log::channel('telegram')->error('APRIL_HOOK BitrixCallingColdService done', [
-                'company' => $this->entityId
-            ]);
+            // Log::channel('telegram')->error('APRIL_HOOK BitrixCallingColdService done', [
+            //     'company' => $this->entityId
+            // ]);
 
             // TODO RETUR  LIST FLOW/
 

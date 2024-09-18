@@ -19,11 +19,11 @@ use App\Http\Controllers\BitrixHookController;
 
 
 
-Route::middleware(['rate.limit'])->group(function () {
+Route::group(function () {
     // новй холодный звонка из Откуда Угодно
     Route::post('cold', function (Request $request) {
 
-    
+        sleep(1);
         $controller = new BitrixHookController();
         return $controller->getColdCall(
             $request
@@ -33,7 +33,7 @@ Route::middleware(['rate.limit'])->group(function () {
 
     // Route::post('company/assigned', function (Request $request) {
 
-    
+
     //     $controller = new BitrixHookController();
     //     return $controller->getColdCall(
     //         $request
