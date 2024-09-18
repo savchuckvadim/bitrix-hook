@@ -874,7 +874,7 @@ class EventReportTMCService
             }
             $reportFields['op_current_status'] = ' Презентация проведена';
             array_push($currentPresComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
-            array_unshift($currentMComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
+            // array_unshift($currentMComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
         }
 
 
@@ -909,12 +909,12 @@ class EventReportTMCService
                     break;
                 case 'hot':
                     $reportFields['op_current_status'] = 'В решении: ' . $this->currentPlanEventName;
-                    array_unshift($currentMComments, $this->nowDate . 'В решении: ' . $this->comment);
+                    // array_unshift($currentMComments, $this->nowDate . 'В решении: ' . $this->comment);
 
                     break;
                 case 'moneyAwait':
                     $reportFields['op_current_status'] = 'Ждем оплаты: ' . $this->currentPlanEventName;
-                    array_unshift($currentMComments, $this->nowDate . 'В оплате: ' . $this->comment);
+                    // array_unshift($currentMComments, $this->nowDate . 'В оплате: ' . $this->comment);
                     break;
 
 
@@ -925,7 +925,7 @@ class EventReportTMCService
                     $reportFields['next_pres_plan_date'] = $this->planDeadline;  //дата на которую запланировали през
                     $reportFields['op_current_status'] = 'В работе: Презентация запланирована ' . $this->currentPlanEventName;
                     array_push($currentPresComments, $this->nowDate . ' Презентация запланирована ' . $this->currentPlanEventName);
-                    array_unshift($currentMComments, $this->nowDate . ' Презентация запланирована ' . $this->currentPlanEventName);
+                    // array_unshift($currentMComments, $this->nowDate . ' Презентация запланирована ' . $this->currentPlanEventName);
                     break;
                 default:
                     # code...
@@ -967,12 +967,12 @@ class EventReportTMCService
 
                         array_push($currentPresComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
                     }
-                    array_unshift($currentMComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
+                    // array_unshift($currentMComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
                 }
 
                 // array_push($currentMComments, $this->nowDate . ' Нерезультативный. ' . $this->currentTaskTitle);
             } else {
-                array_unshift($currentMComments, $this->nowDate . ' Результативный ' . $this->currentTaskTitle . ' ' . $this->comment);
+                // array_unshift($currentMComments, $this->nowDate . ' Результативный ' . $this->currentTaskTitle . ' ' . $this->comment);
             }
         }
 
@@ -1012,7 +1012,8 @@ class EventReportTMCService
                 }
             }
         }
-
+        $comment = $this->getFullEventComment();
+        array_unshift($currentMComments, $comment);
         if (count($currentMComments) > 5) {
             $currentMComments = array_slice($currentMComments, 0, 5);
         }
