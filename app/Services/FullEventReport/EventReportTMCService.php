@@ -1582,10 +1582,17 @@ class EventReportTMCService
 
     protected function closeNoTMCDeals()
     {
+        $currentDealId = null;
+        if (!empty($this->currentBaseDeal)) {
+            if (!empty($this->currentBaseDeal['ID'])) {
+                $currentDealId = $this->currentBaseDeal['ID'];
+            }
+        }
         if (!empty($this->portalDealData['categories'])) {
             foreach ($this->portalDealData['categories'] as $category) {
 
-                if ($category['code'] !==  'tmc_base') {
+
+                if (!empty($currentDealId) || $category['code'] !==  'tmc_base') {
 
 
                     $isBaseCategory = $category['code'] ===  'sales_base';
@@ -1614,24 +1621,28 @@ class EventReportTMCService
 
                     $userId  = $this->planResponsibleId;
 
+                    $getDealsData =  [
+                        'filter' => [
+                            // "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
+                            // "=assignedById" => $userId,
+                            // "=CATEGORY_ID" => $currentCategoryBtxId,
+                            'COMPANY_ID' => $this->entityId,
+                            "ASSIGNED_BY_ID" => $this->planResponsibleId,
+                            "=STAGE_ID" =>  $includedStages
 
+                        ],
+                        'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
 
+                    ];
+
+                    if (!empty($currentDealId) && $category['code'] ===  'tmc_base') {
+                        $getDealsData['!=ID'] = $currentDealId;
+
+                    }
                     sleep($randomNumber);
                     $currentDeals = BitrixDealService::getDealList(
                         $this->hook,
-                        [
-                            'filter' => [
-                                // "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
-                                // "=assignedById" => $userId,
-                                // "=CATEGORY_ID" => $currentCategoryBtxId,
-                                'COMPANY_ID' => $this->entityId,
-                                "ASSIGNED_BY_ID" => $this->planResponsibleId,
-                                "=STAGE_ID" =>  $includedStages
-
-                            ],
-                            'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
-
-                        ]
+                        $getDealsData
 
 
                     );
