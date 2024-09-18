@@ -3028,7 +3028,7 @@ class EventReportService
                 $this->hook,
                 $this->bitrixLists,
                 $eventType,
-                $reportEventTypeName,
+                $planEventTypeName,
                'done',
                 // $this->stringType,
                 $this->planDeadline, //'', //$this->planDeadline,
