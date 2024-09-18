@@ -1214,7 +1214,7 @@ class EventReportService
             }
             $reportFields['op_current_status'] = ' Презентация проведена';
             array_push($currentPresComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
-            array_push($currentMComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
+            // array_push($currentMComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
         }
 
 
@@ -1249,12 +1249,12 @@ class EventReportService
                     break;
                 case 'hot':
                     $reportFields['op_current_status'] = 'В решении: ' . $this->currentPlanEventName;
-                    array_unshift($currentMComments, $this->nowDate . 'В решении: ' . $this->comment);
+                    // array_unshift($currentMComments, $this->nowDate . 'В решении: ' . $this->comment);
 
                     break;
                 case 'moneyAwait':
                     $reportFields['op_current_status'] = 'Ждем оплаты: ' . $this->currentPlanEventName;
-                    array_unshift($currentMComments, $this->nowDate . 'В оплате: ' . $this->comment);
+                    // array_unshift($currentMComments, $this->nowDate . 'В оплате: ' . $this->comment);
                     break;
 
 
@@ -1265,7 +1265,7 @@ class EventReportService
                     $reportFields['next_pres_plan_date'] = $this->planDeadline;  //дата на которую запланировали през
                     $reportFields['op_current_status'] = 'В работе: Презентация запланирована ' . $this->currentPlanEventName;
                     array_push($currentPresComments, $this->nowDate . ' Презентация запланирована ' . $this->currentPlanEventName);
-                    array_unshift($currentMComments, $this->nowDate . ' Презентация запланирована ' . $this->currentPlanEventName);
+                    // array_unshift($currentMComments, $this->nowDate . ' Презентация запланирована ' . $this->currentPlanEventName);
                     break;
                 default:
                     # code...
@@ -1274,7 +1274,7 @@ class EventReportService
         } else {
             if ($this->workStatus['current']['code'] === 'fail') {
                 $reportFields['op_current_status'] = 'Отказ';
-                array_unshift($currentMComments, $this->nowDate . ' Отказ ' . $this->comment);
+                // array_unshift($currentMComments, $this->nowDate . ' Отказ ' . $this->comment);
 
 
 
@@ -1307,12 +1307,12 @@ class EventReportService
 
                         array_push($currentPresComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
                     }
-                    array_unshift($currentMComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
+                    // array_unshift($currentMComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
                 }
 
                 // array_push($currentMComments, $this->nowDate . ' Нерезультативный. ' . $this->currentTaskTitle);
             } else {
-                array_unshift($currentMComments, $this->nowDate . ' Результативный ' . $this->currentTaskTitle. ' ' . $this->comment);
+                // array_unshift($currentMComments, $this->nowDate . ' Результативный ' . $this->currentTaskTitle. ' ' . $this->comment);
             }
         }
 
@@ -1352,7 +1352,8 @@ class EventReportService
                 }
             }
         }
-
+        $comment = $this->getFullEventComment();
+        array_unshift($currentMComments, $comment);
         if (count($currentMComments) > 5) {
             $currentMComments = array_slice($currentMComments, 0, 5);
         }
@@ -3032,7 +3033,7 @@ class EventReportService
                 $this->bitrixLists,
                 $eventType,
                 $planEventTypeName,
-               'done',
+                'done',
                 // $this->stringType,
                 $this->planDeadline, //'', //$this->planDeadline,
                 $this->planResponsibleId,
@@ -3484,6 +3485,64 @@ class EventReportService
         if (!empty($timeLineString)) {
             $timeLineService->setTimeLine($timeLineString, 'company', $this->entityId);
         }
+    }
+
+    protected function getFullEventComment()
+    {
+
+        $planComment = '';
+        $planEventTypeName = $this->currentPlanEventTypeName;
+        $date = $this->planDeadline; // Предположим, это ваша дата
+        // Создаем объект Carbon из строки
+        $carbonDate = Carbon::createFromFormat('d.m.Y H:i:s', $date);
+
+        // Устанавливаем локализацию
+        $carbonDate->locale('ru');
+
+        // Преобразуем в нужный формат: "1 ноября 12:30"
+        $formattedDate = $carbonDate->isoFormat('D MMMM HH:mm');
+
+
+        if ($this->isPlanned) {
+            if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
+                //report
+                $eventAction = 'plan';
+                $planComment = 'Запланирован';
+                if ($this->currentPlanEventTypeName == 'Презентация') {
+                    $planComment = 'Запланирована';
+                }
+            } else {
+                $eventAction = 'expired';  // не состоялся и двигается крайний срок 
+                $planComment = 'Перенесен';
+                $planEventTypeName = $this->currentReportEventName;
+
+                if ($this->currentReportEventName == 'Презентация') {
+                    $planComment = 'Перенесена';
+                }
+            }
+            $planComment = $planComment . ' ' . $planEventTypeName . ' на ' . $formattedDate;
+        } else {
+            $reportAction = 'done';
+            $reportComment = 'Coстоялся';
+            if ($this->resultStatus !== 'result') {
+                $reportAction = 'nodone';
+                $reportComment = 'Не состоялся';
+            }
+
+            if (!empty($this->currentReportEventName)) {
+                if ($this->currentReportEventName == 'Презентация') {
+                    if ($reportComment == 'Coстоялся') {
+                        $reportComment = 'Coстоялась';
+                    } else if ($reportComment == 'Не состоялся') {
+                        $reportComment = 'Не состоялась';
+                    }
+                }
+                $planComment = $reportComment . ' ' . $this->currentReportEventName;
+            }
+        }
+
+        $planComment = 'ОП ' . $planComment .  "\n" . $this->comment;
+        return $planComment;
     }
 }
 
