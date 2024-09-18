@@ -3016,7 +3016,7 @@ class EventReportService
             //     $currentBaseDealId
 
             // )->onQueue('low-priority');
-            $eventType = '';
+            $eventType = 'success';
             if (!empty($this->isSuccessSale)) {
                 $eventType = 'success';
             } else  if (!empty($this->isFail)) {
