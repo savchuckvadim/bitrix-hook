@@ -510,7 +510,7 @@ class BitrixCallingColdService
 
 
 
-            sleep(3);
+            sleep(1);
 
             BtxCreateListItemJob::dispatch(
                 $this->hook,
