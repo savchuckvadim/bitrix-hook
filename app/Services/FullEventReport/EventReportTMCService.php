@@ -713,14 +713,14 @@ class EventReportTMCService
                 sleep(1);
                 $currentDealsIds = $this->getDealFlow();
             }
-          
+
             // $this->createTask($currentSmartId);
             if ($this->isExpired || $this->isPlanned) {
                 $result = $this->taskFlow(null, $currentDealsIds['planDeals']);
             } else {
                 $result = $this->workStatus;
             }
-          
+
             $this->getEntityFlow();
             // sleep(1);
 
@@ -2212,22 +2212,27 @@ class EventReportTMCService
             //     $currentBaseDealId
 
             // )->onQueue('low-priority');
+            $eventType = 'success';
+            if (!empty($this->isSuccessSale)) {
+                $eventType = 'success';
+            } else  if (!empty($this->isFail)) {
+                $eventType = 'fail';
+            }
             $currentNowDate->modify('+7 second');
             $nowDate = $currentNowDate->format('d.m.Y H:i:s');
-
             $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
                 $this->hook,
                 $this->bitrixLists,
-                $reportEventType,
-                $reportEventTypeName,
-                $reportAction,
+                $eventType,
+                $planEventTypeName,
+                'done',
                 // $this->stringType,
                 $this->planDeadline, //'', //$this->planDeadline,
                 $this->planResponsibleId,
                 $this->planResponsibleId,
                 $this->planResponsibleId,
                 $this->entityId,
-                $planComment,
+                $this->comment,
                 $this->workStatus['current'],
                 $this->resultStatus, // result noresult expired,
                 $this->noresultReason,
@@ -2235,7 +2240,7 @@ class EventReportTMCService
                 $this->failType,
                 $currentDealIds,
                 $currentBaseDealId,
-                $nowDate, // $date,
+                $nowDate,  // $date,
                 null, // $event['eventType'], //$hotName
                 $commands
 
