@@ -1353,7 +1353,7 @@ class EventReportService
             }
         }
         $comment = $this->getFullEventComment();
-        array_unshift($currentMComments, $comment);
+        array_unshift($currentMComments, $this->nowDate . "\n" . $comment);
         if (count($currentMComments) > 5) {
             $currentMComments = array_slice($currentMComments, 0, 5);
         }
