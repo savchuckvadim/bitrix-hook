@@ -798,7 +798,7 @@ class ColdBatchService
                 }
                 // $key = 'close' . '_' . 'company' . '_';
                 // $entityBatchCommands[$key] = $command; // в результате будет id
-               $closeResult =  $batchService->sendGeneralBatchRequest([$batchCommands]);
+               $closeResult =  $batchService->sendGeneralBatchRequest($batchCommands);
                 Log::info('HOOK TEST COLD BATCH', [
                     'batchCommands' => $batchCommands,
 
