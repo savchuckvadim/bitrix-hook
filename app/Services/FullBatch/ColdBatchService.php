@@ -913,10 +913,29 @@ class ColdBatchService
         );
         $key = 'entity_update' . '_' .  $this->entityType . '_';
         $entityBatchCommands[$key] = $command; // в результате будет id
-        $batchService->sendGeneralBatchRequest($entityBatchCommands);
+       $entityResult =  $batchService->sendGeneralBatchRequest($entityBatchCommands);
 
 
+       Log::info('HOOK TEST COLD BATCH', [
+        'entityBatchCommands' => $entityBatchCommands,
 
+
+    ]);
+    Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+        'entityBatchCommands' => $entityBatchCommands,
+
+
+    ]);
+    Log::info('HOOK TEST COLD BATCH', [
+        'entityResult' => $entityResult,
+
+
+    ]);
+    Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+        'entityResult' => $entityResult,
+
+
+    ]);
         // BitrixEntityFlowService::coldflow(
         //     $this->portal,
         //     $this->hook,
