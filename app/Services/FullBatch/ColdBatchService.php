@@ -738,7 +738,7 @@ class ColdBatchService
                             "=STAGE_ID" =>  $includedStages
 
                         ],
-                        'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
+                        'select' => ["ID", "CATEGORY_ID", "STAGE_ID", 'TITLE'],
 
                     ],
                     'list',
@@ -775,14 +775,14 @@ class ColdBatchService
                 ];
 
                 // Теперь создаем команды для обновления каждой сделки на основе полученных данных
-                for ($i = 0; $i < 50; $i++) { // Здесь $i — это индекс, используемый для ссылки на каждую сделку
+                for ($i = 0; $i < 5; $i++) { // Здесь $i — это индекс, используемый для ссылки на каждую сделку
                     $batchCommands["update_deal_{$i}"] =   BitrixDealBatchFlowService::getBatchCommand(
                         [
                             'ID' => '$result[get_deals][result][' . $i . '][ID]', // Формат подстановки из документации
                             'fields' => [
                                 'STAGE_ID' => 'C' . $categoryId . ':APOLOGY'
                             ],
-                            'select' => ['ID', 'TITLE']
+
                         ],
                         'update',
                         '$result[get_deals][result][' . $i . '][ID]'
@@ -799,7 +799,7 @@ class ColdBatchService
                 }
                 // $key = 'close' . '_' . 'company' . '_';
                 // $entityBatchCommands[$key] = $command; // в результате будет id
-               $closeResult =  $batchService->sendGeneralBatchRequest($batchCommands);
+                $closeResult =  $batchService->sendGeneralBatchRequest($batchCommands);
                 Log::info('HOOK TEST COLD BATCH', [
                     'batchCommands' => $batchCommands,
 
@@ -914,29 +914,29 @@ class ColdBatchService
         );
         $key = 'entity_update' . '_' .  $this->entityType . '_';
         $entityBatchCommands[$key] = $command; // в результате будет id
-       $entityResult =  $batchService->sendGeneralBatchRequest($entityBatchCommands);
+        $entityResult =  $batchService->sendGeneralBatchRequest($entityBatchCommands);
 
 
-       Log::info('HOOK TEST COLD BATCH', [
-        'entityBatchCommands' => $entityBatchCommands,
+        Log::info('HOOK TEST COLD BATCH', [
+            'entityBatchCommands' => $entityBatchCommands,
 
 
-    ]);
-    Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
-        'entityBatchCommands' => $entityBatchCommands,
+        ]);
+        Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+            'entityBatchCommands' => $entityBatchCommands,
 
 
-    ]);
-    Log::info('HOOK TEST COLD BATCH', [
-        'entityResult' => $entityResult,
+        ]);
+        Log::info('HOOK TEST COLD BATCH', [
+            'entityResult' => $entityResult,
 
 
-    ]);
-    Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
-        'entityResult' => $entityResult,
+        ]);
+        Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+            'entityResult' => $entityResult,
 
 
-    ]);
+        ]);
         // BitrixEntityFlowService::coldflow(
         //     $this->portal,
         //     $this->hook,
