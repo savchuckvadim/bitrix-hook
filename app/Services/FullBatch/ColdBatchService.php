@@ -1149,7 +1149,7 @@ class ColdBatchService
 
             );
 
-            return $createdTask;
+            return $batchCommands;
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
@@ -1160,7 +1160,7 @@ class ColdBatchService
             Log::error('ERROR COLD: createColdTask',  $errorMessages);
             Log::error('error COLD', ['error' => $th->getMessage()]);
             Log::channel('telegram')->error('APRIL_HOOK', $errorMessages);
-            return $createdTask;
+            return $batchCommands;
         }
     }
 }

@@ -428,7 +428,7 @@ class BitrixTaskService
                 $batchCommands = $this->completeTaskBatchCommand($hook, $idsForComplete, $batchCommands);
             }
 
-            $batchCommand =  BitrixGeneralService::createTaskBatch(
+            $batchCommands =  BitrixGeneralService::createTaskBatch(
                 'Bitrix Task Service create task batch',
                 $hook,
                 $companyId,
