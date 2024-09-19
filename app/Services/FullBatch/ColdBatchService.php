@@ -919,8 +919,8 @@ class ColdBatchService
         $entityBatchCommands = [];
         if (!empty($result)) {
             if (!empty($result['planDeals'])) {
-                Log::info('HOOK BATCH', ['planDeals' => $results['planDeals']]);
-                Log::channel('telegram')->info('HOOK BATCH', ['planDeals' => $results['planDeals']]);
+                Log::info('HOOK planDeals', ['planDeals' => $results['planDeals']]);
+                Log::channel('telegram')->info('HOOK planDeals', ['planDeals' => $results['planDeals']]);
 
 
 
