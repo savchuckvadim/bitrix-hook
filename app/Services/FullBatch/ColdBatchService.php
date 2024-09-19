@@ -798,7 +798,7 @@ class ColdBatchService
                 }
                 // $key = 'close' . '_' . 'company' . '_';
                 // $entityBatchCommands[$key] = $command; // в результате будет id
-                $batchService->sendGeneralBatchRequest($batchCommands);
+               $closeResult =  $batchService->sendGeneralBatchRequest([$batchCommands]);
                 Log::info('HOOK TEST COLD BATCH', [
                     'batchCommands' => $batchCommands,
 
@@ -809,6 +809,17 @@ class ColdBatchService
 
 
                 ]);
+                Log::info('HOOK TEST COLD BATCH', [
+                    'closeResult' => $closeResult,
+
+
+                ]);
+                Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+                    'closeResult' => $closeResult,
+
+
+                ]);
+
                 // if (!empty($currentDeals)) {
                 //     foreach ($currentDeals as $bxDeal) {
                 //         if (!empty($bxDeal)) {
