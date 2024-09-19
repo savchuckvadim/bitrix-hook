@@ -8,9 +8,11 @@ use App\Http\Controllers\PortalController;
 use App\Jobs\BtxCreateListItemJob;
 use App\Services\BitrixGeneralService;
 use App\Services\BitrixTaskService;
+use App\Services\General\BitrixBatchService;
 use App\Services\General\BitrixDealService;
 use App\Services\General\BitrixDepartamentService;
 use App\Services\General\BitrixListService;
+use App\Services\HookFlow\BitrixDealBatchFlowService;
 use App\Services\HookFlow\BitrixDealFlowService;
 use App\Services\HookFlow\BitrixEntityFlowService;
 use App\Services\HookFlow\BitrixListFlowService;
@@ -704,8 +706,27 @@ class ColdBatchService
 
 
                 sleep($randomNumber);
-                $currentDeals = BitrixDealService::getDealList(
-                    $this->hook,
+                // $currentDeals = BitrixDealService::getDealList(
+                //     $this->hook,
+                //     [
+                //         'filter' => [
+                //             // "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
+                //             // "=assignedById" => $userId,
+                //             // "=CATEGORY_ID" => $currentCategoryBtxId,
+                //             'COMPANY_ID' => $this->entityId,
+                //             // "ASSIGNED_BY_ID" => $this->responsibleId,
+                //             "=STAGE_ID" =>  $includedStages
+
+                //         ],
+                //         'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
+
+                //     ]
+
+
+                // );
+
+                $currentDealsBatchCommand = BitrixDealBatchFlowService::getBatchCommand(
+
                     [
                         'filter' => [
                             // "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
@@ -718,36 +739,80 @@ class ColdBatchService
                         ],
                         'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
 
-                    ]
+                    ],
+                    'list',
+                    null
 
 
                 );
-                // Log::info('HOOK TEST CURRENTENTITY', [
-                //     'currentDeals' => $currentDeals,
+                $key = 'list_deals_current';
+                // $resultBatchCommands[$key] = [
+                //     'command' => $currentDealsBatchCommand,
+                //     'dealId' => null,
+                //     'deal' => null,
+                //     // 'targetStage' => $targetStageBtxId,
+                //     'batchKey' => $key,
+                //     'isNeedUpdate' => true,
+                //     // 'tag' => $tag
 
 
-                // ]);
 
-                if (!empty($currentDeals)) {
-                    foreach ($currentDeals as $bxDeal) {
-                        if (!empty($bxDeal)) {
-                            if (!empty($bxDeal['ID'])) {
-                                $rand = rand(1, 2);
-                                sleep($rand);
-                                $urand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                                usleep($urand);
-                                BitrixDealService::updateDeal(
-                                    $this->hook,
-                                    $bxDeal['ID'],
-                                    [
-                                        'STAGE_ID' => 'C' . $categoryId . ':APOLOGY'
+                // ];
+                $batchCommands = [
+                    'get_deals' => [
+                        'method' => 'crm.deal.list',
+                        'params' => [
+                            'filter' => [
+                                'COMPANY_ID' => $this->entityId,
+                                "=STAGE_ID" => $includedStages
+                            ],
+                            'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
+                        ]
+                    ]
+                ];
 
-                                    ]
-                                );
-                            }
-                        }
-                    }
+                // Теперь создаем команды для обновления каждой сделки на основе полученных данных
+                for ($i = 0; $i < 50; $i++) { // Здесь $i — это индекс, используемый для ссылки на каждую сделку
+                    $batchCommands["update_deal_{$i}"] = [
+                        'method' => 'crm.deal.update',
+                        'params' => [
+                            'ID' => '$result[get_deals][result][' . $i . '][ID]', // Формат подстановки из документации
+                            'fields' => [
+                                'STAGE_ID' => 'C' . $categoryId . ':APOLOGY'
+                            ]
+                        ]
+                    ];
                 }
+                Log::info('HOOK TEST COLD BATCH', [
+                    'batchCommands' => $batchCommands,
+
+
+                ]);
+                Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+                    'batchCommands' => $batchCommands,
+
+
+                ]);
+                // if (!empty($currentDeals)) {
+                //     foreach ($currentDeals as $bxDeal) {
+                //         if (!empty($bxDeal)) {
+                //             if (!empty($bxDeal['ID'])) {
+                //                 $rand = rand(1, 2);
+                //                 sleep($rand);
+                //                 $urand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                //                 usleep($urand);
+                //                 BitrixDealService::updateDeal(
+                //                     $this->hook,
+                //                     $bxDeal['ID'],
+                //                     [
+                //                         'STAGE_ID' => 'C' . $categoryId . ':APOLOGY'
+
+                //                     ]
+                //                 );
+                //             }
+                //         }
+                //     }
+                // }
             }
         }
         // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
@@ -756,12 +821,12 @@ class ColdBatchService
 
         // ]);
 
-        $rand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-        usleep($rand);
-        $rand = rand(1, 2); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-        usleep($rand);
-
-        $flowResult =  BitrixDealFlowService::flow(
+        // $rand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        // usleep($rand);
+        // $rand = rand(1, 2); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        // usleep($rand);
+        $mainDealFlowBatchCommands = [];
+        $flowResult =  BitrixDealBatchFlowService::batchFlow(
             $this->hook,
             null, // current btx deals for report
             $this->portalDealData,
@@ -774,28 +839,64 @@ class ColdBatchService
             'plan',  // plan done expired 
             $this->responsibleId,
             true, //is result for report
-            '$fields'
+            '$fields',
+            null,
+            $mainDealFlowBatchCommands,
+            'xo' //tag
+
         );
+        $mainDealFlowBatchCommands = $flowResult['commands'];
         $planDeals = $flowResult['dealIds'];
 
-        if (!empty($planDeals)) {
-            foreach ($planDeals as $dealId) {
-                $rand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                usleep($rand);
-                $rand = rand(1, 2); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                usleep($rand);
 
-                BitrixEntityFlowService::coldflow(
-                    $this->portal,
-                    $this->hook,
-                    'deal',
-                    $dealId,
-                    'xo', // xo warm presentation,
-                    'plan',  // plan done expired 
-                    $this->entityFieldsUpdatingContent, //updting fields 
-                );
-            }
-        }
+        $command = BitrixBatchService::batchCommand(
+            $this->entityFieldsUpdatingContent,
+            'deal',
+            '$dealId',
+            'update'
+        );
+
+        Log::info('HOOK TEST COLD BATCH', [
+            'command' => $command,
+
+
+        ]);
+        Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+            'command' => $command,
+
+
+        ]);
+
+        Log::info('HOOK TEST COLD BATCH', [
+            'mainDealFlowBatchCommands' => $mainDealFlowBatchCommands,
+
+
+        ]);
+        Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+            'mainDealFlowBatchCommands' => $mainDealFlowBatchCommands,
+
+
+        ]);
+
+
+        // if (!empty($planDeals)) {
+        //     foreach ($planDeals as $dealId) {
+        //         $rand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        //         usleep($rand);
+        //         $rand = rand(1, 2); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        //         usleep($rand);
+
+        //         BitrixEntityFlowService::coldflow(
+        //             $this->portal,
+        //             $this->hook,
+        //             'deal',
+        //             $dealId,
+        //             'xo', // xo warm presentation,
+        //             'plan',  // plan done expired 
+        //             $this->entityFieldsUpdatingContent, //updting fields 
+        //         );
+        //     }
+        // }
 
         return [
             'planDeals' => $planDeals,

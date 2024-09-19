@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\APIOnlineController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BitrixHookController;
-
+use App\Services\FullBatch\ColdBatchService;
+use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,15 +22,128 @@ use App\Http\Controllers\BitrixHookController;
 
 
 // Route::middleware(['rate.limit'])->group(function () {
-    // новй холодный звонка из Откуда Угодно
-    Route::post('cold', function (Request $request) {
+// новй холодный звонка из Откуда Угодно
+Route::post('cold', function (Request $request) {
 
-    
-        $controller = new BitrixHookController();
-        return $controller->getColdCall(
-            $request
+    sleep(1);
+    $controller = new BitrixHookController();
+    return $controller->getColdCall(
+        $request
+    );
+});
+
+Route::post('coldtest', function (Request $request) {
+
+    $createdId =  null;
+    $responsibleId =  null;
+    $entityId =  null;
+    $entityType = null;
+    //     Log::channel('telegram')->error('APRIL_HOOK', [
+
+    //         'deadline' => $request['deadline'],
+    //         // 'название обзвона' => $name,
+    //         // 'companyId' => $companyId,
+    //         // 'domain' => $domain,
+    //         // 'responsibleId' => $responsibleId,
+    //         // 'btrx response' => $response['error_description']
+
+    // ]);
+    try {
+        date_default_timezone_set('Europe/Moscow');
+        $nowDate = new DateTime();
+        setlocale(LC_TIME, 'ru_RU.utf8');
+        // Форматируем дату и время в нужный формат
+        $locale = 'ru_RU';
+        $pattern = 'd MMMM yyyy';
+
+        // Создаем форматтер
+        $formatter = new IntlDateFormatter(
+            $locale,
+            IntlDateFormatter::NONE,
+            IntlDateFormatter::NONE,
+            date_default_timezone_get(),
+            IntlDateFormatter::GREGORIAN,
+            $pattern
         );
-    });
+
+        $formattedStringNowDate = $formatter->format($nowDate);
+        $name = 'от ' . $formattedStringNowDate;
+        if (isset($request['name'])) {
+            if (!empty($request['name'])) {
+                $name = $request['name'];
+            }
+        }
+
+
+
+        if (isset($request['created'])) {
+            $created = $request['created'];
+            $partsCreated = explode("_", $created);
+            $createdId = $partsCreated[1];
+        }
+
+        if (isset($request['responsible'])) {
+            $responsible = $request['responsible'];
+            $partsResponsible = explode("_", $responsible);
+
+            $responsibleId = $partsResponsible[1];
+        }
+
+
+
+        $auth = $request['auth'];
+        $domain = $auth['domain'];
+        if (isset($request['entity_id'])) {
+            $entityId = $request['entity_id'];
+        }
+
+        if (isset($request['entity_type'])) {
+            $entityType  = $request['entity_type'];
+        }
+
+        $deadline = $request['deadline'];
+        // $crm = $request['crm'];
+        // if (isset($request['name'])) {
+        //     $name = $request['name'];
+        // }
+
+        if (isset($request['isTmc'])) {
+            $isTmc  = $request['isTmc'];
+        }
+
+        $data = [
+            'domain' => $domain,
+            'entityType' => $entityType,
+            'entityId' => $entityId,
+            'responsible' => $responsibleId,
+            'created' => $createdId,
+            'deadline' => $deadline,
+            'name' => $name,
+            'isTmc' => $isTmc
+
+        ];
+        // Log::info('APRIL_HOOK pre rerdis', ['$data' => $data]);
+
+        $service = new ColdBatchService(
+            $data
+        );
+        $reult =  $service->getCold();
+        // $service = new BitrixCallingColdService($data);
+        // $reult =  $service->getCold();
+
+        return APIOnlineController::getSuccess(['result' => $reult]);
+
+        // return APIOnlineController::getSuccess(['result' => 'job catch it!']);
+    } catch (\Throwable $th) {
+        $errorMessages =  [
+            'message'   => $th->getMessage(),
+            'file'      => $th->getFile(),
+            'line'      => $th->getLine(),
+            'trace'     => $th->getTraceAsString(),
+        ];
+        Log::error('ERROR COLD BTX HOOK CONTROLLER: Exception caught',  $errorMessages);
+    }
+});
 
 
     // Route::post('company/assigned', function (Request $request) {
