@@ -803,20 +803,19 @@ class ColdBatchService
                 }
                 // $key = 'close' . '_' . 'company' . '_';
                 // $entityBatchCommands[$key] = $command; // в результате будет id
-                // $closeCommand = BitrixDealBatchFlowService::getBatchCommand(
-                //     [
-                //         'ID' => 8955, // Формат подстановки из документации
-                //         'fields' => [
-                //             // 'STAGE_ID' => 'C' . $categoryId . ':APOLOGY'
-                //             'TITLE' => 'yo'
-                //         ],
+                $closeCommand = BitrixDealBatchFlowService::getBatchCommand(
 
-                //     ],
-                //     'update',
-                //     '$result[' . $key . '][' . $i . '][ID]'
-                // );
+                    [
+                        // 'STAGE_ID' => 'C' . $categoryId . ':APOLOGY'
+                        'TITLE' => 'yo !'
+                    ],
 
-                // $batchCommands["update_deal_x"] =   $closeCommand;
+
+                    'update',
+                    8955
+                );
+
+                $batchCommands["update_deal_x"] =   $closeCommand;
                 $closeResult =  $batchService->sendGeneralBatchRequest($batchCommands);
 
                 foreach ($closeResult as $cResult) {
