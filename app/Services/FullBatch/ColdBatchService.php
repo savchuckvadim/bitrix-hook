@@ -920,12 +920,11 @@ class ColdBatchService
         $entityBatchCommands = [];
         if (!empty($result)) {
             if (!empty($result['planDeals'])) {
-                Log::info('HOOK planDeals', ['planDeals' => $results['planDeals']]);
-                Log::channel('telegram')->info('HOOK planDeals', ['planDeals' => $results['planDeals']]);
+             
 
 
 
-                foreach ($results['planDeals'] as $pDealId) {
+                foreach ($result['planDeals'] as $pDealId) {
                     $command = BitrixDealBatchFlowService::getFullBatchCommand(
                         ['fields' => $this->entityFieldsUpdatingContent],
                         'update',
