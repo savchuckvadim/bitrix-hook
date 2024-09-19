@@ -366,4 +366,19 @@ class BitrixBatchService
 
         return $currentMethod . '?' . http_build_query($data);
     }
+    static function getGeneralBatchCommand(
+        $data,
+      
+        $method, //update | add
+        $entityId = null,
+
+    ) {
+
+       
+        if (!empty($entityId)) {
+            $data['ID'] = $entityId;
+        }
+
+        return $method . '?' . http_build_query($data);
+    }
 }

@@ -920,7 +920,7 @@ class ColdBatchService
         $entityBatchCommands = [];
         if (!empty($result)) {
             if (!empty($result['planDeals'])) {
-             
+
 
 
 
@@ -929,7 +929,7 @@ class ColdBatchService
                         ['fields' => $this->entityFieldsUpdatingContent],
                         'update',
                         $pDealId,
-                       
+
                     );
                     $key = 'entity_update' . '_' . 'deal' . '_' . $pDealId;
                     $entityBatchCommands[$key] = $command; // в результате будет id
@@ -943,8 +943,18 @@ class ColdBatchService
             $this->entityId,
             'update'
         );
-        $key = 'entity_update' . '_' .  $this->entityType . '_'.$this->entityId;
+        $key = 'entity_update' . '_' .  $this->entityType . '_' . $this->entityId;
         $entityBatchCommands[$key] = $command; // в результате будет id
+
+
+        /** TASKS BATCH */
+        $this->createColdTaskBatchCommand(
+            null,
+            $result['planDeals'],
+            $entityBatchCommands
+
+        );
+
         $entityResult =  $batchService->sendGeneralBatchRequest($entityBatchCommands);
 
 
@@ -1116,9 +1126,9 @@ class ColdBatchService
                 $leadId  = $this->entityId;
             }
             $taskService = new BitrixTaskService();
+           
 
-
-            $createdTask =  $taskService->createTask(
+            $createdTask =  $taskService->getCreateTaskBatchCommands(
                 'cold',       //$type,   //cold warm presentation hot 
                 $this->stringType,
                 $this->portal,

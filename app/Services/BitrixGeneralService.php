@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Http\Controllers\APIBitrixController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\PortalController;
+use App\Services\General\BitrixBatchService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -280,7 +281,7 @@ class BitrixGeneralService
 
             $data = [
                 'id' => $entityId,
-                
+
 
 
             ];
@@ -508,6 +509,178 @@ class BitrixGeneralService
             // ]);
 
             $createdTask =  APIBitrixController::getBitrixRespone($responseData, $parentMethod);
+
+            return $createdTask;
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR: Exception caught',  $errorMessages);
+            Log::info('error', ['error' => $th->getMessage()]);
+            Log::channel('telegram')->info(
+                'HOOK: general createTask from' . $parentMethod,
+                ['error' => $th->getMessage()]
+            );
+            return  $createdTask;
+        }
+    }
+    static function createTaskBatch(
+        $parentMethod,
+        $hook,
+        $companyId,
+        $leadId,
+        // $deadline,
+        // $createdId,
+        // $currentSmartItemId,
+        // $smartCrmId,
+        // $taskTitle,
+        // $responsibleId,
+        // $callingGroupId,
+        $taskData,
+        $batchCommands
+
+    ) {
+        //company and contacts
+        $methodCompany = '/crm.company.get.json';
+        $methodContacts = '/crm.contact.list.json';
+        $methodTask = '/tasks.task.add.json';
+
+
+        $nowDate = now();
+        // $crm = $currentSmartItemId;
+
+        $createdTask = null;
+        $description = '';
+        try {
+
+            $batchService = new BitrixBatchService($hook);
+
+            $url = $hook . $methodContacts;
+            $contactsData =  [
+                'FILTER' => [
+                    'COMPANY_ID' => $companyId,
+
+                ],
+                'select' => ["ID", "NAME", "LAST_NAME", "SECOND_NAME", "TYPE_ID", "SOURCE_ID", "PHONE", "EMAIL", "COMMENTS"],
+            ];
+            $getCompanyData = [
+                'ID'  => $companyId,
+                'select' => ["TITLE", "PHONE", "EMAIL"],
+            ];
+
+            $contacts = Http::get($url,  $contactsData);
+
+
+            $url = $hook . $methodCompany;
+            $company = Http::get($url,  $getCompanyData);
+
+
+            //contacts description
+            $contactsString = '';
+            $contactsTable = '[TABLE]';
+            $contactRows = '';
+            if (isset($contacts['result'])) {
+                foreach ($contacts['result'] as  $contact) {
+                    $contactRow = '[TR]';
+                    $contactPhones = '';
+                    if (isset($contact["PHONE"])) {
+                        foreach ($contact["PHONE"] as $phone) {
+                            $contactPhones = $contactPhones .  $phone["VALUE"] . "   ";
+                        }
+                    }
+
+                    $emails = '';
+                    if (isset($contact["EMAIL"])) {
+                        foreach ($contact["EMAIL"] as $email) {
+                            if (isset($email["VALUE"])) {
+                                $emails = $emails .  $email["VALUE"] . "   ";
+                            }
+                        }
+                    }
+
+
+
+                    $contactsNameString =  $contact["NAME"] . " " . $contact["SECOND_NAME"] . " " . $contact["SECOND_NAME"];
+                    $contactsFirstCell = ' [TD]' . $contactsNameString . '[/TD]';
+                    $contactsPhonesCell = ' [TD]' . $contactPhones . '[/TD]';
+                    $contactsEmailsCell = ' [TD]' . $emails . '[/TD]';
+
+
+
+                    $contactRow = '[TR]' . $contactsFirstCell . ''  . $contactsPhonesCell . $contactsEmailsCell . '[/TR]';
+                    $contactRows = $contactRows . $contactRow;
+                }
+
+
+
+
+                $contactsTable = '[TABLE]' . $contactRows . '[/TABLE]';
+            }
+
+
+            //company phones description
+            $cmpnPhonesEmailsList = '';
+
+            if (isset($company['result'])) {
+
+                $cmpnPhonesEmailsList = '';
+                if (isset($company['result']['PHONE'])) {
+                    $companyPhones = $company['result']['PHONE'];
+                    $cmpnyListContent = '';
+
+                    foreach ($companyPhones as $phone) {
+                        $cmpnyListContent = $cmpnyListContent . '[*]' .  $phone["VALUE"] . "   ";
+                    }
+
+                    if (isset($company['result']['EMAIL'])) {
+
+                        $companyEmails = $company['result']['EMAIL'];
+
+                        foreach ($companyEmails as $email) {
+                            if (isset($email["VALUE"])) {
+                                $cmpnyListContent = $cmpnyListContent . '[*]' .  $email["VALUE"] . "   ";
+                            }
+                        }
+                    }
+
+                    $cmpnPhonesEmailsList = '[LIST]' . $cmpnyListContent . '[/LIST]';
+                }
+
+
+
+
+
+
+
+                $companyPhones = '';
+
+                $companyTitleString = '[B][COLOR=#0070c0]' . $company['result']['TITLE'] . '[/COLOR][/B]';
+                $description =  $companyTitleString . '
+            ' . '[LEFT][B]Контакты компании: [/B][/LEFT]' . $contactsTable;
+                $description = $description . '' . $cmpnPhonesEmailsList;
+            }
+            $taskData['fields']['DESCRIPTION'] = $description;
+            //task
+
+            $url = $hook . $methodTask;
+
+            // $responseData = Http::get($url, $taskData);
+
+            $batchKey = 'task_create';
+            $batchCommand = $batchService->getGeneralBatchCommand($taskData, $methodTask, null);
+            $batchCommands[$batchKey] = $batchCommand;
+            // Log::channel('telegram')->error('APRIL_HOOK', [
+            //     'createColdTask' => [
+            //         'url' => $url,
+            //         'responseData' => $responseData,
+
+            //     ]
+            // ]);
+
+            // $createdTask =  APIBitrixController::getBitrixRespone($responseData, $parentMethod);
 
             return $createdTask;
         } catch (\Throwable $th) {
