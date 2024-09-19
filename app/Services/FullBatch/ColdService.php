@@ -480,51 +480,51 @@ class ColdBatchService
             //     'currentDealsIds' => $currentDealsIds
 
             // ]);
-            if (!empty($currentDealsIds)) {
+            // if (!empty($currentDealsIds)) {
 
-                $this->createColdTask($currentSmartId, $currentDealsIds);
-            }
+            //     $this->createColdTask($currentSmartId, $currentDealsIds);
+            // }
 
-            $rand = mt_rand(1000000, 2500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-            usleep($rand);
+            // $rand = mt_rand(1000000, 2500000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            // usleep($rand);
 
-            BitrixEntityFlowService::coldflow(
-                $this->portal,
-                $this->hook,
-                $this->entityType,
-                $this->entityId,
-                'xo', // xo warm presentation,
-                'plan',  // plan done expired 
-                $this->entityFieldsUpdatingContent, //updting fields 
-            );
-            // if ($this->withLists) {
-            $workStatus = [
-                'id' => 0,
-                'code' => "inJob",
-                'name' => "В работе"
-            ];
-            BtxCreateListItemJob::dispatch(
-                $this->hook,
-                $this->bitrixLists,
-                'xo',
-                'Холодный обзвон',
-                'plan',
-                // $this->stringType,
-                $this->deadline,
-                $this->createdId,
-                $this->responsibleId,
-                $this->responsibleId,
-                $this->entityId,
-                'Холодный обзвон' . $this->name,
-                $workStatus,
-                'result',  // result noresult expired,
-                null, //$noresultReason = null,
-                null, //$failReason = null,
-                null, //$failType = null,
-                $currentDealsIds,
-                null //current base deal id for uniq pres count
+            // BitrixEntityFlowService::coldflow(
+            //     $this->portal,
+            //     $this->hook,
+            //     $this->entityType,
+            //     $this->entityId,
+            //     'xo', // xo warm presentation,
+            //     'plan',  // plan done expired 
+            //     $this->entityFieldsUpdatingContent, //updting fields 
+            // );
+            // // if ($this->withLists) {
+            // $workStatus = [
+            //     'id' => 0,
+            //     'code' => "inJob",
+            //     'name' => "В работе"
+            // ];
+            // BtxCreateListItemJob::dispatch(
+            //     $this->hook,
+            //     $this->bitrixLists,
+            //     'xo',
+            //     'Холодный обзвон',
+            //     'plan',
+            //     // $this->stringType,
+            //     $this->deadline,
+            //     $this->createdId,
+            //     $this->responsibleId,
+            //     $this->responsibleId,
+            //     $this->entityId,
+            //     'Холодный обзвон' . $this->name,
+            //     $workStatus,
+            //     'result',  // result noresult expired,
+            //     null, //$noresultReason = null,
+            //     null, //$failReason = null,
+            //     null, //$failType = null,
+            //     $currentDealsIds,
+            //     null //current base deal id for uniq pres count
 
-            )->onQueue('low-priority');
+            // )->onQueue('low-priority');
             // BitrixListFlowService::getListsFlow(
             //     $this->hook,
             //     $this->bitrixLists,
