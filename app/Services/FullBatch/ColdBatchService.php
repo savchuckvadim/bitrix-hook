@@ -1092,6 +1092,66 @@ class ColdBatchService
             return $createdTask;
         }
     }
+
+
+    public function createColdTaskBatchCommand(
+        $currentSmartItemId,
+        $currentDealsItemIds = null
+
+    ) {
+
+        $rand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        usleep($rand);
+        $rand = rand(1, 2); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        usleep($rand);
+        $createdTask = null;
+        try {
+            // Log::channel('telegram')->error('APRIL_HOOK', $this->portal);
+            $companyId  = null;
+            $leadId  = null;
+            if ($this->entityType == 'company') {
+
+                $companyId  = $this->entityId;
+            } else if ($this->entityType == 'lead') {
+                $leadId  = $this->entityId;
+            }
+            $taskService = new BitrixTaskService();
+
+
+            $createdTask =  $taskService->createTask(
+                'cold',       //$type,   //cold warm presentation hot 
+                $this->stringType,
+                $this->portal,
+                $this->domain,
+                $this->hook,
+                $companyId,  //may be null
+                $leadId,     //may be null
+                $this->createdId,
+                $this->responsibleId,
+                $this->deadline,
+                $this->name,
+                $currentSmartItemId,
+                true, //$isNeedCompleteOtherTasks
+                null,
+                $currentDealsItemIds,
+
+
+            );
+
+            return $createdTask;
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR COLD: createColdTask',  $errorMessages);
+            Log::error('error COLD', ['error' => $th->getMessage()]);
+            Log::channel('telegram')->error('APRIL_HOOK', $errorMessages);
+            return $createdTask;
+        }
+    }
 }
 
 
