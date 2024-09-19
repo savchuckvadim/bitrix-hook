@@ -424,9 +424,9 @@ class BitrixTaskService
             // usleep($rand);
 
 
-            if ($idsForComplete) {
-                $batchCommands = $this->completeTaskBatchCommand($hook, $idsForComplete, $batchCommands);
-            }
+            // if ($idsForComplete) {
+            //     $batchCommands = $this->completeTaskBatchCommand($hook, $idsForComplete, $batchCommands);
+            // }
 
             $batchCommands =  BitrixGeneralService::createTaskBatch(
                 'Bitrix Task Service create task batch',
