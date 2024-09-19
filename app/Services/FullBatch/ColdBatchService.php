@@ -779,19 +779,18 @@ class ColdBatchService
 
                     $closeCommand = BitrixDealBatchFlowService::getBatchCommand(
                         [
-                            'ID' => '$result[' . $key . '][' . $i . '][ID]', // Формат подстановки из документации
-                            'fields' => [
-                                // 'STAGE_ID' => 'C' . $categoryId . ':APOLOGY'
-                                'TITLE' => 'yo'
-                            ],
 
+                            'STAGE_ID' => 'C' . $categoryId . ':APOLOGY',
+                            'TITLE' => 'yo'
                         ],
+
+
                         'update',
                         '$result[' . $key . '][' . $i . '][ID]'
                     );
 
                     $batchCommands["update_deal_{$i}"] =   $closeCommand;
-                    
+
                     // [
                     //     'method' => 'crm.deal.update',
                     //     'params' => [
@@ -804,18 +803,32 @@ class ColdBatchService
                 }
                 // $key = 'close' . '_' . 'company' . '_';
                 // $entityBatchCommands[$key] = $command; // в результате будет id
+                // $closeCommand = BitrixDealBatchFlowService::getBatchCommand(
+                //     [
+                //         'ID' => 8955, // Формат подстановки из документации
+                //         'fields' => [
+                //             // 'STAGE_ID' => 'C' . $categoryId . ':APOLOGY'
+                //             'TITLE' => 'yo'
+                //         ],
+
+                //     ],
+                //     'update',
+                //     '$result[' . $key . '][' . $i . '][ID]'
+                // );
+
+                // $batchCommands["update_deal_x"] =   $closeCommand;
                 $closeResult =  $batchService->sendGeneralBatchRequest($batchCommands);
 
                 foreach ($closeResult as $cResult) {
                     Log::info('HOOK TEST COLD BATCH', [
                         'cResult' => $cResult,
-    
-    
+
+
                     ]);
                     Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
                         'cResult' => $cResult,
-    
-    
+
+
                     ]);
                 }
                 Log::info('HOOK TEST COLD BATCH', [
