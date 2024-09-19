@@ -677,6 +677,7 @@ class ColdBatchService
         sleep($rand);
         $urand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
         usleep($urand);
+        $batchService =  new BitrixBatchService($this->hook);
 
         if (!empty($this->portalDealData['categories'])) {
             foreach ($this->portalDealData['categories'] as $category) {
@@ -759,30 +760,45 @@ class ColdBatchService
 
                 // ];
                 $batchCommands = [
-                    'get_deals' => [
-                        'method' => 'crm.deal.list',
-                        'params' => [
-                            'filter' => [
-                                'COMPANY_ID' => $this->entityId,
-                                "=STAGE_ID" => $includedStages
-                            ],
-                            'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
-                        ]
-                    ]
+                    'get_deals' => $currentDealsBatchCommand,
+
+                    // [
+                    //     'method' => 'crm.deal.list',
+                    //     'params' => [
+                    //         'filter' => [
+                    //             'COMPANY_ID' => $this->entityId,
+                    //             "=STAGE_ID" => $includedStages
+                    //         ],
+                    //         'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
+                    //     ]
+                    // ]
                 ];
 
                 // Теперь создаем команды для обновления каждой сделки на основе полученных данных
                 for ($i = 0; $i < 50; $i++) { // Здесь $i — это индекс, используемый для ссылки на каждую сделку
-                    $batchCommands["update_deal_{$i}"] = [
-                        'method' => 'crm.deal.update',
-                        'params' => [
+                    $batchCommands["update_deal_{$i}"] =   BitrixDealBatchFlowService::getBatchCommand(
+                        [
                             'ID' => '$result[get_deals][result][' . $i . '][ID]', // Формат подстановки из документации
                             'fields' => [
                                 'STAGE_ID' => 'C' . $categoryId . ':APOLOGY'
                             ]
-                        ]
-                    ];
+                        ],
+                        'update',
+                        '$result[get_deals][result][' . $i . '][ID]'
+                    );
+                    // [
+                    //     'method' => 'crm.deal.update',
+                    //     'params' => [
+                    //         'ID' => '$result[get_deals][result][' . $i . '][ID]', // Формат подстановки из документации
+                    //         'fields' => [
+                    //             'STAGE_ID' => 'C' . $categoryId . ':APOLOGY'
+                    //         ]
+                    //     ]
+                    // ];
                 }
+                // $key = 'close' . '_' . 'company' . '_';
+                // $entityBatchCommands[$key] = $command; // в результате будет id
+                $batchService->sendGeneralBatchRequest($batchCommands);
                 Log::info('HOOK TEST COLD BATCH', [
                     'batchCommands' => $batchCommands,
 
@@ -847,12 +863,11 @@ class ColdBatchService
         );
         $mainDealFlowBatchCommands = $flowResult['commands'];
         // $planDeals = $flowResult['dealIds'];
-        $cleanBatchCommands = BitrixDealBatchFlowService::cleanBatchCommands($batchCommands, $this->portalDealData);
+        $cleanBatchCommands = BitrixDealBatchFlowService::cleanBatchCommands($mainDealFlowBatchCommands, $this->portalDealData);
 
         // Log::channel('telegram')->info('HOOK BATCH', ['cleanBatchCommands' => $cleanBatchCommands]);
 
 
-        $batchService =  new BitrixBatchService($this->hook);
         $results = $batchService->sendFlowBatchRequest($cleanBatchCommands);
         // Log::info('HOOK BATCH', ['results' => $results]);
         // Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
@@ -868,9 +883,9 @@ class ColdBatchService
         $key = 'entity' . '_' . 'company' . '_';
         $entityBatchCommands[$key] = $command; // в результате будет id
         $batchService->sendGeneralBatchRequest($entityBatchCommands);
-   
-   
-   
+
+
+
         Log::info('HOOK TEST COLD BATCH', [
             'command' => $command,
 
@@ -914,7 +929,7 @@ class ColdBatchService
         // }
 
         return [
-            'planDeals' =>' $planDeals',
+            'planDeals' => ' $planDeals',
         ];
     }
 
