@@ -778,14 +778,14 @@ class ColdBatchService
                 for ($i = 0; $i < 5; $i++) { // Здесь $i — это индекс, используемый для ссылки на каждую сделку
                     $batchCommands["update_deal_{$i}"] =   BitrixDealBatchFlowService::getBatchCommand(
                         [
-                            'ID' => '$result[get_deals][result][' . $i . '][ID]', // Формат подстановки из документации
+                            'ID' => '$result[get_deals][' . $i . '][ID]', // Формат подстановки из документации
                             'fields' => [
                                 'STAGE_ID' => 'C' . $categoryId . ':APOLOGY'
                             ],
 
                         ],
                         'update',
-                        '$result[get_deals][result][' . $i . '][ID]'
+                        '$result[get_deals][' . $i . '][ID]'
                     );
                     // [
                     //     'method' => 'crm.deal.update',
