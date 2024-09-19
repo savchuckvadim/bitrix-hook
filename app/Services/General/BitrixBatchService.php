@@ -182,7 +182,16 @@ class BitrixBatchService
                 'cmd' => $batchCommands
             ]);
             $responseData = $response->json();
+            Log::info('HOOK TEST Service BATCH', [
+                'batchCommands' => $batchCommands,
 
+
+            ]);
+            Log::channel('telegram')->info('HOOK TEST Service BATCH', [
+                'batchCommands' => $batchCommands,
+
+
+            ]);
             if (isset($responseData['result']['result_total']) && count($responseData['result']['result_total']) > 0) {
                 foreach ($responseData['result']['result_total'] as $key => $kpiCount) {
 
