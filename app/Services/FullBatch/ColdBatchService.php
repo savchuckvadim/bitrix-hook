@@ -790,11 +790,7 @@ class ColdBatchService
                     );
 
                     $batchCommands["update_deal_{$i}"] =   $closeCommand;
-                    Log::info('HOOK TEST COLD BATCH', [
-                        "update_deal_{$i}" => $closeCommand,
-
-
-                    ]);
+                    
                     // [
                     //     'method' => 'crm.deal.update',
                     //     'params' => [
@@ -808,6 +804,19 @@ class ColdBatchService
                 // $key = 'close' . '_' . 'company' . '_';
                 // $entityBatchCommands[$key] = $command; // в результате будет id
                 $closeResult =  $batchService->sendGeneralBatchRequest($batchCommands);
+
+                foreach ($closeResult as $cResult) {
+                    Log::info('HOOK TEST COLD BATCH', [
+                        'cResult' => $cResult,
+    
+    
+                    ]);
+                    Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+                        'cResult' => $cResult,
+    
+    
+                    ]);
+                }
                 Log::info('HOOK TEST COLD BATCH', [
                     'batchCommands' => $batchCommands,
 
@@ -818,16 +827,16 @@ class ColdBatchService
 
 
                 ]);
-                Log::info('HOOK TEST COLD BATCH', [
-                    'closeResult' => $closeResult,
+                // Log::info('HOOK TEST COLD BATCH', [
+                //     'closeResult' => $closeResult,
 
 
-                ]);
-                Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
-                    'closeResult' => $closeResult,
+                // ]);
+                // Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+                //     'closeResult' => $closeResult,
 
 
-                ]);
+                // ]);
 
                 // if (!empty($currentDeals)) {
                 //     foreach ($currentDeals as $bxDeal) {
