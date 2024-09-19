@@ -460,10 +460,7 @@ class ColdBatchService
                 usleep($urand);
                 $this->getSmartFlow();
             }
-            $rand = rand(1, 2);
-            sleep($rand);
-            $urand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-            usleep($urand);
+       
             if ($this->isDealFlow && $this->portalDealData) {
                 $currentDealsIds = $this->getDealFlow();
                 if (!empty($currentDealsIds)) {
@@ -673,10 +670,8 @@ class ColdBatchService
     protected function getDealFlow()
     {
 
-        $rand = rand(1, 2);
-        sleep($rand);
-        $urand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-        usleep($urand);
+ 
+        
         $batchService =  new BitrixBatchService($this->hook);
 
         if (!empty($this->portalDealData['categories'])) {
@@ -702,11 +697,11 @@ class ColdBatchService
                         }
                     }
                 }
-                $randomNumber = rand(1, 3);
+                // $randomNumber = rand(1, 3);
 
 
 
-                sleep($randomNumber);
+                // sleep($randomNumber);
                 // $currentDeals = BitrixDealService::getDealList(
                 //     $this->hook,
                 //     [
@@ -1111,10 +1106,10 @@ class ColdBatchService
 
     ) {
 
-        $rand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-        usleep($rand);
-        $rand = rand(1, 2); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-        usleep($rand);
+        // $rand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        // usleep($rand);
+        // $rand = rand(1, 2); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        // usleep($rand);
         $createdTask = null;
         try {
             // Log::channel('telegram')->error('APRIL_HOOK', $this->portal);

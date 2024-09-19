@@ -544,10 +544,14 @@ class BitrixGeneralService
 
     ) {
         //company and contacts
-        $methodCompany = '/crm.company.get.json';
-        $methodContacts = '/crm.contact.list.json';
+        // $methodCompany = '/crm.company.get.json';
+        // $methodContacts = '/crm.contact.list.json';
+        // $methodTask = 'tasks.task.add';
+        $batchService = new BitrixBatchService($hook);
+        $methodCompany = 'crm.company.get';
+        $methodContacts = 'crm.contact.list';
         $methodTask = 'tasks.task.add';
-
+        // Команда на получение данных компании
 
         $nowDate = now();
         // $crm = $currentSmartItemId;
@@ -556,116 +560,146 @@ class BitrixGeneralService
         $description = '';
         try {
 
-            $batchService = new BitrixBatchService($hook);
 
-            $url = $hook . $methodContacts;
-            $contactsData =  [
-                'FILTER' => [
-                    'COMPANY_ID' => $companyId,
-
-                ],
-                'select' => ["ID", "NAME", "LAST_NAME", "SECOND_NAME", "TYPE_ID", "SOURCE_ID", "PHONE", "EMAIL", "COMMENTS"],
-            ];
             $getCompanyData = [
-                'ID'  => $companyId,
+                'ID' => $companyId,
                 'select' => ["TITLE", "PHONE", "EMAIL"],
             ];
+            $batchCommands['get_company'] = $batchService->getGeneralBatchCommand($getCompanyData, $methodCompany, null);
 
-            $contacts = Http::get($url,  $contactsData);
+            // Команда на получение списка контактов
+            $contactsData = [
+                'FILTER' => [
+                    'COMPANY_ID' => $companyId,
+                ],
+                'select' => ["ID", "NAME", "LAST_NAME", "PHONE", "EMAIL"],
+            ];
+            $batchCommands['get_contacts'] = $batchService->getGeneralBatchCommand($contactsData, $methodContacts, null);
+
+            $contactDescription = '';
+            for ($i = 0; $i < 10; $i++) {
+                $contactDescription .= 'Имя: $result[get_contacts][' . $i . '][NAME] $result[get_contacts][' . $i . '][LAST_NAME], ';
+                $contactDescription .= 'Телефон: $result[get_contacts][' . $i . '][PHONE][0][VALUE], ';
+                $contactDescription .= 'Email: $result[get_contacts][' . $i . '][EMAIL][0][VALUE]' . "\n";
+            }
+
+            $companyTitleString = '[B][COLOR=#0070c0] Компания: $result[get_company][TITLE] [/COLOR][/B]';
 
 
-            $url = $hook . $methodCompany;
-            $company = Http::get($url,  $getCompanyData);
+
+            $description = $companyTitleString . "\n" .
+                'Контакты: ' . "\n" .
+                $contactDescription;
+
+            $taskData['fields']['DESCRIPTION'] = $description;
+            // $url = $hook . $methodContacts;
+            // $contactsData =  [
+            //     'FILTER' => [
+            //         'COMPANY_ID' => $companyId,
+
+            //     ],
+            //     'select' => ["ID", "NAME", "LAST_NAME", "SECOND_NAME", "TYPE_ID", "SOURCE_ID", "PHONE", "EMAIL", "COMMENTS"],
+            // ];
+            // $getCompanyData = [
+            //     'ID'  => $companyId,
+            //     'select' => ["TITLE", "PHONE", "EMAIL"],
+            // ];
+
+            // $contacts = Http::get($url,  $contactsData);
+
+
+            // $url = $hook . $methodCompany;
+            // $company = Http::get($url,  $getCompanyData);
 
 
             //contacts description
             $contactsString = '';
-            $contactsTable = '[TABLE]';
-            $contactRows = '';
-            if (isset($contacts['result'])) {
-                foreach ($contacts['result'] as  $contact) {
-                    $contactRow = '[TR]';
-                    $contactPhones = '';
-                    if (isset($contact["PHONE"])) {
-                        foreach ($contact["PHONE"] as $phone) {
-                            $contactPhones = $contactPhones .  $phone["VALUE"] . "   ";
-                        }
-                    }
+            // $contactsTable = '[TABLE]';
+            // $contactRows = '';
+            // if (isset($contacts['result'])) {
+            //     foreach ($contacts['result'] as  $contact) {
+            //         $contactRow = '[TR]';
+            //         $contactPhones = '';
+            //         if (isset($contact["PHONE"])) {
+            //             foreach ($contact["PHONE"] as $phone) {
+            //                 $contactPhones = $contactPhones .  $phone["VALUE"] . "   ";
+            //             }
+            //         }
 
-                    $emails = '';
-                    if (isset($contact["EMAIL"])) {
-                        foreach ($contact["EMAIL"] as $email) {
-                            if (isset($email["VALUE"])) {
-                                $emails = $emails .  $email["VALUE"] . "   ";
-                            }
-                        }
-                    }
-
-
-
-                    $contactsNameString =  $contact["NAME"] . " " . $contact["SECOND_NAME"] . " " . $contact["SECOND_NAME"];
-                    $contactsFirstCell = ' [TD]' . $contactsNameString . '[/TD]';
-                    $contactsPhonesCell = ' [TD]' . $contactPhones . '[/TD]';
-                    $contactsEmailsCell = ' [TD]' . $emails . '[/TD]';
+            //         $emails = '';
+            //         if (isset($contact["EMAIL"])) {
+            //             foreach ($contact["EMAIL"] as $email) {
+            //                 if (isset($email["VALUE"])) {
+            //                     $emails = $emails .  $email["VALUE"] . "   ";
+            //                 }
+            //             }
+            //         }
 
 
 
-                    $contactRow = '[TR]' . $contactsFirstCell . ''  . $contactsPhonesCell . $contactsEmailsCell . '[/TR]';
-                    $contactRows = $contactRows . $contactRow;
-                }
+            //         $contactsNameString =  $contact["NAME"] . " " . $contact["SECOND_NAME"] . " " . $contact["SECOND_NAME"];
+            //         $contactsFirstCell = ' [TD]' . $contactsNameString . '[/TD]';
+            //         $contactsPhonesCell = ' [TD]' . $contactPhones . '[/TD]';
+            //         $contactsEmailsCell = ' [TD]' . $emails . '[/TD]';
+
+
+
+            //         $contactRow = '[TR]' . $contactsFirstCell . ''  . $contactsPhonesCell . $contactsEmailsCell . '[/TR]';
+            //         $contactRows = $contactRows . $contactRow;
+            //     }
 
 
 
 
-                $contactsTable = '[TABLE]' . $contactRows . '[/TABLE]';
-            }
+            //     $contactsTable = '[TABLE]' . $contactRows . '[/TABLE]';
+            // }
 
 
-            //company phones description
-            $cmpnPhonesEmailsList = '';
+            // //company phones description
+            // $cmpnPhonesEmailsList = '';
 
-            if (isset($company['result'])) {
+            // if (isset($company['result'])) {
 
-                $cmpnPhonesEmailsList = '';
-                if (isset($company['result']['PHONE'])) {
-                    $companyPhones = $company['result']['PHONE'];
-                    $cmpnyListContent = '';
+            //     $cmpnPhonesEmailsList = '';
+            //     if (isset($company['result']['PHONE'])) {
+            //         $companyPhones = $company['result']['PHONE'];
+            //         $cmpnyListContent = '';
 
-                    foreach ($companyPhones as $phone) {
-                        $cmpnyListContent = $cmpnyListContent . '[*]' .  $phone["VALUE"] . "   ";
-                    }
+            //         foreach ($companyPhones as $phone) {
+            //             $cmpnyListContent = $cmpnyListContent . '[*]' .  $phone["VALUE"] . "   ";
+            //         }
 
-                    if (isset($company['result']['EMAIL'])) {
+            //         if (isset($company['result']['EMAIL'])) {
 
-                        $companyEmails = $company['result']['EMAIL'];
+            //             $companyEmails = $company['result']['EMAIL'];
 
-                        foreach ($companyEmails as $email) {
-                            if (isset($email["VALUE"])) {
-                                $cmpnyListContent = $cmpnyListContent . '[*]' .  $email["VALUE"] . "   ";
-                            }
-                        }
-                    }
+            //             foreach ($companyEmails as $email) {
+            //                 if (isset($email["VALUE"])) {
+            //                     $cmpnyListContent = $cmpnyListContent . '[*]' .  $email["VALUE"] . "   ";
+            //                 }
+            //             }
+            //         }
 
-                    $cmpnPhonesEmailsList = '[LIST]' . $cmpnyListContent . '[/LIST]';
-                }
-
-
+            //         $cmpnPhonesEmailsList = '[LIST]' . $cmpnyListContent . '[/LIST]';
+            //     }
 
 
 
 
 
-                $companyPhones = '';
 
-                $companyTitleString = '[B][COLOR=#0070c0]' . $company['result']['TITLE'] . '[/COLOR][/B]';
-                $description =  $companyTitleString . '
-            ' . '[LEFT][B]Контакты компании: [/B][/LEFT]' . $contactsTable;
-                $description = $description . '' . $cmpnPhonesEmailsList;
-            }
-            $taskData['fields']['DESCRIPTION'] = $description;
-            //task
 
-            $url = $hook . $methodTask;
+            //     $companyPhones = '';
+
+            //     $companyTitleString = '[B][COLOR=#0070c0]' . $company['result']['TITLE'] . '[/COLOR][/B]';
+            //     $description =  $companyTitleString . '
+            // ' . '[LEFT][B]Контакты компании: [/B][/LEFT]' . $contactsTable;
+            //     $description = $description . '' . $cmpnPhonesEmailsList;
+            // }
+            // $taskData['fields']['DESCRIPTION'] = $description;
+            // //task
+
+            // $url = $hook . $methodTask;
 
             // $responseData = Http::get($url, $taskData);
 

@@ -262,8 +262,7 @@ class BitrixTaskService
     ) {
         date_default_timezone_set('Europe/Moscow');
         $nowDate = now();
-        $rand = mt_rand(10000, 700000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-        usleep($rand);
+
         // $rand = 1; // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
         // sleep($rand);
 

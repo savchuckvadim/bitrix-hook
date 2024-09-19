@@ -178,7 +178,7 @@ class BitrixBatchService
                 print_r($responseData['result_error']);
                 print_r("<br>");
             }
-            usleep(mt_rand(1000, 400000));
+            usleep(mt_rand(1000, 4000));
         };
 
         // if (isset($result[0])) {
