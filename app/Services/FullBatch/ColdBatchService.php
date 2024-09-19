@@ -781,7 +781,8 @@ class ColdBatchService
                             'ID' => '$result[get_deals][result][' . $i . '][ID]', // Формат подстановки из документации
                             'fields' => [
                                 'STAGE_ID' => 'C' . $categoryId . ':APOLOGY'
-                            ]
+                            ],
+                            'select' => ['ID', 'TITLE']
                         ],
                         'update',
                         '$result[get_deals][result][' . $i . '][ID]'
