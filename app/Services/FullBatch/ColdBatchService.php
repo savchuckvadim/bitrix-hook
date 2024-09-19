@@ -818,28 +818,28 @@ class ColdBatchService
                 // $batchCommands["update_deal_x"] =   $closeCommand;
                 $closeResult =  $batchService->sendGeneralBatchRequest($batchCommands);
 
-                foreach ($closeResult as $cResult) {
-                    Log::info('HOOK TEST COLD BATCH', [
-                        'cResult' => $cResult,
+                // foreach ($closeResult as $cResult) {
+                //     Log::info('HOOK TEST COLD BATCH', [
+                //         'cResult' => $cResult,
 
 
-                    ]);
-                    Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
-                        'cResult' => $cResult,
+                //     ]);
+                //     Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+                //         'cResult' => $cResult,
 
 
-                    ]);
-                }
-                Log::info('HOOK TEST COLD BATCH', [
-                    'batchCommands' => $batchCommands,
+                //     ]);
+                // }
+                // Log::info('HOOK TEST COLD BATCH', [
+                //     'batchCommands' => $batchCommands,
 
 
-                ]);
-                Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
-                    'batchCommands' => $batchCommands,
+                // ]);
+                // Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+                //     'batchCommands' => $batchCommands,
 
 
-                ]);
+                // ]);
                 // Log::info('HOOK TEST COLD BATCH', [
                 //     'closeResult' => $closeResult,
 
@@ -915,9 +915,10 @@ class ColdBatchService
         Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
 
         $result = BitrixDealBatchFlowService::handleBatchResults($results);
+        Log::channel('telegram')->info('HOOK BATCH handle', ['handle result' => $result]);
         $entityBatchCommands = [];
-        if (!empty($results)) {
-            if (!empty($results['planDeals'])) {
+        if (!empty($result)) {
+            if (!empty($result['planDeals'])) {
                 Log::info('HOOK BATCH', ['planDeals' => $results['planDeals']]);
                 Log::channel('telegram')->info('HOOK BATCH', ['planDeals' => $results['planDeals']]);
 
