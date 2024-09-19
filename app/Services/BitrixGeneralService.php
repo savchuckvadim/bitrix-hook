@@ -546,7 +546,7 @@ class BitrixGeneralService
         //company and contacts
         $methodCompany = '/crm.company.get.json';
         $methodContacts = '/crm.contact.list.json';
-        $methodTask = '/tasks.task.add.json';
+        $methodTask = 'tasks.task.add.json';
 
 
         $nowDate = now();
