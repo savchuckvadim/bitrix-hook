@@ -873,16 +873,45 @@ class ColdBatchService
         // Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
 
         $result = BitrixDealBatchFlowService::handleBatchResults($results);
+        $entityBatchCommands = [];
+        if (!empty($results)) {
+            if (!empty($results['planDeals'])) {
 
+                foreach ($results['planDeals'] as $pDealId) {
+                    $command = BitrixBatchService::batchCommand(
+                        $this->entityFieldsUpdatingContent,
+                        'deal',
+                        $pDealId,
+                        'update'
+                    );
+                    $key = 'entity_update' . '_' . 'deal' . '_';
+                    $entityBatchCommands[$key] = $command; // в результате будет id
+                    // $batchService->sendGeneralBatchRequest($entityBatchCommands);
+                }
+            }
+        }
         $command = BitrixBatchService::batchCommand(
             $this->entityFieldsUpdatingContent,
-            'deal',
-            '$dealId',
+            $this->entityType,
+            $this->entityId,
             'update'
         );
-        $key = 'entity' . '_' . 'company' . '_';
+        $key = 'entity_update' . '_' .  $this->entityType . '_';
         $entityBatchCommands[$key] = $command; // в результате будет id
         $batchService->sendGeneralBatchRequest($entityBatchCommands);
+
+
+
+        // BitrixEntityFlowService::coldflow(
+        //     $this->portal,
+        //     $this->hook,
+        //     $this->entityType,
+        //     $this->entityId,
+        //     'xo', // xo warm presentation,
+        //     'plan',  // plan done expired 
+        //     $this->entityFieldsUpdatingContent, //updting fields 
+        // );
+
 
 
 
