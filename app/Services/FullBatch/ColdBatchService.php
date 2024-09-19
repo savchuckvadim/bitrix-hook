@@ -781,7 +781,7 @@ class ColdBatchService
                         [
 
                             'STAGE_ID' => 'C' . $categoryId . ':APOLOGY',
-                
+
                         ],
 
 
@@ -926,13 +926,13 @@ class ColdBatchService
 
 
                 foreach ($results['planDeals'] as $pDealId) {
-                    $command = BitrixBatchService::batchCommand(
-                        $this->entityFieldsUpdatingContent,
-                        'deal',
+                    $command = BitrixDealBatchFlowService::getFullBatchCommand(
+                        ['fields' => $this->entityFieldsUpdatingContent],
+                        'update',
                         $pDealId,
-                        'update'
+                       
                     );
-                    $key = 'entity_update' . '_' . 'deal' . '_';
+                    $key = 'entity_update' . '_' . 'deal' . '_' . $pDealId;
                     $entityBatchCommands[$key] = $command; // в результате будет id
                     // $batchService->sendGeneralBatchRequest($entityBatchCommands);
                 }
@@ -944,7 +944,7 @@ class ColdBatchService
             $this->entityId,
             'update'
         );
-        $key = 'entity_update' . '_' .  $this->entityType . '_';
+        $key = 'entity_update' . '_' .  $this->entityType . '_'.$this->entityId;
         $entityBatchCommands[$key] = $command; // в результате будет id
         $entityResult =  $batchService->sendGeneralBatchRequest($entityBatchCommands);
 
