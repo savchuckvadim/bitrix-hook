@@ -760,7 +760,7 @@ class ColdBatchService
 
                 // ];
                 $batchCommands = [
-                    'get_deals' => $currentDealsBatchCommand,
+                    $key => $currentDealsBatchCommand,
 
                     // [
                     //     'method' => 'crm.deal.list',
@@ -776,17 +776,25 @@ class ColdBatchService
 
                 // Теперь создаем команды для обновления каждой сделки на основе полученных данных
                 for ($i = 0; $i < 5; $i++) { // Здесь $i — это индекс, используемый для ссылки на каждую сделку
-                    $batchCommands["update_deal_{$i}"] =   BitrixDealBatchFlowService::getBatchCommand(
+
+                    $closeCommand = BitrixDealBatchFlowService::getBatchCommand(
                         [
-                            'ID' => '$result[get_deals][' . $i . '][ID]', // Формат подстановки из документации
+                            'ID' => '$result[' . $key . '][' . $i . '][ID]', // Формат подстановки из документации
                             'fields' => [
                                 'STAGE_ID' => 'C' . $categoryId . ':APOLOGY'
                             ],
 
                         ],
                         'update',
-                        '$result[get_deals][' . $i . '][ID]'
+                        '$result[' . $key . '][' . $i . '][ID]'
                     );
+
+                    $batchCommands["update_deal_{$i}"] =   $closeCommand;
+                    Log::info('HOOK TEST COLD BATCH', [
+                        "update_deal_{$i}" => $closeCommand,
+
+
+                    ]);
                     // [
                     //     'method' => 'crm.deal.update',
                     //     'params' => [
