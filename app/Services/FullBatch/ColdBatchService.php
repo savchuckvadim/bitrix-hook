@@ -900,7 +900,7 @@ class ColdBatchService
             '$fields',
             null,
             $mainDealFlowBatchCommands,
-            'xo' //tag
+            'plan' //tag
 
         );
         $mainDealFlowBatchCommands = $flowResult['commands'];
@@ -916,6 +916,7 @@ class ColdBatchService
 
         $result = BitrixDealBatchFlowService::handleBatchResults($results);
         Log::channel('telegram')->info('HOOK BATCH handle', ['handle result' => $result]);
+        Log::info('HOOK BATCH handle', ['handle result' => $result]);
         $entityBatchCommands = [];
         if (!empty($result)) {
             if (!empty($result['planDeals'])) {

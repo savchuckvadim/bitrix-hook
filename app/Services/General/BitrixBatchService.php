@@ -218,8 +218,8 @@ class BitrixBatchService
                 // array_push($result['errors'], $responseData);
                 // return APIController::getError('batch result not found', $responseData);
             }
-            $rand = mt_rand(100000, 400000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-            usleep($rand);
+            // $rand = mt_rand(100000, 400000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            // usleep($rand);
         };
 
         return $result;
