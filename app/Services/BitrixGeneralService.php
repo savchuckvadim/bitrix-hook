@@ -577,12 +577,26 @@ class BitrixGeneralService
             $batchCommands['get_contacts'] = $batchService->getGeneralBatchCommand($contactsData, $methodContacts, null);
 
             $contactDescription = '';
+            // for ($i = 0; $i < 10; $i++) {
+            //     $contactDescription .= 'Имя: $result[get_contacts][' . $i . '][NAME] $result[get_contacts][' . $i . '][LAST_NAME], ';
+            //     $contactDescription .= 'Телефон: $result[get_contacts][' . $i . '][PHONE][0][VALUE], ';
+            //     $contactDescription .= 'Email: $result[get_contacts][' . $i . '][EMAIL][0][VALUE]' . "\n";
+            // }
+
+
             for ($i = 0; $i < 10; $i++) {
-                $contactDescription .= 'Имя: $result[get_contacts][' . $i . '][NAME] $result[get_contacts][' . $i . '][LAST_NAME], ';
-                $contactDescription .= 'Телефон: $result[get_contacts][' . $i . '][PHONE][0][VALUE], ';
-                $contactDescription .= 'Email: $result[get_contacts][' . $i . '][EMAIL][0][VALUE]' . "\n";
+                $contactDescription .= 'Имя: ';
+                $contactDescription .= '$result[get_contacts][' . $i . '][NAME] ? $result[get_contacts][' . $i . '][NAME] : "Имя не указано"';
+                $contactDescription .= ' ';
+                $contactDescription .= '$result[get_contacts][' . $i . '][LAST_NAME] ? $result[get_contacts][' . $i . '][LAST_NAME] : ""';
+                $contactDescription .= ', Телефон: ';
+                $contactDescription .= '$result[get_contacts][' . $i . '][PHONE][0][VALUE] ? $result[get_contacts][' . $i . '][PHONE][0][VALUE] : "Телефон не указан"';
+                $contactDescription .= ', Email: ';
+                $contactDescription .= '$result[get_contacts][' . $i . '][EMAIL][0][VALUE] ? $result[get_contacts][' . $i . '][EMAIL][0][VALUE] : "Email не указан"';
+                $contactDescription .= "\n";
             }
 
+            
             $companyTitleString = '[B][COLOR=#0070c0] Компания: $result[get_company][TITLE] [/COLOR][/B]';
 
 
