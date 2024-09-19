@@ -775,13 +775,13 @@ class ColdBatchService
                 ];
 
                 // Теперь создаем команды для обновления каждой сделки на основе полученных данных
-                for ($i = 0; $i < 5; $i++) { // Здесь $i — это индекс, используемый для ссылки на каждую сделку
+                for ($i = 0; $i < 20; $i++) { // Здесь $i — это индекс, используемый для ссылки на каждую сделку
 
                     $closeCommand = BitrixDealBatchFlowService::getBatchCommand(
                         [
 
                             'STAGE_ID' => 'C' . $categoryId . ':APOLOGY',
-                            'TITLE' => 'yo'
+                
                         ],
 
 
@@ -803,19 +803,19 @@ class ColdBatchService
                 }
                 // $key = 'close' . '_' . 'company' . '_';
                 // $entityBatchCommands[$key] = $command; // в результате будет id
-                $closeCommand = BitrixDealBatchFlowService::getBatchCommand(
+                // $closeCommand = BitrixDealBatchFlowService::getBatchCommand(
 
-                    [
-                        'STAGE_ID' => 'C' . $categoryId . ':APOLOGY',
-                        'TITLE' => 'yo 12 !'
-                    ],
+                //     [
+                //         'STAGE_ID' => 'C' . $categoryId . ':APOLOGY',
+                //         'TITLE' => 'yo 12 !'
+                //     ],
 
 
-                    'update',
-                    8955
-                );
+                //     'update',
+                //     8955
+                // );
 
-                $batchCommands["update_deal_x"] =   $closeCommand;
+                // $batchCommands["update_deal_x"] =   $closeCommand;
                 $closeResult =  $batchService->sendGeneralBatchRequest($batchCommands);
 
                 foreach ($closeResult as $cResult) {
