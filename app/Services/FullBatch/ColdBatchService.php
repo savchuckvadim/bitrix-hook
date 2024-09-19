@@ -869,13 +869,17 @@ class ColdBatchService
 
 
         $results = $batchService->sendFlowBatchRequest($cleanBatchCommands);
-        // Log::info('HOOK BATCH', ['results' => $results]);
-        // Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
+        Log::info('HOOK BATCH', ['results' => $results]);
+        Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
 
         $result = BitrixDealBatchFlowService::handleBatchResults($results);
         $entityBatchCommands = [];
         if (!empty($results)) {
             if (!empty($results['planDeals'])) {
+                Log::info('HOOK BATCH', ['planDeals' => $results['planDeals']]);
+                Log::channel('telegram')->info('HOOK BATCH', ['planDeals' => $results['planDeals']]);
+
+
 
                 foreach ($results['planDeals'] as $pDealId) {
                     $command = BitrixBatchService::batchCommand(
