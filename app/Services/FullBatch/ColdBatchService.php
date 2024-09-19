@@ -781,7 +781,8 @@ class ColdBatchService
                         [
                             'ID' => '$result[' . $key . '][' . $i . '][ID]', // Формат подстановки из документации
                             'fields' => [
-                                'STAGE_ID' => 'C' . $categoryId . ':APOLOGY'
+                                // 'STAGE_ID' => 'C' . $categoryId . ':APOLOGY'
+                                'TITLE' => 'yo'
                             ],
 
                         ],
