@@ -806,8 +806,8 @@ class ColdBatchService
                 $closeCommand = BitrixDealBatchFlowService::getBatchCommand(
 
                     [
-                        // 'STAGE_ID' => 'C' . $categoryId . ':APOLOGY'
-                        'TITLE' => 'yo !'
+                        'STAGE_ID' => 'C' . $categoryId . ':APOLOGY',
+                        'TITLE' => 'yo 12 !'
                     ],
 
 
