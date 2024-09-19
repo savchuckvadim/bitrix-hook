@@ -948,7 +948,7 @@ class ColdBatchService
 
 
         /** TASKS BATCH */
-        $this->createColdTaskBatchCommand(
+        $entityBatchCommands = $this->createColdTaskBatchCommand(
             null,
             $result['planDeals'],
             $entityBatchCommands
@@ -1106,7 +1106,8 @@ class ColdBatchService
 
     public function createColdTaskBatchCommand(
         $currentSmartItemId,
-        $currentDealsItemIds = null
+        $currentDealsItemIds = null,
+        $batchCommands
 
     ) {
 
@@ -1128,7 +1129,7 @@ class ColdBatchService
             $taskService = new BitrixTaskService();
            
 
-            $createdTask =  $taskService->getCreateTaskBatchCommands(
+            $batchCommands =  $taskService->getCreateTaskBatchCommands(
                 'cold',       //$type,   //cold warm presentation hot 
                 $this->stringType,
                 $this->portal,
@@ -1144,7 +1145,7 @@ class ColdBatchService
                 true, //$isNeedCompleteOtherTasks
                 null,
                 $currentDealsItemIds,
-
+                $batchCommands
 
             );
 

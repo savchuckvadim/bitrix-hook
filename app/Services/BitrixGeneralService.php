@@ -682,7 +682,7 @@ class BitrixGeneralService
 
             // $createdTask =  APIBitrixController::getBitrixRespone($responseData, $parentMethod);
 
-            return $createdTask;
+            return $batchCommands;
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
