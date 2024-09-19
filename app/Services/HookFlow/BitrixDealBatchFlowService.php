@@ -317,6 +317,20 @@ class BitrixDealBatchFlowService
 
         return $currentMethod . '?' . http_build_query($data);
     }
+    static function getFullBatchCommand(
+        $data,
+        $method, //update | add
+        $dealId
+    ) {
+
+        $currentMethod = 'crm.deal.' . $method;
+        // $data = ['FIELDS' => $fieldsData];
+        if (!empty($dealId)) {
+            $data['ID'] = $dealId;
+        }
+
+        return $currentMethod . '?' . http_build_query($data);
+    }
 
     static function cleanBatchCommands($batchCommands, $portalDealData)
     {

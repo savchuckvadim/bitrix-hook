@@ -726,7 +726,7 @@ class ColdBatchService
 
                 // );
 
-                $currentDealsBatchCommand = BitrixDealBatchFlowService::getBatchCommand(
+                $currentDealsBatchCommand = BitrixDealBatchFlowService::getFullBatchCommand(
 
                     [
                         'filter' => [
