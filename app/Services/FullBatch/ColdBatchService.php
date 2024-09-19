@@ -846,8 +846,18 @@ class ColdBatchService
 
         );
         $mainDealFlowBatchCommands = $flowResult['commands'];
-        $planDeals = $flowResult['dealIds'];
+        // $planDeals = $flowResult['dealIds'];
+        $cleanBatchCommands = BitrixDealBatchFlowService::cleanBatchCommands($batchCommands, $this->portalDealData);
 
+        // Log::channel('telegram')->info('HOOK BATCH', ['cleanBatchCommands' => $cleanBatchCommands]);
+
+
+        $batchService =  new BitrixBatchService($this->hook);
+        $results = $batchService->sendFlowBatchRequest($cleanBatchCommands);
+        // Log::info('HOOK BATCH', ['results' => $results]);
+        // Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
+
+        $result = BitrixDealBatchFlowService::handleBatchResults($results);
 
         $command = BitrixBatchService::batchCommand(
             $this->entityFieldsUpdatingContent,
@@ -855,7 +865,12 @@ class ColdBatchService
             '$dealId',
             'update'
         );
-
+        $key = 'entity' . '_' . 'company' . '_';
+        $entityBatchCommands[$key] = $command; // в результате будет id
+        $batchService->sendGeneralBatchRequest($entityBatchCommands);
+   
+   
+   
         Log::info('HOOK TEST COLD BATCH', [
             'command' => $command,
 
@@ -899,7 +914,7 @@ class ColdBatchService
         // }
 
         return [
-            'planDeals' => $planDeals,
+            'planDeals' =>' $planDeals',
         ];
     }
 
