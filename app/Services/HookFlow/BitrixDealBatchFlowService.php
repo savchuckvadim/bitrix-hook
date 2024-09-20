@@ -625,6 +625,101 @@ class BitrixDealBatchFlowService
         // ];
     }
 
+    static function cleanColdBatchCommands($batchCommands, $portalDealData, $resultBatchCommands = [])
+    {
+        $reportDeals = [];
+        $planDeals = [];
+        $unplannedPresDeals = [];
+        $newPresDeal = null;
+        $groupped = [];
+        $resultGroupped = [];
+        // $resultBatchCommands = [];
+        // Логирование результатов обработки
+        // Log::info('HOOK BATCH handleBatchResults', ['batchResult' => $batchResult]);
+        // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['batchResult' => $batchResult]);
+        // Log::channel('telegram')->info('HOOK cleanBatchCommands', ['batchCommands' => $batchCommands]);
+        // Log::info('HOOK cleanBatchCommands', ['batchCommands' => $batchCommands]);
+
+        // [
+        // {"update_unpres_sales_base_7267_PRESENTATION":true,
+        // "update_unpres_sales_presentation_7271_WON":true,
+        // "update_report_sales_xo_7269_WON":true,
+        // "update_plan_sales_base_7267_WARM":true}
+        // ]}
+
+        //перебираем комманды находим те что ч одинаковым dealId
+        try {
+            //code...
+
+            // Извлечение результатов
+            $results = $batchCommands;  // Предполагаем, что структура такая, как в примере
+            foreach ($results as $key => $batchData) { // value в данном случае сделка, точнее ее поля для обновления
+                Log::info('HOOK groupped BATCH DATA', [$key => $batchData]);
+                // 'command' => $batchCommand,
+                //         'dealId' => $currentDealId,
+                //         'deal' => $currentDeal,
+                //         'targetStage' => $targetStageBtxId,
+                //         'isNeedUpdate' => true
+
+                $parts = explode('_', $key);
+                $operation = $parts[0];  // 'update' или 'set'
+                $tag = $parts[1];        // 'report' или 'plan'
+                $category = $parts[2] . '_' . $parts[3];  // Категория всегда состоит из двух слов
+
+
+                $dealId = $batchData['dealId'];
+                $tag = $batchData['tag'];
+
+
+
+                // Log::info('HOOK groupped cleanBatchCommands', ['groupped' => $groupped]);
+
+
+                if ($tag === 'report') {
+                    if (empty($dealId)) {
+                        $dealId =  '$result[' . $key . ']';
+                    }
+                    $reportDeals[] = $dealId;  // Добавляем ID в массив reportDeals
+                } elseif ($tag === 'plan') {
+                    if (empty($dealId)) {
+                        $dealId =  '$result[' . $key . ']';
+                    }
+                    $planDeals[] = $dealId;  // Добавляем ID в массив planDeals
+                }
+
+                $resultBatchCommands[$key] = $batchData['command'];
+            }
+
+
+
+            return [
+                'planDeals' => $planDeals,
+                'commands' =>  $resultBatchCommands
+            ];
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR COLD: Exception caught',  $errorMessages);
+            Log::info('error COLD', ['error' => $th->getMessage()]);
+            return [
+                'planDeals' => null,
+                'commands' =>  null
+            ];
+        }
+
+        // return [
+        //     'reportDeals' => $reportDeals,
+        //     'planDeals' => $planDeals,
+        //     // 'unplannedPresDeals' => $unplannedPresDeals,  // Раскомментируйте, если нужно использовать,
+        //     'newPresDeal' =>  $newPresDeal
+        // ];
+    }
+
+
     static function handleBatchResults($batchResult)
     {
         $reportDeals = [];

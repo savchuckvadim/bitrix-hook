@@ -247,6 +247,7 @@ class BitrixTaskService
         $portal,
         $domain,
         $hook,
+        $company,
         $companyId,  //may be null
         $leadId,     //may be null
         $createdId,
