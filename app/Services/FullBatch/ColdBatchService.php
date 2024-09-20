@@ -674,7 +674,8 @@ class ColdBatchService
 
 
         $batchService =  new BitrixBatchService($this->hook);
-
+        $batchCommands = [];
+        
         if (!empty($this->portalDealData['categories'])) {
             foreach ($this->portalDealData['categories'] as $category) {
                 $isBaseCategory = $category['code'] ===  'sales_base';
@@ -755,7 +756,7 @@ class ColdBatchService
 
 
                 // ];
-                $batchCommands = [
+                $closeCommands = [
                     $key => $currentDealsBatchCommand,
 
                     // [
@@ -785,7 +786,7 @@ class ColdBatchService
                         '$result[' . $key . '][' . $i . '][ID]'
                     );
 
-                    $batchCommands["update_deal_{$i}"] =   $closeCommand;
+                    $closeCommands["update_deal_{$i}"] =   $closeCommand;
 
                     // [
                     //     'method' => 'crm.deal.update',
@@ -797,6 +798,8 @@ class ColdBatchService
                     //     ]
                     // ];
                 }
+                $batchService->sendGeneralBatchRequest($closeCommands);
+
                 // $key = 'close' . '_' . 'company' . '_';
                 // $entityBatchCommands[$key] = $command; // в результате будет id
                 // $closeCommand = BitrixDealBatchFlowService::getBatchCommand(
