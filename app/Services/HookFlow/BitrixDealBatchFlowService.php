@@ -676,14 +676,14 @@ class BitrixDealBatchFlowService
 
 
                 if ($tag === 'report') {
-                    if (empty($dealId)) {
-                        $dealId =  '$result[' . $key . ']';
-                    }
+
+                    $dealId =  '$result[' . $key . ']';
+
                     $reportDeals[] = $dealId;  // Добавляем ID в массив reportDeals
                 } elseif ($tag === 'plan') {
-                    if (empty($dealId)) {
-                        $dealId =  '$result[' . $key . ']';
-                    }
+
+                    $dealId =  '$result[' . $key . ']';
+
                     $planDeals[] = $dealId;  // Добавляем ID в массив planDeals
                 }
 
