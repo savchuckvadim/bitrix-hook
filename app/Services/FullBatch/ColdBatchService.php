@@ -902,8 +902,8 @@ class ColdBatchService
         $mainDealFlowBatchCommands = $flowResult['commands'];
         // $planDeals = $flowResult['dealIds'];
         $cleanBatchCommands = BitrixDealBatchFlowService::cleanColdBatchCommands($mainDealFlowBatchCommands, $this->portalDealData, $batchCommands);
-        $batchCommands = $batchCommands['commands'];
-        $planDeals =  $batchCommands['planDeals'];
+        $batchCommands = $cleanBatchCommands['commands'];
+        $planDeals =  $cleanBatchCommands['planDeals'];
         // Log::channel('telegram')->info('HOOK BATCH', ['cleanBatchCommands' => $cleanBatchCommands]);
 
 
