@@ -584,7 +584,7 @@ class BitrixGeneralService
             //     $contactDescription .= 'Email: $result[get_contacts][' . $i . '][EMAIL][0][VALUE]' . "\n";
             // }
 
-            $companyTitleString = '[URL=https://www.april-dev.bitrix24.ru/crm/company/details/' . $companyId . '/][B][COLOR=#0070c0] Компания: $result[get_company][TITLE] [/COLOR][/B][/URl]';
+            $companyTitleString = '[URL=https://april-dev.bitrix24.ru/crm/company/details/' . $companyId . '/][B][COLOR=#0070c0] Компания: $result[get_company][TITLE] [/COLOR][/B][/URl]';
 
 
 
