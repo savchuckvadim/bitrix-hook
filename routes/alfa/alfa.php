@@ -43,6 +43,10 @@ Route::post('alfa/contract-specification', function (Request $request) {
     Log::channel('telegram')->info('TST HOOK ALFA', [
         'listItems' => $listItems
     ]);
+
+    Log::info('TST HOOK ALFA', [
+        'listItems' => $listItems
+    ]);
 });
 
 
