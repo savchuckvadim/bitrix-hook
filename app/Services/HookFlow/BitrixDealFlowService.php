@@ -659,7 +659,7 @@ class BitrixDealFlowService
 
         return $currentDeal;
     }
-
+  
 
     static function getBaseDealFromCurrentBtxDeals(
         $portalDealData,

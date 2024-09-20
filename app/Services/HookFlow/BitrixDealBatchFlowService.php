@@ -218,9 +218,6 @@ class BitrixDealBatchFlowService
                                 'isNeedUpdate' => true,
                                 'tag' => $tag
 
-
-
-
                             ];
                         }
                     } else {
@@ -302,7 +299,115 @@ class BitrixDealBatchFlowService
 
         return ['dealIds' => ['$result'], 'newPresDeal' => $newPresDeal, 'commands' => $resultBatchCommands];
     }
+    static function batchFlowNEW(
 
+        $hook,
+        $currentBtxDeals,
+        $portalDealData,
+        $currentDepartamentType  = 'sales',
+        $entityType,
+        $entityId,
+        $planEventType, // xo warm presentation, 
+        $reportEventType, // xo warm presentation, 
+        $eventTypeName, //Презентация , Звонок
+        $eventName, //имя планируемого события
+        $planEventAction,  // plan done expired fail
+        $reportEventAction,  // plan done expired fail
+        $isUnplanned,
+        $responsibleId,
+        $isResult,
+        $fields,
+        $tmcPresRelationDealId = null, //id сделки TMC из BASE FLOW для связи с основной и со вделкой презентации
+
+        $resultBatchCommands, // = []
+        $tag, //plan unpres report newpresdeal,
+        $baseDealId,
+
+
+    ) {
+        // $rand = rand(1, 3); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        // sleep($rand);
+        $newPresDeal = null; //for mutation
+        //находит сначала целевые категиории сделок из portal   по eventType и eventAction - по тому что происходит
+        //сюда могут при ходить массив текущих сделок и которых есть CATEGORY_ID такой как в portal->deal->category->bitrixId
+        //
+
+        $batchCommands = [];
+
+        $currentDealIds = [];
+
+        // $currentCategoryDatas =  BitrixDealService::getTargetCategoryData(
+        //     $portalDealData,
+        //     $currentDepartamentType,
+        //     $eventType,
+        //     $eventAction
+        // );
+
+        // if ($currentCategoryData['code'] === 'tmc_base' && $eventType === 'presentation' && ($eventAction === 'done' ||  $eventAction === 'fail')) {
+        //     //если данная перебираемая сделка - тмц , при этом событие - сделана презентация
+        //     //значит у презернтации была привязана тмц сделка и это она - надо у нее не менять ответственного а толкько закрыть - 
+        //     // през по заявке состоялась
+        //     $fieldsData = [
+
+        //         'CATEGORY_ID' => $currentCategoryData['bitrixId'],
+        //         'STAGE_ID' => "C" . $currentCategoryData['bitrixId'] . ':' . $targetStageBtxId,
+        //         "COMPANY_ID" => $entityId,
+
+        //     ];
+        // }
+        $planDeals = [];
+        foreach ($portalDealData['categories'] as $category) {
+            switch ($category['code']) {
+                case 'sales_base':
+
+                    $pTargetStage = BitrixDealService::getSaleBaseTargetStage(
+                        $category,
+                        $currentDepartamentType,
+                        $planEventType, // xo warm presentation,
+                        $reportEventType, // xo warm presentation,
+                        $planEventAction,  // plan done expired fail
+                        $reportEventAction,  // plan done expired fail
+                        $isResult,
+                        $isUnplanned
+                    );
+                    $targetStageBtxId = $pTargetStage['bitrixId'];
+
+                    $fieldsData = [
+
+                        'CATEGORY_ID' => $category['bitrixId'],
+                        'STAGE_ID' => "C" . $category['bitrixId'] . ':' . $targetStageBtxId,
+                        "COMPANY_ID" => $entityId,
+                        'ASSIGNED_BY_ID' => $responsibleId
+                    ];
+                    if ($baseDealId) {
+                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $baseDealId);
+                        $key = 'update_' . $tag . '_' . $category['code'] . '_' . $baseDealId;
+                        $resultBatchCommands[$key] = $batchCommand;
+                    } else {
+                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
+                        $key = 'set_' . $tag . '_' . $category['code'] ;
+                        $resultBatchCommands[$key] = $batchCommand;
+                        $baseDealId = '$result[' . $key . '][ID]';
+                    }
+
+                    if ($isUnplanned) {
+
+                        array_push($planDeals, $baseDealId);
+                    }
+
+
+
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        }
+
+
+        return ['dealIds' => ['$result'], 'newPresDeal' => $newPresDeal, 'commands' => $resultBatchCommands];
+    }
     static function getBatchCommand(
         $fieldsData,
         $method, //update | add
@@ -844,7 +949,7 @@ class BitrixDealBatchFlowService
     }
 
 
-    static function unplannedPresflow(
+    static function unplannedPresflowBatchCommand(
 
         $hook,
         $currentDeal,
@@ -858,10 +963,12 @@ class BitrixDealBatchFlowService
         $eventAction,  // plan done expired fail
         $responsibleId,
         $isResult,
-        $fields
+        $fields,
+        $batchCommands
 
     ) {
 
+        $tag = 'unplanned';
 
 
         $currentDealId = null;
@@ -944,19 +1051,48 @@ class BitrixDealBatchFlowService
 
                         $fieldsData['TITLE'] = $eventTypeName . ' ' .  $eventName;
 
-                        $currentDealId = BitrixDealService::setDeal(
-                            $hook,
-                            $fieldsData,
-                            $currentCategoryData
+                        // $currentDealId = BitrixDealService::setDeal(
+                        //     $hook,
+                        //     $fieldsData,
+                        //     $currentCategoryData
 
-                        );
+                        // );
+                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
+                        $key = 'set_' . $tag . '_' . $currentCategoryData['code'];
+                        $batchCommands[$key] = [
+                            'command' => $batchCommand,
+                            'dealId' => $key,
+                            'deal' => null,
+                            'targetStage' => $targetStageBtxId,
+                            'batchKey' => $key,
+                            'isNeedUpdate' => true,
+                            'tag' => $tag
+
+
+
+                        ];
+                        $currentDealId = '$result[' . $key . ']';
                     } else {
-                        BitrixDealService::updateDeal(
-                            $hook,
-                            $currentDealId,
-                            $fieldsData,
+                        // BitrixDealService::updateDeal(
+                        //     $hook,
+                        //     $currentDealId,
+                        //     $fieldsData,
 
-                        );
+                        // );
+
+                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $currentDealId);
+                        $key = 'update_' . $tag . '_' . $currentCategoryData['code'] . '_' . $currentDealId;
+                        $batchCommands[$key] = [
+                            'command' => $batchCommand,
+                            'dealId' => $currentDealId,
+                            'deal' => $currentDeal,
+                            'targetStage' => $targetStageBtxId,
+                            'isNeedUpdate' => true,
+                            'batchKey' => $key,
+                            'tag' => $tag
+
+
+                        ];
                     }
                     // if (!$currentDealId) {
                     // Log::info('DEAL TEST', [
@@ -972,6 +1108,23 @@ class BitrixDealBatchFlowService
 
 
                     );
+                    $batchCommand = BitrixDealBatchFlowService::getBatchCommand(['ID' => $currentDealId], 'get', null, $tag);
+                    $key = 'get_' . $tag . '_' . $currentCategoryData['code'] . '_' . $currentDealId;
+                    // $resultBatchCommands[$key] = $batchCommand;
+                    $batchCommands[$key] = [
+                        'command' => $batchCommand,
+                        'dealId' => $currentDealId,
+                        'deal' => null,
+                        'targetStage' => $targetStageBtxId,
+                        'batchKey' => $key,
+                        'isNeedUpdate' => true,
+                        'tag' => $tag
+
+
+
+
+                    ];
+                    $currentDeal = '$result[' . $key . ']';
                 }
             }
         }

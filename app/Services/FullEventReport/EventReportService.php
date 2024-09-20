@@ -684,9 +684,11 @@ class EventReportService
             if ($this->isDealFlow && $this->portalDealData) {
                 // $currentDealsIds = $this->getBatchDealFlow();
 
-                $currentDealsIds = $this->getBatchDealFlow();
-
+                
+                // $currentDealsIds = $this->getBatchDealFlow();
+                
                 // $currentDealsIds = $this->getDealFlow();
+                $currentDealsIds = $this->getNEWBatchDealFlow(); 
 
             }
 
@@ -2430,6 +2432,149 @@ class EventReportService
     }
 
 
+    protected function getNEWBatchDealFlow()
+    {
+
+        // должен собрать batch commands
+        // отправить send batch
+        // из резултатов вернуть объект с массивами созданных и обновленных сделок
+        // если при начале функции нет currentBtxDeals - сначала создается она
+
+        //сейчас есть
+        // protected $currentBaseDeal;
+        // protected $currentPresDeal;
+        // protected $currentColdDeal;
+        // protected $currentTMCDeal;
+
+        // protected $relationBaseDeals;  //базовые сделки пользователь-компания
+        // protected $relationCompanyUserPresDeals; //allPresDeals //през сделки пользователь-компания
+        // protected $relationFromBasePresDeals;
+        // protected $relationColdDeals;
+        // protected $relationTMCDeals;
+
+
+
+        // $currentBaseDeal - обновляется в любом случае если ее нет - создается
+        // $currentPresDeal - обновляется если през - done или planEventType - pres
+        // $currentColdDeal - обновляется если xo - done или planEventType - xo
+
+        // в зависимости от условий сделка в итоге попадает либо в plan либо в report deals
+
+        $reportDeals = [];
+        $planDeals = [];
+        $currentBtxDeals = $this->currentBtxDeals;
+        $batchCommands = [];
+        $entityBatchCommands = [];
+        $isUnplanned = $this->isPresentationDone && $this->currentReportEventType !== 'presentation';
+        $unplannedPresDeal =  null;
+        if (empty($currentBtxDeals)) {   //если текущие сделки отсутствуют значит надо сначала создать базовую - чтобы нормально отработал поток
+            $setNewDealData = [
+                'COMPANY_ID' => $this->entityId,
+                'CATEGORY_ID' => $this->btxDealBaseCategoryId,
+                'ASSIGNED_BY_ID' => $this->planResponsibleId,
+            ];
+            $currentDealId = BitrixDealService::setDeal(
+                $this->hook,
+                $setNewDealData,
+
+            );
+
+            if (!empty($currentDealId) && empty($this->currentBaseDeal)) {
+                // $rand = mt_rand(100000, 300000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                // usleep($rand);
+                $newBaseDeal = BitrixDealService::getDeal(
+                    $this->hook,
+                    ['id' => $currentDealId]
+
+
+                );
+                $this->currentBaseDeal = $newBaseDeal;
+                $currentBtxDeals = [$newBaseDeal];
+                $this->currentBtxDeals = [$newBaseDeal];
+            }
+        }
+
+        $this->setTimeLine();
+        $unplannedPresDeals = null;
+        $newPresDeal = null;
+        // report - закрывает сделки
+        // plan - создаёт
+        //todo report flow
+
+        // if report type = xo | cold
+        $currentReportStatus = 'done';
+
+        // if ($this->currentReportEventType == 'xo') {
+
+        if ($this->isFail) {
+            //найти сделку хо -> закрыть в отказ , заполнить поля отказа по хо 
+            $currentReportStatus = 'fail';
+        } else if ($this->isSuccessSale) {
+            //найти сделку хо -> закрыть в отказ , заполнить поля отказа по хо 
+            $currentReportStatus = 'success';
+        } else {
+            if ($this->isResult) {                   // результативный
+
+                if ($this->isInWork) {                // в работе или успех
+                    //найти сделку хо и закрыть в успех
+                }
+            } else { //нерезультативный 
+                if ($this->isPlanned) {                // если запланирован нерезультативный - перенос 
+                    //найти сделку хо и закрыть в успех
+                    $currentReportStatus = 'expired';
+                }
+            }
+        }
+        // }
+
+        $batchService =  new BitrixBatchService($this->hook);
+
+        $batchCommands = BitrixDealBatchFlowService::batchFlowNEW(  // редактирует сделки отчетности из currentTask основную и если есть xo
+            $this->hook,
+            $currentBtxDeals,
+            $this->portalDealData,
+            $this->currentDepartamentType,
+            $this->entityType,
+            $this->entityId,
+            $this->currentPlanEventType,
+            $this->currentReportEventType, // xo warm presentation, 
+            $this->currentReportEventName,
+            $this->currentPlanEventName,
+            $currentReportStatus,  // plan done expired fail success
+            'plan',
+            $this->planResponsibleId,
+            $isUnplanned,
+            $this->isExpired,
+            $this->isResult,
+            '$fields',
+            $this->relationSalePresDeal,
+            $batchCommands,
+            'report'
+
+        );
+        $result =  $batchService->sendGeneralBatchRequest($batchCommands['commands']);
+        $result['planDeals'] =  $result['planDeals'];
+        Log::info('HOOK BATCH batchFlow report DEAL', ['report result' => $result]);
+        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $result]);
+        Log::info('HOOK BATCH batchFlow report DEAL', ['planDeals planDeals' =>  $result['planDeals']]);
+        Log::channel('telegram')->info('HOOK BATCH planDeals', ['planDeals' => $result['planDeals']]);
+
+        // if (!empty($result)) {
+        //     if (!empty($result['newPresDeal'])) {
+        //         $newPresDealId = $result['newPresDeal'];
+        //         $newPresDeal = BitrixDealService::getDeal(
+        //             $this->hook,
+        //             ['id' => $newPresDealId]
+
+
+        //         );
+        //     }
+        // }
+
+        // $result['unplannedPresDeals'] = [$unplannedPresDeal];
+
+        return  $result;
+    }
 
 
     //tasks for complete

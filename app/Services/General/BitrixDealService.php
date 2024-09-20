@@ -498,7 +498,131 @@ class BitrixDealService
         return $targetStageBtxId;
     }
 
+    static function getSaleBaseTargetStage(
+        $currentCategoryData,
+        $planEventType, // xo warm presentation,
+        $reportEventType, // xo warm presentation,
+        $planEventAction,  // plan done expired fail
+        $reportEventAction,  // plan done expired fail
+        $isResult,
+        $isUnplanned
+    ) {
+        // sales_new
+        // sales_cold
+        // sales_warm
+        // sales_pres
+        // sales_offer_create
+        // sales_document_send
+        // sales_in_progress
+        // sales_money_await
+        // sales_supply
+        // sales_success
+        // sales_fail
+        // sales_double
+        // cold_new
+        // cold_plan
+        // cold_pending
+        // cold_success
+        // cold_fail
+        // cold_noresult
+        // spres_new
+        // spres_plan
+        // spres_pending
+        // spres_success
+        // spres_fail
+        // spres_noresult
+        // sales_tmc_new
+        // sales_tmc_plan
+        // sales_tmc_pending
+        // sales_tmc_pres_in_progress
+        // sales_tmc_pres_plan
+        // sales_tmc_success
+        // sales_tmc_fail
+        $targetStageBtxId = null;
+        $stageSuphicks = 'plan';
+        $stagePrephicks = 'sales';
 
+        $eventOrders = [
+            [
+                'code' => 'xo',
+                'order' => 0,
+                'suphicks' => 'cold'
+            ],
+            [
+                'code' => 'warm',
+                'order' => 1,
+                'suphicks' => 'warm'
+            ],
+            [
+                'code' => 'presentation',
+                'order' => 2,
+                'suphicks' => 'pres'
+            ],
+            [
+                'code' => 'document',
+                'order' => 3,
+                'suphicks' => 'offer_create'
+            ],
+            [
+                'code' => 'hot',
+                'order' => 4,
+                'suphicks' => 'in_progress'
+            ],
+
+            [
+                'code' => 'moneyAwait',
+                'order' => 6,
+                'suphicks' => 'money_await'
+            ],
+        ];
+        $planOrder =  0;
+        $reportOrder = 0;
+
+        $codesToFilter = [$planEventType, $reportEventType];
+        if ($isUnplanned) {
+            array_push($codesToFilter, 'presentation');
+        }
+        // Фильтруем массив по кодам
+        $filtered = array_filter($eventOrders, function ($item) use ($codesToFilter) {
+            return in_array($item['code'], $codesToFilter);
+        });
+
+        // Находим элемент с максимальным значением 'order'
+        $currentOrderData = array_reduce($filtered, function ($carry, $item) {
+            return ($carry === null || $item['order'] > $carry['order']) ? $item : $carry;
+        });
+
+        if ($currentCategoryData['code'] === 'sales_base') {
+            if (!empty($currentOrderData)) {
+                $stageSuphicks = $currentOrderData['suphicks'];
+
+                if ($reportEventAction == 'fail' || $reportEventAction == 'success') {
+                    $stageSuphicks = $reportEventAction;
+                }
+            }
+
+            if (!empty($currentCategoryData['stages'])) {
+
+                foreach ($currentCategoryData['stages'] as $stage) {
+
+                    // if ($eventType === 'xo' || $eventType === 'cold') {
+
+                    if ($stage['code'] == $stagePrephicks . '_' . $stageSuphicks) {
+                        $targetStageBtxId = $stage['bitrixId'];
+                        // Log::channel('telegram')->info('DEAL TEST', [
+                        //     'stageCode' => $stage['code'],
+                        //     'eventType' => $eventType,
+
+                        //     'stage' => $stage,
+
+                        // ]);
+                    }
+                    // }
+                }
+            }
+        }
+        return $targetStageBtxId;
+    }
 
     static function getIsCanDealStageUpdate(
         $currentDeal, //with ID CATEGORY_ID STAGE_ID
