@@ -577,18 +577,19 @@ class BitrixGeneralService
             $batchCommands['get_contacts'] = $batchService->getGeneralBatchCommand($contactsData, $methodContacts, null);
 
             $contactDescription = '';
-            for ($i = 0; $i < 10; $i++) {
-                $contactDescription .= 'Имя: $result[get_contacts][' . $i . '][NAME] $result[get_contacts][' . $i . '][LAST_NAME], ';
-                $contactDescription .= 'Телефон: $result[get_contacts][' . $i . '][PHONE][0][VALUE], ';
-                $contactDescription .= 'Email: $result[get_contacts][' . $i . '][EMAIL][0][VALUE]' . "\n";
-            }
+            // for ($i = 0; $i < 10; $i++) {
+            //     $contactDescription .= 'Имя: $result[get_contacts][' . $i . '][NAME] $result[get_contacts][' . $i . '][LAST_NAME], ';
+            $contactDescription .= 'Телефон: $result[get_company][PHONE][0][VALUE], ';
+            $contactDescription .= 'Телефон: $result[get_company][PHONE][1][VALUE], ';
+            //     $contactDescription .= 'Email: $result[get_contacts][' . $i . '][EMAIL][0][VALUE]' . "\n";
+            // }
 
-            $companyTitleString = '[B][COLOR=#0070c0] Компания: $result[get_company][TITLE] [/COLOR][/B]';
+            $companyTitleString = '[URL=https://www.april-dev.bitrix24.ru/crm/company/details/' . $companyId . '/][B][COLOR=#0070c0] Компания: $result[get_company][TITLE] [/COLOR][/B][/URl]';
 
 
 
             $description = $companyTitleString . "\n" .
-                'Контакты: ' . "\n" .
+               
                 $contactDescription;
 
             $taskData['fields']['DESCRIPTION'] = $description;
