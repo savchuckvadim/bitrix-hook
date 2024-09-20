@@ -561,38 +561,38 @@ class BitrixGeneralService
         try {
 
 
-            $getCompanyData = [
-                'ID' => $companyId,
-                'select' => ["TITLE", "PHONE", "EMAIL"],
-            ];
-            $batchCommands['get_company'] = $batchService->getGeneralBatchCommand($getCompanyData, $methodCompany, null);
+            // $getCompanyData = [
+            //     'ID' => $companyId,
+            //     'select' => ["TITLE", "PHONE", "EMAIL"],
+            // ];
+            // $batchCommands['get_company'] = $batchService->getGeneralBatchCommand($getCompanyData, $methodCompany, null);
 
-            // Команда на получение списка контактов
-            $contactsData = [
-                'FILTER' => [
-                    'COMPANY_ID' => $companyId,
-                ],
-                'select' => ["ID", "NAME", "LAST_NAME", "PHONE", "EMAIL"],
-            ];
-            $batchCommands['get_contacts'] = $batchService->getGeneralBatchCommand($contactsData, $methodContacts, null);
+            // // Команда на получение списка контактов
+            // $contactsData = [
+            //     'FILTER' => [
+            //         'COMPANY_ID' => $companyId,
+            //     ],
+            //     'select' => ["ID", "NAME", "LAST_NAME", "PHONE", "EMAIL"],
+            // ];
+            // $batchCommands['get_contacts'] = $batchService->getGeneralBatchCommand($contactsData, $methodContacts, null);
 
-            $contactDescription = '';
-            // for ($i = 0; $i < 10; $i++) {
-            //     $contactDescription .= 'Имя: $result[get_contacts][' . $i . '][NAME] $result[get_contacts][' . $i . '][LAST_NAME], ';
-            $contactDescription .= 'Телефон: $result[get_company][PHONE][0][VALUE], ';
-            $contactDescription .= 'Телефон: $result[get_company][PHONE][1][VALUE], ';
+            // $contactDescription = '';
+            // // for ($i = 0; $i < 10; $i++) {
+            // //     $contactDescription .= 'Имя: $result[get_contacts][' . $i . '][NAME] $result[get_contacts][' . $i . '][LAST_NAME], ';
+            // $contactDescription .= 'Телефон: $result[get_company][PHONE][0][VALUE], ';
+            // $contactDescription .= 'Телефон: $result[get_company][PHONE][1][VALUE], ';
             //     $contactDescription .= 'Email: $result[get_contacts][' . $i . '][EMAIL][0][VALUE]' . "\n";
             // }
 
-            $companyTitleString = '[URL=https://april-dev.bitrix24.ru/crm/company/details/' . $companyId . '/][B][COLOR=#0070c0] Компания: $result[get_company][TITLE] [/COLOR][/B][/URl]';
+            // $companyTitleString = '[URL=https://april-dev.bitrix24.ru/crm/company/details/' . $companyId . '/][B][COLOR=#0070c0] Компания: $result[get_company][TITLE] [/COLOR][/B][/URl]';
 
 
 
-            $description = $companyTitleString . "\n" .
+            // $description = $companyTitleString . "\n" .
                
-                $contactDescription;
+            //     $contactDescription;
 
-            $taskData['fields']['DESCRIPTION'] = $description;
+            // $taskData['fields']['DESCRIPTION'] = $description;
             // $url = $hook . $methodContacts;
             // $contactsData =  [
             //     'FILTER' => [

@@ -369,7 +369,16 @@ class BitrixTaskService
                 ]
             ];
 
+            $companyTitleString = '[URL=https://april-dev.bitrix24.ru/crm/company/details/' . $companyId . '/][B][COLOR=#0070c0] Компания: ' . $company['TITLE'] . ' [/COLOR][/B][/URl]';
 
+            $contactDescription = $this->getTaskCompanyInfo(
+                $company
+            );
+
+            $description = $companyTitleString . "\n" . "\n" . "\n" .
+                $contactDescription;
+
+            $taskData['fields']['DESCRIPTION'] = $description;
 
 
             $idsForComplete = null;
@@ -439,13 +448,13 @@ class BitrixTaskService
             );
             Log::info('HOOK TEST COLD BATCH', [
                 'task batchCommands' => $batchCommands,
-    
-    
+
+
             ]);
             Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
                 'task batchCommands' => $batchCommands,
-    
-    
+
+
             ]);
 
 
@@ -474,6 +483,49 @@ class BitrixTaskService
         }
     }
 
+    protected  function getTaskCompanyInfo($company)
+    {
+
+        $description = '';
+        if (!empty($company)) {
+
+            $cmpnPhonesEmailsList = '';
+            if (isset($company['PHONE'])) {
+                $companyPhones = $company['PHONE'];
+                $cmpnyListContent = '';
+
+                foreach ($companyPhones as $phone) {
+                    $cmpnyListContent = $cmpnyListContent . '[*]' .  $phone["VALUE"] . "   ";
+                }
+
+                if (isset($company['EMAIL'])) {
+
+                    $companyEmails = $company['EMAIL'];
+
+                    foreach ($companyEmails as $email) {
+                        if (isset($email["VALUE"])) {
+                            $cmpnyListContent = $cmpnyListContent . '[*]' .  $email["VALUE"] . "   ";
+                        }
+                    }
+                }
+
+                $cmpnPhonesEmailsList = '[LIST]' . $cmpnyListContent . '[/LIST]';
+            }
+
+
+
+
+
+
+
+            $companyPhones = '';
+
+            $companyTitleString = '[B][COLOR=#0070c0]' . $company['TITLE'] . '[/COLOR][/B]';
+            $description =  $companyTitleString;
+            $description = $description . '' . $cmpnPhonesEmailsList;
+        }
+        return  $description;
+    }
     public function updateTask(
 
 

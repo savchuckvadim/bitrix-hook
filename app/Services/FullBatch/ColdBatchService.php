@@ -756,7 +756,7 @@ class ColdBatchService
 
 
                 // ];
-                $batchCommands = [
+                $closeCommands = [
                     $key => $currentDealsBatchCommand,
 
                     // [
@@ -786,7 +786,7 @@ class ColdBatchService
                         '$result[' . $key . '][' . $i . '][ID]'
                     );
 
-                    $batchCommands["update_deal_{$i}"] =   $closeCommand;
+                    $closeCommands["update_deal_{$i}"] =   $closeCommand;
 
                     // [
                     //     'method' => 'crm.deal.update',
@@ -798,7 +798,7 @@ class ColdBatchService
                     //     ]
                     // ];
                 }
-                // $batchService->sendGeneralBatchRequest($closeCommands);
+                $batchService->sendGeneralBatchRequest($closeCommands);
 
                 // $key = 'close' . '_' . 'company' . '_';
                 // $entityBatchCommands[$key] = $command; // в результате будет id
@@ -951,7 +951,7 @@ class ColdBatchService
         $batchCommands = $this->createColdTaskBatchCommand(
             null,
             $planDeals,
-            $batchCommands
+            $batchCommands,
 
         );
 
