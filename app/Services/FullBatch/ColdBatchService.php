@@ -725,7 +725,7 @@ class ColdBatchService
                 $currentDealsBatchCommand = BitrixDealBatchFlowService::getFullBatchCommand(
 
                     [
-                        'filter' => [
+                        'FILTER' => [
                             // "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
                             // "=assignedById" => $userId,
                             // "=CATEGORY_ID" => $currentCategoryBtxId,
@@ -771,7 +771,7 @@ class ColdBatchService
                 ];
 
                 // Теперь создаем команды для обновления каждой сделки на основе полученных данных
-                for ($i = 0; $i < 20; $i++) { // Здесь $i — это индекс, используемый для ссылки на каждую сделку
+                for ($i = 0; $i < 5; $i++) { // Здесь $i — это индекс, используемый для ссылки на каждую сделку
 
                     $closeCommand = BitrixDealBatchFlowService::getBatchCommand(
                         [
@@ -915,7 +915,8 @@ class ColdBatchService
         Log::channel('telegram')->info('HOOK BATCH handle', ['handle result' => $planDeals]);
         Log::info('HOOK BATCH handle', ['handle planDeals' => $planDeals]);
 
-
+        Log::channel('telegram')->info('HOOK BATCH handle', ['handle result' => $planDeals]);
+        Log::info('HOOK BATCH handle', ['handle planDeals' => $planDeals]);
 
         // $entityBatchCommands = [];
         if (!empty($planDeals) && (is_object($planDeals) || is_array($planDeals))) {
