@@ -369,14 +369,12 @@ class BitrixTaskService
                 ]
             ];
 
-            $companyTitleString = '[URL=https://april-dev.bitrix24.ru/crm/company/details/' . $companyId . '/][B][COLOR=#0070c0] Компания: ' . $company['TITLE'] . ' [/COLOR][/B][/URl]';
 
-            $contactDescription = $this->getTaskCompanyInfo(
-                $company
+            $description = $this->getTaskCompanyInfo(
+                $company,
+                'april-dev.bitrix24.ru'
             );
 
-            $description = $companyTitleString . "\n" . "\n" . "\n" .
-                $contactDescription;
 
             $taskData['fields']['DESCRIPTION'] = $description;
 
@@ -483,7 +481,7 @@ class BitrixTaskService
         }
     }
 
-    protected  function getTaskCompanyInfo($company)
+    protected  function getTaskCompanyInfo($company, $domain)
     {
 
         $description = '';
@@ -520,7 +518,7 @@ class BitrixTaskService
 
             $companyPhones = '';
 
-            $companyTitleString = '[B][COLOR=#0070c0]' . $company['TITLE'] . '[/COLOR][/B]';
+            $companyTitleString = '[URL=https://' . $domain . '/crm/company/details/' . $company['ID'] . '/][B][COLOR=#0070c0] Компания: ' . $company['TITLE'] . ' [/COLOR][/B][/URl]' . "\n" . 'Телефоны: ' . "\n";
             $description =  $companyTitleString;
             $description = $description . '' . $cmpnPhonesEmailsList;
         }
