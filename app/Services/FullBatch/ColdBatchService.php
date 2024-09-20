@@ -725,7 +725,7 @@ class ColdBatchService
                 $currentDealsBatchCommand = BitrixDealBatchFlowService::getFullBatchCommand(
 
                     [
-                        'FILTER' => [
+                        'filter' => [
                             // "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
                             // "=assignedById" => $userId,
                             // "=CATEGORY_ID" => $currentCategoryBtxId,
@@ -734,7 +734,7 @@ class ColdBatchService
                             "=STAGE_ID" =>  $includedStages
 
                         ],
-                        'select' => ["ID", "CATEGORY_ID", "STAGE_ID", 'TITLE'],
+                        // 'select' => ["ID", "CATEGORY_ID", "STAGE_ID", 'TITLE'],
 
                     ],
                     'list',
