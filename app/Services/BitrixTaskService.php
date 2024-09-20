@@ -437,6 +437,18 @@ class BitrixTaskService
                 $taskData,
                 $batchCommands
             );
+            Log::info('HOOK TEST COLD BATCH', [
+                'task batchCommands' => $batchCommands,
+    
+    
+            ]);
+            Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+                'task batchCommands' => $batchCommands,
+    
+    
+            ]);
+
+
             return $batchCommands;
             // return APIOnlineController::getResponse(
             //     0,

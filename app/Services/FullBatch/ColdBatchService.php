@@ -912,8 +912,8 @@ class ColdBatchService
         // Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
 
         // $result = BitrixDealBatchFlowService::handleBatchResults($results);
-        // Log::channel('telegram')->info('HOOK BATCH handle', ['handle result' => $result]);
-        // Log::info('HOOK BATCH handle', ['handle result' => $result]);
+        Log::channel('telegram')->info('HOOK BATCH handle', ['handle result' => $planDeals]);
+        Log::info('HOOK BATCH handle', ['handle planDeals' => $planDeals]);
 
 
 
