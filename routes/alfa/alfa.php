@@ -135,7 +135,7 @@ Route::get('alfa/contract-specification/{domain}/{smartId}', function ($domain, 
     }
     $resultText = 'Приложение к договору ППК';
 
-    $message = "\n" . 'Сделка: <a href="' . $documentLink . '" target="_blank">' . $resultText . '</a>';
+    $message = "\n" . 'Приложение: <a href="' . $documentLink . '" target="_blank">' . $resultText . '</a>';
 
     $timeLine = new BitrixTimeLineService($hook);
     $timeLine->setTimeLine($message, 'DYNAMIC_159', $smartId);
