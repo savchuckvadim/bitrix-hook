@@ -326,6 +326,12 @@ class BitrixDealBatchFlowService
 
 
     ) {
+        Log::info('HOOK BATCH batchFlow report DEAL', ['resultBatchCommands' =>  $resultBatchCommands]);
+        Log::channel('telegram')->info('HOOK BATCH category', ['resultBatchCommands' =>  $resultBatchCommands]);
+        Log::info('HOOK BATCH batchFlow report DEAL', ['tmcPresRelationDealId' =>  $tmcPresRelationDealId]);
+        Log::channel('telegram')->info('HOOK BATCH category', ['tmcPresRelationDealId' =>  $tmcPresRelationDealId]);
+        Log::info('HOOK BATCH batchFlow report DEAL', ['fields' =>  $fields]);
+        Log::channel('telegram')->info('HOOK BATCH category', ['fields' =>  $fields]);
         // $rand = rand(1, 3); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
         // sleep($rand);
         $newPresDeal = null; //for mutation
