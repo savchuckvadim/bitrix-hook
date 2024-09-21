@@ -27,13 +27,9 @@ use Illuminate\Support\Facades\Log;
 // Route::middleware(['rate.limit'])->group(function () {
 // новй холодный звонка из Откуда Угодно
 Route::post('alfa/contract-specification', function (Request $request) {
-    Log::channel('telegram')->info('TST HOOK ALFA', [
-        'yo' => 'yo'
-    ]);
+  
     $data = $request->all();
-    Log::channel('telegram')->info('TST HOOK ALFA', [
-        'data' => $data
-    ]);
+    
     $companyId = $data['companyId'];
     $smartId = $data['smartId'];
     $domain = $data['auth']['domain'];
@@ -70,8 +66,20 @@ Route::post('alfa/contract-specification', function (Request $request) {
     Log::info('TST HOOK ALFA', [
         'listItems' => $listItems
     ]);
-    $documentLink = APIOnlineController::online('post', 'alfa/specification', $documentData, 'link');
+    $documentLinkData = APIOnlineController::online('post', 'alfa/specification', $documentData, 'link');
+    $documentLink =  $documentLinkData;
+    if (!empty($documentLinkData['data'])) {
+        $documentLink = $documentLinkData['data'];
+    }
+    if (!empty($documentLink['link'])) {
+        $documentLink = $documentLink['link'];
+    }
+    $resultText = 'Приложение к договору ППК';
 
+    $message = "\n" . 'Приложение: <a href="' . $documentLink . '" target="_blank">' . $resultText . '</a>';
+
+    $timeLine = new BitrixTimeLineService($hook);
+    $timeLine->setTimeLine($message, 'DYNAMIC_159', $smartId);
     Log::channel('telegram')->info('TST HOOK ALFA', [
         'documentLink' => $documentLink
     ]);
