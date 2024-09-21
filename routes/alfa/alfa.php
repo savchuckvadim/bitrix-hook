@@ -67,7 +67,7 @@ Route::post('alfa/contract-specification', function (Request $request) {
         $nowDate = new DateTime();
         setlocale(LC_TIME, 'ru_RU.utf8');
         // Форматируем дату и время в нужный формат
-        $documentCreateDate = $nowDate->format('d.m.Y H:i:s');
+        $documentCreateDate = $nowDate->format('d.m.Y');
         // $locale = 'ru_RU';
         // $pattern = 'd MMMM yyyy';
 
@@ -164,7 +164,7 @@ Route::get('alfa/contract-specification/{domain}/{smartId}', function ($domain, 
     $nowDate = new DateTime();
     setlocale(LC_TIME, 'ru_RU.utf8');
     // Форматируем дату и время в нужный формат
-    $documentCreateDate = $nowDate->format('d.m.Y H:i:s');
+    $documentCreateDate = $nowDate->format('d.m.Y');
     $documentCreateDate =  $documentCreateDate . 'г.';
     // $locale = 'ru_RU';
     // $pattern = 'd MMMM yyyy';
