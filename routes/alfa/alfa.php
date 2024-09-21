@@ -137,6 +137,7 @@ Route::get('alfa/contract-specification/{domain}/{smartId}', function ($domain, 
     APIOnlineController::getSuccess([
         'link' => $documentLink
     ]);
+    
 });
 
 

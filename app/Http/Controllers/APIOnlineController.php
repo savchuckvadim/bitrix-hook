@@ -19,10 +19,12 @@ class APIOnlineController extends Controller
                 BASE_URL . '/' . $endpoint,
                 $requestData
             );
+            $data = $portalResponse->json();
+            Log::channel('telegram')->info('HOOK FROM ONLINE', ['hookfromon' => $data]);
 
-
+            
             if ($portalResponse->successful()) {
-                $data = $portalResponse->json();
+
 
                 if ($data['resultCode'] == 0 && $data[$dataname]) {
                     return [
@@ -35,11 +37,13 @@ class APIOnlineController extends Controller
                         $portalResponse
                     ]);
                     Log::channel('telegram')->error(
-                        'APRIL_HOOK online ERROR',[
+                        'APRIL_HOOK online ERROR',
+                        [
                             'online Response' => $portalResponse,
                             'method' => $method
-                            
-                        ]);
+
+                        ]
+                    );
 
                     return [
                         'resultCode' => 1,
