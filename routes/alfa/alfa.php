@@ -27,70 +27,91 @@ use Illuminate\Support\Facades\Log;
 // Route::middleware(['rate.limit'])->group(function () {
 // новй холодный звонка из Откуда Угодно
 Route::post('alfa/contract-specification', function (Request $request) {
-  
+
     $data = $request->all();
-    
-    $companyId = $data['companyId'];
-    $smartId = $data['smartId'];
-    $domain = $data['auth']['domain'];
-    $listBitrixId = $data['listBitrixId'];
-    $hook = PortalController::getHook($domain);
-    $listFilter = [
-        // 'PROPERTY_' => $companyId,
-        'PROPERTY_192' => $smartId,
+    try {
+        $companyId = $data['companyId'];
+        $smartId = $data['smartId'];
+        $domain = $data['auth']['domain'];
+        $listBitrixId = $data['listBitrixId'];
+        $hook = PortalController::getHook($domain);
+        $listFilter = [
+            // 'PROPERTY_' => $companyId,
+            'PROPERTY_192' => $smartId,
 
-    ];
-    $listItems  = BitrixListService::getList($hook, $listBitrixId, $listFilter);
-    //get smart -> smart list UF_CRM
+        ];
+        $listItems  = BitrixListService::getList($hook, $listBitrixId, $listFilter);
+        //get smart -> smart list UF_CRM
 
 
-    $documentNumber = 'ТЕСТ НОМЕР ДОКУМЕНТА';
-    $documentCreateDate = 'ТЕСТ ДАТА ДОКУМЕНТА';
-    $persons = $listItems;
-    $companyName = 'ТЕСТ НАЗВАНИЕ КОМПАНИИ';
-    $position = 'ДИРЕКТОР';
-    $director = 'ТЕСТ ИМЯ РУКОВОДИТЕЛЯ';
-    $documentData = [
-        'documentNumber' => $documentNumber,
-        'documentCreateDate' => $documentCreateDate,
-        'persons' => $persons,
-        'companyName' => $companyName,
-        'position' => $position,
-        'director' => $director,
+        $documentNumber = $data['documentNumber'];
+        $documentCreateDate = $data['documentCreateDate'];
 
-    ];
-    Log::channel('telegram')->info('TST HOOK ALFA', [
-        'listItems' => $listItems
-    ]);
+        $companyName = $data['companyName'];
 
-    Log::info('TST HOOK ALFA', [
-        'listItems' => $listItems
-    ]);
-    $documentLinkData = APIOnlineController::online('post', 'alfa/specification', $documentData, 'link');
-    $documentLink =  $documentLinkData;
-    if (!empty($documentLinkData['data'])) {
-        $documentLink = $documentLinkData['data'];
+        $position = $data['position'];
+
+        $director = $data['director'];
+
+
+        $persons = [];
+
+        foreach ($listItems as $key => $listItem) {
+            $person = [
+                'number' => $key + 1,
+                'person' => $listItem['NAME'],
+
+            ];
+            foreach ($listItem['PROPERTY_204'] as $key => $value) {
+                $person['product'] = $value;
+            }
+            array_push($persons, $person);
+        }
+
+        $documentData = [
+            'documentNumber' => $documentNumber,
+            'documentCreateDate' => $documentCreateDate,
+            'persons' => $persons,
+            'companyName' => $companyName,
+            'position' => $position,
+            'director' => $director,
+
+        ];
+        Log::channel('telegram')->info('TST HOOK ALFA', [
+            'listItems' => $listItems
+        ]);
+
+        Log::info('TST HOOK ALFA', [
+            'listItems' => $listItems
+        ]);
+        $documentLinkData = APIOnlineController::online('post', 'alfa/specification', $documentData, 'link');
+        $documentLink =  $documentLinkData;
+        if (!empty($documentLinkData['data'])) {
+            $documentLink = $documentLinkData['data'];
+        }
+        if (!empty($documentLink['link'])) {
+            $documentLink = $documentLink['link'];
+        }
+        $resultText = 'Приложение к договору ППК';
+
+        $message = "\n" . 'Приложение: <a href="' . $documentLink . '" target="_blank">' . $resultText . '</a>';
+
+        $timeLine = new BitrixTimeLineService($hook);
+        $timeLine->setTimeLine($message, 'DYNAMIC_159', $smartId);
+        Log::channel('telegram')->info('TST HOOK ALFA', [
+            'documentLink' => $documentLink
+        ]);
+
+        Log::info('TST HOOK ALFA', [
+            'documentLink' => $documentLink
+        ]);
+
+        APIOnlineController::getSuccess([
+            'link' => $documentLink
+        ]);
+    } catch (\Throwable $th) {
+        //throw $th;
     }
-    if (!empty($documentLink['link'])) {
-        $documentLink = $documentLink['link'];
-    }
-    $resultText = 'Приложение к договору ППК';
-
-    $message = "\n" . 'Приложение: <a href="' . $documentLink . '" target="_blank">' . $resultText . '</a>';
-
-    $timeLine = new BitrixTimeLineService($hook);
-    $timeLine->setTimeLine($message, 'DYNAMIC_159', $smartId);
-    Log::channel('telegram')->info('TST HOOK ALFA', [
-        'documentLink' => $documentLink
-    ]);
-
-    Log::info('TST HOOK ALFA', [
-        'documentLink' => $documentLink
-    ]);
-
-    APIOnlineController::getSuccess([
-        'link' => $documentLink
-    ]);
 });
 
 
@@ -108,15 +129,27 @@ Route::get('alfa/contract-specification/{domain}/{smartId}', function ($domain, 
 
     ];
     $listItems  = BitrixListService::getList($hook, $listBitrixId, $listFilter);
-    //get smart -> smart list UF_CRM
+    $persons = [];
 
+    foreach ($listItems as $key => $listItem) {
+        $person = [
+            'number' => $key + 1,
+            'person' => $listItem['NAME'],
+
+        ];
+        foreach ($listItem['PROPERTY_204'] as $key => $value) {
+            $person['product'] = $value;
+        }
+        array_push($persons, $person);
+    }
 
     $documentNumber = 'ТЕСТ НОМЕР ДОКУМЕНТА';
     $documentCreateDate = 'ТЕСТ ДАТА ДОКУМЕНТА';
-    $persons = $listItems;
+
     $companyName = 'ТЕСТ НАЗВАНИЕ КОМПАНИИ';
-    $position = 'ДИРЕКТОР';
+    $position = '';
     $director = 'ТЕСТ ИМЯ РУКОВОДИТЕЛЯ';
+    $clientType = 'fiz';
     $documentData = [
         'documentNumber' => $documentNumber,
         'documentCreateDate' => $documentCreateDate,
