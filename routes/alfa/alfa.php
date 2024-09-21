@@ -58,7 +58,7 @@ Route::post('alfa/contract-specification', function (Request $request) {
 
         foreach ($listItems as $key => $listItem) {
             $person = [
-                'number' => $key + 1,
+                'personNumber' =>  $key + 1 .'. ',
                 'person' => $listItem['NAME'],
 
             ];
@@ -133,7 +133,7 @@ Route::get('alfa/contract-specification/{domain}/{smartId}', function ($domain, 
 
     foreach ($listItems as $key => $listItem) {
         $person = [
-            'number' => $key + 1,
+            'personNumber' =>  $key + 1 .'. ',
             'person' => $listItem['NAME'],
 
         ];
