@@ -366,7 +366,8 @@ class BitrixDealBatchFlowService
         foreach ($portalDealData['categories'] as $category) {
             switch ($category['code']) {
                 case 'sales_base':
-
+                    Log::info('HOOK BATCH batchFlow report DEAL', ['category' =>  $category]);
+                    Log::channel('telegram')->info('HOOK BATCH category', ['category' =>  $category]);
                     $pTargetStage = BitrixDealService::getSaleBaseTargetStage(
                         $category,
                         $currentDepartamentType,
@@ -378,7 +379,8 @@ class BitrixDealBatchFlowService
                         $isUnplanned
                     );
                     $targetStageBtxId = $pTargetStage;
-
+                    Log::info('HOOK BATCH batchFlow report DEAL', ['pTargetStage' =>  $pTargetStage]);
+                    Log::channel('telegram')->info('HOOK BATCH category', ['pTargetStage' =>  $pTargetStage]);
                     $fieldsData = [
 
                         'CATEGORY_ID' => $category['bitrixId'],
