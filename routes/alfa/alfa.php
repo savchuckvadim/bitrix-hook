@@ -125,7 +125,7 @@ Route::get('alfa/contract-specification/{domain}/{smartId}', function ($domain, 
         'listItems' => $listItems
     ]);
     $documentLinkData = APIOnlineController::online('post', 'alfa/specification', $documentData, 'data');
-    $documentLink =  $documentLinkData['link'];
+    $documentLink =  $documentLinkData;
     Log::channel('telegram')->info('TST HOOK ALFA', [
         'documentLink' => $documentLink
     ]);
