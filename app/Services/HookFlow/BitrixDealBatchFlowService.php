@@ -380,6 +380,12 @@ class BitrixDealBatchFlowService
                         'ASSIGNED_BY_ID' => $responsibleId
                     ];
                     if ($baseDealId) {
+                        Log::info('HOOK BATCH batchFlow report DEAL', ['baseDealId' =>  $baseDealId]);
+                        Log::channel('telegram')->info('HOOK BATCH baseDealId', ['baseDealId' =>  $baseDealId]);
+                        Log::info('HOOK BATCH batchFlow report DEAL', ['tag' =>  $tag]);
+                        Log::channel('telegram')->info('HOOK BATCH tag', ['tag' =>  $tag]);
+                        Log::info('HOOK BATCH batchFlow report DEAL', ['category' =>  $category]);
+                        Log::channel('telegram')->info('HOOK BATCH category', ['category' =>  $category]);
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $baseDealId);
                         $key = 'update_' . $tag . '_' . $category['code'] . '_' . $baseDealId;
                         $resultBatchCommands[$key] = $batchCommand;
