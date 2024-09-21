@@ -685,10 +685,10 @@ class EventReportService
                 // $currentDealsIds = $this->getBatchDealFlow();
 
 
-                // $currentDealsIds = $this->getBatchDealFlow();
+                $currentDealsIds = $this->getBatchDealFlow();
 
                 // $currentDealsIds = $this->getDealFlow();
-                $currentDealsIds = $this->getNEWBatchDealFlow();
+                // $currentDealsIds = $this->getNEWBatchDealFlow();
             }
 
             // $this->createTask($currentSmartId);
