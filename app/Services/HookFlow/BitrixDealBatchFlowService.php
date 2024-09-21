@@ -370,7 +370,7 @@ class BitrixDealBatchFlowService
                         $isResult,
                         $isUnplanned
                     );
-                    $targetStageBtxId = $pTargetStage['bitrixId'];
+                    $targetStageBtxId = $pTargetStage;
 
                     $fieldsData = [
 

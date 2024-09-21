@@ -45,6 +45,23 @@ Route::post('alfa/contract-specification', function (Request $request) {
     ];
     $listItems  = BitrixListService::getList($hook, $listBitrixId, $listFilter);
     //get smart -> smart list UF_CRM
+
+
+    $documentNumber = 'ТЕСТ НОМЕР ДОКУМЕНТА';
+    $documentCreateDate = 'ТЕСТ ДАТА ДОКУМЕНТА';
+    $persons = $listItems;
+    $companyName = 'ТЕСТ НАЗВАНИЕ КОМПАНИИ';
+    $position = 'ДИРЕКТОР';
+    $director = 'ТЕСТ ИМЯ РУКОВОДИТЕЛЯ';
+    $documentData = [
+        'documentNumber' => $documentNumber,
+        'documentCreateDate' => $documentCreateDate,
+        'persons' => $persons,
+        'companyName' => $companyName,
+        'position' => $position,
+        'director' => $director,
+
+    ];
     Log::channel('telegram')->info('TST HOOK ALFA', [
         'listItems' => $listItems
     ]);
@@ -52,14 +69,75 @@ Route::post('alfa/contract-specification', function (Request $request) {
     Log::info('TST HOOK ALFA', [
         'listItems' => $listItems
     ]);
+    $documentLink = APIOnlineController::online('post', 'alfa/specification', $documentData, 'link');
+ 
+    Log::channel('telegram')->info('TST HOOK ALFA', [
+        'documentLink' => $documentLink
+    ]);
+
+    Log::info('TST HOOK ALFA', [
+        'documentLink' => $documentLink
+    ]);
 
     APIOnlineController::getSuccess([
-        'listItems' => $listItems
+        'link' => $documentLink
     ]);
 });
 
 
 
+Route::get('alfa/contract-specification/{domain}/{smartId}', function ($domain, $smartId) {
+    Log::channel('telegram')->info('TST HOOK ALFA', [
+        'yo' => 'yo'
+    ]);
+   
+    $listBitrixId = 48;
+    $hook = PortalController::getHook($domain);
+    $listFilter = [
+        // 'PROPERTY_' => $companyId,
+        'PROPERTY_192' => $smartId,
+
+    ];
+    $listItems  = BitrixListService::getList($hook, $listBitrixId, $listFilter);
+    //get smart -> smart list UF_CRM
+
+
+    $documentNumber = 'ТЕСТ НОМЕР ДОКУМЕНТА';
+    $documentCreateDate = 'ТЕСТ ДАТА ДОКУМЕНТА';
+    $persons = $listItems;
+    $companyName = 'ТЕСТ НАЗВАНИЕ КОМПАНИИ';
+    $position = 'ДИРЕКТОР';
+    $director = 'ТЕСТ ИМЯ РУКОВОДИТЕЛЯ';
+    $documentData = [
+        'documentNumber' => $documentNumber,
+        'documentCreateDate' => $documentCreateDate,
+        'persons' => $persons,
+        'companyName' => $companyName,
+        'position' => $position,
+        'director' => $director,
+
+    ];
+    Log::channel('telegram')->info('TST HOOK ALFA', [
+        'listItems' => $listItems
+    ]);
+
+    Log::info('TST HOOK ALFA', [
+        'listItems' => $listItems
+    ]);
+    $documentLink = APIOnlineController::online('post', 'alfa/specification', $documentData, 'link');
+ 
+    Log::channel('telegram')->info('TST HOOK ALFA', [
+        'documentLink' => $documentLink
+    ]);
+
+    Log::info('TST HOOK ALFA', [
+        'documentLink' => $documentLink
+    ]);
+
+    APIOnlineController::getSuccess([
+        'link' => $documentLink
+    ]);
+});
 
 
 
