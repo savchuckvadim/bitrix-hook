@@ -2458,6 +2458,11 @@ class EventReportService
         // $currentColdDeal - обновляется если xo - done или planEventType - xo
 
         // в зависимости от условий сделка в итоге попадает либо в plan либо в report deals
+        $currentDealId = null;
+        if (!empty($this->currentBaseDeal)) {
+            $currentDealId = $this->currentBaseDeal['ID'];
+        }
+
 
         $reportDeals = [];
         $planDeals = [];
