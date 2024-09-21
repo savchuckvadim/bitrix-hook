@@ -30,7 +30,7 @@ Route::post('alfa/contract-specification', function (Request $request) {
 
     $data = $request->all();
     try {
-        $companyId = $data['companyId'];
+        // $companyId = $data['companyId'];
         $smartId = $data['smartId'];
         $domain = $data['auth']['domain'];
         $listBitrixId = $data['listBitrixId'];
@@ -45,12 +45,8 @@ Route::post('alfa/contract-specification', function (Request $request) {
 
 
         $documentNumber = $data['documentNumber'];
-        $documentCreateDate = $data['documentCreateDate'];
-
         $companyName = $data['companyName'];
-
         $position = $data['position'];
-
         $director = $data['director'];
 
 
@@ -58,7 +54,7 @@ Route::post('alfa/contract-specification', function (Request $request) {
 
         foreach ($listItems as $key => $listItem) {
             $person = [
-                'personNumber' =>  $key + 1 .'. ',
+                'personNumber' =>  $key + 1 . '. ',
                 'person' => $listItem['NAME'],
 
             ];
@@ -67,6 +63,28 @@ Route::post('alfa/contract-specification', function (Request $request) {
             }
             array_push($persons, $person);
         }
+        date_default_timezone_set('Europe/Moscow');
+        $nowDate = new DateTime();
+        setlocale(LC_TIME, 'ru_RU.utf8');
+        // Форматируем дату и время в нужный формат
+        $documentCreateDate = $nowDate->format('d.m.Y H:i:s');
+        $locale = 'ru_RU';
+        $pattern = 'd MMMM yyyy';
+
+        // Создаем форматтер
+        $formatter = new IntlDateFormatter(
+            $locale,
+            IntlDateFormatter::NONE,
+            IntlDateFormatter::NONE,
+            date_default_timezone_get(),
+            IntlDateFormatter::GREGORIAN,
+            $pattern
+        );
+
+        // Форматируем дату
+        $documentCreateDate = $formatter->format($nowDate);
+
+
 
         $documentData = [
             'documentNumber' => $documentNumber,
@@ -133,7 +151,7 @@ Route::get('alfa/contract-specification/{domain}/{smartId}', function ($domain, 
 
     foreach ($listItems as $key => $listItem) {
         $person = [
-            'personNumber' =>  $key + 1 .'. ',
+            'personNumber' =>  $key + 1 . '. ',
             'person' => $listItem['NAME'],
 
         ];
@@ -142,9 +160,27 @@ Route::get('alfa/contract-specification/{domain}/{smartId}', function ($domain, 
         }
         array_push($persons, $person);
     }
+    date_default_timezone_set('Europe/Moscow');
+    $nowDate = new DateTime();
+    setlocale(LC_TIME, 'ru_RU.utf8');
+    // Форматируем дату и время в нужный формат
+    $documentCreateDate = $nowDate->format('d.m.Y H:i:s');
+    $locale = 'ru_RU';
+    $pattern = 'd MMMM yyyy';
 
+    // Создаем форматтер
+    $formatter = new IntlDateFormatter(
+        $locale,
+        IntlDateFormatter::NONE,
+        IntlDateFormatter::NONE,
+        date_default_timezone_get(),
+        IntlDateFormatter::GREGORIAN,
+        $pattern
+    );
+
+    // Форматируем дату
+    $documentCreateDate = $formatter->format($nowDate);
     $documentNumber = 'ТЕСТ НОМЕР ДОКУМЕНТА';
-    $documentCreateDate = 'ТЕСТ ДАТА ДОКУМЕНТА';
 
     $companyName = 'ТЕСТ НАЗВАНИЕ КОМПАНИИ';
     $position = '';
