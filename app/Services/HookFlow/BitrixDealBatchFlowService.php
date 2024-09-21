@@ -311,10 +311,12 @@ class BitrixDealBatchFlowService
         $reportEventType, // xo warm presentation, 
         $eventTypeName, //Презентация , Звонок
         $eventName, //имя планируемого события
-        $planEventAction,  // plan done expired fail
+
         $reportEventAction,  // plan done expired fail
-        $isUnplanned,
+        $planEventAction,  // plan done expired fail
         $responsibleId,
+        $isUnplanned,
+        $isExpired,
         $isResult,
         $fields,
         $tmcPresRelationDealId = null, //id сделки TMC из BASE FLOW для связи с основной и со вделкой презентации
@@ -391,7 +393,7 @@ class BitrixDealBatchFlowService
                         $resultBatchCommands[$key] = $batchCommand;
                     } else {
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
-                        $key = 'set_' . $tag . '_' . $category['code'] ;
+                        $key = 'set_' . $tag . '_' . $category['code'];
                         $resultBatchCommands[$key] = $batchCommand;
                         $baseDealId = '$result[' . $key . '][ID]';
                     }

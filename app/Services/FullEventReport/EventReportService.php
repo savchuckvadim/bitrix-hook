@@ -684,12 +684,11 @@ class EventReportService
             if ($this->isDealFlow && $this->portalDealData) {
                 // $currentDealsIds = $this->getBatchDealFlow();
 
-                
-                // $currentDealsIds = $this->getBatchDealFlow();
-                
-                // $currentDealsIds = $this->getDealFlow();
-                $currentDealsIds = $this->getNEWBatchDealFlow(); 
 
+                // $currentDealsIds = $this->getBatchDealFlow();
+
+                // $currentDealsIds = $this->getDealFlow();
+                $currentDealsIds = $this->getNEWBatchDealFlow();
             }
 
             // $this->createTask($currentSmartId);
@@ -2549,8 +2548,8 @@ class EventReportService
             '$fields',
             $this->relationSalePresDeal,
             $batchCommands,
-            'report'
-
+            'report',
+            $currentDealId
         );
         $result =  $batchService->sendGeneralBatchRequest($batchCommands['commands']);
         $result['planDeals'] =  $result['planDeals'];
