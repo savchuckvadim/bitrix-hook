@@ -70,7 +70,7 @@ Route::post('alfa/contract-specification', function (Request $request) {
         'listItems' => $listItems
     ]);
     $documentLink = APIOnlineController::online('post', 'alfa/specification', $documentData, 'link');
- 
+
     Log::channel('telegram')->info('TST HOOK ALFA', [
         'documentLink' => $documentLink
     ]);
@@ -90,7 +90,7 @@ Route::get('alfa/contract-specification/{domain}/{smartId}', function ($domain, 
     Log::channel('telegram')->info('TST HOOK ALFA', [
         'yo' => 'yo'
     ]);
-   
+
     $listBitrixId = 48;
     $hook = PortalController::getHook($domain);
     $listFilter = [
@@ -124,8 +124,8 @@ Route::get('alfa/contract-specification/{domain}/{smartId}', function ($domain, 
     Log::info('TST HOOK ALFA', [
         'listItems' => $listItems
     ]);
-    $documentLink = APIOnlineController::online('post', 'alfa/specification', $documentData, 'link');
- 
+    $documentLinkData = APIOnlineController::online('post', 'alfa/specification', $documentData, 'data');
+    $documentLink =  $documentLinkData['link'];
     Log::channel('telegram')->info('TST HOOK ALFA', [
         'documentLink' => $documentLink
     ]);
@@ -137,7 +137,6 @@ Route::get('alfa/contract-specification/{domain}/{smartId}', function ($domain, 
     APIOnlineController::getSuccess([
         'link' => $documentLink
     ]);
-    
 });
 
 
