@@ -138,7 +138,7 @@ Route::get('alfa/contract-specification/{domain}/{smartId}', function ($domain, 
     $message = "\n" . 'Сделка: <a href="' . $documentLink . '" target="_blank">' . $resultText . '</a>';
 
     $timeLine = new BitrixTimeLineService($hook);
-    $timeLine->setTimeLine($message, 'DYNAMIC_158', $smartId);
+    $timeLine->setTimeLine($message, 'DYNAMIC_159', $smartId);
     Log::channel('telegram')->info('TST HOOK ALFA', [
         'documentLink' => $documentLink
     ]);
