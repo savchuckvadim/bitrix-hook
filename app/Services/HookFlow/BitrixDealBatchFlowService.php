@@ -300,7 +300,6 @@ class BitrixDealBatchFlowService
         return ['dealIds' => ['$result'], 'newPresDeal' => $newPresDeal, 'commands' => $resultBatchCommands];
     }
     static function batchFlowNEW(
-
         $hook,
         $currentBtxDeals,
         $portalDealData,
@@ -319,7 +318,7 @@ class BitrixDealBatchFlowService
         $isExpired,
         $isResult,
         $fields,
-        $tmcPresRelationDealId = null, //id сделки TMC из BASE FLOW для связи с основной и со вделкой презентации
+        $tmcPresRelationDealId, //id сделки TMC из BASE FLOW для связи с основной и со вделкой презентации
 
         $resultBatchCommands, // = []
         $tag, //plan unpres report newpresdeal,
@@ -389,11 +388,11 @@ class BitrixDealBatchFlowService
                         Log::info('HOOK BATCH batchFlow report DEAL', ['category' =>  $category]);
                         Log::channel('telegram')->info('HOOK BATCH category', ['category' =>  $category]);
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $baseDealId);
-                        $key = 'update_' . $tag . '_' . $category['code'] . '_' . $baseDealId;
+                        $key = 'update_' . '_' . $category['code'] . '_' . $baseDealId;
                         $resultBatchCommands[$key] = $batchCommand;
                     } else {
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
-                        $key = 'set_' . $tag . '_' . $category['code'];
+                        $key = 'set_' . '_' . $category['code'];
                         $resultBatchCommands[$key] = $batchCommand;
                         $baseDealId = '$result[' . $key . '][ID]';
                     }
