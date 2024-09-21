@@ -61,6 +61,7 @@ class APIOnlineController extends Controller
                 return [
                     'resultCode' => 1,
                     'message' => 'ONLINE: Ошибка при запросе к API.',
+                    'portalResponse' => $portalResponse
 
                 ];
             }
