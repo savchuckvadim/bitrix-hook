@@ -22,7 +22,7 @@ class APIOnlineController extends Controller
             $data = $portalResponse->json();
             Log::channel('telegram')->info('HOOK FROM ONLINE', ['hookfromon' => $data]);
 
-            
+
             if ($portalResponse->successful()) {
 
 
@@ -53,6 +53,9 @@ class APIOnlineController extends Controller
                 }
             } else {
                 Log::error('API ONLINE: ONLINE: Ошибка при запросе к API. portalResponse', [
+                    $portalResponse
+                ]);
+                Log::channel('telegram')->error('API ONLINE: ONLINE: Ошибка при запросе к API. portalResponse', [
                     $portalResponse
                 ]);
                 return [
