@@ -63,27 +63,27 @@ Route::post('alfa/contract-specification', function (Request $request) {
             }
             array_push($persons, $person);
         }
-        date_default_timezone_set('Europe/Moscow');
+        date_default_timezone_set('Asia/Novosibirsk');
         $nowDate = new DateTime();
         setlocale(LC_TIME, 'ru_RU.utf8');
         // Форматируем дату и время в нужный формат
         $documentCreateDate = $nowDate->format('d.m.Y H:i:s');
-        $locale = 'ru_RU';
-        $pattern = 'd MMMM yyyy';
+        // $locale = 'ru_RU';
+        // $pattern = 'd MMMM yyyy';
 
-        // Создаем форматтер
-        $formatter = new IntlDateFormatter(
-            $locale,
-            IntlDateFormatter::NONE,
-            IntlDateFormatter::NONE,
-            date_default_timezone_get(),
-            IntlDateFormatter::GREGORIAN,
-            $pattern
-        );
+        // // Создаем форматтер
+        // $formatter = new IntlDateFormatter(
+        //     $locale,
+        //     IntlDateFormatter::NONE,
+        //     IntlDateFormatter::NONE,
+        //     date_default_timezone_get(),
+        //     IntlDateFormatter::GREGORIAN,
+        //     $pattern
+        // );
 
-        // Форматируем дату
-        $documentCreateDate = $formatter->format($nowDate);
-
+        // // Форматируем дату
+        // $documentCreateDate = $formatter->format($nowDate);
+        $documentCreateDate =  $documentCreateDate . 'г.';
 
 
         $documentData = [
@@ -160,27 +160,29 @@ Route::get('alfa/contract-specification/{domain}/{smartId}', function ($domain, 
         }
         array_push($persons, $person);
     }
-    date_default_timezone_set('Europe/Moscow');
+    date_default_timezone_set('Asia/Novosibirsk');
     $nowDate = new DateTime();
     setlocale(LC_TIME, 'ru_RU.utf8');
     // Форматируем дату и время в нужный формат
     $documentCreateDate = $nowDate->format('d.m.Y H:i:s');
-    $locale = 'ru_RU';
-    $pattern = 'd MMMM yyyy';
+    $documentCreateDate =  $documentCreateDate . 'г.';
+    // $locale = 'ru_RU';
+    // $pattern = 'd MMMM yyyy';
 
-    // Создаем форматтер
-    $formatter = new IntlDateFormatter(
-        $locale,
-        IntlDateFormatter::NONE,
-        IntlDateFormatter::NONE,
-        date_default_timezone_get(),
-        IntlDateFormatter::GREGORIAN,
-        $pattern
-    );
+    // // Создаем форматтер
+    // $formatter = new IntlDateFormatter(
+    //     $locale,
+    //     IntlDateFormatter::NONE,
+    //     IntlDateFormatter::NONE,
+    //     date_default_timezone_get(),
+    //     IntlDateFormatter::GREGORIAN,
+    //     $pattern
+    // );
 
-    // Форматируем дату
-    $documentCreateDate = $formatter->format($nowDate);
-    $documentNumber = 'ТЕСТ НОМЕР ДОКУМЕНТА';
+    // // Форматируем дату
+    // $documentCreateDate = $formatter->format($nowDate);
+    $rand = rand(10, 790);
+    $documentNumber = $rand;
 
     $companyName = 'ТЕСТ НАЗВАНИЕ КОМПАНИИ';
     $position = '';
