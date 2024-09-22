@@ -406,7 +406,13 @@ class BitrixDealBatchFlowService
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $baseDealId);
                         $key = 'update_' . '_' . $category['code'] . '_' . $baseDealId;
                         $resultBatchCommands[$key] = $batchCommand;
+
+                        
+
                     } else {
+
+
+
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
                         $key = 'set_' . '_' . $category['code'];
                         $resultBatchCommands[$key] = $batchCommand;

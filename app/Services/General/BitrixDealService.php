@@ -618,9 +618,16 @@ class BitrixDealService
 
               
             }
-
-            if ($reportEventAction == 'fail' || $reportEventAction == 'success') {
-                $stageSuphicks = $reportEventAction;
+            
+            if ($isFail) {                      // если отказ
+                $stageSuphicks = 'fail';
+                if (!$isResult) {
+                    $stageSuphicks = 'double';
+                }
+            }
+          
+            if ($isSuccess) {                       // если успех
+                $stageSuphicks = 'success';
             }
             if (!empty($currentCategoryData['stages'])) {
 
