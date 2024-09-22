@@ -375,7 +375,7 @@ class BitrixDealBatchFlowService
                     $pTargetStage = BitrixDealService::getSaleBaseTargetStage(
                         $category,
                         $currentStageOrder,
-                        $currentDepartamentType,
+                        // $currentDepartamentType,
                         $planEventType, // xo warm presentation,
                         $reportEventType, // xo warm presentation,
                         $planEventAction,  // plan done expired fail
