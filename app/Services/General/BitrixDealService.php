@@ -510,6 +510,16 @@ class BitrixDealService
         $isSuccess,
         $isFail,
     ) {
+        Log::channel('telegram')->error('APRIL_HOOK', [
+      
+                'isResult' => $isResult,
+                'isUnplanned' => $isUnplanned,
+                'isSuccess' => $isSuccess,
+
+                'isFail' => $isFail,
+
+           
+        ]);
         // sales_new
         // sales_cold
         // sales_warm
@@ -619,14 +629,14 @@ class BitrixDealService
               
             }
             
-            if ($isFail) {                      // если отказ
+            if (!empty($isFail)) {                      // если отказ
                 $stageSuphicks = 'fail';
                 if (!$isResult) {
                     $stageSuphicks = 'double';
                 }
             }
           
-            if ($isSuccess) {                       // если успех
+            if (!empty($isSuccess)) {                       // если успех
                 $stageSuphicks = 'success';
             }
             if (!empty($currentCategoryData['stages'])) {

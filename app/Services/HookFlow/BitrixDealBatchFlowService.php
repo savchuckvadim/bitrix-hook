@@ -308,8 +308,8 @@ class BitrixDealBatchFlowService
         $entityId,
         $planEventType, // xo warm presentation, 
         $reportEventType, // xo warm presentation, 
-        $eventTypeName, //Презентация , Звонок
-        $eventName, //имя планируемого события
+        $currentReportEventName, //Презентация , Звонок
+        $currentPlanEventName, //имя планируемого события
 
         $reportEventAction,  // plan done expired fail
         $planEventAction,  // plan done expired fail
@@ -407,7 +407,7 @@ class BitrixDealBatchFlowService
                         $key = 'update_' . '_' . $category['code'] . '_' . $baseDealId;
                         $resultBatchCommands[$key] = $batchCommand;
 
-                        
+
 
                     } else {
 
