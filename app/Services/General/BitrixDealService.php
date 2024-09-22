@@ -500,6 +500,7 @@ class BitrixDealService
 
     static function getSaleBaseTargetStage(
         $currentCategoryData,
+        $currentStageOrder,
         $planEventType, // xo warm presentation,
         $reportEventType, // xo warm presentation,
         $planEventAction,  // plan done expired fail
@@ -579,7 +580,12 @@ class BitrixDealService
         $reportOrder = 0;
 
         $codesToFilter = [$planEventType, $reportEventType];
+
+        if(!empty($currentStageOrder)){
+            array_push($codesToFilter , $currentStageOrder);
+        }
         if ($isUnplanned) {
+            
             array_push($codesToFilter, 'presentation');
         }
         // Фильтруем массив по кодам
@@ -624,6 +630,101 @@ class BitrixDealService
         return $targetStageBtxId;
     }
 
+    static function getEventOrderFromCurrentBaseDeal(
+        $currentBtxDeal,
+        $currentCategoryData,
+
+    ) {
+        // sales_new
+        // sales_cold
+        // sales_warm
+        // sales_pres
+        // sales_offer_create
+        // sales_document_send
+        // sales_in_progress
+        // sales_money_await
+        // sales_supply
+        // sales_success
+        // sales_fail
+        // sales_double
+        // cold_new
+        // cold_plan
+        // cold_pending
+        // cold_success
+        // cold_fail
+        // cold_noresult
+        // spres_new
+        // spres_plan
+        // spres_pending
+        // spres_success
+        // spres_fail
+        // spres_noresult
+        // sales_tmc_new
+        // sales_tmc_plan
+        // sales_tmc_pending
+        // sales_tmc_pres_in_progress
+        // sales_tmc_pres_plan
+        // sales_tmc_success
+        // sales_tmc_fail
+        $targetStageBtxId = null;
+        $stageSuphicks = 'plan';
+        $stagePrephicks = 'sales';
+
+        $eventOrders = [
+            [
+                'code' => 'xo',
+                'order' => 0,
+                'suphicks' => 'cold'
+            ],
+            [
+                'code' => 'warm',
+                'order' => 1,
+                'suphicks' => 'warm'
+            ],
+            [
+                'code' => 'presentation',
+                'order' => 2,
+                'suphicks' => 'pres'
+            ],
+            [
+                'code' => 'document',
+                'order' => 3,
+                'suphicks' => 'offer_create'
+            ],
+            [
+                'code' => 'hot',
+                'order' => 4,
+                'suphicks' => 'in_progress'
+            ],
+
+            [
+                'code' => 'moneyAwait',
+                'order' => 6,
+                'suphicks' => 'money_await'
+            ],
+        ];
+        $planOrder =  0;
+        $reportOrder = 0;
+        $currentEventOrder = null;
+        if (!empty($currentBtxDeal)) {
+
+            if (!empty($currentBtxDeal['STAGE_ID'])) {
+                foreach ($currentCategoryData['stages'] as $stage) {
+                    if ("C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'] ==  $currentBtxDeal['STAGE_ID']) {
+
+                        foreach ($eventOrders as $eventOrder) {
+                            if ($stagePrephicks.'_' . $eventOrder['suphicks'] === $stage['code']) {
+                                $currentEventOrder = $eventOrder['code'];
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+        return $currentEventOrder;
+    }
     static function getIsCanDealStageUpdate(
         $currentDeal, //with ID CATEGORY_ID STAGE_ID
         $targetStageBtxId,

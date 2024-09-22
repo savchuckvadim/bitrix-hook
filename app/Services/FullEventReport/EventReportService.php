@@ -684,8 +684,12 @@ class EventReportService
             if ($this->isDealFlow && $this->portalDealData) {
                 // $currentDealsIds = $this->getBatchDealFlow();
 
+                if ($this->domain !== 'april-dev.bitrix24.ru') {
+                    $currentDealsIds = $this->getBatchDealFlow();
+                } else {
+                    $currentDealsIds = $this->getNEWBatchDealFlow();
+                }
 
-                $currentDealsIds = $this->getBatchDealFlow();
 
                 // $currentDealsIds = $this->getDealFlow();
                 // $currentDealsIds = $this->getNEWBatchDealFlow();
@@ -2535,7 +2539,7 @@ class EventReportService
 
         $batchCommands = BitrixDealBatchFlowService::batchFlowNEW(  // редактирует сделки отчетности из currentTask основную и если есть xo
             $this->hook,
-            $currentBtxDeals,
+            $this->currentBaseDeal,
             $this->portalDealData,
             $this->currentDepartamentType,
             $this->entityType,

@@ -301,7 +301,7 @@ class BitrixDealBatchFlowService
     }
     static function batchFlowNEW(
         $hook,
-        $currentBtxDeals,
+        $currentBaseDeal,
         $portalDealData,
         $currentDepartamentType  = 'sales',
         $entityType,
@@ -368,15 +368,19 @@ class BitrixDealBatchFlowService
                 case 'sales_base':
                     Log::info('HOOK BATCH batchFlow report DEAL', ['category' =>  $category]);
                     Log::channel('telegram')->info('HOOK BATCH category', ['category' =>  $category]);
+
+                    $currentStageOrder = BitrixDealService::getEventOrderFromCurrentBaseDeal($currentBaseDeal, $category);
                     $pTargetStage = BitrixDealService::getSaleBaseTargetStage(
                         $category,
+                        $currentStageOrder,
                         $currentDepartamentType,
                         $planEventType, // xo warm presentation,
                         $reportEventType, // xo warm presentation,
                         $planEventAction,  // plan done expired fail
                         $reportEventAction,  // plan done expired fail
                         $isResult,
-                        $isUnplanned
+                        $isUnplanned,
+                       
                     );
                     $targetStageBtxId = $pTargetStage;
                     Log::info('HOOK BATCH batchFlow report DEAL', ['pTargetStage' =>  $pTargetStage]);
