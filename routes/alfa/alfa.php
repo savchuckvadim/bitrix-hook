@@ -29,6 +29,12 @@ use Illuminate\Support\Facades\Log;
 Route::post('alfa/contract-specification', function (Request $request) {
 
     $data = $request->all();
+    Log::channel('telegram')->info('TST HOOK ALFA', [
+        'data' => $data
+    ]);
+    Log::channel('telegram')->info('TST HOOK ALFA', [
+        'yo' => 'yo'
+    ]);
     try {
         // $companyId = $data['companyId'];
         $smartId = $data['smartId'];
