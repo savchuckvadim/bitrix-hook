@@ -511,14 +511,14 @@ class BitrixDealService
         $isFail,
     ) {
         Log::channel('telegram')->error('APRIL_HOOK', [
-      
-                'isResult' => $isResult,
-                'isUnplanned' => $isUnplanned,
-                'isSuccess' => $isSuccess,
 
-                'isFail' => $isFail,
+            'isResult' => $isResult,
+            'isUnplanned' => $isUnplanned,
+            'isSuccess' => $isSuccess,
 
-           
+            'isFail' => $isFail,
+
+
         ]);
         // sales_new
         // sales_cold
@@ -587,13 +587,13 @@ class BitrixDealService
                 'order' => 6,
                 'suphicks' => 'money_await'
             ],
-            
+
             // [
             //     'code' => 'success',
             //     'order' => 6,
             //     'suphicks' => 'money_await'
             // ],
-            
+
             // [
             //     'code' => 'fail',
             //     'order' => 7,
@@ -605,11 +605,11 @@ class BitrixDealService
 
         $codesToFilter = [$planEventType, $reportEventType];
 
-        if(!empty($currentStageOrder)){
-            array_push($codesToFilter , $currentStageOrder);
+        if (!empty($currentStageOrder)) {
+            array_push($codesToFilter, $currentStageOrder);
         }
         if ($isUnplanned) {
-            
+
             array_push($codesToFilter, 'presentation');
         }
         // Фильтруем массив по кодам
@@ -625,17 +625,15 @@ class BitrixDealService
         if ($currentCategoryData['code'] === 'sales_base') {
             if (!empty($currentOrderData)) {
                 $stageSuphicks = $currentOrderData['suphicks'];
-
-              
             }
-            
+
             if (!empty($isFail)) {                      // если отказ
                 $stageSuphicks = 'fail';
                 if (!$isResult) {
                     $stageSuphicks = 'double';
                 }
             }
-          
+
             if (!empty($isSuccess)) {                       // если успех
                 $stageSuphicks = 'success';
             }
@@ -745,18 +743,86 @@ class BitrixDealService
                     if ("C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'] ==  $currentBtxDeal['STAGE_ID']) {
 
                         foreach ($eventOrders as $eventOrder) {
-                            if ($stagePrephicks.'_' . $eventOrder['suphicks'] === $stage['code']) {
+                            if ($stagePrephicks . '_' . $eventOrder['suphicks'] === $stage['code']) {
                                 $currentEventOrder = $eventOrder['code'];
                             }
                         }
                     }
                 }
-
             }
         }
 
         return $currentEventOrder;
     }
+
+
+    static function getXOTargetStage(
+        $currentCategoryData,
+        $reportEventType, // xo warm presentation,
+        $isExpired,
+        $isResult,
+        $isSuccess,
+        $isFail,
+    ) {
+
+        // cold_new
+        // cold_plan
+        // cold_pending
+        // cold_success
+        // cold_fail
+        // cold_noresult
+
+
+        $targetStageBtxId = null;
+        $stageSuphicks = '';
+        $stagePrephicks = 'cold';
+
+
+        if ($reportEventType == 'xo' || $reportEventType == 'cold') {
+            if ($isExpired) {
+                $stageSuphicks = 'pending';
+            }
+            if ($isFail) {
+                $stageSuphicks = 'fail';
+                if (!$isResult) {
+                    $stageSuphicks = 'noresult';
+                }
+            }
+
+            if ((($isResult && !$isFail) || $isSuccess)) {
+                $stageSuphicks = 'success';
+            }
+            if (!$isResult && !$isExpired) {
+                $stageSuphicks = 'noresult';
+            }
+        }
+
+        if (!empty($currentCategoryData['stages'])) {
+
+            foreach ($currentCategoryData['stages'] as $stage) {
+
+                // if ($eventType === 'xo' || $eventType === 'cold') {
+
+                if ($stage['code'] == $stagePrephicks . '_' . $stageSuphicks) {
+                    $targetStageBtxId = $stage['bitrixId'];
+                    // Log::channel('telegram')->info('DEAL TEST', [
+                    //     'stageCode' => $stage['code'],
+                    //     'eventType' => $eventType,
+
+                    //     'stage' => $stage,
+
+                    // ]);
+                }
+                // }
+            }
+        }
+
+        return $targetStageBtxId;
+    }
+
+   
+
+
     static function getIsCanDealStageUpdate(
         $currentDeal, //with ID CATEGORY_ID STAGE_ID
         $targetStageBtxId,

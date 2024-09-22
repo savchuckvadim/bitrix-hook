@@ -325,6 +325,7 @@ class BitrixDealBatchFlowService
         $resultBatchCommands, // = []
         $tag, //plan unpres report newpresdeal,
         $baseDealId,
+        $xoDealId
 
 
     ) {
@@ -406,9 +407,6 @@ class BitrixDealBatchFlowService
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $baseDealId);
                         $key = 'update_' . '_' . $category['code'] . '_' . $baseDealId;
                         $resultBatchCommands[$key] = $batchCommand;
-
-
-
                     } else {
 
 
@@ -427,6 +425,42 @@ class BitrixDealBatchFlowService
 
 
                     break;
+                case 'sales_xo':
+                    $pTargetStage = BitrixDealService::getXOTargetStage(
+                        $category,
+                        $reportEventType, // xo warm presentation,
+                        $isExpired,
+                        $isResult,
+                        $isSuccess,
+                        $isFail,
+
+                    );
+                    $targetStageBtxId = $pTargetStage;
+                    Log::info('HOOK BATCH batchFlow report DEAL', ['pTargetStage' =>  $pTargetStage]);
+                    Log::channel('telegram')->info('HOOK BATCH category', ['pTargetStage' =>  $pTargetStage]);
+                    $fieldsData = [
+
+                        'CATEGORY_ID' => $category['bitrixId'],
+                        'STAGE_ID' => "C" . $category['bitrixId'] . ':' . $targetStageBtxId,
+                        "COMPANY_ID" => $entityId,
+                        'ASSIGNED_BY_ID' => $responsibleId
+                    ];
+
+                    if ($xoDealId) {
+
+                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $xoDealId);
+                        $key = 'update_' . '_' . $category['code'] . '_' . $baseDealId;
+                        $resultBatchCommands[$key] = $batchCommand;
+                    }
+
+                    break;
+
+                case 'sales_presentation':
+                    break;
+                case 'tmc_base':
+                    break;
+
+
 
                 default:
                     # code...
