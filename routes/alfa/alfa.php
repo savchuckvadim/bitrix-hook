@@ -34,6 +34,12 @@ Route::post('alfa/contract-specification', function (Request $request) {
         $smartId = $data['smartId'];
         $domain = $data['auth']['domain'];
         $listBitrixId = $data['listBitrixId'];
+        $documentNumber = $data['documentNumber'];
+        $companyName = $data['companyName'];
+        $position = $data['position'];
+        $director = $data['director'];
+
+        
         $hook = PortalController::getHook($domain);
         $listFilter = [
             // 'PROPERTY_' => $companyId,
@@ -43,11 +49,14 @@ Route::post('alfa/contract-specification', function (Request $request) {
         $listItems  = BitrixListService::getList($hook, $listBitrixId, $listFilter);
         //get smart -> smart list UF_CRM
 
+        Log::channel('telegram')->info('TST HOOK ALFA', [
+            'data' => $data
+        ]);
 
-        $documentNumber = $data['documentNumber'];
-        $companyName = $data['companyName'];
-        $position = $data['position'];
-        $director = $data['director'];
+        Log::info('TST HOOK ALFA', [
+            'data' => $data
+        ]);
+        
 
 
         $persons = [];

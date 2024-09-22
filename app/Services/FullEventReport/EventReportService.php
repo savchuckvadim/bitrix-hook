@@ -2554,6 +2554,8 @@ class EventReportService
             $isUnplanned,
             $this->isExpired,
             $this->isResult,
+            $this->isSuccessSale,
+            $this->isFail,
             '$fields',
             $this->relationSalePresDeal,
             $batchCommands,

@@ -317,6 +317,8 @@ class BitrixDealBatchFlowService
         $isUnplanned,
         $isExpired,
         $isResult,
+        $isSuccess,
+        $isFail,
         $fields,
         $tmcPresRelationDealId, //id сделки TMC из BASE FLOW для связи с основной и со вделкой презентации
 
@@ -380,7 +382,9 @@ class BitrixDealBatchFlowService
                         $reportEventAction,  // plan done expired fail
                         $isResult,
                         $isUnplanned,
-                       
+                        $isSuccess,
+                        $isFail,
+
                     );
                     $targetStageBtxId = $pTargetStage;
                     Log::info('HOOK BATCH batchFlow report DEAL', ['pTargetStage' =>  $pTargetStage]);

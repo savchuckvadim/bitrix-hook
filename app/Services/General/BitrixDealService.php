@@ -506,7 +506,9 @@ class BitrixDealService
         $planEventAction,  // plan done expired fail
         $reportEventAction,  // plan done expired fail
         $isResult,
-        $isUnplanned
+        $isUnplanned,
+        $isSuccess,
+        $isFail,
     ) {
         // sales_new
         // sales_cold
