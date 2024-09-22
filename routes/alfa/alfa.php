@@ -117,7 +117,7 @@ Route::post('alfa/contract-specification', function (Request $request) {
         Log::info('TST HOOK ALFA', [
             'listItems' => $listItems
         ]);
-        $documentLinkData = APIOnlineController::online('post', 'alfa/specification', $documentData, 'link');
+        $documentLinkData = APIOnlineController::online('post', 'alfa/specification', $documentData, 'data');
         $documentLink =  $documentLinkData;
         if (!empty($documentLinkData['data'])) {
             $documentLink = $documentLinkData['data'];
@@ -143,7 +143,12 @@ Route::post('alfa/contract-specification', function (Request $request) {
             'link' => $documentLink
         ]);
     } catch (\Throwable $th) {
-        //throw $th;
+        Log::error('ERROR: Exception caught', [
+            'message'   => $th->getMessage(),
+            'file'      => $th->getFile(),
+            'line'      => $th->getLine(),
+            'trace'     => $th->getTraceAsString(),
+        ]);
     }
 });
 
