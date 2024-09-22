@@ -2472,6 +2472,11 @@ class EventReportService
             $xoDealId = $this->currentColdDeal['ID'];
         }
 
+        $reportPresDealId = null;
+        if (!empty($this->currentPresDeal)) {
+            $reportPresDealId = $this->currentPresDeal['ID'];
+        }
+
         $reportDeals = [];
         $planDeals = [];
         $currentBtxDeals = $this->currentBtxDeals;
@@ -2565,7 +2570,8 @@ class EventReportService
             $batchCommands,
             'report',
             $currentDealId,
-            $xoDealId
+            $xoDealId,
+            $reportPresDealId
         );
         $result =  $batchService->sendGeneralBatchRequest($batchCommands['commands']);
         $result['planDeals'] =  $result['planDeals'];

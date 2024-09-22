@@ -820,7 +820,60 @@ class BitrixDealService
         return $targetStageBtxId;
     }
 
-   
+    static function getTargetStagePresentation(
+        $currentCategoryData,
+        $eventType, // xo warm presentation,
+        $eventAction,  // plan done expired fail
+        $isResult,
+        $isUnplanned,
+        $isSuccess,
+        $isFail,
+    ) {
+
+        // spres_new
+        // spres_plan
+        // spres_pending
+        // spres_success
+        // spres_fail
+        // spres_noresult
+        $targetStageBtxId = null;
+        $stageSuphicks = 'plan';
+        $stagePrephicks = 'spres';
+
+
+        if ($eventAction == 'done' || $eventAction == 'success') {
+            $stageSuphicks = 'success';
+        } else if ($eventAction == 'expired') {
+            $stageSuphicks = 'pending';
+        } else if ($eventAction == 'fail') {
+            $stageSuphicks = 'fail';
+
+            if (!$isResult) {
+                $stageSuphicks = 'noresult';
+            }
+        }
+
+        if (!empty($currentCategoryData['stages'])) {
+
+            foreach ($currentCategoryData['stages'] as $stage) {
+
+                // if ($eventType === 'xo' || $eventType === 'cold') {
+
+                if ($stage['code'] == $stagePrephicks . '_' . $stageSuphicks) {
+                    $targetStageBtxId = $stage['bitrixId'];
+                    // Log::channel('telegram')->info('DEAL TEST', [
+                    //     'stageCode' => $stage['code'],
+                    //     'eventType' => $eventType,
+
+                    //     'stage' => $stage,
+
+                    // ]);
+                }
+                // }
+            }
+        }
+        return  $targetStageBtxId;
+    }
 
 
     static function getIsCanDealStageUpdate(
