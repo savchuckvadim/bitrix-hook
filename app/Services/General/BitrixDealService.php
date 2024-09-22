@@ -575,6 +575,18 @@ class BitrixDealService
                 'order' => 6,
                 'suphicks' => 'money_await'
             ],
+            
+            // [
+            //     'code' => 'success',
+            //     'order' => 6,
+            //     'suphicks' => 'money_await'
+            // ],
+            
+            // [
+            //     'code' => 'fail',
+            //     'order' => 7,
+            //     'suphicks' => 'money_await'
+            // ],
         ];
         $planOrder =  0;
         $reportOrder = 0;
@@ -602,11 +614,12 @@ class BitrixDealService
             if (!empty($currentOrderData)) {
                 $stageSuphicks = $currentOrderData['suphicks'];
 
-                if ($reportEventAction == 'fail' || $reportEventAction == 'success') {
-                    $stageSuphicks = $reportEventAction;
-                }
+              
             }
 
+            if ($reportEventAction == 'fail' || $reportEventAction == 'success') {
+                $stageSuphicks = $reportEventAction;
+            }
             if (!empty($currentCategoryData['stages'])) {
 
                 foreach ($currentCategoryData['stages'] as $stage) {
