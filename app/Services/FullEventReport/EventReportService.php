@@ -697,7 +697,9 @@ class EventReportService
 
             // $this->createTask($currentSmartId);
             if ($this->isExpired || $this->isPlanned) {
-                $result = $this->taskFlow(null, $currentDealsIds['planDeals']);
+                if ($this->domain !== 'april-dev.bitrix24.ru') {
+                    $result = $this->taskFlow(null, $currentDealsIds['planDeals']);
+                }
             } else {
                 $result = $this->workStatus;
             }
@@ -2586,28 +2588,31 @@ class EventReportService
                 $taskId = $this->currentTask['id'];
             }
         }
-        $batchCommands =  $taskService->getCreateTaskBatchCommands(
-            'cold',       //$type,   //cold warm presentation hot 
-            $this->stringType,
-            $this->portal,
-            $this->domain,
-            $this->hook,
-            $this->currentBtxEntity,
-            $this->entityId,  //may be null
-            null, //$leadId,     //may be null
-            $this->planCreatedId,
-            $this->planResponsibleId,
-            $this->planDeadline,
-            $this->currentPlanEventName,
-            null, // $currentSmartItemId,
-            true, //$isNeedCompleteOtherTasks
-            $taskId, // null,
-            $result['planDeals'],
-            $result['commands']
-
-        );
+        $batchCommands =  $result['commands'];
+        if ($this->isPlanned && !$this->isExpired) {
 
 
+            $batchCommands =  $taskService->getCreateTaskBatchCommands(
+                'cold',       //$type,   //cold warm presentation hot 
+                $this->stringType,
+                $this->portal,
+                $this->domain,
+                $this->hook,
+                $this->currentBtxEntity,
+                $this->entityId,  //may be null
+                null, //$leadId,     //may be null
+                $this->planCreatedId,
+                $this->planResponsibleId,
+                $this->planDeadline,
+                $this->currentPlanEventName,
+                null, // $currentSmartItemId,
+                true, //$isNeedCompleteOtherTasks
+                $taskId, // null,
+                $result['planDeals'],
+                $result['commands']
+
+            );
+        }
         $batchService->sendGeneralBatchRequest($batchCommands);
 
         Log::info('HOOK BATCH batchFlow report DEAL', ['report result' => $result]);
