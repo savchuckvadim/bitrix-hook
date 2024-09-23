@@ -6,6 +6,7 @@ use App\Http\Controllers\APIBitrixController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\PortalController;
 use App\Services\General\BitrixBatchService;
+use App\Services\HookFlow\BitrixDealBatchFlowService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -242,7 +243,7 @@ class BitrixTaskService
     public function getCreateTaskBatchCommands(
 
         //from bitrix hook
-    
+
         $type,   //cold warm presentation hot  $stringType = 'Холодный обзвон ';
         $stringType,
         $portal,
@@ -593,6 +594,77 @@ class BitrixTaskService
             Log::error('ERROR COLD: Exception caught',  $errorMessages);
             Log::info('error COLD', ['error' => $th->getMessage()]);
             return APIOnlineController::getResponse(1, $th->getMessage(),  $errorMessages);
+        }
+    }
+
+    public function getUpdateTaskBatchCommand(
+        $domain,
+        $currentTaskId,
+        $deadline,
+        // $currentSmartItemId,
+        // $isNeedCompleteOtherTasks,
+
+        // $currentDealsItemIds = null
+
+
+    ) {
+
+
+        $batchcommand = '';
+        try {
+
+            $moscowTime = $deadline;
+
+            if ($domain === 'alfacentr.bitrix24.ru') {
+
+
+                $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
+                $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
+                $moscowTime = $moscowTime->format('Y-m-d H:i:s');
+            }
+
+
+            $taskData =  [
+                'taskId' => $currentTaskId,
+                'fields' => [
+                    'DEADLINE' => $moscowTime, //- крайний срок;
+                    'ALLOW_CHANGE_DEADLINE' => 'N',
+
+                ]
+            ];
+
+
+
+            $batchcommand =   BitrixBatchService::getGeneralBatchCommand(
+                $taskData,
+                'tasks.task.update'
+            );
+            return  $batchcommand;
+            // $updatedTask = BitrixGeneralService::updateTask(
+            //     'Bitrix Task Service create task',
+            //     $hook,
+            //     $taskData
+            // );
+
+            // return APIOnlineController::getResponse(
+            //     0,
+            //     'success',
+            //     [
+            //         'updatedTask' => $updatedTask,
+
+            //     ]
+            // );
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR COLD: Exception caught',  $errorMessages);
+            Log::info('error COLD', ['error' => $th->getMessage()]);
+            // return APIOnlineController::getResponse(1, $th->getMessage(),  $errorMessages);
+            return  $batchcommand;
         }
     }
 

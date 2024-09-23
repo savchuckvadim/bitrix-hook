@@ -2589,28 +2589,11 @@ class EventReportService
             }
         }
         $batchCommands =  $result['commands'];
-        if ($this->isPlanned && !$this->isExpired) {
-
-
-            $batchCommands =  $taskService->getCreateTaskBatchCommands(
-                'cold',       //$type,   //cold warm presentation hot 
-                $this->stringType,
-                $this->portal,
-                $this->domain,
-                $this->hook,
-                $this->currentBtxEntity,
-                $this->entityId,  //may be null
-                null, //$leadId,     //may be null
-                $this->planCreatedId,
-                $this->planResponsibleId,
-                $this->planDeadline,
-                $this->currentPlanEventName,
-                null, // $currentSmartItemId,
-                true, //$isNeedCompleteOtherTasks
-                $taskId, // null,
+        if ($this->isExpired || $this->isPlanned) {
+            $batchCommands = $this->getTaskFlowBatchCommand(
+                null,
                 $result['planDeals'],
-                $result['commands']
-
+                $batchCommands 
             );
         }
         $batchService->sendGeneralBatchRequest($batchCommands);
@@ -2716,7 +2699,94 @@ class EventReportService
         }
     }
 
+    protected function getTaskFlowBatchCommand(
+        $currentSmartItemId,
+        $currentDealsIds,
+        $batchCommands
 
+    ) {
+
+
+        $companyId  = null;
+        $leadId  = null;
+        $currentTaskId = null;
+        $createdTask = null;
+        try {
+            // Log::channel('telegram')->error('APRIL_HOOK', $this->portal);
+
+            if (!empty($this->currentTask)) {
+                if (!empty($this->currentTask['id'])) {
+                    $currentTaskId = $this->currentTask['id'];
+                }
+            }
+
+            if ($this->entityType == 'company') {
+
+                $companyId  = $this->entityId;
+            } else if ($this->entityType == 'lead') {
+                $leadId  = $this->entityId;
+            }
+            $taskService = new BitrixTaskService();
+
+            if (!$this->isExpired) {
+
+
+
+                $batchCommands =  $taskService->getCreateTaskBatchCommands(
+                    $this->currentPlanEventType,       //$type,   //cold warm presentation hot 
+                    $this->stringType,
+                    $this->portal,
+                    $this->domain,
+                    $this->hook,
+                    $this->currentBtxEntity,
+                    $this->entityId,  //may be null
+                    null, //$leadId,     //may be null
+                    $this->planCreatedId,
+                    $this->planResponsibleId,
+                    $this->planDeadline,
+                    $this->currentPlanEventName,
+                    null, // $currentSmartItemId,
+                    false, //$isNeedCompleteOtherTasks
+                    $currentTaskId, // null,
+                    $currentDealsIds,
+                    $batchCommands
+
+                );
+            } else {
+                // $createdTask =  $taskService->updateTask(
+
+                //     $this->domain,
+                //     $this->hook,
+                //     $currentTaskId,
+                //     $this->planDeadline,
+                //     $this->currentPlanEventName,
+                // );
+                $batchCommand =  $taskService->getUpdateTaskBatchCommand(
+                    $this->domain,
+                    $currentTaskId,
+                    $this->planDeadline,
+                );
+                if (!empty($batchCommand)) {
+
+                    array_push($batchCommands, $batchCommand);
+                }
+            }
+
+
+            return $batchCommands;
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR COLD: createColdTask',  $errorMessages);
+            Log::info('error COLD', ['error' => $th->getMessage()]);
+            Log::channel('telegram')->error('APRIL_HOOK', $errorMessages);
+            return $batchCommands;
+        }
+    }
     protected function getListFlow()
     {
 
