@@ -2438,6 +2438,7 @@ class EventReportService
     protected function getNEWBatchDealFlow()
     {
 
+        $result =  ['dealIds' => ['$result'], 'planDeals' => null, 'newPresDeal' => null, 'commands' => null];
         // должен собрать batch commands
         // отправить send batch
         // из резултатов вернуть объект с массивами созданных и обновленных сделок
@@ -2546,7 +2547,7 @@ class EventReportService
 
         $batchService =  new BitrixBatchService($this->hook);
 
-        $batchCommands = BitrixDealBatchFlowService::batchFlowNEW(  // редактирует сделки отчетности из currentTask основную и если есть xo
+        $result = BitrixDealBatchFlowService::batchFlowNEW(  // редактирует сделки отчетности из currentTask основную и если есть xo
             $this->hook,
             $this->currentBaseDeal,
             $this->portalDealData,
@@ -2574,7 +2575,7 @@ class EventReportService
             $reportPresDealId
         );
         $result =  $batchService->sendGeneralBatchRequest($batchCommands['commands']);
-        $result['planDeals'] =  $result['planDeals'];
+
         Log::info('HOOK BATCH batchFlow report DEAL', ['report result' => $result]);
         Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $result]);
         Log::info('HOOK BATCH batchFlow report DEAL', ['planDeals planDeals' =>  $result['planDeals']]);
