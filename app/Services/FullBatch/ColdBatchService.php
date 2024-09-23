@@ -233,9 +233,9 @@ class ColdBatchService
                 $currentMComments = $currentBtxEntity['UF_CRM_OP_MHISTORY'];
             }
         }
-        $stringComment = $nowOnlyDate . ' ХО запланирован ' . $data['name'] . ' на ' . $data['deadline'];
+        $stringComment = $formattedStringNowDate . "\n"  . ' ХО запланирован на ' . $data['deadline'];
 
-        array_unshift($currentMComments, $this->nowDate . "\n" . $stringComment);
+        array_unshift($currentMComments,  $stringComment);
         if (count($currentMComments) > 8) {
             $currentMComments = array_slice($currentMComments, 0, 8);
         }
@@ -301,23 +301,23 @@ class ColdBatchService
 
 
                                 // if (!empty($currentBtxEntity)) {
-                                    // if (isset($currentBtxCompany[$fullFieldId])) {
+                                // if (isset($currentBtxCompany[$fullFieldId])) {
 
-                                    // $currentComments = $currentBtxEntity[$fullFieldId];
+                                // $currentComments = $currentBtxEntity[$fullFieldId];
 
-                                    // if ($pField['code'] == 'op_mhistory') {
+                                // if ($pField['code'] == 'op_mhistory') {
 
-                                    //     array_push($currentComments, $stringComment);
-                                    //     // if (!empty($currentComments)) {
-                                    //     //     array_push($currentComments, $stringComment);
-                                    //     // } else {
-                                    //     //     $currentComments = $stringComment;
-                                    //     // }
-                                    // } 
-                                    // else {
-                                    //     $currentComments = $currentComments  . ' | ' . $stringComment;
-                                    // }
-                                    // }
+                                //     array_push($currentComments, $stringComment);
+                                //     // if (!empty($currentComments)) {
+                                //     //     array_push($currentComments, $stringComment);
+                                //     // } else {
+                                //     //     $currentComments = $stringComment;
+                                //     // }
+                                // } 
+                                // else {
+                                //     $currentComments = $currentComments  . ' | ' . $stringComment;
+                                // }
+                                // }
                                 // }
 
 
@@ -325,7 +325,7 @@ class ColdBatchService
 
                                 break;
                             case 'op_current_status':
-                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] =  'Холодный в работе от ' . $nowOnlyDate;
+                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] =  'Холодный в работе ' . $this->name;
 
                                 break;
                             case 'op_work_status':
