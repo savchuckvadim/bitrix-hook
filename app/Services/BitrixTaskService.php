@@ -242,6 +242,7 @@ class BitrixTaskService
     public function getCreateTaskBatchCommands(
 
         //from bitrix hook
+    
         $type,   //cold warm presentation hot  $stringType = 'Холодный обзвон ';
         $stringType,
         $portal,
@@ -372,7 +373,7 @@ class BitrixTaskService
 
             $description = $this->getTaskCompanyInfo(
                 $company,
-                'april-dev.bitrix24.ru'
+                $domain
             );
 
 

@@ -2574,7 +2574,41 @@ class EventReportService
             $xoDealId,
             $reportPresDealId
         );
-        $batchService->sendGeneralBatchRequest($result['commands']);
+        $taskService = new BitrixTaskService();
+
+        $taskId = null;
+        if (!empty($this->currentTask)) {
+            if (!empty($this->currentTask['ID'])) {
+
+                $taskId = $this->currentTask['ID'];
+            }
+            if (!empty($this->currentTask['id'])) {
+                $taskId = $this->currentTask['id'];
+            }
+        }
+        $batchCommands =  $taskService->getCreateTaskBatchCommands(
+            'cold',       //$type,   //cold warm presentation hot 
+            $this->stringType,
+            $this->portal,
+            $this->domain,
+            $this->hook,
+            $this->currentBtxEntity,
+            $this->entityId,  //may be null
+            null, //$leadId,     //may be null
+            $this->planCreatedId,
+            $this->planResponsibleId,
+            $this->planDeadline,
+            $this->currentPlanEventName,
+            null, // $currentSmartItemId,
+            true, //$isNeedCompleteOtherTasks
+            $taskId, // null,
+            $result['planDeals'],
+            $result['commands']
+
+        );
+
+
+        $batchService->sendGeneralBatchRequest($batchCommands);
 
         Log::info('HOOK BATCH batchFlow report DEAL', ['report result' => $result]);
         Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $result]);
