@@ -2734,13 +2734,13 @@ class EventReportService
 
                 $batchCommands =  $taskService->getCreateTaskBatchCommands(
                     $this->currentPlanEventType,       //$type,   //cold warm presentation hot 
-                    $this->stringType,
+                    $this->currentPlanEventTypeName,
                     $this->portal,
                     $this->domain,
                     $this->hook,
                     $this->currentBtxEntity,
-                    $this->entityId,  //may be null
-                    null, //$leadId,     //may be null
+                    $companyId,  //may be null
+                    $leadId, //$leadId,     //may be null
                     $this->planCreatedId,
                     $this->planResponsibleId,
                     $this->planDeadline,
