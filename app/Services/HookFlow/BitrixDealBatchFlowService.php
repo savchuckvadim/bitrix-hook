@@ -368,6 +368,9 @@ class BitrixDealBatchFlowService
         // }
         $planDeals = [];
         $reportDeals = [];
+        $unplannedPresDeals = [];
+
+        
         foreach ($portalDealData['categories'] as $category) {
             switch ($category['code']) {
                 case 'sales_base':
@@ -552,8 +555,6 @@ class BitrixDealBatchFlowService
                         $resultBatchCommands[$key] = $batchCommand;
                         $unplannedPresDeal = '$result[' . $key . ']';
                         array_push($unplannedPresDeals, $unplannedPresDeal);
-
-                        
                     }
 
 
