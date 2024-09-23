@@ -367,6 +367,7 @@ class BitrixDealBatchFlowService
         //     ];
         // }
         $planDeals = [];
+        $reportDeals = [];
         foreach ($portalDealData['categories'] as $category) {
             switch ($category['code']) {
                 case 'sales_base':
@@ -418,11 +419,14 @@ class BitrixDealBatchFlowService
                         $baseDealId = '$result[' . $key . '][ID]';
                     }
 
-                    if ($isUnplanned) {
+                    // if ($isUnplanned) {
 
+                    //     array_push($planDeals, $baseDealId);
+                    // }
+
+                    if (!empty($planEventType)) {
                         array_push($planDeals, $baseDealId);
                     }
-
 
 
                     break;
@@ -515,7 +519,11 @@ class BitrixDealBatchFlowService
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
                         $key = 'set_' . '_' . $category['code'];
                         $resultBatchCommands[$key] = $batchCommand;
-                        $newPresDeal = '$result[' . $key . '][ID]';
+                        $newPresDeal = '$result[' . $key . ']';
+                        $newPresDealId = '$result[' . $key . '][ID]';
+
+
+                        array_push($planDeals, $newPresDealId);
                     }
 
                     if (!empty($isUnplanned)) {
@@ -542,7 +550,10 @@ class BitrixDealBatchFlowService
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
                         $key = 'set_' . '_' . $category['code'];
                         $resultBatchCommands[$key] = $batchCommand;
-                        $unplannedPresDeal = '$result[' . $key . '][ID]';
+                        $unplannedPresDeal = '$result[' . $key . ']';
+                        array_push($unplannedPresDeals, $unplannedPresDeal);
+
+                        
                     }
 
 
@@ -556,7 +567,7 @@ class BitrixDealBatchFlowService
                     break;
             }
         }
-        return ['dealIds' => ['$result'], 'newPresDeal' => $newPresDeal, 'commands' => $resultBatchCommands];
+        return ['dealIds' => ['$result'], 'planDeals' => $planDeals, 'newPresDeal' => $newPresDeal, 'commands' => $resultBatchCommands];
     }
     static function getBatchCommand(
         $fieldsData,
