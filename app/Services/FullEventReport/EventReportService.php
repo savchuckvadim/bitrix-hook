@@ -2574,7 +2574,7 @@ class EventReportService
             $xoDealId,
             $reportPresDealId
         );
-        $result =  $batchService->sendGeneralBatchRequest($result['commands']);
+        $batchService->sendGeneralBatchRequest($result['commands']);
 
         Log::info('HOOK BATCH batchFlow report DEAL', ['report result' => $result]);
         Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $result]);
