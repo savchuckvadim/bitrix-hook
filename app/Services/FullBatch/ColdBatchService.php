@@ -263,6 +263,12 @@ class ColdBatchService
                                 $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $data['deadline'];
 
                                 break;
+                            case 'next_pres_plan_date':
+                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = null;
+
+                                break;
+
+
                             case 'call_last_date':
                                 // $currentEntityField = [
                                 //     'UF_CRM_' . $companyField['bitrixId'] => $data['deadline']
@@ -328,6 +334,11 @@ class ColdBatchService
                                 $resultEntityFields['UF_CRM_' . $pField['bitrixId']] =  'Холодный в работе ' . $this->name;
 
                                 break;
+                            case 'op_current_status':
+                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] =  'Холодный в работе ' . $this->name;
+
+                                break;
+
                             case 'op_work_status':
 
 
