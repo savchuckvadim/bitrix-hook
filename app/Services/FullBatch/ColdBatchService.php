@@ -226,7 +226,19 @@ class ColdBatchService
         // $now =  new DateTime();
         // $now = $nowDate->format('d.m.Y H:i');
         $nowOnlyDate = $nowDate->format('d.m.Y');
+        $currentMComments = [];
+        if (!empty($this->currentBtxEntity)) {
+            if (!empty($this->currentBtxEntity['UF_CRM_OP_MHISTORY'])) {
 
+                $currentMComments = $currentBtxEntity['UF_CRM_OP_MHISTORY'];
+            }
+        }
+        $stringComment = $nowOnlyDate . ' ХО запланирован ' . $data['name'] . ' на ' . $data['deadline'];
+
+        array_unshift($currentMComments, $this->nowDate . "\n" . $stringComment);
+        if (count($currentMComments) > 8) {
+            $currentMComments = array_slice($currentMComments, 0, 8);
+        }
 
 
         if (!empty($portal[$data['entityType']])) {
@@ -278,41 +290,42 @@ class ColdBatchService
 
                                 break;
 
-                            case 'op_history':
+                                // case 'op_history':
                             case 'op_mhistory':
 
                                 $fullFieldId = 'UF_CRM_' . $pField['bitrixId'];  //UF_CRM_OP_MHISTORY
-
-                                $stringComment = $nowOnlyDate . ' ХО запланирован ' . $data['name'] . ' на ' . $data['deadline'];
-
-                                $currentComments = '';
+                                $resultEntityFields[$fullFieldId] =  $currentMComments;
 
 
-                                if (!empty($currentBtxEntity)) {
+                                // $currentComments = '';
+
+
+                                // if (!empty($currentBtxEntity)) {
                                     // if (isset($currentBtxCompany[$fullFieldId])) {
 
-                                    $currentComments = $currentBtxEntity[$fullFieldId];
+                                    // $currentComments = $currentBtxEntity[$fullFieldId];
 
-                                    if ($pField['code'] == 'op_mhistory') {
-                                        $currentComments = [];
-                                        array_push($currentComments, $stringComment);
-                                        // if (!empty($currentComments)) {
-                                        //     array_push($currentComments, $stringComment);
-                                        // } else {
-                                        //     $currentComments = $stringComment;
-                                        // }
-                                    } else {
-                                        $currentComments = $currentComments  . ' | ' . $stringComment;
-                                    }
+                                    // if ($pField['code'] == 'op_mhistory') {
+
+                                    //     array_push($currentComments, $stringComment);
+                                    //     // if (!empty($currentComments)) {
+                                    //     //     array_push($currentComments, $stringComment);
+                                    //     // } else {
+                                    //     //     $currentComments = $stringComment;
+                                    //     // }
+                                    // } 
+                                    // else {
+                                    //     $currentComments = $currentComments  . ' | ' . $stringComment;
                                     // }
-                                }
+                                    // }
+                                // }
 
 
-                                $resultEntityFields[$fullFieldId] =  $currentComments;
+                                $resultEntityFields[$fullFieldId] =  $currentMComments;
 
                                 break;
                             case 'op_current_status':
-                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] =  'Холодный в работе от' . $nowOnlyDate;
+                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] =  'Холодный в работе от ' . $nowOnlyDate;
 
                                 break;
                             case 'op_work_status':
