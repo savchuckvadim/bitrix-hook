@@ -264,7 +264,7 @@ class ColdBatchService
 
                                 break;
                             case 'next_pres_plan_date':
-                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = null;
+                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = '';
 
                                 break;
 
