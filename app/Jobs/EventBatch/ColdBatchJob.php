@@ -35,9 +35,9 @@ class ColdBatchJob implements ShouldQueue
     {
         Log::info("Processing job from Redis queue.");
         // $rand = rand(1, 2);
-        sleep(1);
-        // $urand = mt_rand(1000, 9000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-        // usleep($urand);
+        // sleep(1);
+        $urand = mt_rand(1000, 9000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        usleep($urand);
         // $service = new BitrixCallingColdService($this->data);
         // $reult =  $service->getCold();
         $service = new ColdBatchService(
