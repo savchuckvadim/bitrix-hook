@@ -2612,6 +2612,7 @@ class EventReportService
                     $targetStageBtxId = $pTargetStage;
                     Log::info('HOOK BATCH batchFlow report DEAL', ['pTargetStage' =>  $pTargetStage]);
                     Log::channel('telegram')->info('HOOK BATCH category', ['pTargetStage' =>  $pTargetStage]);
+
                     $fieldsData = [
 
                         'CATEGORY_ID' => $category['bitrixId'],
@@ -2631,8 +2632,19 @@ class EventReportService
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
                         $key = 'set_' . '_' . $category['code'];
                         $resultBatchCommands[$key] = $batchCommand;
-                        $baseDealId = '$result[' . $key . '][ID]';
+                        $currentDealId = '$result[' . $key . '][ID]';
                     }
+
+
+                    $entityCommand =  $this->getEntityBatchFlowCommand(
+                        true,
+                        $this->currentBaseDeal,
+                        'base',
+                        $currentDealId,
+                        ''
+                    );
+                    $key = 'entity_base' . '_' . 'deal' . '_' .  $currentDealId;
+                    $entityBatchCommands[$key] = $entityCommand; // в результате будет id
 
                     // if ($isUnplanned) {
 
@@ -2640,7 +2652,7 @@ class EventReportService
                     // }
 
                     if (!empty($planEventType)) {
-                        array_push($planDeals, $baseDealId);
+                        array_push($planDeals, $currentDealId);
                     }
 
 
@@ -2753,7 +2765,7 @@ class EventReportService
                         );
 
                         $fieldsData = [
-
+                            'TITLE' => 'Спонтанная от ' . $this->nowDate,
                             'CATEGORY_ID' => $category['bitrixId'],
                             'STAGE_ID' => "C" . $category['bitrixId'] . ':' . $pTargetStage,
                             "COMPANY_ID" => $this->entityId,
@@ -2764,6 +2776,17 @@ class EventReportService
                         $resultBatchCommands[$key] = $batchCommand;
                         $unplannedPresDeal = '$result[' . $key . ']';
                         array_push($unplannedPresDeals, $unplannedPresDeal);
+
+
+                        $entityCommand =  $this->getEntityBatchFlowCommand(
+                            true,
+                            $unplannedPresDeal,
+                            'presentation',
+                            $currentDealId,
+                            'unplanned'
+                        );
+                        $key = 'entity_unplanned' . '_' . 'deal';
+                        $resultBatchCommands[$key] = $entityCommand; // в результате будет id
                     }
 
 
@@ -2779,14 +2802,27 @@ class EventReportService
         }
 
 
+
         $result =  ['dealIds' => ['$result'], 'planDeals' => $planDeals, 'newPresDeal' => $newPresDeal, 'commands' => $resultBatchCommands];
 
+        // if (!empty($this->currentTMCDeal) && $this->currentPlanEventType == 'presentation') {
+        //     BitrixDealFlowService::tmcPresentationRelation(
+        //         $this->hook,
+        //         $this->portalDealData,
+        //         $this->currentBaseDeal,
+        //         $newPresDeal,
+        //         $this->currentTMCDeal['ID']
+        //     );
+        // }
 
 
 
 
 
 
+        $companyCommand =  $this->getEntityBatchFlowCommand();
+        $key = 'entity_newpres' . '_' . 'company' . '_';
+        $entityBatchCommands[$key] = $companyCommand; // в результате будет id
 
 
 
