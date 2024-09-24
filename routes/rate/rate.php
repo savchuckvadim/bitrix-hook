@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Log;
 // новй холодный звонка из Откуда Угодно
 Route::post('cold', function (Request $request) {
 
-    sleep(1);
+  
     $controller = new BitrixHookController();
     return $controller->getColdCall(
         $request
