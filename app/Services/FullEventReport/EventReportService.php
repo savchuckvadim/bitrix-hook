@@ -2640,11 +2640,11 @@ class EventReportService
                         true,
                         $this->currentBaseDeal,
                         'base',
-                        $currentDealId,
+                        $this->currentBaseDeal['ID'],
                         ''
                     );
                     $key = 'entity_base' . '_' . 'deal' . '_' .  $currentDealId;
-                    $entityBatchCommands[$key] = $entityCommand; // в результате будет id
+                    $resultBatchCommands[$key] = $entityCommand; // в результате будет id
 
                     // if ($isUnplanned) {
 
