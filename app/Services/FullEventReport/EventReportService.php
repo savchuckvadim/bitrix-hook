@@ -2593,7 +2593,7 @@ class EventReportService
             $batchCommands = $this->getTaskFlowBatchCommand(
                 null,
                 $result['planDeals'],
-                $batchCommands 
+                $batchCommands
             );
         }
         $batchService->sendGeneralBatchRequest($batchCommands);
@@ -3105,7 +3105,7 @@ class EventReportService
         //     'isPresentationDone' => $this->isPresentationDone
         // ]);
 
-        if ($this->isPresentationDone == true) {
+        if ($this->isPresentationDone == true && !$this->isExpired) {
             //если была проведена през
             if ($reportEventType !== 'presentation') {
                 //если текущее событие не през - значит uplanned

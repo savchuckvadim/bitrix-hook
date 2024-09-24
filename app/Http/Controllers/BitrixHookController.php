@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\ColdCallJob;
 use App\Jobs\CreateBitrixCallingTaskJob;
+use App\Jobs\EventBatch\ColdBatchJob;
 use App\Services\BitrixCallingColdService;
 use App\Services\BitrixCallingColdTaskService;
 use App\Services\BitrixCallingTaskFailService;
@@ -152,9 +153,13 @@ class BitrixHookController extends Controller
             ];
             Log::info('APRIL_HOOK pre rerdis', ['$data' => $data]);
 
-            ColdCallJob::dispatch(
+            // ColdCallJob::dispatch(
+            //     $data
+            // )->onQueue('low-priority');
+            ColdBatchJob::dispatch(
                 $data
             )->onQueue('low-priority');
+
             // $service = new BitrixCallingColdService($data);
             // $reult =  $service->getCold();
 
@@ -1395,8 +1400,10 @@ class BitrixHookController extends Controller
                 0,
                 'error callings',
                 [
-                    'result' => $resultCallings, 'response' => $response,
-                    'callStartDateFrom' => $callStartDateFrom, 'callStartDateTo' => $callStartDateTo
+                    'result' => $resultCallings,
+                    'response' => $response,
+                    'callStartDateFrom' => $callStartDateFrom,
+                    'callStartDateTo' => $callStartDateTo
                 ]
             );
         } catch (\Throwable $th) {
@@ -1414,8 +1421,10 @@ class BitrixHookController extends Controller
             0,
             'error callings',
             [
-                'result' => $resultCallings, 'response' => $response,
-                'callStartDateFrom' => $callStartDateFrom, 'callStartDateTo' => $callStartDateTo
+                'result' => $resultCallings,
+                'response' => $response,
+                'callStartDateFrom' => $callStartDateFrom,
+                'callStartDateTo' => $callStartDateTo
             ]
         );
 
