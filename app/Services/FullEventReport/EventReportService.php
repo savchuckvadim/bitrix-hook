@@ -2549,33 +2549,250 @@ class EventReportService
 
         $batchService =  new BitrixBatchService($this->hook);
 
-        $result = BitrixDealBatchFlowService::batchFlowNEW(  // редактирует сделки отчетности из currentTask основную и если есть xo
-            $this->hook,
-            $this->currentBaseDeal,
-            $this->portalDealData,
-            $this->currentDepartamentType,
-            $this->entityType,
-            $this->entityId,
-            $this->currentPlanEventType,
-            $this->currentReportEventType, // xo warm presentation, 
-            $this->currentReportEventName,
-            $this->currentPlanEventName,
-            $currentReportStatus,  // plan done expired fail success
-            'plan',
-            $this->planResponsibleId,
-            $isUnplanned,
-            $this->isExpired,
-            $this->isResult,
-            $this->isSuccessSale,
-            $this->isFail,
-            '$fields',
-            $this->relationSalePresDeal,
-            $batchCommands,
-            'report',
-            $currentDealId,
-            $xoDealId,
-            $reportPresDealId
-        );
+        // $result = BitrixDealBatchFlowService::batchFlowNEW(  // редактирует сделки отчетности из currentTask основную и если есть xo
+        //     $this->hook,
+        //     $this->currentBaseDeal,
+        //     $this->portalDealData,
+        //     $this->currentDepartamentType,
+        //     $this->entityType,
+        //     $this->entityId,
+        //     $this->currentPlanEventType,
+        //     $this->currentReportEventType, // xo warm presentation, 
+        //     $this->currentReportEventName,
+        //     $this->currentPlanEventName,
+        //     $currentReportStatus,  // plan done expired fail success
+        //     'plan',
+        //     $this->planResponsibleId,
+        //     $isUnplanned,
+        //     $this->isExpired,
+        //     $this->isResult,
+        //     $this->isSuccessSale,
+        //     $this->isFail,
+        //     '$fields',
+        //     $this->relationSalePresDeal,
+        //     $batchCommands,
+        //     'report',
+        //     $currentDealId,
+        //     $xoDealId,
+        //     $reportPresDealId
+        // );
+
+
+
+        $newPresDeal = null;
+        $planDeals = [];
+        $reportDeals = [];
+        $unplannedPresDeals = [];
+
+
+
+        //DEALS FLOW
+        foreach ($this->portalDealData['categories'] as $category) {
+
+            switch ($category['code']) {
+                case 'sales_base':
+                    // Log::info('HOOK BATCH batchFlow report DEAL', ['category' =>  $category]);
+                    // Log::channel('telegram')->info('HOOK BATCH category', ['category' =>  $category]);
+
+                    $currentStageOrder = BitrixDealService::getEventOrderFromCurrentBaseDeal($this->currentBaseDeal, $category);
+                    $pTargetStage = BitrixDealService::getSaleBaseTargetStage(
+                        $category,
+                        $currentStageOrder,
+                        // $currentDepartamentType,
+                        $this->currentPlanEventType, // xo warm presentation,
+                        $this->currentReportEventType, // xo warm presentation,
+                        $this->currentReportEventName,
+                        $this->currentPlanEventName,
+                        $this->isResult,
+                        $isUnplanned,
+                        $this->isSuccessSale,
+                        $this->isFail,
+
+                    );
+                    $targetStageBtxId = $pTargetStage;
+                    Log::info('HOOK BATCH batchFlow report DEAL', ['pTargetStage' =>  $pTargetStage]);
+                    Log::channel('telegram')->info('HOOK BATCH category', ['pTargetStage' =>  $pTargetStage]);
+                    $fieldsData = [
+
+                        'CATEGORY_ID' => $category['bitrixId'],
+                        'STAGE_ID' => "C" . $category['bitrixId'] . ':' . $targetStageBtxId,
+                        "COMPANY_ID" => $this->entityId,
+                        'ASSIGNED_BY_ID' =>  $this->planResponsibleId
+                    ];
+                    if ($currentDealId) {
+
+                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $currentDealId);
+                        $key = 'update_' . '_' . $category['code'] . '_' . $currentDealId;
+                        $resultBatchCommands[$key] = $batchCommand;
+                    } else {
+
+
+
+                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
+                        $key = 'set_' . '_' . $category['code'];
+                        $resultBatchCommands[$key] = $batchCommand;
+                        $baseDealId = '$result[' . $key . '][ID]';
+                    }
+
+                    // if ($isUnplanned) {
+
+                    //     array_push($planDeals, $baseDealId);
+                    // }
+
+                    if (!empty($planEventType)) {
+                        array_push($planDeals, $baseDealId);
+                    }
+
+
+                    break;
+                case 'sales_xo':
+                    $pTargetStage = BitrixDealService::getXOTargetStage(
+                        $category,
+                        $this->currentReportEventType, // xo warm presentation,
+                        $this->isExpired,
+                        $this->isResult,
+                        $this->isSuccessSale,
+                        $this->isFail,
+
+                    );
+                    $targetStageBtxId = $pTargetStage;
+                    // Log::info('HOOK BATCH batchFlow report DEAL', ['pTargetStage' =>  $pTargetStage]);
+                    // Log::channel('telegram')->info('HOOK BATCH category', ['pTargetStage' =>  $pTargetStage]);
+                    $fieldsData = [
+
+                        'CATEGORY_ID' => $category['bitrixId'],
+                        'STAGE_ID' => "C" . $category['bitrixId'] . ':' . $targetStageBtxId,
+                        "COMPANY_ID" => $this->entityId,
+                        'ASSIGNED_BY_ID' => $this->planResponsibleId,
+                    ];
+
+                    if ($xoDealId) {
+
+                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $xoDealId);
+                        $key = 'update_' . '_' . $category['code'] . '_' . $xoDealId;
+                        $resultBatchCommands[$key] = $batchCommand;
+                    }
+
+                    break;
+
+                case 'sales_presentation':
+
+                    // 1) если report - presentetion - обновить текущую pres deal from task
+                    if ($this->currentReportEventType == 'presentation') {
+                        if ($reportPresDealId) {
+                            $pTargetStage = BitrixDealService::getTargetStagePresentation(
+                                $category,
+                                // $currentDepartamentType,
+                                $this->currentReportEventType, // xo warm presentation,
+                                $currentReportStatus,  // plan done expired fail
+                                $this->isResult,
+                                $isUnplanned,
+                                $this->isSuccessSale,
+                                $this->isFail,
+
+                            );
+                            $fieldsData = [
+
+                                // 'CATEGORY_ID' => $category['bitrixId'],
+                                'STAGE_ID' => "C" . $category['bitrixId'] . ':' . $pTargetStage,
+                                // "COMPANY_ID" => $entityId,
+                                // 'ASSIGNED_BY_ID' => $responsibleId
+                            ];
+
+
+                            $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $reportPresDealId);
+                            $key = 'update_' . '_' . $category['code'] . '_' . $reportPresDealId;
+                            $resultBatchCommands[$key] = $batchCommand;
+                        }
+                    }
+
+                    // 2) если plan - presentetion создать plan pres deal  и засунуть в plan и в task
+                    if ($this->currentPlanEventType == 'presentation') {
+
+
+                        $pTargetStage = BitrixDealService::getTargetStagePresentation(
+                            $category,
+                            // $currentDepartamentType,
+                            $this->currentPlanEventType, // xo warm presentation,
+                            'plan',  // plan done expired fail
+                            $this->isResult,
+                            $isUnplanned,
+                            $this->isSuccessSale,
+                            $this->isFail,
+
+                        );
+                        $fieldsData = [
+
+                            'CATEGORY_ID' => $category['bitrixId'],
+                            'STAGE_ID' => "C" . $category['bitrixId'] . ':' . $pTargetStage,
+                            "COMPANY_ID" => $this->entityId,
+                            'ASSIGNED_BY_ID' => $this->planResponsibleId
+                        ];
+                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
+                        $key = 'set_' . '_' . $category['code'];
+                        $resultBatchCommands[$key] = $batchCommand;
+                        $newPresDeal = '$result[' . $key . ']';
+                        $newPresDealId = '$result[' . $key . '][ID]';
+
+
+                        array_push($planDeals, $newPresDealId);
+                    }
+
+                    if (!empty($isUnplanned)) {
+                        // 3) если unplanned pres создает еще одну и в успех ее сразу
+                        $pTargetStage = BitrixDealService::getTargetStagePresentation(
+                            $category,
+                            // $currentDepartamentType,
+                            'presentation', // xo warm presentation,
+                            'done',  // plan done expired fail
+                            $this->isResult,
+                            $isUnplanned,
+                            $this->isSuccessSale,
+                            $this->isFail,
+
+                        );
+
+                        $fieldsData = [
+
+                            'CATEGORY_ID' => $category['bitrixId'],
+                            'STAGE_ID' => "C" . $category['bitrixId'] . ':' . $pTargetStage,
+                            "COMPANY_ID" => $this->entityId,
+                            'ASSIGNED_BY_ID' => $this->planResponsibleId
+                        ];
+                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
+                        $key = 'set_' . '_' . $category['code'];
+                        $resultBatchCommands[$key] = $batchCommand;
+                        $unplannedPresDeal = '$result[' . $key . ']';
+                        array_push($unplannedPresDeals, $unplannedPresDeal);
+                    }
+
+
+
+                    break;
+                case 'tmc_base':
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        }
+
+
+        $result =  ['dealIds' => ['$result'], 'planDeals' => $planDeals, 'newPresDeal' => $newPresDeal, 'commands' => $resultBatchCommands];
+
+
+
+
+
+
+
+
+
+
+
+
+
         $taskService = new BitrixTaskService();
 
         $taskId = null;

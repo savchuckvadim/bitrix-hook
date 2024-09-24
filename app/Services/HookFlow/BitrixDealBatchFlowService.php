@@ -372,6 +372,10 @@ class BitrixDealBatchFlowService
 
         
         foreach ($portalDealData['categories'] as $category) {
+
+
+
+            
             switch ($category['code']) {
                 case 'sales_base':
                     Log::info('HOOK BATCH batchFlow report DEAL', ['category' =>  $category]);
