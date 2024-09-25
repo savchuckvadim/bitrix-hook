@@ -2829,7 +2829,8 @@ class EventReportService
         $resultBatchCommands[$key] = $companyCommand; // в результате будет id
 
 
-
+        Log::info('HOOK BATCH batchFlow report DEAL entity', ['$key '.$key => $companyCommand]);
+        Log::channel('telegram')->info('HOOK BATCH entity batchFlow',['$key '.$key => $companyCommand]);
 
 
 
