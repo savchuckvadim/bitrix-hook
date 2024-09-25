@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # PHP-FPM Service для Laravel
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: cloudsigma.com/php
+    container_name: app
+    restart: "no"
+    tty: true
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    networks:
+      - app-network
+    depends_on:
+      - redis
+    # command: /bin/sh -c "php-fpm & php artisan websockets:serve"
+
+  # Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: "no"
+    tty: true
+    ports:
+      - "8082:80"
+    volumes:
+      # - ./:/var/www/html
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/ssl:/etc/nginx/ssl
+    networks:
+      - app-network
+    depends_on:
+      - app
+
+  # Redis Service
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: "unless-stopped"
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+
+
+networks:
+  app-network:
+    driver: bridge
