@@ -2655,7 +2655,7 @@ class EventReportService
                     //     array_push($planDeals, $baseDealId);
                     // }
 
-                    if (!empty($planEventType)) {
+                    if (!empty($this->currentPlanEventType)) {
                         array_push($planDeals, $currentDealId);
                     }
 
