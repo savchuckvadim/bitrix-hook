@@ -2821,8 +2821,8 @@ class EventReportService
 
 
         $companyCommand =  $this->getEntityBatchFlowCommand();
-        $key = 'entity_newpres' . '_' . 'company' . '_';
-        $entityBatchCommands[$key] = $companyCommand; // в результате будет id
+        $key = 'entity' . '_' . 'company';
+        $resultBatchCommands[$key] = $companyCommand; // в результате будет id
 
 
 
