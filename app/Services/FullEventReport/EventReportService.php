@@ -2591,9 +2591,10 @@ class EventReportService
 
             switch ($category['code']) {
                 case 'sales_base':
-                    // Log::info('HOOK BATCH batchFlow report DEAL', ['category' =>  $category]);
-                    // Log::channel('telegram')->info('HOOK BATCH category', ['category' =>  $category]);
-
+                    Log::info('HOOK BATCH batchFlow report DEAL', ['category' =>  $category]);
+                    Log::channel('telegram')->info('HOOK BATCH currentDealId', ['currentDealId' =>  $currentDealId]);
+                    Log::info('HOOK BATCH batchFlow report DEAL', ['currentDealId' =>  $currentDealId]);
+                    Log::channel('telegram')->info('HOOK BATCH currentDealId', ['currentDealId' =>  $currentDealId]);
                     $currentStageOrder = BitrixDealService::getEventOrderFromCurrentBaseDeal($this->currentBaseDeal, $category);
                     $pTargetStage = BitrixDealService::getSaleBaseTargetStage(
                         $category,
@@ -2632,7 +2633,10 @@ class EventReportService
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
                         $key = 'set_' . '_' . $category['code'];
                         $resultBatchCommands[$key] = $batchCommand;
-                        $currentDealId = '$result[' . $key . '][ID]';
+                        $currentDealId = '$result[' . $key . ']';
+
+                        
+
                     }
 
 
