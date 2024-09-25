@@ -28,7 +28,7 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $domain = 'april-garant.bitrix24.ru';
+        $domain = '';
         $portal = PortalController::getPortal($domain);
         // Log::info('portal', ['portal' => $portal]);
         

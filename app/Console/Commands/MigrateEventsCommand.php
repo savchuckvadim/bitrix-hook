@@ -27,7 +27,7 @@ class MigrateEventsCommand extends Command
      */
     public function handle()
     {
-        $domain = 'gsr.bitrix24.ru';
+        $domain = '';
         set_time_limit(0);
         $migrateContraller = new MColdController('token', $domain);
         $migrateContraller->crm();

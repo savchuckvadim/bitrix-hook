@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Http;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
-class ExcelCommand extends Command
+class ExcelClientTasksCommand extends Command
 {
     /**
      * The name and signature of the console command.
