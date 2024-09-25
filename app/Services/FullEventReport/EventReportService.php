@@ -2807,7 +2807,6 @@ class EventReportService
 
 
 
-        $result =  ['dealIds' => ['$result'], 'planDeals' => $planDeals, 'newPresDeal' => $newPresDeal, 'commands' => $resultBatchCommands];
 
         // if (!empty($this->currentTMCDeal) && $this->currentPlanEventType == 'presentation') {
         //     BitrixDealFlowService::tmcPresentationRelation(
@@ -2832,6 +2831,7 @@ class EventReportService
         Log::info('HOOK BATCH batchFlow report DEAL entity', ['$key '.$key => $companyCommand]);
         Log::channel('telegram')->info('HOOK BATCH entity batchFlow',['$key '.$key => $companyCommand]);
 
+        $result =  ['dealIds' => ['$result'], 'planDeals' => $planDeals, 'newPresDeal' => $newPresDeal, 'commands' => $resultBatchCommands];
 
 
         $taskService = new BitrixTaskService();
@@ -2846,15 +2846,15 @@ class EventReportService
                 $taskId = $this->currentTask['id'];
             }
         }
-        $batchCommands =  $result['commands'];
+        // $batchCommands =  $result['commands'];
         if ($this->isExpired || $this->isPlanned) {
-            $batchCommands = $this->getTaskFlowBatchCommand(
+            $resultBatchCommands = $this->getTaskFlowBatchCommand(
                 null,
                 $result['planDeals'],
-                $batchCommands
+                $resultBatchCommands
             );
         }
-        $batchService->sendGeneralBatchRequest($batchCommands);
+        $batchService->sendGeneralBatchRequest($resultBatchCommands);
 
         Log::info('HOOK BATCH batchFlow report DEAL', ['report result' => $result]);
         Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $result]);
