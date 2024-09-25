@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: cloudsigma.com/php
-    container_name: app
+    container_name: april_app
     restart: "no"
     tty: true
     working_dir: /var/www/html
@@ -22,7 +22,7 @@ services:
   # Nginx Service
   webserver:
     image: nginx:alpine
-    container_name: webserver
+    container_name: april_app_webserver
     restart: "no"
     tty: true
     ports:
