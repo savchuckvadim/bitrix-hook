@@ -2774,10 +2774,10 @@ class EventReportService
                         $key = 'set_' . '_' . $category['code'];
                         $resultBatchCommands[$key] = $batchCommand;
                         $newPresDeal = '$result[' . $key . ']';
-                        $newPresDealId = '$result[' . $key . '][ID]';
+                        // $newPresDealId = '$result[' . $key . '][ID]';
 
 
-                        array_push($planDeals, $newPresDealId);
+                        array_push($planDeals, $newPresDeal);
                     }
 
                     if (!empty($isUnplanned)) {
@@ -2835,9 +2835,9 @@ class EventReportService
                             // 'ASSIGNED_BY_ID' => $responsibleId
                             'UF_CRM_TO_BASE_SALES' => $this->currentBaseDeal['ID'],
                             'UF_CRM_TO_PRESENTATION_SALES' => $newPresDeal['ID'],
-                            'UF_CRM_PRES_COMMENTS' => $newPresDeal['UF_CRM_PRES_COMMENTS'],
-                            'UF_CRM_LAST_PRES_DONE_RESPONSIBLE' => $newPresDeal['ASSIGNED_BY_ID'],
-                            'UF_CRM_MANAGER_OP' => $newPresDeal['ASSIGNED_BY_ID'],
+                            // 'UF_CRM_PRES_COMMENTS' => $newPresDeal['UF_CRM_PRES_COMMENTS'],
+                            'UF_CRM_LAST_PRES_DONE_RESPONSIBLE' => $this->planResponsibleId,
+                            'UF_CRM_MANAGER_OP' => $this->planResponsibleId,
                         ];
 
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $this->currentTMCDeal['ID']);
