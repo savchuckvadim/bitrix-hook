@@ -46,6 +46,72 @@ services:
     networks:
       - app-network
 
+    version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/html
+    environment:
+      - QUEUE_CONNECTION=redis
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  queue-default:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: php /var/www/html/artisan queue:work redis --sleep=3 --tries=1
+    volumes:
+      - .:/var/www/html
+    environment:
+      - QUEUE_CONNECTION=redis
+    user: 'www-data'
+    depends_on:
+      - april_app
+      - redis_april_app
+    deploy:
+      replicas: 1
+
+  queue-low-priority:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: php /var/www/html/artisan queue:work redis --sleep=3 --tries=1 --queue=low-priority
+    volumes:
+      - .:/var/www/html
+    environment:
+      - QUEUE_CONNECTION=redis
+    user: 'www-data'
+    depends_on:
+      - april_app
+      - redis_april_app
+    deploy:
+      replicas: 1
+
+  queue-high-priority:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: php /var/www/html/artisan queue:work redis --sleep=3 --tries=1 --queue=high-priority
+    volumes:
+      - .:/var/www/html
+    environment:
+      - QUEUE_CONNECTION=redis
+    user: 'www-data'
+    depends_on:
+      - april_app
+      - redis_april_app
+    deploy:
+      replicas: 2
 
 
 networks:
