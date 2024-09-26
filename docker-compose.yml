@@ -48,25 +48,6 @@ services:
 
     version: '3.8'
 
-services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - .:/var/www/html
-    environment:
-      - QUEUE_CONNECTION=redis
-    networks:
-      - app-network
-    depends_on:
-      - redis
-
-  redis:
-    image: redis:alpine
-    ports:
-      - "6379:6379"
-
   queue-default:
     build:
       context: .
