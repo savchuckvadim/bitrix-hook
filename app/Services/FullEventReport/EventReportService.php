@@ -2999,7 +2999,7 @@ class EventReportService
             );
         }
         $resultBatchCommands =  $this->getListPresentationFlowBatch(
-            $result['planDeals'],
+            $result,
             $resultBatchCommands
         );
 
