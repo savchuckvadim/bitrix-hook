@@ -522,8 +522,7 @@ class EventReportService
                     $this->relationColdDeals = $sessionDeals['allXODeals'];
                     $this->currentTMCDealFromCurrentPres = $sessionDeals['currentTMCDeal'];
                     // Log::info('HOOK TMC SESSION', ['sessionDeals' => $sessionDeals]);
-                    // Log::info('HOOK TMC SESSION currentTMCDeal', ['session currentTMCDeal' => $sessionDeals['currentTMCDeal']]);
-
+                    Log::info('HOOK TMC SESSION currentTMCDeal', ['session currentTMCDeal' => $sessionDeals['currentTMCDeal']]);
                 }
             }
         } else {
@@ -641,6 +640,8 @@ class EventReportService
 
             // }
         }
+        Log::info('HOOK TMC SESSION currentTMCDeal', ['session currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres]);
+        Log::info('HOOK TMC SESSION currentTMCDeal', ['session currentTMCDeal' => $this->currentTMCDeal]);
 
 
         $this->currentDepartamentType = BitrixDepartamentService::getDepartamentTypeByUserId();
@@ -2441,7 +2442,7 @@ class EventReportService
     protected function getNEWBatchDealFlow()
     {
 
-        $result =  ['dealIds' => ['$result'], 'planDeals' => null, 'newPresDeal' => null, 'commands' => null];
+        $result =  ['dealIds' => ['$result'], 'planDeals' => null, 'newPresDeal' => null, 'commands' => null, 'unplannedPresDeals' => null];
         // должен собрать batch commands
         // отправить send batch
         // из резултатов вернуть объект с массивами созданных и обновленных сделок
@@ -2585,6 +2586,23 @@ class EventReportService
         $reportDeals = [];
         $unplannedPresDeals = [];
 
+
+        Log::channel('telegram')
+            ->info(
+                'vheck',
+                [
+                    'currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres,
+
+                ]
+            );
+        Log::channel('telegram')
+            ->info(
+                'vheck',
+                [
+                    'currentTMCDeal' => $this->currentTMCDeal,
+
+                ]
+            );
 
 
         //DEALS FLOW
@@ -2811,11 +2829,10 @@ class EventReportService
                             'UF_CRM_LAST_PRES_DONE_RESPONSIBLE' => $newPresDeal['ASSIGNED_BY_ID'],
                             'UF_CRM_MANAGER_OP' => $newPresDeal['ASSIGNED_BY_ID'],
                         ];
-                        
+
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $this->currentTMCDeal['ID']);
                         $key = 'update_' . '_' . $category['code'] . '_' . $this->currentTMCDeal['ID'];
                         $resultBatchCommands[$key] = $batchCommand;
-    
                     }
 
                     Log::channel('telegram')
@@ -2933,7 +2950,13 @@ class EventReportService
         Log::info('HOOK BATCH batchFlow report DEAL entity', ['$key ' . $key => $companyCommand]);
         Log::channel('telegram')->info('HOOK BATCH entity batchFlow', ['$key ' . $key => $companyCommand]);
 
-        $result =  ['dealIds' => ['$result'], 'planDeals' => $planDeals, 'newPresDeal' => $newPresDeal, 'commands' => $resultBatchCommands];
+        $result =  [
+            'dealIds' => ['$result'],
+            'planDeals' => $planDeals,
+            'newPresDeal' => $newPresDeal,
+            'unplannedPresDeals' => $unplannedPresDeals,
+            'commands' => $resultBatchCommands
+        ];
 
 
         // $taskService = new BitrixTaskService();
