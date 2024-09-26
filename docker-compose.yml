@@ -57,6 +57,8 @@ services:
       - .:/var/www/html
     environment:
       - QUEUE_CONNECTION=redis
+    networks:
+      - app-network
     depends_on:
       - redis
 
@@ -75,6 +77,8 @@ services:
     environment:
       - QUEUE_CONNECTION=redis
     user: 'www-data'
+    networks:
+      - app-network
     depends_on:
       - app
       - redis
@@ -91,6 +95,8 @@ services:
     environment:
       - QUEUE_CONNECTION=redis
     user: 'www-data'
+    networks:
+      - app-network
     depends_on:
       - app
       - redis
@@ -107,6 +113,8 @@ services:
     environment:
       - QUEUE_CONNECTION=redis
     user: 'www-data'
+    networks:
+      - app-network
     depends_on:
       - app
       - redis
