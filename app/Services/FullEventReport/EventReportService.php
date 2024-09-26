@@ -640,8 +640,18 @@ class EventReportService
 
             // }
         }
-        Log::info('HOOK TMC SESSION currentTMCDeal', ['session currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres]);
-        Log::info('HOOK TMC SESSION currentTMCDeal', ['session currentTMCDeal' => $this->currentTMCDeal]);
+        Log::info(
+            'HOOK TMC SESSION currentTMCDeal',
+            [
+                'session currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres
+            ]
+        );
+        Log::info(
+            'HOOK TMC SESSION currentTMCDeal',
+            [
+                'session currentTMCDeal' => $this->currentTMCDeal
+            ]
+        );
 
 
         $this->currentDepartamentType = BitrixDepartamentService::getDepartamentTypeByUserId();
@@ -2835,22 +2845,20 @@ class EventReportService
                         $resultBatchCommands[$key] = $batchCommand;
                     }
 
-                    Log::channel('telegram')
-                        ->info(
-                            'vheck',
-                            [
-                                'currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres,
+                    Log::info(
+                        'vheck',
+                        [
+                            'currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres,
 
-                            ]
-                        );
-                    Log::channel('telegram')
-                        ->info(
-                            'vheck',
-                            [
-                                'currentTMCDeal' => $this->currentTMCDeal,
+                        ]
+                    );
+                    Log::info(
+                        'vheck',
+                        [
+                            'currentTMCDeal' => $this->currentTMCDeal,
 
-                            ]
-                        );
+                        ]
+                    );
                     if ((!empty($this->currentTMCDealFromCurrentPres) || !empty($this->currentTMCDeal)) &&
                         ($this->resultStatus === 'result' || $this->isFail || $this->isSuccessSale) &&
                         $this->currentReportEventType === 'presentation'
