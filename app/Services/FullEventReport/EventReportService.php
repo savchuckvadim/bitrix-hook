@@ -2770,7 +2770,7 @@ class EventReportService
                         );
 
                         $fieldsData = [
-                            'TITLE' => 'Спонтанная от ' . $this->nowDate,
+                            'TITLE' => 'Презентация Спонтанная от ' . $this->nowDate,
                             'CATEGORY_ID' => $category['bitrixId'],
                             'STAGE_ID' => "C" . $category['bitrixId'] . ':' . $pTargetStage,
                             "COMPANY_ID" => $this->entityId,
@@ -2820,8 +2820,68 @@ class EventReportService
         // }
 
 
+  // обновляет стадию тмц сделку
+        // если есть из tmc init pres или relation tmc from session 
+        // пытается подставить если есть связанную если нет - из init
+        // обновляет сделку 
+        // из инит - заявка принята
+        // из relation - состоялась или fail
+        if ((!empty($this->currentTMCDealFromCurrentPres) || !empty($this->currentTMCDeal)) &&
+            ($this->resultStatus === 'result' || $this->isFail || $this->isSuccessSale) &&
+            $this->currentReportEventType === 'presentation'
+        ) {
+            $curTMCDeal = $this->currentTMCDeal;
+            if (!empty($this->currentTMCDealFromCurrentPres)) {
+                $curTMCDeal = $this->currentTMCDealFromCurrentPres;
+            }
+            $tmcAction = 'done';
+            if ($this->resultStatus !== 'result' && $this->isFail) {
+                $tmcAction = 'fail';
+            }
+            $tmcflowResult =  BitrixDealBatchFlowService::batchFlow(  // редактирует сделки отчетности из currentTask основную и если есть xo
+                $this->hook,
+                [$curTMCDeal],
+                $this->portalDealData,
+                'tmc',
+                $this->entityType,
+                $this->entityId,
+                $this->currentReportEventType, // xo warm presentation, 
+                $this->currentReportEventName,
+                $this->currentPlanEventName,
+                $tmcAction, //$currentReportStatus,  // plan done expired fail success
+                $this->planResponsibleId,
+                $this->isResult,
+                '$fields',
+                $this->relationSalePresDeal,
+                $resultBatchCommands,
+                'tmc_report'
+            );
+            $resultBatchCommands = $tmcflowResult['commands'];
+            //обновляет сделку тмц в успех если есть tmc deal и если през состоялась
+        }
 
 
+        if (!empty($this->currentPresDeal)) {  //report pres deal
+            // $rand = mt_rand(100000, 300000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            // usleep($rand);
+            // $this->getEntityFlow(
+            //     true,
+            //     $this->currentPresDeal,
+            //     'presentation',
+            //     $this->currentBaseDeal['ID'],
+            //     'done'
+            // );
+
+            $entityCommand =  $this->getEntityBatchFlowCommand(
+                true,
+                $this->currentPresDeal,
+                'presentation',
+                $this->currentBaseDeal['ID'],
+                'done'
+            );
+            $key = 'entity_pres' . '_' . 'deal' . '_' . $this->currentPresDeal['ID'];
+            $resultBatchCommands[$key] = $entityCommand; // в результате будет id
+        }
 
 
         $companyCommand =  $this->getEntityBatchFlowCommand();
