@@ -4089,7 +4089,7 @@ class EventReportService
         $planEventTypeName = $this->currentPlanEventTypeName;
         $date = $this->planDeadline; // Предположим, это ваша дата
         // Создаем объект Carbon из строки
-        $carbonDate = Carbon::createFromFormat('d.m.Y H:i', $date);
+        $carbonDate = Carbon::createFromFormat('d.m.Y H:i:s', $date);
 
         // Устанавливаем локализацию
         $carbonDate->locale('ru');
