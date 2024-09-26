@@ -2834,7 +2834,7 @@ class EventReportService
                             // "COMPANY_ID" => $entityId,
                             // 'ASSIGNED_BY_ID' => $responsibleId
                             'UF_CRM_TO_BASE_SALES' => $this->currentBaseDeal['ID'],
-                            'UF_CRM_TO_PRESENTATION_SALES' => $newPresDeal['ID'],
+                            'UF_CRM_TO_PRESENTATION_SALES' => $newPresDeal,
                             // 'UF_CRM_PRES_COMMENTS' => $newPresDeal['UF_CRM_PRES_COMMENTS'],
                             'UF_CRM_LAST_PRES_DONE_RESPONSIBLE' => $this->planResponsibleId,
                             'UF_CRM_MANAGER_OP' => $this->planResponsibleId,
