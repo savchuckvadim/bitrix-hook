@@ -253,6 +253,7 @@ class EventReportService
                     case 'xo':
                     case 'cold':
                         $this->currentReportEventName = 'Холодный звонок';
+                        break;
                     case 'presentation':
                     case 'pres':
                         $this->currentReportEventName = 'Презентация';
@@ -4028,7 +4029,7 @@ class EventReportService
         $planEventTypeName = $this->currentPlanEventTypeName;
         $date = $this->planDeadline; // Предположим, это ваша дата
         // Создаем объект Carbon из строки
-        $carbonDate = Carbon::createFromFormat('d.m.Y H:i:s', $date);
+        $carbonDate = Carbon::createFromFormat('d.m.Y H:i', $date);
 
         // Устанавливаем локализацию
         $carbonDate->locale('ru');
@@ -4036,6 +4037,7 @@ class EventReportService
         // Преобразуем в нужный формат: "1 ноября 12:30"
         $formattedDate = $carbonDate->isoFormat('D MMMM HH:mm');
 
+        log::channel('telegram')->info('');
 
         if ($this->isPlanned) {
             if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию

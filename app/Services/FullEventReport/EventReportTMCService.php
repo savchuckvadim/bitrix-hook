@@ -255,6 +255,7 @@ class EventReportTMCService
                     case 'xo':
                     case 'cold':
                         $this->currentReportEventName = 'Холодный звонок';
+                        break;
                     case 'presentation':
                     case 'pres':
                         $this->currentReportEventName = 'Презентация';
