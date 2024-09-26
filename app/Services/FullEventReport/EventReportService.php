@@ -2696,6 +2696,8 @@ class EventReportService
                     if (!empty($this->currentPlanEventType)) {
                         array_push($planDeals, $currentDealId);
                     }
+                    array_push($reportDeals, $currentDealId);
+                    array_push($unplannedPresDeals, $currentDealId);
 
 
                     break;
@@ -2734,6 +2736,8 @@ class EventReportService
                     // 1) если report - presentetion - обновить текущую pres deal from task
                     if ($this->currentReportEventType == 'presentation') {
                         if ($reportPresDealId) {
+                            array_push($reportDeals, $reportPresDealId);
+
                             $pTargetStage = BitrixDealService::getTargetStagePresentation(
                                 $category,
                                 // $currentDepartamentType,
@@ -2807,7 +2811,7 @@ class EventReportService
                         );
 
                         $fieldsData = [
-                            'TITLE' => 'Презентация Спонтанная от ' . $this->nowDate,
+                            'TITLE' => 'Презентация от ' . $this->nowDate,
                             'CATEGORY_ID' => $category['bitrixId'],
                             'STAGE_ID' => "C" . $category['bitrixId'] . ':' . $pTargetStage,
                             "COMPANY_ID" => $this->entityId,
@@ -2973,6 +2977,7 @@ class EventReportService
         $result =  [
             'dealIds' => ['$result'],
             'planDeals' => $planDeals,
+            'reportDeals' => $reportDeals,
             'newPresDeal' => $newPresDeal,
             'unplannedPresDeals' => $unplannedPresDeals,
             'commands' => $resultBatchCommands
@@ -4090,6 +4095,7 @@ class EventReportService
     ) {
         $currentTask = $this->currentTask;
         $currentDealIds = $planPresDealIds['planDeals'];
+        $currentRepoertDealIds = $planPresDealIds['reportDeals'];
         $unplannedPresDealsIds = $planPresDealIds['unplannedPresDeals'];
 
         // presentation list flow запускается когда
@@ -4206,6 +4212,7 @@ class EventReportService
                 }
             }
             $eventType = 'report';
+          
 
             if (
                 $this->isExpired ////текущую назначенную презентацию переносят
@@ -4222,7 +4229,7 @@ class EventReportService
                 $batchCommands =   BitrixListPresentationFlowService::getListPresentationReportFlowBatch(
                     $this->hook,
                     $this->bitrixLists,
-                    $currentDealIds,
+                    $currentRepoertDealIds,
                     // $reportStatus,
                     $this->isPresentationDone,
 
