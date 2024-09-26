@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MigrateCRM\MigrateCRMController;
+use App\Http\Controllers\PortalController;
 use App\Jobs\CRMMigrateJob;
 use Illuminate\Support\Facades\Route;
 
@@ -22,21 +23,19 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
-Route::get('/gsr/crm/{pass}/{domain}/{token}/', function ($pass, $domain, $token) {
-    // $url = LinkController ::urlForRedirect($linkId);
+Route::get('/test/', function ($pass, $domain, $token) {
+
+    $domain = 'april-dev.bitrix24.ru';
+    $portal = PortalController::getPortal($domain);
+    if(!empty($portal)){
+        $result = $portal['data']['id'];
+
+    }
     // dd([
     //     'pass' => $pass,
     //     'domain' => $domain,
     //     'token' => $token,
     // ]);
-    // set_time_limit(0);
-    // if ($pass == 'nmbrsdntl' && $domain) {
-    //     // dispatch(
-    //     //     new CRMMigrateJob($token, $domain)
-    //     // )->onQueue('high-priority');
-    //     $controller = new  MigrateCRMController($token, $domain);
-    //     $controller->crm();
-    // } else {
-        return 'yo';
-    // }
+
+    return 'yo';
 });
