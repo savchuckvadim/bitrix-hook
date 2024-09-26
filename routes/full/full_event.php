@@ -66,19 +66,20 @@ Route::prefix('full')->group(function () {
                 $comment = 'ТМЦ:' . $comedata['commentTMC'];
             }
             if (!empty($comedata['commentOwner'])) {
-                $comment = 'Руководитель: ' . $comedata['commentOwner'];
+                $comment = $comment . "\n" . 'Руководитель: ' . $comedata['commentOwner'];
             }
             if (!empty($comedata['commentTMC'])) {
-                $comment = 'Менеджер: ' . $comedata['commentManager'];
+                $comment = $comment . "\n" . 'Менеджер: ' . $comedata['commentManager'];
             }
 
 
 
             $partsCreated = explode("_", $comedata['ownerId']);
             $partsResponsible = explode("_", $comedata['managerId']);
+            $partsTmc = explode("_", $comedata['tmcId']);
             $createdId = $partsCreated[1];
             $responsibleId = $partsResponsible[1];
-
+            $tmcId = $partsResponsible[1];
 
 
             $data['presentation'] = [
@@ -166,6 +167,14 @@ Route::prefix('full')->group(function () {
                     // "LAST_NAME" => "",
                     // "SECOND_NAME" => ""
                 ],
+                "tmc" => [
+                    "ID" => $tmcId,
+                    // "XML_ID" => "",
+                    // "ACTIVE" => true,
+                    // "NAME" => "",
+                    // "LAST_NAME" => "",
+                    // "SECOND_NAME" => ""
+                ],
                 "deadline" => $comedata['deadline'],
                 "isPlanned" => true,
                 "name" => $comedata['name']
@@ -219,7 +228,7 @@ Route::prefix('full')->group(function () {
                 'baseDealSession' => $baseDealSession,
 
                 'tmcDealSession' => $tmcDealSession,
-                '$data' => $data
+                'plan' => $data['plan']
 
             ]);
 
@@ -459,7 +468,7 @@ Route::prefix('full')->group(function () {
 
                             $timeLineString .= "\n" . $message;
                             $timeLineString .= "\n"  . 'Статус: ' . $company['UF_CRM_OP_CURRENT_STATUS'];
-                           
+
 
 
                             // $timeLineString .= "\n" . $message;

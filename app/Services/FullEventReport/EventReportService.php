@@ -99,6 +99,7 @@ class EventReportService
 
     protected $planCreatedId;
     protected $planResponsibleId;
+    protected $planTmcId;
     protected $planDeadline;
     protected $nowDate;
 
@@ -342,6 +343,14 @@ class EventReportService
         if (!empty($data['plan']['responsibility']) && !empty($data['plan']['responsibility']['ID'])) {
             $this->planResponsibleId = $data['plan']['responsibility']['ID'];
         };
+
+        if (isset($data['plan']['tmc'])) {
+            if (!empty($data['plan']['tmc']) && !empty($data['plan']['tmc']['ID'])) {
+                $this->planTmcId = $data['plan']['tmc']['ID'];
+            };
+        };
+
+
         if (!empty($data['plan']['deadline'])) {
             $this->planDeadline = $data['plan']['deadline'];
         };
@@ -731,14 +740,16 @@ class EventReportService
             $this->getListBatchFlow();
             //   $this->getListFlow();
 
+            if ($this->domain !== 'april-dev.bitrix24.ru') {
 
-            // $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-            $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-            usleep($rand);
-            $this->getListPresentationFlow(
-                $currentDealsIds
-            );
+                // $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                usleep($rand);
 
+                $this->getListPresentationFlow(
+                    $currentDealsIds
+                );
+            }
             return APIOnlineController::getSuccess(['data' => ['result' => $result, 'presInitLink' => null]]);
         } catch (\Throwable $th) {
             $errorMessages =  [
@@ -2987,6 +2998,11 @@ class EventReportService
                 $resultBatchCommands
             );
         }
+        $resultBatchCommands =  $this->getListPresentationFlowBatch(
+            $result['planDeals'],
+            $resultBatchCommands
+        );
+
         $batchService->sendGeneralBatchRequest($resultBatchCommands);
 
         Log::info('HOOK BATCH batchFlow report DEAL', ['report result' => $result]);
@@ -4065,6 +4081,238 @@ class EventReportService
 
         //     )->onQueue('low-priority');
         // }
+    }
+
+    protected function getListPresentationFlowBatch(
+        $planPresDealIds,
+        $batchCommands
+    ) {
+        $currentTask = $this->currentTask;
+        $currentDealIds = $planPresDealIds['planDeals'];
+        $unplannedPresDealsIds = $planPresDealIds['unplannedPresDeals'];
+
+        // presentation list flow запускается когда
+        // планируется презентация или unplunned тогда для связи со сделками берется $planPresDealIds
+        // отчитываются о презентации презентация или unplunned тогда для связи со сделками берется $currentTask
+
+
+        // Дата начала	presentation	datetime	pres_event_date
+        // Автор Заявки	presentation	employee	pres_plan_author
+        // Планируемая Дата презентации	presentation	datetime	pres_plan_date
+        // Дата переноса	presentation	datetime	pres_pound_date
+        // Дата проведения презентации	presentation	datetime	pres_done_date
+        // Комментарий к заявке	presentation	string	pres_plan_comment
+        // Контактные данные	presentation	multiple	pres_plan_contacts
+        // Ответственный	presentation	employee	pres_responsible
+        // Статус Заявки	presentation	enumeration	pres_init_status
+        // Заявка Принята/Отклонена	presentation	datetime	pres_init_status_date
+        // Комментарий к непринятой заявке	presentation	string	pres_init_fail_comment
+        // Комментарий после презентации	presentation	string	pres_done_comment
+        // Результативность	presentation	enumeration	pres_result_status
+        // Статус Работы	presentation	enumeration	pres_work_status
+        // Неперспективная 	presentation	enumeration	pres_fail_type
+        // ОП Причина Отказа	presentation	enumeration	pres_fail_reason
+        // CRM	presentation	crm	pres_crm
+        // Презентация Сделка	presentation	crm	pres_crm_deal
+        // ТМЦ Сделка	presentation	crm	pres_crm_tmc_deal
+        // Основная Сделка	presentation	crm	pres_crm_base_deal
+        // Связи	presentation	crm	pres_crm_other
+        // Контакт	presentation	crm	pres_crm_contacts
+
+        // для планирования plan
+        // дата
+        // автор заявки
+        // ответственный
+        // планируемая дата презентации
+        // название 
+        // комментарий к заявке
+        // crm - компания и plan deals
+        //  по идее связать с tmc deal
+
+
+
+        // для отчетности report
+        // результативность да или нет, тип нерезультативности
+        // статус работы в работе, отказ, причина
+        // если перенос - отображать в комментариях после през строками
+        // текущая дата - дата последнего изменения 
+        // если была проведена презентация обновляется поле дата проведения презентации
+        // все изменения записываются в множественное поле коммент после презентации
+        // Log::channel('telegram')->error('APRIL_HOOK', [
+
+        //     'currentPlanEventType' => $this->currentPlanEventType,
+        //     'isPlanned' => $this->isPlanned,
+        //     'isExpired' => $this->isExpired,
+
+        // ]);
+
+        if (  //планируется презентация без переносов
+            $this->currentPlanEventType == 'presentation' &&
+            $this->isPlanned && !$this->isExpired
+        ) { //plan
+            $eventType = 'plan';
+
+            BitrixListPresentationFlowService::getListPresentationPlanFlowBatch(
+                $this->hook,
+                $this->bitrixLists,
+                $currentDealIds,
+                $this->nowDate,
+                $eventType,
+                $this->planDeadline,
+                $this->planCreatedId,
+                $this->planResponsibleId,
+                $this->planTmcId,
+                $this->entityId,
+                $this->comment,
+                $this->currentPlanEventName,
+                $this->workStatus['current'],
+                $this->resultStatus, // result noresult expired,
+                $batchCommands,
+                // $this->noresultReason,
+                // $this->failReason,
+                // $this->failType
+
+
+            );
+        }
+
+        // sleep(1);
+        if ($this->currentReportEventType == 'presentation') {  //report
+
+            //если текущее событие по которому отчитываются - презентация
+
+            $currentDealIds = [];
+            // if (!empty($currentTask)) {
+            //     if (!empty($currentTask['ufCrmTask'])) {
+            //         $array = $currentTask['ufCrmTask'];
+            //         foreach ($array as $item) {
+            //             // Проверяем, начинается ли элемент с "D_"
+            //             if (strpos($item, "D_") === 0) {
+            //                 // Добавляем ID в массив, удаляя первые два символа "D_"
+            //                 $currentDealIds[] = substr($item, 2);
+            //             }
+            //         }
+            //     }
+            // }
+
+            if (!empty($this->currentBtxDeals)) {
+
+                $array = $currentTask['ufCrmTask'];
+                foreach ($this->currentBtxDeals as $deal) {
+                    // Проверяем, начинается ли элемент с "D_"
+                    // Добавляем ID в массив, удаляя первые два символа "D_"
+                    $currentDealIds[] = $deal['ID'];
+                }
+            }
+            $eventType = 'report';
+
+            if (
+                $this->isExpired ////текущую назначенную презентацию переносят
+                || ( // //текущая назначенная презентация не состоялась
+
+                    $this->resultStatus !== 'result'
+                    && $this->isFail && !$this->isPresentationDone
+                )
+            ) {
+
+                // $reportStatus = 'pound';
+                // $eventAction = 'expired';
+                //report
+                BitrixListPresentationFlowService::getListPresentationReportFlowBatch(
+                    $this->hook,
+                    $this->bitrixLists,
+                    $currentDealIds,
+                    // $reportStatus,
+                    $this->isPresentationDone,
+
+                    $this->nowDate,
+                    $eventType,
+                    $this->isExpired,
+                    $this->planDeadline,
+                    $this->planCreatedId,
+                    $this->planResponsibleId,
+                    $this->entityId,
+                    $this->comment,
+                    $this->currentPlanEventName,
+                    $this->workStatus['current'],
+                    $this->resultStatus, // result noresult expired,
+                    $this->noresultReason,
+                    $this->failReason,
+                    $this->failType,
+                    $batchCommands
+
+
+                );
+            }
+        }
+
+        if ($this->isPresentationDone) { //unplanned | planned
+
+
+            if ($this->currentReportEventType !== 'presentation') {
+                $currentDealIds =  $unplannedPresDealsIds;
+                // если unplanned то у следующих действий додлжны быть айди 
+                // соответствующих сделок
+                // если текущее событие не през - значит uplanned
+                // занчит сначала планируем
+                // Log::channel('telegram')->info('presentationBtxList', [
+                //     'currentDealIds' => $currentDealIds,
+
+
+                // ]);
+                BitrixListPresentationFlowService::getListPresentationPlanFlowBatch(
+                    $this->hook,
+                    $this->bitrixLists,
+                    $currentDealIds, //передаем айди основной и уже закрытой през сделки
+                    $this->nowDate,
+                    'plan',
+                    $this->planDeadline,
+                    $this->planCreatedId,
+                    $this->planResponsibleId,
+                    $this->planTmcId,
+                    $this->entityId,
+                    $this->comment,
+                    $this->currentPlanEventName,
+                    $this->workStatus['current'],
+                    'result', // result noresult expired,
+                    $batchCommands
+                    // $this->noresultReason,
+                    // $this->failReason,
+                    // $this->failType
+
+
+                );
+            }
+            // sleep(1);
+
+            // если была проведена презентация вне зависимости от текущего события
+            BitrixListPresentationFlowService::getListPresentationReportFlowBatch(
+                $this->hook,
+                $this->bitrixLists,
+                $currentDealIds, //planDeals || unplannedDeals если през была незапланированной
+                // $reportStatus,
+                $this->isPresentationDone,
+
+                $this->nowDate,
+                'report',
+                $this->isExpired,
+                $this->planDeadline,
+                $this->planCreatedId,
+                $this->planResponsibleId,
+                $this->entityId,
+                $this->comment,
+                $this->currentPlanEventName,
+                $this->workStatus['current'],
+                $this->resultStatus, // result noresult expired,
+                $this->noresultReason,
+                $this->failReason,
+                $this->failType,
+                $batchCommands
+
+
+            );
+        }
+        return $batchCommands;
     }
 
     protected function setTimeLine()
