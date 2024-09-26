@@ -76,8 +76,8 @@ services:
       - QUEUE_CONNECTION=redis
     user: 'www-data'
     depends_on:
-      - april_app
-      - redis_april_app
+      - app
+      - redis
     deploy:
       replicas: 1
 
@@ -92,8 +92,8 @@ services:
       - QUEUE_CONNECTION=redis
     user: 'www-data'
     depends_on:
-      - april_app
-      - redis_april_app
+      - app
+      - redis
     deploy:
       replicas: 1
 
@@ -108,8 +108,8 @@ services:
       - QUEUE_CONNECTION=redis
     user: 'www-data'
     depends_on:
-      - april_app
-      - redis_april_app
+      - app
+      - redis
     deploy:
       replicas: 2
 
