@@ -649,7 +649,7 @@ class BitrixListPresentationFlowService
         $deadline,
         $created,
         $responsible,
-        $tmcId = null,
+        $tmcId,
         // $suresponsible,
         $companyId,
         $comment,
@@ -928,6 +928,11 @@ class BitrixListPresentationFlowService
             );
             $commandKey = 'present_list_plan_' . $code;
             $batchCommands[$commandKey] = $batchCommand;
+            Log::channel('telegram')->error('APRIL_HOOK', [
+                'btrx commandKey' =>$batchCommand,
+            ]);
+
+
             return $batchCommands;
             // $responseData = BitrixListService::setItem(
             //     $hook,
@@ -1284,6 +1289,13 @@ class BitrixListPresentationFlowService
             );
             $commandKey = 'present_list_report_' . $code;
             $batchCommands[$commandKey] = $batchCommand;
+
+            Log::channel('telegram')->error('APRIL_HOOK', [
+                'btrx commandKey' =>$batchCommand,
+            ]);
+
+
+
             return $batchCommands;
         } catch (\Throwable $th) {
             $errorMessages =  [

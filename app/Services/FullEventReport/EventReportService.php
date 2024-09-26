@@ -688,6 +688,7 @@ class EventReportService
             $currentDeal = null;
             $currentDealId = null;
             $currentDealsIds = null;
+            $result = null;
             // if(!$this->smartId){
 
             // }
@@ -4152,7 +4153,7 @@ class EventReportService
         ) { //plan
             $eventType = 'plan';
 
-            BitrixListPresentationFlowService::getListPresentationPlanFlowBatch(
+            $batchCommands =  BitrixListPresentationFlowService::getListPresentationPlanFlowBatch(
                 $this->hook,
                 $this->bitrixLists,
                 $currentDealIds,
@@ -4218,7 +4219,7 @@ class EventReportService
                 // $reportStatus = 'pound';
                 // $eventAction = 'expired';
                 //report
-                BitrixListPresentationFlowService::getListPresentationReportFlowBatch(
+                $batchCommands =   BitrixListPresentationFlowService::getListPresentationReportFlowBatch(
                     $this->hook,
                     $this->bitrixLists,
                     $currentDealIds,
@@ -4260,7 +4261,7 @@ class EventReportService
 
 
                 // ]);
-                BitrixListPresentationFlowService::getListPresentationPlanFlowBatch(
+                $batchCommands =  BitrixListPresentationFlowService::getListPresentationPlanFlowBatch(
                     $this->hook,
                     $this->bitrixLists,
                     $currentDealIds, //передаем айди основной и уже закрытой през сделки
@@ -4286,7 +4287,7 @@ class EventReportService
             // sleep(1);
 
             // если была проведена презентация вне зависимости от текущего события
-            BitrixListPresentationFlowService::getListPresentationReportFlowBatch(
+            $batchCommands = BitrixListPresentationFlowService::getListPresentationReportFlowBatch(
                 $this->hook,
                 $this->bitrixLists,
                 $currentDealIds, //planDeals || unplannedDeals если през была незапланированной
