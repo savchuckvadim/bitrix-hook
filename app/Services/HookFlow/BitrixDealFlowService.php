@@ -523,6 +523,69 @@ class BitrixDealFlowService
         return $result;
     }
 
+    static function tmcPresentationRelationNatchCommand(
+        //изменяет сделку тмц из основного потока
+        //из потока ТМЦ - ПЛАН,  ПЕРЕНОС, ОТКАЗ, Заявка в рассмотрении - если планирование презентации
+        //+ будет создаваться задача для тмц Презентация: заявка в рассмотрении - чтобы он потом мог поставить заявку отменили
+        //отсюда изменение сделки ТМЦ на SUCCESS если планируется презентация из основного flow (то есть
+        // летит из rpa) и при этом есть связанная TMCDeal
+
+
+        $hook,
+        // $currentBtxDeals,
+        $category,
+        $currentBaseDeal,
+        $currentPresDeal,
+        $currentTmcDealId,
+
+
+
+
+    ) {
+        $rand = mt_rand(300000, 900000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        usleep($rand);
+        $newPresDeal = null; //for mutation
+        //находит сначала целевые категиории сделок из portal   по eventType и eventAction - по тому что происходит
+        //сюда могут при ходить массив текущих сделок и которых есть CATEGORY_ID такой как в portal->deal->category->bitrixId
+        //
+        $currentDealIds = [];
+        $categoryId = null;
+
+        if ($category['code'] == 'tmc_base') {
+
+            $categoryId = $category['bitrixId'];
+        }
+
+
+
+
+
+
+        $fieldsData = [
+            'CATEGORY_ID' => $categoryId,
+            'STAGE_ID' => "C" . $categoryId . ':' . 'PRES_PLAN',
+            // "COMPANY_ID" => $entityId,
+            // 'ASSIGNED_BY_ID' => $responsibleId
+            'UF_CRM_TO_BASE_SALES' => $currentBaseDeal['ID'],
+            'UF_CRM_TO_PRESENTATION_SALES' => $currentPresDeal['ID'],
+            'UF_CRM_PRES_COMMENTS' => $currentPresDeal['UF_CRM_PRES_COMMENTS'],
+            'UF_CRM_LAST_PRES_DONE_RESPONSIBLE' => $currentPresDeal['ASSIGNED_BY_ID'],
+            'UF_CRM_MANAGER_OP' => $currentPresDeal['ASSIGNED_BY_ID'],
+        ];
+
+
+        $result =  BitrixDealService::updateDeal(
+            $hook,
+            $currentTmcDealId,
+            $fieldsData,
+
+        );
+
+
+
+
+        return $result;
+    }
 
     static function unplannedPresflow(
 
@@ -659,7 +722,7 @@ class BitrixDealFlowService
 
         return $currentDeal;
     }
-  
+
 
     static function getBaseDealFromCurrentBtxDeals(
         $portalDealData,

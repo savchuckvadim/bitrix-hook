@@ -2797,6 +2797,43 @@ class EventReportService
                 case 'tmc_base':
 
 
+                    if (!empty($this->currentTMCDeal) && $this->currentPlanEventType == 'presentation') {
+                        $categoryId = $category['bitrixId'];
+
+                        $fieldsData = [
+                            'CATEGORY_ID' => $categoryId,
+                            'STAGE_ID' => "C" . $categoryId . ':' . 'PRES_PLAN',
+                            // "COMPANY_ID" => $entityId,
+                            // 'ASSIGNED_BY_ID' => $responsibleId
+                            'UF_CRM_TO_BASE_SALES' => $this->currentBaseDeal['ID'],
+                            'UF_CRM_TO_PRESENTATION_SALES' => $newPresDeal['ID'],
+                            'UF_CRM_PRES_COMMENTS' => $newPresDeal['UF_CRM_PRES_COMMENTS'],
+                            'UF_CRM_LAST_PRES_DONE_RESPONSIBLE' => $newPresDeal['ASSIGNED_BY_ID'],
+                            'UF_CRM_MANAGER_OP' => $newPresDeal['ASSIGNED_BY_ID'],
+                        ];
+                        
+                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $this->currentTMCDeal['ID']);
+                        $key = 'update_' . '_' . $category['code'] . '_' . $this->currentTMCDeal['ID'];
+                        $resultBatchCommands[$key] = $batchCommand;
+    
+                    }
+
+                    Log::channel('telegram')
+                        ->info(
+                            'vheck',
+                            [
+                                'currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres,
+
+                            ]
+                        );
+                    Log::channel('telegram')
+                        ->info(
+                            'vheck',
+                            [
+                                'currentTMCDeal' => $this->currentTMCDeal,
+
+                            ]
+                        );
                     if ((!empty($this->currentTMCDealFromCurrentPres) || !empty($this->currentTMCDeal)) &&
                         ($this->resultStatus === 'result' || $this->isFail || $this->isSuccessSale) &&
                         $this->currentReportEventType === 'presentation'
