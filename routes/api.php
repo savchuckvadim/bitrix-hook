@@ -31,7 +31,24 @@ use PhpParser\Node\Stmt\Return_;
 |
 */
 
+Route::get('/test/', function () {
 
+    $domain = 'april-dev.bitrix24.ru';
+    $portal = PortalController::getPortal($domain);
+    if(!empty($portal) && !empty($portal['data'])){
+        $result = $portal['data']['id'];
+
+    }else{
+        $result = $portal;
+
+    }
+    dd([
+        'result' => $result,
+        
+    ]);
+
+    return 'yo';
+});
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
