@@ -6,7 +6,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: cloudsigma.com/php
+    # image: cloudsigma.com/php
+    image: april_app_image
     container_name: april_app
     restart: "always"
     tty: true
@@ -66,9 +67,10 @@ services:
       - app-network
 
   queue-default:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: april_app_image
     command: php /var/www/html/artisan queue:work redis --sleep=3 --tries=1
     volumes:
       - .:/var/www/html
@@ -85,9 +87,10 @@ services:
       replicas: 1
 
   queue-low-priority:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: april_app_image
     command: php /var/www/html/artisan queue:work redis --sleep=3 --tries=1 --queue=low-priority
     volumes:
       - .:/var/www/html
@@ -104,9 +107,10 @@ services:
       replicas: 1
 
   queue-high-priority:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: april_app_image
     command: php /var/www/html/artisan queue:work redis --sleep=3 --tries=1 --queue=high-priority
     volumes:
       - .:/var/www/html
