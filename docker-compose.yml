@@ -36,7 +36,6 @@ services:
       - app-network
     depends_on:
       - app
- 
 
   # MySQL Service
   db:
@@ -121,6 +120,10 @@ services:
       - db
     deploy:
       replicas: 2
+
+volumes:
+  db_data:
+
 
 networks:
   app-network:
