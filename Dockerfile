@@ -23,8 +23,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     git \
     libonig-dev \
-    curl \
-    mysql-client 
+    curl 
 
 
 # Clear cache
