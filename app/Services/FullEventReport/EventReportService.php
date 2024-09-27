@@ -1435,8 +1435,324 @@ class EventReportService
         return $entityCommand;
     }
 
+    protected function getEntityBatchFlowCommandFromIdForNewDeal(
+        $isDeal = true,
+        $dealId,
+        $dealType = 'base',  //presentation, xo
+        $baseDealId = null,
+        $dealEventType = false //plan done unplanned fail
+    ) {
+        $entityCommand = '';
+        $currentReportEventType = $this->currentReportEventType;
+        $currentPlanEventType = $this->currentPlanEventType;
+        $isPresentationDone = $this->isPresentationDone;
 
-    
+        $currentBtxEntity = $this->currentBtxEntity;
+        $entityType = $this->entityType;
+        $entityId = $this->entityId;
+
+        $portalEntityData = $this->portalCompanyData;
+
+
+        $reportFields = [];
+        $reportFields['manager_op'] = $this->planResponsibleId;
+        $reportFields['op_work_status'] = '';
+        $reportFields['op_prospects_type'] = 'op_prospects_good';
+        $reportFields['op_result_status'] = '';
+        $reportFields['op_noresult_reason'] = '';
+        $reportFields['op_fail_reason'] = '';
+
+        $reportFields['op_fail_comments'] = '';
+        $reportFields['op_history'] = '';
+        $reportFields['op_mhistory'] = [];
+
+
+        $currentPresCount = 0;
+        $companyPresCount = 0;
+        $dealPresCount = 0;
+        if (!empty($this->currentTask)) {
+            if (!empty($this->currentTask['presentation'])) {
+
+                if (!empty($this->currentTask['presentation']['company'])) {
+                    $companyPresCount = (int)$this->currentTask['presentation']['company'];
+                }
+                if (!empty($this->currentTask['presentation']['deal'])) {
+                    $dealPresCount = (int)$this->currentTask['presentation']['deal'];
+                }
+            }
+        }
+
+
+
+        $currentPresCount =  $companyPresCount;
+        if ($isDeal && !empty($dealId)) {
+
+            $currentPresCount =  $dealPresCount;
+            // $currentBtxEntity = $deal;
+            $entityType = 'deal';
+            $entityId =  $dealId;
+            $portalEntityData = $this->portalDealData;
+
+            if ($dealType == 'presentation') {
+                $reportFields['to_base_sales'] = $baseDealId;
+                $currentPresCount = 0;
+                if ($dealEventType == 'plan' || $dealEventType == 'fail') {
+                    $currentPresCount = -1;
+                }
+            }
+        }
+
+
+        $currentPresComments = [];
+        $currentFailComments = [];
+        $currentMComments = [];
+        // if (isset($currentBtxEntity)) {
+        //     if (!empty($currentBtxEntity['UF_CRM_PRES_COMMENTS'])) {
+        //         $currentPresComments = $currentBtxEntity['UF_CRM_PRES_COMMENTS'];
+        //     }
+
+        //     if (!empty($currentBtxEntity['UF_CRM_OP_FAIL_COMMENTS'])) {
+        //         $currentFailComments = $currentBtxEntity['UF_CRM_OP_FAIL_COMMENTS'];
+        //     }
+
+        //     if (!empty($currentBtxEntity['UF_CRM_OP_MHISTORY'])) {
+        //         $currentMComments = $currentBtxEntity['UF_CRM_OP_MHISTORY'];
+        //     }
+        // }
+
+
+        //обнуляем дату следующей презентации и звонка - они будут аполнены только если реально что-то запланировано
+        $reportFields['next_pres_plan_date'] = null;
+        $reportFields['call_next_date'] = null;
+
+        if ($currentReportEventType) {
+
+
+            //general
+            $reportFields['call_last_date'] = $this->nowDate;
+
+            switch ($currentReportEventType) {
+                case 'xo':
+                    $reportFields['xo_date'] = null;
+
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        }
+        // Log::channel('telegram')->info('HOOK entity flow', [
+        //     'isPresentationDone' => $this->isPresentationDone
+        // ]);
+        //presentation done with unplanned
+        if ($this->isPresentationDone) {
+
+
+
+            $reportFields['last_pres_done_date'] = $this->nowDate;
+            $reportFields['last_pres_done_responsible'] =  $this->planResponsibleId;
+            $reportFields['pres_count'] = $currentPresCount + 1;
+
+            if ($currentReportEventType !== 'presentation' || $this->isNew) {
+                $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
+                $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
+                $reportFields['next_pres_plan_date'] = $this->nowDate;  //дата на которую запланировали през
+
+            }
+            $reportFields['op_current_status'] = ' Презентация проведена';
+            array_push($currentPresComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
+            // array_push($currentMComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
+        }
+
+
+        //plan
+        $planFields = [];
+
+        if ($this->isPlanned) {
+
+
+            //general
+            $reportFields['call_next_date'] = $this->planDeadline;
+            $reportFields['call_next_name'] = $this->currentPlanEventName;
+            $reportFields['xo_responsible'] = $this->planResponsibleId;
+            $reportFields['xo_created'] = $this->planResponsibleId;
+            $reportFields['op_current_status'] = 'Звонок запланирован в работе';
+
+            // Log::channel('telegram')->info('TST', [
+            //     'currentPlanEventType' => $currentPlanEventType,
+
+            // ]);
+
+
+            switch ($currentPlanEventType) {
+                    // 0: {id: 1, code: "warm", name: "Звонок"}
+                    // // 1: {id: 2, code: "presentation", name: "Презентация"}
+                    // // 2: {id: 3, code: "hot", name: "Решение"}
+                    // // 3: {id: 4, code: "moneyAwait", name: "Оплата"}
+                case 'xo':
+                    $reportFields['xo_date'] = $this->planDeadline;
+                    $reportFields['xo_name'] = $this->currentPlanEventName;
+
+                    break;
+                case 'hot':
+                    $reportFields['op_current_status'] = 'В решении: ' . $this->currentPlanEventName;
+                    // array_unshift($currentMComments, $this->nowDate . 'В решении: ' . $this->comment);
+
+                    break;
+                case 'moneyAwait':
+                    $reportFields['op_current_status'] = 'Ждем оплаты: ' . $this->currentPlanEventName;
+                    // array_unshift($currentMComments, $this->nowDate . 'В оплате: ' . $this->comment);
+                    break;
+
+
+                case 'presentation':
+
+                    $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
+                    $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
+                    $reportFields['next_pres_plan_date'] = $this->planDeadline;  //дата на которую запланировали през
+                    $reportFields['op_current_status'] = 'В работе: Презентация запланирована ' . $this->currentPlanEventName;
+                    array_push($currentPresComments, $this->nowDate . ' Презентация запланирована ' . $this->currentPlanEventName);
+                    // array_unshift($currentMComments, $this->nowDate . ' Презентация запланирована ' . $this->currentPlanEventName);
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+        } else {
+            if ($this->workStatus['current']['code'] === 'fail') {
+                $reportFields['op_current_status'] = 'Отказ';
+                // array_unshift($currentMComments, $this->nowDate . ' Отказ ' . $this->comment);
+
+
+
+                $reportFields['op_fail_comments'] = $currentFailComments;
+                if ($this->isPresentationDone) {
+                    array_push($currentPresComments, $this->nowDate . ' Отказ после презентации ' . $this->currentTaskTitle . ' ' . $this->comment);
+                } else {
+                    if ($currentReportEventType === 'presentation') {
+
+                        array_push($currentPresComments, $this->nowDate . ' Отказ: Презентация не состоялась ' . $this->currentTaskTitle . ' ' . $this->comment);
+                    }
+                }
+            }
+
+            if ($this->workStatus['current']['code'] === 'success') {
+                $reportFields['op_current_status'] = 'Успех: продажа состоялась ' . $this->nowDate;
+            }
+        }
+        if (!$this->isNew) {
+            if ($this->resultStatus !== 'result') {
+                if (!empty($this->noresultReason)) {
+                    if (!empty($this->noresultReason['code'])) {
+
+                        $reportFields['op_noresult_reason'] = $this->noresultReason['code'];
+                    }
+                }
+
+                if ($this->workStatus['current']['code'] === 'inJob' || $this->workStatus['current']['code'] === 'setAside') {
+                    if ($currentReportEventType === 'presentation') {
+
+                        array_push($currentPresComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
+                    }
+                    // array_unshift($currentMComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
+                }
+
+                // array_push($currentMComments, $this->nowDate . ' Нерезультативный. ' . $this->currentTaskTitle);
+            } else {
+                // array_unshift($currentMComments, $this->nowDate . ' Результативный ' . $this->currentTaskTitle. ' ' . $this->comment);
+            }
+        }
+
+
+
+        // Log::channel('telegram')->info('TST', [
+        //     'currentPresComments' => $currentPresComments,
+        //     'currentFailComments' => $currentFailComments,
+        // ]);
+        // Log::channel('telegram')->info('HOOK TEST getWorkstatusFieldItemValue', [
+        //     'failType' => $this->failType,
+        //     'failReason' => $this->failReason,
+        // ]);
+
+        if (!empty($this->workStatus['current'])) {
+            if (!empty($this->workStatus['current']['code'])) {
+                $workStatusCode = $this->workStatus['current']['code'];
+
+
+                if ($workStatusCode === 'fail') {  //если провал
+                    if (!empty($this->failType)) {
+                        if (!empty($this->failType['code'])) {
+
+                            // $reportFields['op_prospects_type'] = $this->failType['code'];
+
+
+                            if ($this->failType['code'] == 'failure') { //если тип провала - отказ
+                                if (!empty($this->failReason)) {
+                                    if (!empty($this->failReason['code'])) {
+
+                                        $reportFields['op_fail_reason'] = $this->failReason['code'];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        $comment = $this->getFullEventComment();
+        array_unshift($currentMComments, $this->nowDate . "\n" . $comment);
+        if (count($currentMComments) > 8) {
+            $currentMComments = array_slice($currentMComments, 0, 8);
+        }
+
+
+        //закидываем сформированные комментарии
+        $reportFields['op_mhistory'] = $currentMComments;
+        // if ($this->isPresentationDone || ($this->isPlanned && $currentPlanEventType == 'presentation')) {
+        $reportFields['pres_comments'] = $currentPresComments;
+        // }
+
+
+        $entityService = new BitrixEntityBatchFlowService();
+
+
+
+
+        $entityCommand = $entityService->getBatchCommand(
+            $this->portal,
+            null, // $currentBtxEntity,
+            $portalEntityData,
+            $this->hook,
+            $entityType,
+            $entityId,
+            $this->currentPlanEventType, // xo warm presentation,
+            'plan',  // plan done expired 
+            $this->planCreatedId,
+            $this->planResponsibleId,
+            $this->planDeadline,
+            $this->nowDate,
+            $this->isPresentationDone,
+            $this->isUnplannedPresentation,
+            $this->workStatus['current']['code'],  // inJob setAside ...
+            $this->resultStatus, //result | noresult ... new
+            $this->failType,
+            $this->failReason,
+            $this->noresultReason,
+            $this->currentReportEventType,
+            $this->currentReportEventName,
+            $this->currentPlanEventName,
+            $this->comment,
+            $reportFields
+        );
+
+
+
+        // return ['command' => $entityCommand];
+        return $entityCommand;
+    }
+
+
     // get deal relations flow
 
 
@@ -2763,6 +3079,18 @@ class EventReportService
                             $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $reportPresDealId);
                             $key = 'update_' . '_' . $category['code'] . '_' . $reportPresDealId;
                             $resultBatchCommands[$key] = $batchCommand;
+
+
+                            $entityCommand =  $this->getEntityBatchFlowCommandFromIdForNewDeal(
+                                true,
+                                $reportPresDealId,
+                                'presentation',
+                                $this->currentBaseDeal['ID'],
+                                $currentReportStatus
+                            );
+    
+                            $key = 'update_entity_deal_plan' . '_' . $category['code'];
+                            $resultBatchCommands[$key] = $batchCommand;
                         }
                     }
 
@@ -2793,16 +3121,16 @@ class EventReportService
                         $resultBatchCommands[$key] = $batchCommand;
                         $newPresDeal = '$result[' . $key . ']';
                         // $newPresDealId = '$result[' . $key . '][ID]';
-                        // $entityCommand =  $this->getEntityBatchFlowCommand(
-                        //     true,
-                        //     $newPresDeal,
-                        //     'presentation',
-                        //      $this->currentBaseDeal['ID'],
-                        //     ''
-                        // );
+                        $entityCommand =  $this->getEntityBatchFlowCommandFromIdForNewDeal(
+                            true,
+                            $newPresDeal,
+                            'presentation',
+                            $this->currentBaseDeal['ID'],
+                            'plan'
+                        );
 
-                        // $key = 'update_entity_deal' . '_' . $category['code'];
-                        // $resultBatchCommands[$key] = $batchCommand;
+                        $key = 'update_entity_deal_plan' . '_' . $category['code'];
+                        $resultBatchCommands[$key] = $batchCommand;
 
                         array_push($planDeals, $newPresDeal);
                     }
@@ -2846,15 +3174,15 @@ class EventReportService
                         array_push($unplannedPresDeals, $unplannedPresDeal);
 
 
-                        // $entityCommand =  $this->getEntityBatchFlowCommand(
-                        //     true,
-                        //     $unplannedPresDeal,
-                        //     'presentation',
-                        //     $currentDealId,
-                        //     'unplanned'
-                        // );
-                        // $key = 'entity_unplanned' . '_' . 'deal';
-                        // $resultBatchCommands[$key] = $entityCommand; // в результате будет id
+                        $entityCommand =  $this->getEntityBatchFlowCommandFromIdForNewDeal(
+                            true,
+                            $unplannedPresDeal,
+                            'presentation',
+                            $currentDealId,
+                            'unplanned'
+                        );
+                        $key = 'entity_unplanned' . '_' . 'deal';
+                        $resultBatchCommands[$key] = $entityCommand; // в результате будет id
                     }
 
 

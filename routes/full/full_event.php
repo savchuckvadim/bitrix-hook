@@ -79,7 +79,7 @@ Route::prefix('full')->group(function () {
             $partsTmc = explode("_", $comedata['tmcId']);
             $createdId = $partsCreated[1];
             $responsibleId = $partsResponsible[1];
-            $tmcId = $partsResponsible[1];
+            $tmcId = $partsTmc[1];
 
 
             $data['presentation'] = [
