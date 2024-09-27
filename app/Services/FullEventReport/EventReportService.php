@@ -1435,6 +1435,8 @@ class EventReportService
         return $entityCommand;
     }
 
+
+    
     // get deal relations flow
 
 
@@ -2780,7 +2782,7 @@ class EventReportService
 
                         );
                         $fieldsData = [
-                            'TITLE' => 'Презентация от ' . $this->nowDate . ' ' . $this->currentPlanEventName,
+                            'TITLE' => 'Презентация ' . $this->currentPlanEventName,
                             'CATEGORY_ID' => $category['bitrixId'],
                             'STAGE_ID' => "C" . $category['bitrixId'] . ':' . $pTargetStage,
                             "COMPANY_ID" => $this->entityId,
@@ -2791,7 +2793,16 @@ class EventReportService
                         $resultBatchCommands[$key] = $batchCommand;
                         $newPresDeal = '$result[' . $key . ']';
                         // $newPresDealId = '$result[' . $key . '][ID]';
+                        // $entityCommand =  $this->getEntityBatchFlowCommand(
+                        //     true,
+                        //     $newPresDeal,
+                        //     'presentation',
+                        //      $this->currentBaseDeal['ID'],
+                        //     ''
+                        // );
 
+                        // $key = 'update_entity_deal' . '_' . $category['code'];
+                        // $resultBatchCommands[$key] = $batchCommand;
 
                         array_push($planDeals, $newPresDeal);
                     }
@@ -2821,18 +2832,29 @@ class EventReportService
                         $key = 'set_' . '_' . $category['code'];
                         $resultBatchCommands[$key] = $batchCommand;
                         $unplannedPresDeal = '$result[' . $key . ']';
-                        array_push($unplannedPresDeals, $unplannedPresDeal);
-
 
                         $entityCommand =  $this->getEntityBatchFlowCommand(
                             true,
-                            $unplannedPresDeal,
-                            'presentation',
-                            $currentDealId,
+                            $this->currentBaseDeal,
+                            'base',
+                            $this->currentBaseDeal['ID'],
                             'unplanned'
                         );
-                        $key = 'entity_unplanned' . '_' . 'deal';
-                        $resultBatchCommands[$key] = $entityCommand; // в результате будет id
+                        $key = 'entity_unplannedbase' . '_' . 'deal' . '_' .  $this->currentBaseDeal['ID'];
+                        $entityBatchCommands[$key] = $entityCommand;
+
+                        array_push($unplannedPresDeals, $unplannedPresDeal);
+
+
+                        // $entityCommand =  $this->getEntityBatchFlowCommand(
+                        //     true,
+                        //     $unplannedPresDeal,
+                        //     'presentation',
+                        //     $currentDealId,
+                        //     'unplanned'
+                        // );
+                        // $key = 'entity_unplanned' . '_' . 'deal';
+                        // $resultBatchCommands[$key] = $entityCommand; // в результате будет id
                     }
 
 
@@ -2914,9 +2936,25 @@ class EventReportService
                             // 'ASSIGNED_BY_ID' => $this->planResponsibleId
                         ];
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $curTMCDeal['ID']);
+
                         $key = 'update_' . '_' . $category['code'];
                         $resultBatchCommands[$key] = $batchCommand;
+
+                        $entityCommand =  $this->getEntityBatchFlowCommand(
+                            true,
+                            $curTMCDeal,
+                            'base',
+                            null, // $this->currentBaseDeal['ID'],
+                            ''
+                        );
+
+                        $key = 'update_entity_deal' . '_' . $category['code'];
+                        $resultBatchCommands[$key] = $batchCommand;
                     }
+
+                    $sessionTMCDealKey = 'tmcInit_' . $this->domain . '_' . $this->planResponsibleId . '_' . $this->entityId;
+
+                    FullEventInitController::clearSessionItem($sessionTMCDealKey);
 
                     break;
 
@@ -4145,13 +4183,12 @@ class EventReportService
         // текущая дата - дата последнего изменения 
         // если была проведена презентация обновляется поле дата проведения презентации
         // все изменения записываются в множественное поле коммент после презентации
-        // Log::channel('telegram')->error('APRIL_HOOK', [
+        Log::channel('telegram')->error('APRIL_HOOK getListPresentationFlowBatch', [
 
-        //     'currentPlanEventType' => $this->currentPlanEventType,
-        //     'isPlanned' => $this->isPlanned,
-        //     'isExpired' => $this->isExpired,
+            'currentPlanEventType' => $this->currentPlanEventType,
+            'planTmcId' => $this->planTmcId,
 
-        // ]);
+        ]);
 
         if (  //планируется презентация без переносов
             $this->currentPlanEventType == 'presentation' &&
@@ -4212,7 +4249,7 @@ class EventReportService
                 }
             }
             $eventType = 'report';
-          
+
 
             if (
                 $this->isExpired ////текущую назначенную презентацию переносят
