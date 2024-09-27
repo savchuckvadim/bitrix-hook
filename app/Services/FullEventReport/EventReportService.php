@@ -3090,7 +3090,7 @@ class EventReportService
                             );
     
                             $key = 'update_entity_deal_plan' . '_' . $category['code'];
-                            $resultBatchCommands[$key] = $batchCommand;
+                            $resultBatchCommands[$key] = $entityCommand;
                         }
                     }
 
@@ -3130,7 +3130,7 @@ class EventReportService
                         );
 
                         $key = 'update_entity_deal_plan' . '_' . $category['code'];
-                        $resultBatchCommands[$key] = $batchCommand;
+                        $resultBatchCommands[$key] = $entityCommand;
 
                         array_push($planDeals, $newPresDeal);
                     }
@@ -3161,15 +3161,15 @@ class EventReportService
                         $resultBatchCommands[$key] = $batchCommand;
                         $unplannedPresDeal = '$result[' . $key . ']';
 
-                        $entityCommand =  $this->getEntityBatchFlowCommand(
+                        $entityCommand =  $this->getEntityBatchFlowCommandFromIdForNewDeal(
                             true,
-                            $this->currentBaseDeal,
-                            'base',
+                            $unplannedPresDeal,
+                            'presentation',
                             $this->currentBaseDeal['ID'],
                             'unplanned'
                         );
                         $key = 'entity_unplannedbase' . '_' . 'deal' . '_' .  $this->currentBaseDeal['ID'];
-                        $entityBatchCommands[$key] = $entityCommand;
+                        $resultBatchCommands[$key] = $entityCommand;
 
                         array_push($unplannedPresDeals, $unplannedPresDeal);
 
