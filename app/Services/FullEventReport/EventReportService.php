@@ -706,11 +706,11 @@ class EventReportService
             if ($this->isDealFlow && $this->portalDealData) {
                 // $currentDealsIds = $this->getBatchDealFlow();
 
-                if ($this->domain !== 'april-dev.bitrix24.ru') {
-                    $currentDealsIds = $this->getBatchDealFlow();
-                } else {
+                // if ($this->domain !== 'april-dev.bitrix24.ru') {
+                //     $currentDealsIds = $this->getBatchDealFlow();
+                // } else {
                     $currentDealsIds = $this->getNEWBatchDealFlow();
-                }
+                // }
 
 
                 // $currentDealsIds = $this->getDealFlow();
@@ -718,13 +718,18 @@ class EventReportService
             }
 
             // $this->createTask($currentSmartId);
-            if ($this->isExpired || $this->isPlanned) {
-                if ($this->domain !== 'april-dev.bitrix24.ru') {
-                    $result = $this->taskFlow(null, $currentDealsIds['planDeals']);
-                }
-            } else {
-                $result = $this->workStatus;
-            }
+
+
+
+            // if ($this->isExpired || $this->isPlanned) {
+            //     if ($this->domain !== 'april-dev.bitrix24.ru') {
+            //         $result = $this->taskFlow(null, $currentDealsIds['planDeals']);
+            //     }
+            // } else {
+            //     $result = $this->workStatus;
+            // }
+
+
 
             // $this->getEntityFlow();
 
@@ -741,16 +746,16 @@ class EventReportService
             $this->getListBatchFlow();
             //   $this->getListFlow();
 
-            if ($this->domain !== 'april-dev.bitrix24.ru') {
+            // if ($this->domain !== 'april-dev.bitrix24.ru') {
 
-                // $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                usleep($rand);
+            //     // $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            //     $rand = mt_rand(600000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            //     usleep($rand);
 
-                $this->getListPresentationFlow(
-                    $currentDealsIds
-                );
-            }
+            //     $this->getListPresentationFlow(
+            //         $currentDealsIds
+            //     );
+            // }
             return APIOnlineController::getSuccess(['data' => ['result' => $result, 'presInitLink' => null]]);
         } catch (\Throwable $th) {
             $errorMessages =  [
