@@ -529,9 +529,9 @@ class EventReportService
                     $this->relationCompanyUserPresDeals = $sessionDeals['allPresentationDeals']; //allPresDeal 
                     $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
                     $this->relationColdDeals = $sessionDeals['allXODeals'];
-                    $this->currentTMCDealFromCurrentPres = $sessionDeals['currentTMCDeal'];
-                    // Log::info('HOOK TMC SESSION', ['sessionDeals' => $sessionDeals]);
-                    Log::info('HOOK TMC SESSION currentTMCDeal', ['session currentTMCDeal' => $sessionDeals['currentTMCDeal']]);
+                    // $this->currentTMCDealFromCurrentPres = $sessionDeals['currentTMCDeal'];
+                    Log::info('HOOK TMC SESSION', ['sessionDeals' => $sessionDeals]);
+                    // Log::info('HOOK TMC SESSION currentTMCDeal', ['session currentTMCDeal' => $sessionDeals['currentTMCDeal']]);
                 }
             }
         } else {
