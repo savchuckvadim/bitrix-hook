@@ -63,13 +63,13 @@ Route::prefix('full')->group(function () {
 
             $comment = '';
             if (!empty($comedata['commentTMC'])) {
-                $comment = 'ТМЦ:' . $comedata['commentTMC'];
+                $comment = 'ТМЦ: ' . $comedata['commentTMC'] . "   " ;
             }
             if (!empty($comedata['commentOwner'])) {
-                $comment = $comment . "\n" . 'Руководитель: ' . $comedata['commentOwner'];
+                $comment = $comment . "\n" . 'Руководитель: ' . $comedata['commentOwner'] . "   " ;
             }
             if (!empty($comedata['commentTMC'])) {
-                $comment = $comment . "\n" . 'Менеджер: ' . $comedata['commentManager'];
+                $comment = $comment . "\n" . 'Менеджер: ' . $comedata['commentManager'] . "   " ;
             }
 
 
