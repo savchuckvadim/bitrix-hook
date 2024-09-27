@@ -50,6 +50,12 @@ RUN composer dump-autoload
 RUN chown -R www-data:www-data /var/www/html/bootstrap/cache
 RUN chown -R www-data:www-data /var/www/html/storage
 
+# Generate application key
+RUN php artisan key:generate
+
+# Run database migrations
+RUN php artisan migrate --force
+
 # Expose port 9000 and start php-fpm server (for FastCGI Process Manager)
 EXPOSE 9000
 CMD ["php-fpm"]
