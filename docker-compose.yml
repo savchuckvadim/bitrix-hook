@@ -45,7 +45,7 @@ services:
     container_name: april_app_db
     restart: "unless-stopped"
     environment:
-      # MYSQL_ROOT_PASSWORD: root_password # Задай свой пароль для root
+      MYSQL_ROOT_PASSWORD: cfdx # Задай свой пароль для root
       MYSQL_DATABASE: bitrixhook # Название базы данных
       MYSQL_USER: bitrixhook # Имя пользователя
       MYSQL_PASSWORD: Vadimsa1988! # Пароль пользователя
