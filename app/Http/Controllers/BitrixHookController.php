@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\ColdCallJob;
 use App\Jobs\CreateBitrixCallingTaskJob;
 use App\Jobs\EventBatch\ColdBatchJob;
-use App\Services\BitrixCallingColdService;
 use App\Services\BitrixCallingColdTaskService;
 use App\Services\BitrixCallingTaskFailService;
-use App\Services\BitrixCallingTaskPresentationDoneService;
 use App\Services\BitrixGeneralService;
 use App\Services\BitrixLeadCompleteService;
 use Carbon\Carbon;
@@ -158,7 +155,7 @@ class BitrixHookController extends Controller
             // )->onQueue('low-priority');
             dispatch(
                 new ColdBatchJob($data)
-            )->onQueue('default');
+            )->onQueue('low-priority');
 
             // $service = new BitrixCallingColdService($data);
             // $reult =  $service->getCold();
