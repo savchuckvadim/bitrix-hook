@@ -156,9 +156,9 @@ class BitrixHookController extends Controller
             // ColdCallJob::dispatch(
             //     $data
             // )->onQueue('low-priority');
-            ColdBatchJob::dispatch(
-                $data
-            );
+            dispatch(
+                new ColdBatchJob($data)
+            )->onQueue('default');
 
             // $service = new BitrixCallingColdService($data);
             // $reult =  $service->getCold();
