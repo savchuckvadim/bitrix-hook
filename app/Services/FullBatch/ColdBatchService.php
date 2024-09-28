@@ -94,26 +94,33 @@ class ColdBatchService
         $data,
 
     ) {
-        date_default_timezone_set('Europe/Moscow');
-        $nowDate = new DateTime();
-        setlocale(LC_TIME, 'ru_RU.utf8');
+        // $nowDate = new DateTime();
+        Carbon::setLocale('ru'); // Устанавливаем локализацию Carbon
         // Форматируем дату и время в нужный формат
-        $this->nowDate = $nowDate->format('d.m.Y H:i:s');
-        $locale = 'ru_RU';
-        $pattern = 'd MMMM yyyy';
+        // $locale = 'ru_RU';
+        // $pattern = 'd MMMM yyyy';
 
-        // Создаем форматтер
-        $formatter = new IntlDateFormatter(
-            $locale,
-            IntlDateFormatter::NONE,
-            IntlDateFormatter::NONE,
-            date_default_timezone_get(),
-            IntlDateFormatter::GREGORIAN,
-            $pattern
-        );
+        // // Создаем форматтер
+        // $formatter = new IntlDateFormatter(
+        //     $locale,
+        //     IntlDateFormatter::NONE,
+        //     IntlDateFormatter::NONE,
+        //     date_default_timezone_get(),
+        //     IntlDateFormatter::GREGORIAN,
+        //     $pattern
+        // );
 
-        // Форматируем дату
-        $formattedStringNowDate = $formatter->format($nowDate);
+        // $formattedStringNowDate = $formatter->format($nowDate);
+        // $name = 'от ' . $formattedStringNowDate;
+
+        //   // Форматируем дату
+        //   $formattedStringNowDate = $formatter->format($nowDate);
+        // Получаем текущую дату и время
+        $nowDate = Carbon::now();
+
+        // Форматируем дату в нужный формат
+        $formattedStringNowDate = $nowDate->translatedFormat('d F Y');
+
         $domain = $data['domain'];
         $this->entityType = $data['entityType'];
         $this->entityId = $data['entityId'];
