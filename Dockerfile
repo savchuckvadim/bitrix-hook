@@ -23,7 +23,8 @@ RUN apt-get update && apt-get install -y \
     unzip \
     git \
     libonig-dev \
-    curl 
+    curl \
+    libicu-dev
 
 
 # Clear cache
