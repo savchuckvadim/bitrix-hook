@@ -25,7 +25,7 @@ class BitrixDealFlowService
         $currentDepartamentType  = 'sales',
         $entityType,
         $entityId,
-        $eventType, // xo warm presentation, 
+        $eventType, // xo warm presentation,  document
         $eventTypeName, //Презентация , Звонок
         $eventName, //имя планируемого события
         $eventAction,  // plan done expired fail success

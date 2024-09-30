@@ -332,18 +332,29 @@ class EventDocumentService
 
             // ]);
 
-            $this->isOfferDone = true;
-            if (!empty($data['invoice'])) {
 
-
-                if (!empty($data['invoice']['one'])) {
-                    if (!empty($data['invoice']['one']['value'])) {
-                        $this->isInvoiceDone = true;
-                    }
+            if (isset($data['isSupplyReport'])) {
+                if (!empty($data['isSupplyReport'])) {
+                    $this->isSupplyReportDone = true;
                 }
             }
 
+            if(empty($this->isSupplyReportDone)){
+                $this->isOfferDone = true;
+                if (!empty($data['invoice'])) {
+    
+    
+                    if (!empty($data['invoice']['one'])) {
+                        if (!empty($data['invoice']['one']['value'])) {
+                            $this->isInvoiceDone = true;
+                        }
+                    }
+                }
+    
+    
 
+            }
+ 
 
 
             if (!empty($portal['smarts'])) {
@@ -435,7 +446,7 @@ class EventDocumentService
             $currentDeal = null;
             $currentDealId = null;
             $currentDealsIds = null;
-           
+
             // if(!$this->smartId){
 
             // }
@@ -457,18 +468,24 @@ class EventDocumentService
             // } else {
             //     $result = $this->workStatus;
             // }
-            $this->getEntityFlow();
+            if(empty($this->isSupplyReportDone)){ //если не отчет о продаже
+                $this->getEntityFlow();
+
+            }
             // обновляет поля связанные с документом kpi
             // sleep(1);
 
 
             $this->getListFlow();
             sleep(1);
+
+            if(empty($this->isSupplyReportDone)){ //если не отчет о продаже
+
             if ($this->isFromPresentation && $this->currentPresDeal) {
 
                 $this->getListPresentationFlow();
             }
-
+        }
             return APIOnlineController::getSuccess(['data' => ['result' => $this->workStatus, 'presInitLink' => null]]);
         } catch (\Throwable $th) {
             $errorMessages =  [
@@ -640,15 +657,12 @@ class EventDocumentService
             // $this->comment,
             $reportFields
         );
-
     }
 
 
 
     //smart
-    protected function getSmartFlow()
-    {
-    }
+    protected function getSmartFlow() {}
 
 
 
@@ -708,6 +722,13 @@ class EventDocumentService
 
         }
 
+        $documentAction = 'document';
+
+        if (!empty($this->isSupplyReportDone)) {
+
+            $documentAction = 'supply';
+        }
+
         BitrixDealFlowService::flow( //создает сделку
             $this->hook,
             [$this->currentBaseDeal],
@@ -715,7 +736,7 @@ class EventDocumentService
             'sales',
             $this->entityType,
             $this->entityId,
-            'document', // xo warm presentation, hot moneyAwait
+            $documentAction, // xo warm presentation, hot moneyAwait
             $this->currentPlanEventTypeName,
             $this->currentPlanEventName,
             'done',  // plan done expired 
@@ -1424,7 +1445,40 @@ class EventDocumentService
                 $this->currentBaseDeal['ID'],
                 null,
                 null,
-         
+
+                // $this->workStatus['current'], 
+                // $this->resultStatus, // result noresult expired,
+                // $this->noresultReason,
+                // $this->failReason,
+                // $this->failType
+
+            );
+        }
+
+
+        if ($this->isSupplyReportDone) { //если сделан отчет о продаже
+
+
+            $eventTypeCode = 'ev_supply';
+            $eventTypeName = 'Отчет о поставке';
+   
+
+
+            BitrixListDocumentFlowService::getListsFlow(  //report - отчет по текущему событию
+                $this->hook,
+                $this->bitrixLists,
+                $eventTypeCode,
+                $eventTypeName,
+                'done',  // сделано, отправлено
+                // $this->stringType,
+                // $this->nowDate,
+                $this->responsibleId,
+                $this->responsibleId,
+                $this->responsibleId,
+                $this->entityId,
+                $this->comment,
+                $currentBxDealIds,
+                $this->currentBaseDeal['ID']
                 // $this->workStatus['current'], 
                 // $this->resultStatus, // result noresult expired,
                 // $this->noresultReason,

@@ -37,7 +37,7 @@ class BitrixListDocumentFlowService
         $eventTypeName, //Коммерческое Предлжение   Счет после презентации Поставка
 
 
-        $eventAction,  // 
+        $eventAction,  //           done - отчет сделан
         // Отправлен	event_action	act_send	ACT_SEND
         // Подписан	event_action	act_sign	ACT_SIGN
         // Оплачен	event_action	act_pay	ACT_PAY

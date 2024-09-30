@@ -377,7 +377,7 @@ class BitrixDealService
     static function getTargetStage(
         $currentCategoryData,
         $group,
-        $eventType, // xo warm presentation,
+        $eventType, // xo warm presentation, document
         $eventAction,  // plan done expired fail
         $isResult,
     ) {
@@ -474,6 +474,11 @@ class BitrixDealService
         if ($eventType === 'document') {
             $stagePrephicks = 'sales';
             $stageSuphicks = 'offer_create';
+        }
+
+        if ($eventType === 'supply') {
+            $stagePrephicks = 'sales';
+            $stageSuphicks = 'supply';
         }
         if (!empty($currentCategoryData['stages'])) {
 
