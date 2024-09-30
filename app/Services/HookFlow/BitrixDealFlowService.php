@@ -115,7 +115,7 @@ class BitrixDealFlowService
                     'CATEGORY_ID' => $currentCategoryData['bitrixId'],
                     'STAGE_ID' => "C" . $currentCategoryData['bitrixId'] . ':' . $targetStageBtxId,
                     "COMPANY_ID" => $entityId,
-                    'ASSIGNED_BY_ID' => $responsibleId
+                    // 'ASSIGNED_BY_ID' => $responsibleId
                 ];
                 if ($currentCategoryData['code'] === 'tmc_base' && $eventType === 'presentation' && ($eventAction === 'done' || $eventAction === 'fail')) {
                     //если данная перебираемая сделка - тмц , при этом событие - сделана презентация
