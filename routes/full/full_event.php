@@ -286,8 +286,10 @@ Route::prefix('full')->group(function () {
     Route::post('/contract/flow', function (Request $request) {
 
         $data = $request->all();
+        $service = new EventDocumentService($data);
+        $result = $service->getDocumentFlow();
         return APIOnlineController::getSuccess(
-            ['contractData' => $data, 'link' => $data]
+            ['contractData' => $data, 'link' => $data, 'service' => $result]
         );
     }); //TODO |
 
