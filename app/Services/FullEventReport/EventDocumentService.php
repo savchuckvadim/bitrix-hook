@@ -614,7 +614,7 @@ class EventDocumentService
 
             $reportFields['op_offer_date'] = $this->nowDate;
         }
-        if ($this->isInvoiceDone) {
+        if (!empty($this->isInvoiceDone)) {
 
             $reportFields['op_invoice_q'] = $entityInvoiceCount + 1; //количество 
             $reportFields['op_current_status'] = 'Счет';
@@ -625,6 +625,17 @@ class EventDocumentService
             }
 
             $reportFields['op_invoice_date'] = $this->nowDate;
+        }
+        if ($this->isSupplyReportDone) {
+
+            $reportFields['op_current_status'] = 'Поставка';
+
+            // if ($isFromPresentation) {
+            //     $reportFields['op_invoice_pres_q'] =   $entityPresInvoiceCount + 1; //количество после през
+            //     $reportFields['op_current_status'] = 'Счет после презентации';
+            // }
+
+            // $reportFields['op_invoice_date'] = $this->nowDate;
         }
         $reportFields['pres_comments'] = $currentComments . ' | ' . $this->nowDate . ' ' . $reportFields['op_current_status'];
         // if ($this->isContractDone) {
