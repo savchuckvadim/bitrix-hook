@@ -295,7 +295,7 @@ class BitrixDealService
     static function getTargetCategoryData(
         $portalDealData,
         $currentDepartamentType,
-        $eventType, // xo warm presentation,
+        $eventType, // xo warm presentation, document supply
         $eventAction,  // plan done expired fail
 
 
@@ -311,7 +311,7 @@ class BitrixDealService
 
         if ($currentDepartamentType === 'sales') {
             if (
-                ($eventType == 'document') ||
+                ($eventType == 'document' || $eventType == 'supply') ||
                 $eventAction == 'plan' ||
                 ($eventAction == 'done' && $eventType == 'presentation') ||
 
