@@ -263,7 +263,6 @@ class EventDocumentService
             $portal = $portal['data'];
             $this->portal = $portal;
 
-            $this->isFromPresentation = $data['isFromPresentation'];
 
 
             // $this->aprilSmartData = $portal['bitrixSmart'];
@@ -332,6 +331,11 @@ class EventDocumentService
 
             // ]);
 
+            if (isset($data['isFromPresentation'])) {
+                $this->isFromPresentation = $data['isFromPresentation'];
+
+            
+            }
 
             if (isset($data['isSupplyReport'])) {
                 if (!empty($data['isSupplyReport'])) {
@@ -340,6 +344,9 @@ class EventDocumentService
             }
 
             if(empty($this->isSupplyReportDone)){
+              
+
+              
                 $this->isOfferDone = true;
                 if (!empty($data['invoice'])) {
     
