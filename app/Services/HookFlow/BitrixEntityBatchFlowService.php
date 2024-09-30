@@ -112,25 +112,25 @@ class BitrixEntityBatchFlowService
 
         $command = '';
         try {
-            // if ($entityType == 'deal') {
-            // Log::info('HOOK TEST currentBtxDeals', [
-            //     'currentBtxEntity' => $currentBtxEntity,
-            //     'entityType' => $entityType,
-            //     'entityId' => $entityId,
-            //     // 'reportFields' => $reportFields,  
+            if ($entityType == 'deal') {
+                Log::info('HOOK TEST currentBtxDeals', [
+                    'currentBtxEntity' => $currentBtxEntity,
+                    'entityType' => $entityType,
+                    'entityId' => $entityId,
+                    // 'reportFields' => $reportFields,  
 
 
-            // ]);
-            // }
+                ]);
+            }
             if (!empty($portalCompanyData) && !empty($portalCompanyData['bitrixfields'])) {
                 $fields = $portalCompanyData['bitrixfields'];
 
-                // Log::channel('telegram')->info('APRIL_HOOK updateCompany', [
-                //     'portal fields' => $fields,
-                //     'currentFieldsForUpdate' => $currentFieldsForUpdate,
-                //     'currentBtxEntity' => $currentBtxEntity
+                Log::channel('telegram')->info('APRIL_HOOK updateCompany', [
+                    'portal fields' => $fields,
+                    'currentFieldsForUpdate' => $currentFieldsForUpdate,
+                    'currentBtxEntity' => $currentBtxEntity
 
-                // ]);
+                ]);
 
 
                 $updatedFields = $this->getReportFields(
@@ -710,12 +710,12 @@ class BitrixEntityBatchFlowService
         if ($entityType == 'company') {
             $updatedFields['ASSIGNED_BY_ID'] = $responsibleId;
         }
-        // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-        //     'updatedFields' => $updatedFields
-        // ]);
-        // Log::info('HOOK TEST CURRENTENTITY', [
-        //     'updatedFields' => $updatedFields
-        // ]);
+        Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
+            'updatedFields' => $updatedFields
+        ]);
+        Log::info('HOOK TEST CURRENTENTITY', [
+            'updatedFields' => $updatedFields
+        ]);
         return $updatedFields;
     }
 
@@ -810,12 +810,12 @@ class BitrixEntityBatchFlowService
                 }
             }
         }
-        // Log::channel('telegram')->info('HOOK TEST getWorkstatusFieldItemValue', [
-        //     'resultCode' => $resultCode,
-        //     'planEventType' => $planEventType,
-        //     'workStatus' => $workStatus,
-        //     'resultItemBtxId' => $resultItemBtxId,
-        // ]);
+        Log::channel('telegram')->info('HOOK TEST getWorkstatusFieldItemValue', [
+            'resultCode' => $resultCode,
+            'planEventType' => $planEventType,
+            'workStatus' => $workStatus,
+            'resultItemBtxId' => $resultItemBtxId,
+        ]);
         return $resultItemBtxId;
     }
 

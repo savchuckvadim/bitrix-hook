@@ -709,7 +709,7 @@ class EventReportService
                 // if ($this->domain !== 'april-dev.bitrix24.ru') {
                 //     $currentDealsIds = $this->getBatchDealFlow();
                 // } else {
-                    $currentDealsIds = $this->getNEWBatchDealFlow();
+                $currentDealsIds = $this->getNEWBatchDealFlow();
                 // }
 
 
@@ -1403,6 +1403,17 @@ class EventReportService
 
 
         $entityService = new BitrixEntityBatchFlowService();
+
+
+        Log::channel('telegram')->info('HOOK FROM ONLINE', ['reportFields' => $reportFields]);
+        Log::info('HOOK FROM ONLINE', ['reportFields' => $reportFields]);
+
+        if (isset($reportFields['op_work_status'])) {
+
+            Log::channel('telegram')->info('HOOK FROM ONLINE', ['op_work_status' => $reportFields['op_work_status']]);
+            Log::info('HOOK FROM ONLINE', ['op_work_status' => $reportFields['op_work_status']]);
+        }
+
 
 
 
@@ -3093,7 +3104,7 @@ class EventReportService
                                 $this->currentBaseDeal['ID'],
                                 $currentReportStatus
                             );
-    
+
                             $key = 'update_entity_deal_plan' . '_' . $category['code'];
                             $resultBatchCommands[$key] = $entityCommand;
                         }
