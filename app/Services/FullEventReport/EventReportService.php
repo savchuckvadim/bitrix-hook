@@ -1163,8 +1163,8 @@ class EventReportService
         if(!empty($this->currentBtxEntity)){
             if(isset($this->currentBtxEntity['UF_CRM_PRES_COUNT'])){
 
-                $currentPresCount = $this->currentBtxEntity['UF_CRM_PRES_COUNT'];
-                $companyPresCount = $this->currentBtxEntity['UF_CRM_PRES_COUNT'];
+                $currentPresCount = (int)$this->currentBtxEntity['UF_CRM_PRES_COUNT'];
+                $companyPresCount = (int)$this->currentBtxEntity['UF_CRM_PRES_COUNT'];
 
             }
 
@@ -1174,7 +1174,7 @@ class EventReportService
         if(!empty($this->currentBaseDeal)){
             if(isset($this->currentBaseDeal['UF_CRM_PRES_COUNT'])){
 
-                $dealPresCount = $this->currentBaseDeal['UF_CRM_PRES_COUNT'];
+                $dealPresCount = (int)$this->currentBaseDeal['UF_CRM_PRES_COUNT'];
 
             }
 
