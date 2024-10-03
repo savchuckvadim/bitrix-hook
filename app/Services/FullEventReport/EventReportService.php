@@ -529,7 +529,7 @@ class EventReportService
                     $this->relationCompanyUserPresDeals = $sessionDeals['allPresentationDeals']; //allPresDeal 
                     $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
                     $this->relationColdDeals = $sessionDeals['allXODeals'];
-                    // $this->currentTMCDealFromCurrentPres = $sessionDeals['currentTMCDeal'];
+                    $this->currentTMCDealFromCurrentPres = $sessionDeals['currentTMCDeal'];
                     Log::info('HOOK TMC SESSION', ['sessionDeals' => $sessionDeals]);
                     // Log::info('HOOK TMC SESSION currentTMCDeal', ['session currentTMCDeal' => $sessionDeals['currentTMCDeal']]);
                 }
@@ -3244,6 +3244,9 @@ class EventReportService
 
                         ]
                     );
+                    // Log::channel('telegram')->info('TMC DEAL', [
+                    //     'currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres
+                    // ]);
                     if ((!empty($this->currentTMCDealFromCurrentPres) || !empty($this->currentTMCDeal)) &&
                         ($this->resultStatus === 'result' || $this->isFail || $this->isSuccessSale) &&
                         $this->currentReportEventType === 'presentation'

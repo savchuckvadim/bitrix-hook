@@ -1409,7 +1409,7 @@ class ReportController extends Controller
                         if (!empty($btxDealPortalCategory['code'])) {
                             if ($btxDealPortalCategory['code'] == "tmc_base") {
                                 $currentBaseCategoryBtxId = $btxDealPortalCategory['bitrixId'];
-                            } 
+                            }
                         }
                     }
                 }
@@ -1490,7 +1490,7 @@ class ReportController extends Controller
                         'currentBaseDeals' => $currentBaseDeals,
                         // 'basePresentationDeals' => $basePresentationDeals,
                         'allPresentationDeals' => $allPresentationDeals,
-                       
+
 
                     ],
 
@@ -1865,6 +1865,60 @@ class ReportController extends Controller
                 !empty($domain) &&
                 !empty($currentTask)
             ) {
+
+                $select = [
+                    'ID',
+                    'TITLE',
+                    'UF_CRM_PRES_COUNT',
+                    'CATEGORY_ID',
+                    'ASSIGNED_BY_ID',
+                    // 'COMPANY_ID',
+                    'STAGE_ID',
+                    // 'XO_NAME',
+                    // 'XO_DATE',
+                    // 'XO_RESPONSIBLE',
+                    // 'XO_CREATED',
+                    // 'NEXT_PRES_PLAN_DATE',
+                    // 'LAST_PRES_PLAN_DATE',
+                    // 'LAST_PRES_DONE_DATE',
+                    // 'LAST_PRES_PLAN_RESPONSIBLE',
+                    // 'LAST_PRES_DONE_RESPONSIBLE',
+
+                    'UF_CRM_PRES_COMMENTS',
+                    // 'MANAGER_OP',
+                    // 'MANAGER_TMC',
+                    // 'MANAGER_OS',
+                    // 'MANAGER_EDU',
+                    // 'CALL_NEXT_DATE',
+                    // 'CALL_NEXT_NAME',
+                    // 'CALL_LAST_DATE',
+                    // 'GO_PLAN',
+                    'UF_CRM_OP_HISTORY',
+                    'UF_CRM_OP_MHISTORY',
+                    // 'OP_WORK_STATUS',
+                    // 'OP_PROSPECTS_TYPE',
+                    // 'OP_EFIELD_FAIL_REASON',
+                    // 'OP_FAIL_COMMENTS',
+                    // 'OP_NORESULT_REASON',
+                    // 'OP_CLIENT_STATUS',
+                    // 'OP_PROSPECTS',
+                    // 'OP_CLIENT_TYPE',
+                    // 'OP_CONCURENTS',
+                    // 'OP_CATEGORY',
+                    // 'OP_SMART_COMPANY_ID',
+                    // 'OP_SMART_ID',
+                    // 'OP_SMART_LID',
+                    // 'OP_SMART_LIDS',
+                    // 'OFFER_SUM',
+                    'UF_CRM_TO_BASE_SALES',
+                    'UF_CRM_TO_XO_SALES',
+                    'UF_CRM_TO_PRESENTATION_SALES',
+                    'UF_CRM_TO_BASE_TMC',
+                    'UF_CRM_TO_PRESENTATION_TMC',
+                    'UF_CRM_TO_BASE_SERVICE',
+                    'UF_CRM_OP_CURRENT_STATUS',
+
+                ];
                 $responsibleId = 1;
                 $currentBaseDeal = null;               //базовая сделка в задаче всегда должна быть одна
                 $currentPresentationDeal = null;               // сделка презентации из задачи
@@ -1876,35 +1930,29 @@ class ReportController extends Controller
                 $allPresentationDeals = [];                  // все сделки презентации связанные с компанией и пользователем
                 $currentCompany = null;
                 $allXODeals = [];
-
+                $allTMCDeals = [];
+                $currentTMCDeal = null;
                 // $companyId = $data['userId'];
                 // $userId = $data['companyId'];
-
+                // $domain = $data['domain'];
+                // $companyId  = $data['domain'];
                 $btxDeals = []; //from task
-
+                // $currentTask =  $data['currentTask'];
 
 
                 $getAllPresDealsData = [];
 
-
-
+                $portal = PortalController::getPortal($domain);
+                $portal = $portal['data'];
+                $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+                $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+                // $currentCompany = BitrixGeneralService::getEntity($hook, 'company', $companyId);
                 $sessionKey = $domain . '_' . $currentTask['id'];
 
 
                 $presList = null;
 
-                $select = [
-                    'ID',
-                    'TITLE',
-                    'UF_CRM_PRES_COUNT',
-                    'CATEGORY_ID',
-                    'STAGE_ID',
-                    'UF_CRM_PRES_COMMENTS',
-                    'UF_CRM_OP_FAIL_COMMENTS',
-                    'UF_CRM_TO_BASE_SALES',
-                    'UF_CRM_TO_BASE_SALES',
 
-                ];
 
                 //from task - получаем из task компании и сделки разных направлений
 
@@ -2008,6 +2056,17 @@ class ReportController extends Controller
                                     if (!empty($btxDeal['CATEGORY_ID'])) {
                                         if ($btxDeal['CATEGORY_ID'] == $currentXOCategoryBtxId) {
                                             $currentXODeal = $btxDeal;      // сделка презентации из задачи
+
+                                        }
+                                    }
+                                }
+                            } else  if ($btxDealPortalCategory['code'] == "tmc_base") {
+                                $currentTMCCategoryBtxId = $btxDealPortalCategory['bitrixId'];
+
+                                foreach ($btxDeals as $btxDeal) {
+                                    if (!empty($btxDeal['CATEGORY_ID'])) {
+                                        if ($btxDeal['CATEGORY_ID'] == $currentTMCCategoryBtxId) {
+                                            $currentTMCDeal = $btxDeal;      // сделка презентации из задачи
 
                                         }
                                     }
@@ -2165,17 +2224,60 @@ class ReportController extends Controller
                                     'select' => $select
                                 ];
 
-                                sleep(1);
+                                $rand = mt_rand(300000, 1000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                                usleep($rand);
                                 $allXODeals =   BitrixDealService::getDealList(
                                     $hook,
                                     $getAllXODealsData,
+                                );
+                            }
+                        } else  if ($btxDealPortalCategory['code'] == "tmc_base") {
+
+
+
+                            foreach ($btxDeals as $btxDeal) {
+                                $currenBaseCategoryBtxId = $btxDealPortalCategory['bitrixId'];
+
+                                if (!empty($btxDeal['CATEGORY_ID'])) {
+                                    if ($btxDeal['CATEGORY_ID'] == $btxDealPortalCategory['bitrixId']) {
+                                        $currentTMCDeal = $btxDeal;   //базовая сделка в задаче всегда должна быть одна
+                                    }
+                                }
+
+
+                                $getAllTMCDealsData =  [
+                                    'filter' => [
+                                        'COMPANY_ID' => $currentCompany['ID'],
+                                        'CATEGORY_ID' => $currenBaseCategoryBtxId,
+                                        'RESPONSIBLE_ID' => $responsibleId,
+                                        '!=STAGE_ID' => ['C' . $currenBaseCategoryBtxId . ':WON', 'C' . $currenBaseCategoryBtxId . ':LOSE', 'C' . $currenBaseCategoryBtxId . ':APOLOGY']
+                                    ],
+                                    'select' => $select
+
+                                ];
+
+
+                                $allTMCDeals =   BitrixDealService::getDealList(
+                                    $hook,
+                                    $getAllTMCDealsData,
                                 );
                             }
                         }
                     }
                 }
 
+                if (empty($currentTMCDeal) && !empty($currentPresentationDeal) && !empty($allTMCDeals)) {
 
+                    if (!empty($currentPresentationDeal['ID'])) {
+                        foreach ($allTMCDeals as $key => $tmcDeal) {
+                            if (!empty($tmcDeal['UF_CRM_TO_PRESENTATION_SALES'])) {
+                                if ($tmcDeal['UF_CRM_TO_PRESENTATION_SALES'] === $currentPresentationDeal['ID']) {
+                                    $currentTMCDeal = $tmcDeal;
+                                }
+                            }
+                        }
+                    }
+                }
 
                 if (!empty($currentBaseDeal) && !empty($currentCompany)) {
 
@@ -2221,8 +2323,8 @@ class ReportController extends Controller
 
 
                 $sessionData = [
-                    'hook' => $hook,
-                    'portal' => $portal,
+                    // 'hook' => $hook,
+                    // 'portal' => $portal,
                     'currentTask' => $currentTask,
                     'currentCompany' => $currentCompany,
                     'deals' => [
@@ -2235,13 +2337,13 @@ class ReportController extends Controller
                         'currentXODeal' => $currentXODeal,
                         'allXODeals' => $allXODeals,
                         'currentTaskDeals' => $btxDeals,
-                        // 'allDeals' => $allDeals
+                        'allTMCDeals' => $allTMCDeals,
+                        'currentTMCDeal' => $currentTMCDeal
 
-                    ],
-
-
-
+                    ]
                 ];
+
+    
 
                 FullEventInitController::setSessionItem(
                     $sessionKey,
