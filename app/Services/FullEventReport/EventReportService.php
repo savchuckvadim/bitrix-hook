@@ -1158,17 +1158,40 @@ class EventReportService
         $currentPresCount = 0;
         $companyPresCount = 0;
         $dealPresCount = 0;
-        if (!empty($this->currentTask)) {
-            if (!empty($this->currentTask['presentation'])) {
 
-                if (!empty($this->currentTask['presentation']['company'])) {
-                    $companyPresCount = (int)$this->currentTask['presentation']['company'];
-                }
-                if (!empty($this->currentTask['presentation']['deal'])) {
-                    $dealPresCount = (int)$this->currentTask['presentation']['deal'];
-                }
+        //CЧЕТЧИК ОБНУЛЯЕТСЯ ЕСЛИ NEW TASK
+        if(!empty($this->currentBtxEntity)){
+            if(isset($this->currentBtxEntity['UF_CRM_PRES_COUNT'])){
+
+                $currentPresCount = $this->currentBtxEntity['UF_CRM_PRES_COUNT'];
+                $companyPresCount = $this->currentBtxEntity['UF_CRM_PRES_COUNT'];
+
             }
+
+
         }
+
+        if(!empty($this->currentBaseDeal)){
+            if(isset($this->currentBaseDeal['UF_CRM_PRES_COUNT'])){
+
+                $dealPresCount = $this->currentBaseDeal['UF_CRM_PRES_COUNT'];
+
+            }
+
+
+        }
+
+        // if (!empty($this->currentTask)) {
+        //     if (!empty($this->currentTask['presentation'])) {
+
+        //         if (!empty($this->currentTask['presentation']['company'])) {
+        //             $companyPresCount = (int)$this->currentTask['presentation']['company'];
+        //         }
+        //         if (!empty($this->currentTask['presentation']['deal'])) {
+        //             $dealPresCount = (int)$this->currentTask['presentation']['deal'];
+        //         }
+        //     }
+        // }
 
 
 

@@ -313,8 +313,8 @@ class ReportController extends Controller
                     // 'LAST_PRES_DONE_RESPONSIBLE',
 
                     'UF_CRM_PRES_COMMENTS',
-                    // 'MANAGER_OP',
-                    // 'MANAGER_TMC',
+                    'UF_CRM_MANAGER_OP',
+                    'UF_CRM_MANAGER_TMC',
                     // 'MANAGER_OS',
                     // 'MANAGER_EDU',
                     // 'CALL_NEXT_DATE',
