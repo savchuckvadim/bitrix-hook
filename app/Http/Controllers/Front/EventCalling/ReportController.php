@@ -298,7 +298,7 @@ class ReportController extends Controller
                     'ID',
                     'TITLE',
                     'UF_CRM_PRES_COUNT',
-                    'UF_CRM_1709807026',
+                    // 'UF_CRM_1709807026',
 
 
                     'CATEGORY_ID',
@@ -1179,6 +1179,7 @@ class ReportController extends Controller
 
                 $presList = null;
 
+                
 
 
                 //from task - получаем из task компании и сделки разных направлений
@@ -1873,7 +1874,7 @@ class ReportController extends Controller
                     'ID',
                     'TITLE',
                     'UF_CRM_PRES_COUNT',
-                    'UF_CRM_1709807026',
+                    // 'UF_CRM_1709807026',
 
                     
                     'CATEGORY_ID',
