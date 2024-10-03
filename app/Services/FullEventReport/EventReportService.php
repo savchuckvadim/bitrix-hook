@@ -1183,8 +1183,8 @@ class EventReportService
         if (!empty($this->currentBtxEntity)) {
             if (isset($this->currentBtxEntity['UF_CRM_PRES_COUNT'])) {
 
-                $currentPresCount = (int)$this->currentBtxEntity['UF_CRM_PRES_COUNT'];
-                $companyPresCount = (int)$this->currentBtxEntity['UF_CRM_PRES_COUNT'];
+                $currentPresCount = (int)$this->currentBtxEntity['UF_CRM_1709807026'];
+                $companyPresCount = (int)$this->currentBtxEntity['UF_CRM_1709807026'];
             }
         }
 
@@ -1523,6 +1523,40 @@ class EventReportService
         $currentPresCount = 0;
         $companyPresCount = 0;
         $dealPresCount = 0;
+        Log::channel('telegram')
+            ->info(
+                'COUNT CHECK vheck',
+                [
+                    'currentBtxEntity' => $this->currentBtxEntity['UF_CRM_1709807026'],
+
+                ]
+            );
+        Log::channel('telegram')
+            ->info(
+                'COUNT CHECK vheck',
+                [
+                    'currentBaseDeal' => $this->currentBaseDeal['UF_CRM_PRES_COUNT'],
+
+                ]
+            );
+
+
+        //CЧЕТЧИК ОБНУЛЯЕТСЯ ЕСЛИ NEW TASK
+        if (!empty($this->currentBtxEntity)) {
+            if (isset($this->currentBtxEntity['UF_CRM_PRES_COUNT'])) {
+
+                $currentPresCount = (int)$this->currentBtxEntity['UF_CRM_1709807026'];
+                $companyPresCount = (int)$this->currentBtxEntity['UF_CRM_1709807026'];
+            }
+        }
+
+        if (!empty($this->currentBaseDeal)) {
+            if (isset($this->currentBaseDeal['UF_CRM_PRES_COUNT'])) {
+
+                $dealPresCount = (int)$this->currentBaseDeal['UF_CRM_PRES_COUNT'];
+            }
+        }
+
         // if (!empty($this->currentTask)) {
         //     if (!empty($this->currentTask['presentation'])) {
 
@@ -1535,20 +1569,6 @@ class EventReportService
         //     }
         // }
 
-        if (!empty($this->currentBtxEntity)) {
-            if (isset($this->currentBtxEntity['UF_CRM_PRES_COUNT'])) {
-
-                $currentPresCount = (int)$this->currentBtxEntity['UF_CRM_PRES_COUNT'];
-                $companyPresCount = (int)$this->currentBtxEntity['UF_CRM_PRES_COUNT'];
-            }
-        }
-
-        if (!empty($this->currentBaseDeal)) {
-            if (isset($this->currentBaseDeal['UF_CRM_PRES_COUNT'])) {
-
-                $dealPresCount = (int)$this->currentBaseDeal['UF_CRM_PRES_COUNT'];
-            }
-        }
 
         $currentPresCount =  $companyPresCount;
         if ($isDeal && !empty($dealId)) {
