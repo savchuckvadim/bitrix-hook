@@ -502,6 +502,8 @@ class EventReportService
 
                     // ]);
                 }
+                $this->currentBtxEntity  = $sessionData['currentCompany'];
+
                 if (
                     isset($sessionDeals['currentBaseDeal'])
                     //  &&
