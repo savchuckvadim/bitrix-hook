@@ -910,7 +910,62 @@ class ReportController extends Controller
                 //     $baseDealId
                 // );
 
+                $select = [
+                    'ID',
+                    'TITLE',
+                    'UF_CRM_PRES_COUNT',
+                    // 'UF_CRM_1709807026',
 
+                    
+                    'CATEGORY_ID',
+                    'ASSIGNED_BY_ID',
+                    // 'COMPANY_ID',
+                    'STAGE_ID',
+                    // 'XO_NAME',
+                    // 'XO_DATE',
+                    // 'XO_RESPONSIBLE',
+                    // 'XO_CREATED',
+                    // 'NEXT_PRES_PLAN_DATE',
+                    // 'LAST_PRES_PLAN_DATE',
+                    // 'LAST_PRES_DONE_DATE',
+                    // 'LAST_PRES_PLAN_RESPONSIBLE',
+                    // 'LAST_PRES_DONE_RESPONSIBLE',
+
+                    'UF_CRM_PRES_COMMENTS',
+                    // 'MANAGER_OP',
+                    // 'MANAGER_TMC',
+                    // 'MANAGER_OS',
+                    // 'MANAGER_EDU',
+                    // 'CALL_NEXT_DATE',
+                    // 'CALL_NEXT_NAME',
+                    // 'CALL_LAST_DATE',
+                    // 'GO_PLAN',
+                    'UF_CRM_OP_HISTORY',
+                    'UF_CRM_OP_MHISTORY',
+                    // 'OP_WORK_STATUS',
+                    // 'OP_PROSPECTS_TYPE',
+                    // 'OP_EFIELD_FAIL_REASON',
+                    // 'OP_FAIL_COMMENTS',
+                    // 'OP_NORESULT_REASON',
+                    // 'OP_CLIENT_STATUS',
+                    // 'OP_PROSPECTS',
+                    // 'OP_CLIENT_TYPE',
+                    // 'OP_CONCURENTS',
+                    // 'OP_CATEGORY',
+                    // 'OP_SMART_COMPANY_ID',
+                    // 'OP_SMART_ID',
+                    // 'OP_SMART_LID',
+                    // 'OP_SMART_LIDS',
+                    // 'OFFER_SUM',
+                    'UF_CRM_TO_BASE_SALES',
+                    'UF_CRM_TO_XO_SALES',
+                    'UF_CRM_TO_PRESENTATION_SALES',
+                    'UF_CRM_TO_BASE_TMC',
+                    'UF_CRM_TO_PRESENTATION_TMC',
+                    'UF_CRM_TO_BASE_SERVICE',
+                    'UF_CRM_OP_CURRENT_STATUS',
+
+                ];
                 $btxDealPortalCategories = null;
                 $currentCategoryData  = null;
                 $allExecludeStages =  [];
@@ -954,13 +1009,8 @@ class ReportController extends Controller
                                         'C' . $currentBaseCategoryBtxId . ':APOLOGY'
                                     ]
                                 ],
-                                // 'select' => [
-                                //     'ID',
-                                //     'TITLE',
-                                //     'UF_CRM_PRES_COUNT',
-                                //     'STAGE_ID',
+                                'select' => $select
 
-                                // ]
                             ];
 
                             // sleep(1);
@@ -982,13 +1032,8 @@ class ReportController extends Controller
                                     'RESPONSIBLE_ID' => $responsibleId,
                                     '!=STAGE_ID' => ['C' . $currentPresentCategoryBtxId . ':LOSE', 'C' . $currentPresentCategoryBtxId . ':APOLOGY']
                                 ],
-                                // 'select' => [
-                                //     'ID',
-                                //     'TITLE',
-                                //     'UF_CRM_PRES_COUNT',
-                                //     'STAGE_ID',
+                                'select' => $select
 
-                                // ]
                             ];
 
                             sleep(1);
@@ -1180,7 +1225,62 @@ class ReportController extends Controller
                 $presList = null;
 
                 
+                $select = [
+                    'ID',
+                    'TITLE',
+                    'UF_CRM_PRES_COUNT',
+                    // 'UF_CRM_1709807026',
 
+                    
+                    'CATEGORY_ID',
+                    'ASSIGNED_BY_ID',
+                    // 'COMPANY_ID',
+                    'STAGE_ID',
+                    // 'XO_NAME',
+                    // 'XO_DATE',
+                    // 'XO_RESPONSIBLE',
+                    // 'XO_CREATED',
+                    // 'NEXT_PRES_PLAN_DATE',
+                    // 'LAST_PRES_PLAN_DATE',
+                    // 'LAST_PRES_DONE_DATE',
+                    // 'LAST_PRES_PLAN_RESPONSIBLE',
+                    // 'LAST_PRES_DONE_RESPONSIBLE',
+
+                    'UF_CRM_PRES_COMMENTS',
+                    // 'MANAGER_OP',
+                    // 'MANAGER_TMC',
+                    // 'MANAGER_OS',
+                    // 'MANAGER_EDU',
+                    // 'CALL_NEXT_DATE',
+                    // 'CALL_NEXT_NAME',
+                    // 'CALL_LAST_DATE',
+                    // 'GO_PLAN',
+                    'UF_CRM_OP_HISTORY',
+                    'UF_CRM_OP_MHISTORY',
+                    // 'OP_WORK_STATUS',
+                    // 'OP_PROSPECTS_TYPE',
+                    // 'OP_EFIELD_FAIL_REASON',
+                    // 'OP_FAIL_COMMENTS',
+                    // 'OP_NORESULT_REASON',
+                    // 'OP_CLIENT_STATUS',
+                    // 'OP_PROSPECTS',
+                    // 'OP_CLIENT_TYPE',
+                    // 'OP_CONCURENTS',
+                    // 'OP_CATEGORY',
+                    // 'OP_SMART_COMPANY_ID',
+                    // 'OP_SMART_ID',
+                    // 'OP_SMART_LID',
+                    // 'OP_SMART_LIDS',
+                    // 'OFFER_SUM',
+                    'UF_CRM_TO_BASE_SALES',
+                    'UF_CRM_TO_XO_SALES',
+                    'UF_CRM_TO_PRESENTATION_SALES',
+                    'UF_CRM_TO_BASE_TMC',
+                    'UF_CRM_TO_PRESENTATION_TMC',
+                    'UF_CRM_TO_BASE_SERVICE',
+                    'UF_CRM_OP_CURRENT_STATUS',
+
+                ];
 
                 //from task - получаем из task компании и сделки разных направлений
 
@@ -1235,13 +1335,7 @@ class ReportController extends Controller
                                         'C' . $currentBaseCategoryBtxId . ':APOLOGY'
                                     ]
                                 ],
-                                // 'select' => [
-                                //     'ID',
-                                //     'TITLE',
-                                //     'UF_CRM_PRES_COUNT',
-                                //     'STAGE_ID',
-
-                                // ]
+                                'select' => $select
                             ];
 
                             // sleep(1);
@@ -1263,13 +1357,8 @@ class ReportController extends Controller
                                     'RESPONSIBLE_ID' => $responsibleId,
                                     '!=STAGE_ID' => ['C' . $currentPresentCategoryBtxId . ':LOSE', 'C' . $currentPresentCategoryBtxId . ':APOLOGY']
                                 ],
-                                // 'select' => [
-                                //     'ID',
-                                //     'TITLE',
-                                //     'UF_CRM_PRES_COUNT',
-                                //     'STAGE_ID',
+                                'select' => $select
 
-                                // ]
                             ];
 
                             sleep(1);
