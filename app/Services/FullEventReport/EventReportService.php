@@ -3132,6 +3132,9 @@ class EventReportService
                             "COMPANY_ID" => $this->entityId,
                             'ASSIGNED_BY_ID' => $this->planResponsibleId
                         ];
+                        if (!empty($this->currentTMCDeal)) {
+                            $fieldsData['UF_CRM_TO_BASE_TMC'] = $this->currentTMCDeal['ID'];
+                        }
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
                         $key = 'set_' . '_' . $category['code'];
                         $resultBatchCommands[$key] = $batchCommand;

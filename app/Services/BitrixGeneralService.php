@@ -249,7 +249,7 @@ class BitrixGeneralService
     {
         $resultLead = null;
         try {
-            $methodSmart = '/crm.' . $entityType . '.add.json';
+            $methodSmart = '/crm.' . $entityType . '.add';
             $url = $hook . $methodSmart;
 
             $data = [
@@ -276,7 +276,7 @@ class BitrixGeneralService
     {
         $resultFields = null;
         try {
-            $methodSmart = '/crm.' . $entityType . '.get.json';
+            $methodSmart = '/crm.' . $entityType . '.get';
             $url = $hook . $methodSmart;
 
             $data = [
@@ -305,7 +305,7 @@ class BitrixGeneralService
     {
         $resultFields = null;
         try {
-            $methodSmart = '/crm.' . $entityType . '.list.json';
+            $methodSmart = '/crm.' . $entityType . '.list';
             $url = $hook . $methodSmart;
 
             $data = [
@@ -333,7 +333,7 @@ class BitrixGeneralService
     ) {
         $resultLead = null;
         try {
-            $methodSmart = '/crm.' . $entityType . '.update.json';
+            $methodSmart = '/crm.' . $entityType . '.update';
             $url = $hook . $methodSmart;
 
             $data = [
@@ -376,9 +376,9 @@ class BitrixGeneralService
 
     ) {
         //company and contacts
-        $methodCompany = '/crm.company.get.json';
-        $methodContacts = '/crm.contact.list.json';
-        $methodTask = '/tasks.task.add.json';
+        $methodCompany = '/crm.company.get';
+        $methodContacts = '/crm.contact.list';
+        $methodTask = '/tasks.task.add';
 
 
         $nowDate = now();

@@ -342,8 +342,8 @@ class ReportController extends Controller
                     'UF_CRM_TO_XO_SALES',
                     'UF_CRM_TO_PRESENTATION_SALES',
                     'UF_CRM_TO_BASE_TMC',
-                    'TO_PRESENTATION_TMC',
-                    'TO_BASE_SERVICE',
+                    'UF_CRM_TO_PRESENTATION_TMC',
+                    'UF_CRM_TO_BASE_SERVICE',
                     'UF_CRM_OP_CURRENT_STATUS',
 
                 ];
