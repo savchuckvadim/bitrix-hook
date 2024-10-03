@@ -1173,7 +1173,7 @@ class EventReportService
             ->info(
                 'COUNT CHECK vheck',
                 [
-                    'currentBaseDeal' => $this->currentBaseDeal['UF_CRM_PRES_COUNT'],
+                    'currentBaseDeal' => $this->currentBaseDeal,
 
                 ]
             );
@@ -1181,7 +1181,7 @@ class EventReportService
 
         //CЧЕТЧИК ОБНУЛЯЕТСЯ ЕСЛИ NEW TASK
         if (!empty($this->currentBtxEntity)) {
-            if (isset($this->currentBtxEntity['UF_CRM_PRES_COUNT'])) {
+            if (isset($this->currentBtxEntity['UF_CRM_1709807026'])) {
 
                 $currentPresCount = (int)$this->currentBtxEntity['UF_CRM_1709807026'];
                 $companyPresCount = (int)$this->currentBtxEntity['UF_CRM_1709807026'];
@@ -1543,7 +1543,7 @@ class EventReportService
 
         //CЧЕТЧИК ОБНУЛЯЕТСЯ ЕСЛИ NEW TASK
         if (!empty($this->currentBtxEntity)) {
-            if (isset($this->currentBtxEntity['UF_CRM_PRES_COUNT'])) {
+            if (isset($this->currentBtxEntity['UF_CRM_1709807026'])) {
 
                 $currentPresCount = (int)$this->currentBtxEntity['UF_CRM_1709807026'];
                 $companyPresCount = (int)$this->currentBtxEntity['UF_CRM_1709807026'];
