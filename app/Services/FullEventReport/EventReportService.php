@@ -1511,19 +1511,38 @@ class EventReportService
         $currentPresCount = 0;
         $companyPresCount = 0;
         $dealPresCount = 0;
-        if (!empty($this->currentTask)) {
-            if (!empty($this->currentTask['presentation'])) {
+        // if (!empty($this->currentTask)) {
+        //     if (!empty($this->currentTask['presentation'])) {
 
-                if (!empty($this->currentTask['presentation']['company'])) {
-                    $companyPresCount = (int)$this->currentTask['presentation']['company'];
-                }
-                if (!empty($this->currentTask['presentation']['deal'])) {
-                    $dealPresCount = (int)$this->currentTask['presentation']['deal'];
-                }
+        //         if (!empty($this->currentTask['presentation']['company'])) {
+        //             $companyPresCount = (int)$this->currentTask['presentation']['company'];
+        //         }
+        //         if (!empty($this->currentTask['presentation']['deal'])) {
+        //             $dealPresCount = (int)$this->currentTask['presentation']['deal'];
+        //         }
+        //     }
+        // }
+
+        if(!empty($this->currentBtxEntity)){
+            if(isset($this->currentBtxEntity['UF_CRM_PRES_COUNT'])){
+
+                $currentPresCount = (int)$this->currentBtxEntity['UF_CRM_PRES_COUNT'];
+                $companyPresCount = (int)$this->currentBtxEntity['UF_CRM_PRES_COUNT'];
+
             }
+
+
         }
 
+        if(!empty($this->currentBaseDeal)){
+            if(isset($this->currentBaseDeal['UF_CRM_PRES_COUNT'])){
 
+                $dealPresCount = (int)$this->currentBaseDeal['UF_CRM_PRES_COUNT'];
+
+            }
+
+
+        }
 
         $currentPresCount =  $companyPresCount;
         if ($isDeal && !empty($dealId)) {
