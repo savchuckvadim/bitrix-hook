@@ -298,6 +298,9 @@ class ReportController extends Controller
                     'ID',
                     'TITLE',
                     'UF_CRM_PRES_COUNT',
+                    'UF_CRM_1709807026',
+
+
                     'CATEGORY_ID',
                     'ASSIGNED_BY_ID',
                     // 'COMPANY_ID',
@@ -1870,6 +1873,9 @@ class ReportController extends Controller
                     'ID',
                     'TITLE',
                     'UF_CRM_PRES_COUNT',
+                    'UF_CRM_1709807026',
+
+                    
                     'CATEGORY_ID',
                     'ASSIGNED_BY_ID',
                     // 'COMPANY_ID',
@@ -2343,7 +2349,7 @@ class ReportController extends Controller
                     ]
                 ];
 
-    
+
 
                 FullEventInitController::setSessionItem(
                     $sessionKey,

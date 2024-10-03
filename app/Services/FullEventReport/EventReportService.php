@@ -1165,7 +1165,7 @@ class EventReportService
             ->info(
                 'COUNT CHECK vheck',
                 [
-                    'currentBtxEntity' => $this->currentBtxEntity['UF_CRM_PRES_COUNT'],
+                    'currentBtxEntity' => $this->currentBtxEntity['UF_CRM_1709807026'],
 
                 ]
             );
