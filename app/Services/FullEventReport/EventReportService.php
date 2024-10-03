@@ -1535,7 +1535,7 @@ class EventReportService
             ->info(
                 'COUNT CHECK vheck',
                 [
-                    'currentBaseDeal' => $this->currentBaseDeal['UF_CRM_PRES_COUNT'],
+                    'currentBaseDeal' => $this->currentBaseDeal,
 
                 ]
             );
