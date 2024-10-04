@@ -4574,7 +4574,7 @@ class EventReportService
         ]);
         
         Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
-            'unplannedPresDealsIds' => $planPresDealIds['unplannedPresDealsIds'],
+            'unplannedPresDealsIds' => $unplannedPresDealsIds,
 
 
         ]);
