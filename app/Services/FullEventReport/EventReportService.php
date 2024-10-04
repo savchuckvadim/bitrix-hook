@@ -4556,6 +4556,29 @@ class EventReportService
         $currentRepoertDealIds = $planPresDealIds['reportDeals'];
         $unplannedPresDealsIds = $planPresDealIds['unplannedPresDeals'];
 
+        Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+            'planDeals' => $planPresDealIds['planDeals'],
+
+
+        ]);
+        // Log::info('HOOK TEST COLD BATCH', [
+        //     'reportDeals' => $planPresDealIds['reportDeals'],
+
+
+        // ]);
+
+        Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+            'currentRepoertDealIds' => $planPresDealIds['reportDeals'],
+
+
+        ]);
+        
+        Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+            'unplannedPresDealsIds' => $planPresDealIds['unplannedPresDealsIds'],
+
+
+        ]);
+        
         // presentation list flow запускается когда
         // планируется презентация или unplunned тогда для связи со сделками берется $planPresDealIds
         // отчитываются о презентации презентация или unplunned тогда для связи со сделками берется $currentTask

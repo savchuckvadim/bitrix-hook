@@ -946,11 +946,11 @@ class ColdBatchService
         // Log::channel('telegram')->info('HOOK BATCH', ['results' => $results]);
 
         // $result = BitrixDealBatchFlowService::handleBatchResults($results);
-        Log::channel('telegram')->info('HOOK BATCH handle', ['handle result' => $planDeals]);
-        Log::info('HOOK BATCH handle', ['handle planDeals' => $planDeals]);
+        // Log::channel('telegram')->info('HOOK BATCH handle', ['handle result' => $planDeals]);
+        // Log::info('HOOK BATCH handle', ['handle planDeals' => $planDeals]);
 
-        Log::channel('telegram')->info('HOOK BATCH handle', ['handle result' => $planDeals]);
-        Log::info('HOOK BATCH handle', ['handle planDeals' => $planDeals]);
+        // Log::channel('telegram')->info('HOOK BATCH handle', ['handle result' => $planDeals]);
+        // Log::info('HOOK BATCH handle', ['handle planDeals' => $planDeals]);
 
         // $entityBatchCommands = [];
         if (!empty($planDeals) && (is_object($planDeals) || is_array($planDeals))) {
@@ -1021,26 +1021,26 @@ class ColdBatchService
         $entityResult =  $batchService->sendGeneralBatchRequest($batchCommands);
 
 
-        Log::info('HOOK TEST COLD BATCH', [
-            'all batchCommands' => $batchCommands,
+        // Log::info('HOOK TEST COLD BATCH', [
+        //     'all batchCommands' => $batchCommands,
 
 
-        ]);
-        Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
-            'all batchCommands' => $batchCommands,
+        // ]);
+        // Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+        //     'all batchCommands' => $batchCommands,
 
 
-        ]);
-        Log::info('HOOK TEST COLD BATCH', [
-            'entityResult' => $entityResult,
+        // ]);
+        // Log::info('HOOK TEST COLD BATCH', [
+        //     'entityResult' => $entityResult,
 
 
-        ]);
-        Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
-            'entityResult' => $entityResult,
+        // ]);
+        // Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+        //     'entityResult' => $entityResult,
 
 
-        ]);
+        // ]);
         // BitrixEntityFlowService::coldflow(
         //     $this->portal,
         //     $this->hook,
@@ -1054,27 +1054,27 @@ class ColdBatchService
 
 
 
-        Log::info('HOOK TEST COLD BATCH', [
-            'command' => $command,
+        // Log::info('HOOK TEST COLD BATCH', [
+        //     'command' => $command,
 
 
-        ]);
-        Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
-            'command' => $command,
+        // ]);
+        // Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+        //     'command' => $command,
 
 
-        ]);
+        // ]);
 
-        Log::info('HOOK TEST COLD BATCH', [
-            'mainDealFlowBatchCommands' => $mainDealFlowBatchCommands,
-
-
-        ]);
-        Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
-            'mainDealFlowBatchCommands' => $mainDealFlowBatchCommands,
+        // Log::info('HOOK TEST COLD BATCH', [
+        //     'mainDealFlowBatchCommands' => $mainDealFlowBatchCommands,
 
 
-        ]);
+        // ]);
+        // Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+        //     'mainDealFlowBatchCommands' => $mainDealFlowBatchCommands,
+
+
+        // ]);
 
 
         // if (!empty($planDeals)) {

@@ -300,12 +300,12 @@ class BitrixHookController extends Controller
                     // 'DESCRIPTION' => $description
                 ]
             ];
-            Log::channel('telegram')->error('APRIL_HOOK', [
-                'createColdTask' => [
-                    'taskData' => $taskData,
+            // Log::channel('telegram')->error('APRIL_HOOK', [
+            //     'createColdTask' => [
+            //         'taskData' => $taskData,
 
-                ]
-            ]);
+            //     ]
+            // ]);
             $createdTask = BitrixGeneralService::createTask(
                 'BitrixHookController create cold task',
                 $hook,
