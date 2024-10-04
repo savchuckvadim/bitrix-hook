@@ -4572,13 +4572,13 @@ class EventReportService
 
 
         ]);
-        
+
         Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
             'unplannedPresDealsIds' => $unplannedPresDealsIds,
 
 
         ]);
-        
+
         // presentation list flow запускается когда
         // планируется презентация или unplunned тогда для связи со сделками берется $planPresDealIds
         // отчитываются о презентации презентация или unplunned тогда для связи со сделками берется $currentTask
@@ -4748,57 +4748,48 @@ class EventReportService
 
 
                 // ]);
-                $batchCommands =  BitrixListPresentationFlowService::getListPresentationPlanFlowBatch(
+                $batchCommands = BitrixListPresentationFlowService::getListPresentationUnplannedtFlowBatch(
                     $this->hook,
                     $this->bitrixLists,
-                    $currentDealIds, //передаем айди основной и уже закрытой през сделки
+                    $currentDealIds, //planDeals || unplannedDeals если през была незапланированной
                     $this->nowDate,
-                    'plan',
-                    $this->planDeadline,
-                    $this->planCreatedId,
                     $this->planResponsibleId,
-                    $this->planTmcId,
                     $this->entityId,
                     $this->comment,
-                    $this->currentPlanEventName,
                     $this->workStatus['current'],
-                    'result', // result noresult expired,
+                    $this->failReason,
+                    $this->failType,
                     $batchCommands
-                    // $this->noresultReason,
-                    // $this->failReason,
-                    // $this->failType
-
-
                 );
             }
             // sleep(1);
 
-            // если была проведена презентация вне зависимости от текущего события
-            $batchCommands = BitrixListPresentationFlowService::getListPresentationReportFlowBatch(
-                $this->hook,
-                $this->bitrixLists,
-                $currentDealIds, //planDeals || unplannedDeals если през была незапланированной
-                // $reportStatus,
-                $this->isPresentationDone,
+            if ($this->currentReportEventType === 'presentation') {
+                // если была проведена презентация вне зависимости от текущего события
+                $batchCommands = BitrixListPresentationFlowService::getListPresentationReportFlowBatch(
+                    $this->hook,
+                    $this->bitrixLists,
+                    $currentDealIds, //planDeals || unplannedDeals если през была незапланированной
+                    // $reportStatus,
+                    $this->isPresentationDone,
 
-                $this->nowDate,
-                'report',
-                $this->isExpired,
-                $this->planDeadline,
-                $this->planCreatedId,
-                $this->planResponsibleId,
-                $this->entityId,
-                $this->comment,
-                $this->currentPlanEventName,
-                $this->workStatus['current'],
-                $this->resultStatus, // result noresult expired,
-                $this->noresultReason,
-                $this->failReason,
-                $this->failType,
-                $batchCommands
-
-
-            );
+                    $this->nowDate,
+                    'report',
+                    $this->isExpired,
+                    $this->planDeadline,
+                    $this->planCreatedId,
+                    $this->planResponsibleId,
+                    $this->entityId,
+                    $this->comment,
+                    $this->currentPlanEventName,
+                    $this->workStatus['current'],
+                    $this->resultStatus, // result noresult expired,
+                    $this->noresultReason,
+                    $this->failReason,
+                    $this->failType,
+                    $batchCommands
+                );
+            }
         }
         return $batchCommands;
     }

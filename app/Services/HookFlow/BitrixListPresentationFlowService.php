@@ -929,7 +929,7 @@ class BitrixListPresentationFlowService
             $commandKey = 'present_list_plan_' . $code;
             $batchCommands[$commandKey] = $batchCommand;
             Log::channel('telegram')->error('APRIL_HOOK', [
-                'btrx commandKey' =>$batchCommand,
+                'btrx commandKey' => $batchCommand,
             ]);
 
 
@@ -1291,7 +1291,7 @@ class BitrixListPresentationFlowService
             $batchCommands[$commandKey] = $batchCommand;
 
             Log::channel('telegram')->error('APRIL_HOOK', [
-                'btrx commandKey' =>$batchCommand,
+                'btrx commandKey' => $batchCommand,
             ]);
 
 
@@ -1310,6 +1310,368 @@ class BitrixListPresentationFlowService
             return $batchCommands;
         }
     }
+
+
+    static function getListPresentationUnplannedtFlowBatch(
+        $hook,
+        $bitrixLists,
+        $currentDealIds,
+        $nowDate,
+        $responsible,
+        $companyId,
+        $comment,
+        $workStatus, //inJob
+        $failReason,
+        $failType,
+        $batchCommands = []
+        // $noresultReason,
+        // $failReason,
+        // $failType,
+
+
+    ) {
+        try {
+            $eventType = 'report';
+            $isDone = true;
+            $isExpired = false;
+            $resultStatus = 'result';
+
+
+            if (isset($workStatus['code'])) {
+                $workStatus = $workStatus['code'];
+            }
+
+
+            $presPortalBtxList = null;
+            $code = '';
+
+            foreach ($currentDealIds as $key => $dealId) {
+                if ($key == 0) {
+                    $code = $dealId;
+                } else {
+                    $code = $code . '_' . $dealId;
+                }
+            }
+
+            foreach ($bitrixLists as $bitrixList) {
+                if (!empty($bitrixList['type'])) {
+                    if ($bitrixList['type'] == 'presentation') {
+                        $presPortalBtxList = $bitrixList;
+                    }
+                }
+            }
+
+            $fieldsData = [
+                'NAME' => 'Презентация Спонтанная от' . $nowDate,
+
+            ];
+
+
+
+            $failTypeCode = null;
+
+            if (!empty($failType)) {
+                if (!empty($failType['code'])) {
+                    $failTypeCode = $failType['code'];
+                }
+                if (!empty($failType['cuurent'])) {
+                    if (!empty($failType['cuurent']['code'])) {
+                        $failTypeCode = $failType['cuurent']['code'];
+                    }
+                }
+            }
+            // Log::channel('telegram')->error('APRIL_HOOK', [
+
+            //     'code' => $code,
+            //     'getListPresentationPlanFlow' => 'getListPresentationPlanFlow',
+            //     'presPortalBtxList' => $presPortalBtxList
+
+
+            // ]);
+
+
+            $presentatationPlanFields = [
+                [
+                    'code' => 'pres_event_date', //дата начала
+                    'name' => 'Дата создания заявки',
+                    'value' => $nowDate //$nowDate->format('d.m.Y H:i:s'),
+                ],
+                [
+                    'code' => 'pres_init_status_date',
+                    'name' => 'Заявка Принята/Отклонена',
+                    'value' => $nowDate
+                ],
+                // [
+                //     'code' => 'event_title',
+                //     'name' => 'Название',
+                //     'value' => $evTypeName . ' ' . $eventActionName
+                // ],
+                [
+                    'code' => 'pres_plan_date',
+                    'name' => 'Планируемая Дата презентации',
+                    'value' => $nowDate
+                ],
+                [
+                    'code' => 'pres_done_comment',
+                    'name' => 'Комментарий после презентации',
+                    'value' => $comment,
+                ],
+                [
+                    'code' => 'pres_plan_author',
+                    'name' => 'Автор Заявки',
+                    'value' => $responsible,
+                ],
+                [
+                    'code' => 'pres_responsible',
+                    'name' => 'Ответственный',
+                    'value' => $responsible,
+                ],
+                [
+                    'code' => 'pres_plan_comment',
+                    'name' => 'Комментарий к заявке',
+                    'value' => 'Презентация Спонтанная от ' . $nowDate,
+                ],
+                [
+                    'code' => 'pres_plan_contacts',
+                    'name' => 'Контактные данные',
+                    'value' => 'Контактные данные', // []
+                ],
+                [
+                    'code' => 'pres_init_status',
+                    'name' => 'Статус Заявки',
+                    'list' =>  [
+                        'code' => BitrixListPresentationFlowService::getPresInitStatus(
+                            $resultStatus
+                        )
+                    ]
+                ],
+                [
+                    'code' => 'pres_crm_company',
+                    'name' => 'pres_crm_company',
+                    'value' => ['n0' => 'CO_' . $companyId],
+                ],
+                [
+                    'code' => 'pres_crm_base_deal',
+                    'name' => 'crm',
+                    'value' => ['n0' => 'D_' . $currentDealIds[0]], //base deal
+                ],
+                [
+                    'code' => 'pres_crm_deal',
+                    'name' => 'crm',
+                    'value' => ['n0' => 'D_' . $currentDealIds[1]], //base deal
+                ],
+                [
+                    'code' => 'pres_crm',
+                    'name' => 'crm',
+                    'value' => [
+                        'n0' => 'CO_' . $companyId,
+                        'n1' => 'D_' . $currentDealIds[0],
+                        'n2' => 'D_' . $currentDealIds[1]
+
+
+                    ], //base deal
+                ],
+                // [
+                //     'code' => 'pres_crm_tmc_deal',
+                //     'name' => 'crm',
+                //     // 'value' => ['n0' => 'CO_' . $companyId], //tmc deal
+                // ],
+                [
+                    'code' => 'pres_result_status',
+                    'name' => 'Результативность',
+                    'list' =>  [
+                        'code' => BitrixListPresentationFlowService::getPresResultStatus(
+                            $isDone,
+                            $isExpired,
+                            false, // isPlan
+                            $workStatus
+                        ),  //'in_work',
+                        // 'name' =>  'В работе' //'В работе'
+                    ],
+                ],
+
+                [
+                    'code' => 'pres_work_status',
+                    'name' => 'Статус Работы',
+                    'list' =>  [
+                        'code' => BitrixListPresentationFlowService::getCurrentWorkStatusCode(
+                            $workStatus,
+                            $eventType
+                        ),  //'in_work',
+                        // 'name' =>  'В работе' //'В работе'
+                    ],
+                ],
+                [
+                    'code' => 'pres_prospects_type',
+                    'name' => 'Перспективная ?',
+                    'list' =>  [
+                        'code' => 'pres_prospects_good',  //'in_work',
+                        // 'name' =>  'В работе' //'В работе'
+                    ],
+                ],
+                [
+                    'code' => 'pres_done_date',
+                    'name' => 'Дата проведения презентации',
+                    'value' =>  $nowDate,
+                ]
+                // [
+                //     'code' => 'op_result_status',
+                //     'name' => 'Результативность',
+                //     'list' =>  [
+                //         'code' => BitrixListFlowService::getResultStatus(
+                //             $resultStatus,
+                //         ),  //'in_work',
+                //         // 'name' =>  'В работе' //'В работе'
+                //     ],
+                // ],
+
+
+            ];
+
+            
+            if ($workStatus === 'fail') {  //если провал
+                if (!empty($failTypeCode)) {
+
+                    $perspectItem = [
+                        'code' => 'pres_prospects_type',
+                        'name' => 'Перспективная ?',
+                        'list' =>  [
+                            'code' => BitrixListPresentationFlowService::getPerspectStatus(
+                                $failTypeCode,
+                            ),  //'in_work',
+                            // 'name' =>  'В работе' //'В работе'
+                        ],
+                    ];
+                    array_push($presentatationReportFields, $perspectItem);
+
+
+
+
+
+
+                    if ($failTypeCode == 'failure') { //если тип провала - отказ
+                        if (!empty($failReason)) {
+                            if (!empty($failReason['code'])) {
+                                $failReasonItem = [
+                                    'code' => 'pres_fail_reason',
+                                    'name' => 'ОП Причина Отказа',
+                                    'list' =>  [
+                                        'code' => BitrixListPresentationFlowService::getFailReason(
+                                            $failReason['code']
+                                        ),
+                                        // 'name' =>  'В работе' //'В работе'
+                                    ],
+                                ];
+                                array_push($presentatationReportFields, $failReasonItem);
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (!empty($failTypeCode)) {
+
+                    $perspectItem = [
+                        'code' => 'pres_prospects_type',
+                        'name' => 'Перспективная ?',
+                        'list' =>  [
+                            'code' => 'pres_prospects_good',  //'in_work',
+                            // 'name' =>  'В работе' //'В работе'
+                        ],
+                    ];
+                    array_push($presentatationReportFields, $perspectItem);
+                }
+            }
+
+
+
+            foreach ($presentatationPlanFields as $presValue) {
+                $currentDataField = [];
+                $fieldCode = $presPortalBtxList['group'] . '_' . $presPortalBtxList['type'] . '_' . $presValue['code'];
+                $btxId = BitrixListPresentationFlowService::getBtxListCurrentData($presPortalBtxList, $fieldCode, null);
+                if (!empty($presValue)) {
+
+
+
+                    if (!empty($presValue['value'])) {
+                        $fieldsData[$btxId] = $presValue['value'];
+                        $currentDataField[$btxId] = $presValue['value'];
+                    }
+
+                    if (!empty($presValue['list'])) {
+                        $btxItemId = BitrixListPresentationFlowService::getBtxListCurrentData($presPortalBtxList, $fieldCode, $presValue['list']['code']);
+                        $currentDataField[$btxId] = [
+
+                            $btxItemId =>  $presValue['list']['code']
+                        ];
+
+                        $fieldsData[$btxId] =  $btxItemId;
+                    }
+                }
+                // array_push($fieldsData, $currentDataField);
+            }
+
+            // $fieldsData['NAME'] = $evTypeName . ' ' . $name;
+            // Log::channel('telegram')->error('APRIL_HOOK pres LIST', [
+
+            //     'fieldsData' => $fieldsData,
+
+
+            // ]);
+            $method = 'lists.element.add';
+
+            if (empty($code)) {
+                $uniqueHash = md5(uniqid(rand(), true));
+                $code = $uniqueHash;
+            }
+            $data =  [
+                'IBLOCK_TYPE_ID' => 'lists',
+                'IBLOCK_ID' => $bitrixList['bitrixId'],
+
+                'ELEMENT_CODE' => $code,
+                'FIELDS' => $fieldsData
+            ];
+
+
+            $service = new BitrixBatchService($hook);
+            $batchCommand = $service->getGeneralBatchCommand(
+                $data,
+                $method
+            );
+            $commandKey = 'present_list_plan_' . $code;
+            $batchCommands[$commandKey] = $batchCommand;
+            Log::channel('telegram')->error('APRIL_HOOK', [
+                'btrx commandKey' => $batchCommand,
+            ]);
+
+
+            return $batchCommands;
+            // $responseData = BitrixListService::setItem(
+            //     $hook,
+            //     $bitrixList['bitrixId'],
+            //     $fieldsData,
+            //     $code
+            // );
+            // Log::channel('telegram')->error('APRIL_HOOK pres list service: setItem', [
+
+            //     'responseData' => $responseData,
+
+
+            // ]);
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR COLD: getListsFlow',  $errorMessages);
+
+            Log::channel('telegram')->error('APRIL_HOOK Pres Lists Flow', $errorMessages);
+            return $batchCommands;
+        }
+    }
+
+
 
 
 
