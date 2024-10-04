@@ -3246,7 +3246,7 @@ class EventReportService
                             'ASSIGNED_BY_ID' => $this->planResponsibleId
                         ];
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
-                        $key = 'set_' . '_' . $category['code'];
+                        $key = 'set_' . 'unplanned_' . $category['code'];
                         $resultBatchCommands[$key] = $batchCommand;
                         $unplannedPresDeal = '$result[' . $key . ']';
 
