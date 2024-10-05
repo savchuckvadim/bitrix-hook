@@ -3609,8 +3609,9 @@ class EventReportService
         $contactId = null;
         if (!empty($this->planContact)) {
             if (!empty($this->planContact['current'])) {
-                $contactId = $this->planContact['current']['ID'];
-            }
+                if (!empty($this->planContact['current']['contact'])) {
+                    $contactId = $this->planContact['current']['contact']['ID'];
+                }            }
         }
         try {
             // Log::channel('telegram')->error('APRIL_HOOK', $this->portal);
