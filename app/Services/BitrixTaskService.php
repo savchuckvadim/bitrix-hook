@@ -260,6 +260,7 @@ class BitrixTaskService
         $isNeedCompleteOtherTasks,
         $currentTaskId = null,
         $currentDealsItemIds = null,
+        $contactId = null,
         $batchCommands = []
 
     ) {
@@ -297,7 +298,12 @@ class BitrixTaskService
             if ($leadId) {
                 array_push($tasksCrmRelations, 'L_' . $leadId);
             }
+            if (!empty($contactId)) {
+                array_push($tasksCrmRelations, 'C_' . $contactId);
+            }
 
+
+        
 
             //TODO get smart data for tasks
 

@@ -163,6 +163,17 @@ class EventReportService
     protected $btxDealPresCategoryId;
 
 
+    protected $planContact;
+    protected $reportContact;
+
+    // {
+    //     name: 
+    //     pnone:
+    //     email:
+    //     current:
+    //     isNeedUpdate:
+    //     isNeedCreate:
+    // }
 
     public function __construct(
 
@@ -188,6 +199,13 @@ class EventReportService
 
         $entityType = null;
         $entityId = null;
+
+        if (isset($data['contact'])) {
+            if (!empty($data['contact'])) {
+                $this->planContact = $data['contact'];
+            }
+        }
+
 
         if (isset($placement)) {
             if (!empty($placement['placement'])) {
@@ -3013,22 +3031,22 @@ class EventReportService
         $unplannedPresDeals = [];
 
 
-        Log::channel('telegram')
-            ->info(
-                'vheck',
-                [
-                    'currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres,
+        // Log::channel('telegram')
+        //     ->info(
+        //         'vheck',
+        //         [
+        //             'currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres,
 
-                ]
-            );
-        Log::channel('telegram')
-            ->info(
-                'vheck',
-                [
-                    'currentTMCDeal' => $this->currentTMCDeal,
+        //         ]
+        //     );
+        // Log::channel('telegram')
+        //     ->info(
+        //         'vheck',
+        //         [
+        //             'currentTMCDeal' => $this->currentTMCDeal,
 
-                ]
-            );
+        //         ]
+        //     );
 
 
         //DEALS FLOW
@@ -3036,10 +3054,10 @@ class EventReportService
 
             switch ($category['code']) {
                 case 'sales_base':
-                    Log::info('HOOK BATCH batchFlow report DEAL', ['category' =>  $category]);
-                    Log::channel('telegram')->info('HOOK BATCH currentDealId', ['currentDealId' =>  $currentDealId]);
-                    Log::info('HOOK BATCH batchFlow report DEAL', ['currentDealId' =>  $currentDealId]);
-                    Log::channel('telegram')->info('HOOK BATCH currentDealId', ['currentDealId' =>  $currentDealId]);
+                    // Log::info('HOOK BATCH batchFlow report DEAL', ['category' =>  $category]);
+                    // Log::channel('telegram')->info('HOOK BATCH currentDealId', ['currentDealId' =>  $currentDealId]);
+                    // Log::info('HOOK BATCH batchFlow report DEAL', ['currentDealId' =>  $currentDealId]);
+                    // Log::channel('telegram')->info('HOOK BATCH currentDealId', ['currentDealId' =>  $currentDealId]);
                     $currentStageOrder = BitrixDealService::getEventOrderFromCurrentBaseDeal($this->currentBaseDeal, $category);
                     $pTargetStage = BitrixDealService::getSaleBaseTargetStage(
                         $category,
@@ -3056,8 +3074,8 @@ class EventReportService
 
                     );
                     $targetStageBtxId = $pTargetStage;
-                    Log::info('HOOK BATCH batchFlow report DEAL', ['pTargetStage' =>  $pTargetStage]);
-                    Log::channel('telegram')->info('HOOK BATCH category', ['pTargetStage' =>  $pTargetStage]);
+                    // Log::info('HOOK BATCH batchFlow report DEAL', ['pTargetStage' =>  $pTargetStage]);
+                    // Log::channel('telegram')->info('HOOK BATCH category', ['pTargetStage' =>  $pTargetStage]);
 
                     $fieldsData = [
 
@@ -3469,10 +3487,10 @@ class EventReportService
 
         $batchService->sendGeneralBatchRequest($resultBatchCommands);
 
-        Log::info('HOOK BATCH batchFlow report DEAL', ['report result' => $result]);
-        Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $result]);
-        Log::info('HOOK BATCH batchFlow report DEAL', ['planDeals planDeals' =>  $result['planDeals']]);
-        Log::channel('telegram')->info('HOOK BATCH planDeals', ['planDeals' => $result['planDeals']]);
+        // Log::info('HOOK BATCH batchFlow report DEAL', ['report result' => $result]);
+        // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $result]);
+        // Log::info('HOOK BATCH batchFlow report DEAL', ['planDeals planDeals' =>  $result['planDeals']]);
+        // Log::channel('telegram')->info('HOOK BATCH planDeals', ['planDeals' => $result['planDeals']]);
 
         // if (!empty($result)) {
         //     if (!empty($result['newPresDeal'])) {
@@ -3488,6 +3506,12 @@ class EventReportService
 
         // $result['unplannedPresDeals'] = [$unplannedPresDeal];
 
+        if (!empty($this->planContact)) {
+            if (!empty($this->planContact['current'])) {
+                if (!empty($this->planContact['current']['ID'])) {
+                }
+            }
+        }
         return  $result;
     }
 
@@ -3582,6 +3606,12 @@ class EventReportService
         $leadId  = null;
         $currentTaskId = null;
         $createdTask = null;
+        $contactId = null;
+        if (!empty($this->planContact)) {
+            if (!empty($this->planContact['current'])) {
+                $contactId = $this->planContact['current']['ID'];
+            }
+        }
         try {
             // Log::channel('telegram')->error('APRIL_HOOK', $this->portal);
 
@@ -3620,6 +3650,7 @@ class EventReportService
                     false, //$isNeedCompleteOtherTasks
                     $currentTaskId, // null,
                     $currentDealsIds,
+                    $contactId,
                     $batchCommands
 
                 );

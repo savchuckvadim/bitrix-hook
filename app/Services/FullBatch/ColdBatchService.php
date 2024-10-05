@@ -1209,6 +1209,7 @@ class ColdBatchService
                 true, //$isNeedCompleteOtherTasks
                 null,
                 $currentDealsItemIds,
+                null, //$contactId
                 $batchCommands
 
             );
