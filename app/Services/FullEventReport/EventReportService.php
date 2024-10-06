@@ -200,9 +200,20 @@ class EventReportService
         $entityType = null;
         $entityId = null;
 
-        if (isset($data['contact'])) {
-            if (!empty($data['contact'])) {
-                $this->planContact = $data['contact'];
+        // if (isset($data['contact'])) {
+        //     if (!empty($data['contact'])) {
+        //         $this->planContact = $data['contact'];
+        //     }
+        // }
+
+        if (!empty($data['plan'])) {
+            if (!empty($data['plan']['contact'])) {
+                $this->planContact = $data['plan']['contact'];
+            }
+        }
+        if (!empty($data['report'])) {
+            if (!empty($data['report']['contact'])) {
+                $this->reportContact = $data['report']['contact'];
             }
         }
 
