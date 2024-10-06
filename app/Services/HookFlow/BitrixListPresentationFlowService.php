@@ -1542,7 +1542,7 @@ class BitrixListPresentationFlowService
                             // 'name' =>  'В работе' //'В работе'
                         ],
                     ];
-                    array_push($presentatationReportFields, $perspectItem);
+                    array_push($presentatationPlanFields, $perspectItem);
 
 
 
@@ -1562,7 +1562,7 @@ class BitrixListPresentationFlowService
                                         // 'name' =>  'В работе' //'В работе'
                                     ],
                                 ];
-                                array_push($presentatationReportFields, $failReasonItem);
+                                array_push($presentatationPlanFields, $failReasonItem);
                             }
                         }
                     }
@@ -1578,7 +1578,7 @@ class BitrixListPresentationFlowService
                             // 'name' =>  'В работе' //'В работе'
                         ],
                     ];
-                    array_push($presentatationReportFields, $perspectItem);
+                    array_push($presentatationPlanFields, $perspectItem);
                 }
             }
 
