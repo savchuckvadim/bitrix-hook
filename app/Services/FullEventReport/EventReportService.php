@@ -4790,11 +4790,11 @@ class EventReportService
                 // соответствующих сделок
                 // если текущее событие не през - значит uplanned
                 // занчит сначала планируем
-                // Log::channel('telegram')->info('presentationBtxList', [
-                //     'currentDealIds' => $currentDealIds,
+                Log::channel('telegram')->info('presentationBtxList', [
+                    'currentDealIds' => $currentDealIds,
 
 
-                // ]);
+                ]);
                 $batchCommands = BitrixListPresentationFlowService::getListPresentationUnplannedtFlowBatch(
                     $this->hook,
                     $this->bitrixLists,

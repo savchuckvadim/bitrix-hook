@@ -1528,7 +1528,7 @@ class BitrixListPresentationFlowService
 
             ];
 
-            
+
             if ($workStatus === 'fail') {  //если провал
                 if (!empty($failTypeCode)) {
 
@@ -1617,6 +1617,7 @@ class BitrixListPresentationFlowService
 
 
             // ]);
+            $fieldsData['NAME'] =  'Презентация Спонтанная от' . $nowDate;
             $method = 'lists.element.add';
 
             if (empty($code)) {
@@ -1637,7 +1638,7 @@ class BitrixListPresentationFlowService
                 $data,
                 $method
             );
-            $commandKey = 'present_list_plan_' . $code;
+            $commandKey = 'present_list_unplanned_' . $code;
             $batchCommands[$commandKey] = $batchCommand;
             Log::channel('telegram')->error('APRIL_HOOK', [
                 'btrx commandKey' => $batchCommand,
