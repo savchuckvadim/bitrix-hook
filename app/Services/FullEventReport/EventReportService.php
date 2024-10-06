@@ -164,7 +164,9 @@ class EventReportService
 
 
     protected $planContact;
+    protected $planContactId;
     protected $reportContact;
+    protected $reportContactId;
 
     // {
     //     name: 
@@ -209,11 +211,17 @@ class EventReportService
         if (!empty($data['plan'])) {
             if (!empty($data['plan']['contact'])) {
                 $this->planContact = $data['plan']['contact'];
+                if (!empty($data['plan']['contact']['ID'])) {
+                    $this->planContactId = $data['plan']['contact']['ID'];
+                }
             }
         }
         if (!empty($data['report'])) {
             if (!empty($data['report']['contact'])) {
                 $this->reportContact = $data['report']['contact'];
+                if (!empty($data['report']['contact']['ID'])) {
+                    $this->reportContactId = $data['report']['contact']['ID'];
+                }
             }
         }
 
@@ -3516,14 +3524,14 @@ class EventReportService
         // }
 
         // $result['unplannedPresDeals'] = [$unplannedPresDeal];
-        $contactId = null;
-        if (!empty($this->planContact)) {
-            if (!empty($this->planContact['current'])) {
-                if (!empty($this->planContact['current']['contact'])) {
-                    $contactId = $this->planContact['current']['contact']['ID'];
-                }
-            }
-        }
+        // $contactId = null;
+        // if (!empty($this->planContact)) {
+        //     if (!empty($this->planContact['current'])) {
+        //         if (!empty($this->planContact['current']['contact'])) {
+        //             $contactId = $this->planContact['current']['contact']['ID'];
+        //         }
+        //     }
+        // }
         return  $result;
     }
 
@@ -3618,14 +3626,8 @@ class EventReportService
         $leadId  = null;
         $currentTaskId = null;
         $createdTask = null;
-        $contactId = null;
-        if (!empty($this->planContact)) {
-            if (!empty($this->planContact['current'])) {
-                if (!empty($this->planContact['current']['contact'])) {
-                    $contactId = $this->planContact['current']['contact']['ID'];
-                }
-            }
-        }
+        $contactId = $this->planContactId;
+    
         try {
             // Log::channel('telegram')->error('APRIL_HOOK', $this->portal);
 
