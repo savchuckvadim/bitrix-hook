@@ -1617,7 +1617,7 @@ class BitrixListPresentationFlowService
 
 
             // ]);
-            $fieldsData['NAME'] =  'Презентация Спонтанная от' . $nowDate;
+            $fieldsData['NAME'] =  'Презентация Спонтанная от ' . $nowDate;
             $method = 'lists.element.add';
 
             if (empty($code)) {
