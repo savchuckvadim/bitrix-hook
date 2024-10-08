@@ -1216,7 +1216,6 @@ class EventReportService
             );
 
 
-        //CЧЕТЧИК ОБНУЛЯЕТСЯ ЕСЛИ NEW TASK
         if (!empty($this->currentBtxEntity)) {
             if (isset($this->currentBtxEntity['UF_CRM_1709807026'])) {
 
@@ -4011,6 +4010,7 @@ class EventReportService
                         $currentBaseDealId,
                         $nowDate, // $date,
                         null, // $event['eventType'], //$hotName
+                        $this->reportContactId,
                         $commands
 
                     );
@@ -4077,6 +4077,7 @@ class EventReportService
                     $currentBaseDealId,
                     $nowDate, // $date,
                     null, // $event['eventType'], //$hotName
+                    $this->reportContactId,
                     $commands
 
                 );
@@ -4127,6 +4128,7 @@ class EventReportService
                 $currentBaseDealId,
                 $nowDate, // $date,
                 null, // $event['eventType'], //$hotName
+                $this->reportContactId,
                 $commands
 
             );
@@ -4184,6 +4186,8 @@ class EventReportService
                     $currentBaseDealId,
                     $nowDate, // $date,
                     null, // $event['eventType'], //$hotName
+                    $this->planContactId,
+
                     $commands
 
                 );
@@ -4244,6 +4248,8 @@ class EventReportService
                 $currentBaseDealId,
                 $nowDate,  // $date,
                 null, // $event['eventType'], //$hotName
+                $this->reportContactId,
+
                 $commands
 
             );

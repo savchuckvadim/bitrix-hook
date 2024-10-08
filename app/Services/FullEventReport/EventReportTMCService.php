@@ -1589,7 +1589,7 @@ class EventReportTMCService
                 $currentDealId = $this->currentBaseDeal['ID'];
             }
         }
-       
+
         if (!empty($this->portalDealData['categories'])) {
             foreach ($this->portalDealData['categories'] as $category) {
 
@@ -2025,6 +2025,7 @@ class EventReportTMCService
                         $currentBaseDealId,
                         $nowDate, // $date,
                         null, // $event['eventType'], //$hotName
+                        null, //$contactId
                         $commands
 
                     );
@@ -2091,6 +2092,7 @@ class EventReportTMCService
                     $currentBaseDealId,
                     $nowDate, // $date,
                     null, // $event['eventType'], //$hotName
+                    null, //$contactId
                     $commands
 
                 );
@@ -2141,6 +2143,8 @@ class EventReportTMCService
                 $currentBaseDealId,
                 $nowDate, // $date,
                 null, // $event['eventType'], //$hotName
+                null, //$contactId
+
                 $commands
 
             );
@@ -2198,6 +2202,7 @@ class EventReportTMCService
                     $currentBaseDealId,
                     $nowDate, // $date,
                     null, // $event['eventType'], //$hotName
+                    null, //$contactId
                     $commands
 
                 );
@@ -2258,6 +2263,7 @@ class EventReportTMCService
                 $currentBaseDealId,
                 $nowDate,  // $date,
                 null, // $event['eventType'], //$hotName
+                null, //$contactId
                 $commands
 
             );

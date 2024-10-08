@@ -482,6 +482,7 @@ class BitrixListFlowService
         $currentBaseDealId,
         $nowDate = null,
         $hotName = null,
+        $contactId,
         $resultBatchCommands // = []
 
     ) {
@@ -503,14 +504,19 @@ class BitrixListFlowService
 
 
             $crmValue = ['n0' => 'CO_' . $companyId];
-
+            $dealIndex = 1;
+            if (!empty($contactId)) {
+                $dealIndex = 2;
+                $crmValue['n1'] = 'C_' . $contactId;
+            }
             if (!empty($dealIds)) {
 
                 foreach ($dealIds as $key => $dealId) {
-                    $crmValue['n' . $key + 1] = 'D_' . $dealId;
+                    $crmValue['n' . $key + $dealIndex] = 'D_' . $dealId;
                 }
             }
-
+            if (!empty($contactId)) {
+            }
 
             if ($eventType == 'xo' || $eventType == 'cold') {
                 $evTypeName = 'Холодный звонок';
@@ -620,6 +626,11 @@ class BitrixListFlowService
                     'code' => 'crm_company',
                     'name' => 'crm_company',
                     'value' => ['n0' => 'CO_' . $companyId],
+                ],
+                [
+                    'code' => 'crm_contact',
+                    'name' => 'crm_contact',
+                    'value' => ['n0' => 'C_' . $contactId],
                 ],
 
                 [
@@ -1031,7 +1042,7 @@ class BitrixListFlowService
     {
 
         $result = 'op_call_result_yes';
-        if ($resultStatus !== 'result') {
+        if ($resultStatus !== 'result' && $resultStatus !== 'new') {
             $result = 'op_call_result_no';
         }
 
