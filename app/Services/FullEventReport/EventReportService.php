@@ -4920,11 +4920,42 @@ class EventReportService
                 $message = "\n" . 'Сделка: <a href="' . $dealLink . '" target="_blank">' . $dealTitle . '</a>';
             }
         }
+        $messagePlanContact = null;
+        $messageReportContact = null;
+
+        if(!empty($this->reportContact) && !empty($this->reportContactId)){
+            $reportContactId = $this->reportContactId;
+            $reportContactName = $this->reportContact['NAME'];
+
+            $reportContactLink = 'https://' . $this->domain . '/crm/contact/details/' . $reportContactId . '/';
+            $messageReportContact = '    Контакт: <a href="' . $reportContactLink . '" target="_blank">' . $reportContactName . '</a>';
+
+        }
+
+
+        if(!empty($this->planContact) && !empty($this->planContactId)){
+            $planContactId = $this->planContactId;
+            $planContactName = $this->planContact['NAME'];
+
+            $planContactLink = 'https://' . $this->domain . '/crm/contact/details/' . $planContactId . '/';
+            $messagePlanContact = '    Контакт: <a href="' . $planContactLink . '" target="_blank">' . $planContactName . '</a>';
+
+        }
+
+
 
         $timeLineString =  $planComment;
         if (!empty($message)) {
 
             $timeLineString .= $message;
+        }
+        if (!empty($messageReportContact)) {
+
+            $timeLineString .= $messageReportContact;
+        }
+        if (!empty($messagePlanContact)) {
+
+            $timeLineString .= $messagePlanContact;
         }
         // Log::channel('telegram')->info('HOOK TIME LINE', ['set' => $timeLineString]);
 

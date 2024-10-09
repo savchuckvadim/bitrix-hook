@@ -509,14 +509,14 @@ class BitrixListFlowService
                 $dealIndex = 2;
                 $crmValue['n1'] = 'C_' . $contactId;
             }
+            
             if (!empty($dealIds)) {
 
                 foreach ($dealIds as $key => $dealId) {
                     $crmValue['n' . $key + $dealIndex] = 'D_' . $dealId;
                 }
             }
-            if (!empty($contactId)) {
-            }
+          
 
             if ($eventType == 'xo' || $eventType == 'cold') {
                 $evTypeName = 'Холодный звонок';
