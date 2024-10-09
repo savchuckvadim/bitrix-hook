@@ -710,29 +710,31 @@ class EventReportTMCBatchService
             if ($this->isDealFlow && $this->portalDealData) {
                 $this->closeNoTMCDeals();
                 sleep(1);
-                $currentDealsIds = $this->getDealFlow();
+                // $currentDealsIds = $this->getDealFlow();
+                $currentDealsIds = $this->getNEWBatchDealFlow();
+
             }
 
             // $this->createTask($currentSmartId);
-            if ($this->isExpired || $this->isPlanned) {
-                $result = $this->taskFlow(null, $currentDealsIds['planDeals']);
-            } else {
-                $result = $this->workStatus;
-            }
+            // if ($this->isExpired || $this->isPlanned) {
+            //     $result = $this->taskFlow(null, $currentDealsIds['planDeals']);
+            // } else {
+            //     $result = $this->workStatus;
+            // }
 
-            $this->getEntityFlow();
+            // $this->getEntityFlow();
+            // // sleep(1);
+
+
+            // $this->getListBatchFlow();
+
+            // // $this->getListFlow();
             // sleep(1);
+            // $this->getListPresentationFlow(
+            //     $currentDealsIds
+            // );
 
-
-            $this->getListBatchFlow();
-
-            // $this->getListFlow();
-            sleep(1);
-            $this->getListPresentationFlow(
-                $currentDealsIds
-            );
-
-            return APIOnlineController::getSuccess(['data' => ['result' => $result, 'presInitLink' => $this->resultRpaLink]]);
+            return APIOnlineController::getSuccess(['data' => [ 'presInitLink' => $this->resultRpaLink]]);
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
