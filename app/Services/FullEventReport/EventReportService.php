@@ -3626,7 +3626,7 @@ class EventReportService
         $currentTaskId = null;
         $createdTask = null;
         $contactId = $this->planContactId;
-    
+
         try {
             // Log::channel('telegram')->error('APRIL_HOOK', $this->portal);
 
@@ -4923,29 +4923,29 @@ class EventReportService
         $messagePlanContact = null;
         $messageReportContact = null;
 
-        if(!empty($this->reportContact) && !empty($this->reportContactId)){
+        if (!empty($this->reportContact) && !empty($this->reportContactId)) {
             $reportContactId = $this->reportContactId;
             $reportContactName = $this->reportContact['NAME'];
 
             $reportContactLink = 'https://' . $this->domain . '/crm/contact/details/' . $reportContactId . '/';
-            $messageReportContact = ' Контакты: <a href="' . $reportContactLink . '" target="_blank">' . $reportContactName . '</a>';
-
+            $messageReportContact = '   Контакты: <a href="' . $reportContactLink . '" target="_blank">' . $reportContactName . '</a>';
         }
 
 
-        if(!empty($this->planContact) && !empty($this->planContactId)){
-            $planContactId = $this->planContactId;
-            $planContactName = $this->planContact['NAME'];
+        if (!empty($this->planContact) && !empty($this->planContactId)) {
+            if ($this->reportContactId !== $this->planContactId) {
 
-            $planContactLink = 'https://' . $this->domain . '/crm/contact/details/' . $planContactId . '/';
-            if(!empty($this->reportContact) && !empty($this->reportContactId)){
-                $messagePlanContact = ',  <a href="' . $planContactLink . '" target="_blank">' . $planContactName . '</a>';
 
-            }else{
-                $messagePlanContact = ' Контакты:  <a href="' . $planContactLink . '" target="_blank">' . $planContactName . '</a>';
+                $planContactId = $this->planContactId;
+                $planContactName = $this->planContact['NAME'];
 
+                $planContactLink = 'https://' . $this->domain . '/crm/contact/details/' . $planContactId . '/';
+                if (!empty($this->reportContact) && !empty($this->reportContactId)) {
+                    $messagePlanContact = ', <a href="' . $planContactLink . '" target="_blank">' . $planContactName . '</a>';
+                } else {
+                    $messagePlanContact = '   Контакты:  <a href="' . $planContactLink . '" target="_blank">' . $planContactName . '</a>';
+                }
             }
-
         }
 
 
