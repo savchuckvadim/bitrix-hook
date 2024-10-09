@@ -4928,7 +4928,7 @@ class EventReportService
             $reportContactName = $this->reportContact['NAME'];
 
             $reportContactLink = 'https://' . $this->domain . '/crm/contact/details/' . $reportContactId . '/';
-            $messageReportContact = '    Контакт: <a href="' . $reportContactLink . '" target="_blank">' . $reportContactName . '</a>';
+            $messageReportContact = ' Контакты: <a href="' . $reportContactLink . '" target="_blank">' . $reportContactName . '</a>';
 
         }
 
@@ -4938,7 +4938,13 @@ class EventReportService
             $planContactName = $this->planContact['NAME'];
 
             $planContactLink = 'https://' . $this->domain . '/crm/contact/details/' . $planContactId . '/';
-            $messagePlanContact = '    Контакт: <a href="' . $planContactLink . '" target="_blank">' . $planContactName . '</a>';
+            if(!empty($this->reportContact) && !empty($this->reportContactId)){
+                $messagePlanContact = ',  <a href="' . $planContactLink . '" target="_blank">' . $planContactName . '</a>';
+
+            }else{
+                $messagePlanContact = ' Контакты:  <a href="' . $planContactLink . '" target="_blank">' . $planContactName . '</a>';
+
+            }
 
         }
 
