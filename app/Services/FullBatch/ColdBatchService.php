@@ -1016,6 +1016,7 @@ class ColdBatchService
             null,  //current base deal id for uniq pres count
             null, // $nowDate, // $date,
             null, // /$hotName
+            null, //$contactId,
             $batchCommands
         );
         $entityResult =  $batchService->sendGeneralBatchRequest($batchCommands);
