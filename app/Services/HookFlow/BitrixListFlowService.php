@@ -509,14 +509,14 @@ class BitrixListFlowService
                 $dealIndex = 2;
                 $crmValue['n1'] = 'C_' . $contactId;
             }
-            
+
             if (!empty($dealIds)) {
 
                 foreach ($dealIds as $key => $dealId) {
                     $crmValue['n' . $key + $dealIndex] = 'D_' . $dealId;
                 }
             }
-          
+
 
             if ($eventType == 'xo' || $eventType == 'cold') {
                 $evTypeName = 'Холодный звонок';
@@ -627,11 +627,7 @@ class BitrixListFlowService
                     'name' => 'crm_company',
                     'value' => ['n0' => 'CO_' . $companyId],
                 ],
-                [
-                    'code' => 'crm_contact',
-                    'name' => 'crm_contact',
-                    'value' => ['n0' => 'C_' . $contactId],
-                ],
+
 
                 [
                     'code' => 'manager_comment',
@@ -682,8 +678,15 @@ class BitrixListFlowService
 
 
             ];
+            if (!empty($contactId)) {
 
-
+                $contact =  [
+                    'code' => 'crm_contact',
+                    'name' => 'crm_contact',
+                    'value' => ['n0' => 'C_' . $contactId],
+                ];
+                array_push($xoFields, $contact);
+            }
             if ($resultStatus !== 'result' && $resultStatus !== 'new') {
                 if (!empty($noresultReason)) {
                     if (!empty($noresultReason['code'])) {
