@@ -515,16 +515,16 @@ class BitrixDealService
         $isSuccess,
         $isFail,
     ) {
-        Log::channel('telegram')->error('APRIL_HOOK', [
+        // Log::channel('telegram')->error('APRIL_HOOK', [
 
-            'isResult' => $isResult,
-            'isUnplanned' => $isUnplanned,
-            'isSuccess' => $isSuccess,
+        //     'isResult' => $isResult,
+        //     'isUnplanned' => $isUnplanned,
+        //     'isSuccess' => $isSuccess,
 
-            'isFail' => $isFail,
+        //     'isFail' => $isFail,
 
 
-        ]);
+        // ]);
         // sales_new
         // sales_cold
         // sales_warm
@@ -759,7 +759,261 @@ class BitrixDealService
 
         return $currentEventOrder;
     }
+    static function getTMCTargetStage(
 
+
+        $currentCategoryData,
+        $currentStageOrder,
+        $planEventType, // xo warm presentation,
+        $reportEventType, // xo warm presentation,
+        // $planEventAction,  // plan done expired fail
+        // $reportEventAction,  // plan done expired fail
+        $isResult,
+        $isSuccess,
+        $isFail,
+        
+    ) {
+
+        // sales_tmc_new
+        // sales_tmc_plan
+        // sales_tmc_pending
+        // sales_tmc_pres_in_progress
+        // sales_tmc_pres_plan
+        // sales_tmc_success
+        // sales_tmc_fail
+        // sales_tmc_noresult
+
+        $stageSuphicks = 'plan';
+        $stagePrephicks = 'sales_tmc';
+        $targetStageBtxId = null;
+
+        $eventOrders = [
+            // [
+            //     'code' => 'xo',
+            //     'order' => 0,
+            //     'suphicks' => 'cold'
+            // ],
+            [
+                'code' => 'warm',
+                'order' => 1,
+                'suphicks' => 'plan'
+            ],
+
+            [
+                'code' => 'presentation',
+                'order' => 2,
+                'suphicks' => 'plan'
+            ],
+            [
+                'code' => 'document',
+                'order' => 3,
+                'suphicks' => 'plan'
+            ],
+            [
+                'code' => 'hot',
+                'order' => 4,
+                'suphicks' => 'plan'
+            ],
+
+            [
+                'code' => 'moneyAwait',
+                'order' => 6,
+                'suphicks' => 'plan'
+            ],
+            [
+                'code' => 'success',
+                'order' => 7,
+                'suphicks' => 'success'
+            ],
+
+            [
+                'code' => 'fail',
+                'order' => 8,
+                'suphicks' => 'fail'
+            ],
+
+
+
+        ];
+        
+        $codesToFilter = [$planEventType, $reportEventType];
+        if (!empty($currentStageOrder)) {
+            array_push($codesToFilter, $currentStageOrder);
+        }
+          // Фильтруем массив по кодам
+          $filtered = array_filter($eventOrders, function ($item) use ($codesToFilter) {
+            return in_array($item['code'], $codesToFilter);
+        });
+
+        // Находим элемент с максимальным значением 'order'
+        $currentOrderData = array_reduce($filtered, function ($carry, $item) {
+            return ($carry === null || $item['order'] > $carry['order']) ? $item : $carry;
+        });
+
+
+        if (!empty($currentOrderData)) {
+            $stageSuphicks = $currentOrderData['suphicks'];
+        }
+
+
+        if (!empty($isFail)) {                      // если отказ
+            $stageSuphicks = 'fail';
+            if (!$isResult) {
+                $stageSuphicks = 'double';
+            }
+        }
+
+        if (!empty($isSuccess)) {                       // если успех
+            $stageSuphicks = 'success';
+        }
+     
+
+
+        // if ($eventAction == 'done' || $eventAction == 'success') {
+        //     $stageSuphicks = 'success';
+        // } else if ($eventAction == 'expired') {
+        //     $stageSuphicks = 'pending';
+        // } else if ($eventAction == 'fail') {
+        //     $stageSuphicks = 'fail';
+
+        //     if (!$isResult) {
+        //         $stageSuphicks = 'noresult';
+        //     }
+        // }
+
+        // $stagePrephicks = 'sales_tmc';
+        // if ($eventAction == 'plan' && $eventType == 'presentation') {
+        //     $stageSuphicks = 'pres_in_progress';
+        // }
+        // if ($eventAction == 'done' && $eventType == 'presentation') {
+        //     $stageSuphicks = 'success';
+        // }
+        // if ($eventAction == 'fail' && $eventType == 'presentation') {
+        //     $stageSuphicks = 'noresult';
+        // }
+
+
+
+        if (!empty($currentCategoryData['stages'])) {
+
+            foreach ($currentCategoryData['stages'] as $stage) {
+
+                // if ($eventType === 'xo' || $eventType === 'cold') {
+
+                if ($stage['code'] == $stagePrephicks . '_' . $stageSuphicks) {
+                    $targetStageBtxId = $stage['bitrixId'];
+                    // Log::channel('telegram')->info('DEAL TEST', [
+                    //     'stageCode' => $stage['code'],
+                    //     'eventType' => $eventType,
+
+                    //     'stage' => $stage,
+
+                    // ]);
+                }
+                // }
+            }
+        }
+
+        return $targetStageBtxId;
+    }
+    static function getEventOrderFromCurrentTMCDeal(
+        $currentBtxDeal,
+        $currentCategoryData,
+
+    ) {
+        // sales_new
+        // sales_cold
+        // sales_warm
+        // sales_pres
+        // sales_offer_create
+        // sales_document_send
+        // sales_in_progress
+        // sales_money_await
+        // sales_supply
+        // sales_success
+        // sales_fail
+        // sales_double
+
+        // sales_tmc_new
+        // sales_tmc_plan
+        // sales_tmc_pending
+        // sales_tmc_pres_in_progress
+        // sales_tmc_pres_plan
+        // sales_tmc_success
+        // sales_tmc_fail
+        $targetStageBtxId = null;
+        $stageSuphicks = 'plan';
+        $stagePrephicks = 'sales_tmc';
+
+        $eventOrders = [
+            // [
+            //     'code' => 'xo',
+            //     'order' => 0,
+            //     'suphicks' => 'cold'
+            // ],
+            [
+                'code' => 'warm',
+                'order' => 1,
+                'suphicks' => 'plan'
+            ],
+
+            [
+                'code' => 'presentation',
+                'order' => 2,
+                'suphicks' => 'plan'
+            ],
+            [
+                'code' => 'document',
+                'order' => 3,
+                'suphicks' => 'plan'
+            ],
+            [
+                'code' => 'hot',
+                'order' => 4,
+                'suphicks' => 'plan'
+            ],
+
+            [
+                'code' => 'moneyAwait',
+                'order' => 6,
+                'suphicks' => 'plan'
+            ],
+            [
+                'code' => 'success',
+                'order' => 7,
+                'suphicks' => 'success'
+            ],
+
+            [
+                'code' => 'fail',
+                'order' => 8,
+                'suphicks' => 'fail'
+            ],
+
+
+
+        ];
+        $planOrder =  0;
+        $reportOrder = 0;
+        $currentEventOrder = null;
+        if (!empty($currentBtxDeal)) {
+
+            if (!empty($currentBtxDeal['STAGE_ID'])) {
+                foreach ($currentCategoryData['stages'] as $stage) {
+                    if ("C" . $currentCategoryData['bitrixId'] . ':' . $stage['bitrixId'] ==  $currentBtxDeal['STAGE_ID']) {
+
+                        foreach ($eventOrders as $eventOrder) {
+                            if ($stagePrephicks . '_' . $eventOrder['suphicks'] === $stage['code']) {
+                                $currentEventOrder = $eventOrder['code'];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $currentEventOrder;
+    }
 
     static function getXOTargetStage(
         $currentCategoryData,

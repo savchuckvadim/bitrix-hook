@@ -7,23 +7,23 @@ use App\Http\Controllers\Front\EventCalling\FullEventInitController;
 use App\Http\Controllers\Front\EventCalling\ReportController;
 use App\Http\Controllers\PortalController;
 use App\Jobs\BtxCreateListItemJob;
+use App\Jobs\BtxSuccessListItemJob;
 use App\Services\BitrixTaskService;
 use App\Services\General\BitrixBatchService;
 use App\Services\General\BitrixDealService;
 use App\Services\General\BitrixDepartamentService;
 use App\Services\General\BitrixTimeLineService;
+use App\Services\HookFlow\BitrixDealBatchFlowService;
 use App\Services\HookFlow\BitrixDealFlowService;
+use App\Services\HookFlow\BitrixEntityBatchFlowService;
 use App\Services\HookFlow\BitrixEntityFlowService;
 use App\Services\HookFlow\BitrixListFlowService;
 use App\Services\HookFlow\BitrixListPresentationFlowService;
-use App\Services\HookFlow\BitrixRPAPresFlowService;
 use Carbon\Carbon;
 use DateTime;
-use Illuminate\Console\View\Components\Task;
-use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Log;
 
-class EventReportTMCService
+class EventReportBatchService
 
 {
     protected $portal;
@@ -97,6 +97,7 @@ class EventReportTMCService
 
     protected $planCreatedId;
     protected $planResponsibleId;
+    protected $planTmcId;
     protected $planDeadline;
     protected $nowDate;
 
@@ -144,9 +145,10 @@ class EventReportTMCService
 
 
     protected $currentBaseDeal;
-    // protected $currentPresDeal;
+    protected $currentPresDeal;
     protected $currentColdDeal;
     protected $currentTMCDeal;
+    protected $currentTMCDealFromCurrentPres;
 
     protected $relationBaseDeals;
     protected $relationCompanyUserPresDeals; //allPresDeals
@@ -158,14 +160,20 @@ class EventReportTMCService
     protected $btxDealBaseCategoryId;
     protected $btxDealPresCategoryId;
 
-    protected $portalRPAS;
-    protected $portalRPA;
-    protected $rpaTypeId;
-    protected $portalRPAFields;
-    protected $portalRPAStages;
-    protected $resultRpaItem;
-    protected $resultRpaLink;
 
+    protected $planContact;
+    protected $planContactId;
+    protected $reportContact;
+    protected $reportContactId;
+
+    // {
+    //     name: 
+    //     pnone:
+    //     email:
+    //     current:
+    //     isNeedUpdate:
+    //     isNeedCreate:
+    // }
 
     public function __construct(
 
@@ -180,6 +188,8 @@ class EventReportTMCService
 
         $domain = $data['domain'];
         $this->domain = $domain;
+
+
         $portal = PortalController::getPortal($domain);
         $portal = $portal['data'];
         $this->portal = $portal;
@@ -189,6 +199,30 @@ class EventReportTMCService
 
         $entityType = null;
         $entityId = null;
+
+        // if (isset($data['contact'])) {
+        //     if (!empty($data['contact'])) {
+        //         $this->planContact = $data['contact'];
+        //     }
+        // }
+
+        if (!empty($data['plan'])) {
+            if (!empty($data['plan']['contact'])) {
+                $this->planContact = $data['plan']['contact'];
+                if (!empty($data['plan']['contact']['ID'])) {
+                    $this->planContactId = $data['plan']['contact']['ID'];
+                }
+            }
+        }
+        if (!empty($data['report'])) {
+            if (!empty($data['report']['contact'])) {
+                $this->reportContact = $data['report']['contact'];
+                if (!empty($data['report']['contact']['ID'])) {
+                    $this->reportContactId = $data['report']['contact']['ID'];
+                }
+            }
+        }
+
 
         if (isset($placement)) {
             if (!empty($placement['placement'])) {
@@ -246,7 +280,7 @@ class EventReportTMCService
 
 
                 $this->currentReportEventType = $data['currentTask']['eventType'];
-                // Log::channel('telegram')->info();
+
                 if (!empty($data['currentTask']['eventType'])) {
                     $this->currentReportEventName = 'Звонок';
                 }
@@ -316,17 +350,7 @@ class EventReportTMCService
         if (!empty($data['report']['description'])) {
             $this->comment  = $data['report']['description'];
         }
-        if (!empty($data['contact'])) {
-            if (!empty($data['contact']['name'])) {
-                $this->comment =  $this->comment . "\n" . "ФИО Контактного лица: " . $data['contact']['name'];
-            }
-            if (!empty($data['contact']['phone'])) {
-                $this->comment =  $this->comment . "\n" . " Телефон Контактного лица: " . $data['contact']['phone'];
-            }
-            if (!empty($data['contact']['email'])) {
-                $this->comment =  $this->comment . "\n" . " E-mail Контактного лица: " . $data['contact']['email'];
-            }
-        }
+
         if (!empty($data['report']['noresultReason'])) {
             $this->noresultReason  = $data['report']['noresultReason']['current'];
         }
@@ -355,7 +379,11 @@ class EventReportTMCService
             $this->planResponsibleId = $data['plan']['responsibility']['ID'];
         };
 
-
+        if (isset($data['plan']['tmc'])) {
+            if (!empty($data['plan']['tmc']) && !empty($data['plan']['tmc']['ID'])) {
+                $this->planTmcId = $data['plan']['tmc']['ID'];
+            };
+        };
 
 
         if (!empty($data['plan']['deadline'])) {
@@ -366,7 +394,11 @@ class EventReportTMCService
         $this->isPresentationDone = $data['presentation']['isPresentationDone'];
 
 
-
+        // TODO FXD IS PRES
+        // $this->isPresentationDone = false;
+        // if ($data['report']['resultStatus'] !== 'result' && $this->currentReportEventType == 'presentation') {
+        //     $this->isPresentationDone  = true;
+        // }
 
 
         $this->isUnplannedPresentation = false;
@@ -413,37 +445,13 @@ class EventReportTMCService
 
         $btxDealBaseCategoryId = null;
         $btxDealPresCategoryId = null;
-        if (!empty($portal['rpas'])) {
-            $this->portalRPAS = $portal['rpas'];
-
-            foreach ($portal['rpas'] as $pRPA) {
-                $this->portalRPA = $pRPA;
-
-                $this->rpaTypeId = $pRPA['bitrixId'];
-                if (!empty($pRPA['bitrixfields'])) {
-
-                    $this->portalRPAFields = $pRPA['bitrixfields'];
-                }
-                if (!empty($pRPA['categories']) && is_array($pRPA['categories'])) {
-
-                    if (!empty($pRPA['categories'][0])) {
-
-                        if (!empty($pRPA['categories'][0]['stages'])) {
-
-                            $this->portalRPAStages = $pRPA['categories'][0]['stages'];
-                        }
-                    }
-                }
-            }
-        }
-
 
         if (!empty($portal['bitrixDeal'])) {
 
             if (!empty($portal['bitrixDeal']['categories'])) {
 
                 foreach ($portal['bitrixDeal']['categories'] as $pCategory) {
-                    if ($pCategory['code'] == 'tmc_base') {
+                    if ($pCategory['code'] == 'sales_base') {
                         $this->btxDealBaseCategoryId = $pCategory['bitrixId'];
                         $btxDealBaseCategoryId = $pCategory['bitrixId'];
                     }
@@ -522,15 +530,17 @@ class EventReportTMCService
                     }
 
 
-                    // Log::info('HOOK TEST TMC sessionDeals', [
+                    // Log::info('HOOK TEST sessionDeals', [
                     //     'sessionDeals' => $sessionDeals,
 
 
 
                     // ]);
                 }
+                $this->currentBtxEntity  = $sessionData['currentCompany'];
+
                 if (
-                    isset($sessionDeals['currentTMCDeal'])
+                    isset($sessionDeals['currentBaseDeal'])
                     //  &&
                     // isset($sessionDeals['allBaseDeals'])
                     // isset($sessionDeals['currentPresentationDeal']) &&
@@ -544,24 +554,21 @@ class EventReportTMCService
 
                 ) {
 
-                    // Log::info('HOOK TEST TMC sessionDeals', [
-                    //     'currentTMCDeal' => $sessionDeals['currentTMCDeal'],
 
-
-
-                    // ]);
                     $this->currentBtxDeals  = $sessionDeals['currentTaskDeals'];
 
-                    $this->currentBaseDeal = $sessionDeals['currentTMCDeal'];
-                    // $this->currentPresDeal = $sessionDeals['currentPresentationDeal'];
-                    $this->currentTMCDeal = $sessionDeals['currentTMCDeal'];
+                    $this->currentBaseDeal = $sessionDeals['currentBaseDeal'];
+                    $this->currentPresDeal = $sessionDeals['currentPresentationDeal'];
                     $this->currentColdDeal = $sessionDeals['currentXODeal'];
 
 
                     $this->relationBaseDeals = $sessionDeals['allBaseDeals'];
-                    // $this->relationCompanyUserPresDeals = $sessionDeals['allPresentationDeals']; //allPresDeal 
-                    // $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
+                    $this->relationCompanyUserPresDeals = $sessionDeals['allPresentationDeals']; //allPresDeal 
+                    $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
                     $this->relationColdDeals = $sessionDeals['allXODeals'];
+                    $this->currentTMCDealFromCurrentPres = $sessionDeals['currentTMCDeal'];
+                    Log::info('HOOK TMC SESSION', ['sessionDeals' => $sessionDeals]);
+                    // Log::info('HOOK TMC SESSION currentTMCDeal', ['session currentTMCDeal' => $sessionDeals['currentTMCDeal']]);
                 }
             }
         } else {
@@ -569,7 +576,7 @@ class EventReportTMCService
             $sessionData = FullEventInitController::getSessionItem($sessionKey);
 
             if (empty($sessionData)) {
-                $sessionData = ReportController::getDealsFromNewTaskInnerTMC(
+                $sessionData = ReportController::getDealsFromNewTaskInner(
                     $domain,
                     $this->hook,
                     $entityId,
@@ -584,26 +591,38 @@ class EventReportTMCService
 
                 $sessionDeals = $sessionData['deals'];
             }
+
             if (isset($sessionDeals) && isset($sessionDeals['currentBaseDeals'])) {
                 $this->currentBtxEntity  = $sessionData['currentCompany'];
 
                 if (is_array($sessionDeals['currentBaseDeals']) && !empty($sessionDeals['currentBaseDeals'])) {
                     $this->currentBtxDeals  = [$sessionDeals['currentBaseDeals'][0]];
                     $this->currentBaseDeal = $sessionDeals['currentBaseDeals'][0];
-                    $this->currentTMCDeal =  $sessionDeals['currentBaseDeals'][0];
                 } else {
 
                     $this->currentBtxDeals  = [];
                 }
             }
         }
-        Log::info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
-        Log::channel('telegram')->info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
+        // Log::channel('telegram')->info('HOOK TMC SESSION GET', ['isSuccessSale' => $this->isSuccessSale]);
 
-        Log::info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
-        Log::channel('telegram')->info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
+        if ($this->isSuccessSale) {
+            if (!empty($data['sale'])) {
+                if (!empty($data['sale']['relationSalePresDeal'])) {
+                    $this->currentPresDeal = $data['sale']['relationSalePresDeal'];
+                    array_push($this->currentBtxDeals,  $data['sale']['relationSalePresDeal']);
+                }
+            }
+        }
+        $sessionTMCDealKey = 'tmcInit_' . $domain . '_' . $this->planResponsibleId . '_' . $entityId;
+        $sessionData = FullEventInitController::getSessionItem($sessionTMCDealKey);
 
+        // Log::info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
+        // Log::channel('telegram')->info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
 
+        if (isset($sessionData['tmcDeal'])) {
+            $this->currentTMCDeal = $sessionData['tmcDeal'];
+        }
 
         if (!empty($portal['smarts'])) {
             // foreach ($portal['smarts'] as $smart) {
@@ -667,9 +686,21 @@ class EventReportTMCService
 
             // }
         }
+        // Log::info(
+        //     'HOOK TMC SESSION currentTMCDeal',
+        //     [
+        //         'session currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres
+        //     ]
+        // );
+        // Log::info(
+        //     'HOOK TMC SESSION currentTMCDeal',
+        //     [
+        //         'session currentTMCDeal' => $this->currentTMCDeal
+        //     ]
+        // );
 
 
-        $this->currentDepartamentType = 'tmc';
+        $this->currentDepartamentType = BitrixDepartamentService::getDepartamentTypeByUserId();
 
 
         if (!empty($data['sale'])) {
@@ -686,55 +717,17 @@ class EventReportTMCService
     {
 
         try {
-            // Log::channel('telegram')->error('APRIL_HOOK data', ['entityType' => $this->entityType]);
-            $updatedCompany = null;
-            $updatedLead = null;
-            $currentSmart = null;
-            $currentSmartId = null;
-            $currentDeal = null;
-            $currentDealId = null;
-            $currentDealsIds = null;
-            // if(!$this->smartId){
 
-            // }
-            // $randomNumber = rand(1, 2);
+            $result = null;
 
-            // if ($this->isSmartFlow) {
-            //     $this->getSmartFlow();
-            // }
-            // Log::info('HOOK TEST unplannedPresDeal', [
-            //     'currentBaseDeal' => $this->currentBaseDeal,
-            //     // 'currentPresDeal' => $this->currentPresDeal,
-            //     // 'currentBtxDeals' => $this->currentBtxDeals,
-
-            // ]);
-            $this->setTimeLine();
             if ($this->isDealFlow && $this->portalDealData) {
-                $this->closeNoTMCDeals();
-                sleep(1);
-                $currentDealsIds = $this->getDealFlow();
+
+                $currentDealsIds = $this->getNEWBatchDealFlow();
             }
-
-            // $this->createTask($currentSmartId);
-            if ($this->isExpired || $this->isPlanned) {
-                $result = $this->taskFlow(null, $currentDealsIds['planDeals']);
-            } else {
-                $result = $this->workStatus;
-            }
-
-            $this->getEntityFlow();
-            // sleep(1);
-
 
             $this->getListBatchFlow();
 
-            // $this->getListFlow();
-            sleep(1);
-            $this->getListPresentationFlow(
-                $currentDealsIds
-            );
-
-            return APIOnlineController::getSuccess(['data' => ['result' => $result, 'presInitLink' => $this->resultRpaLink]]);
+            return APIOnlineController::getSuccess(['data' => ['result' => $result, 'presInitLink' => null]]);
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
@@ -749,15 +742,15 @@ class EventReportTMCService
     }
 
 
-
     //entity
-    protected function getEntityFlow(
+    protected function getEntityBatchFlowCommand(
         $isDeal = false,
         $deal = null,
-        $dealType = 'tmc',  //presentation, xo
+        $dealType = 'base',  //presentation, xo
         $baseDealId = null,
         $dealEventType = false //plan done unplanned fail
     ) {
+        $entityCommand = '';
         $currentReportEventType = $this->currentReportEventType;
         $currentPlanEventType = $this->currentPlanEventType;
         $isPresentationDone = $this->isPresentationDone;
@@ -770,7 +763,7 @@ class EventReportTMCService
 
 
         $reportFields = [];
-        $reportFields['manager_tmc'] = $this->planResponsibleId;
+        $reportFields['manager_op'] = $this->planResponsibleId;
         $reportFields['op_work_status'] = '';
         $reportFields['op_prospects_type'] = 'op_prospects_good';
         $reportFields['op_result_status'] = '';
@@ -785,17 +778,51 @@ class EventReportTMCService
         $currentPresCount = 0;
         $companyPresCount = 0;
         $dealPresCount = 0;
-        if (!empty($this->currentTask)) {
-            if (!empty($this->currentTask['presentation'])) {
 
-                if (!empty($this->currentTask['presentation']['company'])) {
-                    $companyPresCount = (int)$this->currentTask['presentation']['company'];
-                }
-                if (!empty($this->currentTask['presentation']['deal'])) {
-                    $dealPresCount = (int)$this->currentTask['presentation']['deal'];
-                }
+        Log::channel('telegram')
+            ->info(
+                'COUNT CHECK vheck',
+                [
+                    'currentBtxEntity' => $this->currentBtxEntity['UF_CRM_1709807026'],
+
+                ]
+            );
+        Log::channel('telegram')
+            ->info(
+                'COUNT CHECK vheck',
+                [
+                    'currentBaseDeal' => $this->currentBaseDeal,
+
+                ]
+            );
+
+
+        if (!empty($this->currentBtxEntity)) {
+            if (isset($this->currentBtxEntity['UF_CRM_1709807026'])) {
+
+                $currentPresCount = (int)$this->currentBtxEntity['UF_CRM_1709807026'];
+                $companyPresCount = (int)$this->currentBtxEntity['UF_CRM_1709807026'];
             }
         }
+
+        if (!empty($this->currentBaseDeal)) {
+            if (isset($this->currentBaseDeal['UF_CRM_PRES_COUNT'])) {
+
+                $dealPresCount = (int)$this->currentBaseDeal['UF_CRM_PRES_COUNT'];
+            }
+        }
+
+        // if (!empty($this->currentTask)) {
+        //     if (!empty($this->currentTask['presentation'])) {
+
+        //         if (!empty($this->currentTask['presentation']['company'])) {
+        //             $companyPresCount = (int)$this->currentTask['presentation']['company'];
+        //         }
+        //         if (!empty($this->currentTask['presentation']['deal'])) {
+        //             $dealPresCount = (int)$this->currentTask['presentation']['deal'];
+        //         }
+        //     }
+        // }
 
 
 
@@ -808,13 +835,13 @@ class EventReportTMCService
             $entityId =  $deal['ID'];
             $portalEntityData = $this->portalDealData;
 
-            // if ($dealType == 'presentation') {
-            //     $reportFields['to_base_sales'] = $baseDealId;
-            //     $currentPresCount = 0;
-            //     if ($dealEventType == 'plan' || $dealEventType == 'fail') {
-            //         $currentPresCount = -1;
-            //     }
-            // }
+            if ($dealType == 'presentation') {
+                $reportFields['to_base_sales'] = $baseDealId;
+                $currentPresCount = 0;
+                if ($dealEventType == 'plan' || $dealEventType == 'fail') {
+                    $currentPresCount = -1;
+                }
+            }
         }
 
 
@@ -857,7 +884,9 @@ class EventReportTMCService
                     break;
             }
         }
-
+        // Log::channel('telegram')->info('HOOK entity flow', [
+        //     'isPresentationDone' => $this->isPresentationDone
+        // ]);
         //presentation done with unplanned
         if ($this->isPresentationDone) {
 
@@ -875,7 +904,7 @@ class EventReportTMCService
             }
             $reportFields['op_current_status'] = ' Презентация проведена';
             array_push($currentPresComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
-            // array_unshift($currentMComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
+            // array_push($currentMComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
         }
 
 
@@ -935,7 +964,7 @@ class EventReportTMCService
         } else {
             if ($this->workStatus['current']['code'] === 'fail') {
                 $reportFields['op_current_status'] = 'Отказ';
-                array_push($currentMComments, $this->nowDate . ' Отказ ' . $this->comment);
+                // array_unshift($currentMComments, $this->nowDate . ' Отказ ' . $this->comment);
 
 
 
@@ -973,7 +1002,7 @@ class EventReportTMCService
 
                 // array_push($currentMComments, $this->nowDate . ' Нерезультативный. ' . $this->currentTaskTitle);
             } else {
-                // array_unshift($currentMComments, $this->nowDate . ' Результативный ' . $this->currentTaskTitle . ' ' . $this->comment);
+                // array_unshift($currentMComments, $this->nowDate . ' Результативный ' . $this->currentTaskTitle. ' ' . $this->comment);
             }
         }
 
@@ -1014,9 +1043,9 @@ class EventReportTMCService
             }
         }
         $comment = $this->getFullEventComment();
-        array_unshift($currentMComments, $comment);
-        if (count($currentMComments) > 5) {
-            $currentMComments = array_slice($currentMComments, 0, 5);
+        array_unshift($currentMComments, $this->nowDate . "\n" . $comment);
+        if (count($currentMComments) > 8) {
+            $currentMComments = array_slice($currentMComments, 0, 8);
         }
 
 
@@ -1027,12 +1056,23 @@ class EventReportTMCService
         // }
 
 
-        $entityService = new BitrixEntityFlowService();
+        $entityService = new BitrixEntityBatchFlowService();
+
+
+        Log::channel('telegram')->info('HOOK FROM ONLINE', ['reportFields' => $reportFields]);
+        Log::info('HOOK FROM ONLINE', ['reportFields' => $reportFields]);
+
+        if (isset($reportFields['op_work_status'])) {
+
+            Log::channel('telegram')->info('HOOK FROM ONLINE', ['op_work_status' => $reportFields['op_work_status']]);
+            Log::info('HOOK FROM ONLINE', ['op_work_status' => $reportFields['op_work_status']]);
+        }
 
 
 
 
-        $entityService->flow(
+
+        $entityCommand = $entityService->getBatchCommand(
             $this->portal,
             $currentBtxEntity,
             $portalEntityData,
@@ -1058,147 +1098,374 @@ class EventReportTMCService
             $this->comment,
             $reportFields
         );
+
+
+
+        // return ['command' => $entityCommand];
+        return $entityCommand;
+    }
+
+    protected function getEntityBatchFlowCommandFromIdForNewDeal(
+        $isDeal = true,
+        $dealId,
+        $dealType = 'base',  //presentation, xo
+        $baseDealId = null,
+        $dealEventType = false //plan done unplanned fail
+    ) {
+        $entityCommand = '';
+        $currentReportEventType = $this->currentReportEventType;
+        $currentPlanEventType = $this->currentPlanEventType;
+        $isPresentationDone = $this->isPresentationDone;
+
+        $currentBtxEntity = $this->currentBtxEntity;
+        $entityType = $this->entityType;
+        $entityId = $this->entityId;
+
+        $portalEntityData = $this->portalCompanyData;
+
+
+        $reportFields = [];
+        $reportFields['manager_op'] = $this->planResponsibleId;
+        $reportFields['op_work_status'] = '';
+        $reportFields['op_prospects_type'] = 'op_prospects_good';
+        $reportFields['op_result_status'] = '';
+        $reportFields['op_noresult_reason'] = '';
+        $reportFields['op_fail_reason'] = '';
+
+        $reportFields['op_fail_comments'] = '';
+        $reportFields['op_history'] = '';
+        $reportFields['op_mhistory'] = [];
+
+
+        $currentPresCount = 0;
+        $companyPresCount = 0;
+        $dealPresCount = 0;
+        Log::channel('telegram')
+            ->info(
+                'COUNT CHECK vheck',
+                [
+                    'currentBtxEntity' => $this->currentBtxEntity['UF_CRM_1709807026'],
+
+                ]
+            );
+        Log::channel('telegram')
+            ->info(
+                'COUNT CHECK vheck',
+                [
+                    'currentBaseDeal' => $this->currentBaseDeal,
+
+                ]
+            );
+
+
+        //CЧЕТЧИК ОБНУЛЯЕТСЯ ЕСЛИ NEW TASK
+        if (!empty($this->currentBtxEntity)) {
+            if (isset($this->currentBtxEntity['UF_CRM_1709807026'])) {
+
+                $currentPresCount = (int)$this->currentBtxEntity['UF_CRM_1709807026'];
+                $companyPresCount = (int)$this->currentBtxEntity['UF_CRM_1709807026'];
+            }
+        }
+
+        if (!empty($this->currentBaseDeal)) {
+            if (isset($this->currentBaseDeal['UF_CRM_PRES_COUNT'])) {
+
+                $dealPresCount = (int)$this->currentBaseDeal['UF_CRM_PRES_COUNT'];
+            }
+        }
+
+        // if (!empty($this->currentTask)) {
+        //     if (!empty($this->currentTask['presentation'])) {
+
+        //         if (!empty($this->currentTask['presentation']['company'])) {
+        //             $companyPresCount = (int)$this->currentTask['presentation']['company'];
+        //         }
+        //         if (!empty($this->currentTask['presentation']['deal'])) {
+        //             $dealPresCount = (int)$this->currentTask['presentation']['deal'];
+        //         }
+        //     }
+        // }
+
+
+        $currentPresCount =  $companyPresCount;
+        if ($isDeal && !empty($dealId)) {
+
+            $currentPresCount =  $dealPresCount;
+            // $currentBtxEntity = $deal;
+            $entityType = 'deal';
+            $entityId =  $dealId;
+            $portalEntityData = $this->portalDealData;
+
+            if ($dealType == 'presentation') {
+                $reportFields['to_base_sales'] = $baseDealId;
+                $currentPresCount = 0;
+                if ($dealEventType == 'plan' || $dealEventType == 'fail') {
+                    $currentPresCount = -1;
+                }
+            }
+        }
+
+
+        $currentPresComments = [];
+        $currentFailComments = [];
+        $currentMComments = [];
+        // if (isset($currentBtxEntity)) {
+        //     if (!empty($currentBtxEntity['UF_CRM_PRES_COMMENTS'])) {
+        //         $currentPresComments = $currentBtxEntity['UF_CRM_PRES_COMMENTS'];
+        //     }
+
+        //     if (!empty($currentBtxEntity['UF_CRM_OP_FAIL_COMMENTS'])) {
+        //         $currentFailComments = $currentBtxEntity['UF_CRM_OP_FAIL_COMMENTS'];
+        //     }
+
+        //     if (!empty($currentBtxEntity['UF_CRM_OP_MHISTORY'])) {
+        //         $currentMComments = $currentBtxEntity['UF_CRM_OP_MHISTORY'];
+        //     }
+        // }
+
+
+        //обнуляем дату следующей презентации и звонка - они будут аполнены только если реально что-то запланировано
+        $reportFields['next_pres_plan_date'] = null;
+        $reportFields['call_next_date'] = null;
+
+        if ($currentReportEventType) {
+
+
+            //general
+            $reportFields['call_last_date'] = $this->nowDate;
+
+            switch ($currentReportEventType) {
+                case 'xo':
+                    $reportFields['xo_date'] = null;
+
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        }
+        // Log::channel('telegram')->info('HOOK entity flow', [
+        //     'isPresentationDone' => $this->isPresentationDone
+        // ]);
+        //presentation done with unplanned
+        if ($this->isPresentationDone) {
+
+
+
+            $reportFields['last_pres_done_date'] = $this->nowDate;
+            $reportFields['last_pres_done_responsible'] =  $this->planResponsibleId;
+            $reportFields['pres_count'] = $currentPresCount + 1;
+
+            if ($currentReportEventType !== 'presentation' || $this->isNew) {
+                $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
+                $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
+                $reportFields['next_pres_plan_date'] = $this->nowDate;  //дата на которую запланировали през
+
+            }
+            $reportFields['op_current_status'] = ' Презентация проведена';
+            array_push($currentPresComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
+            // array_push($currentMComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
+        }
+
+
+        //plan
+        $planFields = [];
+
+        if ($this->isPlanned) {
+
+
+            //general
+            $reportFields['call_next_date'] = $this->planDeadline;
+            $reportFields['call_next_name'] = $this->currentPlanEventName;
+            $reportFields['xo_responsible'] = $this->planResponsibleId;
+            $reportFields['xo_created'] = $this->planResponsibleId;
+            $reportFields['op_current_status'] = 'Звонок запланирован в работе';
+
+            // Log::channel('telegram')->info('TST', [
+            //     'currentPlanEventType' => $currentPlanEventType,
+
+            // ]);
+
+
+            switch ($currentPlanEventType) {
+                    // 0: {id: 1, code: "warm", name: "Звонок"}
+                    // // 1: {id: 2, code: "presentation", name: "Презентация"}
+                    // // 2: {id: 3, code: "hot", name: "Решение"}
+                    // // 3: {id: 4, code: "moneyAwait", name: "Оплата"}
+                case 'xo':
+                    $reportFields['xo_date'] = $this->planDeadline;
+                    $reportFields['xo_name'] = $this->currentPlanEventName;
+
+                    break;
+                case 'hot':
+                    $reportFields['op_current_status'] = 'В решении: ' . $this->currentPlanEventName;
+                    // array_unshift($currentMComments, $this->nowDate . 'В решении: ' . $this->comment);
+
+                    break;
+                case 'moneyAwait':
+                    $reportFields['op_current_status'] = 'Ждем оплаты: ' . $this->currentPlanEventName;
+                    // array_unshift($currentMComments, $this->nowDate . 'В оплате: ' . $this->comment);
+                    break;
+
+
+                case 'presentation':
+
+                    $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
+                    $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
+                    $reportFields['next_pres_plan_date'] = $this->planDeadline;  //дата на которую запланировали през
+                    $reportFields['op_current_status'] = 'В работе: Презентация запланирована ' . $this->currentPlanEventName;
+                    array_push($currentPresComments, $this->nowDate . ' Презентация запланирована ' . $this->currentPlanEventName);
+                    // array_unshift($currentMComments, $this->nowDate . ' Презентация запланирована ' . $this->currentPlanEventName);
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+        } else {
+            if ($this->workStatus['current']['code'] === 'fail') {
+                $reportFields['op_current_status'] = 'Отказ';
+                // array_unshift($currentMComments, $this->nowDate . ' Отказ ' . $this->comment);
+
+
+
+                $reportFields['op_fail_comments'] = $currentFailComments;
+                if ($this->isPresentationDone) {
+                    array_push($currentPresComments, $this->nowDate . ' Отказ после презентации ' . $this->currentTaskTitle . ' ' . $this->comment);
+                } else {
+                    if ($currentReportEventType === 'presentation') {
+
+                        array_push($currentPresComments, $this->nowDate . ' Отказ: Презентация не состоялась ' . $this->currentTaskTitle . ' ' . $this->comment);
+                    }
+                }
+            }
+
+            if ($this->workStatus['current']['code'] === 'success') {
+                $reportFields['op_current_status'] = 'Успех: продажа состоялась ' . $this->nowDate;
+            }
+        }
+        if (!$this->isNew) {
+            if ($this->resultStatus !== 'result') {
+                if (!empty($this->noresultReason)) {
+                    if (!empty($this->noresultReason['code'])) {
+
+                        $reportFields['op_noresult_reason'] = $this->noresultReason['code'];
+                    }
+                }
+
+                if ($this->workStatus['current']['code'] === 'inJob' || $this->workStatus['current']['code'] === 'setAside') {
+                    if ($currentReportEventType === 'presentation') {
+
+                        array_push($currentPresComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
+                    }
+                    // array_unshift($currentMComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
+                }
+
+                // array_push($currentMComments, $this->nowDate . ' Нерезультативный. ' . $this->currentTaskTitle);
+            } else {
+                // array_unshift($currentMComments, $this->nowDate . ' Результативный ' . $this->currentTaskTitle. ' ' . $this->comment);
+            }
+        }
+
+
+
+        // Log::channel('telegram')->info('TST', [
+        //     'currentPresComments' => $currentPresComments,
+        //     'currentFailComments' => $currentFailComments,
+        // ]);
+        // Log::channel('telegram')->info('HOOK TEST getWorkstatusFieldItemValue', [
+        //     'failType' => $this->failType,
+        //     'failReason' => $this->failReason,
+        // ]);
+
+        if (!empty($this->workStatus['current'])) {
+            if (!empty($this->workStatus['current']['code'])) {
+                $workStatusCode = $this->workStatus['current']['code'];
+
+
+                if ($workStatusCode === 'fail') {  //если провал
+                    if (!empty($this->failType)) {
+                        if (!empty($this->failType['code'])) {
+
+                            // $reportFields['op_prospects_type'] = $this->failType['code'];
+
+
+                            if ($this->failType['code'] == 'failure') { //если тип провала - отказ
+                                if (!empty($this->failReason)) {
+                                    if (!empty($this->failReason['code'])) {
+
+                                        $reportFields['op_fail_reason'] = $this->failReason['code'];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        $comment = $this->getFullEventComment();
+        array_unshift($currentMComments, $this->nowDate . "\n" . $comment);
+        if (count($currentMComments) > 8) {
+            $currentMComments = array_slice($currentMComments, 0, 8);
+        }
+
+
+        //закидываем сформированные комментарии
+        $reportFields['op_mhistory'] = $currentMComments;
+        // if ($this->isPresentationDone || ($this->isPlanned && $currentPlanEventType == 'presentation')) {
+        $reportFields['pres_comments'] = $currentPresComments;
+        // }
+
+
+        $entityService = new BitrixEntityBatchFlowService();
+
+
+
+
+        $entityCommand = $entityService->getBatchCommand(
+            $this->portal,
+            null, // $currentBtxEntity,
+            $portalEntityData,
+            $this->hook,
+            $entityType,
+            $entityId,
+            $this->currentPlanEventType, // xo warm presentation,
+            'plan',  // plan done expired 
+            $this->planCreatedId,
+            $this->planResponsibleId,
+            $this->planDeadline,
+            $this->nowDate,
+            $this->isPresentationDone,
+            $this->isUnplannedPresentation,
+            $this->workStatus['current']['code'],  // inJob setAside ...
+            $this->resultStatus, //result | noresult ... new
+            $this->failType,
+            $this->failReason,
+            $this->noresultReason,
+            $this->currentReportEventType,
+            $this->currentReportEventName,
+            $this->currentPlanEventName,
+            $this->comment,
+            $reportFields
+        );
+
+
+
+        // return ['command' => $entityCommand];
+        return $entityCommand;
     }
 
 
-    // get deal relations flow
 
 
-    //todo 
-    //get clod report fields
-    //get warm report fields
-    //get presentation report fields
-    //get other report fields
-    //get new event report fields
-
-
-
-
-    //get clod plan fields
-    //get warm plan fields
-    //get presentation plan fields
-    //get in_progress plan fields
-    //get money_await plan fields
-
-
-    //get presentation done fields
-    //get statuses fields
-
-    //smart
-    protected function getSmartFlow()
+    protected function getNEWBatchDealFlow()
     {
 
-        // $methodSmart = '/crm.item.add.json';
-        // $url = $this->hook . $methodSmart;
-
-        //дата следующего звонка smart
-        // UF_CRM_6_1709907693 - alfa
-        // UF_CRM_10_1709907744 - april
-
-
-        //название обзвона общее - тема
-        // UF_CRM_6_1709907816 - alfa
-        // UF_CRM_10_1709907850 - april
-
-
-        // cold
-        // ..Дата холодного обзвона  UF_CRM_10_1701270138
-        // ..Название Холодного обзвона  UF_CRM_10_1703491835
-
-
-
-        //todo 
-        // Постановщик ХО UF_CRM_6_1702453779
-        // Ответственный ХО UF_CRM_6_1702652862
-
-        // $categoryId = 28;
-        // $stageId = 'DT162_28:NEW';
-
-        // $lastCallDateField = 'ufCrm10_1709907744';
-        // $callThemeField = 'ufCrm10_1709907850';
-        // $lastCallDateFieldCold = 'ufCrm10_1701270138';
-        // $callThemeFieldCold = 'ufCrm10_1703491835';
-
-        // if ($this->domain == 'alfacentr.bitrix24.ru') {
-        //     $lastCallDateField = 'ufCrm6_1709907693';
-        //     $callThemeField = 'ufCrm6_1709907816';
-        //     $lastCallDateFieldCold = 'ufCrm6_1709907693';
-        //     $callThemeFieldCold = 'ufCrm6_1700645937';
-
-        //     $categoryId = 14;
-        //     $stageId = 'DT156_14:NEW';
-        // }
-
-
-        // $hook = $this->hook;
-
-        // $responsibleId  = $this->responsibleId;
-        // $smart  = $this->aprilSmartData;
-
-        // $companyId  = null;
-        // $leadId  = null;
-
-        // if ($this->entityType == 'company') {
-
-        //     $companyId  = $this->entityId;
-        // } else if ($this->entityType == 'lead') {
-        //     $leadId  = $this->entityId;
-        // }
-
-        // $resultFields = [];
-        // $fieldsData = [];
-        // $fieldsData['categoryId'] = $this->categoryId;
-        // $fieldsData['stageId'] = $this->stageId;
-
-
-        // // $fieldsData['ufCrm7_1698134405'] = $companyId;
-        // $fieldsData['assigned_by_id'] = $responsibleId;
-        // // $fieldsData['companyId'] = $companyId;
-
-        // if ($companyId) {
-        //     $fieldsData['ufCrm7_1698134405'] = $companyId;
-        //     $fieldsData['company_id'] = $companyId;
-        // }
-        // if ($leadId) {
-        //     $fieldsData['parentId1'] = $leadId;
-        //     $fieldsData['ufCrm7_1697129037'] = $leadId;
-        // }
-
-        // $fieldsData[$this->lastCallDateField] = $this->deadline;  //дата звонка следующего
-        // $fieldsData[$this->lastCallDateFieldCold] = $this->deadline; //дата холодного следующего
-        // $fieldsData[$this->callThemeField] = $this->name;      //тема следующего звонка
-        // $fieldsData[$this->callThemeFieldCold] = $this->name;  //тема холодного звонка
-
-        // $fieldsData['ufCrm6_1702652862'] = $responsibleId; // alfacenter Ответственный ХО 
-
-        // if ($this->createdId) {
-        //     $fieldsData[$this->createdFieldCold] = $this->createdId;  // Постановщик ХО - smart field
-
-        // }
-
-
-
-        // $entityId = $smart['crmId'];
-
-
-        // return BitrixSmartFlowService::flow(
-        //     $this->aprilSmartData,
-        //     $this->hook,
-        //     $this->entityType,
-        //     $entityId,
-        //     'xo', // xo warm presentation,
-        //     'plan',  // plan done expired 
-        //     $this->responsibleId,
-        //     $fieldsData
-        // );
-    }
-
-
-
-    // deal flow
-
-    protected function getDealFlow()
-    {
+        $result =  ['dealIds' => ['$result'], 'planDeals' => null, 'newPresDeal' => null, 'commands' => null, 'unplannedPresDeals' => null];
+        // должен собрать batch commands
+        // отправить send batch
+        // из резултатов вернуть объект с массивами созданных и обновленных сделок
+        // если при начале функции нет currentBtxDeals - сначала создается она
 
         //сейчас есть
         // protected $currentBaseDeal;
@@ -1219,12 +1486,28 @@ class EventReportTMCService
         // $currentColdDeal - обновляется если xo - done или planEventType - xo
 
         // в зависимости от условий сделка в итоге попадает либо в plan либо в report deals
+        $currentDealId = null;
+        if (!empty($this->currentBaseDeal)) {
+            $currentDealId = $this->currentBaseDeal['ID'];
+        }
+
+        $xoDealId = null;
+        if (!empty($this->currentColdDeal)) {
+            $xoDealId = $this->currentColdDeal['ID'];
+        }
+
+        $reportPresDealId = null;
+        if (!empty($this->currentPresDeal)) {
+            $reportPresDealId = $this->currentPresDeal['ID'];
+        }
 
         $reportDeals = [];
         $planDeals = [];
         $currentBtxDeals = $this->currentBtxDeals;
-
-
+        $batchCommands = [];
+        $entityBatchCommands = [];
+        $isUnplanned = $this->isPresentationDone && $this->currentReportEventType !== 'presentation';
+        $unplannedPresDeal =  null;
         if (empty($currentBtxDeals)) {   //если текущие сделки отсутствуют значит надо сначала создать базовую - чтобы нормально отработал поток
             $setNewDealData = [
                 'COMPANY_ID' => $this->entityId,
@@ -1237,9 +1520,9 @@ class EventReportTMCService
 
             );
 
-            if (!empty($currentDealId)) {
-                $rand = 1;
-                sleep($rand);
+            if (!empty($currentDealId) && empty($this->currentBaseDeal)) {
+                // $rand = mt_rand(100000, 300000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+                // usleep($rand);
                 $newBaseDeal = BitrixDealService::getDeal(
                     $this->hook,
                     ['id' => $currentDealId]
@@ -1252,7 +1535,7 @@ class EventReportTMCService
             }
         }
 
-
+        $this->setTimeLine();
         $unplannedPresDeals = null;
         $newPresDeal = null;
         // report - закрывает сделки
@@ -1285,417 +1568,522 @@ class EventReportTMCService
         }
         // }
 
+        $batchService =  new BitrixBatchService($this->hook);
 
-        // if ($this->isPresentationDone && $this->currentReportEventType !== 'presentation') { // проведенная презентация будет isUnplanned
-        //     //в current task не будет id сделки презентации
-        //     // в таком случае предполагается, что сделки презентация еще не существует
-        //     $currentBtxDeals = [];
-        //     $unplannedPresDeal = BitrixDealFlowService::unplannedPresflow(  //  создает - презентация
-        //         $this->hook,
-        //         null,
-        //         $this->portalDealData,
-        //         $this->currentDepartamentType,
-        //         $this->entityType,
-        //         $this->entityId,
-        //         'presentation', // xo warm presentation,
-        //         'Презентация',
-        //         'Спонтанная от ' . $this->nowDate,
-        //         'plan',  // plan done expired fail
-        //         $this->planResponsibleId,
-        //         true,
-        //         '$fields',
-        //         null // $relationSalePresDeal
+
+
+
+        $newPresDeal = null;
+        $planDeals = [];
+        $reportDeals = [];
+        $unplannedPresDeals = [];
+
+
+        // Log::channel('telegram')
+        //     ->info(
+        //         'vheck',
+        //         [
+        //             'currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres,
+
+        //         ]
+        //     );
+        // Log::channel('telegram')
+        //     ->info(
+        //         'vheck',
+        //         [
+        //             'currentTMCDeal' => $this->currentTMCDeal,
+
+        //         ]
         //     );
 
-        //     // $isDeal = false, 
-        //     // $deal = null, 
-        //     // $dealType = 'base',  //presentation, xo
-        //     // $baseDealId = null
 
-        //     Log::info('HOOK TEST unplannedPresDeal', [
-        //         'currentBaseDeal' => $this->currentBaseDeal,
+        //DEALS FLOW
+        foreach ($this->portalDealData['categories'] as $category) {
+
+            switch ($category['code']) {
+                case 'sales_base':
+                    // Log::info('HOOK BATCH batchFlow report DEAL', ['category' =>  $category]);
+                    // Log::channel('telegram')->info('HOOK BATCH currentDealId', ['currentDealId' =>  $currentDealId]);
+                    // Log::info('HOOK BATCH batchFlow report DEAL', ['currentDealId' =>  $currentDealId]);
+                    // Log::channel('telegram')->info('HOOK BATCH currentDealId', ['currentDealId' =>  $currentDealId]);
+                    $currentStageOrder = BitrixDealService::getEventOrderFromCurrentBaseDeal($this->currentBaseDeal, $category);
+                    $pTargetStage = BitrixDealService::getSaleBaseTargetStage(
+                        $category,
+                        $currentStageOrder,
+                        // $currentDepartamentType,
+                        $this->currentPlanEventType, // xo warm presentation,
+                        $this->currentReportEventType, // xo warm presentation,
+                        $this->currentReportEventName,
+                        $this->currentPlanEventName,
+                        $this->isResult,
+                        $isUnplanned,
+                        $this->isSuccessSale,
+                        $this->isFail,
+
+                    );
+                    $targetStageBtxId = $pTargetStage;
+                    // Log::info('HOOK BATCH batchFlow report DEAL', ['pTargetStage' =>  $pTargetStage]);
+                    // Log::channel('telegram')->info('HOOK BATCH category', ['pTargetStage' =>  $pTargetStage]);
+
+                    $fieldsData = [
+
+                        'CATEGORY_ID' => $category['bitrixId'],
+                        'STAGE_ID' => "C" . $category['bitrixId'] . ':' . $targetStageBtxId,
+                        "COMPANY_ID" => $this->entityId,
+                        'ASSIGNED_BY_ID' =>  $this->planResponsibleId
+                    ];
+                    if ($currentDealId) {
+
+                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $currentDealId);
+                        $key = 'update_' . '_' . $category['code'] . '_' . $currentDealId;
+                        $resultBatchCommands[$key] = $batchCommand;
+                    } else {
 
 
-        //     ]);
-        //     if (!empty($this->currentBaseDeal)) {
-        //         $this->getEntityFlow(
-        //             true,
-        //             $unplannedPresDeal,
-        //             'presentation',
-        //             $this->currentBaseDeal['ID'],
-        //             'unplanned'
+
+                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
+                        $key = 'set_' . '_' . $category['code'];
+                        $resultBatchCommands[$key] = $batchCommand;
+                        $currentDealId = '$result[' . $key . ']';
+                    }
+
+
+                    $entityCommand =  $this->getEntityBatchFlowCommand(
+                        true,
+                        $this->currentBaseDeal,
+                        'base',
+                        $this->currentBaseDeal['ID'],
+                        ''
+                    );
+                    $key = 'entity_base' . '_' . 'deal' . '_' .  $currentDealId;
+                    $resultBatchCommands[$key] = $entityCommand; // в результате будет id
+
+                    // if ($isUnplanned) {
+
+                    //     array_push($planDeals, $baseDealId);
+                    // }
+
+                    if (!empty($this->currentPlanEventType)) {
+                        array_push($planDeals, $currentDealId);
+                    }
+                    array_push($reportDeals, $currentDealId);
+                    array_push($unplannedPresDeals, $currentDealId);
+
+
+                    break;
+                case 'sales_xo':
+                    $pTargetStage = BitrixDealService::getXOTargetStage(
+                        $category,
+                        $this->currentReportEventType, // xo warm presentation,
+                        $this->isExpired,
+                        $this->isResult,
+                        $this->isSuccessSale,
+                        $this->isFail,
+
+                    );
+                    $targetStageBtxId = $pTargetStage;
+                    // Log::info('HOOK BATCH batchFlow report DEAL', ['pTargetStage' =>  $pTargetStage]);
+                    // Log::channel('telegram')->info('HOOK BATCH category', ['pTargetStage' =>  $pTargetStage]);
+                    $fieldsData = [
+
+                        'CATEGORY_ID' => $category['bitrixId'],
+                        'STAGE_ID' => "C" . $category['bitrixId'] . ':' . $targetStageBtxId,
+                        "COMPANY_ID" => $this->entityId,
+                        'ASSIGNED_BY_ID' => $this->planResponsibleId,
+                    ];
+
+                    if ($xoDealId) {
+
+                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $xoDealId);
+                        $key = 'update_' . '_' . $category['code'] . '_' . $xoDealId;
+                        $resultBatchCommands[$key] = $batchCommand;
+                    }
+
+                    break;
+
+                case 'sales_presentation':
+
+                    // 1) если report - presentetion - обновить текущую pres deal from task
+                    if ($this->currentReportEventType == 'presentation') {
+                        if ($reportPresDealId) {
+                            array_push($reportDeals, $reportPresDealId);
+
+                            $pTargetStage = BitrixDealService::getTargetStagePresentation(
+                                $category,
+                                // $currentDepartamentType,
+                                $this->currentReportEventType, // xo warm presentation,
+                                $currentReportStatus,  // plan done expired fail
+                                $this->isResult,
+                                $isUnplanned,
+                                $this->isSuccessSale,
+                                $this->isFail,
+
+                            );
+                            $fieldsData = [
+
+                                // 'CATEGORY_ID' => $category['bitrixId'],
+                                'STAGE_ID' => "C" . $category['bitrixId'] . ':' . $pTargetStage,
+                                // "COMPANY_ID" => $entityId,
+                                // 'ASSIGNED_BY_ID' => $responsibleId
+                            ];
+
+
+                            $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $reportPresDealId);
+                            $key = 'update_' . '_' . $category['code'] . '_' . $reportPresDealId;
+                            $resultBatchCommands[$key] = $batchCommand;
+
+
+                            $entityCommand =  $this->getEntityBatchFlowCommandFromIdForNewDeal(
+                                true,
+                                $reportPresDealId,
+                                'presentation',
+                                $this->currentBaseDeal['ID'],
+                                $currentReportStatus
+                            );
+
+                            $key = 'update_entity_deal_plan' . '_' . $category['code'];
+                            $resultBatchCommands[$key] = $entityCommand;
+                        }
+                    }
+
+                    // 2) если plan - presentetion создать plan pres deal  и засунуть в plan и в task
+                    if ($this->currentPlanEventType == 'presentation') {
+
+
+                        $pTargetStage = BitrixDealService::getTargetStagePresentation(
+                            $category,
+                            // $currentDepartamentType,
+                            $this->currentPlanEventType, // xo warm presentation,
+                            'plan',  // plan done expired fail
+                            $this->isResult,
+                            $isUnplanned,
+                            $this->isSuccessSale,
+                            $this->isFail,
+
+                        );
+                        $fieldsData = [
+                            'TITLE' => 'Презентация ' . $this->currentPlanEventName,
+                            'CATEGORY_ID' => $category['bitrixId'],
+                            'STAGE_ID' => "C" . $category['bitrixId'] . ':' . $pTargetStage,
+                            "COMPANY_ID" => $this->entityId,
+                            'ASSIGNED_BY_ID' => $this->planResponsibleId
+                        ];
+                        if (!empty($this->currentTMCDeal)) {
+                            $fieldsData['UF_CRM_TO_BASE_TMC'] = $this->currentTMCDeal['ID'];
+                        }
+                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
+                        $key = 'set_' . '_' . $category['code'];
+                        $resultBatchCommands[$key] = $batchCommand;
+                        $newPresDeal = '$result[' . $key . ']';
+                        // $newPresDealId = '$result[' . $key . '][ID]';
+                        $entityCommand =  $this->getEntityBatchFlowCommandFromIdForNewDeal(
+                            true,
+                            $newPresDeal,
+                            'presentation',
+                            $this->currentBaseDeal['ID'],
+                            'plan'
+                        );
+
+                        $key = 'update_entity_deal_plan' . '_' . $category['code'];
+                        $resultBatchCommands[$key] = $entityCommand;
+
+                        array_push($planDeals, $newPresDeal);
+                    }
+
+                    if (!empty($isUnplanned)) {
+                        // 3) если unplanned pres создает еще одну и в успех ее сразу
+                        $pTargetStage = BitrixDealService::getTargetStagePresentation(
+                            $category,
+                            // $currentDepartamentType,
+                            'presentation', // xo warm presentation,
+                            'done',  // plan done expired fail
+                            $this->isResult,
+                            $isUnplanned,
+                            $this->isSuccessSale,
+                            $this->isFail,
+
+                        );
+
+                        $fieldsData = [
+                            'TITLE' => 'Презентация от ' . $this->nowDate,
+                            'CATEGORY_ID' => $category['bitrixId'],
+                            'STAGE_ID' => "C" . $category['bitrixId'] . ':' . $pTargetStage,
+                            "COMPANY_ID" => $this->entityId,
+                            'ASSIGNED_BY_ID' => $this->planResponsibleId
+                        ];
+                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'add', null);
+                        $key = 'set_' . 'unplanned_' . $category['code'];
+                        $resultBatchCommands[$key] = $batchCommand;
+                        $unplannedPresDeal = '$result[' . $key . ']';
+
+                        $entityCommand =  $this->getEntityBatchFlowCommandFromIdForNewDeal(
+                            true,
+                            $unplannedPresDeal,
+                            'presentation',
+                            $this->currentBaseDeal['ID'],
+                            'unplanned'
+                        );
+                        $key = 'entity_unplannedbase' . '_' . 'deal' . '_' .  $this->currentBaseDeal['ID'];
+                        $resultBatchCommands[$key] = $entityCommand;
+
+                        array_push($unplannedPresDeals, $unplannedPresDeal);
+
+
+                        $entityCommand =  $this->getEntityBatchFlowCommandFromIdForNewDeal(
+                            true,
+                            $unplannedPresDeal,
+                            'presentation',
+                            $currentDealId,
+                            'unplanned'
+                        );
+                        $key = 'entity_unplanned' . '_' . 'deal';
+                        $resultBatchCommands[$key] = $entityCommand; // в результате будет id
+                    }
+
+
+
+                    break;
+                case 'tmc_base':
+
+
+                    if (!empty($this->currentTMCDeal) && $this->currentPlanEventType == 'presentation') {
+                        $categoryId = $category['bitrixId'];
+
+                        $fieldsData = [
+                            'CATEGORY_ID' => $categoryId,
+                            'STAGE_ID' => "C" . $categoryId . ':' . 'PRES_PLAN',
+                            // "COMPANY_ID" => $entityId,
+                            // 'ASSIGNED_BY_ID' => $responsibleId
+                            'UF_CRM_TO_BASE_SALES' => $this->currentBaseDeal['ID'],
+                            'UF_CRM_TO_PRESENTATION_SALES' => $newPresDeal,
+                            // 'UF_CRM_PRES_COMMENTS' => $newPresDeal['UF_CRM_PRES_COMMENTS'],
+                            'UF_CRM_LAST_PRES_DONE_RESPONSIBLE' => $this->planResponsibleId,
+                            'UF_CRM_MANAGER_OP' => $this->planResponsibleId,
+                        ];
+
+                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $this->currentTMCDeal['ID']);
+                        $key = 'update_' . '_' . $category['code'] . '_' . $this->currentTMCDeal['ID'];
+                        $resultBatchCommands[$key] = $batchCommand;
+                    }
+
+                    Log::info(
+                        'vheck',
+                        [
+                            'currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres,
+
+                        ]
+                    );
+                    Log::info(
+                        'vheck',
+                        [
+                            'currentTMCDeal' => $this->currentTMCDeal,
+
+                        ]
+                    );
+                    // Log::channel('telegram')->info('TMC DEAL', [
+                    //     'currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres
+                    // ]);
+                    if ((!empty($this->currentTMCDealFromCurrentPres) || !empty($this->currentTMCDeal)) &&
+                        ($this->resultStatus === 'result' || $this->isFail || $this->isSuccessSale) &&
+                        $this->currentReportEventType === 'presentation'
+                    ) {
+                        // обновляет стадию тмц сделку
+                        // если есть из tmc init pres или relation tmc from session 
+                        // пытается подставить если есть связанную если нет - из init
+                        // обновляет сделку 
+                        // из инит - заявка принята
+                        // из relation - состоялась или fail
+                        $curTMCDeal = $this->currentTMCDeal;
+                        if (!empty($this->currentTMCDealFromCurrentPres)) {
+                            $curTMCDeal = $this->currentTMCDealFromCurrentPres;
+                        }
+                        $tmcAction = 'done';
+                        if ($this->resultStatus !== 'result' && $this->isFail) {
+                            $tmcAction = 'fail';
+                        }
+
+
+                        $pTargetStage = BitrixDealService::getTargetStage(
+                            $category,
+                            'tmc',
+                            $this->currentReportEventType, // xo warm presentation,
+                            $tmcAction,  // plan done expired fail
+                            $this->isResult,
+                            // $isUnplanned,
+                            // $this->isSuccessSale,
+                            // $this->isFail,
+
+                        );
+                        $fieldsData = [
+                            // 'TITLE' => 'Презентация от ' . $this->nowDate . ' ' . $this->currentPlanEventName,
+                            'CATEGORY_ID' => $category['bitrixId'],
+                            'STAGE_ID' => "C" . $category['bitrixId'] . ':' . $pTargetStage,
+                            "COMPANY_ID" => $this->entityId,
+                            // 'ASSIGNED_BY_ID' => $this->planResponsibleId
+                        ];
+                        $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $curTMCDeal['ID']);
+
+                        $key = 'update_' . '_' . $category['code'];
+                        $resultBatchCommands[$key] = $batchCommand;
+
+                        $entityCommand =  $this->getEntityBatchFlowCommand(
+                            true,
+                            $curTMCDeal,
+                            'base',
+                            null, // $this->currentBaseDeal['ID'],
+                            ''
+                        );
+
+                        $key = 'update_entity_deal' . '_' . $category['code'];
+                        $resultBatchCommands[$key] = $batchCommand;
+                    }
+
+                    $sessionTMCDealKey = 'tmcInit_' . $this->domain . '_' . $this->planResponsibleId . '_' . $this->entityId;
+
+                    FullEventInitController::clearSessionItem($sessionTMCDealKey);
+
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        }
+
+
+
+
+        // if (!empty($this->currentTMCDeal) && $this->currentPlanEventType == 'presentation') {
+        //     BitrixDealFlowService::tmcPresentationRelation(
+        //         $this->hook,
+        //         $this->portalDealData,
+        //         $this->currentBaseDeal,
+        //         $newPresDeal,
+        //         $this->currentTMCDeal['ID']
+        //     );
+        // }
+
+
+
+
+
+        if (!empty($this->currentPresDeal)) {  //report pres deal
+            // $rand = mt_rand(100000, 300000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            // usleep($rand);
+            // $this->getEntityFlow(
+            //     true,
+            //     $this->currentPresDeal,
+            //     'presentation',
+            //     $this->currentBaseDeal['ID'],
+            //     'done'
+            // );
+
+            $entityCommand =  $this->getEntityBatchFlowCommand(
+                true,
+                $this->currentPresDeal,
+                'presentation',
+                $this->currentBaseDeal['ID'],
+                'done'
+            );
+            $key = 'entity_pres' . '_' . 'deal' . '_' . $this->currentPresDeal['ID'];
+            $resultBatchCommands[$key] = $entityCommand; // в результате будет id
+        }
+
+
+        $companyCommand =  $this->getEntityBatchFlowCommand();
+        $key = 'entity' . '_' . 'company';
+        $resultBatchCommands[$key] = $companyCommand; // в результате будет id
+
+
+        Log::info('HOOK BATCH batchFlow report DEAL entity', ['$key ' . $key => $companyCommand]);
+        Log::channel('telegram')->info('HOOK BATCH entity batchFlow', ['$key ' . $key => $companyCommand]);
+
+        $result =  [
+            'dealIds' => ['$result'],
+            'planDeals' => $planDeals,
+            'reportDeals' => $reportDeals,
+            'newPresDeal' => $newPresDeal,
+            'unplannedPresDeals' => $unplannedPresDeals,
+            'commands' => $resultBatchCommands
+        ];
+
+
+        // $taskService = new BitrixTaskService();
+
+        // $taskId = null;
+        // if (!empty($this->currentTask)) {
+        //     if (!empty($this->currentTask['ID'])) {
+
+        //         $taskId = $this->currentTask['ID'];
+        //     }
+        //     if (!empty($this->currentTask['id'])) {
+        //         $taskId = $this->currentTask['id'];
+        //     }
+        // }
+        // $batchCommands =  $result['commands'];
+        if ($this->isExpired || $this->isPlanned) {
+            $resultBatchCommands = $this->getTaskFlowBatchCommand(
+                null,
+                $result['planDeals'],
+                $resultBatchCommands
+            );
+        }
+        $resultBatchCommands =  $this->getListPresentationFlowBatch(
+            $result,
+            $resultBatchCommands
+        );
+
+        $batchService->sendGeneralBatchRequest($resultBatchCommands);
+
+        // Log::info('HOOK BATCH batchFlow report DEAL', ['report result' => $result]);
+        // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $result]);
+        // Log::info('HOOK BATCH batchFlow report DEAL', ['planDeals planDeals' =>  $result['planDeals']]);
+        // Log::channel('telegram')->info('HOOK BATCH planDeals', ['planDeals' => $result['planDeals']]);
+
+        // if (!empty($result)) {
+        //     if (!empty($result['newPresDeal'])) {
+        //         $newPresDealId = $result['newPresDeal'];
+        //         $newPresDeal = BitrixDealService::getDeal(
+        //             $this->hook,
+        //             ['id' => $newPresDealId]
+
+
         //         );
         //     }
+        // }
 
-
-
-
-        //     if (!empty($unplannedPresDeal)) {
-        //         if (isset($unplannedPresDeal['ID'])) {
-
-        //             $unplannedPresDealId = $unplannedPresDeal['ID'];
-        //             array_push($this->currentBtxDeals, $unplannedPresDeal);
-        //             $unplannedPresResultStatus = 'done';
-        //             $unplannedPresResultName = 'Проведена';
-        //             if ($this->isFail) {
-        //                 $unplannedPresResultStatus = 'fail';
-        //                 $unplannedPresResultName = 'Отказ после презентации';
-        //             }
-        //             $flowResult = BitrixDealFlowService::flow(  // закрывает сделку  - презентация обновляет базовую в соответствии с проведенной през
-        //                 $this->hook,
-        //                 $this->currentBtxDeals,
-        //                 $this->portalDealData,
-        //                 $this->currentDepartamentType,
-        //                 $this->entityType,
-        //                 $this->entityId,
-        //                 'presentation', // xo warm presentation,
-        //                 'Презентация',
-        //                 $unplannedPresResultName,
-        //                 $unplannedPresResultStatus,  // plan done expired fail
-        //                 $this->planResponsibleId,
-        //                 true,
-        //                 '$fields',
-        //                 null // $relationSalePresDeal
-        //             );
-        //             $unplannedPresDeals = $flowResult['dealIds'];
-
-
-
-
-        //             // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [
-        //             //     'unplannedPresDeals' => $unplannedPresDeals,
-
-
-        //             // ]);
-        //             // Log::info('HOOK TEST CURRENTENTITY', [
-        //             //     'unplannedPresDeals' => $unplannedPresDeals,
-
-
-        //             // ]);
-        //             foreach ($this->currentBtxDeals as $cbtxdeal) {
-        //                 if ($cbtxdeal['ID'] !== $unplannedPresDealId) {
-        //                     sleep(1);
-        //                     $updtdbtxdeal = BitrixDealService::getDeal(
-        //                         $this->hook,
-        //                         ['id' => $cbtxdeal['ID']]
-        //                     );
-        //                     if (!empty($updtdbtxdeal)) {
-
-        //                         $cbtxdeal = $updtdbtxdeal;
-        //                     }
-        //                     array_push($currentBtxDeals, $cbtxdeal);
-        //                 }
-        //             }
+        // $result['unplannedPresDeals'] = [$unplannedPresDeal];
+        // $contactId = null;
+        // if (!empty($this->planContact)) {
+        //     if (!empty($this->planContact['current'])) {
+        //         if (!empty($this->planContact['current']['contact'])) {
+        //             $contactId = $this->planContact['current']['contact']['ID'];
         //         }
         //     }
         // }
-        // sleep(1);
-
-
-        //если был unplanned а потом plan ->
-        //если warm plan а report был xo 
-        // - то нужна обновленная стадия в базовой битрикс сделке что не пыталось повысить
-        // с xo в warm так как уже на самом деле pres 
-        // если plan pres -> планируется новая презентация и поэтому в  
-        // $this->currentBtxDeals должна отсутствовать сделка презентации созданная при unplanned, 
-        // которая пушится туда  при unplanned - чтобы были обработаны базовая сделка 
-        // в соответствии с проведенной през
-        // при этом у основной сделки должна быть обновлена стадия - например на през если была unplanned
-        // Log::info('HOOK TEST currentBtxDeals', [
-        //     'currentBtxDeals' => $currentBtxDeals,
-        //     'this currentBtxDeals' => $this->currentBtxDeals,
-
-
-        // ]);
-
-        // Log::info('HOOK TEST currentBtxDeals', [
-        //     '$currentPlanEventType' => $this->currentPlanEventType,
-        //     'isPlanned' => $this->isPlanned,
-
-
-        // ]);
-
-        if ($currentReportStatus === 'fail') {
-
-
-            $flowResult = BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
-                $this->hook,
-                $currentBtxDeals,
-                $this->portalDealData,
-                $this->currentDepartamentType,
-                $this->entityType,
-                $this->entityId,
-                $this->currentReportEventType, // xo warm presentation, 
-                $this->currentReportEventName,
-                $this->currentPlanEventName,
-                $currentReportStatus,  // plan done expired fail success
-                $this->planResponsibleId,
-                $this->isResult,
-                '$fields',
-                $this->relationSalePresDeal
-            );
-            $reportDeals = $flowResult['dealIds'];
-            //todo plan flow
-        }
-        // if ($this->currentPlanEventType == 'warm') {
-        //     // найти или создать сделку base не sucess стадия теплый прозвон
-
-
-        // }
-        // if plan type = xo | cold
-
-        //если запланирован
-        //xo - создать или обновить ХО & Основная
-        //warm | money_await | in_progress - создать или обновить  Основная
-        //presentation - создать или обновить presentation & Основная
-
-        // if (!empty($this->currentBaseDeal)) {
-        //     sleep(1);
-        //     $this->getEntityFlow(
-        //         true,
-        //         $this->currentBaseDeal,
-        //         'base',
-        //         $this->currentBaseDeal['ID'],
-        //         'unplanned'
-        //     );
-        // }
-
-        // if (!empty($this->currentPresDeal)) {  //report pres deal
-        //     sleep(1);
-        //     $this->getEntityFlow(
-        //         true,
-        //         $this->currentPresDeal,
-        //         'presentation',
-        //         $this->currentBaseDeal['ID'],
-        //         'done'
-        //     );
-        // }
-
-
-        if ($this->isPlanned) {
-            // $currentBtxDeals = BitrixDealFlowService::getBaseDealFromCurrentBtxDeals(
-            //     $this->portalDealData,
-            //     $currentBtxDeals
-            // );
-            $currentPlanType = 'plan';
-            if ($this->isExpired) {
-                $currentPlanType = 'expired';
-            }
-            $flowResult =  BitrixDealFlowService::flow( //создает или обновляет сделку
-                $this->hook,
-                $currentBtxDeals,
-                $this->portalDealData,
-                $this->currentDepartamentType,
-                $this->entityType,
-                $this->entityId,
-                $this->currentPlanEventType, // xo warm presentation, hot moneyAwait
-                $this->currentPlanEventTypeName,
-                $this->currentPlanEventName,
-                $currentPlanType,  // plan done expired 
-                $this->planResponsibleId,
-                $this->isResult,
-                '$fields',
-                null, // $relationSalePresDeal
-            );
-            $planDeals = $flowResult['dealIds'];
-            $newPresDeal = $flowResult['newPresDeal'];
-            if ($this->currentPlanEventType !== 'presentation') {
-            } else {
-                // Log::info('HOOK TEST currentBtxDeals', [
-                //     '$rpa case' => true,
-                //     'currentTMCDeal currentBaseDeal' => $this->currentBaseDeal,
-
-
-                // ]);
-                $rpaFlowService = new BitrixRPAPresFlowService(
-                    $this->hook,
-                    $this->portalRPA
-
-                );
-
-
-                if (!empty($this->currentBaseDeal)) {
-                    if (!empty($this->currentBaseDeal['ID'])) {
-
-
-                        $this->resultRpaItem =  $rpaFlowService->getRPAPresInitFlow(
-                            $this->currentBaseDeal['ID'],
-                            $this->nowDate,
-                            $this->planDeadline,
-                            $this->planCreatedId,
-                            $this->planResponsibleId,
-                            // 1, //$bossId 
-                            $this->entityId,
-                            // $contactId,
-                            $this->comment,
-                            $this->currentPlanEventName,
-
-                        );
-                        Log::channel('telegram')->info('HOOK TEST currentBtxDeals', [
-                            'resultRpaItem' => $this->resultRpaItem,
-
-
-                        ]);
-
-                        if (!empty($this->resultRpaItem)) {
-                            if (!empty($this->resultRpaItem['id'])) {
-                                $this->resultRpaLink = 'https://' . $this->domain . '/rpa/item/' . $this->rpaTypeId . '/' . $this->resultRpaItem['id'].'/';
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-        }
-
-
-        // Log::info('HOOK TEST currentBtxDeals', [
-        //     'newPresDeal' => $newPresDeal,
-
-
-
-        // ]);
-        // if (!empty($newPresDeal)) {  //plan pres deal
-        //     sleep(1);
-        //     $this->getEntityFlow(
-        //         true,
-        //         $newPresDeal,
-        //         'presentation',
-        //         $this->currentBaseDeal['ID'],
-        //         'plan'
-        //     );
-        // }
-        // Log::channel('telegram')->info('presentationBtxList', [
-        //     'reportDeals' => $reportDeals,
-        //     'planDeals' => $planDeals,
-        //     // 'failReason' => $failReason,
-        //     // 'failType' => $failType,
-
-        // ]);
-
-        return [
-            'reportDeals' => $reportDeals,
-            'planDeals' => $planDeals,
-            'unplannedPresDeals' => $unplannedPresDeals,
-        ];
-    }
-
-
-    protected function closeNoTMCDeals()
-    {
-        $currentDealId = null;
-        if (!empty($this->currentBaseDeal)) {
-            if (!empty($this->currentBaseDeal['ID'])) {
-                $currentDealId = $this->currentBaseDeal['ID'];
-            }
-        }
-
-        if (!empty($this->portalDealData['categories'])) {
-            foreach ($this->portalDealData['categories'] as $category) {
-
-
-                if (!empty($currentDealId) || $category['code'] !==  'tmc_base') {
-
-
-                    $isBaseCategory = $category['code'] ===  'sales_base';
-
-                    $includedStages = [];
-
-
-                    $categoryId = $category['bitrixId'];
-
-                    if (!empty($category['stages'])) {
-                        foreach ($category['stages'] as $stage) {
-                            if ($stage['code']) {
-                                if (
-                                    (strpos($stage['code'], 'fail') === false) &&
-                                    (strpos($stage['code'], 'noresult') === false) &&
-                                    ((strpos($stage['code'], 'double') === false)) &&
-                                    (strpos($stage['code'], 'success') === false)
-                                ) {
-                                    array_push($includedStages, "C" . $categoryId . ":" . $stage['bitrixId']);
-                                }
-                            }
-                        }
-                    }
-                    $randomNumber = rand(1, 2);
-
-
-                    $userId  = $this->planResponsibleId;
-
-                    $getDealsData =  [
-                        'filter' => [
-                            // "!=stage_id" => ["DT162_26:SUCCESS", "DT156_12:SUCCESS"],
-                            // "=assignedById" => $userId,
-                            // "=CATEGORY_ID" => $currentCategoryBtxId,
-                            'COMPANY_ID' => $this->entityId,
-                            "ASSIGNED_BY_ID" => $this->planResponsibleId,
-                            "=STAGE_ID" =>  $includedStages
-
-                        ],
-                        'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
-
-                    ];
-
-                    if (!empty($currentDealId) && $category['code'] ===  'tmc_base') {
-                        $getDealsData['filter']['!=ID'] = $currentDealId;
-                    }
-                    sleep($randomNumber);
-                    $currentDeals = BitrixDealService::getDealList(
-                        $this->hook,
-                        $getDealsData
-
-
-                    );
-                    // Log::info('HOOK TEST CURRENTENTITY', [
-                    //     'currentDeals' => $currentDeals,
-
-
-                    // ]);
-
-                    if (!empty($currentDeals)) {
-                        foreach ($currentDeals as $bxDeal) {
-                            if (!empty($bxDeal)) {
-                                if (!empty($bxDeal['ID'])) {
-                                    $rand = rand(1, 2);
-                                    sleep($rand);
-                                    $urand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                                    usleep($urand);
-                                    BitrixDealService::updateDeal(
-                                        $this->hook,
-                                        $bxDeal['ID'],
-                                        [
-                                            'STAGE_ID' => 'C' . $categoryId . ':APOLOGY'
-
-                                        ]
-                                    );
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        return  $result;
     }
 
 
     //tasks for complete
 
 
-    protected function taskFlow(
+    protected function getTaskFlowBatchCommand(
         $currentSmartItemId,
-        $currentDealsIds
+        $currentDealsIds,
+        $batchCommands
 
     ) {
 
-        $createdTask = null;
-        // Log::channel('telegram')->error('APRIL_HOOK', $this->portal);
+
         $companyId  = null;
         $leadId  = null;
         $currentTaskId = null;
-
+        $createdTask = null;
+        $contactId = $this->planContactId;
 
         try {
+            // Log::channel('telegram')->error('APRIL_HOOK', $this->portal);
 
             if (!empty($this->currentTask)) {
                 if (!empty($this->currentTask['id'])) {
@@ -1711,39 +2099,53 @@ class EventReportTMCService
             }
             $taskService = new BitrixTaskService();
 
-            // if (!$this->isExpired) {
-            $createdTask =  $taskService->createTask(
-                $this->currentPlanEventType,       //$type,   //cold warm presentation hot 
-                $this->currentPlanEventTypeName,
-                $this->portal,
-                $this->domain,
-                $this->hook,
-                $companyId,  //may be null
-                $leadId,     //may be null
-                // $this->planCreatedId,
-                $this->planResponsibleId,
-                $this->planResponsibleId,
-                $this->planDeadline,
-                $this->currentPlanEventName,
-                $currentSmartItemId,
-                false, //$isNeedCompleteOtherTasks
-                $currentTaskId,
-                $currentDealsIds,
-
-            );
-            // } else {
-            //     $createdTask =  $taskService->updateTask(
-
-            //         $this->domain,
-            //         $this->hook,
-            //         $currentTaskId,
-            //         $this->planDeadline,
-            //         $this->currentPlanEventName,
-            //     );
-            // }
+            if (!$this->isExpired) {
 
 
-            return $createdTask;
+
+                $batchCommands =  $taskService->getCreateTaskBatchCommands(
+                    $this->currentPlanEventType,       //$type,   //cold warm presentation hot 
+                    $this->currentPlanEventTypeName,
+                    $this->portal,
+                    $this->domain,
+                    $this->hook,
+                    $this->currentBtxEntity,
+                    $companyId,  //may be null
+                    $leadId, //$leadId,     //may be null
+                    $this->planCreatedId,
+                    $this->planResponsibleId,
+                    $this->planDeadline,
+                    $this->currentPlanEventName,
+                    null, // $currentSmartItemId,
+                    false, //$isNeedCompleteOtherTasks
+                    $currentTaskId, // null,
+                    $currentDealsIds,
+                    $contactId,
+                    $batchCommands
+
+                );
+            } else {
+                // $createdTask =  $taskService->updateTask(
+
+                //     $this->domain,
+                //     $this->hook,
+                //     $currentTaskId,
+                //     $this->planDeadline,
+                //     $this->currentPlanEventName,
+                // );
+                $batchCommand =  $taskService->getUpdateTaskBatchCommand(
+                    $this->domain,
+                    $currentTaskId,
+                    $this->planDeadline,
+                );
+                if (!empty($batchCommand)) {
+
+                    array_push($batchCommands, $batchCommand);
+                }
+            }
+
+
+            return $batchCommands;
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
@@ -1754,164 +2156,7 @@ class EventReportTMCService
             Log::error('ERROR COLD: createColdTask',  $errorMessages);
             Log::info('error COLD', ['error' => $th->getMessage()]);
             Log::channel('telegram')->error('APRIL_HOOK', $errorMessages);
-            return $createdTask;
-        }
-    }
-
-
-    protected function getListFlow()
-    {
-
-        $currentDealIds = [];
-
-        if (!empty($this->currentBtxDeals)) {
-
-            foreach ($this->currentBtxDeals as $currentBtxDeals) {
-                if (isset($currentBtxDeals['ID'])) {
-
-                    array_push($currentDealIds, $currentBtxDeals['ID']);
-                }
-            }
-        }
-
-
-
-        $reportEventType = $this->currentReportEventType;
-        $reportEventTypeName = $this->currentReportEventName;
-        $planEventTypeName = $this->currentPlanEventTypeName;
-        $planEventType = $this->currentPlanEventType; //если перенос то тип будет автоматически взят из report - предыдущего события
-        $eventAction = 'expired';  // не состоялся и двигается крайний срок 
-        $planComment = 'Перенесен';
-        if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
-            //report
-            $eventAction = 'plan';
-            $planComment = 'Запланирован';
-        }
-
-        $planComment = $planComment . ' ' . $planEventTypeName . ' ' . $this->comment;
-        if (!$this->isNew) { //если новая то не отчитываемся
-            // покачто
-            // todo сделать чтобы в новой задаче можно было отчитаться что было
-
-
-
-
-            if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
-
-                $reportAction = 'done';
-                if ($this->resultStatus !== 'result') {
-                    $reportAction = 'nodone';
-                }
-
-                if ($reportEventType !== 'presentation') {
-
-                    //если текущий не презентация
-                    BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию
-                        $this->hook,
-                        $this->bitrixLists,
-                        $reportEventType,
-                        $reportEventTypeName,
-                        $reportAction,
-                        // $this->stringType,
-                        $this->planDeadline,
-                        $this->planResponsibleId,
-                        $this->planResponsibleId,
-                        $this->planResponsibleId,
-                        $this->entityId,
-                        $this->comment,
-                        $this->workStatus['current'],
-                        $this->resultStatus, // result noresult expired,
-                        $this->noresultReason,
-                        $this->failReason,
-                        $this->failType,
-                        $currentDealIds
-
-                    )->onQueue('low-priority');
-                }
-
-                //если была проведена презентация - не важно какое текущее report event
-            }
-        }
-        // Log::channel('telegram')->info('HOOK TST', [
-        //     'isPresentationDone' => $this->isPresentationDone
-        // ]);
-
-        if ($this->isPresentationDone == true) {
-            //если была проведена през
-            if ($reportEventType !== 'presentation') {
-                //если текущее событие не през - значит uplanned
-                //значит надо запланировать през в холостую
-                BtxCreateListItemJob::dispatch(  //запись о планировании и переносе
-                    $this->hook,
-                    $this->bitrixLists,
-                    'presentation',
-                    'Презентация',
-                    'plan',
-                    // $this->stringType,
-                    $this->nowDate,
-                    $this->planResponsibleId,
-                    $this->planResponsibleId,
-                    $this->planResponsibleId,
-                    $this->entityId,
-                    'не запланированая презентация',
-                    ['code' => 'inJob'], //$this->workStatus['current'],
-                    'result',  // result noresult expired
-                    $this->noresultReason,
-                    $this->failReason,
-                    $this->failType,
-                    $currentDealIds
-
-
-                )->onQueue('low-priority');
-            }
-            BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию
-                $this->hook,
-                $this->bitrixLists,
-                'presentation',
-                'Презентация',
-                'done',
-                // $this->stringType,
-                $this->planDeadline,
-                $this->planResponsibleId,
-                $this->planResponsibleId,
-                $this->planResponsibleId,
-                $this->entityId,
-                $this->comment,
-                $this->workStatus['current'],
-                $this->resultStatus, // result noresult expired,
-                $this->noresultReason,
-                $this->failReason,
-                $this->failType,
-                $currentDealIds
-
-            )->onQueue('low-priority');
-        }
-
-
-
-
-        if ($this->isPlanned) {
-            BtxCreateListItemJob::dispatch(  //запись о планировании и переносе
-                $this->hook,
-                $this->bitrixLists,
-                $planEventType,
-                $planEventTypeName,
-                $eventAction,
-                // $this->stringType,
-                $this->planDeadline,
-                $this->planResponsibleId,
-                $this->planResponsibleId,
-                $this->planResponsibleId,
-                $this->entityId,
-                $planComment,
-                $this->workStatus['current'],
-                $this->resultStatus,  // result noresult expired
-                $this->noresultReason,
-                $this->failReason,
-                $this->failType,
-                $currentDealIds
-
-            )->onQueue('low-priority');
+            return $batchCommands;
         }
     }
 
@@ -2025,7 +2270,7 @@ class EventReportTMCService
                         $currentBaseDealId,
                         $nowDate, // $date,
                         null, // $event['eventType'], //$hotName
-                        null, //$contactId
+                        $this->reportContactId,
                         $commands
 
                     );
@@ -2038,7 +2283,7 @@ class EventReportTMCService
         //     'isPresentationDone' => $this->isPresentationDone
         // ]);
 
-        if ($this->isPresentationDone == true) {
+        if ($this->isPresentationDone == true && !$this->isExpired) {
             //если была проведена през
             if ($reportEventType !== 'presentation') {
                 //если текущее событие не през - значит uplanned
@@ -2092,7 +2337,7 @@ class EventReportTMCService
                     $currentBaseDealId,
                     $nowDate, // $date,
                     null, // $event['eventType'], //$hotName
-                    null, //$contactId
+                    $this->reportContactId,
                     $commands
 
                 );
@@ -2143,8 +2388,7 @@ class EventReportTMCService
                 $currentBaseDealId,
                 $nowDate, // $date,
                 null, // $event['eventType'], //$hotName
-                null, //$contactId
-
+                $this->reportContactId,
                 $commands
 
             );
@@ -2177,9 +2421,9 @@ class EventReportTMCService
                 //     $currentBaseDealId
 
                 // )->onQueue('low-priority');
+
                 $currentNowDate->modify('+5 second');
                 $nowDate = $currentNowDate->format('d.m.Y H:i:s');
-
                 $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
                     $this->hook,
                     $this->bitrixLists,
@@ -2202,7 +2446,8 @@ class EventReportTMCService
                     $currentBaseDealId,
                     $nowDate, // $date,
                     null, // $event['eventType'], //$hotName
-                    null, //$contactId
+                    $this->planContactId,
+
                     $commands
 
                 );
@@ -2263,7 +2508,8 @@ class EventReportTMCService
                 $currentBaseDealId,
                 $nowDate,  // $date,
                 null, // $event['eventType'], //$hotName
-                null, //$contactId
+                $this->reportContactId,
+
                 $commands
 
             );
@@ -2275,12 +2521,38 @@ class EventReportTMCService
 
 
 
-    protected function getListPresentationFlow(
-        $planPresDealIds
+
+    protected function getListPresentationFlowBatch(
+        $planPresDealIds,
+        $batchCommands
     ) {
         $currentTask = $this->currentTask;
         $currentDealIds = $planPresDealIds['planDeals'];
+        $currentRepoertDealIds = $planPresDealIds['reportDeals'];
         $unplannedPresDealsIds = $planPresDealIds['unplannedPresDeals'];
+
+        Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+            'planDeals' => $planPresDealIds['planDeals'],
+
+
+        ]);
+        // Log::info('HOOK TEST COLD BATCH', [
+        //     'reportDeals' => $planPresDealIds['reportDeals'],
+
+
+        // ]);
+
+        Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+            'currentRepoertDealIds' => $planPresDealIds['reportDeals'],
+
+
+        ]);
+
+        Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+            'unplannedPresDealsIds' => $unplannedPresDealsIds,
+
+
+        ]);
 
         // presentation list flow запускается когда
         // планируется презентация или unplunned тогда для связи со сделками берется $planPresDealIds
@@ -2329,7 +2601,12 @@ class EventReportTMCService
         // текущая дата - дата последнего изменения 
         // если была проведена презентация обновляется поле дата проведения презентации
         // все изменения записываются в множественное поле коммент после презентации
+        Log::channel('telegram')->error('APRIL_HOOK getListPresentationFlowBatch', [
 
+            'currentPlanEventType' => $this->currentPlanEventType,
+            'planTmcId' => $this->planTmcId,
+
+        ]);
 
         if (  //планируется презентация без переносов
             $this->currentPlanEventType == 'presentation' &&
@@ -2337,7 +2614,7 @@ class EventReportTMCService
         ) { //plan
             $eventType = 'plan';
 
-            BitrixListPresentationFlowService::getListPresentationPlanFlow(
+            $batchCommands =  BitrixListPresentationFlowService::getListPresentationPlanFlowBatch(
                 $this->hook,
                 $this->bitrixLists,
                 $currentDealIds,
@@ -2346,11 +2623,13 @@ class EventReportTMCService
                 $this->planDeadline,
                 $this->planCreatedId,
                 $this->planResponsibleId,
+                $this->planTmcId,
                 $this->entityId,
                 $this->comment,
                 $this->currentPlanEventName,
                 $this->workStatus['current'],
                 $this->resultStatus, // result noresult expired,
+                $batchCommands,
                 // $this->noresultReason,
                 // $this->failReason,
                 // $this->failType
@@ -2359,7 +2638,7 @@ class EventReportTMCService
             );
         }
 
-        sleep(1);
+        // sleep(1);
         if ($this->currentReportEventType == 'presentation') {  //report
 
             //если текущее событие по которому отчитываются - презентация
@@ -2389,6 +2668,7 @@ class EventReportTMCService
             }
             $eventType = 'report';
 
+
             if (
                 $this->isExpired ////текущую назначенную презентацию переносят
                 || ( // //текущая назначенная презентация не состоялась
@@ -2401,10 +2681,10 @@ class EventReportTMCService
                 // $reportStatus = 'pound';
                 // $eventAction = 'expired';
                 //report
-                BitrixListPresentationFlowService::getListPresentationReportFlow(
+                $batchCommands =   BitrixListPresentationFlowService::getListPresentationReportFlowBatch(
                     $this->hook,
                     $this->bitrixLists,
-                    $currentDealIds,
+                    $currentRepoertDealIds,
                     // $reportStatus,
                     $this->isPresentationDone,
 
@@ -2421,7 +2701,8 @@ class EventReportTMCService
                     $this->resultStatus, // result noresult expired,
                     $this->noresultReason,
                     $this->failReason,
-                    $this->failType
+                    $this->failType,
+                    $batchCommands
 
 
                 );
@@ -2437,17 +2718,39 @@ class EventReportTMCService
                 // соответствующих сделок
                 // если текущее событие не през - значит uplanned
                 // занчит сначала планируем
-                // Log::channel('telegram')->info('presentationBtxList', [
-                //     'currentDealIds' => $currentDealIds,
+                Log::channel('telegram')->info('presentationBtxList', [
+                    'currentDealIds' => $currentDealIds,
 
 
-                // ]);
-                BitrixListPresentationFlowService::getListPresentationPlanFlow(
+                ]);
+                $batchCommands = BitrixListPresentationFlowService::getListPresentationUnplannedtFlowBatch(
                     $this->hook,
                     $this->bitrixLists,
-                    $currentDealIds, //передаем айди основной и уже закрытой през сделки
+                    $currentDealIds, //planDeals || unplannedDeals если през была незапланированной
                     $this->nowDate,
-                    'plan',
+                    $this->planResponsibleId,
+                    $this->entityId,
+                    $this->comment,
+                    $this->workStatus['current'],
+                    $this->failReason,
+                    $this->failType,
+                    $batchCommands
+                );
+            }
+            // sleep(1);
+
+            if ($this->currentReportEventType === 'presentation') {
+                // если была проведена презентация вне зависимости от текущего события
+                $batchCommands = BitrixListPresentationFlowService::getListPresentationReportFlowBatch(
+                    $this->hook,
+                    $this->bitrixLists,
+                    $currentDealIds, //planDeals || unplannedDeals если през была незапланированной
+                    // $reportStatus,
+                    $this->isPresentationDone,
+
+                    $this->nowDate,
+                    'report',
+                    $this->isExpired,
                     $this->planDeadline,
                     $this->planCreatedId,
                     $this->planResponsibleId,
@@ -2455,158 +2758,15 @@ class EventReportTMCService
                     $this->comment,
                     $this->currentPlanEventName,
                     $this->workStatus['current'],
-                    'result', // result noresult expired,
-                    // $this->noresultReason,
-                    // $this->failReason,
-                    // $this->failType
-
-
+                    $this->resultStatus, // result noresult expired,
+                    $this->noresultReason,
+                    $this->failReason,
+                    $this->failType,
+                    $batchCommands
                 );
             }
-            sleep(1);
-
-            // если была проведена презентация вне зависимости от текущего события
-            BitrixListPresentationFlowService::getListPresentationReportFlow(
-                $this->hook,
-                $this->bitrixLists,
-                $currentDealIds, //planDeals || unplannedDeals если през была незапланированной
-                // $reportStatus,
-                $this->isPresentationDone,
-
-                $this->nowDate,
-                'report',
-                $this->isExpired,
-                $this->planDeadline,
-                $this->planCreatedId,
-                $this->planResponsibleId,
-                $this->entityId,
-                $this->comment,
-                $this->currentPlanEventName,
-                $this->workStatus['current'],
-                $this->resultStatus, // result noresult expired,
-                $this->noresultReason,
-                $this->failReason,
-                $this->failType
-
-
-            );
         }
-
-
-
-        // $reportEventType = $this->currentReportEventType;
-        // $reportEventTypeName = $this->currentReportEventName;
-        // $planEventTypeName = $this->currentPlanEventTypeName;
-        // $planEventType = $this->currentPlanEventType; //если перенос то тип будет автоматически взят из report - предыдущего события
-        // $eventAction = 'expired';  // не состоялся и двигается крайний срок 
-        // $planComment = 'Перенесен';
-
-
-        // if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
-        //     //report
-        //     $eventAction = 'plan';
-        //     $planComment = 'Запланирован';
-
-        //     if ($reportEventType !== 'presentation') {
-
-        //         //если текущий не презентация
-        //         BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию
-        //             $this->hook,
-        //             $this->bitrixLists,
-        //             $reportEventType,
-        //             $reportEventTypeName,
-        //             'done',
-        //             // $this->stringType,
-        //             $this->planDeadline,
-        //             $this->planResponsibleId,
-        //             $this->planResponsibleId,
-        //             $this->planResponsibleId,
-        //             $this->entityId,
-        //             $this->comment,
-        //             $this->workStatus['current'],
-        //             $this->resultStatus, // result noresult expired,
-        //             $this->noresultReason,
-        //             $this->failReason,
-        //             $this->failType
-
-        //         )->onQueue('low-priority');
-        //     }
-
-        //     //если была проведена презентация - не важно какое текущее report event
-
-        //     if ($this->isPresentationDone == true) {
-        //         //если была проведена през
-        //         if ($reportEventType !== 'presentation') {
-        //             //если текущее событие не през - значит uplanned
-        //             //значит надо запланировать през в холостую
-        //             BtxCreateListItemJob::dispatch(  //запись о планировании и переносе
-        //                 $this->hook,
-        //                 $this->bitrixLists,
-        //                 'presentation',
-        //                 'Презентация',
-        //                 'plan',
-        //                 // $this->stringType,
-        //                 $this->nowDate,
-        //                 $this->planResponsibleId,
-        //                 $this->planResponsibleId,
-        //                 $this->planResponsibleId,
-        //                 $this->entityId,
-        //                 'не запланированая презентация',
-        //                 ['code' => 'inJob'], //$this->workStatus['current'],
-        //                 'result',  // result noresult expired
-        //                 $this->noresultReason,
-        //                 $this->failReason,
-        //                 $this->failType
-
-        //             )->onQueue('low-priority');
-        //         }
-        //         BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию
-        //             $this->hook,
-        //             $this->bitrixLists,
-        //             'presentation',
-        //             'Презентация',
-        //             'done',
-        //             // $this->stringType,
-        //             $this->planDeadline,
-        //             $this->planResponsibleId,
-        //             $this->planResponsibleId,
-        //             $this->planResponsibleId,
-        //             $this->entityId,
-        //             $this->comment,
-        //             $this->workStatus['current'],
-        //             $this->resultStatus, // result noresult expired,
-        //             $this->noresultReason,
-        //             $this->failReason,
-        //             $this->failType
-
-        //         )->onQueue('low-priority');
-        //     }
-        // }
-
-
-
-        // if ($this->isPlanned) {
-        //     BtxCreateListItemJob::dispatch(  //запись о планировании и переносе
-        //         $this->hook,
-        //         $this->bitrixLists,
-        //         $planEventType,
-        //         $planEventTypeName,
-        //         $eventAction,
-        //         // $this->stringType,
-        //         $this->planDeadline,
-        //         $this->planResponsibleId,
-        //         $this->planResponsibleId,
-        //         $this->planResponsibleId,
-        //         $this->entityId,
-        //         $planComment,
-        //         $this->workStatus['current'],
-        //         $this->resultStatus,  // result noresult expired
-        //         $this->noresultReason,
-        //         $this->failReason,
-        //         $this->failType
-
-        //     )->onQueue('low-priority');
-        // }
+        return $batchCommands;
     }
 
     protected function setTimeLine()
@@ -2615,39 +2775,6 @@ class EventReportTMCService
         $timeLineString = '';
         $planEventType = $this->currentPlanEventType; //если перенос то тип будет автоматически взят из report - предыдущего события
         $eventAction = '';  // не состоялся и двигается крайний срок 
-
-
-
-        $planComment = $this->getFullEventComment();
-
-
-
-
-        if (!empty($this->currentBaseDeal)) {
-            if (!empty($this->currentBaseDeal['ID'] && !empty($this->currentBaseDeal['TITLE']))) {
-                $dealId = $this->currentBaseDeal['ID'];
-                $dealTitle = $this->currentBaseDeal['TITLE'];
-                $dealLink = 'https://' . $this->domain . '/crm/deal/details/' . $dealId . '/';
-                $message = "\n" . 'Сделка: <a href="' . $dealLink . '" target="_blank">' . $dealTitle . '</a>';
-            }
-        }
-
-        $timeLineString =  $planComment;
-        if (!empty($message)) {
-
-            $timeLineString .= $message;
-        }
-        // Log::channel('telegram')->info('HOOK TIME LINE', ['set' => $timeLineString]);
-
-        // Log::info('HOOK TIME LINE', ['set' => $timeLineString]);
-        if (!empty($timeLineString)) {
-            $timeLineService->setTimeLine($timeLineString, 'company', $this->entityId);
-        }
-    }
-
-    protected function getFullEventComment()
-    {
-
         $planComment = '';
         $planEventTypeName = $this->currentPlanEventTypeName;
         $date = $this->planDeadline; // Предположим, это ваша дата
@@ -2688,6 +2815,7 @@ class EventReportTMCService
             }
 
             if (!empty($this->currentReportEventName)) {
+
                 if ($this->currentReportEventName == 'Презентация') {
                     if ($reportComment == 'Coстоялся') {
                         $reportComment = 'Coстоялась';
@@ -2699,7 +2827,128 @@ class EventReportTMCService
             }
         }
 
-        $planComment = 'ТМЦ ' . $planComment .  "\n" . $this->comment;
+
+
+
+
+        $planComment = $planComment .  "\n" . $this->comment;
+
+
+        if (!empty($this->currentBaseDeal)) {
+            if (!empty($this->currentBaseDeal['ID'] && !empty($this->currentBaseDeal['TITLE']))) {
+                $dealId = $this->currentBaseDeal['ID'];
+                $dealTitle = $this->currentBaseDeal['TITLE'];
+                $dealLink = 'https://' . $this->domain . '/crm/deal/details/' . $dealId . '/';
+                $message = "\n" . 'Сделка: <a href="' . $dealLink . '" target="_blank">' . $dealTitle . '</a>';
+            }
+        }
+        $messagePlanContact = null;
+        $messageReportContact = null;
+
+        if (!empty($this->reportContact) && !empty($this->reportContactId)) {
+            $reportContactId = $this->reportContactId;
+            $reportContactName = $this->reportContact['NAME'];
+
+            $reportContactLink = 'https://' . $this->domain . '/crm/contact/details/' . $reportContactId . '/';
+            $messageReportContact = '   Контакты: <a href="' . $reportContactLink . '" target="_blank">' . $reportContactName . '</a>';
+        }
+
+
+        if (!empty($this->planContact) && !empty($this->planContactId)) {
+            if ($this->reportContactId !== $this->planContactId) {
+
+
+                $planContactId = $this->planContactId;
+                $planContactName = $this->planContact['NAME'];
+
+                $planContactLink = 'https://' . $this->domain . '/crm/contact/details/' . $planContactId . '/';
+                if (!empty($this->reportContact) && !empty($this->reportContactId)) {
+                    $messagePlanContact = ', <a href="' . $planContactLink . '" target="_blank">' . $planContactName . '</a>';
+                } else {
+                    $messagePlanContact = '   Контакты:  <a href="' . $planContactLink . '" target="_blank">' . $planContactName . '</a>';
+                }
+            }
+        }
+
+
+
+        $timeLineString =  $planComment;
+        if (!empty($message)) {
+
+            $timeLineString .= $message;
+        }
+        if (!empty($messageReportContact)) {
+
+            $timeLineString .= $messageReportContact;
+        }
+        if (!empty($messagePlanContact)) {
+
+            $timeLineString .= $messagePlanContact;
+        }
+        // Log::channel('telegram')->info('HOOK TIME LINE', ['set' => $timeLineString]);
+
+        // Log::info('HOOK TIME LINE', ['set' => $timeLineString]);
+        if (!empty($timeLineString)) {
+            $timeLineService->setTimeLine($timeLineString, 'company', $this->entityId);
+        }
+    }
+
+    protected function getFullEventComment()
+    {
+
+        $planComment = '';
+        $planEventTypeName = $this->currentPlanEventTypeName;
+        $date = $this->planDeadline; // Предположим, это ваша дата
+        // Создаем объект Carbon из строки
+        $carbonDate = Carbon::createFromFormat('d.m.Y H:i:s', $date);
+
+        // Устанавливаем локализацию
+        $carbonDate->locale('ru');
+
+        // Преобразуем в нужный формат: "1 ноября 12:30"
+        $formattedDate = $carbonDate->isoFormat('D MMMM HH:mm');
+
+        log::channel('telegram')->info('');
+
+        if ($this->isPlanned) {
+            if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
+                //report
+                $eventAction = 'plan';
+                $planComment = 'Запланирован';
+                if ($this->currentPlanEventTypeName == 'Презентация') {
+                    $planComment = 'Запланирована';
+                }
+            } else {
+                $eventAction = 'expired';  // не состоялся и двигается крайний срок 
+                $planComment = 'Перенесен';
+                $planEventTypeName = $this->currentReportEventName;
+
+                if ($this->currentReportEventName == 'Презентация') {
+                    $planComment = 'Перенесена';
+                }
+            }
+            $planComment = $planComment . ' ' . $planEventTypeName . ' на ' . $formattedDate;
+        } else {
+            $reportAction = 'done';
+            $reportComment = 'Coстоялся';
+            if ($this->resultStatus !== 'result') {
+                $reportAction = 'nodone';
+                $reportComment = 'Не состоялся';
+            }
+
+            if (!empty($this->currentReportEventName)) {
+                if ($this->currentReportEventName == 'Презентация') {
+                    if ($reportComment == 'Coстоялся') {
+                        $reportComment = 'Coстоялась';
+                    } else if ($reportComment == 'Не состоялся') {
+                        $reportComment = 'Не состоялась';
+                    }
+                }
+                $planComment = $reportComment . ' ' . $this->currentReportEventName;
+            }
+        }
+
+        $planComment = 'ОП ' . $planComment .  "\n" . $this->comment;
         return $planComment;
     }
 }
