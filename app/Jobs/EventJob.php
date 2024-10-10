@@ -53,8 +53,8 @@ class EventJob implements ShouldQueue
         }
         if ($isTmc) {
             // Log::channel('telegram')->info("Redis tmc queue.");
-            $service = new EventReportTMCService($this->data);
-            // $service = new EventReportTMCBatchService($this->data);
+            // $service = new EventReportTMCService($this->data);
+            $service = new EventReportTMCBatchService($this->data);
         } else {
             Log::channel('telegram')->info("Redis sale queue.");
             $service = new EventReportService($this->data);
