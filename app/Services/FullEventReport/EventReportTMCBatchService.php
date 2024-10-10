@@ -712,7 +712,6 @@ class EventReportTMCBatchService
                 sleep(1);
                 // $currentDealsIds = $this->getDealFlow();
                 $currentDealsIds = $this->getNEWBatchDealFlow();
-
             }
 
             // $this->createTask($currentSmartId);
@@ -734,7 +733,7 @@ class EventReportTMCBatchService
             //     $currentDealsIds
             // );
 
-            return APIOnlineController::getSuccess(['data' => [ 'presInitLink' => $this->resultRpaLink]]);
+            return APIOnlineController::getSuccess(['data' => ['presInitLink' => $this->resultRpaLink]]);
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
@@ -1229,8 +1228,8 @@ class EventReportTMCBatchService
             $currentDealId = $this->currentBaseDeal['ID'];
         }
 
-    
-    
+
+
 
         $reportDeals = [];
         $planDeals = [];
@@ -1374,7 +1373,7 @@ class EventReportTMCBatchService
                     $key = 'update_' . '_' . $category['code'] . '_' . $currentDealId;
                     $resultBatchCommands[$key] = $batchCommand;
 
-
+                    $planDeals = [$currentDealId];
                     // if (!empty($this->currentTMCDeal) && $this->currentPlanEventType == 'presentation') {
                     //     $categoryId = $category['bitrixId'];
 
@@ -1438,8 +1437,12 @@ class EventReportTMCBatchService
             'commands' => $resultBatchCommands
         ];
 
+        $resultBatchCommands = $this->taskFlow(
+            null, // $currentSmartItemId,
+            $planDeals,
+            $resultBatchCommands
+        );
 
-       
 
         // if ($this->isExpired || $this->isPlanned) {
         //     $resultBatchCommands = $this->getTaskFlowBatchCommand(
@@ -1817,7 +1820,8 @@ class EventReportTMCBatchService
 
     protected function taskFlow(
         $currentSmartItemId,
-        $currentDealsIds
+        $currentDealsIds,
+        $batchCommands
 
     ) {
 
@@ -1844,39 +1848,74 @@ class EventReportTMCBatchService
             }
             $taskService = new BitrixTaskService();
 
-            // if (!$this->isExpired) {
-            $createdTask =  $taskService->createTask(
-                $this->currentPlanEventType,       //$type,   //cold warm presentation hot 
-                $this->currentPlanEventTypeName,
-                $this->portal,
-                $this->domain,
-                $this->hook,
-                $companyId,  //may be null
-                $leadId,     //may be null
-                // $this->planCreatedId,
-                $this->planResponsibleId,
-                $this->planResponsibleId,
-                $this->planDeadline,
-                $this->currentPlanEventName,
-                $currentSmartItemId,
-                false, //$isNeedCompleteOtherTasks
-                $currentTaskId,
-                $currentDealsIds,
 
-            );
-            // } else {
-            //     $createdTask =  $taskService->updateTask(
+            // $createdTask =  $taskService->createTask(
+            //     $this->currentPlanEventType,       //$type,   //cold warm presentation hot 
+            //     $this->currentPlanEventTypeName,
+            //     $this->portal,
+            //     $this->domain,
+            //     $this->hook,
+            //     $companyId,  //may be null
+            //     $leadId,     //may be null
+            //     // $this->planCreatedId,
+            //     $this->planResponsibleId,
+            //     $this->planResponsibleId,
+            //     $this->planDeadline,
+            //     $this->currentPlanEventName,
+            //     $currentSmartItemId,
+            //     false, //$isNeedCompleteOtherTasks
+            //     $currentTaskId,
+            //     $currentDealsIds,
 
-            //         $this->domain,
-            //         $this->hook,
-            //         $currentTaskId,
-            //         $this->planDeadline,
-            //         $this->currentPlanEventName,
-            //     );
-            // }
+            // );
 
 
-            return $createdTask;
+            if (!$this->isExpired) {
+
+
+
+                $batchCommands =  $taskService->getCreateTaskBatchCommands(
+                    $this->currentPlanEventType,       //$type,   //cold warm presentation hot 
+                    $this->currentPlanEventTypeName,
+                    $this->portal,
+                    $this->domain,
+                    $this->hook,
+                    $this->currentBtxEntity,
+                    $companyId,  //may be null
+                    $leadId, //$leadId,     //may be null
+                    $this->planCreatedId,
+                    $this->planResponsibleId,
+                    $this->planDeadline,
+                    $this->currentPlanEventName,
+                    null, // $currentSmartItemId,
+                    false, //$isNeedCompleteOtherTasks
+                    $currentTaskId, // null,
+                    $currentDealsIds,
+                    null, // $contactId,
+                    $batchCommands
+
+                );
+            } else {
+                // $createdTask =  $taskService->updateTask(
+
+                //     $this->domain,
+                //     $this->hook,
+                //     $currentTaskId,
+                //     $this->planDeadline,
+                //     $this->currentPlanEventName,
+                // );
+                $batchCommand =  $taskService->getUpdateTaskBatchCommand(
+                    $this->domain,
+                    $currentTaskId,
+                    $this->planDeadline,
+                );
+                if (!empty($batchCommand)) {
+
+                    array_push($batchCommands, $batchCommand);
+                }
+            }
+
+            return $batchCommands;
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
