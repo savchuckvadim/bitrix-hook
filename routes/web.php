@@ -25,17 +25,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/test/3479', function () {
 
-    $domain = 'april-dev.bitrix24.ru';
-    $portal = PortalController::getPortal($domain);
-    if(!empty($portal) && !empty($portal['data'])){
-        $result = $portal['data']['id'];
-
-    }else{
-        $result = $portal;
-
-    }
+ 
     dd([
-        'result' => $result,
+        'yo' => 'camon',
         
     ]);
 

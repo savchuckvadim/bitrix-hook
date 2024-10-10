@@ -146,7 +146,7 @@ class BitrixTaskService
                     'CREATED_DATE' => $nowDate, // - дата создания;
                     'DEADLINE' => $moscowTime, //- крайний срок;
                     'UF_CRM_TASK' => $crmItems,
-                    'ALLOW_CHANGE_DEADLINE' => 'N',
+                    'ALLOW_CHANGE_DEADLINE' => 'Y',
                     // 'DESCRIPTION' => $description
                 ]
             ];
@@ -372,7 +372,7 @@ class BitrixTaskService
                     'CREATED_DATE' => $nowDate, // - дата создания;
                     'DEADLINE' => $moscowTime, //- крайний срок;
                     'UF_CRM_TASK' => $crmItems,
-                    'ALLOW_CHANGE_DEADLINE' => 'N',
+                    'ALLOW_CHANGE_DEADLINE' => 'Y',
                     // 'DESCRIPTION' => $description
                 ]
             ];
@@ -568,7 +568,7 @@ class BitrixTaskService
                 'taskId' => $currentTaskId,
                 'fields' => [
                     'DEADLINE' => $moscowTime, //- крайний срок;
-                    'ALLOW_CHANGE_DEADLINE' => 'N',
+                    'ALLOW_CHANGE_DEADLINE' => 'Y',
 
                 ]
             ];
@@ -634,7 +634,7 @@ class BitrixTaskService
                 'taskId' => $currentTaskId,
                 'fields' => [
                     'DEADLINE' => $moscowTime, //- крайний срок;
-                    'ALLOW_CHANGE_DEADLINE' => 'N',
+                    'ALLOW_CHANGE_DEADLINE' => 'Y',
 
                 ]
             ];

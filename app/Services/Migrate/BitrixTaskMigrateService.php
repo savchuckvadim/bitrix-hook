@@ -145,7 +145,7 @@ class BitrixTaskMigrateService
                     'CREATED_DATE' => $nowDate, // - дата создания;
                     'DEADLINE' => $moscowTime, //- крайний срок;
                     'UF_CRM_TASK' => $crmItems,
-                    'ALLOW_CHANGE_DEADLINE' => 'N',
+                    'ALLOW_CHANGE_DEADLINE' => 'Y',
                     // 'DESCRIPTION' => $description
                 ]
             ];
@@ -259,7 +259,7 @@ class BitrixTaskMigrateService
                 'taskId' => $currentTaskId,
                 'fields' => [
                     'DEADLINE' => $moscowTime, //- крайний срок;
-                    'ALLOW_CHANGE_DEADLINE' => 'N',
+                    'ALLOW_CHANGE_DEADLINE' => 'Y',
 
                 ]
             ];
