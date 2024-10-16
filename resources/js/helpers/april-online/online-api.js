@@ -10,9 +10,11 @@ export const online = axios.create({
     withCredentials: true,
     // baseURL: 'https://april-online.ru/api',
     baseURL:
-    IS_ONLINE_APRIL_DEV 
-    ? 'http://localhost:5000/admin'
-    : 'https://april-online.ru/admin',
+        IS_ONLINE_APRIL_DEV
+            ? 'http://localhost:5000/admin'
+            // : 'https://april-online.ru/admin',
+            : 'https://garant-app.ru/admin',
+
     headers: {
         // 'content-type': 'application/json',
         // 'content-type': undefined,
@@ -192,24 +194,24 @@ export const onlineOldAPI = {
 
     getCollection: async (url, method, collectionName, data = null) => {
         let result = null
-        
+
         try {
-            const response = !data 
-            ? await online[method](url)
-            : await online[method](url, data)
+            const response = !data
+                ? await online[method](url)
+                : await online[method](url, data)
 
 
             if (response) {
                 console.log(response)
-                
+
                 if (response.data && response.data.resultCode === 0) {
                     if (response.data[collectionName]) {
-                        
+
                         if (response.data.isCollection) {
-                             
+
                             result = response.data[collectionName].data
                         } else {
-                            
+
                             result = response.data[collectionName]
                         }
 
@@ -217,7 +219,7 @@ export const onlineOldAPI = {
 
                 }
 
-                
+
                 return result
 
             }
@@ -225,7 +227,7 @@ export const onlineOldAPI = {
         } catch (error) {
             console.log(error)
 
-            
+
             return result
         }
 
@@ -253,7 +255,7 @@ export const onlineOldAPI = {
     },
     service: async (url, method, model, data) => {
         let result = null
-        
+
         try {
 
             const response = await online[method](url, data)
@@ -278,28 +280,28 @@ export const onlineOldAPI = {
 export const onlineAPI = {
 
 
-   
+
 
     getCollection: async (url, method, collectionName, data = null) => {
         let result = null
-        
+
         try {
-            const response = !data 
-            ? await online[method](url)
-            : await online[method](url, data)
+            const response = !data
+                ? await online[method](url)
+                : await online[method](url, data)
 
 
             if (response) {
                 console.log(response)
-                
+
                 if (response.data && response.data.resultCode === 0) {
                     if (response.data[collectionName]) {
-                        
+
                         if (response.data.isCollection) {
-                             
+
                             result = response.data[collectionName].data
                         } else {
-                            
+
                             result = response.data[collectionName]
                         }
 
@@ -307,15 +309,15 @@ export const onlineAPI = {
 
                 }
 
-                
+
                 return result
 
             }
 
         } catch (error) {
             console.log(error)
-            
-            
+
+
             return result
         }
 
@@ -327,7 +329,7 @@ export const onlineAPI = {
                 [name]: items
             }
             const response = await online.post(name, data)
-            
+
             if (response) {
                 if (response.data.resultCode === 0) {
                     result = response.data.data
@@ -335,7 +337,7 @@ export const onlineAPI = {
                     console.log(response.data.message)
                 }
             }
-            
+
             return result
         } catch (error) {
             console.log('error')
@@ -345,36 +347,36 @@ export const onlineAPI = {
     },
     service: async (url, method, model, data) => {
         let result = null
-        
+
         try {
-            
-            
+
+
             const response = await online[method](url, data)
-            if(model === 'rqs'){
-                
+            if (model === 'rqs') {
+
 
             }
-            
+
             if (response && response.data) {
                 if (response.data.resultCode === 0) {
-                    if(response.data.data){
+                    if (response.data.data) {
                         result = response.data.data[model]
-                    }else{
+                    } else {
                         result = response.data[model]
                     }
-                    
+
                 } else {
-                    
+
                     console.log(response.data.message)
                 }
             }
 
             return result
-            
+
         } catch (error) {
-            
+
             console.log(error)
-            
+
             return result
         }
     }

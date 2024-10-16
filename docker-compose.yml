@@ -66,9 +66,7 @@ services:
       - app-network
 
   queue-default:
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile
+   
     image: april_app_image:latest
     command: php /var/www/html/artisan queue:work redis --sleep=3 --tries=1
     volumes:
