@@ -1269,7 +1269,7 @@ class EventReportTMCBatchService
             }
         }
 
-      
+
         $unplannedPresDeals = null;
         $newPresDeal = null;
         // report - закрывает сделки
@@ -1430,16 +1430,16 @@ class EventReportTMCBatchService
                     // $rpaId = $resultRPA['rpaId'];
                     $key = 'rpa_tmc' . '_';
                     $resultBatchCommands[$key] = $rpaCommand; // в результате будет id
-
+                    $rpaId = '$result[' . $key . ']';
                     // Log::channel('telegram')->info('HOOK TEST currentBtxDeals', [
                     //     'resultRpaItem' => $this->resultRpaItem,
 
 
                     // ]);
-
-                    // if (!empty($rpaId)) {
-                        $this->resultRpaLink = 'https://' . $this->domain . '/rpa/items/';
-                    // }
+                    $this->resultRpaItem = $rpaId;
+                    if (!empty($rpaId)) {
+                        $this->resultRpaLink = 'https://' . $this->domain . '/rpa/item/' . $rpaId . '/';
+                    }
                 }
             }
         }
@@ -1493,7 +1493,9 @@ class EventReportTMCBatchService
         //     $result,
         //     $resultBatchCommands
         // );
-        $this->setTimeLine();
+        $key = 'timeline_tmc' . '_';
+        $timeLineCommand = $this->setTimeLineBatchCommand();
+        $resultBatchCommands[$key] = $rpaCommand;
         $batchService->sendGeneralBatchRequest($resultBatchCommands);
 
         return  $result;
@@ -2819,13 +2821,14 @@ class EventReportTMCBatchService
         // }
     }
 
-    protected function setTimeLine()
+    protected function setTimeLineBatchCommand()
     {
         $timeLineService = new BitrixTimeLineService($this->hook);
         $timeLineString = '';
         $planEventType = $this->currentPlanEventType; //если перенос то тип будет автоматически взят из report - предыдущего события
         $eventAction = '';  // не состоялся и двигается крайний срок 
 
+        $resultBatchCommand = '';
 
 
         $planComment = $this->getFullEventComment();
@@ -2845,7 +2848,7 @@ class EventReportTMCBatchService
         $timeLineString =  $planComment;
 
         if (!empty($this->resultRpaLink)) {
-            $rpaMessage = "\n" . 'Согласование презентации: <a href="' . $this->resultRpaLink . '" target="_blank">' . $this->currentPlanEventName . '</a>';
+            $rpaMessage = "\n" . $this->resultRpaItem . "\n" . 'Согласование презентации: <a href="' . $this->resultRpaLink . '" target="_blank">' . $this->currentPlanEventName . '</a>';
         }
 
         if (!empty($message)) {
@@ -2861,8 +2864,9 @@ class EventReportTMCBatchService
 
         // Log::info('HOOK TIME LINE', ['set' => $timeLineString]);
         if (!empty($timeLineString)) {
-            $timeLineService->setTimeLine($timeLineString, 'company', $this->entityId);
+            $resultBatchCommand = $timeLineService->setTimelineBatchCommand($timeLineString, 'company', $this->entityId);
         }
+        return  $resultBatchCommand;
     }
 
     protected function getFullEventComment()
