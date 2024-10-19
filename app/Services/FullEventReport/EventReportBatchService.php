@@ -1059,8 +1059,8 @@ class EventReportBatchService
         $entityService = new BitrixEntityBatchFlowService();
 
 
-        Log::channel('telegram')->info('HOOK FROM ONLINE', ['reportFields' => $reportFields]);
-        Log::info('HOOK FROM ONLINE', ['reportFields' => $reportFields]);
+        // Log::channel('telegram')->info('HOOK FROM ONLINE', ['reportFields' => $reportFields]);
+        // Log::info('HOOK FROM ONLINE', ['reportFields' => $reportFields]);
 
         if (isset($reportFields['op_work_status'])) {
 

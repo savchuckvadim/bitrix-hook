@@ -13,6 +13,7 @@ use App\Services\General\BitrixDealService;
 use App\Services\General\BitrixTimeLineService;
 use App\Services\HookFlow\BitrixDealBatchFlowService;
 use App\Services\HookFlow\BitrixDealFlowService;
+use App\Services\HookFlow\BitrixEntityBatchFlowService;
 use App\Services\HookFlow\BitrixEntityFlowService;
 use App\Services\HookFlow\BitrixListFlowService;
 use App\Services\HookFlow\BitrixListPresentationFlowService;
@@ -706,7 +707,7 @@ class EventReportTMCBatchService
             //     // 'currentBtxDeals' => $this->currentBtxDeals,
 
             // ]);
-            $this->setTimeLine();
+            // $this->setTimeLine();
             if ($this->isDealFlow && $this->portalDealData) {
                 $this->closeNoTMCDeals();
                 sleep(1);
@@ -750,12 +751,12 @@ class EventReportTMCBatchService
 
 
     //entity
-    protected function getEntityFlow(
+    protected function getEntityFlowBatchCommand(
         $isDeal = false,
         $deal = null,
         $dealType = 'tmc',  //presentation, xo
         $baseDealId = null,
-        $dealEventType = false //plan done unplanned fail
+        $dealEventType = false, //plan done unplanned fail
     ) {
         $currentReportEventType = $this->currentReportEventType;
         $currentPlanEventType = $this->currentPlanEventType;
@@ -781,27 +782,27 @@ class EventReportTMCBatchService
         $reportFields['op_mhistory'] = [];
 
 
-        $currentPresCount = 0;
-        $companyPresCount = 0;
-        $dealPresCount = 0;
-        if (!empty($this->currentTask)) {
-            if (!empty($this->currentTask['presentation'])) {
+        // $currentPresCount = 0;
+        // $companyPresCount = 0;
+        // $dealPresCount = 0;
+        // if (!empty($this->currentTask)) {
+        //     if (!empty($this->currentTask['presentation'])) {
 
-                if (!empty($this->currentTask['presentation']['company'])) {
-                    $companyPresCount = (int)$this->currentTask['presentation']['company'];
-                }
-                if (!empty($this->currentTask['presentation']['deal'])) {
-                    $dealPresCount = (int)$this->currentTask['presentation']['deal'];
-                }
-            }
-        }
+        //         if (!empty($this->currentTask['presentation']['company'])) {
+        //             $companyPresCount = (int)$this->currentTask['presentation']['company'];
+        //         }
+        //         if (!empty($this->currentTask['presentation']['deal'])) {
+        //             $dealPresCount = (int)$this->currentTask['presentation']['deal'];
+        //         }
+        //     }
+        // }
 
 
 
-        $currentPresCount =  $companyPresCount;
+        // $currentPresCount =  $companyPresCount;
         if ($isDeal && !empty($deal) && !empty($deal['ID'])) {
 
-            $currentPresCount =  $dealPresCount;
+            // $currentPresCount =  $dealPresCount;
             $currentBtxEntity = $deal;
             $entityType = 'deal';
             $entityId =  $deal['ID'];
@@ -857,25 +858,25 @@ class EventReportTMCBatchService
             }
         }
 
-        //presentation done with unplanned
-        if ($this->isPresentationDone) {
+        // //presentation done with unplanned
+        // if ($this->isPresentationDone) {
 
 
 
-            $reportFields['last_pres_done_date'] = $this->nowDate;
-            $reportFields['last_pres_done_responsible'] =  $this->planResponsibleId;
-            $reportFields['pres_count'] = $currentPresCount + 1;
+        //     $reportFields['last_pres_done_date'] = $this->nowDate;
+        //     $reportFields['last_pres_done_responsible'] =  $this->planResponsibleId;
+        //     $reportFields['pres_count'] = $currentPresCount + 1;
 
-            if ($currentReportEventType !== 'presentation' || $this->isNew) {
-                $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
-                $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
-                $reportFields['next_pres_plan_date'] = $this->nowDate;  //дата на которую запланировали през
+        //     if ($currentReportEventType !== 'presentation' || $this->isNew) {
+        //         $reportFields['last_pres_plan_date'] = $this->nowDate; //когда запланировали последнюю през
+        //         $reportFields['last_pres_plan_responsible'] = $this->planResponsibleId;
+        //         $reportFields['next_pres_plan_date'] = $this->nowDate;  //дата на которую запланировали през
 
-            }
-            $reportFields['op_current_status'] = ' Презентация проведена';
-            array_push($currentPresComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
-            // array_unshift($currentMComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
-        }
+        //     }
+        //     $reportFields['op_current_status'] = ' Презентация проведена';
+        //     array_push($currentPresComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
+        //     // array_unshift($currentMComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
+        // }
 
 
         //plan
@@ -1013,9 +1014,9 @@ class EventReportTMCBatchService
             }
         }
         $comment = $this->getFullEventComment();
-        array_unshift($currentMComments, $comment);
-        if (count($currentMComments) > 5) {
-            $currentMComments = array_slice($currentMComments, 0, 5);
+        array_unshift($currentMComments,  $this->nowDate . "\n" . $comment);
+        if (count($currentMComments) > 8) {
+            $currentMComments = array_slice($currentMComments, 0, 8);
         }
 
 
@@ -1026,12 +1027,12 @@ class EventReportTMCBatchService
         // }
 
 
-        $entityService = new BitrixEntityFlowService();
+        $entityService = new BitrixEntityBatchFlowService();
 
 
 
 
-        $entityService->flow(
+        $entityCommand =  $entityService->getBatchCommand(
             $this->portal,
             $currentBtxEntity,
             $portalEntityData,
@@ -1057,8 +1058,9 @@ class EventReportTMCBatchService
             $this->comment,
             $reportFields
         );
-    }
 
+        return   $entityCommand;
+    }
 
     // get deal relations flow
 
@@ -1375,25 +1377,17 @@ class EventReportTMCBatchService
                     $resultBatchCommands[$key] = $batchCommand;
 
                     $planDeals = [$currentDealId];
-                    // if (!empty($this->currentTMCDeal) && $this->currentPlanEventType == 'presentation') {
-                    //     $categoryId = $category['bitrixId'];
 
-                    //     $fieldsData = [
-                    //         'CATEGORY_ID' => $categoryId,
-                    //         'STAGE_ID' => "C" . $categoryId . ':' . 'PRES_PLAN',
-                    //         // "COMPANY_ID" => $entityId,
-                    //         // 'ASSIGNED_BY_ID' => $responsibleId
-                    //         // 'UF_CRM_TO_BASE_SALES' => $this->currentBaseDeal['ID'],
-                    //         // 'UF_CRM_TO_PRESENTATION_SALES' => $newPresDeal,
-                    //         // 'UF_CRM_PRES_COMMENTS' => $newPresDeal['UF_CRM_PRES_COMMENTS'],
-                    //         // 'UF_CRM_LAST_PRES_DONE_RESPONSIBLE' => $this->planResponsibleId,
-                    //         // 'UF_CRM_MANAGER_OP' => $this->planResponsibleId,
-                    //     ];
+                    $entityDealCommand =  $this->getEntityFlowBatchCommand(
+                        true,
+                        $this->currentBaseDeal,
+                        'tmc',
+                        $this->currentBaseDeal['ID'],
+                        ''
+                    );
+                    $key = 'entity_tmc' . '_' . 'deal' . '_' .  $currentDealId;
+                    $resultBatchCommands[$key] = $entityDealCommand; // в результате будет id
 
-                    //     $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $this->currentTMCDeal['ID']);
-                    //     $key = 'update_' . '_' . $category['code'] . '_' . $this->currentTMCDeal['ID'];
-                    //     $resultBatchCommands[$key] = $batchCommand;
-                    // }
 
 
                     break;
@@ -1404,6 +1398,9 @@ class EventReportTMCBatchService
             }
         }
 
+        $entityCommand =  $this->getEntityFlowBatchCommand();
+        $key = 'entity_tmc' . '_' . 'company' . '_' .  $this->entityId;
+        $resultBatchCommands[$key] = $entityCommand; // в результате будет id
 
 
 
