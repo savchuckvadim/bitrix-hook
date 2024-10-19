@@ -363,26 +363,31 @@ class BitrixRPAPresFlowService
                 'fields' => $fieldsData
             ];
 
-            $rpaService = new BitrixRPAService(
-                $this->hook
+            // $rpaService = new BitrixRPAService(
+            //     $this->hook
+            // );
+
+
+
+            // $resultItem = $rpaService->setRPAItem(
+            //     $dataForCreate
+            // );
+            $method = '/rpa.item.add';
+            $batchcommand =   BitrixBatchService::getGeneralBatchCommand(
+                $dataForCreate,
+                $method
             );
-
-
-
-            $resultItem = $rpaService->setRPAItem(
-                $dataForCreate
-            );
-            $rpaId = $resultItem['id'];
-            $fieldsData = [
-                'createdBy' => $created,
-                'updatedBy' => $created,
-                'movedBy' => $created,
-            ];
-            $dataForUpdate = [
-                'id' => $resultItem['id'],
-                'typeId' => $this->rpaTypeId,
-                'fields' => $fieldsData
-            ];
+            // $rpaId = $resultItem['id'];
+            // $fieldsData = [
+            //     'createdBy' => $created,
+            //     'updatedBy' => $created,
+            //     'movedBy' => $created,
+            // ];
+            // $dataForUpdate = [
+            //     'id' => $rpaId,
+            //     'typeId' => $this->rpaTypeId,
+            //     'fields' => $fieldsData
+            // ];
             // sleep(1);
             // $resultItem = $rpaService->updateRPAItem(
             //     $dataForUpdate
@@ -390,11 +395,7 @@ class BitrixRPAPresFlowService
             // Log::channel('telegram')->info('TEST RPA', [
             //     'resultItem' => $resultItem
             // ]);
-            $method = '/rpa.item.list';
-            $batchcommand =   BitrixBatchService::getGeneralBatchCommand(
-                $dataForUpdate,
-                $method
-            );
+
             return ['rpaId' => $rpaId, 'command' => $batchcommand];
         } catch (\Throwable $th) {
             $errorMessages =  [

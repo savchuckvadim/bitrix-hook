@@ -1427,8 +1427,8 @@ class EventReportTMCBatchService
 
                     );
                     $rpaCommand = $resultRPA['command'];
-                    $rpaId = $resultRPA['rpaId'];
-                    $key = 'rpa_tmc' . '_' .  $rpaId;
+                    // $rpaId = $resultRPA['rpaId'];
+                    $key = 'rpa_tmc' . '_';
                     $resultBatchCommands[$key] = $rpaCommand; // в результате будет id
 
                     // Log::channel('telegram')->info('HOOK TEST currentBtxDeals', [
@@ -1437,9 +1437,9 @@ class EventReportTMCBatchService
 
                     // ]);
 
-                    if (!empty($rpaId)) {
-                        $this->resultRpaLink = 'https://' . $this->domain . '/rpa/item/' . $rpaId . '/';
-                    }
+                    // if (!empty($rpaId)) {
+                        $this->resultRpaLink = 'https://' . $this->domain . '/rpa/items/';
+                    // }
                 }
             }
         }
