@@ -1402,7 +1402,47 @@ class EventReportTMCBatchService
         $key = 'entity_tmc' . '_' . 'company' . '_' .  $this->entityId;
         $resultBatchCommands[$key] = $entityCommand; // в результате будет id
 
+        if ($this->currentPlanEventType === 'presentation') {
+            $rpaFlowService = new BitrixRPAPresFlowService(
+                $this->hook,
+                $this->portalRPA
 
+            );
+
+            if (!empty($this->currentBaseDeal)) {
+                if (!empty($this->currentBaseDeal['ID'])) {
+
+
+                    $resultRPA =  $rpaFlowService->getRPAPresInitFlowBatchCommand(
+                        $this->currentBaseDeal['ID'],
+                        $this->nowDate,
+                        $this->planDeadline,
+                        $this->planCreatedId,
+                        $this->planResponsibleId,
+                        // 1, //$bossId 
+                        $this->entityId,
+                        // $contactId,
+                        $this->comment,
+                        $this->currentPlanEventName,
+
+                    );
+                    $rpaCommand = $resultRPA['command'];
+                    $rpaId = $resultRPA['rpaId'];
+                    $key = 'rpa_tmc' . '_' .  $rpaId;
+                    $resultBatchCommands[$key] = $rpaCommand; // в результате будет id
+
+                    // Log::channel('telegram')->info('HOOK TEST currentBtxDeals', [
+                    //     'resultRpaItem' => $this->resultRpaItem,
+
+
+                    // ]);
+
+                    if (!empty($rpaId)) {
+                        $this->resultRpaLink = 'https://' . $this->domain . '/rpa/item/' . $rpaId . '/';
+                    }
+                }
+            }
+        }
 
         // if (!empty($this->currentTMCDeal) && $this->currentPlanEventType == 'presentation') {
         //     BitrixDealFlowService::tmcPresentationRelation(
@@ -2803,9 +2843,19 @@ class EventReportTMCBatchService
         }
 
         $timeLineString =  $planComment;
+
+        if (!empty($this->resultRpaLink)) {
+            $rpaMessage = "\n" . 'Согласование презентации: <a href="' . $this->resultRpaLink . '" target="_blank">' . $this->currentPlanEventName . '</a>';
+        }
+
         if (!empty($message)) {
 
             $timeLineString .= $message;
+        }
+
+        if (!empty($rpaMessage)) {
+
+            $timeLineString .= $rpaMessage;
         }
         // Log::channel('telegram')->info('HOOK TIME LINE', ['set' => $timeLineString]);
 
