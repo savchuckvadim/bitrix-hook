@@ -818,11 +818,7 @@ class BitrixDealService
                 'order' => 6,
                 'suphicks' => 'plan'
             ],
-            [
-                'code' => 'pending',
-                'order' => 7,
-                'suphicks' => 'pending'
-            ],
+
 
 
             [
@@ -845,7 +841,20 @@ class BitrixDealService
 
 
         ];
+        if (!empty($isExpired)) {
 
+            array_push($eventOrders, [
+                'code' => 'pending',
+                'order' => 7,
+                'suphicks' => 'pending'
+            ],);
+        } else {
+            array_push($eventOrders, [
+                'code' => 'pending',
+                'order' => 0,
+                'suphicks' => 'pending'
+            ],);
+        }
 
 
         $codesToFilter = [$planEventType, $reportEventType];
@@ -975,7 +984,7 @@ class BitrixDealService
                 'suphicks' => 'plan'
             ],
 
-          
+
             [
                 'code' => 'document',
                 'order' => 3,
