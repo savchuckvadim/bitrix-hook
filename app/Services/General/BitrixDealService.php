@@ -574,7 +574,7 @@ class BitrixDealService
             [
                 'code' => 'presentation',
                 'order' => 2,
-                'suphicks' => 'pres'
+                'suphicks' => 'pres_in_progress'
             ],
             [
                 'code' => 'document',
@@ -719,7 +719,7 @@ class BitrixDealService
             [
                 'code' => 'presentation',
                 'order' => 2,
-                'suphicks' => 'pres'
+                'suphicks' => 'pres_in_progress'
             ],
             [
                 'code' => 'document',
@@ -821,9 +821,11 @@ class BitrixDealService
                 'order' => 6,
                 'suphicks' => 'plan'
             ],
-
-
-
+            [
+                'code' => 'pending',
+                'order' => 7,
+                'suphicks' => 'pending'
+            ],
 
             [
                 'code' => 'success',
@@ -849,11 +851,6 @@ class BitrixDealService
         }
 
         if (!empty($isExpired)) {
-            array_push($eventOrders, [
-                'code' => 'pending',
-                'order' => 7,
-                'suphicks' => 'pending'
-            ]);
 
             array_push($codesToFilter, 'pending');
         }
