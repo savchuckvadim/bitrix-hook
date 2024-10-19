@@ -372,7 +372,7 @@ class BitrixRPAPresFlowService
             // $resultItem = $rpaService->setRPAItem(
             //     $dataForCreate
             // );
-            $method = '/rpa.item.add';
+            $method = 'rpa.item.add';
             $batchcommand =   BitrixBatchService::getGeneralBatchCommand(
                 $dataForCreate,
                 $method
