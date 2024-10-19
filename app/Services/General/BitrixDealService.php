@@ -772,7 +772,7 @@ class BitrixDealService
         $isSuccess,
         $isFail,
         $isExpired
-        
+
     ) {
 
         // sales_tmc_new
@@ -823,11 +823,11 @@ class BitrixDealService
             ],
 
             [
-                'code' => 'expired',
+                'code' => 'pending',
                 'order' => 7,
                 'suphicks' => 'pending'
             ],
-            
+
 
             [
                 'code' => 'success',
@@ -844,18 +844,18 @@ class BitrixDealService
 
 
         ];
-        
+
         $codesToFilter = [$planEventType, $reportEventType];
         if (!empty($currentStageOrder)) {
             array_push($codesToFilter, $currentStageOrder);
         }
 
         if (!empty($isExpired)) {
-            array_push($codesToFilter, 'expired');
+            array_push($codesToFilter, 'pending');
         }
 
-          // Фильтруем массив по кодам
-          $filtered = array_filter($eventOrders, function ($item) use ($codesToFilter) {
+        // Фильтруем массив по кодам
+        $filtered = array_filter($eventOrders, function ($item) use ($codesToFilter) {
             return in_array($item['code'], $codesToFilter);
         });
 
@@ -880,7 +880,7 @@ class BitrixDealService
         if (!empty($isSuccess)) {                       // если успех
             $stageSuphicks = 'success';
         }
-     
+
 
 
         // if ($eventAction == 'done' || $eventAction == 'success') {
@@ -993,14 +993,19 @@ class BitrixDealService
                 'suphicks' => 'plan'
             ],
             [
-                'code' => 'success',
+                'code' => 'pending',
                 'order' => 7,
+                'suphicks' => 'pending'
+            ],
+            [
+                'code' => 'success',
+                'order' => 8,
                 'suphicks' => 'success'
             ],
 
             [
                 'code' => 'fail',
-                'order' => 8,
+                'order' => 9,
                 'suphicks' => 'fail'
             ],
 
