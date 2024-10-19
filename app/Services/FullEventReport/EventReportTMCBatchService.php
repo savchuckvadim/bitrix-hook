@@ -1269,7 +1269,7 @@ class EventReportTMCBatchService
             }
         }
 
-        $this->setTimeLine();
+      
         $unplannedPresDeals = null;
         $newPresDeal = null;
         // report - закрывает сделки
@@ -1493,7 +1493,7 @@ class EventReportTMCBatchService
         //     $result,
         //     $resultBatchCommands
         // );
-
+        $this->setTimeLine();
         $batchService->sendGeneralBatchRequest($resultBatchCommands);
 
         return  $result;
