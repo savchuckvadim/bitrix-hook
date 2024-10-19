@@ -837,6 +837,11 @@ class BitrixDealService
                 'order' => 10,
                 'suphicks' => 'fail'
             ],
+            [
+                'code' => 'fail',
+                'order' => 11,
+                'suphicks' => 'noresult'
+            ],
 
 
 
@@ -886,7 +891,7 @@ class BitrixDealService
         if (!empty($isFail)) {                      // если отказ
             $stageSuphicks = 'fail';
             if (!$isResult) {
-                $stageSuphicks = 'double';
+                $stageSuphicks = 'noresult';
             }
         }
 
