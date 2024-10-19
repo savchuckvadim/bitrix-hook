@@ -1495,7 +1495,7 @@ class EventReportTMCBatchService
         // );
         $key = 'timeline_tmc' . '_';
         $timeLineCommand = $this->setTimeLineBatchCommand();
-        $resultBatchCommands[$key] = $rpaCommand;
+        $resultBatchCommands[$key] = $timeLineCommand;
         $batchService->sendGeneralBatchRequest($resultBatchCommands);
 
         return  $result;
@@ -2848,7 +2848,7 @@ class EventReportTMCBatchService
         $timeLineString =  $planComment;
 
         if (!empty($this->resultRpaLink)) {
-            $rpaMessage = "\n" . $this->resultRpaItem . "\n" . 'Согласование презентации: <a href="' . $this->resultRpaLink . '" target="_blank">' . $this->currentPlanEventName . '</a>';
+            $rpaMessage = "\n" . 'Согласование презентации: <a href="' . $this->resultRpaLink . '" target="_blank">' . $this->currentPlanEventName . '</a>';
         }
 
         if (!empty($message)) {
