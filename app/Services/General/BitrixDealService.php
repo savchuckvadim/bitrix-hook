@@ -841,13 +841,7 @@ class BitrixDealService
 
         ];
 
-        if ($planEventType !== 'plan' && $planEventType !== 'warm') {
-            array_push($eventOrders, [
-                'code' => 'pending',
-                'order' => 7,
-                'suphicks' => 'pending'
-            ]);
-        }
+
 
         $codesToFilter = [$planEventType, $reportEventType];
         if (!empty($currentStageOrder)) {
@@ -855,6 +849,12 @@ class BitrixDealService
         }
 
         if (!empty($isExpired)) {
+            array_push($eventOrders, [
+                'code' => 'pending',
+                'order' => 7,
+                'suphicks' => 'pending'
+            ]);
+
             array_push($codesToFilter, 'pending');
         }
 
