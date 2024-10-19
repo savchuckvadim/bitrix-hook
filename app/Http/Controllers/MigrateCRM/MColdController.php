@@ -1692,31 +1692,31 @@ class MColdController extends Controller
 
             );
         } else {
-            $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
-                $this->hook,
-                $this->portalBxLists,
-                $resultEventType,
-                $event['eventType'],
-                $resultAction,
-                // $this->stringType,
-                '', //$this->planDeadline,
-                $userId,
-                $userId,
-                $userId,
-                $companyId,
-                $comment,
-                $workStatus,
-                $resultStatus, // result noresult expired,
-                $noresultReason,
-                $failReason,
-                '', // $failType,
-                '', // $currentDealIds,
-                '', // $currentBaseDealId
-                $date,
-                $event['eventType'], //$hotName
-                $commands
+            // $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
+            //     $this->hook,
+            //     $this->portalBxLists,
+            //     $resultEventType,
+            //     $event['eventType'],
+            //     $resultAction,
+            //     // $this->stringType,
+            //     '', //$this->planDeadline,
+            //     $userId,
+            //     $userId,
+            //     $userId,
+            //     $companyId,
+            //     $comment,
+            //     $workStatus,
+            //     $resultStatus, // result noresult expired,
+            //     $noresultReason,
+            //     $failReason,
+            //     '', // $failType,
+            //     '', // $currentDealIds,
+            //     '', // $currentBaseDealId
+            //     $date,
+            //     $event['eventType'], //$hotName
+            //     $commands
 
-            );
+            // );
         }
 
         return $commands;

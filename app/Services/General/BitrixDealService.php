@@ -771,6 +771,7 @@ class BitrixDealService
         $isResult,
         $isSuccess,
         $isFail,
+        $isExpired
         
     ) {
 
@@ -820,15 +821,23 @@ class BitrixDealService
                 'order' => 6,
                 'suphicks' => 'plan'
             ],
+
+            [
+                'code' => 'expired',
+                'order' => 7,
+                'suphicks' => 'pending'
+            ],
+            
+
             [
                 'code' => 'success',
-                'order' => 7,
+                'order' => 8,
                 'suphicks' => 'success'
             ],
 
             [
                 'code' => 'fail',
-                'order' => 8,
+                'order' => 9,
                 'suphicks' => 'fail'
             ],
 
@@ -840,6 +849,11 @@ class BitrixDealService
         if (!empty($currentStageOrder)) {
             array_push($codesToFilter, $currentStageOrder);
         }
+
+        if (!empty($isExpired)) {
+            array_push($codesToFilter, 'expired');
+        }
+
           // Фильтруем массив по кодам
           $filtered = array_filter($eventOrders, function ($item) use ($codesToFilter) {
             return in_array($item['code'], $codesToFilter);

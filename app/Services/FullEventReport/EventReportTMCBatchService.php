@@ -1357,6 +1357,7 @@ class EventReportTMCBatchService
                         $isResult,
                         $this->isSuccessSale,
                         $this->isFail,
+                        $this->isExpired
 
 
                     );
