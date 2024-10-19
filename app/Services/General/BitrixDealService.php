@@ -574,7 +574,7 @@ class BitrixDealService
             [
                 'code' => 'presentation',
                 'order' => 2,
-                'suphicks' => 'pres_in_progress'
+                'suphicks' => 'pres'
             ],
             [
                 'code' => 'document',
@@ -719,7 +719,7 @@ class BitrixDealService
             [
                 'code' => 'presentation',
                 'order' => 2,
-                'suphicks' => 'pres_in_progress'
+                'suphicks' => 'pres'
             ],
             [
                 'code' => 'document',
@@ -803,8 +803,9 @@ class BitrixDealService
             [
                 'code' => 'presentation',
                 'order' => 2,
-                'suphicks' => 'plan'
+                'suphicks' => 'pres_in_progress'
             ],
+
             [
                 'code' => 'document',
                 'order' => 3,
@@ -826,6 +827,7 @@ class BitrixDealService
                 'order' => 7,
                 'suphicks' => 'pending'
             ],
+
 
             [
                 'code' => 'success',
@@ -975,7 +977,7 @@ class BitrixDealService
             [
                 'code' => 'presentation',
                 'order' => 2,
-                'suphicks' => 'plan'
+                'suphicks' => 'pres_in_progress'
             ],
             [
                 'code' => 'document',
