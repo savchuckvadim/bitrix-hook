@@ -710,7 +710,7 @@ class EventReportTMCBatchService
             // $this->setTimeLine();
             if ($this->isDealFlow && $this->portalDealData) {
                 $this->closeNoTMCDeals();
-                sleep(1);
+                // sleep(1);
                 // $currentDealsIds = $this->getDealFlow();
                 $currentDealsIds = $this->getNEWBatchDealFlow();
             }
@@ -1430,16 +1430,16 @@ class EventReportTMCBatchService
                     // $rpaId = $resultRPA['rpaId'];
                     $key = 'rpa_tmc' . '_';
                     $resultBatchCommands[$key] = $rpaCommand; // в результате будет id
-                    $rpaId = '$result[' . $key . ']';
+                    // $rpaId = '$result[' . $key . ']';
                     // Log::channel('telegram')->info('HOOK TEST currentBtxDeals', [
                     //     'resultRpaItem' => $this->resultRpaItem,
 
 
                     // ]);
-                    $this->resultRpaItem = $rpaId;
-                    if (!empty($rpaId)) {
-                        $this->resultRpaLink = 'https://' . $this->domain . '/rpa/item/' . $rpaId . '/';
-                    }
+                    // $this->resultRpaItem = $rpaId;
+                    // if (!empty($rpaId)) {
+                    //     $this->resultRpaLink = 'https://' . $this->domain . '/rpa/item/' . $rpaId . '/';
+                    // }
                 }
             }
         }
@@ -2856,13 +2856,17 @@ class EventReportTMCBatchService
             $timeLineString .= $message;
         }
 
-        if (!empty($rpaMessage)) {
+        // if (!empty($rpaMessage)) {
 
-            $timeLineString .= $rpaMessage;
-        }
+        //     $timeLineString .= $rpaMessage;
+        // }
         // Log::channel('telegram')->info('HOOK TIME LINE', ['set' => $timeLineString]);
 
         // Log::info('HOOK TIME LINE', ['set' => $timeLineString]);
+        // if (!empty($timeLineString)) {
+        //     $resultBatchCommand = $timeLineService->setTimelineBatchCommand($timeLineString, 'company', $this->entityId);
+        // }
+
         if (!empty($timeLineString)) {
             $resultBatchCommand = $timeLineService->setTimelineBatchCommand($timeLineString, 'company', $this->entityId);
         }
