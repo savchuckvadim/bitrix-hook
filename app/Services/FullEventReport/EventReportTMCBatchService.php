@@ -165,6 +165,13 @@ class EventReportTMCBatchService
     protected $resultRpaItem;
     protected $resultRpaLink;
 
+    protected $planContact;
+    protected $reportContact;
+    protected $planContactId;
+    protected $reportContactId;
+    protected $planContactName;
+    protected $reportContactName;
+
 
     public function __construct(
 
@@ -188,6 +195,31 @@ class EventReportTMCBatchService
 
         $entityType = null;
         $entityId = null;
+        if (!empty($data['plan'])) {
+            if (!empty($data['plan']['contact'])) {
+                $this->planContact = $data['plan']['contact'];
+                if (!empty($data['plan']['contact']['ID'])) {
+                    $this->planContactId = $data['plan']['contact']['ID'];
+                }
+
+                if (!empty($data['plan']['contact']['NAME'])) {
+                    $this->planContactName = $data['plan']['contact']['NAME'];
+                }
+            }
+        }
+        if (!empty($data['report'])) {
+            if (!empty($data['report']['contact'])) {
+                $this->reportContact = $data['report']['contact'];
+                if (!empty($data['report']['contact']['ID'])) {
+                    $this->reportContactId = $data['report']['contact']['ID'];
+                }
+
+                if (!empty($data['report']['contact']['NAME'])) {
+                    $this->reportContactName = $data['report']['contact']['NAME'];
+                }
+            }
+        }
+
 
         if (isset($placement)) {
             if (!empty($placement['placement'])) {
@@ -502,6 +534,8 @@ class EventReportTMCBatchService
 
                 $sessionKey = $domain . '_' . $data['currentTask']['id'];
                 $sessionData = FullEventInitController::getSessionItem($sessionKey);
+                Log::info('HOOK TMC SESSION GET task', ['first sessionData' => $sessionData]);
+                Log::channel('telegram')->info('HOOK TMC SESSION GET task', ['first sessionData' => $sessionData]);
 
 
                 if (isset($sessionData['currentCompany']) && isset($sessionData['deals'])) {
@@ -726,7 +760,7 @@ class EventReportTMCBatchService
             // // sleep(1);
 
 
-            // $this->getListBatchFlow();
+            $this->getListBatchFlow();
 
             // // $this->getListFlow();
             // sleep(1);
@@ -1424,6 +1458,9 @@ class EventReportTMCBatchService
                         // $contactId,
                         $this->comment,
                         $this->currentPlanEventName,
+                        $this->planContactId,
+                        $this->planContactName,
+
 
                     );
                     $rpaCommand = $resultRPA['command'];
@@ -1474,13 +1511,14 @@ class EventReportTMCBatchService
             'unplannedPresDeals' => $unplannedPresDeals,
             'commands' => $resultBatchCommands
         ];
+        if ($this->isExpired || $this->isPlanned) {
 
-        $resultBatchCommands = $this->taskFlow(
-            null, // $currentSmartItemId,
-            $planDeals,
-            $resultBatchCommands
-        );
-
+            $resultBatchCommands = $this->taskFlow(
+                null, // $currentSmartItemId,
+                $planDeals,
+                $resultBatchCommands
+            );
+        }
 
         // if ($this->isExpired || $this->isPlanned) {
         //     $resultBatchCommands = $this->getTaskFlowBatchCommand(
@@ -1794,7 +1832,6 @@ class EventReportTMCBatchService
                             }
                         }
                     }
-                    $randomNumber = rand(1, 2);
 
 
                     $userId  = $this->planResponsibleId;
@@ -1816,7 +1853,7 @@ class EventReportTMCBatchService
                     if (!empty($currentDealId) && $category['code'] ===  'tmc_base') {
                         $getDealsData['filter']['!=ID'] = $currentDealId;
                     }
-                    sleep($randomNumber);
+
                     $currentDeals = BitrixDealService::getDealList(
                         $this->hook,
                         $getDealsData
@@ -1931,7 +1968,7 @@ class EventReportTMCBatchService
                     false, //$isNeedCompleteOtherTasks
                     $currentTaskId, // null,
                     $currentDealsIds,
-                    null, // $contactId,
+                    $this->planContact, // $contactId,
                     $batchCommands
 
                 );
@@ -2237,7 +2274,7 @@ class EventReportTMCBatchService
                         $currentBaseDealId,
                         $nowDate, // $date,
                         null, // $event['eventType'], //$hotName
-                        null, //$contactId
+                        $this->reportContactId,
                         $commands
 
                     );
@@ -2304,7 +2341,7 @@ class EventReportTMCBatchService
                     $currentBaseDealId,
                     $nowDate, // $date,
                     null, // $event['eventType'], //$hotName
-                    null, //$contactId
+                    $this->reportContactId,
                     $commands
 
                 );
@@ -2355,7 +2392,7 @@ class EventReportTMCBatchService
                 $currentBaseDealId,
                 $nowDate, // $date,
                 null, // $event['eventType'], //$hotName
-                null, //$contactId
+                $this->reportContactId,
 
                 $commands
 
@@ -2414,7 +2451,7 @@ class EventReportTMCBatchService
                     $currentBaseDealId,
                     $nowDate, // $date,
                     null, // $event['eventType'], //$hotName
-                    null, //$contactId
+                    $this->planContactId,
                     $commands
 
                 );
@@ -2475,7 +2512,7 @@ class EventReportTMCBatchService
                 $currentBaseDealId,
                 $nowDate,  // $date,
                 null, // $event['eventType'], //$hotName
-                null, //$contactId
+                $this->reportContactId,
                 $commands
 
             );

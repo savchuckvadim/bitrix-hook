@@ -234,9 +234,11 @@ class BitrixRPAPresFlowService
         $responsible, //tmc user
         // $bossId = 1,
         $companyId,
-        // $contactId,
+        // 
         $comment,
         $name,
+        $contactId,
+        $contactName,
 
 
 
@@ -297,7 +299,7 @@ class BitrixRPAPresFlowService
                 [
                     'code' => 'name', //дата начала
                     'name' => 'Название',
-                    'value' => 'Заявка ' . $name . ' от ' . $nowDate
+                    'value' => 'Заявка ' . $name . ' ' . $contactName . ' от ' . $nowDate
                 ],
                 [
                     'code' => 'next_pres_plan_date', //дата начала
@@ -320,11 +322,11 @@ class BitrixRPAPresFlowService
                     'name' => 'Компания',
                     'value' => $companyId,
                 ],
-                // [
-                //     'code' => 'rpa_crm_contact',
-                //     'name' => 'Контакт',
-                //     'value' => $contactId,
-                // ],
+                [
+                    'code' => 'rpa_crm_contact',
+                    'name' => 'Контакт',
+                    'value' => $contactId,
+                ],
                 [
                     'code' => 'rpa_tmc_comment',
                     'name' => 'Комментарий к заявке',

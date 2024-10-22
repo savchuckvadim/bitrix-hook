@@ -3625,7 +3625,7 @@ class EventReportService
         $leadId  = null;
         $currentTaskId = null;
         $createdTask = null;
-        $contactId = $this->planContactId;
+        $contact = $this->planContact;
 
         try {
             // Log::channel('telegram')->error('APRIL_HOOK', $this->portal);
@@ -3665,7 +3665,7 @@ class EventReportService
                     false, //$isNeedCompleteOtherTasks
                     $currentTaskId, // null,
                     $currentDealsIds,
-                    $contactId,
+                    $contact,
                     $batchCommands
 
                 );

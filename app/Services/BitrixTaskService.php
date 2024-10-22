@@ -260,13 +260,26 @@ class BitrixTaskService
         $isNeedCompleteOtherTasks,
         $currentTaskId = null,
         $currentDealsItemIds = null,
-        $contactId = null,
+        $contact = null,
         $batchCommands = []
 
     ) {
         date_default_timezone_set('Europe/Moscow');
         $nowDate = now();
+        $contactId = null;
+        $contactName = null;
+        if (!empty($contact)) {
 
+
+
+            if (!empty($contact['ID'])) {
+                $contactId = $contact['ID'];
+            }
+
+            if (!empty($contact['NAME'])) {
+                $contactName = $contact['NAME'];
+            }
+        }
         // $rand = 1; // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
         // sleep($rand);
 
@@ -303,7 +316,7 @@ class BitrixTaskService
             }
 
 
-        
+
 
             //TODO get smart data for tasks
 
@@ -348,9 +361,14 @@ class BitrixTaskService
                 $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
                 $moscowTime = $moscowTime->format('Y-m-d H:i:s');
             }
+            $taskTitle = $stringType . '  ' . $name;
 
+            if (!empty($contactName)) {
+                $taskTitle .=  '  ' . $contactName;
+            } else {
+                $taskTitle .= '  ' . $deadline;
+            }
 
-            $taskTitle = $stringType . '  ' . $name . '  ' . $deadline;
 
             // if (!$isXO) {
             if (!empty($currentDealsItemIds)) {
