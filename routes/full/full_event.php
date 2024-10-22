@@ -63,13 +63,13 @@ Route::prefix('full')->group(function () {
 
             $comment = '';
             if (!empty($comedata['commentTMC'])) {
-                $comment = 'ТМЦ: ' . $comedata['commentTMC'] . "   " ;
+                $comment = 'ТМЦ: ' . $comedata['commentTMC'] . "   ";
             }
             if (!empty($comedata['commentOwner'])) {
-                $comment = $comment . "\n" . 'Руководитель: ' . $comedata['commentOwner'] . "   " ;
+                $comment = $comment . "\n" . 'Руководитель: ' . $comedata['commentOwner'] . "   ";
             }
             if (!empty($comedata['commentTMC'])) {
-                $comment = $comment . "\n" . 'Менеджер: ' . $comedata['commentManager'] . "   " ;
+                $comment = $comment . "\n" . 'Менеджер: ' . $comedata['commentManager'] . "   ";
             }
 
 
@@ -141,8 +141,23 @@ Route::prefix('full')->group(function () {
             // $data['report']['resultStatus'] = 'new';
             // $data['report']['workStatus']['current']['code'] == 'inJob';
             // $data['plan']['createdBy']
+            $planContact = null;
+
+            if (!empty($comedata['contactId']) && !empty($comedata['contactName'])) {
+                $planContact = [
+                    "ID" => $comedata['contactId'],
+
+                    "NAME" => $comedata['contactName'],
+                    "POST" => '',
+                    'PHONE' => '',
+                    'EMAIL' => '',
+
+                ];
+            }
 
             $data['plan'] = [
+                'contact' => $planContact,
+
                 'type' => [
                     'current' => [
                         "id" => 2,
@@ -177,7 +192,7 @@ Route::prefix('full')->group(function () {
                 ],
                 "deadline" => $comedata['deadline'],
                 "isPlanned" => true,
-                "name" => $comedata['name']
+                "name" => $comedata['name'],
             ];
 
 
