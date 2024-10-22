@@ -143,11 +143,11 @@ Route::prefix('full')->group(function () {
             // $data['plan']['createdBy']
             $planContact = null;
 
-            if (!empty($comedata['contactId']) && !empty($comedata['contactName'])) {
+            if (!empty($comedata['contactId'])) {
                 $planContact = [
                     "ID" => $comedata['contactId'],
 
-                    "NAME" => $comedata['contactName'],
+                    "NAME" => '',
                     "POST" => '',
                     'PHONE' => '',
                     'EMAIL' => '',
