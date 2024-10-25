@@ -460,9 +460,9 @@ class BitrixDealService
 
             if ($group == 'tmc') {
                 if ($eventType == 'xo') {
-                    $stagePrephicks = 'new';
+                    $stageSuphicks = 'new';
                 }
-                
+
                 if ($eventAction == 'plan' && $eventType == 'presentation') {
                     $stageSuphicks = 'pres_in_progress';
                 }
