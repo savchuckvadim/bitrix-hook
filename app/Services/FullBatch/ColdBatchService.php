@@ -911,7 +911,7 @@ class ColdBatchService
 
         // $rand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
         // usleep($rand);
-        // $rand = rand(1, 2); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+        $rand = rand(1, 2); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
         // usleep($rand);
         $mainDealFlowBatchCommands = [];
         $flowResult =  BitrixDealBatchFlowService::batchFlow(
@@ -1021,7 +1021,7 @@ class ColdBatchService
         );
         $entityResult =  $batchService->sendGeneralBatchRequest($batchCommands);
 
-
+        sleep(1);
         // Log::info('HOOK TEST COLD BATCH', [
         //     'all batchCommands' => $batchCommands,
 
