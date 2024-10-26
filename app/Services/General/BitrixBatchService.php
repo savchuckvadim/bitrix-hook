@@ -136,32 +136,28 @@ class BitrixBatchService
                 $result[$key] = $responseData['result'];
                 Log::info('HOOK TEST Service BATCH key', [
                     'result' => $result[$key]
-    
-    
+
+
                 ]);
                 Log::channel('telegram')->info('HOOK TEST Service BATCH key', [
-                   'result' => $result[$key]
-    
-    
+                    'result' => $result[$key]
+
+
                 ]);
                 Log::info('HOOK TEST Service BATCH', [
                     'result' => $result
-    
-    
+
+
                 ]);
-                Log::channel('telegram')->info('HOOK TEST Service BATCH', [
-                    'result' => $result
-    
-    
-                ]);
+
 
                 if (isset($responseData['result']['result'])) {
                     $result[$key] = $responseData['result']['result'];
 
                     Log::channel('telegram')->info('HOOK TEST Service BATCH', [
                         'responseData result result' => $result[$key]
-        
-        
+
+
                     ]);
                 }
                 if (!empty($responseData['result']['result'][0])) {
@@ -172,11 +168,11 @@ class BitrixBatchService
             }
             if (!empty($responseData['result_error'])) {
                 // $result['errors'][$key] = $responseData['result_error'];
-                print_r("<br>");
-                print_r($key);
-                print_r("<br>");
-                print_r($responseData['result_error']);
-                print_r("<br>");
+                Log::channel('telegram')->info('HOOK TEST Service BATCH', [
+                    'result' => $responseData['result_error']
+
+
+                ]);
             }
             usleep(mt_rand(1000, 4000));
         };
@@ -208,7 +204,7 @@ class BitrixBatchService
                 'cmd' => $batchCommands
             ]);
             $responseData = $response->json();
-        
+
             if (isset($responseData['result']['result_total']) && count($responseData['result']['result_total']) > 0) {
                 foreach ($responseData['result']['result_total'] as $key => $kpiCount) {
 
@@ -368,13 +364,13 @@ class BitrixBatchService
     }
     static function getGeneralBatchCommand(
         $data,
-      
+
         $method, //update | add
         $entityId = null,
 
     ) {
 
-       
+
         if (!empty($entityId)) {
             $data['ID'] = $entityId;
         }
