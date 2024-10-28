@@ -278,7 +278,7 @@ Route::prefix('full')->group(function () {
             $domain = $comedata['domain'];
 
             $companyId = $comedata['companyId'];
-            $userId = $comedata['companyId'];
+            $userId = $comedata['userId'];
             $key = $domain . '_' . $companyId . '_' . $userId . '_comment';
             $comment = $comedata['comment'];
             Redis::set($key, $comment);
