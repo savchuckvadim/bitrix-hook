@@ -13,6 +13,7 @@ use App\Services\FullEventReport\EventDocumentService;
 use App\Services\General\BitrixTimeLineService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
 
@@ -270,6 +271,51 @@ Route::prefix('full')->group(function () {
     Route::post('/tasks', [FullEventInitController::class, 'getEventTasks']);
     Route::post('/init', [FullEventInitController::class, 'fullEventSessionInit']);
     Route::post('/session', [FullEventInitController::class, 'sessionGet']);
+    Route::post('/comment/save', function (Request $request) {
+
+        $comedata = $request->all();
+        try {
+            $domain = $comedata['domain'];
+
+            $companyId = $comedata['companyId'];
+            $userId = $comedata['companyId'];
+            $key = $domain . '_' . $companyId . '_' . $userId.'_comment';
+            $comment = $comedata['comment'];
+            Redis::set($key, $comment);
+            $savedData =  Redis::get($key);
+            $result = [
+                $key =>$savedData
+            ];
+            return APIOnlineController::getSuccess($result);
+        } catch (\Throwable $th) {
+            $errorData = [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('API HOOK: Exception caught', $errorData);
+        }
+    });
+    Route::post('/comment/get', function (Request $request) {
+
+        $comedata = $request->all();
+        try {
+            $companyId = $comedata['companyId'];
+            $userId = $comedata['companyId'];
+            $key = $companyId . '' . $userId;
+            $comment =  Redis::get($key);
+        } catch (\Throwable $th) {
+            $errorData = [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('API HOOK: Exception caught', $errorData);
+        }
+    });
+
 
     //////////////////////INIT EVENT FROM TASK ||  EVENT FROM NEW TASK || EVENT FROM FROM ONE MORE TASK || DOCUMENT
     //TODO full department
