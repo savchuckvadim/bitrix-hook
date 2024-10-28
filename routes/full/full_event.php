@@ -286,6 +286,8 @@ Route::prefix('full')->group(function () {
             $result = [
                 $key => $savedData
             ];
+            Redis::del($key, $comment);
+
             return APIOnlineController::getSuccess(['result' => $result]);
         } catch (\Throwable $th) {
             $errorData = [
