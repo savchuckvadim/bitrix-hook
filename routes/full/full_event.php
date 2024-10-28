@@ -307,6 +307,10 @@ Route::prefix('full')->group(function () {
             $userId = $comedata['companyId'];
             $key = $companyId . '' . $userId;
             $comment =  Redis::get($key);
+           
+            Redis::del($key, $comment);
+
+            return APIOnlineController::getSuccess(['comment' => $comment]);
         } catch (\Throwable $th) {
             $errorData = [
                 'message'   => $th->getMessage(),
