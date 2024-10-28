@@ -279,14 +279,14 @@ Route::prefix('full')->group(function () {
 
             $companyId = $comedata['companyId'];
             $userId = $comedata['companyId'];
-            $key = $domain . '_' . $companyId . '_' . $userId.'_comment';
+            $key = $domain . '_' . $companyId . '_' . $userId . '_comment';
             $comment = $comedata['comment'];
             Redis::set($key, $comment);
             $savedData =  Redis::get($key);
             $result = [
-                $key =>$savedData
+                $key => $savedData
             ];
-            return APIOnlineController::getSuccess($result);
+            return APIOnlineController::getSuccess(['result' => $result]);
         } catch (\Throwable $th) {
             $errorData = [
                 'message'   => $th->getMessage(),
