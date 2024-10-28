@@ -303,11 +303,13 @@ Route::prefix('full')->group(function () {
 
         $comedata = $request->all();
         try {
+            $domain = $comedata['domain'];
+
             $companyId = $comedata['companyId'];
-            $userId = $comedata['companyId'];
-            $key = $companyId . '' . $userId;
+            $userId = $comedata['userId'];
+            $key = $domain . '_' . $companyId . '_' . $userId . '_comment';
             $comment =  Redis::get($key);
-           
+
             Redis::del($key, $comment);
 
             return APIOnlineController::getSuccess(['comment' => $comment]);
