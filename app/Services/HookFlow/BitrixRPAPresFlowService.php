@@ -209,9 +209,9 @@ class BitrixRPAPresFlowService
             $resultItem = $rpaService->updateRPAItem(
                 $dataForUpdate
             );
-            Log::channel('telegram')->info('TEST RPA', [
-                'resultItem' => $resultItem
-            ]);
+            // Log::channel('telegram')->info('TEST RPA', [
+            //     'resultItem' => $resultItem
+            // ]);
             return $resultItem;
         } catch (\Throwable $th) {
             $errorMessages =  [

@@ -928,9 +928,9 @@ class BitrixListPresentationFlowService
             );
             $commandKey = 'present_list_plan_' . $code;
             $batchCommands[$commandKey] = $batchCommand;
-            Log::channel('telegram')->error('APRIL_HOOK', [
-                'btrx commandKey' => $batchCommand,
-            ]);
+            // Log::channel('telegram')->error('APRIL_HOOK', [
+            //     'btrx commandKey' => $batchCommand,
+            // ]);
 
 
             return $batchCommands;
@@ -1290,10 +1290,7 @@ class BitrixListPresentationFlowService
             $commandKey = 'present_list_report_' . $code;
             $batchCommands[$commandKey] = $batchCommand;
 
-            Log::channel('telegram')->error('APRIL_HOOK', [
-                'btrx commandKey' => $batchCommand,
-            ]);
-
+       
 
 
             return $batchCommands;
@@ -1640,9 +1637,7 @@ class BitrixListPresentationFlowService
             );
             $commandKey = 'present_list_unplanned_' . $code;
             $batchCommands[$commandKey] = $batchCommand;
-            Log::channel('telegram')->error('APRIL_HOOK', [
-                'btrx commandKey' => $batchCommand,
-            ]);
+         
 
 
             return $batchCommands;

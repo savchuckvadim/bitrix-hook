@@ -330,12 +330,12 @@ class BitrixDealBatchFlowService
 
 
     ) {
-        Log::info('HOOK BATCH batchFlow report DEAL', ['resultBatchCommands' =>  $resultBatchCommands]);
-        Log::channel('telegram')->info('HOOK BATCH category', ['resultBatchCommands' =>  $resultBatchCommands]);
-        Log::info('HOOK BATCH batchFlow report DEAL', ['tmcPresRelationDealId' =>  $tmcPresRelationDealId]);
-        Log::channel('telegram')->info('HOOK BATCH category', ['tmcPresRelationDealId' =>  $tmcPresRelationDealId]);
-        Log::info('HOOK BATCH batchFlow report DEAL', ['fields' =>  $fields]);
-        Log::channel('telegram')->info('HOOK BATCH category', ['fields' =>  $fields]);
+        // Log::info('HOOK BATCH batchFlow report DEAL', ['resultBatchCommands' =>  $resultBatchCommands]);
+        // Log::channel('telegram')->info('HOOK BATCH category', ['resultBatchCommands' =>  $resultBatchCommands]);
+        // Log::info('HOOK BATCH batchFlow report DEAL', ['tmcPresRelationDealId' =>  $tmcPresRelationDealId]);
+        // Log::channel('telegram')->info('HOOK BATCH category', ['tmcPresRelationDealId' =>  $tmcPresRelationDealId]);
+        // Log::info('HOOK BATCH batchFlow report DEAL', ['fields' =>  $fields]);
+        // Log::channel('telegram')->info('HOOK BATCH category', ['fields' =>  $fields]);
         // $rand = rand(1, 3); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
         // sleep($rand);
         $newPresDeal = null; //for mutation
@@ -378,8 +378,8 @@ class BitrixDealBatchFlowService
             
             switch ($category['code']) {
                 case 'sales_base':
-                    Log::info('HOOK BATCH batchFlow report DEAL', ['category' =>  $category]);
-                    Log::channel('telegram')->info('HOOK BATCH category', ['category' =>  $category]);
+                    // Log::info('HOOK BATCH batchFlow report DEAL', ['category' =>  $category]);
+                    // Log::channel('telegram')->info('HOOK BATCH category', ['category' =>  $category]);
 
                     $currentStageOrder = BitrixDealService::getEventOrderFromCurrentBaseDeal($currentBaseDeal, $category);
                     $pTargetStage = BitrixDealService::getSaleBaseTargetStage(
@@ -397,8 +397,8 @@ class BitrixDealBatchFlowService
 
                     );
                     $targetStageBtxId = $pTargetStage;
-                    Log::info('HOOK BATCH batchFlow report DEAL', ['pTargetStage' =>  $pTargetStage]);
-                    Log::channel('telegram')->info('HOOK BATCH category', ['pTargetStage' =>  $pTargetStage]);
+                    // Log::info('HOOK BATCH batchFlow report DEAL', ['pTargetStage' =>  $pTargetStage]);
+                    // Log::channel('telegram')->info('HOOK BATCH category', ['pTargetStage' =>  $pTargetStage]);
                     $fieldsData = [
 
                         'CATEGORY_ID' => $category['bitrixId'],
@@ -407,12 +407,12 @@ class BitrixDealBatchFlowService
                         'ASSIGNED_BY_ID' => $responsibleId
                     ];
                     if ($baseDealId) {
-                        Log::info('HOOK BATCH batchFlow report DEAL', ['baseDealId' =>  $baseDealId]);
-                        Log::channel('telegram')->info('HOOK BATCH baseDealId', ['baseDealId' =>  $baseDealId]);
-                        Log::info('HOOK BATCH batchFlow report DEAL', ['tag' =>  $tag]);
-                        Log::channel('telegram')->info('HOOK BATCH tag', ['tag' =>  $tag]);
-                        Log::info('HOOK BATCH batchFlow report DEAL', ['category' =>  $category]);
-                        Log::channel('telegram')->info('HOOK BATCH category', ['category' =>  $category]);
+                        // Log::info('HOOK BATCH batchFlow report DEAL', ['baseDealId' =>  $baseDealId]);
+                        // Log::channel('telegram')->info('HOOK BATCH baseDealId', ['baseDealId' =>  $baseDealId]);
+                        // Log::info('HOOK BATCH batchFlow report DEAL', ['tag' =>  $tag]);
+                        // Log::channel('telegram')->info('HOOK BATCH tag', ['tag' =>  $tag]);
+                        // Log::info('HOOK BATCH batchFlow report DEAL', ['category' =>  $category]);
+                        // Log::channel('telegram')->info('HOOK BATCH category', ['category' =>  $category]);
                         $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $baseDealId);
                         $key = 'update_' . '_' . $category['code'] . '_' . $baseDealId;
                         $resultBatchCommands[$key] = $batchCommand;
@@ -448,8 +448,8 @@ class BitrixDealBatchFlowService
 
                     );
                     $targetStageBtxId = $pTargetStage;
-                    Log::info('HOOK BATCH batchFlow report DEAL', ['pTargetStage' =>  $pTargetStage]);
-                    Log::channel('telegram')->info('HOOK BATCH category', ['pTargetStage' =>  $pTargetStage]);
+                    // Log::info('HOOK BATCH batchFlow report DEAL', ['pTargetStage' =>  $pTargetStage]);
+                    // Log::channel('telegram')->info('HOOK BATCH category', ['pTargetStage' =>  $pTargetStage]);
                     $fieldsData = [
 
                         'CATEGORY_ID' => $category['bitrixId'],
@@ -631,7 +631,7 @@ class BitrixDealBatchFlowService
             // Извлечение результатов
             $results = $batchCommands;  // Предполагаем, что структура такая, как в примере
             foreach ($results as $key => $batchData) { // value в данном случае сделка, точнее ее поля для обновления
-                Log::info('HOOK groupped BATCH DATA', [$key => $batchData]);
+                // Log::info('HOOK groupped BATCH DATA', [$key => $batchData]);
                 // 'command' => $batchCommand,
                 //         'dealId' => $currentDealId,
                 //         'deal' => $currentDeal,
@@ -682,7 +682,7 @@ class BitrixDealBatchFlowService
                 // Log::channel('telegram')->info('HOOK cleanBatchCommands', ['result' => $targetStageBtxId]);
                 $groupped[$groupKey][] = $batchData;
 
-                Log::info('HOOK groupped cleanBatchCommands', ['groupped' => $groupped]);
+                // Log::info('HOOK groupped cleanBatchCommands', ['groupped' => $groupped]);
 
 
                 if ($tag === 'report') {
@@ -774,7 +774,7 @@ class BitrixDealBatchFlowService
                                             $stageKey =  $key;
 
 
-                                            Log::channel('telegram')->info('HOOK stagebitrixId', ['stagebitrixId' => $stage['bitrixId'], '$process[targetStage]' => $process['targetStage']]);
+                                            // Log::channel('telegram')->info('HOOK stagebitrixId', ['stagebitrixId' => $stage['bitrixId'], '$process[targetStage]' => $process['targetStage']]);
 
                                             if ($stage['bitrixId'] == $process['targetStage']) {
 
@@ -784,7 +784,7 @@ class BitrixDealBatchFlowService
                                                     $isProcessNeedUpdate = true;
                                                     $resultProcess['stageKey'] = $stageKey;
 
-                                                    Log::channel('telegram')->info('HOOK RESULT PROCESS', ['resultProcess' => $resultProcess, 'isProcessNeedUpdate' => $isProcessNeedUpdate]);
+                                                    // Log::channel('telegram')->info('HOOK RESULT PROCESS', ['resultProcess' => $resultProcess, 'isProcessNeedUpdate' => $isProcessNeedUpdate]);
                                                 }
                                                 // $isCurrentSearched = true;
                                             }
@@ -794,12 +794,11 @@ class BitrixDealBatchFlowService
                                             if ($stageBitrixId === $process['deal']['STAGE_ID']) {
 
                                                 $isCurrentSearched = true;
-                                                Log::channel('telegram')->info('HOOK isCurrentSearched', ['process stage' => $stage['bitrixId'], 'isCurrentSearched' => $isCurrentSearched]);
+                                                // Log::channel('telegram')->info('HOOK isCurrentSearched', ['process stage' => $stage['bitrixId'], 'isCurrentSearched' => $isCurrentSearched]);
                                             }
                                         }
                                     }
                                     $resultProcess['isNeedUpdate'] = $isProcessNeedUpdate;
-                                    Log::info('HOOK resultProcess', ['resultProcess' => $resultProcess]);
                                 }
                             }
                         }
@@ -807,7 +806,6 @@ class BitrixDealBatchFlowService
 
                     $resultProcesses[] = $resultProcess;
                     $maxProcessObject = null;
-                    Log::info('HOOK resultProcesses', ['resultProcesses' => $resultProcesses]);
 
                     // Проходим по массиву объектов
                     foreach ($resultProcesses as $resultProcess) {
@@ -823,7 +821,6 @@ class BitrixDealBatchFlowService
 
                     $groupped[$groupKey] = $maxProcessObject;
                     // $resultGroupped[$dealId] = $maxProcessObject;
-                    Log::channel('telegram')->info('HOOK RESULT groupped', ['groupped' => $groupped]);
 
                     // unset($process);  // Очистите ссылку после использования
 
@@ -925,7 +922,6 @@ class BitrixDealBatchFlowService
             // Извлечение результатов
             $results = $batchCommands;  // Предполагаем, что структура такая, как в примере
             foreach ($results as $key => $batchData) { // value в данном случае сделка, точнее ее поля для обновления
-                Log::info('HOOK groupped BATCH DATA', [$key => $batchData]);
                 // 'command' => $batchCommand,
                 //         'dealId' => $currentDealId,
                 //         'deal' => $currentDeal,

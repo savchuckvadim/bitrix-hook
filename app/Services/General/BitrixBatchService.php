@@ -134,31 +134,13 @@ class BitrixBatchService
             // print_r($responseData);
             if (isset($responseData['result'])) {
                 $result[$key] = $responseData['result'];
-                Log::info('HOOK TEST Service BATCH key', [
-                    'result' => $result[$key]
-
-
-                ]);
-                Log::channel('telegram')->info('HOOK TEST Service BATCH key', [
-                    'result' => $result[$key]
-
-
-                ]);
-                Log::info('HOOK TEST Service BATCH', [
-                    'result' => $result
-
-
-                ]);
+         
 
 
                 if (isset($responseData['result']['result'])) {
                     $result[$key] = $responseData['result']['result'];
 
-                    Log::channel('telegram')->info('HOOK TEST Service BATCH', [
-                        'responseData result result' => $result[$key]
-
-
-                    ]);
+                  
                 }
                 if (!empty($responseData['result']['result'][0])) {
                     $result[$key] = $responseData['result']['result'][0];
@@ -341,8 +323,8 @@ class BitrixBatchService
 
             $result = $responseData;
         };
-        Log::info('HOOK BATCH sendBatch', ['result' => $result, '$url' => $url]);
-        Log::channel('telegram')->info('HOOK BATCH sendBatch', ['result' => $result]);
+        // Log::info('HOOK BATCH sendBatch', ['result' => $result, '$url' => $url]);
+        // Log::channel('telegram')->info('HOOK BATCH sendBatch', ['result' => $result]);
         return $result;
     }
 

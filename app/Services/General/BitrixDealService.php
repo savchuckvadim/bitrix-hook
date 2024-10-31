@@ -1194,12 +1194,12 @@ class BitrixDealService
         //     'currentCategoryData' => $currentCategoryData,
 
         // ]);
-        Log::info('HOOK TEST CURRENTENTITY', [
-            'currentDeal' => $currentDeal,
-            'targetStageBtxId' => $targetStageBtxId,
-            'currentCategoryData' => $currentCategoryData,
+        // Log::info('HOOK TEST CURRENTENTITY', [
+        //     'currentDeal' => $currentDeal,
+        //     'targetStageBtxId' => $targetStageBtxId,
+        //     'currentCategoryData' => $currentCategoryData,
 
-        ]);
+        // ]);
         if (!empty($currentDeal) && !empty($targetStageBtxId)) {
 
             if ($currentCategoryData['code'] === 'sales_base') {

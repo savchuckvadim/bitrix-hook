@@ -569,7 +569,7 @@ class EventReportService
                     $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
                     $this->relationColdDeals = $sessionDeals['allXODeals'];
                     $this->currentTMCDealFromCurrentPres = $sessionDeals['currentTMCDeal'];
-                    Log::info('HOOK TMC SESSION', ['sessionDeals' => $sessionDeals]);
+                    // Log::info('HOOK TMC SESSION', ['sessionDeals' => $sessionDeals]);
                     // Log::info('HOOK TMC SESSION currentTMCDeal', ['session currentTMCDeal' => $sessionDeals['currentTMCDeal']]);
                 }
             }
@@ -1198,22 +1198,6 @@ class EventReportService
         $companyPresCount = 0;
         $dealPresCount = 0;
 
-        Log::channel('telegram')
-            ->info(
-                'COUNT CHECK vheck',
-                [
-                    'currentBtxEntity' => $this->currentBtxEntity['UF_CRM_1709807026'],
-
-                ]
-            );
-        Log::channel('telegram')
-            ->info(
-                'COUNT CHECK vheck',
-                [
-                    'currentBaseDeal' => $this->currentBaseDeal,
-
-                ]
-            );
 
 
         if (!empty($this->currentBtxEntity)) {
@@ -1478,13 +1462,13 @@ class EventReportService
         $entityService = new BitrixEntityBatchFlowService();
 
 
-        Log::channel('telegram')->info('HOOK FROM ONLINE', ['reportFields' => $reportFields]);
-        Log::info('HOOK FROM ONLINE', ['reportFields' => $reportFields]);
+        // Log::channel('telegram')->info('HOOK FROM ONLINE', ['reportFields' => $reportFields]);
+        // Log::info('HOOK FROM ONLINE', ['reportFields' => $reportFields]);
 
         if (isset($reportFields['op_work_status'])) {
 
-            Log::channel('telegram')->info('HOOK FROM ONLINE', ['op_work_status' => $reportFields['op_work_status']]);
-            Log::info('HOOK FROM ONLINE', ['op_work_status' => $reportFields['op_work_status']]);
+            // Log::channel('telegram')->info('HOOK FROM ONLINE', ['op_work_status' => $reportFields['op_work_status']]);
+            // Log::info('HOOK FROM ONLINE', ['op_work_status' => $reportFields['op_work_status']]);
         }
 
 
@@ -1559,23 +1543,7 @@ class EventReportService
         $currentPresCount = 0;
         $companyPresCount = 0;
         $dealPresCount = 0;
-        Log::channel('telegram')
-            ->info(
-                'COUNT CHECK vheck',
-                [
-                    'currentBtxEntity' => $this->currentBtxEntity['UF_CRM_1709807026'],
-
-                ]
-            );
-        Log::channel('telegram')
-            ->info(
-                'COUNT CHECK vheck',
-                [
-                    'currentBaseDeal' => $this->currentBaseDeal,
-
-                ]
-            );
-
+  
 
         //CЧЕТЧИК ОБНУЛЯЕТСЯ ЕСЛИ NEW TASK
         if (!empty($this->currentBtxEntity)) {
@@ -3336,20 +3304,7 @@ class EventReportService
                         $resultBatchCommands[$key] = $batchCommand;
                     }
 
-                    Log::info(
-                        'vheck',
-                        [
-                            'currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres,
-
-                        ]
-                    );
-                    Log::info(
-                        'vheck',
-                        [
-                            'currentTMCDeal' => $this->currentTMCDeal,
-
-                        ]
-                    );
+               
                     // Log::channel('telegram')->info('TMC DEAL', [
                     //     'currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres
                     // ]);
@@ -3464,9 +3419,6 @@ class EventReportService
         $key = 'entity' . '_' . 'company';
         $resultBatchCommands[$key] = $companyCommand; // в результате будет id
 
-
-        Log::info('HOOK BATCH batchFlow report DEAL entity', ['$key ' . $key => $companyCommand]);
-        Log::channel('telegram')->info('HOOK BATCH entity batchFlow', ['$key ' . $key => $companyCommand]);
 
         $result =  [
             'dealIds' => ['$result'],
@@ -4620,17 +4572,7 @@ class EventReportService
 
         // ]);
 
-        Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
-            'currentRepoertDealIds' => $planPresDealIds['reportDeals'],
-
-
-        ]);
-
-        Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
-            'unplannedPresDealsIds' => $unplannedPresDealsIds,
-
-
-        ]);
+    
 
         // presentation list flow запускается когда
         // планируется презентация или unplunned тогда для связи со сделками берется $planPresDealIds

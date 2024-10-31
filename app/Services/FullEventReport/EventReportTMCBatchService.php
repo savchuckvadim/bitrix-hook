@@ -534,10 +534,7 @@ class EventReportTMCBatchService
 
                 $sessionKey = $domain . '_' . $data['currentTask']['id'];
                 $sessionData = FullEventInitController::getSessionItem($sessionKey);
-                Log::info('HOOK TMC SESSION GET task', ['first sessionData' => $sessionData]);
-                Log::channel('telegram')->info('HOOK TMC SESSION GET task', ['first sessionData' => $sessionData]);
-
-
+              
                 if (isset($sessionData['currentCompany']) && isset($sessionData['deals'])) {
                     $this->currentBtxEntity  = $sessionData['currentCompany'];
 
@@ -630,11 +627,11 @@ class EventReportTMCBatchService
                 }
             }
         }
-        Log::info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
-        Log::channel('telegram')->info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
+        // Log::info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
+        // Log::channel('telegram')->info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
 
-        Log::info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
-        Log::channel('telegram')->info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
+        // Log::info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
+        // Log::channel('telegram')->info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
 
 
 
@@ -1745,11 +1742,7 @@ class EventReportTMCBatchService
                             $this->currentPlanEventName,
 
                         );
-                        Log::channel('telegram')->info('HOOK TEST currentBtxDeals', [
-                            'resultRpaItem' => $this->resultRpaItem,
-
-
-                        ]);
+                     
 
                         if (!empty($this->resultRpaItem)) {
                             if (!empty($this->resultRpaItem['id'])) {

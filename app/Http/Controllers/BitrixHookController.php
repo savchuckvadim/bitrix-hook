@@ -904,11 +904,11 @@ class BitrixHookController extends Controller
         if (isset($bitrixResponse['result'])) {
             $resultFields = $bitrixResponse['result'];
         } else if (isset($bitrixResponse['error'])  && isset($bitrixResponse['error_description'])) {
-            Log::info('INITIAL COLD BTX ERROR', [
-                // 'btx error' => $smartFieldsResponse['error'],
-                'dscrp' => $bitrixResponse['error_description']
+            // Log::info('INITIAL COLD BTX ERROR', [
+            //     // 'btx error' => $smartFieldsResponse['error'],
+            //     'dscrp' => $bitrixResponse['error_description']
 
-            ]);
+            // ]);
         }
         return $resultFields;
     }

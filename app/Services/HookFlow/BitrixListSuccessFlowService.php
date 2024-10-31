@@ -49,12 +49,12 @@ class BitrixListSuccessFlowService
 
             date_default_timezone_set('Europe/Moscow');
             $nowDate = new DateTime();
-            Log::channel('telegram')->info('HOOK TST SUCCESS', [
-                'nowDate' => $nowDate,
-                'message' => 'success service',
+            // Log::channel('telegram')->info('HOOK TST SUCCESS', [
+            //     'nowDate' => $nowDate,
+            //     'message' => 'success service',
     
     
-            ]);
+            // ]);
 
             $evTypeName = 'Продажа';
             $isSuccess = true;
