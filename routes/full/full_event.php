@@ -382,6 +382,9 @@ Route::prefix('full')->group(function () {
         });
     });
 
+
+
+    //UTILS
     // Route::post('/contract/flow', [ReportController::class, 'eventReport']);
 
     // https://april-hook.ru/api/full/company/update?responsible={{ОП Кто назначен ответственным}}&companyId={{Компания}}
@@ -589,4 +592,47 @@ Route::prefix('full')->group(function () {
             ]);
         }
     });
+
+    Route::post('/company/contacts', function (Request $request) {
+        $data = $request->all();
+        $domain = '';
+        $responsibleId = '';
+        $companyId = '';
+        // Log::channel('telegram')->error('APRIL_HOOK', [
+        //     'data'  =>  $data,
+        // ]);
+        if (!empty($data['auth'])) {
+
+            if (!empty($data['auth']['domain'])) {
+                $domain = $data['auth']['domain'];
+            }
+            Log::channel('telegram')->error('APRIL_HOOK', [
+                'auth'  =>  $data['auth'],
+            ]);
+            if (!empty($data['companyId'])) {
+                $companyId = $data['companyId'];
+            }
+
+            if (!empty($data['responsible'])) {
+
+                $partsResponsible = explode("_", $data['responsible']);
+                $responsibleId = $partsResponsible[1];
+            }
+        }
+        Log::channel('telegram')->error('APRIL_HOOK', [
+            'domain'  =>  $domain,
+            'responsibleId'  =>  $responsibleId,
+            'companyId'  =>  $companyId,
+
+        ]);
+        if (!empty($domain) && $responsibleId && $companyId) {
+            $hook = PortalController::getHook($domain);
+            BitrixGeneralService::updateContactsToCompanyRespnsible(
+                $hook,
+                $companyId,
+                ["ASSIGNED_BY_ID" => $responsibleId]
+            );
+        }
+    });
+
 });

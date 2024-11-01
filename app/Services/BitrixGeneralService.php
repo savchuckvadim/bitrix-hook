@@ -211,6 +211,58 @@ class BitrixGeneralService
         }
     }
 
+    static function updateContactsToCompanyRespnsible($hook, $companyId,  $fields)
+    {
+        $resultFields = null;
+
+        try {
+            $methodContactsIdsGet = 'crm.company.contact.items.get';
+            $url = $hook . $methodContactsIdsGet;
+            $contactsIdsResponse = Http::get($url, [
+                'id' => $companyId
+            ]);
+            $contactsIdsData = APIBitrixController::getBitrixRespone($contactsIdsResponse, 'general service: updateCompany');
+            $resulContactsIds = $contactsIdsData;
+
+            Log::channel('telegram')->info(
+                'resulContactsIds',
+                [
+                    'contact.items' => $resulContactsIds,
+
+                ]
+            );
+
+            if (!empty($resulContactsIds)) {
+                if (is_array($resulContactsIds)) {
+                    foreach ($resulContactsIds as $resulContactsId) {
+                        $method = '/crm.contact.update';
+
+                        $url = $hook . $method;
+
+                        $data = [
+                            'ID' => $resulContactsId,
+                            'fields' => $fields
+                        ];
+                        sleep(1);
+                        $response = Http::get($url, $data);
+                        $responseData = APIBitrixController::getBitrixRespone($response, 'general service: crm.contact.update');
+                        $resultFields = $responseData;
+                    }
+                }
+            }
+
+
+
+            return $resultFields;
+        } catch (\Throwable $th) {
+            Log::info('HOOK UPDT COMPANY ERROR', [
+                'data' => $data
+            ]);
+            return $resultFields;
+        }
+    }
+
+
 
 
     //lead
@@ -589,7 +641,7 @@ class BitrixGeneralService
 
 
             // $description = $companyTitleString . "\n" .
-               
+
             //     $contactDescription;
 
             // $taskData['fields']['DESCRIPTION'] = $description;
