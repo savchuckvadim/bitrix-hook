@@ -234,19 +234,22 @@ class BitrixGeneralService
 
             if (!empty($resulContactsIds)) {
                 if (is_array($resulContactsIds)) {
-                    foreach ($resulContactsIds as $resulContactsId) {
-                        $method = '/crm.contact.update';
+                    foreach ($resulContactsIds as $resulContact) {
+                        if (!empty($resulContact['CONTACT_ID'])) {
+                            $resulContactId = $resulContact['CONTACT_ID'];
+                            $method = '/crm.contact.update';
 
-                        $url = $hook . $method;
+                            $url = $hook . $method;
 
-                        $data = [
-                            'ID' => $resulContactsId,
-                            'fields' => $fields
-                        ];
-                        sleep(1);
-                        $response = Http::get($url, $data);
-                        $responseData = APIBitrixController::getBitrixRespone($response, 'general service: crm.contact.update');
-                        $resultFields = $responseData;
+                            $data = [
+                                'ID' => $resulContactId,
+                                'fields' => $fields
+                            ];
+                            sleep(1);
+                            $response = Http::get($url, $data);
+                            $responseData = APIBitrixController::getBitrixRespone($response, 'general service: crm.contact.update');
+                            $resultFields = $responseData;
+                        }
                     }
                 }
             }
