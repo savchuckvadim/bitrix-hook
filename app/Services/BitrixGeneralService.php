@@ -216,7 +216,7 @@ class BitrixGeneralService
         $resultFields = null;
 
         try {
-            $methodContactsIdsGet = 'crm.company.contact.items.get';
+            $methodContactsIdsGet = '/crm.company.contact.items.get';
             $url = $hook . $methodContactsIdsGet;
             $contactsIdsResponse = Http::get($url, [
                 'id' => $companyId
