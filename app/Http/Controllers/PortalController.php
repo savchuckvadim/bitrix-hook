@@ -16,8 +16,9 @@ class PortalController extends Controller
                 'domain' => $domain
             ];
             $cacheKey = 'portal_' . $domain;
-            $cachedPortalData = Cache::get($cacheKey);
-            if ($cachedPortalData) {
+            $cachedPortalData = '';
+            // Cache::get($cacheKey);
+            if (!empty($cachedPortalData)) {
 
                 $result = $cachedPortalData;
             } else {
