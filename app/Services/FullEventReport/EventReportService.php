@@ -688,18 +688,18 @@ class EventReportService
 
             // }
         }
-        Log::info(
-            'HOOK TMC SESSION currentTMCDeal',
-            [
-                'session currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres
-            ]
-        );
-        Log::info(
-            'HOOK TMC SESSION currentTMCDeal',
-            [
-                'session currentTMCDeal' => $this->currentTMCDeal
-            ]
-        );
+        // Log::info(
+        //     'HOOK TMC SESSION currentTMCDeal',
+        //     [
+        //         'session currentTMCDealFromCurrentPres' => $this->currentTMCDealFromCurrentPres
+        //     ]
+        // );
+        // Log::info(
+        //     'HOOK TMC SESSION currentTMCDeal',
+        //     [
+        //         'session currentTMCDeal' => $this->currentTMCDeal
+        //     ]
+        // );
 
 
         $this->currentDepartamentType = BitrixDepartamentService::getDepartamentTypeByUserId();
@@ -2207,12 +2207,12 @@ class EventReportService
 
 
         if (!empty($this->currentTMCDeal) && $this->currentReportEventType === 'presentation') {
-            Log::info('HOOK TEST currentBtxDeals', [
-                'currentBtxDeals' => $currentBtxDeals,
-                'this currentBtxDeals' => $this->currentBtxDeals,
+            // Log::info('HOOK TEST currentBtxDeals', [
+            //     'currentBtxDeals' => $currentBtxDeals,
+            //     'this currentBtxDeals' => $this->currentBtxDeals,
 
 
-            ]);
+            // ]);
             if ($this->resultStatus === 'result') {
 
                 BitrixDealFlowService::flow(  // редактирует сделки отчетности из currentTask основную и если есть xo
@@ -2323,9 +2323,9 @@ class EventReportService
             $planDeals = $flowResult['dealIds'];
             $newPresDeal = $flowResult['newPresDeal'];
 
-            Log::channel('telegram')->info('HOOK', [
-                '$this->currentTMCDeal' => $this->currentTMCDeal
-            ]);
+            // Log::channel('telegram')->info('HOOK', [
+            //     '$this->currentTMCDeal' => $this->currentTMCDeal
+            // ]);
 
             if (!empty($this->currentTMCDeal) && $this->currentPlanEventType == 'presentation') {
                 BitrixDealFlowService::tmcPresentationRelation(
@@ -4561,11 +4561,11 @@ class EventReportService
         $currentRepoertDealIds = $planPresDealIds['reportDeals'];
         $unplannedPresDealsIds = $planPresDealIds['unplannedPresDeals'];
 
-        Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
-            'planDeals' => $planPresDealIds['planDeals'],
+        // Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+        //     'planDeals' => $planPresDealIds['planDeals'],
 
 
-        ]);
+        // ]);
         // Log::info('HOOK TEST COLD BATCH', [
         //     'reportDeals' => $planPresDealIds['reportDeals'],
 

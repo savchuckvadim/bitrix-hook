@@ -26,131 +26,131 @@ use Illuminate\Support\Facades\Log;
 
 // Route::middleware(['rate.limit'])->group(function () {
 // новй холодный звонка из Откуда Угодно
-Route::post('alfa/contract-specification', function (Request $request) {
+// Route::post('alfa/contract-specification', function (Request $request) {
 
-    $data = $request->all();
-    Log::channel('telegram')->info('TST HOOK ALFA', [
-        'data' => $data
-    ]);
-    Log::channel('telegram')->info('TST HOOK ALFA', [
-        'yo' => 'yo'
-    ]);
-    try {
-        // $companyId = $data['companyId'];
-        $smartId = $data['smartId'];
-        $domain = $data['auth']['domain'];
-        $listBitrixId = $data['listBitrixId'];
-        $documentNumber = $data['documentNumber'];
-        $companyName = $data['companyName'];
-        $position = $data['position'];
-        $director = $data['director'];
+//     $data = $request->all();
+//     Log::channel('telegram')->info('TST HOOK ALFA', [
+//         'data' => $data
+//     ]);
+//     Log::channel('telegram')->info('TST HOOK ALFA', [
+//         'yo' => 'yo'
+//     ]);
+//     try {
+//         // $companyId = $data['companyId'];
+//         $smartId = $data['smartId'];
+//         $domain = $data['auth']['domain'];
+//         $listBitrixId = $data['listBitrixId'];
+//         $documentNumber = $data['documentNumber'];
+//         $companyName = $data['companyName'];
+//         $position = $data['position'];
+//         $director = $data['director'];
 
         
-        $hook = PortalController::getHook($domain);
-        $listFilter = [
-            // 'PROPERTY_' => $companyId,
-            'PROPERTY_192' => $smartId,
+//         $hook = PortalController::getHook($domain);
+//         $listFilter = [
+//             // 'PROPERTY_' => $companyId,
+//             'PROPERTY_192' => $smartId,
 
-        ];
-        $listItems  = BitrixListService::getList($hook, $listBitrixId, $listFilter);
-        //get smart -> smart list UF_CRM
+//         ];
+//         $listItems  = BitrixListService::getList($hook, $listBitrixId, $listFilter);
+//         //get smart -> smart list UF_CRM
 
-        Log::channel('telegram')->info('TST HOOK ALFA', [
-            'data' => $data
-        ]);
+//         Log::channel('telegram')->info('TST HOOK ALFA', [
+//             'data' => $data
+//         ]);
 
-        Log::info('TST HOOK ALFA', [
-            'data' => $data
-        ]);
+//         Log::info('TST HOOK ALFA', [
+//             'data' => $data
+//         ]);
         
 
 
-        $persons = [];
+//         $persons = [];
 
-        foreach ($listItems as $key => $listItem) {
-            $person = [
-                'personNumber' =>  $key + 1 . '. ',
-                'person' => $listItem['NAME'],
+//         foreach ($listItems as $key => $listItem) {
+//             $person = [
+//                 'personNumber' =>  $key + 1 . '. ',
+//                 'person' => $listItem['NAME'],
 
-            ];
-            foreach ($listItem['PROPERTY_204'] as $key => $value) {
-                $person['product'] = $value;
-            }
-            array_push($persons, $person);
-        }
-        date_default_timezone_set('Asia/Novosibirsk');
-        $nowDate = new DateTime();
-        setlocale(LC_TIME, 'ru_RU.utf8');
-        // Форматируем дату и время в нужный формат
-        $documentCreateDate = $nowDate->format('d.m.Y');
-        // $locale = 'ru_RU';
-        // $pattern = 'd MMMM yyyy';
+//             ];
+//             foreach ($listItem['PROPERTY_204'] as $key => $value) {
+//                 $person['product'] = $value;
+//             }
+//             array_push($persons, $person);
+//         }
+//         date_default_timezone_set('Asia/Novosibirsk');
+//         $nowDate = new DateTime();
+//         setlocale(LC_TIME, 'ru_RU.utf8');
+//         // Форматируем дату и время в нужный формат
+//         $documentCreateDate = $nowDate->format('d.m.Y');
+//         // $locale = 'ru_RU';
+//         // $pattern = 'd MMMM yyyy';
 
-        // // Создаем форматтер
-        // $formatter = new IntlDateFormatter(
-        //     $locale,
-        //     IntlDateFormatter::NONE,
-        //     IntlDateFormatter::NONE,
-        //     date_default_timezone_get(),
-        //     IntlDateFormatter::GREGORIAN,
-        //     $pattern
-        // );
+//         // // Создаем форматтер
+//         // $formatter = new IntlDateFormatter(
+//         //     $locale,
+//         //     IntlDateFormatter::NONE,
+//         //     IntlDateFormatter::NONE,
+//         //     date_default_timezone_get(),
+//         //     IntlDateFormatter::GREGORIAN,
+//         //     $pattern
+//         // );
 
-        // // Форматируем дату
-        // $documentCreateDate = $formatter->format($nowDate);
-        $documentCreateDate =  $documentCreateDate . 'г.';
+//         // // Форматируем дату
+//         // $documentCreateDate = $formatter->format($nowDate);
+//         $documentCreateDate =  $documentCreateDate . 'г.';
 
 
-        $documentData = [
-            'documentNumber' => $documentNumber,
-            'documentCreateDate' => $documentCreateDate,
-            'persons' => $persons,
-            'companyName' => $companyName,
-            'position' => $position,
-            'director' => $director,
+//         $documentData = [
+//             'documentNumber' => $documentNumber,
+//             'documentCreateDate' => $documentCreateDate,
+//             'persons' => $persons,
+//             'companyName' => $companyName,
+//             'position' => $position,
+//             'director' => $director,
 
-        ];
-        Log::channel('telegram')->info('TST HOOK ALFA', [
-            'listItems' => $listItems
-        ]);
+//         ];
+//         Log::channel('telegram')->info('TST HOOK ALFA', [
+//             'listItems' => $listItems
+//         ]);
 
-        Log::info('TST HOOK ALFA', [
-            'listItems' => $listItems
-        ]);
-        $documentLinkData = APIOnlineController::online('post', 'alfa/specification', $documentData, 'data');
-        $documentLink =  $documentLinkData;
-        if (!empty($documentLinkData['data'])) {
-            $documentLink = $documentLinkData['data'];
-        }
-        if (!empty($documentLink['link'])) {
-            $documentLink = $documentLink['link'];
-        }
-        $resultText = 'Приложение к договору ППК';
+//         Log::info('TST HOOK ALFA', [
+//             'listItems' => $listItems
+//         ]);
+//         $documentLinkData = APIOnlineController::online('post', 'alfa/specification', $documentData, 'data');
+//         $documentLink =  $documentLinkData;
+//         if (!empty($documentLinkData['data'])) {
+//             $documentLink = $documentLinkData['data'];
+//         }
+//         if (!empty($documentLink['link'])) {
+//             $documentLink = $documentLink['link'];
+//         }
+//         $resultText = 'Приложение к договору ППК';
 
-        $message = "\n" . 'Приложение: <a href="' . $documentLink . '" target="_blank">' . $resultText . '</a>';
+//         $message = "\n" . 'Приложение: <a href="' . $documentLink . '" target="_blank">' . $resultText . '</a>';
 
-        $timeLine = new BitrixTimeLineService($hook);
-        $timeLine->setTimeLine($message, 'DYNAMIC_159', $smartId);
-        Log::channel('telegram')->info('TST HOOK ALFA', [
-            'documentLink' => $documentLink
-        ]);
+//         $timeLine = new BitrixTimeLineService($hook);
+//         $timeLine->setTimeLine($message, 'DYNAMIC_159', $smartId);
+//         Log::channel('telegram')->info('TST HOOK ALFA', [
+//             'documentLink' => $documentLink
+//         ]);
 
-        Log::info('TST HOOK ALFA', [
-            'documentLink' => $documentLink
-        ]);
+//         Log::info('TST HOOK ALFA', [
+//             'documentLink' => $documentLink
+//         ]);
 
-        APIOnlineController::getSuccess([
-            'link' => $documentLink
-        ]);
-    } catch (\Throwable $th) {
-        Log::error('ERROR: Exception caught', [
-            'message'   => $th->getMessage(),
-            'file'      => $th->getFile(),
-            'line'      => $th->getLine(),
-            'trace'     => $th->getTraceAsString(),
-        ]);
-    }
-});
+//         APIOnlineController::getSuccess([
+//             'link' => $documentLink
+//         ]);
+//     } catch (\Throwable $th) {
+//         Log::error('ERROR: Exception caught', [
+//             'message'   => $th->getMessage(),
+//             'file'      => $th->getFile(),
+//             'line'      => $th->getLine(),
+//             'trace'     => $th->getTraceAsString(),
+//         ]);
+//     }
+// });
 
 
 

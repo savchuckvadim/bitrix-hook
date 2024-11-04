@@ -350,14 +350,14 @@ class FullEventInitController extends Controller
 
                 $keys = Redis::keys('*');
 
-                Log::channel('telegram')
-                    ->info(
-                        'Session get',
-                        [
-                            'id' => $keys,
-                            'data' => $data
-                        ]
-                    );
+                // Log::channel('telegram')
+                //     ->info(
+                //         'Session get',
+                //         [
+                //             'id' => $keys,
+                //             'data' => $data
+                //         ]
+                //     );
 
                 return APIOnlineController::getSuccess(
                     [

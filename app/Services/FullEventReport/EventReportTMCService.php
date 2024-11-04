@@ -597,11 +597,11 @@ class EventReportTMCService
                 }
             }
         }
-        Log::info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
-        Log::channel('telegram')->info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
+        // Log::info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
+        // Log::channel('telegram')->info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
 
-        Log::info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
-        Log::channel('telegram')->info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
+        // Log::info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
+        // Log::channel('telegram')->info('HOOK TMC SESSION GET', ['sessionData' => $sessionData]);
 
 
 

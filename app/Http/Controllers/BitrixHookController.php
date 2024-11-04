@@ -394,12 +394,12 @@ class BitrixHookController extends Controller
                 $taskData
             );
 
-            Log::channel('telegram')->error('APRIL_HOOK', [
-                'createColdTask' => [
-                    'createdTask' => $createdTask,
+            // Log::channel('telegram')->error('APRIL_HOOK', [
+            //     'createColdTask' => [
+            //         'createdTask' => $createdTask,
 
-                ]
-            ]);
+            //     ]
+            // ]);
 
             return APIOnlineController::getResponse(
                 0,

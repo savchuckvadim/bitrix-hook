@@ -234,7 +234,7 @@ class BitrixCallingTaskFailService
             $batchCommands['cmd']['updateTask_' . $taskId] = $methodUpdate . '?taskId=' . $taskId . '&fields[MARK]=N';
             $batchCommands['cmd']['completeTask_' . $taskId] = $methodComplete . '?taskId=' . $taskId;
         }
-        Log::info('batchCommands', [$batchCommands]);
+        // Log::info('batchCommands', [$batchCommands]);
         $response = Http::post($hook . '/batch', $batchCommands);
 
         // Обработка ответа от API
@@ -247,7 +247,7 @@ class BitrixCallingTaskFailService
             // Логика обработки ошибки
         }
         $res = $responseData ?? $errorData;
-        Log::info('res', ['res' => $res]);
+        // Log::info('res', ['res' => $res]);
         return $res;
     }
 

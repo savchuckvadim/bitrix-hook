@@ -32,16 +32,16 @@ Route::prefix('full')->group(function () {
         //     &name={{Название}}&ownerId=user_1&managerId={{ОП Кто назначен ответственным}}
         //     &tmcId={{ТМЦ Кто назначил последнюю заявку на презентацию}}&tmcDealId={{ТМЦ Сделка}}&companyId
         $comedata = $request->all();
-        Log::info('HOOK TST', [
-            'comedata' => $comedata,
+        // Log::info('HOOK TST', [
+        //     'comedata' => $comedata,
 
 
-        ]);
-        Log::channel('telegram')->info('HOOK TST', [
+        // ]);
+        // Log::channel('telegram')->info('HOOK TST', [
 
-            '$comedata' => $comedata
+        //     '$comedata' => $comedata
 
-        ]);
+        // ]);
         //     должен сделать полный цикл flow 
         // как будто назначили презентацию
         // найти существующую сделку по компании и сотруднику base или создать
@@ -239,14 +239,14 @@ Route::prefix('full')->group(function () {
             }
 
             // sleep(0.3);
-            Log::info('HOOK TST', [
-                'currentBaseDeals' => $currentBaseDeals,
-                'baseDealSession' => $baseDealSession,
+            // Log::info('HOOK TST', [
+            //     'currentBaseDeals' => $currentBaseDeals,
+            //     'baseDealSession' => $baseDealSession,
 
-                'tmcDealSession' => $tmcDealSession,
-                'plan' => $data['plan']
+            //     'tmcDealSession' => $tmcDealSession,
+            //     'plan' => $data['plan']
 
-            ]);
+            // ]);
 
 
             dispatch(
@@ -393,17 +393,13 @@ Route::prefix('full')->group(function () {
         $domain = '';
         $responsibleId = '';
         $companyId = '';
-        // Log::channel('telegram')->error('APRIL_HOOK', [
-        //     'data'  =>  $data,
-        // ]);
+
         if (!empty($data['auth'])) {
 
             if (!empty($data['auth']['domain'])) {
                 $domain = $data['auth']['domain'];
             }
-            Log::channel('telegram')->error('APRIL_HOOK', [
-                'auth'  =>  $data['auth'],
-            ]);
+
             if (!empty($data['companyId'])) {
                 $companyId = $data['companyId'];
             }
@@ -414,15 +410,17 @@ Route::prefix('full')->group(function () {
                 $responsibleId = $partsResponsible[1];
             }
         }
-        Log::channel('telegram')->error('APRIL_HOOK', [
-            'domain'  =>  $domain,
-            'responsibleId'  =>  $responsibleId,
-            'companyId'  =>  $companyId,
 
-        ]);
         if (!empty($domain) && $responsibleId && $companyId) {
             $hook = PortalController::getHook($domain);
             BitrixGeneralService::updateCompany(
+                $hook,
+                $companyId,
+                ["ASSIGNED_BY_ID" => $responsibleId]
+            );
+            sleep(1);
+            // переводим все контакты на ответственного
+            BitrixGeneralService::updateContactsToCompanyRespnsible(
                 $hook,
                 $companyId,
                 ["ASSIGNED_BY_ID" => $responsibleId]
@@ -445,9 +443,9 @@ Route::prefix('full')->group(function () {
             if (!empty($data['auth']['domain'])) {
                 $domain = $data['auth']['domain'];
             }
-            Log::channel('telegram')->error('APRIL_HOOK', [
-                'auth companies/search'  =>  $data['auth'],
-            ]);
+            // Log::channel('telegram')->error('APRIL_HOOK', [
+            //     'auth companies/search'  =>  $data['auth'],
+            // ]);
             if (!empty($data['leadId'])) {
                 $leadId = $data['leadId'];
             }
@@ -458,12 +456,12 @@ Route::prefix('full')->group(function () {
             //     $responsibleId = $partsResponsible[1];
             // }
         }
-        Log::channel('telegram')->error('APRIL_HOOK', [
-            'domain'  =>  $domain,
-            // 'responsibleId'  =>  $responsibleId,
-            'leadId'  =>  $leadId,
+        // Log::channel('telegram')->error('APRIL_HOOK', [
+        //     'domain'  =>  $domain,
+        //     // 'responsibleId'  =>  $responsibleId,
+        //     'leadId'  =>  $leadId,
 
-        ]);
+        // ]);
         $select = ['TITLE',  'ID', 'EMAIL', 'PHONE', 'UF_CRM_OP_MHISTORY', 'UF_CRM_OP_CURRENT_STATUS'];
 
         if (!empty($domain) &&  $leadId) {
@@ -476,21 +474,21 @@ Route::prefix('full')->group(function () {
                 $select
 
             );
-            Log::channel('telegram')->error('APRIL_HOOK', [
-                'domain'  =>  $domain,
+            // Log::channel('telegram')->error('APRIL_HOOK', [
+            //     'domain'  =>  $domain,
 
 
-            ]);
+            // ]);
             // PHONE":[
             // {"ID":"407425","VALUE_TYPE":"WORK","VALUE":"+79620027991","TYPE_ID":"PHONE"},
             // {"ID":"407429","VALUE_TYPE":"WORK","VALUE":"+79678787898","TYPE_ID":"PHONE"}]},"leadId":"42669"}
             if (!empty($lead)) {
-                Log::channel('telegram')->error('APRIL_HOOK', [
-                    'domain'  =>  $domain,
-                    'lead'  =>  $lead,
+                // Log::channel('telegram')->error('APRIL_HOOK', [
+                //     'domain'  =>  $domain,
+                //     'lead'  =>  $lead,
 
 
-                ]);
+                // ]);
                 if (!empty($lead['PHONE'])) {
 
                     $phones = [];
@@ -514,11 +512,11 @@ Route::prefix('full')->group(function () {
                             $companies = array_merge($companies, $result);
                         }
                     }
-                    Log::channel('telegram')->info('APRIL_HOOK', [
-                        'phones'  =>  $phones,
+                    // Log::channel('telegram')->info('APRIL_HOOK', [
+                    //     'phones'  =>  $phones,
 
 
-                    ]);
+                    // ]);
                     // companies":[
                     // {"TITLE":"TEST 134",
                     //     "ID":"171",
@@ -561,16 +559,16 @@ Route::prefix('full')->group(function () {
 
                     $bxTimeLineService = new BitrixTimeLineService($hook);
                     $bxTimeLineService->setTimeline($timeLineString, 'lead', $leadId);
-                    Log::channel('telegram')->error('APRIL_HOOK', [
-                        'filter'  =>  $filter,
+                    // Log::channel('telegram')->error('APRIL_HOOK', [
+                    //     'filter'  =>  $filter,
 
 
-                    ]);
-                    Log::channel('telegram')->error('APRIL_HOOK', [
-                        'companies'  =>  $companies,
+                    // ]);
+                    // Log::channel('telegram')->error('APRIL_HOOK', [
+                    //     'companies'  =>  $companies,
 
 
-                    ]);
+                    // ]);
                     // foreach ($phones as $phone) {
                     //     if(!empty($phone)){
                     //         $
@@ -578,18 +576,18 @@ Route::prefix('full')->group(function () {
                     // }
                 }
             }
-            Log::channel('telegram')->info('APRIL_HOOK', [
-                'domain'  =>  $domain,
-                // 'lead'  =>  $lead,
-                'companies'  =>  $companies,
+            // Log::channel('telegram')->info('APRIL_HOOK', [
+            //     'domain'  =>  $domain,
+            //     // 'lead'  =>  $lead,
+            //     'companies'  =>  $companies,
 
-            ]);
-            Log::info('APRIL_HOOK', [
-                'domain'  =>  $domain,
-                // 'lead'  =>  $lead,
-                'companies'  =>  $companies,
+            // ]);
+            // Log::info('APRIL_HOOK', [
+            //     'domain'  =>  $domain,
+            //     // 'lead'  =>  $lead,
+            //     'companies'  =>  $companies,
 
-            ]);
+            // ]);
         }
     });
 
@@ -598,17 +596,13 @@ Route::prefix('full')->group(function () {
         $domain = '';
         $responsibleId = '';
         $companyId = '';
-        // Log::channel('telegram')->error('APRIL_HOOK', [
-        //     'data'  =>  $data,
-        // ]);
+
         if (!empty($data['auth'])) {
 
             if (!empty($data['auth']['domain'])) {
                 $domain = $data['auth']['domain'];
             }
-            Log::channel('telegram')->error('APRIL_HOOK', [
-                'auth'  =>  $data['auth'],
-            ]);
+
             if (!empty($data['companyId'])) {
                 $companyId = $data['companyId'];
             }
@@ -619,12 +613,8 @@ Route::prefix('full')->group(function () {
                 $responsibleId = $partsResponsible[1];
             }
         }
-        Log::channel('telegram')->error('APRIL_HOOK', [
-            'domain'  =>  $domain,
-            'responsibleId'  =>  $responsibleId,
-            'companyId'  =>  $companyId,
 
-        ]);
+        
         if (!empty($domain) && $responsibleId && $companyId) {
             $hook = PortalController::getHook($domain);
             BitrixGeneralService::updateContactsToCompanyRespnsible(
@@ -634,5 +624,4 @@ Route::prefix('full')->group(function () {
             );
         }
     });
-
 });

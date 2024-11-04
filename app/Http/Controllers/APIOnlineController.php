@@ -20,7 +20,7 @@ class APIOnlineController extends Controller
                 $requestData
             );
             $data = $portalResponse->json();
-            Log::channel('telegram')->info('HOOK FROM ONLINE', ['hookfromon' => $data]);
+            // Log::channel('telegram')->info('HOOK FROM ONLINE', ['hookfromon' => $data]);
 
 
             if ($portalResponse->successful()) {
