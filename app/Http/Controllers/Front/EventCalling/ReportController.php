@@ -2483,7 +2483,7 @@ class ReportController extends Controller
             $portal = $portal['data'];
             $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
-            $result['portal'] = $portal;
+        
             $sessionKey = 'department_' . $domain . '_' . $currentMonthDay;
             $sessionData = FullEventInitController::getSessionItem($sessionKey);
 
@@ -2563,6 +2563,7 @@ class ReportController extends Controller
                 }
             }
 
+            $result['portal'] = $portal;
 
             return APIOnlineController::getSuccess(
                 $result
