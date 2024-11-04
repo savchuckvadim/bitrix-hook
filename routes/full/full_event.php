@@ -625,24 +625,24 @@ Route::prefix('full')->group(function () {
         }
     });
 
-    // Route::post('test', function (Request $request) {
-    //     $data = $request->all();
-    //     Log::channel('telegram')->info('data', ['data' => $data]);
+    Route::post('test', function (Request $request) {
+        $data = $request->all();
+        Log::channel('telegram')->info('data', ['data' => $data]);
     
-    //     Log::channel('telegram')->info('APRIL_HOOK', [
+        Log::channel('telegram')->info('APRIL_HOOK', [
     
-    //         'date_from' => $request['date_from'],
-    //         'date_to' => $request['date_from'],
-    //         'user_inner_code' => $request['user_inner_code'],
-    //         'client_phone_number' => $request['client_phone_number'],
+            'date_from' => $request['date_from'],
+            'date_to' => $request['date_from'],
+            'user_inner_code' => $request['user_inner_code'],
+            'client_phone_number' => $request['client_phone_number'],
 
-    //         // 'название обзвона' => $name,
-    //         // 'companyId' => $companyId,
-    //         // 'domain' => $domain,
-    //         // 'responsibleId' => $responsibleId,
-    //         // 'btrx response' => $response['error_description']
+            // 'название обзвона' => $name,
+            // 'companyId' => $companyId,
+            // 'domain' => $domain,
+            // 'responsibleId' => $responsibleId,
+            // 'btrx response' => $response['error_description']
     
-    //     ]);
-    //     return APIOnlineController::getSuccess($data);
-    // });
+        ]);
+        return APIOnlineController::getSuccess($data);
+    });
 });
