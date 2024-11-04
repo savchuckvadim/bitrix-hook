@@ -2483,7 +2483,7 @@ class ReportController extends Controller
             $portal = $portal['data'];
             $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
-            $result['hook'] = $hook;
+           
 
             $sessionKey = 'department_' . $domain . '_' . $currentMonthDay;
             $sessionData = FullEventInitController::getSessionItem($sessionKey);
@@ -2500,7 +2500,7 @@ class ReportController extends Controller
             if (empty($departmentResult)) {                               // если в сессии нет department
                 $departamentService = new BitrixDepartamentService($hook);
                 $department =  $departamentService->getDepartamentIdByPortal($portal);
-
+                $result['getDepartamentIdByPortal'] = $department;
                 $allUsers = [];
                 if (!empty($department)) {
 
@@ -2526,6 +2526,8 @@ class ReportController extends Controller
 
                                             $resultDep = $gDep;
                                             $resultDep['USERS'] = $departmentUsers;
+                                            $result['resultDep'] = $departmentUsers;
+
                                             $allUsers = array_merge($allUsers, $departmentUsers);
                                             array_push($resultGeneralDepartment, $resultDep);
                                         }
