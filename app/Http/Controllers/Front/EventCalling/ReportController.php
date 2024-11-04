@@ -2483,7 +2483,7 @@ class ReportController extends Controller
             $portal = $portal['data'];
             $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
-           
+
 
             $sessionKey = 'department_' . $domain . '_' . $currentMonthDay;
             $sessionData = FullEventInitController::getSessionItem($sessionKey);
@@ -2557,7 +2557,7 @@ class ReportController extends Controller
                             'childrenDepartments' => $resultChildrenDepartments,
                             'allUsers' => $allUsers,
                         ];
-                        $result =  ['department' => $departmentResult];
+                        $result['department'] = $departmentResult;
                         FullEventInitController::setSessionItem(
                             $sessionKey,
                             $result
