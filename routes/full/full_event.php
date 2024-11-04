@@ -632,6 +632,10 @@ Route::prefix('full')->group(function () {
         Log::channel('telegram')->info('APRIL_HOOK', [
     
             'date_from' => $request['date_from'],
+            'date_to' => $request['date_from'],
+            'user_inner_code' => $request['user_inner_code'],
+            'client_phone_number' => $request['client_phone_number'],
+
             // 'название обзвона' => $name,
             // 'companyId' => $companyId,
             // 'domain' => $domain,
