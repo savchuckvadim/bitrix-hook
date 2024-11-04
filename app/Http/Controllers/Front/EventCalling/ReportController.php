@@ -2497,7 +2497,7 @@ class ReportController extends Controller
                 }
             }
 
-            if (empty($departmentResult)) {                               // если в сессии нет department
+            // if (empty($departmentResult)) {                               // если в сессии нет department
                 $departamentService = new BitrixDepartamentService($hook);
                 $result['portal'] = $portal;
                 $department =  $departamentService->getDepartamentIdByPortal($portal);
@@ -2564,7 +2564,7 @@ class ReportController extends Controller
                         );
                     }
                 }
-            }
+            // }
 
 
             return APIOnlineController::getSuccess(
