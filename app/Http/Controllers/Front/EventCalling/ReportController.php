@@ -2499,6 +2499,7 @@ class ReportController extends Controller
 
             if (empty($departmentResult)) {                               // если в сессии нет department
                 $departamentService = new BitrixDepartamentService($hook);
+                $result['portal'] = $portal;
                 $department =  $departamentService->getDepartamentIdByPortal($portal);
                 $result['getDepartamentIdByPortal'] = $department;
                 $allUsers = [];
