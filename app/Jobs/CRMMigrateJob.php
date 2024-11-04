@@ -3,15 +3,11 @@
 namespace App\Jobs;
 
 use App\Http\Controllers\MigrateCRM\MigrateCRMController;
-use App\Services\BitrixCallingColdService;
-use App\Services\FullEventReport\EventReportService;
-use App\Services\FullEventReport\EventReportTMCService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class CRMMigrateJob implements ShouldQueue
 {

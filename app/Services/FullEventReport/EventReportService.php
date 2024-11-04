@@ -432,7 +432,7 @@ class EventReportService
         // ]);
 
 
-        if ($domain === 'april-dev.bitrix24.ru' || $domain === 'gsr.bitrix24.ru') {
+        // if ($domain === 'april-dev.bitrix24.ru' || $domain === 'gsr.bitrix24.ru') {
             $this->isDealFlow = true;
             $this->withLists = true;
             if (!empty($portal['deals'])) {
@@ -442,7 +442,7 @@ class EventReportService
 
                 $this->bitrixLists = $portal['bitrixLists'];
             }
-        }
+        // }
 
 
         $btxDealBaseCategoryId = null;
