@@ -916,7 +916,7 @@ class ReportController extends Controller
                     'UF_CRM_PRES_COUNT',
                     // 'UF_CRM_1709807026',
 
-                    
+
                     'CATEGORY_ID',
                     'ASSIGNED_BY_ID',
                     // 'COMPANY_ID',
@@ -1224,14 +1224,14 @@ class ReportController extends Controller
 
                 $presList = null;
 
-                
+
                 $select = [
                     'ID',
                     'TITLE',
                     'UF_CRM_PRES_COUNT',
                     // 'UF_CRM_1709807026',
 
-                    
+
                     'CATEGORY_ID',
                     'ASSIGNED_BY_ID',
                     // 'COMPANY_ID',
@@ -1965,7 +1965,7 @@ class ReportController extends Controller
                     'UF_CRM_PRES_COUNT',
                     // 'UF_CRM_1709807026',
 
-                    
+
                     'CATEGORY_ID',
                     'ASSIGNED_BY_ID',
                     // 'COMPANY_ID',
@@ -2483,7 +2483,7 @@ class ReportController extends Controller
             $portal = $portal['data'];
             $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
-
+            $result['hook'] = $hook;
 
             $sessionKey = 'department_' . $domain . '_' . $currentMonthDay;
             $sessionData = FullEventInitController::getSessionItem($sessionKey);
