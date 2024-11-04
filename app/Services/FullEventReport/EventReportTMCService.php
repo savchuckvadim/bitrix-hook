@@ -1531,11 +1531,11 @@ class EventReportTMCService
                             $this->currentPlanEventName,
 
                         );
-                        Log::channel('telegram')->info('HOOK TEST currentBtxDeals', [
-                            'resultRpaItem' => $this->resultRpaItem,
+                        // Log::channel('telegram')->info('HOOK TEST currentBtxDeals', [
+                        //     'resultRpaItem' => $this->resultRpaItem,
 
 
-                        ]);
+                        // ]);
 
                         if (!empty($this->resultRpaItem)) {
                             if (!empty($this->resultRpaItem['id'])) {

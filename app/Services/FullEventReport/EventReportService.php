@@ -4621,12 +4621,12 @@ class EventReportService
         // текущая дата - дата последнего изменения 
         // если была проведена презентация обновляется поле дата проведения презентации
         // все изменения записываются в множественное поле коммент после презентации
-        Log::channel('telegram')->error('APRIL_HOOK getListPresentationFlowBatch', [
+        // Log::channel('telegram')->error('APRIL_HOOK getListPresentationFlowBatch', [
 
-            'currentPlanEventType' => $this->currentPlanEventType,
-            'planTmcId' => $this->planTmcId,
+        //     'currentPlanEventType' => $this->currentPlanEventType,
+        //     'planTmcId' => $this->planTmcId,
 
-        ]);
+        // ]);
 
         if (  //планируется презентация без переносов
             $this->currentPlanEventType == 'presentation' &&
@@ -4738,11 +4738,11 @@ class EventReportService
                 // соответствующих сделок
                 // если текущее событие не през - значит uplanned
                 // занчит сначала планируем
-                Log::channel('telegram')->info('presentationBtxList', [
-                    'currentDealIds' => $currentDealIds,
+                // Log::channel('telegram')->info('presentationBtxList', [
+                //     'currentDealIds' => $currentDealIds,
 
 
-                ]);
+                // ]);
                 $batchCommands = BitrixListPresentationFlowService::getListPresentationUnplannedtFlowBatch(
                     $this->hook,
                     $this->bitrixLists,
