@@ -224,13 +224,7 @@ class BitrixGeneralService
             $contactsIdsData = APIBitrixController::getBitrixRespone($contactsIdsResponse, 'general service: updateCompany');
             $resulContactsIds = $contactsIdsData;
 
-            Log::channel('telegram')->info(
-                'resulContactsIds',
-                [
-                    'contact.items' => $resulContactsIds,
-
-                ]
-            );
+          
 
             if (!empty($resulContactsIds)) {
                 if (is_array($resulContactsIds)) {

@@ -1097,6 +1097,12 @@ class ColdBatchService
         //     }
         // }
 
+        sleep(1);
+        BitrixGeneralService::updateContactsToCompanyRespnsible(
+            $this->hook,
+            $this->entityId,
+            ["ASSIGNED_BY_ID" => $this->responsibleId]
+        );
         return [
             'planDeals' => ' $planDeals',
         ];

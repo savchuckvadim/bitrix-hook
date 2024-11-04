@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\CreateBitrixCallingTaskJob;
 use App\Jobs\EventBatch\ColdBatchJob;
+use App\Jobs\EventBatch\FailBufferBatchJob;
 use App\Services\BitrixCallingColdTaskService;
 use App\Services\BitrixCallingTaskFailService;
 use App\Services\BitrixGeneralService;
@@ -156,7 +157,7 @@ class BitrixHookController extends Controller
                 'isTmc' => $isTmc
 
             ];
-            Log::info('APRIL_HOOK pre rerdis', ['$data' => $data]);
+            // Log::info('APRIL_HOOK pre rerdis', ['$data' => $data]);
 
             // ColdCallJob::dispatch(
             //     $data
@@ -169,6 +170,84 @@ class BitrixHookController extends Controller
             // $reult =  $service->getCold();
 
             // return APIOnlineController::getSuccess(['result' => $reult]);
+
+            return APIOnlineController::getSuccess(['result' => 'job catch it!']);
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            Log::error('ERROR COLD BTX HOOK CONTROLLER: Exception caught',  $errorMessages);
+        }
+    }
+
+
+    public function getFailBufer(
+        Request $request
+    ) {
+        $createdId =  null;
+        $responsibleId =  null;
+        $entityId =  null;
+        $entityType = null;
+
+        try {
+            date_default_timezone_set('Europe/Moscow');
+            // $nowDate = new DateTime();
+            Carbon::setLocale('ru'); // Устанавливаем локализацию Carbon
+        
+            $nowDate = Carbon::now();
+
+            // Форматируем дату в нужный формат
+            $formattedStringNowDate = $nowDate->translatedFormat('d F Y');
+            $name = 'от ' . $formattedStringNowDate;
+            if (isset($request['name'])) {
+                if (!empty($request['name'])) {
+                    $name = $request['name'];
+                }
+            }
+
+
+
+
+
+            if (isset($request['responsible'])) {
+                $responsible = $request['responsible'];
+                $partsResponsible = explode("_", $responsible);
+
+                $responsibleId = $partsResponsible[1];
+            }
+
+
+
+            $auth = $request['auth'];
+            $domain = $auth['domain'];
+            if (isset($request['entity_id'])) {
+                $entityId = $request['entity_id'];
+            }
+
+            if (isset($request['entity_type'])) {
+                $entityType  = $request['entity_type'];
+            }
+
+      
+  
+            $data = [
+                'domain' => $domain,
+                'entityType' => $entityType,
+                'entityId' => $entityId,
+                'responsible' => $responsibleId,
+
+            ];
+            // Log::info('APRIL_HOOK pre rerdis', ['$data' => $data]);
+
+        
+            dispatch(
+                new FailBufferBatchJob($data)
+            )->onQueue('low-priority');
+
+
 
             return APIOnlineController::getSuccess(['result' => 'job catch it!']);
         } catch (\Throwable $th) {

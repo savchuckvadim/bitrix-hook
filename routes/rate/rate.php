@@ -32,6 +32,15 @@ Route::post('cold', function (Request $request) {
     );
 });
 
+Route::post('fail/buffer', function (Request $request) {
+
+  
+    $controller = new BitrixHookController();
+    return $controller->getFailBufer(
+        $request
+    );
+});
+
 Route::post('coldtest', function (Request $request) {
 
     $createdId =  null;
