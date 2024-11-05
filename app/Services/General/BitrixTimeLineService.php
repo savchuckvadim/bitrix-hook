@@ -60,7 +60,7 @@ class BitrixTimeLineService
         try {
             $hook = $this->hook; // Предполагаем, что функция getHookUrl уже определена
 
-            $method = 'crm.timeline.comment.add';
+            $method = '/crm.timeline.comment.add';
 
             $url = $hook . $method;
             $fields = [
@@ -75,7 +75,7 @@ class BitrixTimeLineService
 
             // Log::info('HOOK TIME LINE', ['data' => $data]);
             $responseBitrix = Http::get($url, $data);
-            $responseData = APIBitrixController::getBitrixRespone($responseBitrix, 'TimeLine Service: setTimeline');
+            $responseData = APIBitrixController::getBitrixRespone($responseBitrix, 'TimeLine Service: setTimeline batch');
        
             // Log::channel('telegram')->info('HOOK TIME LINE', ['responseData' => $responseData]);
 
