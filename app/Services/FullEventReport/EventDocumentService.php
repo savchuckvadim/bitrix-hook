@@ -256,6 +256,7 @@ class EventDocumentService
 
 
 
+            $this->entityType = 'company';
 
 
 

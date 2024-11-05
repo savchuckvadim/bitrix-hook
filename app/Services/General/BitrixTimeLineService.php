@@ -75,7 +75,7 @@ class BitrixTimeLineService
 
             // Log::info('HOOK TIME LINE', ['data' => $data]);
             $responseBitrix = Http::get($url, $data);
-            $responseData = APIBitrixController::getBitrixRespone($responseBitrix, 'TimeLine Service: setTimeline batch');
+            $responseData = APIBitrixController::getBitrixRespone($responseBitrix, 'TimeLine Service: setTimeline');
        
             // Log::channel('telegram')->info('HOOK TIME LINE', ['responseData' => $responseData]);
 
