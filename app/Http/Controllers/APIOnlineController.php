@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-const BASE_URL = 'https://april-online.ru/api';
+const BASE_URL = 'https://garant-app.ru/api';
 class APIOnlineController extends Controller
 {
     public static function online($method, $endpoint, $requestData, $dataname)

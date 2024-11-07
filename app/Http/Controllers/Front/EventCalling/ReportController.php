@@ -916,7 +916,7 @@ class ReportController extends Controller
                     'UF_CRM_PRES_COUNT',
                     // 'UF_CRM_1709807026',
 
-
+                    
                     'CATEGORY_ID',
                     'ASSIGNED_BY_ID',
                     // 'COMPANY_ID',
@@ -1224,14 +1224,14 @@ class ReportController extends Controller
 
                 $presList = null;
 
-
+                
                 $select = [
                     'ID',
                     'TITLE',
                     'UF_CRM_PRES_COUNT',
                     // 'UF_CRM_1709807026',
 
-
+                    
                     'CATEGORY_ID',
                     'ASSIGNED_BY_ID',
                     // 'COMPANY_ID',
@@ -1965,7 +1965,7 @@ class ReportController extends Controller
                     'UF_CRM_PRES_COUNT',
                     // 'UF_CRM_1709807026',
 
-
+                    
                     'CATEGORY_ID',
                     'ASSIGNED_BY_ID',
                     // 'COMPANY_ID',
@@ -2483,7 +2483,8 @@ class ReportController extends Controller
             $portal = $portal['data'];
             $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
-        
+
+
             $sessionKey = 'department_' . $domain . '_' . $currentMonthDay;
             $sessionData = FullEventInitController::getSessionItem($sessionKey);
 
@@ -2499,6 +2500,7 @@ class ReportController extends Controller
             if (empty($departmentResult)) {                               // если в сессии нет department
                 $departamentService = new BitrixDepartamentService($hook);
                 $department =  $departamentService->getDepartamentIdByPortal($portal);
+
                 $allUsers = [];
                 if (!empty($department)) {
 
@@ -2524,8 +2526,6 @@ class ReportController extends Controller
 
                                             $resultDep = $gDep;
                                             $resultDep['USERS'] = $departmentUsers;
-                                            $result['resultDep'] = $departmentUsers;
-
                                             $allUsers = array_merge($allUsers, $departmentUsers);
                                             array_push($resultGeneralDepartment, $resultDep);
                                         }
@@ -2554,7 +2554,7 @@ class ReportController extends Controller
                             'childrenDepartments' => $resultChildrenDepartments,
                             'allUsers' => $allUsers,
                         ];
-                        $result['department'] = $departmentResult;
+                        $result =  ['department' => $departmentResult];
                         FullEventInitController::setSessionItem(
                             $sessionKey,
                             $result
@@ -2563,7 +2563,6 @@ class ReportController extends Controller
                 }
             }
 
-            $result['portal'] = $portal;
 
             return APIOnlineController::getSuccess(
                 $result

@@ -12,8 +12,8 @@ export const online = axios.create({
     baseURL:
         IS_ONLINE_APRIL_DEV
             ? 'http://localhost:5000/admin'
-            : 'https://april-online.ru/admin',
-            // : 'https://garant-app.ru/admin',
+            // : 'https://april-online.ru/admin',
+            : 'https://garant-app.ru/admin',
 
     headers: {
         // 'content-type': 'application/json',
