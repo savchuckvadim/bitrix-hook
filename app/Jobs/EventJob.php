@@ -35,7 +35,7 @@ class EventJob implements ShouldQueue
      */
     public function handle(): void
     {
-        Log::info("Event Job from Redis queue.");
+        // Log::info("Event Job from Redis queue.");
         $isTmc = false;
         if (!empty($this->data)) {
             if (!empty($this->data['departament'])) {
