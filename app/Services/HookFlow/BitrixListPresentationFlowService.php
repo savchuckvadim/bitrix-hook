@@ -900,12 +900,12 @@ class BitrixListPresentationFlowService
             }
 
             $fieldsData['NAME'] = $evTypeName . ' ' . $name;
-            // Log::channel('telegram')->error('APRIL_HOOK pres LIST', [
+            Log::channel('telegram')->error('APRIL_HOOK pres LIST', [
 
-            //     'fieldsData' => $fieldsData,
+                'fieldsData' => $fieldsData,
 
 
-            // ]);
+            ]);
             $method = 'lists.element.add';
 
             if (empty($code)) {
@@ -928,9 +928,9 @@ class BitrixListPresentationFlowService
             );
             $commandKey = 'present_list_plan_' . $code;
             $batchCommands[$commandKey] = $batchCommand;
-            // Log::channel('telegram')->error('APRIL_HOOK', [
-            //     'btrx commandKey' => $batchCommand,
-            // ]);
+            Log::channel('telegram')->error('APRIL_HOOK', [
+                'btrx commandKey' => $batchCommand,
+            ]);
 
 
             return $batchCommands;
