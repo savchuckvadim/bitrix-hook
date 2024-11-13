@@ -914,8 +914,7 @@ class BitrixListPresentationFlowService
             }
             $data =  [
                 'IBLOCK_TYPE_ID' => 'lists',
-                'IBLOCK_ID' => $bitrixList['bitrixId'],
-
+                'IBLOCK_ID' => $presPortalBtxList['bitrixId'],
                 'ELEMENT_CODE' => $code,
                 'FIELDS' => $fieldsData
             ];
