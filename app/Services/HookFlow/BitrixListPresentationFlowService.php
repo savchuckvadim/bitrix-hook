@@ -293,7 +293,7 @@ class BitrixListPresentationFlowService
 
             $responseData = BitrixListService::setItem(
                 $hook,
-                $bitrixList['bitrixId'],
+                $presPortalBtxList['bitrixId'],
                 $fieldsData,
                 $code
             );
@@ -1622,7 +1622,7 @@ class BitrixListPresentationFlowService
             }
             $data =  [
                 'IBLOCK_TYPE_ID' => 'lists',
-                'IBLOCK_ID' => $bitrixList['bitrixId'],
+                'IBLOCK_ID' => $presPortalBtxList['bitrixId'],
 
                 'ELEMENT_CODE' => $code,
                 'FIELDS' => $fieldsData
