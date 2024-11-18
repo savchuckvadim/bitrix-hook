@@ -2539,7 +2539,7 @@ class ReportController extends Controller
                                         if (!empty($chDep['ID'])) {
                                             // array_push($departamentIds, $chDep['ID']);
                                             $departmentUsers  = $departamentService->getUsersByDepartment($chDep['ID']);
-                                            $resultDep = $gDep;
+                                            $resultDep = $chDep;
                                             $resultDep['USERS'] = $departmentUsers;
 
                                             $allUsers = array_merge($allUsers, $departmentUsers);
