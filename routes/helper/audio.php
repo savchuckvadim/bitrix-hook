@@ -19,7 +19,7 @@ Route::post('timeline/set',  function (Request $request) {
             'domain' => 'required|string',
             'links' => 'sometimes',
             'message' => 'required|string',
-            'companyId' => 'required|string',
+            'companyId' => 'required|integer',
 
         ]);
         $hook = PortalController::getHook($data['domain']);
@@ -35,7 +35,7 @@ Route::post('timeline/set',  function (Request $request) {
             }
         }
 
-        $timeLineService->setTimeLine($timeLineString, 'company', $data['domain']);
+        $timeLineService->setTimeLine($timeLineString, 'company', $data['companyId']);
 
 
         return APIOnlineController::getSuccess(
