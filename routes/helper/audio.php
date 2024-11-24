@@ -17,7 +17,7 @@ Route::post('timeline/set',  function (Request $request) {
 
         $data = $request->validate([
             'domain' => 'required|string',
-            'links' => 'required',
+            'links' => 'sometimes',
             'message' => 'required|string',
             'companyId' => 'required|string',
 
