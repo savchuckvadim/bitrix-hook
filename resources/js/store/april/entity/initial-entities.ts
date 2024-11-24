@@ -26,7 +26,7 @@ export const allEntities = [
                 method: API_METHOD.GET
             }
         },
-        relations: [1, 5, 11, 12, 13, 14, 15, 16, 21, 22, 23, 24, 25, 27],
+        relations: [1, 5, 11, 12, 13, 14, 15, 16, 21, 22, 23, 24, 25, 27, 28],
 
     },
     {
@@ -628,7 +628,32 @@ export const allEntities = [
         },
         relations: [17, 19],
 
-    }
+    },
+    {
+        id: 28,
+        item: {
+            name: 'contact',
+            title: 'Обобщаящая связи модель Контакт',
+            type: ENTITY_QUANTITY.ENTITY,
+            get: {
+                url: 'contact',
+                method: API_METHOD.GET
+            }
+
+        },
+        items: {
+            name: 'contacts',
+            title: 'Обобщаящая связи модель Контакт',
+            type: ENTITY_QUANTITY.ENTITIES,
+            get: {
+                url: 'contacts',
+                method: API_METHOD.GET
+            }
+
+        },
+        relations: [17],
+
+    },
 ] as Array<RouteInit>
 
 

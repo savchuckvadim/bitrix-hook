@@ -118,4 +118,38 @@ class APIOnlineController extends Controller
             'data' => $data
         ]);
     }
+
+
+
+    public static function sendFullError($th, $place, $message, $data)
+    {
+
+        $error =  [
+            'message'   => $th->getMessage(),
+            'file'      => $th->getFile(),
+            'line'      => $th->getLine(),
+            'trace'     => $th->getTraceAsString(),
+        ];
+
+        Log::channel('telegram')->error('APRIL_HOOK', [
+            'APRIL_HOOK_' . $place => [
+                '$message' => $message,
+                'error' => $error,
+                $data
+            ]
+        ]);
+        Log::error('APRIL_HOOK', [
+            'APRIL_HOOK_' . $place => [
+                '$message' => $message,
+                'error' => $error,
+                $data
+            ]
+        ]);
+        return response([
+            'resultCode' => 1,
+            'message' => $message,
+            'error' => $error,
+            'data' => $data
+        ]);
+    }
 }
