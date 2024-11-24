@@ -121,15 +121,16 @@ class APIOnlineController extends Controller
 
 
 
-    public static function sendFullError($th, $place, $message, $data)
+    public static function sendFullError($th, $place, $data)
     {
 
         $error =  [
-            'message'   => $th->getMessage(),
+
             'file'      => $th->getFile(),
             'line'      => $th->getLine(),
             'trace'     => $th->getTraceAsString(),
         ];
+        $message = $th->getMessage();
 
         Log::channel('telegram')->error('APRIL_HOOK', [
             'APRIL_HOOK_' . $place => [
