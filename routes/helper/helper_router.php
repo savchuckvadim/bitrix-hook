@@ -1,5 +1,3 @@
-https://april-hook.ru/api/helper/audio
-
 
 
 <?php
