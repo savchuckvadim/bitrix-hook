@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::prefix('helper')
-    ->middleware('check.helper.api.key')
+    ->middleware('helper.come.api.key')
     ->group(function () {
 
         require __DIR__.'/audio.php';
