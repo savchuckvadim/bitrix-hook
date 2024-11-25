@@ -35,12 +35,13 @@ Route::post('timeline/set',  function (Request $request) {
             }
         }
 
-        $timeLineService->setTimeLine($timeLineString, 'company', $data['companyId']);
+        $timeLineResult =  $timeLineService->setTimeLine($timeLineString, 'company', $data['companyId']);
 
 
         return APIOnlineController::getSuccess(
             [
-                'message' => 'push'
+                'message' => 'push',
+                'bx_response' => $timeLineResult
             ]
         );
     } catch (\Throwable $th) {
