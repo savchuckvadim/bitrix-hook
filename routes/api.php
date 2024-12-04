@@ -30,6 +30,10 @@ use PhpParser\Node\Stmt\Return_;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+require __DIR__.'/rate/rate.php';
+require __DIR__.'/full/full_event.php';
+require __DIR__.'/alfa/alfa.php';
+require __DIR__.'/helper/helper_router.php';
 
 Route::get('/test/', function () {
 
@@ -642,10 +646,7 @@ Route::post('/task/fail', function (Request $request) {
 //     );
 // });
 
-require __DIR__.'/rate/rate.php';
-require __DIR__.'/full/full_event.php';
-require __DIR__.'/alfa/alfa.php';
-require __DIR__.'/helper/helper_router.php';
+
 // require __DIR__.'/full/full_report.php';
 
 

@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
+Route::options('{any}', function () {
+    return response()->json([], 200);
+})->where('any', '.*');
 
 Route::post('/pres/count', function (Request $request) {
     return ReportController::getPresCounts($request);
