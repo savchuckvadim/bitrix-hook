@@ -41,6 +41,7 @@ Route::options('{any}', function () {
     APIOnlineController::sendLog('yo OPTIONS request received', []);
 
     return response()->json([], 204, [
+        'CORS-Middleware-Called' => 'true',
         'Access-Control-Allow-Origin' => '*',
         'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
         'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With',
