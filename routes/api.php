@@ -6,19 +6,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\APIController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\BitrixHookController;
-use App\Http\Controllers\Front\Calling\FullEventInitController;
-use App\Http\Controllers\Front\Calling\ReportController;
-use App\Http\Controllers\Front\Calling\ReportSupplyController;
+
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\ReactAppController;
-use App\Jobs\EventJob;
-use App\Models\Price;
+
 use App\Services\BitrixGeneralService;
-use App\Services\FullEventReport\EventDocumentService;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use PhpParser\Node\Stmt\Return_;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,9 +24,9 @@ use PhpParser\Node\Stmt\Return_;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::options('{any}', function () {
-    return response()->json([], 200);
-})->where('any', '.*');
+// Route::options('{any}', function () {
+//     return response()->json([], 200);
+// })->where('any', '.*');
 
 require __DIR__.'/rate/rate.php';
 require __DIR__.'/full/full_event.php';
