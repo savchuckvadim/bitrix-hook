@@ -28,9 +28,10 @@ class ACors
                 'CORS-Middleware-Called' => 'true',
                 'Access-Control-Allow-Origin' => 'http://localhost:5000',
                 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+                'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With',
                 'Access-Control-Allow-Credentials' => 'true',
             ]);
+
         }
         APIOnlineController::sendLog('OPTIONS 2', $data);
         // Обработка обычных запросов
@@ -39,7 +40,7 @@ class ACors
         $response->headers->set('CORS-Middleware-Called', 'true');
         $response->headers->set('Access-Control-Allow-Origin', 'http://localhost:5000');
         $response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-        $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
         $response->headers->set('Access-Control-Allow-Credentials', 'true');
     
         return $response;
