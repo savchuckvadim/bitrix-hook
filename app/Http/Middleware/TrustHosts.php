@@ -15,6 +15,11 @@ class TrustHosts extends Middleware
     {
         return [
             $this->allSubdomainsOfApplicationUrl(),
+            'april-app.ru',
+            'front.april-app.ru',
+            'event.april-app.ru',
+            'april-hook.ru',
+            'garant-app.ru',
         ];
     }
 }
