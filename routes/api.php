@@ -25,6 +25,18 @@ use Illuminate\Support\Facades\Log;
 |
 */
 
+Route::get('/test-cors', function () {
+   
+    $headers = [
+        'CORS-Middleware-Called' => 'true',
+        'Origin' => request()->header('Origin'),
+        'Headers' => response()->headers->all(),
+    ];
+    APIOnlineController::sendLog('CORS-Middleware-Called', $headers);
+
+    return response()->json(['success' => true], 200)->withHeaders($headers);
+});
+
 Route::options('{any}', function () {
     APIOnlineController::sendLog('yo OPTIONS request received', []);
 
