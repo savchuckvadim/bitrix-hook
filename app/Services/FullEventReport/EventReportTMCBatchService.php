@@ -448,20 +448,22 @@ class EventReportTMCBatchService
             $this->portalRPAS = $portal['rpas'];
 
             foreach ($portal['rpas'] as $pRPA) {
-                $this->portalRPA = $pRPA;
+                if ($pRPA['code'] == 'presentation' && $pRPA['type'] == 'sales') {
+                    $this->portalRPA = $pRPA;
 
-                $this->rpaTypeId = $pRPA['bitrixId'];
-                if (!empty($pRPA['bitrixfields'])) {
+                    $this->rpaTypeId = $pRPA['bitrixId'];
+                    if (!empty($pRPA['bitrixfields'])) {
 
-                    $this->portalRPAFields = $pRPA['bitrixfields'];
-                }
-                if (!empty($pRPA['categories']) && is_array($pRPA['categories'])) {
+                        $this->portalRPAFields = $pRPA['bitrixfields'];
+                    }
+                    if (!empty($pRPA['categories']) && is_array($pRPA['categories'])) {
 
-                    if (!empty($pRPA['categories'][0])) {
+                        if (!empty($pRPA['categories'][0])) {
 
-                        if (!empty($pRPA['categories'][0]['stages'])) {
+                            if (!empty($pRPA['categories'][0]['stages'])) {
 
-                            $this->portalRPAStages = $pRPA['categories'][0]['stages'];
+                                $this->portalRPAStages = $pRPA['categories'][0]['stages'];
+                            }
                         }
                     }
                 }
@@ -534,7 +536,7 @@ class EventReportTMCBatchService
 
                 $sessionKey = $domain . '_' . $data['currentTask']['id'];
                 $sessionData = FullEventInitController::getSessionItem($sessionKey);
-              
+
                 if (isset($sessionData['currentCompany']) && isset($sessionData['deals'])) {
                     $this->currentBtxEntity  = $sessionData['currentCompany'];
 
@@ -1742,7 +1744,7 @@ class EventReportTMCBatchService
                             $this->currentPlanEventName,
 
                         );
-                     
+
 
                         if (!empty($this->resultRpaItem)) {
                             if (!empty($this->resultRpaItem['id'])) {

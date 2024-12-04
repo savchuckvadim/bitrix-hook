@@ -14,7 +14,7 @@ Route::post('timeline/set',  function (Request $request) {
 
     try {
         //code...
-
+     
         $data = $request->validate([
             'domain' => 'required|string',
             'links' => 'sometimes',
@@ -49,8 +49,10 @@ Route::post('timeline/set',  function (Request $request) {
             $th,
             'helper.audio',
             'something wrong',
-            $request->all(),
+        
 
         );
     }
 });
+
+
