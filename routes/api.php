@@ -37,17 +37,17 @@ Route::get('/test-cors', function () {
     return response()->json(['success' => true], 200)->withHeaders($headers);
 });
 
-Route::options('{any}', function () {
-    APIOnlineController::sendLog('yo OPTIONS request received', []);
+// Route::options('{any}', function () {
+//     APIOnlineController::sendLog('yo OPTIONS request received', []);
 
-    return response()->json([], 204, [
-        'CORS-Middleware-Called' => 'true',
-        'Access-Control-Allow-Origin' => '*',
-        'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With',
-        'Access-Control-Allow-Credentials' => 'true',
-    ]);
-})->where('any', '.*');
+//     return response()->json([], 204, [
+//         'CORS-Middleware-Called' => 'true',
+//         'Access-Control-Allow-Origin' => '*',
+//         'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+//         'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With',
+//         'Access-Control-Allow-Credentials' => 'true',
+//     ]);
+// })->where('any', '.*');
 
 require __DIR__ . '/rate/rate.php';
 require __DIR__ . '/full/full_event.php';
