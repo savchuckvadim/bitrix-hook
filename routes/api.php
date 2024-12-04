@@ -24,9 +24,15 @@ use Illuminate\Support\Facades\Log;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-// Route::options('{any}', function () {
-//     return response()->json([], 200);
-// })->where('any', '.*');
+
+Route::options('{any}', function () {
+    return response()->json([], 204, [
+        'Access-Control-Allow-Origin' => '*',
+        'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With',
+        'Access-Control-Allow-Credentials' => 'true',
+    ]);
+})->where('any', '.*');
 
 require __DIR__.'/rate/rate.php';
 require __DIR__.'/full/full_event.php';
