@@ -30,6 +30,10 @@ use PhpParser\Node\Stmt\Return_;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::options('{any}', function () {
+    return response()->json([], 200);
+})->where('any', '.*');
+
 require __DIR__.'/rate/rate.php';
 require __DIR__.'/full/full_event.php';
 require __DIR__.'/alfa/alfa.php';
