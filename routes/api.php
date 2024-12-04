@@ -26,6 +26,8 @@ use Illuminate\Support\Facades\Log;
 */
 
 Route::options('{any}', function () {
+    APIOnlineController::sendLog('yo OPTIONS request received', []);
+
     return response()->json([], 204, [
         'Access-Control-Allow-Origin' => '*',
         'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
@@ -34,25 +36,23 @@ Route::options('{any}', function () {
     ]);
 })->where('any', '.*');
 
-require __DIR__.'/rate/rate.php';
-require __DIR__.'/full/full_event.php';
-require __DIR__.'/alfa/alfa.php';
-require __DIR__.'/helper/helper_router.php';
+require __DIR__ . '/rate/rate.php';
+require __DIR__ . '/full/full_event.php';
+require __DIR__ . '/alfa/alfa.php';
+require __DIR__ . '/helper/helper_router.php';
 
 Route::get('/test/', function () {
 
     $domain = 'april-dev.bitrix24.ru';
     $portal = PortalController::getPortal($domain);
-    if(!empty($portal) && !empty($portal['data'])){
+    if (!empty($portal) && !empty($portal['data'])) {
         $result = $portal['data']['id'];
-
-    }else{
+    } else {
         $result = $portal;
-
     }
     dd([
         'result' => $result,
-        
+
     ]);
 
     return 'yo';

@@ -153,4 +153,24 @@ class APIOnlineController extends Controller
             'data' => $data
         ]);
     }
+    public static function sendLog($place, $data)
+    {
+
+      
+      
+
+        Log::channel('telegram')->error('APRIL_HOOK', [
+            'APRIL_HOOK_' . $place => [
+              
+                $data
+            ]
+        ]);
+        Log::error('APRIL_HOOK', [
+            'APRIL_HOOK_' . $place => [
+              
+                $data
+            ]
+        ]);
+    
+    }
 }
