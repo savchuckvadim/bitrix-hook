@@ -19,14 +19,14 @@ class ACors
 
         APIOnlineController::sendLog('CORS data', $data);
         APIOnlineController::sendLog('CORS headers', $request);
-
+        $origin = $request->header('Origin');
 
         // Обработка предварительных запросов (OPTIONS)
         if ($request->isMethod('OPTIONS')) {
             APIOnlineController::sendLog('OPTIONS 1', $data);
             return response()->json([], 200, [
                 'CORS-Middleware-Called' => 'true',
-                'Access-Control-Allow-Origin' => 'http://localhost:5000',
+                'Access-Control-Allow-Origin' => $origin ?: '*',
                 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
                 'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With',
                 'Access-Control-Allow-Credentials' => 'true',
@@ -38,7 +38,7 @@ class ACors
         $response = $next($request);
     
         $response->headers->set('CORS-Middleware-Called', 'true');
-        $response->headers->set('Access-Control-Allow-Origin', 'http://localhost:5000');
+        $response->headers->set('Access-Control-Allow-Origin', $origin ?: '*');
         $response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
         $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
         $response->headers->set('Access-Control-Allow-Credentials', 'true');
