@@ -20,26 +20,28 @@ services:
     depends_on:
       - redis
       - db
+    ports:
+     - "8082:80"
     command: /bin/sh -c "sleep 20 && php artisan key:generate && php artisan migrate --force && php-fpm"
     # command: /bin/sh -c "php-fpm & php artisan websockets:serve"
 
     # Nginx Service
-  webserver:
-    image: nginx:alpine
-    container_name: april_app_webserver
-    restart: "no"
-    tty: true
-    ports:
-      - "8082:80"
+  # webserver:
+  #   image: nginx:alpine
+  #   container_name: april_app_webserver
+  #   restart: "no"
+  #   tty: true
+  #   ports:
+  #     - "8082:80"
   
-    volumes:
-      - ./:/var/www/html
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./nginx/ssl:/etc/nginx/ssl
-    networks:
-      - app-network
-    depends_on:
-      - app
+  #   volumes:
+  #     - ./:/var/www/html
+  #     - ./nginx/conf.d:/etc/nginx/conf.d
+  #     - ./nginx/ssl:/etc/nginx/ssl
+  #   networks:
+  #     - app-network
+  #   depends_on:
+  #     - app
 
   # MySQL Service
   db:
@@ -52,7 +54,7 @@ services:
       MYSQL_USER: bitrixhook # Имя пользователя
       MYSQL_PASSWORD: Vadimsa1988! # Пароль пользователя
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
     networks:
