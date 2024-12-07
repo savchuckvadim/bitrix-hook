@@ -24,7 +24,8 @@ RUN apt-get update && apt-get install -y \
     git \
     libonig-dev \
     curl \
-    libicu-dev
+    libicu-dev \
+    iproute2  
     
 # RUN pecl install xdebug \
 #     && docker-php-ext-enable xdebug
@@ -62,5 +63,5 @@ RUN chown -R www-data:www-data /var/www/html/storage
 
 # Expose port 9000 and start php-fpm server (for FastCGI Process Manager)
 EXPOSE 9000
-CMD ["php-fpm"]
+# CMD ["php-fpm"]
 

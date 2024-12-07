@@ -16,32 +16,32 @@ services:
     #   XDEBUG_MODE: debug
     #   XDEBUG_CONFIG: client_host=192.168.250.102 
     networks:
-      - app-network
+      - april_app-network
     depends_on:
       - redis
       - db
-    # ports:
-    #  - "8082:80"
+    ports:
+     - "9001:9000"
     command: /bin/sh -c "sleep 20 && php artisan key:generate && php artisan migrate --force && php-fpm"
     # command: /bin/sh -c "php-fpm & php artisan websockets:serve"
 
     # Nginx Service
-  webserver:
-    image: nginx:alpine
-    container_name: april_app_webserver
-    restart: "unless-stopped"
-    tty: true
-    ports:
-      - "8082:80"
+  # webserver:
+  #   image: nginx:alpine
+  #   container_name: april_app_webserver
+  #   restart: "unless-stopped"
+  #   tty: true
+  #   ports:
+  #     - "8082:80"
   
-    volumes:
-      - ./:/var/www/html
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./nginx/ssl:/etc/nginx/ssl
-    networks:
-      - app-network
-    depends_on:
-      - app
+  #   volumes:
+  #     - ./:/var/www/html
+  #     - ./nginx/conf.d:/etc/nginx/conf.d
+  #     - ./nginx/ssl:/etc/nginx/ssl
+  #   networks:
+  #     - april_app-network
+  #   depends_on:
+  #     - app
 
   # MySQL Service
   db:
@@ -58,7 +58,7 @@ services:
     volumes:
       - db_data:/var/lib/mysql
     networks:
-      - app-network
+      - april_app-network
 
   # Redis Service
   redis:
@@ -69,7 +69,7 @@ services:
       # - "6379:6379"
       - "6380:6379"
     networks:
-      - app-network
+      - april_app-network
 
   queue-default:
     # build:
@@ -83,7 +83,7 @@ services:
       - QUEUE_CONNECTION=redis
     user: 'www-data'
     networks:
-      - app-network
+      - april_app-network
     depends_on:
       - app
       - redis
@@ -103,7 +103,7 @@ services:
       - QUEUE_CONNECTION=redis
     user: 'www-data'
     networks:
-      - app-network
+      - april_app-network
     depends_on:
       - app
       - redis
@@ -123,7 +123,7 @@ services:
       - QUEUE_CONNECTION=redis
     user: 'www-data'
     networks:
-      - app-network
+      - april_app-network
     depends_on:
       - app
       - redis
@@ -136,5 +136,6 @@ volumes:
 
 
 networks:
-  app-network:
+  april_app-network:
+    name: april_app-network
     driver: bridge

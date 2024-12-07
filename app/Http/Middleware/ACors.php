@@ -24,7 +24,7 @@ class ACors
         // Обработка предварительных запросов (OPTIONS)
         if ($request->isMethod('OPTIONS')) {
             APIOnlineController::sendLog('OPTIONS 1', $data);
-            return response()->json([], 200, [
+            return response()->json([], 207, [
                 'CORS-Middleware-Called' => 'true',
                 'Access-Control-Allow-Origin' => $origin ?: '*',
                 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',

@@ -12,14 +12,17 @@ class TrustProxies extends Middleware
      *
      * @var array<int, string>|string|null
      */
-    protected $proxies;
+    protected $proxies = [
+        'http://localhost','http://localhost:5000',
+        'http://localhost:8082'
+    ];
 
     /**
      * The headers that should be used to detect proxies.
      *
      * @var int
      */
-    protected $headers =
+    protected $headers = 
         Request::HEADER_X_FORWARDED_FOR |
         Request::HEADER_X_FORWARDED_HOST |
         Request::HEADER_X_FORWARDED_PORT |

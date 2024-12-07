@@ -20,6 +20,7 @@ class TrustHosts extends Middleware
             'event.april-app.ru',
             'april-hook.ru',
             'garant-app.ru',
+            'localhost',
         ];
     }
 }
