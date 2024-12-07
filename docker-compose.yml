@@ -21,8 +21,9 @@ services:
       - redis
       - db
     ports:
+     - "8000:8000"
      - "9000:9000"
-    command: /bin/sh -c "sleep 20 && php artisan key:generate && php artisan migrate --force && php-fpm"
+    command: /bin/sh -c "sleep 20 && php artisan key:generate && php artisan migrate --force  && php artisan serve --host=0.0.0.0 --port=8000 && php-fpm"
     # command: /bin/sh -c "php-fpm & php artisan websockets:serve"
 
     # Nginx Service
