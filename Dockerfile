@@ -25,7 +25,8 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     curl \
     libicu-dev \
-    iproute2  
+    iproute2  \
+    nano
     
 # RUN pecl install xdebug \
 #     && docker-php-ext-enable xdebug
