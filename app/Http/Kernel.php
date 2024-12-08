@@ -15,19 +15,19 @@ class Kernel extends HttpKernel
      * @var array<int, class-string|string>
      */
     protected $middleware = [
-        \App\Http\Middleware\ACors::class,
+        // \App\Http\Middleware\ACors::class,
 
 
         // \App\Http\Middleware\TrustHosts::class,
 
-        // \App\Http\Middleware\TrustProxies::class,
-        // \Illuminate\Http\Middleware\HandleCors::class,
+        \App\Http\Middleware\TrustProxies::class,
+        \Illuminate\Http\Middleware\HandleCors::class,
 
 
-        // \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
-        // \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-        // \App\Http\Middleware\TrimStrings::class,
-        // \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
+        \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
+        \App\Http\Middleware\TrimStrings::class,
+        \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
 
     /**
@@ -75,16 +75,16 @@ class Kernel extends HttpKernel
         'helper.come.api.key' => \App\Http\Middleware\HelperComeApiKey::class,
     ];
 
-    public function handle($request)
-    {
-        $data = [
-            'method' => $request->method(),
-            'path' => $request->path(),
-            'headers' => $request->headers->all(),
-        ];
-        // print_r($data);
+    // public function handle($request)
+    // {
+    //     $data = [
+    //         'method' => $request->method(),
+    //         'path' => $request->path(),
+    //         'headers' => $request->headers->all(),
+    //     ];
+    //     // print_r($data);
 
        
-        return parent::handle($request);
-    }
+    //     return parent::handle($request);
+    // }
 }
