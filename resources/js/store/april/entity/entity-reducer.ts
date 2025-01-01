@@ -5,7 +5,6 @@ import { googleAPI } from "../../../helpers/google/google-api"
 import { API_METHOD } from "../../../types/app/app-type"
 import { CreatingEntityType, Entity, EntityField, EntityFormField, EntityStateType, InitialEntity, InitialEntityData, InitialEntityGroup, RelationState, TemplateAddData, TemplateInitialAddData } from "../../../types/entity/entity-types"
 import { Template } from "../../../types/entity/template-types"
-import { tfieldsSetToFirebase } from "../../../utils/service-utils/service-utils"
 import { getDataForSetTField, getDataForSetTemplate, getInitialTemplateData, getInitialTemplateFieldData } from "../../../utils/template-utils"
 
 
@@ -98,7 +97,7 @@ export const updateEntities = (token = null, entityName: string) => async (dispa
 
         } else {
             // savedfireData = await firebaseAPI?.setCollection(entityName, data)
-          
+
             onlineSavedData = await onlineAPI.setCollection(entityName, data)
 
         }
@@ -113,10 +112,10 @@ export const updateEntities = (token = null, entityName: string) => async (dispa
 export const getEntities = (url: string, method: string, collectionName: string, data: any = null) => async (dispatch: AppDispatchType, getState: GetStateType) => {
 
     if (url) {
-        
+
         const collection = await onlineAPI.service(url, API_METHOD.GET, collectionName, null)
 
-        
+
         if (collection) {
             dispatch(entityActions.setEntityItems(collection))
         } else {
@@ -148,10 +147,10 @@ export const getEntityItem = (url: string, entityName: string, entityId: number)
 }
 export const setOrupdateEntityItem = (history: (url: string) => void,
     currentUrl: string, url: string, entityName: string, data: FormData) => async (dispatch: AppDispatchType, getState: GetStateType) => {
-        
+
 
         if (url) {
-            
+
             const formData = data as FormData
             let apiData = {} as { [key: string]: any };
             if (url == 'portal') {
@@ -159,7 +158,7 @@ export const setOrupdateEntityItem = (history: (url: string) => void,
                 for (let [key, value] of formData.entries()) {
                     if (key === 'number' ||
                         key === 'domain' ||
-                        key === 'key' 
+                        key === 'key'
                     ) {
                         apiData[key] = value;
                     } else if (
@@ -177,7 +176,7 @@ export const setOrupdateEntityItem = (history: (url: string) => void,
                     }
 
                 }
-                
+
             } else {
                 apiData = formData
 
@@ -414,7 +413,7 @@ export const setRelation = (relation: RelationState) =>
                         //         ...group.relations,
                         //         resultPushData
                         //     ]
-                        //     : 
+                        //     :
                         return {
                             ...group,
                             relations: resultRelations
@@ -490,7 +489,7 @@ const initialAddEntity = (entityName: string) => async (dispatch: AppDispatchTyp
 export const setUpdatingEntity = (url: string, model: string, values: Array<any>) => async (dispatch: AppDispatchType, getState: GetStateType) => {
 
 
-    
+
     const state = getState() as AppStateType
 
     switch (model) {
@@ -649,7 +648,7 @@ const entity = (state: EntityStateType = initialState, action: EntityActionsType
         // } else return state
 
         // case 'entity/SET_INITIALIZING_ADD':
-        //     
+        //
         //     return {
         //         ...state,
         //         adding: {

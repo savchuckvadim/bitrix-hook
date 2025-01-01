@@ -332,6 +332,9 @@ Route::prefix('full')->group(function () {
 
     // ............................... FULL EVENT Document PRES FRONT
 
+
+    Route::post('/document/company/deals', [ReportController::class, 'getDocumentDealsFromCompany']);
+
     Route::post('/document/init', [ReportController::class, 'getDocumentDealsInit']);
     //засовывает в сессию текущую base сделку
     //находит сделки презентации fromBase и fromCompany

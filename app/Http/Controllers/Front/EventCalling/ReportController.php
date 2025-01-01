@@ -916,7 +916,7 @@ class ReportController extends Controller
                     'UF_CRM_PRES_COUNT',
                     // 'UF_CRM_1709807026',
 
-                    
+
                     'CATEGORY_ID',
                     'ASSIGNED_BY_ID',
                     // 'COMPANY_ID',
@@ -1224,14 +1224,14 @@ class ReportController extends Controller
 
                 $presList = null;
 
-                
+
                 $select = [
                     'ID',
                     'TITLE',
                     'UF_CRM_PRES_COUNT',
                     // 'UF_CRM_1709807026',
 
-                    
+
                     'CATEGORY_ID',
                     'ASSIGNED_BY_ID',
                     // 'COMPANY_ID',
@@ -1634,7 +1634,34 @@ class ReportController extends Controller
         }
     }
 
+    public static function getDocumentDealsFromCompany(Request $request)
+    { //
+        $data = $request->all();
+        $domain = $data['domain'];
+        $companyId = $data['companyId'];
+        $userId = $data['userId'];
 
+        $portal = PortalController::getPortal($domain);
+        $portal = $portal['data'];
+        $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+        $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+
+        $filter = [
+            'filter' => [
+                'COMPANY_ID' => $companyId,
+                // 'CATEGORY_ID' => $currentBaseCategoryBtxId,
+                'RESPONSIBLE_ID' => $userId,
+            ]
+        ];
+        $deals = BitrixGeneralService::getEntityList(
+            $hook,
+            'deal',
+            $filter
+        );
+        APIOnlineController::getSuccess([
+            'deals' => $deals,
+        ]);
+    }
     public static function getDocumentDealsInit(Request $request)
     {
 
@@ -1965,7 +1992,7 @@ class ReportController extends Controller
                     'UF_CRM_PRES_COUNT',
                     // 'UF_CRM_1709807026',
 
-                    
+
                     'CATEGORY_ID',
                     'ASSIGNED_BY_ID',
                     // 'COMPANY_ID',
