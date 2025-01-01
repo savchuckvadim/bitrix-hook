@@ -1658,7 +1658,7 @@ class ReportController extends Controller
             'deal',
             $filter
         );
-        APIOnlineController::getSuccess([
+        return APIOnlineController::getSuccess([
             'deals' => $deals,
         ]);
     }
