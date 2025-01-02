@@ -1636,6 +1636,7 @@ class ReportController extends Controller
 
     public static function getDocumentDealsFromCompany(Request $request)
     { //
+        $resultDeal = null;
         $data = $request->all();
         $domain = $data['domain'];
         $companyId = $data['companyId'];
@@ -1646,20 +1647,44 @@ class ReportController extends Controller
         $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
         $hook = 'https://' . $domain  . '/' . $webhookRestKey;
 
-        $filter = [
-            'filter' => [
-                'COMPANY_ID' => $companyId,
-                // 'CATEGORY_ID' => $currentBaseCategoryBtxId,
-                'RESPONSIBLE_ID' => $userId,
-            ]
-        ];
-        $deals = BitrixGeneralService::getEntityList(
-            $hook,
-            'deal',
-            $filter
-        );
+        if (!empty($portal['bitrixDeal'])) {
+            if (!empty($portal['bitrixDeal']['categories'])) {
+                $btxDealPortalCategories = $portal['bitrixDeal']['categories'];
+            }
+        }
+
+        if (!empty($btxDealPortalCategories)) {
+
+
+            foreach ($btxDealPortalCategories as $btxDealPortalCategory) {
+                if (!empty($btxDealPortalCategory['code'])) {
+                    if ($btxDealPortalCategory['code'] == "sales_base") {
+                        $salesBaseCategory = $btxDealPortalCategory;
+                    }
+                }
+            }
+            $filter = [
+                'filter' => [
+                    'COMPANY_ID' => $companyId,
+                    // 'CATEGORY_ID' => $currentBaseCategoryBtxId,
+                    'RESPONSIBLE_ID' => $userId,
+                    '!=STAGE_ID' => ['C' . $salesBaseCategory . ':LOSE', 'C' . $salesBaseCategory . ':APOLOGY']
+
+                ]
+            ];
+            $deals = BitrixGeneralService::getEntityList(
+                $hook,
+                'deal',
+                $filter
+            );
+            if (!empty($deals)) {
+                if (is_array($deals)) {
+                    $resultDeal = $deals[0];
+                }
+            }
+        }
         return APIOnlineController::getSuccess([
-            'deals' => $deals,
+            'deal' => $resultDeal,
         ]);
     }
     public static function getDocumentDealsInit(Request $request)
