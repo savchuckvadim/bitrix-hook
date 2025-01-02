@@ -1659,7 +1659,7 @@ class ReportController extends Controller
             foreach ($btxDealPortalCategories as $btxDealPortalCategory) {
                 if (!empty($btxDealPortalCategory['code'])) {
                     if ($btxDealPortalCategory['code'] == "sales_base") {
-                        $salesBaseCategory = $btxDealPortalCategory;
+                        $salesBaseCategory = $btxDealPortalCategory['bitrixId'];
                     }
                 }
             }
