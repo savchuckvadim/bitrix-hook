@@ -1666,7 +1666,7 @@ class ReportController extends Controller
             $filter = [
                 'filter' => [
                     'COMPANY_ID' => $companyId,
-                    // 'CATEGORY_ID' => $currentBaseCategoryBtxId,
+                    'CATEGORY_ID' => $salesBaseCategory,
                     'RESPONSIBLE_ID' => $userId,
                     '!=STAGE_ID' => ['C' . $salesBaseCategory . ':LOSE', 'C' . $salesBaseCategory . ':APOLOGY']
 
