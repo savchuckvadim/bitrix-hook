@@ -836,7 +836,7 @@ class BitrixTaskService
             return $resultIds;
         }
     }
-    protected function completeTask($hook, $taskIds)
+    public function completeTask($hook, $taskIds)
     {
         $responseData = null;
 

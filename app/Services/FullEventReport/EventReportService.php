@@ -3462,13 +3462,13 @@ class EventReportService
         //     }
         // }
         // $batchCommands =  $result['commands'];
-        if ($this->isExpired || $this->isPlanned) {
-            $resultBatchCommands = $this->getTaskFlowBatchCommand(
-                null,
-                $result['planDeals'],
-                $resultBatchCommands
-            );
-        }
+        // if ($this->isExpired || $this->isPlanned) {
+        $resultBatchCommands = $this->getTaskFlowBatchCommand(
+            null,
+            $result['planDeals'],
+            $resultBatchCommands
+        );
+        // }
         $resultBatchCommands =  $this->getListPresentationFlowBatch(
             $result,
             $resultBatchCommands
@@ -3617,29 +3617,37 @@ class EventReportService
 
             if (!$this->isExpired) {
 
+                if (!empty($this->isPlanned)) {
+                    $batchCommands =  $taskService->getCreateTaskBatchCommands(
+                        $this->currentPlanEventType,       //$type,   //cold warm presentation hot 
+                        $this->currentPlanEventTypeName,
+                        $this->portal,
+                        $this->domain,
+                        $this->hook,
+                        $this->currentBtxEntity,
+                        $companyId,  //may be null
+                        $leadId, //$leadId,     //may be null
+                        $this->planCreatedId,
+                        $this->planResponsibleId,
+                        $this->planDeadline,
+                        $this->currentPlanEventName,
+                        null, // $currentSmartItemId,
+                        false, //$isNeedCompleteOtherTasks
+                        $currentTaskId, // null,
+                        $currentDealsIds,
+                        $contact,
+                        $batchCommands
 
-
-                $batchCommands =  $taskService->getCreateTaskBatchCommands(
-                    $this->currentPlanEventType,       //$type,   //cold warm presentation hot 
-                    $this->currentPlanEventTypeName,
-                    $this->portal,
-                    $this->domain,
-                    $this->hook,
-                    $this->currentBtxEntity,
-                    $companyId,  //may be null
-                    $leadId, //$leadId,     //may be null
-                    $this->planCreatedId,
-                    $this->planResponsibleId,
-                    $this->planDeadline,
-                    $this->currentPlanEventName,
-                    null, // $currentSmartItemId,
-                    false, //$isNeedCompleteOtherTasks
-                    $currentTaskId, // null,
-                    $currentDealsIds,
-                    $contact,
-                    $batchCommands
-
-                );
+                    );
+                } else {
+                    if (!empty($currentTaskId)) {
+                        $taskServiceForComplete = new BitrixTaskService();
+                        $taskServiceForComplete->completeTask(
+                            $this->hook,
+                            [$currentTaskId]
+                        );
+                    }
+                }
             } else {
                 // $createdTask =  $taskService->updateTask(
 
