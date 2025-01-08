@@ -1813,7 +1813,7 @@ class ReportController extends Controller
                     'UF_CRM_OP_CURRENT_STATUS',
 
                 ];
-                $responsibleId = 1;
+                $responsibleId = $data['userId'];
                 $currentBaseDeal = null;               //базовая сделка в задаче всегда должна быть одна
                 $currentPresentationDeal = null;               // сделка презентации из задачи
                 $currentXODeal = null;
