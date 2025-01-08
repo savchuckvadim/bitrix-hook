@@ -596,8 +596,13 @@ class BitrixDealService
 
             [
                 'code' => 'moneyAwait',
-                'order' => 6,
+                'order' => 5,
                 'suphicks' => 'money_await'
+            ],
+            [
+                'code' => 'supply',
+                'order' => 6,
+                'suphicks' => 'supply'
             ],
 
             // [
@@ -615,7 +620,14 @@ class BitrixDealService
         $planOrder =  0;
         $reportOrder = 0;
 
-        $codesToFilter = [$planEventType, $reportEventType];
+        $codesToFilter = [];
+
+        if (!empty($planEventType)) {
+            array_push($codesToFilter, $planEventType);
+        }
+        if (!empty($reportEventType)) {
+            array_push($codesToFilter, $reportEventType);
+        }
 
         if (!empty($currentStageOrder)) {
             array_push($codesToFilter, $currentStageOrder);
@@ -733,6 +745,7 @@ class BitrixDealService
                 'order' => 3,
                 'suphicks' => 'offer_create'
             ],
+            
             [
                 'code' => 'hot',
                 'order' => 4,
@@ -741,8 +754,13 @@ class BitrixDealService
 
             [
                 'code' => 'moneyAwait',
-                'order' => 6,
+                'order' => 5,
                 'suphicks' => 'money_await'
+            ],
+            [
+                'code' => 'supply',
+                'order' => 6,
+                'suphicks' => 'supply'
             ],
         ];
         $planOrder =  0;
