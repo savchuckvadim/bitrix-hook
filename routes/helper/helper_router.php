@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
+require __DIR__.'/test.php';
 
 Route::prefix('helper')
     ->middleware('helper.come.api.key')
@@ -17,3 +18,4 @@ Route::prefix('helper')
 
        
     });
+   
