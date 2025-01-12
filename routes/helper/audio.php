@@ -14,7 +14,7 @@ Route::post('timeline/set',  function (Request $request) {
 
     try {
         //code...
-     
+
         $data = $request->validate([
             'domain' => 'required|string',
             'links' => 'sometimes',
@@ -49,10 +49,29 @@ Route::post('timeline/set',  function (Request $request) {
             $th,
             'helper.audio',
             'something wrong',
-        
+
 
         );
     }
 });
 
 
+Route::post('text',  function (Request $request) {
+
+    try {
+  
+        $data = $request->all();
+        return response([
+            'result' => 'OK',
+            'message' => 'success',
+            'data' => $data
+        ]);
+    } catch (\Throwable $th) {
+        return APIOnlineController::sendFullError(
+            $th,
+            'helper.text',
+            'something wrong',
+
+        );
+    }
+});
