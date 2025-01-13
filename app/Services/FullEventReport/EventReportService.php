@@ -192,7 +192,7 @@ class EventReportService
         $domain = $data['domain'];
         $this->domain = $domain;
 
-        if ($domain == 'gsirk.bitrix24.ru' || $domain == 'april-dev.bitrix24.ru') {
+        if ($domain == 'gsirk.bitrix24.ru' || $domain == 'april-dev.bitrix24.ru' || $domain == 'april-garant.bitrix24.ru') {
             $this->isPlanActive = $data['plan']['isActive'];
         }
 
