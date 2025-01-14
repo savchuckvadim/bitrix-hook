@@ -4133,7 +4133,7 @@ class EventReportService
                         $this->planDeadline, //'', //$this->planDeadline,
                         $tmcUserId,
                         $tmcUserId,
-                        $tmcUserId,
+                        $this->planResponsibleId,
                         $this->entityId,
                         'Презентация по заявке ТМЦ'.$this->comment,
                         $this->workStatus['current'],
