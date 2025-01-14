@@ -4111,6 +4111,47 @@ class EventReportService
                 $commands
 
             );
+
+            $curTMCDeal = null;
+            //если есть тмц сделка создаем эдемент списка о проведенной презентации 
+            if (!empty($this->currentTMCDealFromCurrentPres)) {
+                $curTMCDeal = $this->currentTMCDealFromCurrentPres;
+            }
+
+            if(!empty($curTMCDeal)){
+                if(!empty($curTMCDeal['ASSIGNED_BY_ID'])){
+                    $tmcUserId = $curTMCDeal['ASSIGNED_BY_ID'];
+                    $currentNowDate->modify('+4 second');
+                    $nowDate = $currentNowDate->format('d.m.Y H:i:s');
+                    $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
+                        $this->hook,
+                        $this->bitrixLists,
+                        'presentation',
+                        'Презентация',
+                        'done',
+                        // $this->stringType,
+                        $this->planDeadline, //'', //$this->planDeadline,
+                        $tmcUserId,
+                        $tmcUserId,
+                        $tmcUserId,
+                        $this->entityId,
+                        'Презентация по заявке ТМЦ'.$this->comment,
+                        $this->workStatus['current'],
+                        $this->resultStatus, // result noresult expired,
+                        $this->noresultReason,
+                        $this->failReason,
+                        $this->failType,
+                        $currentDealIds,
+                        $currentBaseDealId,
+                        $nowDate, // $date,
+                        null, // $event['eventType'], //$hotName
+                        $this->reportContactId,
+                        $commands
+        
+                    );
+                
+                }
+            }
         }
 
 
