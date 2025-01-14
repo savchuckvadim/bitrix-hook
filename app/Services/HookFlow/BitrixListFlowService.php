@@ -771,44 +771,45 @@ class BitrixListFlowService
             ];
 
             foreach ($bitrixLists as $bitrixList) {
-                if ($bitrixList['type'] !== 'presentation') {
+                if ($bitrixList['type'] === 'kpi' || $bitrixList['type'] === 'history') {
+                    if ($bitrixList['group'] === 'sales') {
+                        foreach ($xoFields as $xoValue) {
+                            $currentDataField = [];
+                            $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $xoValue['code'];
+                            $btxId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, null);
+                            if (!empty($xoValue)) {
 
-                    foreach ($xoFields as $xoValue) {
-                        $currentDataField = [];
-                        $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $xoValue['code'];
-                        $btxId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, null);
-                        if (!empty($xoValue)) {
 
 
+                                if (!empty($xoValue['value'])) {
+                                    $fieldsData[$btxId] = $xoValue['value'];
+                                    $currentDataField[$btxId] = $xoValue['value'];
+                                }
 
-                            if (!empty($xoValue['value'])) {
-                                $fieldsData[$btxId] = $xoValue['value'];
-                                $currentDataField[$btxId] = $xoValue['value'];
+                                if (!empty($xoValue['list'])) {
+                                    $btxItemId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, $xoValue['list']['code']);
+                                    $currentDataField[$btxId] = [
+
+                                        $btxItemId =>  $xoValue['list']['code']
+                                    ];
+
+                                    $fieldsData[$btxId] =  $btxItemId;
+                                }
                             }
-
-                            if (!empty($xoValue['list'])) {
-                                $btxItemId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, $xoValue['list']['code']);
-                                $currentDataField[$btxId] = [
-
-                                    $btxItemId =>  $xoValue['list']['code']
-                                ];
-
-                                $fieldsData[$btxId] =  $btxItemId;
-                            }
+                            // array_push($fieldsData, $currentDataField);
                         }
-                        // array_push($fieldsData, $currentDataField);
+                        $uniqueHash = md5(uniqid(rand(), true));
+                        $code = $uniqueHash;
+                        $uniqueSecondHash = md5(uniqid(rand(), true));
+                        $fullCode = $bitrixList['type'] . '_' . $companyId . '_' . $code;
+                        $command =  BitrixListService::getBatchCommandSetItem(
+                            $hook,
+                            $bitrixList['bitrixId'],
+                            $fieldsData,
+                            $fullCode
+                        );
+                        $resultBatchCommands['set_list_item_' . $fullCode] = $command;
                     }
-                    $uniqueHash = md5(uniqid(rand(), true));
-                    $code = $uniqueHash;
-                    $uniqueSecondHash = md5(uniqid(rand(), true));
-                    $fullCode = $bitrixList['type'] . '_' . $companyId . '_' . $code;
-                    $command =  BitrixListService::getBatchCommandSetItem(
-                        $hook,
-                        $bitrixList['bitrixId'],
-                        $fieldsData,
-                        $fullCode
-                    );
-                    $resultBatchCommands['set_list_item_' . $fullCode] = $command;
                 }
             }
 
@@ -827,10 +828,14 @@ class BitrixListFlowService
 
                     if ($isUniqPresReport) {
                         $code = $companyId . '_' . $currentBaseDealId . '_done';
+
+                        if ($responsible !== $suresponsible) { // значит ответственный - ТМЦ и на него надо сделать отдельный уникальный запись об отчете
+                            $code = $companyId . '_' . $currentBaseDealId . '_done_' . $responsible;
+                        }
                     }
 
                     foreach ($bitrixLists as $bitrixList) {
-                        if ($bitrixList['type'] === 'kpi') {
+                        if ($bitrixList['type'] === 'kpi' && $bitrixList['group'] === 'sales') {
 
                             foreach ($xoFields as $xoValue) {
                                 $currentDataField = [];
