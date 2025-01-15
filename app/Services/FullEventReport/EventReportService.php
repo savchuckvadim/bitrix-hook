@@ -3180,6 +3180,19 @@ class EventReportService
                             }
                         }
                     }
+                    APIOnlineController::sendLog('test pres noresult', [
+                        'currentPresReportStatus' => $currentPresReportStatus,
+                        'currentReportEventType' => $this->currentReportEventType,
+                        'this->isFail' => $this->isFail,
+                        'this->isResult' => $this->isResult,
+                        'this->isPlanned' => $this->isPlanned,
+                        'this->isInWork' => $this->isInWork,
+                        'this->isSuccessSale' => $this->isSuccessSale,
+                        'this->isExpired' => $this->isExpired,
+
+                        'this->currentPlanEventType' => $this->currentPlanEventType,
+                        'this->currentReportEventType' => $this->currentReportEventType,
+                    ]);
                     // 1) если report - presentetion - обновить текущую pres deal from task
                     if ($this->currentReportEventType == 'presentation') {
                         if ($reportPresDealId) {
