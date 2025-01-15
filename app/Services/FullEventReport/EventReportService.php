@@ -3163,23 +3163,7 @@ class EventReportService
 
                 case 'sales_presentation':
                     $currentPresReportStatus = $currentReportStatus;
-                    if (!$this->isFail) {
-                     
-                        if ($this->isResult) {                   // результативный
-            
-                            if ($this->isInWork) {                // в работе или успех
-                                //найти сделку хо и закрыть в успех
-                            }
-                        } else { //нерезультативный 
-                            if ($this->isPlanned) {                // если запланирован нерезультативный - перенос 
-                                //найти сделку хо и закрыть в успех
-                                $currentPresReportStatus = 'expired';
-                            }else{
-                                $currentPresReportStatus = 'fail';
 
-                            }
-                        }
-                    }
                     APIOnlineController::sendLog('test pres noresult', [
                         'currentPresReportStatus' => $currentPresReportStatus,
                         'currentReportEventType' => $this->currentReportEventType,
@@ -3195,6 +3179,22 @@ class EventReportService
                     ]);
                     // 1) если report - presentetion - обновить текущую pres deal from task
                     if ($this->currentReportEventType == 'presentation') {
+                        if (!$this->isFail) {
+
+                            if ($this->isResult) {                   // результативный
+
+                                if ($this->isInWork) {                // в работе или успех
+                                    //найти сделку хо и закрыть в успех
+                                }
+                            } else { //нерезультативный 
+                                if ($this->isPlanned) {                // если запланирован нерезультативный - перенос 
+                                    //найти сделку хо и закрыть в успех
+                                    $currentPresReportStatus = 'expired';
+                                } else {
+                                    $currentPresReportStatus = 'fail';
+                                }
+                            }
+                        }
                         if ($reportPresDealId) {
                             array_push($reportDeals, $reportPresDealId);
 
@@ -3233,6 +3233,51 @@ class EventReportService
 
                             $key = 'update_entity_deal_plan' . '_' . $category['code'];
                             $resultBatchCommands[$key] = $entityCommand;
+                        }
+                    } else {  // для отмененной презентации - когда был report type - pres, но сделали - noPres - надо закрыть сделку през
+                        if (!empty($this->currentTask)) {
+                            if (!empty($this->currentTask['isPresentationCanceled'])) {
+
+                                if ($reportPresDealId) {
+                                    array_push($reportDeals, $reportPresDealId);
+
+                                    $pTargetStage = BitrixDealService::getTargetStagePresentation(
+                                        $category,
+                                        // $currentDepartamentType,
+                                        'presentation', // xo warm presentation,
+                                        'fail',  // plan done expired fail
+                                        false, //$this->isResult,
+                                        false, //$isUnplanned,
+                                        false, //$this->isSuccessSale,
+                                        false, //$this->isFail,
+
+                                    );
+                                    $fieldsData = [
+
+                                        // 'CATEGORY_ID' => $category['bitrixId'],
+                                        'STAGE_ID' => "C" . $category['bitrixId'] . ':' . $pTargetStage,
+                                        // "COMPANY_ID" => $entityId,
+                                        // 'ASSIGNED_BY_ID' => $responsibleId
+                                    ];
+
+
+                                    $batchCommand = BitrixDealBatchFlowService::getBatchCommand($fieldsData, 'update', $reportPresDealId);
+                                    $key = 'update_' . '_' . $category['code'] . '_' . $reportPresDealId;
+                                    $resultBatchCommands[$key] = $batchCommand;
+
+
+                                    $entityCommand =  $this->getEntityBatchFlowCommandFromIdForNewDeal(
+                                        true,
+                                        $reportPresDealId,
+                                        'presentation',
+                                        $this->currentBaseDeal['ID'],
+                                        'fail'
+                                    );
+
+                                    $key = 'update_entity_deal_plan' . '_' . $category['code'];
+                                    $resultBatchCommands[$key] = $entityCommand;
+                                }
+                            }
                         }
                     }
 
