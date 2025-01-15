@@ -2228,58 +2228,194 @@ class EventReportTMCBatchService
             }
         }
 
-        $reportEventType = $this->currentReportEventType;
-        $reportEventTypeName = $this->currentReportEventName;
-        $planEventTypeName = $this->currentPlanEventTypeName;
-        $planEventType = $this->currentPlanEventType; //если перенос то тип будет автоматически взят из report - предыдущего события
-        $eventAction = 'expired';  // не состоялся и двигается крайний срок 
-        $planComment = 'Перенесен';
-        if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
-            //report
-            $eventAction = 'plan';
-            $planComment = 'Запланирован';
-        } else {
-            $planEventTypeName = $this->currentReportEventName;
-            $planEventType = $this->currentReportEventType;
-        }
-
-        $planComment = $planComment . ' ' . $planEventTypeName . ' ' . $this->currentPlanEventName;
-        if ($this->isNew || $this->isExpired) {
-            $planComment .=  ' ' . $this->comment;
-        }
-        if (!$this->isNew) { //если новая то не отчитываемся
-            // покачто
-            // todo сделать чтобы в новой задаче можно было отчитаться что было
-
+     
+            $reportEventType = $this->currentReportEventType;
+            $reportEventTypeName = $this->currentReportEventName;
+            $planEventTypeName = $this->currentPlanEventTypeName;
+            $planEventType = $this->currentPlanEventType; //если перенос то тип будет автоматически взят из report - предыдущего события
+            $eventAction = 'expired';  // не состоялся и двигается крайний срок 
+            $planComment = 'Перенесен';
             if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
+                //report
+                $eventAction = 'plan';
+                $planComment = 'Запланирован';
+            } else {
+                $planEventTypeName = $this->currentReportEventName;
+                $planEventType = $this->currentReportEventType;
+            }
 
-                $reportAction = 'done';
-                if ($this->resultStatus !== 'result') {
-                    $reportAction = 'nodone';
-                }
+            $planComment = $planComment . ' ' . $planEventTypeName . ' ' . $this->currentPlanEventName;
+            if ($this->isNew || $this->isExpired) {
+                $planComment .=  ' ' . $this->comment;
+            }
+            if (!$this->isNew) { //если новая то не отчитываемся
+                // покачто
+                // todo сделать чтобы в новой задаче можно было отчитаться что было
 
-                if ($reportEventType !== 'presentation') {
+                if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
 
-                    $deadline = $this->planDeadline;
-                    if (!$this->isPlanned) {
-                        $deadline = null;
+                    $reportAction = 'done';
+                    if ($this->resultStatus !== 'result') {
+                        $reportAction = 'nodone';
                     }
-                 
-                    $currentNowDate->modify('+1 second');
+
+                    if ($reportEventType !== 'presentation') {
+
+                        $deadline = $this->planDeadline;
+                        if (!$this->isPlanned) {
+                            $deadline = null;
+                        }
+
+                        $currentNowDate->modify('+1 second');
+                        $nowDate = $currentNowDate->format('d.m.Y H:i:s');
+                        $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
+                            $this->hook,
+                            $this->bitrixLists,
+                            $reportEventType,
+                            $reportEventTypeName,
+                            $reportAction,
+                            // $this->stringType,
+                            $deadline, //'', //$this->planDeadline,
+                            $this->planResponsibleId,
+                            $this->planResponsibleId,
+                            $this->planResponsibleId,
+                            $this->entityId,
+                            $this->comment,
+                            $this->workStatus['current'],
+                            $this->resultStatus, // result noresult expired,
+                            $this->noresultReason,
+                            $this->failReason,
+                            $this->failType,
+                            $currentDealIds,
+                            $currentBaseDealId,
+                            $nowDate, // $date,
+                            null, // $event['eventType'], //$hotName
+                            $this->reportContactId,
+                            $commands
+
+                        );
+                    }
+
+                    //если была проведена презентация - не важно какое текущее report event
+                }
+            }
+            // Log::channel('telegram')->info('HOOK TST', [
+            //     'isPresentationDone' => $this->isPresentationDone
+            // ]);
+
+            // У ТМС нет отчета по unplanned presentation
+            // if ($this->isPresentationDone == true) {
+            //     //если была проведена през
+            //     if ($reportEventType !== 'presentation') {
+            //         //если текущее событие не през - значит uplanned
+            //         //значит надо запланировать през в холостую
+           
+
+            //         $currentNowDate->modify('+2 second');
+            //         $nowDate = $currentNowDate->format('d.m.Y H:i:s');
+
+            //         $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
+            //             $this->hook,
+            //             $this->bitrixLists,
+            //             'presentation',
+            //             'Презентация',
+            //             'plan',
+            //             // $this->stringType,
+            //             $this->nowDate, //'', //$this->planDeadline,
+            //             $this->planResponsibleId,
+            //             $this->planResponsibleId,
+            //             $this->planResponsibleId,
+            //             $this->entityId,
+            //             'незапланированая презентация',
+            //             ['code' => 'inJob'],
+            //             'result', // result noresult expired,
+            //             $this->noresultReason,
+            //             $this->failReason,
+            //             $this->failType,
+            //             $currentDealIds,
+            //             $currentBaseDealId,
+            //             $nowDate, // $date,
+            //             null, // $event['eventType'], //$hotName
+            //             $this->reportContactId,
+            //             $commands
+
+            //         );
+            //     }
+              
+            //     $currentNowDate->modify('+3 second');
+            //     $nowDate = $currentNowDate->format('d.m.Y H:i:s');
+            //     $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
+            //         $this->hook,
+            //         $this->bitrixLists,
+            //         'presentation',
+            //         'Презентация',
+            //         'done',
+            //         // $this->stringType,
+            //         $this->planDeadline, //'', //$this->planDeadline,
+            //         $this->planResponsibleId,
+            //         $this->planResponsibleId,
+            //         $this->planResponsibleId,
+            //         $this->entityId,
+            //         $this->comment,
+            //         $this->workStatus['current'],
+            //         $this->resultStatus, // result noresult expired,
+            //         $this->noresultReason,
+            //         $this->failReason,
+            //         $this->failType,
+            //         $currentDealIds,
+            //         $currentBaseDealId,
+            //         $nowDate, // $date,
+            //         null, // $event['eventType'], //$hotName
+            //         $this->reportContactId,
+
+            //         $commands
+
+            //     );
+            // }
+
+
+
+            if (!$this->isSuccessSale && !$this->isFail) {
+
+                if ($this->isPlanned) {
+                    // BtxCreateListItemJob::dispatch(  //запись о планировании и переносе
+                    //     $this->hook,
+                    //     $this->bitrixLists,
+                    //     $planEventType,
+                    //     $planEventTypeName,
+                    //     $eventAction,
+                    //     // $this->stringType,
+                    //     $this->planDeadline,
+                    //     $this->planResponsibleId,
+                    //     $this->planResponsibleId,
+                    //     $this->planResponsibleId,
+                    //     $this->entityId,
+                    //     $planComment,
+                    //     $this->workStatus['current'],
+                    //     $this->resultStatus,  // result noresult expired
+                    //     $this->noresultReason,
+                    //     $this->failReason,
+                    //     $this->failType,
+                    //     $currentDealIds,
+                    //     $currentBaseDealId
+
+                    // )->onQueue('low-priority');
+                    $currentNowDate->modify('+5 second');
                     $nowDate = $currentNowDate->format('d.m.Y H:i:s');
+
                     $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
                         $this->hook,
                         $this->bitrixLists,
-                        $reportEventType,
-                        $reportEventTypeName,
-                        $reportAction,
+                        $planEventType,
+                        $planEventTypeName,
+                        $eventAction,
                         // $this->stringType,
-                        $deadline, //'', //$this->planDeadline,
+                        $this->planDeadline, //'', //$this->planDeadline,
                         $this->planResponsibleId,
                         $this->planResponsibleId,
                         $this->planResponsibleId,
                         $this->entityId,
-                        $this->comment,
+                        $planComment,
                         $this->workStatus['current'],
                         $this->resultStatus, // result noresult expired,
                         $this->noresultReason,
@@ -2289,142 +2425,21 @@ class EventReportTMCBatchService
                         $currentBaseDealId,
                         $nowDate, // $date,
                         null, // $event['eventType'], //$hotName
-                        $this->reportContactId,
+                        $this->planContactId,
                         $commands
 
                     );
                 }
-
-                //если была проведена презентация - не важно какое текущее report event
             }
-        }
-        // Log::channel('telegram')->info('HOOK TST', [
-        //     'isPresentationDone' => $this->isPresentationDone
-        // ]);
-
-        if ($this->isPresentationDone == true) {
-            //если была проведена през
-            if ($reportEventType !== 'presentation') {
-                //если текущее событие не през - значит uplanned
-                //значит надо запланировать през в холостую
-                // BtxCreateListItemJob::dispatch(  //запись о планировании и переносе
-                //     $this->hook,
-                //     $this->bitrixLists,
-                //     'presentation',
-                //     'Презентация',
-                //     'plan',
-                //     // $this->stringType,
-                //     $this->nowDate,
-                //     $this->planResponsibleId,
-                //     $this->planResponsibleId,
-                //     $this->planResponsibleId,
-                //     $this->entityId,
-                //     'не запланированая презентация',
-                //     ['code' => 'inJob'], //$this->workStatus['current'],
-                //     'result',  // result noresult expired
-                //     $this->noresultReason,
-                //     $this->failReason,
-                //     $this->failType,
-                //     $currentDealIds,
-                //     $currentBaseDealId
 
 
-                // )->onQueue('low-priority');
-
-                $currentNowDate->modify('+2 second');
-                $nowDate = $currentNowDate->format('d.m.Y H:i:s');
-
-                $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
-                    $this->hook,
-                    $this->bitrixLists,
-                    'presentation',
-                    'Презентация',
-                    'plan',
-                    // $this->stringType,
-                    $this->nowDate, //'', //$this->planDeadline,
-                    $this->planResponsibleId,
-                    $this->planResponsibleId,
-                    $this->planResponsibleId,
-                    $this->entityId,
-                    'незапланированая презентация',
-                    ['code' => 'inJob'],
-                    'result', // result noresult expired,
-                    $this->noresultReason,
-                    $this->failReason,
-                    $this->failType,
-                    $currentDealIds,
-                    $currentBaseDealId,
-                    $nowDate, // $date,
-                    null, // $event['eventType'], //$hotName
-                    $this->reportContactId,
-                    $commands
-
-                );
-            }
-            // BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию - презентация
-            //     $this->hook,
-            //     $this->bitrixLists,
-            //     'presentation',
-            //     'Презентация',
-            //     'done',
-            //     // $this->stringType,
-            //     $this->planDeadline,
-            //     $this->planResponsibleId,
-            //     $this->planResponsibleId,
-            //     $this->planResponsibleId,
-            //     $this->entityId,
-            //     $this->comment,
-            //     $this->workStatus['current'],
-            //     $this->resultStatus, // result noresult expired,
-            //     $this->noresultReason,
-            //     $this->failReason,
-            //     $this->failType,
-            //     $currentDealIds,
-            //     $currentBaseDealId
-
-            // )->onQueue('low-priority');
-            $currentNowDate->modify('+3 second');
-            $nowDate = $currentNowDate->format('d.m.Y H:i:s');
-            $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
-                $this->hook,
-                $this->bitrixLists,
-                'presentation',
-                'Презентация',
-                'done',
-                // $this->stringType,
-                $this->planDeadline, //'', //$this->planDeadline,
-                $this->planResponsibleId,
-                $this->planResponsibleId,
-                $this->planResponsibleId,
-                $this->entityId,
-                $this->comment,
-                $this->workStatus['current'],
-                $this->resultStatus, // result noresult expired,
-                $this->noresultReason,
-                $this->failReason,
-                $this->failType,
-                $currentDealIds,
-                $currentBaseDealId,
-                $nowDate, // $date,
-                null, // $event['eventType'], //$hotName
-                $this->reportContactId,
-
-                $commands
-
-            );
-        }
-
-
-
-        if (!$this->isSuccessSale && !$this->isFail) {
-
-            if ($this->isPlanned) {
-                // BtxCreateListItemJob::dispatch(  //запись о планировании и переносе
+            if ($this->isSuccessSale || $this->isFail) {
+                // BtxSuccessListItemJob::dispatch(  //запись о планировании и переносе
                 //     $this->hook,
                 //     $this->bitrixLists,
                 //     $planEventType,
                 //     $planEventTypeName,
-                //     $eventAction,
+                //     'done',
                 //     // $this->stringType,
                 //     $this->planDeadline,
                 //     $this->planResponsibleId,
@@ -2441,22 +2456,27 @@ class EventReportTMCBatchService
                 //     $currentBaseDealId
 
                 // )->onQueue('low-priority');
-                $currentNowDate->modify('+5 second');
+                $eventType = 'success';
+                if (!empty($this->isSuccessSale)) {
+                    $eventType = 'success';
+                } else  if (!empty($this->isFail)) {
+                    $eventType = 'fail';
+                }
+                $currentNowDate->modify('+7 second');
                 $nowDate = $currentNowDate->format('d.m.Y H:i:s');
-
                 $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
                     $this->hook,
                     $this->bitrixLists,
-                    $planEventType,
+                    $eventType,
                     $planEventTypeName,
-                    $eventAction,
+                    'done',
                     // $this->stringType,
                     $this->planDeadline, //'', //$this->planDeadline,
                     $this->planResponsibleId,
                     $this->planResponsibleId,
                     $this->planResponsibleId,
                     $this->entityId,
-                    $planComment,
+                    $this->comment,
                     $this->workStatus['current'],
                     $this->resultStatus, // result noresult expired,
                     $this->noresultReason,
@@ -2464,77 +2484,17 @@ class EventReportTMCBatchService
                     $this->failType,
                     $currentDealIds,
                     $currentBaseDealId,
-                    $nowDate, // $date,
+                    $nowDate,  // $date,
                     null, // $event['eventType'], //$hotName
-                    $this->planContactId,
+                    $this->reportContactId,
                     $commands
 
                 );
             }
-        }
-
-
-        if ($this->isSuccessSale || $this->isFail) {
-            // BtxSuccessListItemJob::dispatch(  //запись о планировании и переносе
-            //     $this->hook,
-            //     $this->bitrixLists,
-            //     $planEventType,
-            //     $planEventTypeName,
-            //     'done',
-            //     // $this->stringType,
-            //     $this->planDeadline,
-            //     $this->planResponsibleId,
-            //     $this->planResponsibleId,
-            //     $this->planResponsibleId,
-            //     $this->entityId,
-            //     $planComment,
-            //     $this->workStatus['current'],
-            //     $this->resultStatus,  // result noresult expired
-            //     $this->noresultReason,
-            //     $this->failReason,
-            //     $this->failType,
-            //     $currentDealIds,
-            //     $currentBaseDealId
-
-            // )->onQueue('low-priority');
-            $eventType = 'success';
-            if (!empty($this->isSuccessSale)) {
-                $eventType = 'success';
-            } else  if (!empty($this->isFail)) {
-                $eventType = 'fail';
-            }
-            $currentNowDate->modify('+7 second');
-            $nowDate = $currentNowDate->format('d.m.Y H:i:s');
-            $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
-                $this->hook,
-                $this->bitrixLists,
-                $eventType,
-                $planEventTypeName,
-                'done',
-                // $this->stringType,
-                $this->planDeadline, //'', //$this->planDeadline,
-                $this->planResponsibleId,
-                $this->planResponsibleId,
-                $this->planResponsibleId,
-                $this->entityId,
-                $this->comment,
-                $this->workStatus['current'],
-                $this->resultStatus, // result noresult expired,
-                $this->noresultReason,
-                $this->failReason,
-                $this->failType,
-                $currentDealIds,
-                $currentBaseDealId,
-                $nowDate,  // $date,
-                null, // $event['eventType'], //$hotName
-                $this->reportContactId,
-                $commands
-
-            );
-        }
-
+        
         $batchService = new BitrixBatchService($this->hook);
         $batchService->sendGeneralBatchRequest($commands);
+        
     }
 
 
