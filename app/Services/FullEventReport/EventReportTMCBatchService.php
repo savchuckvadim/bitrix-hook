@@ -1993,7 +1993,7 @@ class EventReportTMCBatchService
                         $batchCommands
 
                     );
-                }else{
+                } else {
                     if (!empty($currentTaskId)) {
                         $taskServiceForComplete = new BitrixTaskService();
                         $taskServiceForComplete->completeTask(
@@ -2083,7 +2083,10 @@ class EventReportTMCBatchService
                 }
 
                 if ($reportEventType !== 'presentation') {
-
+                    $deadline = $this->planDeadline;
+                    if (!$this->isPlanned) {
+                        $deadline = null;
+                    }
                     //если текущий не презентация
                     BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию
                         $this->hook,
@@ -2092,7 +2095,7 @@ class EventReportTMCBatchService
                         $reportEventTypeName,
                         $reportAction,
                         // $this->stringType,
-                        $this->planDeadline,
+                        $$deadline,
                         $this->planResponsibleId,
                         $this->planResponsibleId,
                         $this->planResponsibleId,
