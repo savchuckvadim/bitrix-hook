@@ -1144,7 +1144,7 @@ class BitrixDealService
 
     static function getTargetStagePresentation(
         $currentCategoryData,
-        $eventType, // xo warm presentation,
+        $eventType, // presentation,
         $eventAction,  // plan done expired fail
         $isResult,
         $isUnplanned,
@@ -1167,6 +1167,7 @@ class BitrixDealService
             $stageSuphicks = 'success';
         } else if ($eventAction == 'expired') {
             $stageSuphicks = 'pending';
+            
         } else if ($eventAction == 'fail') {
             $stageSuphicks = 'fail';
 

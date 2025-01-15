@@ -3162,7 +3162,24 @@ class EventReportService
                     break;
 
                 case 'sales_presentation':
+                    $currentPresReportStatus = $currentReportStatus;
+                    if (!$this->isFail) {
+                     
+                        if ($this->isResult) {                   // результативный
+            
+                            if ($this->isInWork) {                // в работе или успех
+                                //найти сделку хо и закрыть в успех
+                            }
+                        } else { //нерезультативный 
+                            if ($this->isPlanned) {                // если запланирован нерезультативный - перенос 
+                                //найти сделку хо и закрыть в успех
+                                $currentPresReportStatus = 'expired';
+                            }else{
+                                $currentPresReportStatus = 'fail';
 
+                            }
+                        }
+                    }
                     // 1) если report - presentetion - обновить текущую pres deal from task
                     if ($this->currentReportEventType == 'presentation') {
                         if ($reportPresDealId) {
@@ -3172,7 +3189,7 @@ class EventReportService
                                 $category,
                                 // $currentDepartamentType,
                                 $this->currentReportEventType, // xo warm presentation,
-                                $currentReportStatus,  // plan done expired fail
+                                $currentPresReportStatus,  // plan done expired fail
                                 $this->isResult,
                                 $isUnplanned,
                                 $this->isSuccessSale,
