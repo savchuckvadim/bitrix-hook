@@ -193,9 +193,8 @@ class EventReportService
         $this->domain = $domain;
 
         if ($domain == 'gsirk.bitrix24.ru' || $domain == 'april-dev.bitrix24.ru' || $domain == 'april-garant.bitrix24.ru') {
-            if(isset($data['plan']['isActive'])){
+            if (isset($data['plan']['isActive'])) {
                 $this->isPlanActive = $data['plan']['isActive'];
-
             }
         }
 
@@ -356,7 +355,8 @@ class EventReportService
         if (
             $data['report']['resultStatus'] !== 'result' &&
             $data['report']['resultStatus'] !== 'new' &&
-            $data['plan']['isPlanned']
+            $data['plan']['isPlanned'] &&
+            $this->isPlanActive
 
         ) {
             $this->isExpired  = true;
@@ -4121,8 +4121,8 @@ class EventReportService
                 $curTMCDeal = $this->currentTMCDealFromCurrentPres;
             }
 
-            if(!empty($curTMCDeal)){
-                if(!empty($curTMCDeal['ASSIGNED_BY_ID'])){
+            if (!empty($curTMCDeal)) {
+                if (!empty($curTMCDeal['ASSIGNED_BY_ID'])) {
                     $tmcUserId = $curTMCDeal['ASSIGNED_BY_ID'];
                     $currentNowDate->modify('+4 second');
                     $nowDate = $currentNowDate->format('d.m.Y H:i:s');
@@ -4138,7 +4138,7 @@ class EventReportService
                         $tmcUserId,
                         $this->planResponsibleId,
                         $this->entityId,
-                        'Презентация по заявке ТМЦ'.$this->comment,
+                        'Презентация по заявке ТМЦ' . $this->comment,
                         $this->workStatus['current'],
                         $this->resultStatus, // result noresult expired,
                         $this->noresultReason,
@@ -4150,9 +4150,8 @@ class EventReportService
                         null, // $event['eventType'], //$hotName
                         $this->reportContactId,
                         $commands
-        
+
                     );
-                
                 }
             }
         }
