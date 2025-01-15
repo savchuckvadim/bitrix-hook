@@ -4043,6 +4043,12 @@ class EventReportService
                     //     $currentBaseDealId
 
                     // )->onQueue('low-priority');
+                    $deadline = $this->planDeadline;
+                    if (!$this->isPlanned) {
+                        $deadline = null;
+                    }
+
+                    
                     $currentNowDate->modify('+1 second');
                     $nowDate = $currentNowDate->format('d.m.Y H:i:s');
                     $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
@@ -4052,7 +4058,7 @@ class EventReportService
                         $reportEventTypeName,
                         $reportAction,
                         // $this->stringType,
-                        $this->planDeadline, //'', //$this->planDeadline,
+                        $deadline, //'', //$this->planDeadline,
                         $this->planResponsibleId,
                         $this->planResponsibleId,
                         $this->planResponsibleId,
@@ -4161,6 +4167,11 @@ class EventReportService
             //     $currentBaseDealId
 
             // )->onQueue('low-priority');
+            $deadline = $this->planDeadline;
+            if (!$this->isPlanned) {
+                $deadline = null;
+            }
+
             $currentNowDate->modify('+3 second');
             $nowDate = $currentNowDate->format('d.m.Y H:i:s');
             $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
@@ -4170,7 +4181,7 @@ class EventReportService
                 'Презентация',
                 'done',
                 // $this->stringType,
-                $this->planDeadline, //'', //$this->planDeadline,
+                $deadline, //'', //$this->planDeadline,
                 $this->planResponsibleId,
                 $this->planResponsibleId,
                 $this->planResponsibleId,
