@@ -745,7 +745,7 @@ class BitrixDealService
                 'order' => 3,
                 'suphicks' => 'offer_create'
             ],
-            
+
             [
                 'code' => 'hot',
                 'order' => 4,
@@ -886,8 +886,11 @@ class BitrixDealService
             ],);
         }
 
-
-        $codesToFilter = [$planEventType, $reportEventType];
+        if (!empty($planEventType)) {
+            $codesToFilter = [$planEventType, $reportEventType];
+        } else {
+            $codesToFilter = [$reportEventType];
+        }
         if (!empty($currentStageOrder)) {
             array_push($codesToFilter, $currentStageOrder);
         }
@@ -1167,7 +1170,6 @@ class BitrixDealService
             $stageSuphicks = 'success';
         } else if ($eventAction == 'expired') {
             $stageSuphicks = 'pending';
-            
         } else if ($eventAction == 'fail') {
             $stageSuphicks = 'fail';
 

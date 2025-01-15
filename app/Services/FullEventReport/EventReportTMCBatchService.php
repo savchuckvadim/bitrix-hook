@@ -84,6 +84,9 @@ class EventReportTMCBatchService
     protected $plan;
     protected $presentation;
     protected $isPlanned;
+    protected $isPlanActive = true;
+
+
     protected $currentPlanEventType;
 
     // 0: {id: 1, code: "warm", name: "Звонок"}
@@ -340,9 +343,7 @@ class EventReportTMCBatchService
             $this->isSuccessSale =  true;
         }
 
-        if ($data['report']['resultStatus'] !== 'result' && $data['report']['resultStatus'] !== 'new' && $data['plan']['isPlanned']) {
-            $this->isExpired  = true;
-        }
+
 
         if (!empty($data['report']['description'])) {
             $this->comment  = $data['report']['description'];
@@ -371,8 +372,34 @@ class EventReportTMCBatchService
 
 
         $this->plan = $data['plan'];
-        $this->isPlanned = $data['plan']['isPlanned'];
-        if (!empty($data['plan']['isPlanned']) && !empty($data['plan']['type']) && !empty($data['plan']['type']['current']) && !empty($data['plan']['type']['current']['code'])) {
+        if ($domain == 'gsirk.bitrix24.ru' || $domain == 'april-dev.bitrix24.ru' || $domain == 'april-garant.bitrix24.ru') {
+            if (isset($data['plan']['isActive'])) {
+                $this->isPlanActive = $data['plan']['isActive'];
+            }
+        }
+        // $this->isPlanned = $data['plan']['isPlanned'];
+        $this->isPlanned = $data['plan']['isPlanned'] && !empty($this->isPlanActive);
+
+        if (
+            $data['report']['resultStatus'] !== 'result' &&
+            $data['report']['resultStatus'] !== 'new' &&
+            $data['plan']['isPlanned'] &&
+            !empty($this->isPlanActive)
+
+        ) {
+            $this->isExpired  = true;
+        }
+
+
+
+
+        if (
+            !empty($this->isPlanned) &&
+            !empty($this->isPlanActive) &&
+            !empty($data['plan']['type']) &&
+            !empty($data['plan']['type']['current']) &&
+            !empty($data['plan']['type']['current']['code'])
+        ) {
             $this->currentPlanEventType = $data['plan']['type']['current']['code'];
             $this->currentPlanEventTypeName = $data['plan']['type']['current']['name'];
             $this->currentPlanEventName = $data['plan']['name'];
@@ -1510,14 +1537,14 @@ class EventReportTMCBatchService
             'unplannedPresDeals' => $unplannedPresDeals,
             'commands' => $resultBatchCommands
         ];
-        if ($this->isExpired || $this->isPlanned) {
 
-            $resultBatchCommands = $this->taskFlow(
-                null, // $currentSmartItemId,
-                $planDeals,
-                $resultBatchCommands
-            );
-        }
+
+        $resultBatchCommands = $this->taskFlow(
+            null, // $currentSmartItemId,
+            $planDeals,
+            $resultBatchCommands
+        );
+
 
         // if ($this->isExpired || $this->isPlanned) {
         //     $resultBatchCommands = $this->getTaskFlowBatchCommand(
@@ -1944,29 +1971,37 @@ class EventReportTMCBatchService
 
             if (!$this->isExpired) {
 
+                if (!empty($this->isPlanned)) {
+                    $batchCommands =  $taskService->getCreateTaskBatchCommands(
+                        $this->currentPlanEventType,       //$type,   //cold warm presentation hot 
+                        $this->currentPlanEventTypeName,
+                        $this->portal,
+                        $this->domain,
+                        $this->hook,
+                        $this->currentBtxEntity,
+                        $companyId,  //may be null
+                        $leadId, //$leadId,     //may be null
+                        $this->planCreatedId,
+                        $this->planResponsibleId,
+                        $this->planDeadline,
+                        $this->currentPlanEventName,
+                        null, // $currentSmartItemId,
+                        false, //$isNeedCompleteOtherTasks
+                        $currentTaskId, // null,
+                        $currentDealsIds,
+                        $this->planContact, // $contactId,
+                        $batchCommands
 
-
-                $batchCommands =  $taskService->getCreateTaskBatchCommands(
-                    $this->currentPlanEventType,       //$type,   //cold warm presentation hot 
-                    $this->currentPlanEventTypeName,
-                    $this->portal,
-                    $this->domain,
-                    $this->hook,
-                    $this->currentBtxEntity,
-                    $companyId,  //may be null
-                    $leadId, //$leadId,     //may be null
-                    $this->planCreatedId,
-                    $this->planResponsibleId,
-                    $this->planDeadline,
-                    $this->currentPlanEventName,
-                    null, // $currentSmartItemId,
-                    false, //$isNeedCompleteOtherTasks
-                    $currentTaskId, // null,
-                    $currentDealsIds,
-                    $this->planContact, // $contactId,
-                    $batchCommands
-
-                );
+                    );
+                }else{
+                    if (!empty($currentTaskId)) {
+                        $taskServiceForComplete = new BitrixTaskService();
+                        $taskServiceForComplete->completeTask(
+                            $this->hook,
+                            [$currentTaskId]
+                        );
+                    }
+                }
             } else {
                 // $createdTask =  $taskService->updateTask(
 
