@@ -2260,29 +2260,11 @@ class EventReportTMCBatchService
 
                 if ($reportEventType !== 'presentation') {
 
-                    //если текущий не презентация
-                    // BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию
-                    //     $this->hook,
-                    //     $this->bitrixLists,
-                    //     $reportEventType,
-                    //     $reportEventTypeName,
-                    //     $reportAction,
-                    //     // $this->stringType,
-                    //     $this->planDeadline,
-                    //     $this->planResponsibleId,
-                    //     $this->planResponsibleId,
-                    //     $this->planResponsibleId,
-                    //     $this->entityId,
-                    //     $this->comment,
-                    //     $this->workStatus['current'],
-                    //     $this->resultStatus, // result noresult expired,
-                    //     $this->noresultReason,
-                    //     $this->failReason,
-                    //     $this->failType,
-                    //     $currentDealIds,
-                    //     $currentBaseDealId
-
-                    // )->onQueue('low-priority');
+                    $deadline = $this->planDeadline;
+                    if (!$this->isPlanned) {
+                        $deadline = null;
+                    }
+                 
                     $currentNowDate->modify('+1 second');
                     $nowDate = $currentNowDate->format('d.m.Y H:i:s');
                     $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
@@ -2292,7 +2274,7 @@ class EventReportTMCBatchService
                         $reportEventTypeName,
                         $reportAction,
                         // $this->stringType,
-                        $this->planDeadline, //'', //$this->planDeadline,
+                        $deadline, //'', //$this->planDeadline,
                         $this->planResponsibleId,
                         $this->planResponsibleId,
                         $this->planResponsibleId,
