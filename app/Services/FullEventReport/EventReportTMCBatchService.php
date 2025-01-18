@@ -372,11 +372,11 @@ class EventReportTMCBatchService
 
 
         $this->plan = $data['plan'];
-        if ($domain == 'gsirk.bitrix24.ru' || $domain == 'april-dev.bitrix24.ru' || $domain == 'april-garant.bitrix24.ru') {
+        // if ($domain == 'gsirk.bitrix24.ru' || $domain == 'april-dev.bitrix24.ru' || $domain == 'april-garant.bitrix24.ru') {
             if (isset($data['plan']['isActive'])) {
                 $this->isPlanActive = $data['plan']['isActive'];
             }
-        }
+        // }
         // $this->isPlanned = $data['plan']['isPlanned'];
         $this->isPlanned = $data['plan']['isPlanned'] && !empty($this->isPlanActive);
 
