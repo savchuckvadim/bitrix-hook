@@ -6,7 +6,7 @@ import { showToastWithPromise } from "./toast-util";
 
 export const getProfile = async (email: string, firebase: any, history: any, dispatch: any, setAuthUserData: any): Promise<Profile | null> => {
     let result = null
-    
+    debugger
     if (email) {
        await showToastWithPromise("Вы успешно зарегестрированы", 'success', {
             position: "top-right",
@@ -14,7 +14,7 @@ export const getProfile = async (email: string, firebase: any, history: any, dis
         })
 
         const profile = await firebase.getDocByProp('profile', 'email', email) as Profile | null
-
+        debugger
         if (profile) {
             const logged_user = {
                 login: true,
@@ -27,7 +27,7 @@ export const getProfile = async (email: string, firebase: any, history: any, dis
 
             
 
-
+            debugger
             dispatch(setAuthUserData(profile))
         }
 

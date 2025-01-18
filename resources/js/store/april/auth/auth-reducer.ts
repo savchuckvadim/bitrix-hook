@@ -65,11 +65,12 @@ export const getAuthApp = (): AuthThunkType => async (dispatch) => {
 
 export const initializeGoogleAuth = (history: any): AuthThunkType => async (dispatch, getState) => {
     const firebaseBackend = getState().app.firebaseBackend
-    
+    debugger
     if (firebaseBackend) {
         const fireBaseUser = await firebaseBackend.socialLoginUser('google')
         //@ts-ignore
         const email = fireBaseUser.email as string
+        debugger
         const profile = await getProfile(email, firebaseBackend, history, dispatch, actions.setAuthUserData)
         
       
@@ -82,15 +83,21 @@ export const initializeGoogleAuth = (history: any): AuthThunkType => async (disp
 export const login = (user: any, history: any): AuthThunkType => async (dispatch, getState) => {
 
     const firebaseBackend = getState().app.firebaseBackend
-    
+    debugger
     if (firebaseBackend) {
         
         const fireBaseUser = await firebaseBackend.loginUser(user.email, user.password)
-        
+        debugger
         //@ts-ignore
         const firebaseEmail = fireBaseUser.email
         
-        const profile = await getProfile(firebaseEmail, firebaseBackend, history, dispatch, actions.setAuthUserData)
+        const profile = await getProfile(
+            firebaseEmail, 
+            firebaseBackend,
+             history, 
+             dispatch, 
+             actions.setAuthUserData
+            )
         
     } else {
         alert('something wrong with firebase api')
@@ -162,7 +169,7 @@ const auth = (state: AuthStateType = initialState, action: SetAuthUserDataType):
 
     switch (action.type) {
         case "SP/AUTH/SET_USER_DATA":
-
+            debugger
             result = { ...state, }
             result.isAuth = action.isAuth
             result.authUser = action.authUser //запоминаем аутентифицированного пользователя в state

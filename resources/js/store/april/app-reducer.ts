@@ -1,16 +1,5 @@
-// // import { googleAPI } from '../../services/google-api/google-api'
-// import { onlineAPI } from '../../services/april-online-api/online-api'
-// import { generalAPI } from '../../services/firebase-api/firebase-api'
-// import { aitest } from '../../services/openai-api/openai-api'
-// import { PreloaderCodesEnum } from '../../types/types'
-// import { InferActionsTypes, ThunkType } from '../store'
-// import { getAuthApp } from './auth/auth-reducer'
-// // import { getDialogs } from './dialogs/dialogs-reducer'
-// import { inProgress, InProgressType } from './preloader/preloader-reducer'
 
 import { InferActionsTypes, ThunkType } from ".."
-import { hookAPI } from "../../helpers/april-hook/hook-api"
-import { onlineAPI } from "../../helpers/april-online/online-api"
 import { initFirebaseBackend } from "../../helpers/firebase/firebase_helper"
 import { FirebaseAuthBackendClassType, FirebaseAuthBackendInstanceType } from "../../helpers/firebase/types"
 import { firebaseConfig } from "../../secret/secret"
@@ -46,6 +35,7 @@ export const initialize = (): AuthThunkType => async (dispatch) => {
 
 
     const fireBack = initFirebaseBackend(firebaseConfig) as FirebaseAuthBackendInstanceType
+   debugger
     fireBack && dispatch(appActions.setFirebase(fireBack))
 
     dispatch(appActions.initializedSuccess())

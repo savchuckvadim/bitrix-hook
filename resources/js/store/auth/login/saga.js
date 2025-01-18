@@ -13,7 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 //TODO TESTING ONLINE
 
 function* loginUser({ payload: { user, history } }) {
-
+  debugger
  
   try {
 
@@ -54,6 +54,7 @@ function* loginUser({ payload: { user, history } }) {
 }
 
 function* logoutUser({ payload: { history } }) {
+  debugger
   try {
     sessionStorage.removeItem("authUser");
     history('/login');

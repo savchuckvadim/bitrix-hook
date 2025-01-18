@@ -8,6 +8,7 @@ export class FirebaseAuthBackend {
   constructor(firebaseConfig) {
     if (firebaseConfig) {
       // Initialize Firebase
+      debugger
       firebase.initializeApp(firebaseConfig);
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
@@ -61,6 +62,7 @@ export class FirebaseAuthBackend {
    * Login user with given details
    */
   loginUser = (email, password) => {
+    debugger
     return new Promise((resolve, reject) => {
       firebase
         .auth()
