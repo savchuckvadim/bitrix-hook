@@ -47,7 +47,7 @@ export const appendFormData = (formData, key, value) => {
 };
 
 
-export const getFormik = (router, creating, itemUrl, current, setOrupdateEntityItem) => {
+export const getFormik = (router, creating, itemUrl, current, setOrupdateEntityItem, isFormData) => {
     let dataInitialValues = null
     if (current) {
 
@@ -71,20 +71,24 @@ export const getFormik = (router, creating, itemUrl, current, setOrupdateEntityI
 
         onSubmit: (values) => {
             console.log("values", values);
-            const formData = new FormData();
+            let formData = values;
+            if (isFormData) {
+                formData = new FormData();
+
+                debugger
+                for (const key in values) {
+                    appendFormData(formData, key, values[key]);
+                }
+                console.log("formData", formData.values());
 
 
-            for (const key in values) {
-                appendFormData(formData, key, values[key]);
+                for (let [key, value] of formData.entries()) {
+                    console.log(key, value);
+                }
+
             }
-            console.log("formData", formData.values());
-
-
-            for (let [key, value] of formData.entries()) {
-                console.log(key, value);
-            }
-
-            setOrupdateEntityItem(router.navigate, router.location.pathname, itemUrl, itemUrl, formData)
+            debugger
+            setOrupdateEntityItem(router.navigate, router.location.pathname, itemUrl, itemUrl, formData, isFormData)
 
         }
 

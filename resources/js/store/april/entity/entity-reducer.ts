@@ -146,8 +146,9 @@ export const getEntityItem = (url: string, entityName: string, entityId: number)
 
 }
 export const setOrupdateEntityItem = (history: (url: string) => void,
-    currentUrl: string, url: string, entityName: string, data: FormData) => async (dispatch: AppDispatchType, getState: GetStateType) => {
-
+    currentUrl: string, url: string, entityName: string, data: FormData, isFormData = true) => 
+        async (dispatch: AppDispatchType, getState: GetStateType) => {
+        debugger
 
         if (url) {
 

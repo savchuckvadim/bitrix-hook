@@ -265,6 +265,9 @@ class BitrixTaskService
 
     ) {
         date_default_timezone_set('Europe/Moscow');
+        if ($domain === 'gsirk.bitrix24.ru') {
+            date_default_timezone_set('Asia/Irkutsk');
+        }
         $nowDate = now();
         $contactId = null;
         $contactName = null;
@@ -470,7 +473,7 @@ class BitrixTaskService
                 $taskData,
                 $batchCommands
             );
-      
+
 
 
             return $batchCommands;

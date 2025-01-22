@@ -30,21 +30,22 @@ const EntityItemAdd = ({
 
     //meta title
     document.title = entityName + " | Skote React + Laravel 10 Admin And Dashboard Template";
-
-    const validation = getFormik(router, creating, itemUrl, null, setOrupdateEntityItem)
+    const isFormData = creating.formData.apiName !== 'complect' && creating.formData.apiName !== 'complects'
+    
+    const validation = getFormik(router, creating, itemUrl, null, setOrupdateEntityItem, isFormData)
 
     const handleFileChange = (event, inputName, formik) => {
 
         formik.setFieldValue(inputName, event.target.files);
     };
-    
 
-    
+
+
 
 
     const getItems = (creatingEntity) => {
         let result = []
-        
+
         creatingEntity.groups.forEach((group, index) => {
 
             const isEntitiesGroup = group.type === 'entities'
@@ -56,8 +57,8 @@ const EntityItemAdd = ({
                     <h4>{group.groupName}</h4>
 
                     {fields.map(field => {
-                      
-                        
+
+
                         return (
                             <Row className="mb-4">
                                 <Label
@@ -133,7 +134,7 @@ const EntityItemAdd = ({
     
     return (
         <React.Fragment>
-           
+
             <Row>
                 <Col xl={6}>
                     <Form

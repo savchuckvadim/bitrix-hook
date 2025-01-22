@@ -692,6 +692,31 @@ allEntities.push(
         []
     )
 )
+
+allEntities.push(
+    getEntityRoute(
+        100,
+        'complect',
+        'Комплекты GARANT',
+        []
+    )
+)
+allEntities.push(
+    getEntityRoute(
+        101,
+        'infogroup',
+        'Группы инфоблоков',
+        []
+    )
+)
+allEntities.push(
+    getEntityRoute(
+        101,
+        'supply',
+        'Виды поставки комплектов Гарант',
+        []
+    )
+)
 export const getRouteDataById = (id: number) => {
     return allEntities.find(routeData => routeData.id == id)
 }
