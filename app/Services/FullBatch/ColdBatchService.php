@@ -231,7 +231,7 @@ class ColdBatchService
             'op_history_multiple',
         ];
         $resultEntityFields = [];
-    
+
 
         $workStatus = [
             'id' => 0,
@@ -1211,6 +1211,13 @@ class ColdBatchService
             } else if ($this->entityType == 'lead') {
                 $leadId  = $this->entityId;
             }
+
+            if (!empty($this->lead)) {
+                if (!empty($this->lead['ID'])) {
+                    $leadId = $this->lead['ID'];
+                }
+            }
+
             $taskService = new BitrixTaskService();
 
 
