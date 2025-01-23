@@ -33,7 +33,13 @@ class FullEventFlowLeadController extends Controller
         //UF_CRM_LEAD_QUEST_URL ссылка на отчет
 
         foreach ($lead as $key => $value) {
-            if ($key === 'TITLE') {
+            if (
+                $key === 'TITLE' ||
+                $key === 'ASSIGNED_BY_ID' ||
+                $key === 'PHONE' ||
+                $key === 'EMAIL' 
+                
+                ) {
                 APIOnlineController::sendLog('FullEventFlowLeadController', [
 
                     $key => $value
@@ -43,9 +49,9 @@ class FullEventFlowLeadController extends Controller
         }
         $fields['LEAD_ID'] = $leadId;
         $fields['TITLE'] = $lead['TITLE'];
-        $fields['ASSIGNED_BY_ID'] = $lead['ASSIGNED_BY_ID'];
-        $fields['PHONE'] = $lead['PHONE'];
-        $fields['EMAIL'] = $lead['EMAIL'];
+        // $fields['ASSIGNED_BY_ID'] = $lead['ASSIGNED_BY_ID'];
+        // $fields['PHONE'] = $lead['PHONE'];
+        // $fields['EMAIL'] = $lead['EMAIL'];
         APIOnlineController::sendLog('FullEventFlowLeadController', [
 
             'fields' => $fields,
