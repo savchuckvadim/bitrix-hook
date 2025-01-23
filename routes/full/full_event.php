@@ -21,6 +21,9 @@ Route::post('/pres/count', function (Request $request) {
 });
 
 Route::prefix('full')->group(function () {
+    require __DIR__ . '/full_lead.php';
+
+
     Route::post('', [ReportController::class, 'eventReport']);
 
     // ............................... FULL EVENT CALING PRES FRONT
@@ -616,7 +619,7 @@ Route::prefix('full')->group(function () {
             }
         }
 
-        
+
         if (!empty($domain) && $responsibleId && $companyId) {
             $hook = PortalController::getHook($domain);
             BitrixGeneralService::updateContactsToCompanyRespnsible(
@@ -630,9 +633,9 @@ Route::prefix('full')->group(function () {
     // Route::post('test', function (Request $request) {
     //     $data = $request->all();
     //     Log::channel('telegram')->info('data', ['data' => $data]);
-    
+
     //     Log::channel('telegram')->info('APRIL_HOOK', [
-    
+
     //         'date_from' => $request['date_from'],
     //         'date_to' => $request['date_from'],
     //         'user_inner_code' => $request['user_inner_code'],
@@ -643,7 +646,7 @@ Route::prefix('full')->group(function () {
     //         // 'domain' => $domain,
     //         // 'responsibleId' => $responsibleId,
     //         // 'btrx response' => $response['error_description']
-    
+
     //     ]);
     //     return APIOnlineController::getSuccess($data);
     // });
