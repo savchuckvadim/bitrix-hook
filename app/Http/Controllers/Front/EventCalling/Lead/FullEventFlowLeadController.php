@@ -6,6 +6,7 @@ use App\Http\Controllers\APIBitrixController;
 use App\Http\Controllers\APIOnlineController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PortalController;
+use App\Services\BitrixGeneralService;
 use Illuminate\Http\Request;
 
 class FullEventFlowLeadController extends Controller
@@ -20,12 +21,25 @@ class FullEventFlowLeadController extends Controller
         $leadId = $data['leadId'];
         $domain  = $data['auth']['domain'];
         $hook = PortalController::getHook($domain);
+        $lead = BitrixGeneralService::getEntity($hook, 'lead', $leadId);
 
         APIOnlineController::sendLog('FullEventFlowLeadController', [
 
             'leadId' => $leadId,
             'domain' => $domain,
-            'hook' => $hook,
+            'lead' => $lead,
+        ]);
+        $fields = [];
+        foreach ($lead as $key => $value) {
+            if ($key !== 'ID') {
+                $fields[$key] = $value;
+            }
+        }
+        $company = BitrixGeneralService::setEntity($hook, 'company', ['fields' => $fields]);
+        APIOnlineController::sendLog('FullEventFlowLeadController', [
+
+            'company' => $company,
+    
         ]);
     }
 }
