@@ -88,6 +88,7 @@ class ColdBatchService
 
     protected $nowDate = [];
     protected $isTmc = false;
+    protected $lead = null;
 
     public function __construct(
 
@@ -96,6 +97,13 @@ class ColdBatchService
     ) {
         // $nowDate = new DateTime();
         Carbon::setLocale('ru'); // Устанавливаем локализацию Carbon
+
+        if (isset($data['lead'])) {
+            if (!empty($data['lead'])) {
+                $this->lead = $data['lead'];
+            }
+        }
+
         // Форматируем дату и время в нужный формат
         // $locale = 'ru_RU';
         // $pattern = 'd MMMM yyyy';
@@ -223,6 +231,11 @@ class ColdBatchService
             'op_history_multiple',
         ];
         $resultEntityFields = [];
+        if (!empty($this->lead)) {
+            if (!empty($this->lead['TITLE'])) {
+                $resultEntityFields['TITLE'] = $this->lead['TITLE'];
+            }
+        }
 
         $workStatus = [
             'id' => 0,
@@ -931,6 +944,7 @@ class ColdBatchService
             null,
             $mainDealFlowBatchCommands,
             'plan' //tag
+
 
         );
         $mainDealFlowBatchCommands = $flowResult['commands'];

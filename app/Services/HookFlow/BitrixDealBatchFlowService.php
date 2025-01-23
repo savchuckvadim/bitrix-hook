@@ -34,7 +34,8 @@ class BitrixDealBatchFlowService
         $tmcPresRelationDealId = null, //id сделки TMC из BASE FLOW для связи с основной и со вделкой презентации
 
         $resultBatchCommands, // = []
-        $tag //plan unpres report newpresdeal
+        $tag, //plan unpres report newpresdeal
+    
 
 
     ) {
