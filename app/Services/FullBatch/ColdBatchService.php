@@ -964,17 +964,18 @@ class ColdBatchService
 
         // $entityBatchCommands = [];
         if (!empty($planDeals) && (is_object($planDeals) || is_array($planDeals))) {
+            $entityFieldsCopy = $this->entityFieldsUpdatingContent;
 
             if (!empty($this->lead)) {
                 if (!empty($this->lead['TITLE'])) {
-                    $this->entityFieldsUpdatingContent['TITLE'] = $this->lead['TITLE'];
-                    $this->entityFieldsUpdatingContent['LEAD_ID'] = $this->lead['ID'];
+                    $entityFieldsCopy['TITLE'] = $this->lead['TITLE'];
+                    $entityFieldsCopy['LEAD_ID'] = $this->lead['ID'];
                 }
             }
 
             foreach ($planDeals as $pDealId) {
                 $command = BitrixDealBatchFlowService::getFullBatchCommand(
-                    ['fields' => $this->entityFieldsUpdatingContent],
+                    ['fields' => $entityFieldsCopy],
                     'update',
                     $pDealId,
 
