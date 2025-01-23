@@ -62,10 +62,10 @@ class FullEventFlowLeadController extends Controller
             'companyId' => $companyId,
 
         ]);
-        $leadUpdate = BitrixGeneralService::updateEntity($hook,'lead', $leadId,  ['fields' => [
+        $leadUpdate = BitrixGeneralService::updateEntity($hook,'lead', $leadId,   [
             'COMPANY_ID' => $companyId,
             'STATUS_ID' => 'CONVERTED'
-        ]]);
+        ]);
 
         APIOnlineController::sendLog('FullEventFlowLeadController', [
 
