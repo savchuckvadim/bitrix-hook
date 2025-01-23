@@ -231,11 +231,7 @@ class ColdBatchService
             'op_history_multiple',
         ];
         $resultEntityFields = [];
-        if (!empty($this->lead)) {
-            if (!empty($this->lead['TITLE'])) {
-                $resultEntityFields['TITLE'] = $this->lead['TITLE'];
-            }
-        }
+    
 
         $workStatus = [
             'id' => 0,
@@ -969,6 +965,11 @@ class ColdBatchService
         // $entityBatchCommands = [];
         if (!empty($planDeals) && (is_object($planDeals) || is_array($planDeals))) {
 
+            if (!empty($this->lead)) {
+                if (!empty($this->lead['TITLE'])) {
+                    $this->entityFieldsUpdatingContent['TITLE'] = $this->lead['TITLE'];
+                }
+            }
 
             foreach ($planDeals as $pDealId) {
                 $command = BitrixDealBatchFlowService::getFullBatchCommand(

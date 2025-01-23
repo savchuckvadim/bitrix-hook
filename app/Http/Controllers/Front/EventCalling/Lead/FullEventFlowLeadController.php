@@ -27,6 +27,8 @@ class FullEventFlowLeadController extends Controller
         $hook = PortalController::getHook($domain);
         $responsibleId = null;
         $createdId = 1;
+        $companyId = null;
+
         if (isset($assigned)) {
 
             $partsResponsible = explode("_", $assigned);
@@ -45,16 +47,23 @@ class FullEventFlowLeadController extends Controller
         $lead = BitrixGeneralService::getEntityByID($hook, 'lead', $leadId);
 
         $fields = [];
-        //UF_CRM_LEAD_QUEST_URL ссылка на отчет
-
-
         $fields['LEAD_ID'] = $leadId;
-        $fields['TITLE'] = $lead['TITLE'];
+   
+        //UF_CRM_LEAD_QUEST_URL ссылка на отчет
+        if (!empty($lead['COMPANY_ID'])) {
+            $companyId = $lead['COMPANY_ID'];
+            BitrixGeneralService::updateEntity($hook, 'company', $companyId,   $fields);
+        }else{
+            $fields['TITLE'] = $lead['TITLE'];
+            $companyId = BitrixGeneralService::setEntity($hook, 'company', $fields);
+
+        }
+
+     
         // $fields['ASSIGNED_BY_ID'] = $lead['ASSIGNED_BY_ID'];
         // $fields['PHONE'] = $lead['PHONE'];
         // $fields['EMAIL'] = $lead['EMAIL'];
 
-        $companyId = BitrixGeneralService::setEntity($hook, 'company', $fields);
 
         $leadUpdate = BitrixGeneralService::updateEntity($hook, 'lead', $leadId,   [
             'COMPANY_ID' => $companyId,
