@@ -41,13 +41,13 @@ class FullEventFlowLeadController extends Controller
                 ]);
             }
         }
-        // $fields['LEAD_ID'] = $leadId;
-        $fields['title'] = $lead['TITLE'];
+        $fields['LEAD_ID'] = $leadId;
+        $fields['TITLE'] = $lead['TITLE'];
         APIOnlineController::sendLog('FullEventFlowLeadController', [
 
             'fields' => $fields,
         ]);
-        $companyId = BitrixGeneralService::setEntity($hook, 'company', ['fields' => $fields]);
+        $companyId = BitrixGeneralService::setEntity($hook, 'company', $fields);
         APIOnlineController::sendLog('FullEventFlowLeadController', [
 
             'companyId' => $companyId,
