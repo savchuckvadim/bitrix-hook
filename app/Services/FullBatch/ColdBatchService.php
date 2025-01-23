@@ -162,7 +162,7 @@ class ColdBatchService
         $portal = $portal['data'];
         $this->portal = $portal;
 
-        if ($domain === 'april-dev.bitrix24.ru' || $domain === 'gsr.bitrix24.ru' || $domain === 'gsirk.bitrix24.ru') {
+        if ($domain === 'april-dev.bitrix24.ru' || $domain === 'gsr.bitrix24.ru' || $domain === 'gsirk.bitrix24.ru' || $domain === 'april-garant.bitrix24.ru') {
             $this->isDealFlow = true;
             $this->withLists = true;
             $this->isSmartFlow = false;

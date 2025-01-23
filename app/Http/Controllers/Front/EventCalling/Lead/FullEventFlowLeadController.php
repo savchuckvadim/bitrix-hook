@@ -91,7 +91,7 @@ class FullEventFlowLeadController extends Controller
             ];
             APIOnlineController::sendLog('FullEventFlowLeadController', [
 
-                'prejob data' => $data,
+                'prejob data' => $prejob_data,
 
             ]);
             dispatch(
@@ -106,8 +106,8 @@ class FullEventFlowLeadController extends Controller
             ];
             APIOnlineController::sendLog('FullEventFlowLeadController', [
 
-                'prejob data' => $data,
-                'companyId' => $companyId,
+                // 'data' => $data,
+                // 'companyId' => $companyId,
                 'error' =>   $errorMessages
 
             ]);
