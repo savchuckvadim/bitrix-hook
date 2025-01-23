@@ -968,6 +968,7 @@ class ColdBatchService
             if (!empty($this->lead)) {
                 if (!empty($this->lead['TITLE'])) {
                     $this->entityFieldsUpdatingContent['TITLE'] = $this->lead['TITLE'];
+                    $this->entityFieldsUpdatingContent['LEAD_ID'] = $this->lead['ID'];
                 }
             }
 
