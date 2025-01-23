@@ -21,7 +21,7 @@ class FullEventFlowLeadController extends Controller
         $leadId = $data['leadId'];
         $domain  = $data['auth']['domain'];
         $hook = PortalController::getHook($domain);
-        $lead = BitrixGeneralService::getEntity($hook, 'lead', $leadId);
+        $lead = BitrixGeneralService::getEntityByID($hook, 'lead', $leadId);
 
         APIOnlineController::sendLog('FullEventFlowLeadController', [
 
