@@ -19,6 +19,8 @@ class FullEventFlowLeadController extends Controller
         $data = $request->all();
 
         $leadId = $data['leadId'];
+        $deadline = $data['deadline'];
+        $assigned = $data['assigned'];
         $domain  = $data['auth']['domain'];
         $hook = PortalController::getHook($domain);
 
@@ -26,6 +28,8 @@ class FullEventFlowLeadController extends Controller
 
             'leadId' => $leadId,
             'domain' => $domain,
+            'deadline' => $deadline,
+            'assigned' => $assigned,
         ]);
         $lead = BitrixGeneralService::getEntityByID($hook, 'lead', $leadId);
 
