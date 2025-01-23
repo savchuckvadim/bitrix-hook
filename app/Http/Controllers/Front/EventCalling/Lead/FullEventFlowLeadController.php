@@ -30,26 +30,36 @@ class FullEventFlowLeadController extends Controller
         $lead = BitrixGeneralService::getEntityByID($hook, 'lead', $leadId);
 
         $fields = [];
+        //UF_CRM_LEAD_QUEST_URL ссылка на отчет
+
         foreach ($lead as $key => $value) {
             if ($key === 'TITLE') {
-                $fields[$key] = $value;
+                APIOnlineController::sendLog('FullEventFlowLeadController', [
+
+                    $key => $value
+
+                ]);
             }
-            APIOnlineController::sendLog('FullEventFlowLeadController', [
-
-                $key => $value
-
-            ]);
         }
         // $fields['LEAD_ID'] = $leadId;
-        $fields['TITLE'] = $lead['TITLE'];
+        $fields['title'] = $lead['TITLE'];
         APIOnlineController::sendLog('FullEventFlowLeadController', [
 
             'fields' => $fields,
         ]);
-        $company = BitrixGeneralService::setEntity($hook, 'company', ['fields' => $fields]);
+        $companyId = BitrixGeneralService::setEntity($hook, 'company', ['fields' => $fields]);
         APIOnlineController::sendLog('FullEventFlowLeadController', [
 
-            'company' => $company,
+            'companyId' => $companyId,
+
+        ]);
+        $leadUpdate = BitrixGeneralService::updateEntity($hook, $leadId, 'lead', ['fields' => [
+            'COMPANY_ID' => $companyId
+        ]]);
+
+        APIOnlineController::sendLog('FullEventFlowLeadController', [
+
+            'leadUpdate' => $leadUpdate,
 
         ]);
     }
