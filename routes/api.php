@@ -51,6 +51,7 @@ Route::get('/test-cors', function () {
 
 require __DIR__ . '/rate/rate.php';
 require __DIR__ . '/full/full_event.php';
+require __DIR__ . '/full/full_lead.php';
 require __DIR__ . '/alfa/alfa.php';
 require __DIR__ . '/helper/helper_router.php';
 

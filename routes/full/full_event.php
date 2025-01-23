@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/pres/count', function (Request $request) {
     return ReportController::getPresCounts($request);
 });
-require __DIR__ . '/full_lead.php';
+
 
 
 Route::prefix('full')->group(function () {
