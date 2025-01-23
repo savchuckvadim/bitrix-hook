@@ -165,7 +165,7 @@ class APIOnlineController extends Controller
                 $data
             ]
         ]);
-        Log::error('APRIL_HOOK', [
+        Log::info('APRIL_HOOK', [
             'APRIL_HOOK_' . $place => [
               
                 $data
