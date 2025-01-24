@@ -13,4 +13,5 @@ Route::prefix('flow-front')->group(function () {
         return $controller->getHistory($companyId);
 
     });
+    
 });
