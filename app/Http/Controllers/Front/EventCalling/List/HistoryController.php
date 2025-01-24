@@ -110,10 +110,10 @@ class HistoryController extends Controller
                 'IBLOCK_TYPE_ID' => 'lists',
                 'IBLOCK_ID' => $listId,
                 'filter' => [
-                    [$companyIdFieldId] => '%' . $companyId . '%',
+                    $companyIdFieldId => '%' . $companyId . '%',
                 ],
                 'select' => [
-                    $eventActionTypeField,
+            
                     $commentFieldId
                 ]
 
