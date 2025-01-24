@@ -98,7 +98,7 @@ class HistoryController extends Controller
                     }
                     if ($plField['code'] === 'sales_history_manager_comment') {
                         $commentField = $plField;
-                        $commentFieldId = $companyIdField['bitrixCamelId']; //like PROPERTY_2119 
+                        $commentFieldId = $commentField['bitrixCamelId']; //like PROPERTY_2119 
 
                     }
                 }
