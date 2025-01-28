@@ -44,7 +44,7 @@ class EventReportPostFailService
     public function processPostFail()
     {
         try {
-
+            sleep(2);
             if (!empty($this->hook)) {
                 if (!empty($this->companyId)) {
                     if (!empty($this->postFailDate)) {
