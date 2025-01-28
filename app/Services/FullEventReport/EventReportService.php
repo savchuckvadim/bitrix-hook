@@ -10,6 +10,7 @@ use App\Jobs\BtxCreateListItemJob;
 use App\Jobs\BtxSuccessListItemJob;
 use App\Services\BitrixTaskService;
 use App\Services\FullEventReport\EventReport\EventReportPostFailService\EventReportPostFailService;
+use App\Services\FullEventReport\EventReport\EventReportRelationLeadService\EventReportRelationLeadService;
 use App\Services\General\BitrixBatchService;
 use App\Services\General\BitrixDealService;
 use App\Services\General\BitrixDepartamentService;
@@ -200,6 +201,12 @@ class EventReportService
         if (isset($data['fail'])) {
             if (!empty($data['fail'])) {
                 $this->postFail = $data['fail'];
+            }
+        }
+
+        if (isset($data['lead'])) {
+            if (!empty($data['lead'])) {
+                $this->relationLead = $data['lead'];
             }
         }
         if ($domain == 'gsirk.bitrix24.ru') {
@@ -765,49 +772,13 @@ class EventReportService
             $currentDealId = null;
             $currentDealsIds = null;
             $result = null;
-            // if(!$this->smartId){
 
-            // }
-            // $randomNumber = rand(1, 2);
-
-            // if ($this->isSmartFlow) {
-            //     $this->getSmartFlow();
-            // }
-            // Log::info('HOOK TEST unplannedPresDeal', [
-            //     'currentBaseDeal' => $this->currentBaseDeal,
-            //     'currentPresDeal' => $this->currentPresDeal,
-            //     'currentBtxDeals' => $this->currentBtxDeals,
-
-            // ]);
             if ($this->isDealFlow && $this->portalDealData) {
-                // $currentDealsIds = $this->getBatchDealFlow();
 
-                // if ($this->domain !== 'april-dev.bitrix24.ru') {
-                //     $currentDealsIds = $this->getBatchDealFlow();
-                // } else {
                 $currentDealsIds = $this->getNEWBatchDealFlow();
-                // }
-
-
-                // $currentDealsIds = $this->getDealFlow();
-                // $currentDealsIds = $this->getNEWBatchDealFlow();
             }
 
-            // $this->createTask($currentSmartId);
 
-
-
-            // if ($this->isExpired || $this->isPlanned) {
-            //     if ($this->domain !== 'april-dev.bitrix24.ru') {
-            //         $result = $this->taskFlow(null, $currentDealsIds['planDeals']);
-            //     }
-            // } else {
-            //     $result = $this->workStatus;
-            // }
-
-
-
-            // $this->getEntityFlow();
 
 
             if (!empty($this->postFail)) {
@@ -826,6 +797,7 @@ class EventReportService
             }
 
 
+            $this->relationLeadFlow();
 
             // sleep(1);
 
@@ -860,6 +832,31 @@ class EventReportService
         }
     }
 
+    protected function relationLeadFlow()
+    {
+        if (!empty($this->relationLead)) {
+
+            $statusForRelationLead = '';
+
+            if (!empty($this->isResult) && empty($this->isFail)) {
+                if (!empty($this->isInWork) || !empty($this->isSuccessSale)) {
+                    $statusForRelationLead = 'success';
+                }
+            }
+            if (!empty($this->isFail)) {
+                $statusForRelationLead = 'fail';
+            }
+            if (!empty($statusForRelationLead)) {
+                $relationLeadService = new EventReportRelationLeadService([
+                    'domain' => $this->domain,
+                    'hook' => $this->hook,
+                    'lead' => $this->relationLead,
+                    'status' => $statusForRelationLead,
+                ]);
+                $relationLeadService->processLead();
+            }
+        }
+    }
     protected function failFlow()
     {
         if (!empty($this->postFail)) {
