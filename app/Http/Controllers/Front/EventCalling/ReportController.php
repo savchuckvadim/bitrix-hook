@@ -39,11 +39,25 @@ class ReportController extends Controller
             $isFullData = true;
             if (isset($request->lead)) {
                 $data['lead'] = $request->lead;
+                Log::channel('telegram')->info(
+                    '$request->lead',
+                    [
+                        'lead' => $request->lead,
+
+                    ]
+                );
             }
             if (isset($request->fail)) {
                 $data['fail'] = $request->fail;
+                Log::channel('telegram')->info(
+                    '$request->fail',
+                    [
+                        'fail' => $request->fail,
+
+                    ]
+                );
             }
-            
+
             if (isset($request->currentTask)) {
                 $data['currentTask'] = $request->currentTask;
             }
@@ -110,6 +124,8 @@ class ReportController extends Controller
                 //     $service = new EventReportTMCService($data);
                 //     return $service->getEventFlow();
                 // } else {
+
+
                 dispatch(
                     new EventJob($data)
                 )->onQueue('high-priority');
