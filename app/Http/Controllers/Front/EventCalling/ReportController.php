@@ -42,7 +42,7 @@ class ReportController extends Controller
                 Log::channel('telegram')->info(
                     '$request->lead',
                     [
-                        'lead' => $request->lead,
+                        'leadID' => $request->lead['ID'],
 
                     ]
                 );
