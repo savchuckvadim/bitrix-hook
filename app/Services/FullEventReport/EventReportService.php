@@ -834,15 +834,15 @@ class EventReportService
 
     protected function relationLeadFlow()
     {
-        Log::channel('telegram')->info(
-            'relationLead',
-            [
-                '$this->' => $this->relationLead,
-
-            ]
-        );
+     
         if (!empty($this->relationLead)) {
-
+            Log::channel('telegram')->info(
+                'relationLead',
+                [
+                    '$this->' => $this->relationLead['ID'],
+    
+                ]
+            );
             $statusForRelationLead = '';
 
             if (!empty($this->isResult)) {
@@ -857,7 +857,7 @@ class EventReportService
                 'relationLead',
                 [
                     '$statusForRelationLead' => $statusForRelationLead,
-                    // 'leadId' => $this->relationLead['ID']
+                    'leadId' => $this->relationLead['ID']
     
                 ]
             );
@@ -870,6 +870,14 @@ class EventReportService
                 ]);
                 $relationLeadService->processLead();
             }
+        }else{
+            Log::channel('telegram')->info(
+                'relationLead NO LEAD',
+                [
+                    '$this->' => $this->relationLead,
+    
+                ]
+            );
         }
     }
     protected function failFlow()
