@@ -8,8 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\PortalController;
 use App\Jobs\EventJob;
 use App\Services\BitrixGeneralService;
-use App\Services\FullEventReport\EventReportService;
-use App\Services\FullEventReport\EventReportTMCService;
+
 use App\Services\General\BitrixDealService;
 use App\Services\General\BitrixDepartamentService;
 use App\Services\General\BitrixListService;
@@ -37,12 +36,13 @@ class ReportController extends Controller
 
             ];
             $isFullData = true;
-            if (isset($request->lead)) {
-                $data['lead'] = $request->lead;
+            $dataRequest = $request->all();
+            if (isset($dataRequest['lead'])) {
+                $data['lead'] = $dataRequest['lead'];
                 Log::channel('telegram')->info(
-                    '$request->lead',
+                    'data[lead]',
                     [
-                        'leadID' => $request->lead['ID'],
+                        'leadID' => $data['lead']['ID'],
 
                     ]
                 );
