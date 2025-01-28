@@ -864,7 +864,7 @@ class EventReportService
                 $relationLeadService = new EventReportRelationLeadService([
                     'domain' => $this->domain,
                     'hook' => $this->hook,
-                    'lead' => $this->relationLead,
+                    'lead' => $this->relationLead['ID'],
                     'status' => $statusForRelationLead,
                 ]);
                 $relationLeadService->processLead();
