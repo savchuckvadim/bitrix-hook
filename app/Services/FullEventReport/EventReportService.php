@@ -856,16 +856,17 @@ class EventReportService
                 Log::channel('telegram')->info(
                     'relationLead',
                     [
-                        '$statusForRelationLead' => $statusForRelationLead,
-                        'leadId' => $this->relationLead['ID']
-
-                    ]
-                );
-                if (!empty($statusForRelationLead)) {
-                    $relationLeadService = new EventReportRelationLeadService([
                         'domain' => $this->domain,
                         'hook' => $this->hook,
                         'lead' => $this->relationLead['ID'],
+                        'status' => $statusForRelationLead,
+                    ]
+                );
+                if ($statusForRelationLead == 'success' || $statusForRelationLead == 'fail') {
+                    $relationLeadService = new EventReportRelationLeadService([
+                        'domain' => $this->domain,
+                        'hook' => $this->hook,
+                        'lead' => $this->relationLead,
                         'status' => $statusForRelationLead,
                     ]);
                     $relationLeadService->processLead();
