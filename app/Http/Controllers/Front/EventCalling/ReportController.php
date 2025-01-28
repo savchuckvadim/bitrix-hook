@@ -31,10 +31,19 @@ class ReportController extends Controller
                 'domain' => null,
                 'departament' => null,
                 'sale' => null,
-                'contact' => null
+                'contact' => null,
+                'lead' => null,
+                'fail' => null,
 
             ];
             $isFullData = true;
+            if (isset($request->lead)) {
+                $data['lead'] = $request->lead;
+            }
+            if (isset($request->fail)) {
+                $data['fail'] = $request->fail;
+            }
+            
             if (isset($request->currentTask)) {
                 $data['currentTask'] = $request->currentTask;
             }

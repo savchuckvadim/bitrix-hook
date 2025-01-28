@@ -838,7 +838,7 @@ class EventReportService
 
             $statusForRelationLead = '';
 
-            if (!empty($this->isResult) && empty($this->isFail)) {
+            if (!empty($this->isResult)) {
                 if (!empty($this->isInWork) || !empty($this->isSuccessSale)) {
                     $statusForRelationLead = 'success';
                 }
