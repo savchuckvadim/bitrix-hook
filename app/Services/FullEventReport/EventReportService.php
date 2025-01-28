@@ -857,7 +857,7 @@ class EventReportService
                 'relationLead',
                 [
                     '$statusForRelationLead' => $statusForRelationLead,
-                    'leadId' => $this->relationLead['ID']
+                    // 'leadId' => $this->relationLead['ID']
     
                 ]
             );
