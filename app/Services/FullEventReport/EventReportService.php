@@ -1421,7 +1421,7 @@ class EventReportService
 
             }
             $reportFields['op_current_status'] = ' Презентация проведена';
-            array_push($currentPresComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
+            array_unshift($currentPresComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
             // array_push($currentMComments, $this->nowDate . ' Презентация проведена ' . $this->comment);
         }
 
@@ -1492,11 +1492,11 @@ class EventReportService
 
 
                 if ($this->isPresentationDone) {
-                    array_push($currentPresComments, $this->nowDate . ' Отказ после презентации ' . $this->currentTaskTitle . ' ' . $this->comment);
+                    array_unshift($currentPresComments, $this->nowDate . ' Отказ после презентации ' . $this->currentTaskTitle . ' ' . $this->comment);
                 } else {
                     if ($currentReportEventType === 'presentation') {
 
-                        array_push($currentPresComments, $this->nowDate . ' Отказ: Презентация не состоялась ' . $this->currentTaskTitle . ' ' . $this->comment);
+                        array_unshift($currentPresComments, $this->nowDate . ' Отказ: Презентация не состоялась ' . $this->currentTaskTitle . ' ' . $this->comment);
                     }
                 }
             }
@@ -1517,7 +1517,8 @@ class EventReportService
                 if ($this->workStatus['current']['code'] === 'inJob' || $this->workStatus['current']['code'] === 'setAside') {
                     if ($currentReportEventType === 'presentation') {
 
-                        array_push($currentPresComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
+                        array_unshift($currentPresComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
+                       
                     }
                     // array_unshift($currentMComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
                 }
@@ -1571,10 +1572,20 @@ class EventReportService
         }
         $comment = $this->getFullEventComment();
         array_unshift($currentMComments, $this->nowDate . "\n" . $comment);
-        if (count($currentMComments) > 12) {
-            $currentMComments = array_slice($currentMComments, 0, 12);
+      
+        if($this->domain === 'gsirk.bitrix24.ru'){
+            if (count($currentMComments) > 30) {
+                $currentMComments = array_slice($currentMComments, 0, 30);
+            }
+        }else{
+            if (count($currentMComments) > 12) {
+                $currentMComments = array_slice($currentMComments, 0, 12);
+            }
         }
 
+        if (count($currentPresComments) > 15) {
+            $currentPresComments = array_slice($currentPresComments, 0, 15);
+        }
 
         //закидываем сформированные комментарии
         $reportFields['op_mhistory'] = $currentMComments;
