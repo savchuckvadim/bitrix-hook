@@ -5239,6 +5239,15 @@ class EventReportService
                 }
             }
         }
+
+        APIOnlineController::sendLog('getFullEventComment', [
+
+            'planComment' => $planComment,
+            'work status' => $this->workStatus['current'],
+            'domain' => $this->domain,
+
+
+        ]);
         return $planComment;
     }
 }
