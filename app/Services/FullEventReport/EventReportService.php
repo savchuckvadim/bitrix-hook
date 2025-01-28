@@ -834,50 +834,65 @@ class EventReportService
 
     protected function relationLeadFlow()
     {
-     
-        if (!empty($this->relationLead)) {
-            Log::channel('telegram')->info(
-                'relationLead',
-                [
-                    '$this->' => $this->relationLead['ID'],
-    
-                ]
-            );
-            $statusForRelationLead = '';
+        try {
+            if (!empty($this->relationLead)) {
+                Log::channel('telegram')->info(
+                    'relationLead',
+                    [
+                        '$this->' => $this->relationLead['ID'],
 
-            if (!empty($this->isResult)) {
-                if (!empty($this->isInWork) || !empty($this->isSuccessSale)) {
-                    $statusForRelationLead = 'success';
+                    ]
+                );
+                $statusForRelationLead = '';
+
+                if (!empty($this->isResult)) {
+                    if (!empty($this->isInWork) || !empty($this->isSuccessSale)) {
+                        $statusForRelationLead = 'success';
+                    }
                 }
+                if (!empty($this->isFail)) {
+                    $statusForRelationLead = 'fail';
+                }
+                Log::channel('telegram')->info(
+                    'relationLead',
+                    [
+                        '$statusForRelationLead' => $statusForRelationLead,
+                        'leadId' => $this->relationLead['ID']
+
+                    ]
+                );
+                if (!empty($statusForRelationLead)) {
+                    $relationLeadService = new EventReportRelationLeadService([
+                        'domain' => $this->domain,
+                        'hook' => $this->hook,
+                        'lead' => $this->relationLead['ID'],
+                        'status' => $statusForRelationLead,
+                    ]);
+                    $relationLeadService->processLead();
+                }
+            } else {
+                Log::channel('telegram')->info(
+                    'relationLead NO LEAD',
+                    [
+                        '$this->' => $this->relationLead,
+
+                    ]
+                );
             }
-            if (!empty($this->isFail)) {
-                $statusForRelationLead = 'fail';
-            }
-            Log::channel('telegram')->info(
-                'relationLead',
-                [
-                    '$statusForRelationLead' => $statusForRelationLead,
-                    'leadId' => $this->relationLead['ID']
-    
-                ]
-            );
-            if (!empty($statusForRelationLead)) {
-                $relationLeadService = new EventReportRelationLeadService([
-                    'domain' => $this->domain,
-                    'hook' => $this->hook,
-                    'lead' => $this->relationLead['ID'],
-                    'status' => $statusForRelationLead,
-                ]);
-                $relationLeadService->processLead();
-            }
-        }else{
-            Log::channel('telegram')->info(
-                'relationLead NO LEAD',
-                [
-                    '$this->' => $this->relationLead,
-    
-                ]
-            );
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            APIOnlineController::sendLog('EventReportRelationLeadService', [
+
+                'domain' => $this->domain,
+                // 'companyId' => $companyId,
+                'error' =>   $errorMessages
+
+            ]);
         }
     }
     protected function failFlow()
