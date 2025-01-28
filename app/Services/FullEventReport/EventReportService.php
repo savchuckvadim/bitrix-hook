@@ -837,13 +837,7 @@ class EventReportService
         try {
             if (!empty($this->relationLead)) {
                 if (!empty($this->relationLead['ID'])) {
-                    Log::channel('telegram')->info(
-                        'relationLead',
-                        [
-                            '$this->' => $this->relationLead['ID'],
 
-                        ]
-                    );
                     $statusForRelationLead = '';
 
                     if (!empty($this->isResult)) {
@@ -854,15 +848,7 @@ class EventReportService
                     if (!empty($this->isFail)) {
                         $statusForRelationLead = 'fail';
                     }
-                    Log::channel('telegram')->info(
-                        'relationLead',
-                        [
-                            'domain' => $this->domain,
-                            // 'hook' => $this->hook,
-                            'lead' => $this->relationLead['ID'],
-                            'status' => $statusForRelationLead,
-                        ]
-                    );
+
                     if ($statusForRelationLead == 'success' || $statusForRelationLead == 'fail') {
                         $relationLeadService = new EventReportRelationLeadService(
                             $this->domain,
@@ -874,13 +860,13 @@ class EventReportService
                     }
                 }
             } else {
-                Log::channel('telegram')->info(
-                    'relationLead NO LEAD',
-                    [
-                        '$this->' => $this->relationLead,
+                // Log::channel('telegram')->info(
+                //     'relationLead NO LEAD',
+                //     [
+                //         '$this->' => $this->relationLead,
 
-                    ]
-                );
+                //     ]
+                // );
             }
         } catch (\Throwable $th) {
             $errorMessages =  [
@@ -914,7 +900,15 @@ class EventReportService
 
 
                                 if ($this->failType['code'] == 'failure') {
-
+                                    Log::channel('telegram')->info(
+                                        'failFlow',
+                                        [
+                                            'domain' => $this->domain,
+                                            // 'hook' => $this->hook,
+                                            'fail' => $this->postFail,
+                                            'companyId' => $this->entityId
+                                        ]
+                                    );
                                     $postFailService = new EventReportPostFailService([
                                         'domain' => $this->domain,
                                         'hook' => $this->hook,

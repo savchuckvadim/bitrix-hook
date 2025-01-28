@@ -5,6 +5,7 @@ namespace App\Services\FullEventReport\EventReport;
 use App\Http\Controllers\APIOnlineController;
 use App\Services\BitrixGeneralService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class EventReportPostFailService
 
@@ -33,7 +34,6 @@ class EventReportPostFailService
                 // $this->postFailDate = $data['fail']['postFailDate'];
                 $carbonDate = Carbon::parse($date);
                 $this->postFailDate =  $carbonDate->format('d.m.Y H:i:s');
-
             }
         }
         // {
@@ -44,6 +44,7 @@ class EventReportPostFailService
     public function processPostFail()
     {
         try {
+
             if (!empty($this->hook)) {
                 if (!empty($this->companyId)) {
                     if (!empty($this->postFailDate)) {
@@ -71,12 +72,10 @@ class EventReportPostFailService
                         APIOnlineController::sendLog('EventReportPostFailService', [
 
                             'companyUpdate' => $companyUpdate,
-                            'fields' => [
-                                'domain' => $this->domain,
-                                $this->postFailDateStringFieldId => $this->postFailDate,
-                                $this->postFailDateFieldId => $this->postFailDate,
 
-                            ],
+                            'domain' => $this->domain,
+                            'ASSIGNED_BY_ID' => $this->postFailUserId,
+                            'fields' => $fields,
 
                         ]);
                     }
