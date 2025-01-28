@@ -1304,7 +1304,7 @@ class EventReportService
         $reportFields['op_noresult_reason'] = '';
         $reportFields['op_fail_reason'] = '';
 
-        $reportFields['op_fail_comments'] = '';
+        // $reportFields['op_fail_comments'] = '';
         $reportFields['op_history'] = '';
         $reportFields['op_mhistory'] = [];
 
