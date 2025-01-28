@@ -1485,7 +1485,7 @@ class EventReportService
                 // array_unshift($currentMComments, $this->nowDate . ' Отказ ' . $this->comment);
 
                 array_unshift($currentFailComments, $this->nowDate . "\n" . $this->comment);
-                if (count($currentMComments) > 18) {
+                if (count($currentFailComments) > 18) {
                     $currentFailComments = array_slice($currentFailComments, 0, 18);
                 }
                 $reportFields['op_fail_comments'] = $currentFailComments;
@@ -1571,8 +1571,8 @@ class EventReportService
         }
         $comment = $this->getFullEventComment();
         array_unshift($currentMComments, $this->nowDate . "\n" . $comment);
-        if (count($currentMComments) > 8) {
-            $currentMComments = array_slice($currentMComments, 0, 8);
+        if (count($currentMComments) > 12) {
+            $currentMComments = array_slice($currentMComments, 0, 12);
         }
 
 
@@ -3266,19 +3266,19 @@ class EventReportService
                 case 'sales_presentation':
                     $currentPresReportStatus = $currentReportStatus;
 
-                    APIOnlineController::sendLog('test pres noresult', [
-                        'currentPresReportStatus' => $currentPresReportStatus,
-                        'currentReportEventType' => $this->currentReportEventType,
-                        'this->isFail' => $this->isFail,
-                        'this->isResult' => $this->isResult,
-                        'this->isPlanned' => $this->isPlanned,
-                        'this->isInWork' => $this->isInWork,
-                        'this->isSuccessSale' => $this->isSuccessSale,
-                        'this->isExpired' => $this->isExpired,
+                    // APIOnlineController::sendLog('test pres noresult', [
+                    //     'currentPresReportStatus' => $currentPresReportStatus,
+                    //     'currentReportEventType' => $this->currentReportEventType,
+                    //     'this->isFail' => $this->isFail,
+                    //     'this->isResult' => $this->isResult,
+                    //     'this->isPlanned' => $this->isPlanned,
+                    //     'this->isInWork' => $this->isInWork,
+                    //     'this->isSuccessSale' => $this->isSuccessSale,
+                    //     'this->isExpired' => $this->isExpired,
 
-                        'this->currentPlanEventType' => $this->currentPlanEventType,
-                        'this->currentReportEventType' => $this->currentReportEventType,
-                    ]);
+                    //     'this->currentPlanEventType' => $this->currentPlanEventType,
+                    //     'this->currentReportEventType' => $this->currentReportEventType,
+                    // ]);
                     // 1) если report - presentetion - обновить текущую pres deal from task
                     if ($this->currentReportEventType == 'presentation') {
                         if (!$this->isFail) {
