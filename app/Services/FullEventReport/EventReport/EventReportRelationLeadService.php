@@ -48,8 +48,7 @@ class EventReportRelationLeadService
                     Log::channel('telegram')->info(
                         'processLead',
                         [
-                            '$domain' => $this->domain,
-                            '$hook' => $this->hook,
+                          
                             '$leadId' => $this->lead['ID'],
                             '$status' => $this->status,
             
