@@ -65,7 +65,7 @@ class EventReportPostFailService
                         }
                         $companyUpdate = BitrixGeneralService::updateEntity(
                             $this->hook,
-                            'lead',
+                            'company',
                             $this->companyId,
                             $fields
                         );
