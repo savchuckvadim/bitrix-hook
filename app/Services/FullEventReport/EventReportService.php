@@ -836,40 +836,42 @@ class EventReportService
     {
         try {
             if (!empty($this->relationLead)) {
-                Log::channel('telegram')->info(
-                    'relationLead',
-                    [
-                        '$this->' => $this->relationLead['ID'],
+                if (!empty($this->relationLead['ID'])) {
+                    Log::channel('telegram')->info(
+                        'relationLead',
+                        [
+                            '$this->' => $this->relationLead['ID'],
 
-                    ]
-                );
-                $statusForRelationLead = '';
-
-                if (!empty($this->isResult)) {
-                    if (!empty($this->isInWork) || !empty($this->isSuccessSale)) {
-                        $statusForRelationLead = 'success';
-                    }
-                }
-                if (!empty($this->isFail)) {
-                    $statusForRelationLead = 'fail';
-                }
-                Log::channel('telegram')->info(
-                    'relationLead',
-                    [
-                        'domain' => $this->domain,
-                        // 'hook' => $this->hook,
-                        'lead' => $this->relationLead['ID'],
-                        'status' => $statusForRelationLead,
-                    ]
-                );
-                if ($statusForRelationLead == 'success' || $statusForRelationLead == 'fail') {
-                    $relationLeadService = new EventReportRelationLeadService(
-                        $this->domain,
-                        $this->hook,
-                        $this->relationLead['ID'],
-                        $statusForRelationLead,
+                        ]
                     );
-                    $relationLeadService->processLead();
+                    $statusForRelationLead = '';
+
+                    if (!empty($this->isResult)) {
+                        if (!empty($this->isInWork) || !empty($this->isSuccessSale)) {
+                            $statusForRelationLead = 'success';
+                        }
+                    }
+                    if (!empty($this->isFail)) {
+                        $statusForRelationLead = 'fail';
+                    }
+                    Log::channel('telegram')->info(
+                        'relationLead',
+                        [
+                            'domain' => $this->domain,
+                            // 'hook' => $this->hook,
+                            'lead' => $this->relationLead['ID'],
+                            'status' => $statusForRelationLead,
+                        ]
+                    );
+                    if ($statusForRelationLead == 'success' || $statusForRelationLead == 'fail') {
+                        $relationLeadService = new EventReportRelationLeadService(
+                            $this->domain,
+                            $this->hook,
+                            $this->relationLead['ID'],
+                            $statusForRelationLead,
+                        );
+                        $relationLeadService->processLead();
+                    }
                 }
             } else {
                 Log::channel('telegram')->info(
