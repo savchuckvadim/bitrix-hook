@@ -38,13 +38,26 @@ class EventReportRelationLeadService
                 [
                     '$domain' => $this->domain,
                     '$hook' => $this->hook,
-                    '$lead' => $this->lead,
                     '$status' => $this->status,
     
                 ]
             );
             if (!empty($this->lead)) {
                 if (!empty($this->lead['ID'])) {
+
+                    Log::channel('telegram')->info(
+                        'processLead',
+                        [
+                            '$domain' => $this->domain,
+                            '$hook' => $this->hook,
+                            '$leadId' => $this->lead['ID'],
+                            '$status' => $this->status,
+            
+                        ]
+                    );
+
+
+
                     $leadId = $this->lead['ID'];
                     $bxStatusId = 'CONVERTED';
                     if (!empty($this->status)) {
