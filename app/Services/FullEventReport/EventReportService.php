@@ -9,6 +9,7 @@ use App\Http\Controllers\PortalController;
 use App\Jobs\BtxCreateListItemJob;
 use App\Jobs\BtxSuccessListItemJob;
 use App\Services\BitrixTaskService;
+use App\Services\FullEventReport\EventReport\EventReportPostFailService\EventReportPostFailService;
 use App\Services\General\BitrixBatchService;
 use App\Services\General\BitrixDealService;
 use App\Services\General\BitrixDepartamentService;
@@ -169,6 +170,10 @@ class EventReportService
     protected $reportContact;
     protected $reportContactId;
 
+    protected $relationLead = null;
+    protected $postFail;
+
+
     // {
     //     name: 
     //     pnone:
@@ -192,10 +197,20 @@ class EventReportService
         $domain = $data['domain'];
         $this->domain = $domain;
 
-        // if ($domain == 'gsirk.bitrix24.ru' || $domain == 'april-dev.bitrix24.ru' || $domain == 'april-garant.bitrix24.ru') {
-            if (isset($data['plan']['isActive'])) {
-                $this->isPlanActive = $data['plan']['isActive'];
+        if (isset($data['fail'])) {
+            if (!empty($data['fail'])) {
+                $this->postFail = $data['fail'];
             }
+        }
+        if ($domain == 'gsirk.bitrix24.ru') {
+            date_default_timezone_set('Asia/Irkutsk');
+        } else if ($domain == 'alfacentr.bitrix24.ru') {
+            date_default_timezone_set('Asia/Novosibirsk');
+        }
+        // if ($domain == 'gsirk.bitrix24.ru' || $domain == 'april-dev.bitrix24.ru' || $domain == 'april-garant.bitrix24.ru') {
+        if (isset($data['plan']['isActive'])) {
+            $this->isPlanActive = $data['plan']['isActive'];
+        }
         // }
 
 
@@ -795,6 +810,20 @@ class EventReportService
             // $this->getEntityFlow();
 
 
+            if (!empty($this->postFail)) {
+                if (!empty($this->postFail['postFailDate'])) {
+                    if (!empty($this->workStatus['current'])) {
+                        if (!empty($this->workStatus['current']['code'])) {
+                            $workStatusCode = $this->workStatus['current']['code'];
+
+
+                            if ($workStatusCode === 'fail') {  //если провал 
+                                $this->failFlow();
+                            }
+                        }
+                    }
+                }
+            }
 
 
 
@@ -831,6 +860,38 @@ class EventReportService
         }
     }
 
+    protected function failFlow()
+    {
+        if (!empty($this->postFail)) {
+            if (!empty($this->workStatus['current'])) {
+                if (!empty($this->workStatus['current']['code'])) {
+                    $workStatusCode = $this->workStatus['current']['code'];
+
+
+                    if ($workStatusCode === 'fail') {  //если провал 
+                        if (!empty($this->failType)) {
+                            if (!empty($this->failType['code'])) {
+
+                                // $reportFields['op_prospects_type'] = $this->failType['code'];
+
+
+                                if ($this->failType['code'] == 'failure') {
+
+                                    $postFailService = new EventReportPostFailService([
+                                        'domain' => $this->domain,
+                                        'hook' => $this->hook,
+                                        'fail' => $this->postFail,
+                                        'companyId' => $this->entityId
+                                    ]);
+                                    $postFailService->processPostFail();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 
     //entity
@@ -1391,9 +1452,13 @@ class EventReportService
                 $reportFields['op_current_status'] = 'Отказ';
                 // array_unshift($currentMComments, $this->nowDate . ' Отказ ' . $this->comment);
 
-
-
+                array_unshift($currentFailComments, $this->nowDate . "\n" . $this->comment);
+                if (count($currentMComments) > 18) {
+                    $currentFailComments = array_slice($currentFailComments, 0, 18);
+                }
                 $reportFields['op_fail_comments'] = $currentFailComments;
+
+
                 if ($this->isPresentationDone) {
                     array_push($currentPresComments, $this->nowDate . ' Отказ после презентации ' . $this->currentTaskTitle . ' ' . $this->comment);
                 } else {
@@ -1447,14 +1512,19 @@ class EventReportService
                 $workStatusCode = $this->workStatus['current']['code'];
 
 
-                if ($workStatusCode === 'fail') {  //если провал
+                if ($workStatusCode === 'fail') {  //если провал 
+
+
+
                     if (!empty($this->failType)) {
                         if (!empty($this->failType['code'])) {
 
                             // $reportFields['op_prospects_type'] = $this->failType['code'];
 
 
-                            if ($this->failType['code'] == 'failure') { //если тип провала - отказ
+                            if ($this->failType['code'] == 'failure') { //если тип провала - отказ возражение
+
+
                                 if (!empty($this->failReason)) {
                                     if (!empty($this->failReason['code'])) {
 
@@ -2968,7 +3038,7 @@ class EventReportService
             }
         }
 
-        $this->setTimeLine();
+
         $unplannedPresDeals = null;
         $newPresDeal = null;
         // report - закрывает сделки
@@ -3553,7 +3623,7 @@ class EventReportService
         );
 
         $batchService->sendGeneralBatchRequest($resultBatchCommands);
-
+        $this->setTimeLine();
         // Log::info('HOOK BATCH batchFlow report DEAL', ['report result' => $result]);
         // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $result]);
         // Log::info('HOOK BATCH batchFlow report DEAL', ['planDeals planDeals' =>  $result['planDeals']]);
@@ -4048,7 +4118,7 @@ class EventReportService
                         $deadline = null;
                     }
 
-                    
+
                     $currentNowDate->modify('+1 second');
                     $nowDate = $currentNowDate->format('d.m.Y H:i:s');
                     $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
@@ -5124,7 +5194,19 @@ class EventReportService
             }
         }
 
-        $planComment = 'ОП ' . $planComment .  "\n" . $this->comment;
+        if (!empty($this->workStatus['current'])) {
+            if (!empty($this->workStatus['current']['code'])) {
+                $workStatusCode = $this->workStatus['current']['code'];
+
+
+                if ($workStatusCode === 'fail') {  //если провал 
+                    $planComment = 'ОП ОТКАЗ ' . $planComment .  "\n" . $this->comment;
+                } else {
+
+                    $planComment = 'ОП ' . $planComment .  "\n" . $this->comment;
+                }
+            }
+        }
         return $planComment;
     }
 }
