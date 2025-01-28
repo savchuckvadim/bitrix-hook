@@ -834,6 +834,13 @@ class EventReportService
 
     protected function relationLeadFlow()
     {
+        Log::channel('telegram')->info(
+            'relationLead',
+            [
+                '$this->' => $this->relationLead,
+
+            ]
+        );
         if (!empty($this->relationLead)) {
 
             $statusForRelationLead = '';
@@ -846,6 +853,13 @@ class EventReportService
             if (!empty($this->isFail)) {
                 $statusForRelationLead = 'fail';
             }
+            Log::channel('telegram')->info(
+                'relationLead',
+                [
+                    '$statusForRelationLead' => $statusForRelationLead,
+    
+                ]
+            );
             if (!empty($statusForRelationLead)) {
                 $relationLeadService = new EventReportRelationLeadService([
                     'domain' => $this->domain,

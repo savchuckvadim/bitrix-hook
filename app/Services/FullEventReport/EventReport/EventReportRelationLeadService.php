@@ -5,7 +5,7 @@ namespace App\Services\FullEventReport\EventReport\EventReportRelationLeadServic
 
 use App\Http\Controllers\APIOnlineController;
 use App\Services\BitrixGeneralService;
-
+use Illuminate\Support\Facades\Log;
 
 class EventReportRelationLeadService
 
@@ -33,7 +33,16 @@ class EventReportRelationLeadService
     public function processLead()
     {
         try {
-
+            Log::channel('telegram')->info(
+                'processLead',
+                [
+                    '$domain' => $this->domain,
+                    '$hook' => $this->hook,
+                    '$lead' => $this->lead,
+                    '$status' => $this->status,
+    
+                ]
+            );
             if (!empty($this->lead)) {
                 if (!empty($this->lead['ID'])) {
                     $leadId = $this->lead['ID'];
