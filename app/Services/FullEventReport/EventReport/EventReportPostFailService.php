@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\FullEventReport\EventReport\EventReportPostFailService;
+namespace App\Services\FullEventReport\EventReport;
 
 use App\Http\Controllers\APIOnlineController;
 use App\Services\BitrixGeneralService;
