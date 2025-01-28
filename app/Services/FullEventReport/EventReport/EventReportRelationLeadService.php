@@ -11,23 +11,26 @@ class EventReportRelationLeadService
 
 {
     protected $domain;
-    protected $portal;
+    // protected $portal;
 
     protected $hook;
 
-    protected $lead = null;
+    protected $leadId = null;
     protected $status; // fail || success
 
 
     public function __construct(
 
-        $data,
+        $domain,
+        $hook,
+        $leadId,
+        $status,
 
     ) {
-        $this->domain = $data['domain'];
-        $this->hook = $data['hook'];
-        $this->lead = $data['lead'];
-        $this->status = $data['status'];  // 'success' | 'fail'
+        $this->domain = $domain;
+        $this->hook = $hook;
+        $this->leadId = $leadId;
+        $this->status = $status;  // 'success' | 'fail'
     }
 
     public function processLead()
@@ -37,45 +40,50 @@ class EventReportRelationLeadService
                 'processLead',
                 [
                     '$domain' => $this->domain,
-                    '$hook' => $this->hook,
+                    // '$hook' => $this->hook,
                     '$status' => $this->status,
-    
+
                 ]
             );
-            if (!empty($this->lead)) {
-                if (!empty($this->lead['ID'])) {
+            if (!empty($this->leadId)) {
+                // if (!empty($this->lead['ID'])) {
 
-                    Log::channel('telegram')->info(
-                        'processLead',
-                        [
-                          
-                            '$leadId' => $this->lead['ID'],
-                            '$status' => $this->status,
-            
-                        ]
-                    );
+                Log::channel('telegram')->info(
+                    'processLead',
+                    [
+
+                        '$leadId' => $this->leadId,
+                        '$status' => $this->status,
+
+                    ]
+                );
 
 
 
-                    $leadId = $this->lead['ID'];
-                    $bxStatusId = 'CONVERTED';
-                    if (!empty($this->status)) {
-                        if ($this->status == 'fail') {
-                            $bxStatusId = 'JUNK';
-                        }
+                // $leadId = $this->lead['ID'];
+                $bxStatusId = 'CONVERTED';
+                if (!empty($this->status)) {
+                    if ($this->status == 'fail') {
+                        $bxStatusId = 'JUNK';
                     }
-                    $leadUpdate = BitrixGeneralService::updateEntity($this->hook, 'lead', $leadId,   [
+                }
+                $leadUpdate = BitrixGeneralService::updateEntity(
+                    $this->hook,
+                    'lead',
+                    $this->leadId,
+                    [
                         // 'COMPANY_ID' => $companyId,
                         'STATUS_ID' => $bxStatusId
                         // 'STATUS_ID' => 'CONVERTED'
-                    ]);
+                    ]
+                );
 
-                    APIOnlineController::sendLog('EventReportRelationLeadService', [
+                APIOnlineController::sendLog('EventReportRelationLeadService', [
 
-                        'leadUpdate' => $leadUpdate,
+                    'leadUpdate' => $leadUpdate,
 
-                    ]);
-                }
+                ]);
+                // }
             }
         } catch (\Throwable $th) {
             $errorMessages =  [

@@ -857,18 +857,18 @@ class EventReportService
                     'relationLead',
                     [
                         'domain' => $this->domain,
-                        'hook' => $this->hook,
+                        // 'hook' => $this->hook,
                         'lead' => $this->relationLead['ID'],
                         'status' => $statusForRelationLead,
                     ]
                 );
                 if ($statusForRelationLead == 'success' || $statusForRelationLead == 'fail') {
-                    $relationLeadService = new EventReportRelationLeadService([
-                        'domain' => $this->domain,
-                        'hook' => $this->hook,
-                        'lead' => $this->relationLead,
-                        'status' => $statusForRelationLead,
-                    ]);
+                    $relationLeadService = new EventReportRelationLeadService(
+                        $this->domain,
+                        $this->hook,
+                        $this->relationLead['ID'],
+                        $statusForRelationLead,
+                    );
                     $relationLeadService->processLead();
                 }
             } else {
