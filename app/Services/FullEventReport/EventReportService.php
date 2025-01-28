@@ -1518,7 +1518,6 @@ class EventReportService
                     if ($currentReportEventType === 'presentation') {
 
                         array_unshift($currentPresComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
-                       
                     }
                     // array_unshift($currentMComments, $this->nowDate . ' Перенос: ' . $this->currentTaskTitle . ' ' . $this->comment);
                 }
@@ -1572,17 +1571,14 @@ class EventReportService
         }
         $comment = $this->getFullEventComment();
         array_unshift($currentMComments, $this->nowDate . "\n" . $comment);
-      
-        if($this->domain === 'gsirk.bitrix24.ru'){
-            if (count($currentMComments) > 30) {
-                $currentMComments = array_slice($currentMComments, 0, 30);
-            }
-        }else{
-            if (count($currentMComments) > 12) {
-                $currentMComments = array_slice($currentMComments, 0, 12);
-            }
+        $totalCommentsCount = 12;
+        if ($this->domain === 'gsirk.bitrix24.ru') {
+            $totalCommentsCount = 30;
+           
+        } 
+        if (count($currentMComments) > $totalCommentsCount) {
+            $currentMComments = array_slice($currentMComments, 0, $totalCommentsCount);
         }
-
         if (count($currentPresComments) > 15) {
             $currentPresComments = array_slice($currentPresComments, 0, 15);
         }
