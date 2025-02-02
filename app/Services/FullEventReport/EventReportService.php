@@ -4852,6 +4852,9 @@ class EventReportService
         $currentDealIds = $planPresDealIds['planDeals'];
         $currentRepoertDealIds = $planPresDealIds['reportDeals'];
         $unplannedPresDealsIds = $planPresDealIds['unplannedPresDeals'];
+        date_default_timezone_set('Europe/Moscow');
+        $currentNowDate = new DateTime();
+        $nowDate = $currentNowDate->format('d.m.Y H:i:s');
 
         // Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
         //     'planDeals' => $planPresDealIds['planDeals'],
@@ -4930,7 +4933,7 @@ class EventReportService
                 $this->hook,
                 $this->bitrixLists,
                 $currentDealIds,
-                $this->nowDate,
+                $nowDate,
                 $eventType,
                 $this->planDeadline,
                 $this->planCreatedId,
@@ -5000,7 +5003,7 @@ class EventReportService
                     // $reportStatus,
                     $this->isPresentationDone,
 
-                    $this->nowDate,
+                    $nowDate,
                     $eventType,
                     $this->isExpired,
                     $this->planDeadline,
@@ -5039,7 +5042,7 @@ class EventReportService
                     $this->hook,
                     $this->bitrixLists,
                     $currentDealIds, //planDeals || unplannedDeals если през была незапланированной
-                    $this->nowDate,
+                    $nowDate,
                     $this->planResponsibleId,
                     $this->entityId,
                     $this->comment,
@@ -5060,7 +5063,7 @@ class EventReportService
                     // $reportStatus,
                     $this->isPresentationDone,
 
-                    $this->nowDate,
+                    $nowDate,
                     'report',
                     $this->isExpired,
                     $this->planDeadline,
