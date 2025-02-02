@@ -1000,7 +1000,7 @@ class BitrixListPresentationFlowService
                 $nowDateLocal = Carbon::now('Asia/Irkutsk')->locale('ru')->isoFormat('D MMMM YYYY'); // Для строки
                 $nowDateUtc = Carbon::now('Asia/Irkutsk')->setTimezone('Europe/Moscow')->format('Y-m-d H:i:s'); // Для Bitrix
             } else {
-                $nowDateLocal = Carbon::now('Europe/Moscow')->isoFormat('D MMMM YYYY'); // По умолчанию
+                $nowDateLocal = Carbon::now('Europe/Moscow')->locale('ru')->isoFormat('D MMMM YYYY'); // По умолчанию
                 $nowDateUtc =  Carbon::now('Europe/Moscow')->format('Y-m-d H:i:s');; // В Москве оба значения одинаковые
             }
 
@@ -1349,7 +1349,7 @@ class BitrixListPresentationFlowService
                 $nowDateLocal = Carbon::now('Asia/Irkutsk')->locale('ru')->isoFormat('D MMMM YYYY'); // Для строки
                 $nowDateUtc = Carbon::now('Asia/Irkutsk')->setTimezone('Europe/Moscow')->format('Y-m-d H:i:s'); // Для Bitrix
             } else {
-                $nowDateLocal = Carbon::now('Europe/Moscow')->isoFormat('D MMMM YYYY'); // По умолчанию
+                $nowDateLocal = Carbon::now('Europe/Moscow')->locale('ru')->isoFormat('D MMMM YYYY'); // По умолчанию
                 $nowDateUtc =  Carbon::now('Europe/Moscow')->format('Y-m-d H:i:s');; // В Москве оба значения одинаковые
             }
 
