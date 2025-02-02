@@ -4175,8 +4175,8 @@ class EventReportService
                     } else   if ($this->domain === 'gsirk.bitrix24.ru') {
 
                         $deadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->planDeadline, 'Asia/Irkutsk');
-                        // $deadline = $deadline->setTimezone('Europe/Moscow');
-                        // $deadline = $deadline->format('Y-m-d H:i:s');
+                        $deadline = $deadline->setTimezone('Europe/Moscow');
+                        $deadline = $deadline->format('Y-m-d H:i:s');
                     }
 
                     if (!$this->isPlanned) {
