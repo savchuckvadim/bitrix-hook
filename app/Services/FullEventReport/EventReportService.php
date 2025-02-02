@@ -4161,7 +4161,9 @@ class EventReportService
                     // )->onQueue('low-priority');
                     $deadline = $this->planDeadline;
                     Log::channel('telegram')
-                        ->info('APRIL_HOOK init deadline', $this->planDeadline);
+                        ->info('APRIL_HOOK init deadline', [
+                             'initdeadline' => $this->planDeadline
+                        ]);
 
                     if ($this->domain === 'alfacentr.bitrix24.ru') {
 
@@ -4181,7 +4183,9 @@ class EventReportService
                         $deadline = null;
                     }
 
-                    Log::channel('telegram')->info('APRIL_HOOK list deadline', $deadline);
+                    Log::channel('telegram')->info('APRIL_HOOK list deadline', [
+                        'deadline' => $deadline
+                   ]);
 
                     $currentNowDate->modify('+1 second');
                     $nowDate = $currentNowDate->format('d.m.Y H:i:s');
