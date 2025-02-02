@@ -4843,6 +4843,7 @@ class EventReportService
             $eventType = 'plan';
 
             $batchCommands =  BitrixListPresentationFlowService::getListPresentationPlanFlowBatch(
+                $this->domain,
                 $this->hook,
                 $this->bitrixLists,
                 $currentDealIds,
@@ -4910,6 +4911,7 @@ class EventReportService
                 // $eventAction = 'expired';
                 //report
                 $batchCommands =   BitrixListPresentationFlowService::getListPresentationReportFlowBatch(
+                    $this->domain,
                     $this->hook,
                     $this->bitrixLists,
                     $currentRepoertDealIds,
@@ -4952,6 +4954,7 @@ class EventReportService
 
                 // ]);
                 $batchCommands = BitrixListPresentationFlowService::getListPresentationUnplannedtFlowBatch(
+                    $this->domain,
                     $this->hook,
                     $this->bitrixLists,
                     $currentDealIds, //planDeals || unplannedDeals если през была незапланированной
@@ -4970,6 +4973,7 @@ class EventReportService
             if ($this->currentReportEventType === 'presentation') {
                 // если была проведена презентация вне зависимости от текущего события
                 $batchCommands = BitrixListPresentationFlowService::getListPresentationReportFlowBatch(
+                    $this->domain,
                     $this->hook,
                     $this->bitrixLists,
                     $currentDealIds, //planDeals || unplannedDeals если през была незапланированной

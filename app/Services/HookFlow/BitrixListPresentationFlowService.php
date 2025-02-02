@@ -4,6 +4,7 @@ namespace App\Services\HookFlow;
 
 use App\Services\General\BitrixBatchService;
 use App\Services\General\BitrixListService;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Support\Facades\Log;
 
@@ -636,6 +637,7 @@ class BitrixListPresentationFlowService
     //BATCH FLOW
 
     static function getListPresentationPlanFlowBatch(
+        $domain,
         $hook,
         $bitrixLists,
         $currentDealIds,
@@ -783,7 +785,7 @@ class BitrixListPresentationFlowService
                 [
                     'code' => 'pres_plan_contacts',
                     'name' => 'Контактные данные',
-                    'value' => 'Контактные данные', // []
+                    'value' => '', // []
                 ],
                 [
                     'code' => 'pres_init_status',
@@ -961,6 +963,7 @@ class BitrixListPresentationFlowService
 
 
     static function getListPresentationReportFlowBatch(
+        $domain,
         $hook,
         $bitrixLists,
         $currentDealIds,
@@ -990,6 +993,17 @@ class BitrixListPresentationFlowService
 
 
         try {
+            if ($domain === 'alfacentr.bitrix24.ru') {
+                $nowDateLocal = Carbon::now('Asia/Novosibirsk')->locale('ru')->isoFormat('D MMMM YYYY');
+                $nowDateUtc = Carbon::now('Asia/Novosibirsk')->setTimezone('Europe/Moscow')->format('Y-m-d H:i:s'); // Для Bitrix
+            } elseif ($domain === 'gsirk.bitrix24.ru') {
+                $nowDateLocal = Carbon::now('Asia/Irkutsk')->locale('ru')->isoFormat('D MMMM YYYY'); // Для строки
+                $nowDateUtc = Carbon::now('Asia/Irkutsk')->setTimezone('Europe/Moscow')->format('Y-m-d H:i:s'); // Для Bitrix
+            } else {
+                $nowDateLocal = Carbon::now('Europe/Moscow')->isoFormat('D MMMM YYYY'); // По умолчанию
+                $nowDateUtc =  Carbon::now('Europe/Moscow')->format('Y-m-d H:i:s');; // В Москве оба значения одинаковые
+            }
+
             $eventType = 'report';
             $isDone = $isPresentationDone;
             $failTypeCode = null;
@@ -1022,7 +1036,7 @@ class BitrixListPresentationFlowService
             }
 
 
-            $comment = $deadline . ' ' . $eventActionName . ' ' . $comment;
+            $comment =  $eventActionName . ' ' . "\n" . $nowDateLocal . ' '  . "\n" . $comment;
             $totalPresComment = $comment;
 
 
@@ -1289,7 +1303,7 @@ class BitrixListPresentationFlowService
             $commandKey = 'present_list_report_' . $code;
             $batchCommands[$commandKey] = $batchCommand;
 
-       
+
 
 
             return $batchCommands;
@@ -1309,6 +1323,7 @@ class BitrixListPresentationFlowService
 
 
     static function getListPresentationUnplannedtFlowBatch(
+        $domain,
         $hook,
         $bitrixLists,
         $currentDealIds,
@@ -1327,6 +1342,17 @@ class BitrixListPresentationFlowService
 
     ) {
         try {
+            if ($domain === 'alfacentr.bitrix24.ru') {
+                $nowDateLocal = Carbon::now('Asia/Novosibirsk')->locale('ru')->isoFormat('D MMMM YYYY');
+                $nowDateUtc = Carbon::now('Asia/Novosibirsk')->setTimezone('Europe/Moscow')->format('Y-m-d H:i:s'); // Для Bitrix
+            } elseif ($domain === 'gsirk.bitrix24.ru') {
+                $nowDateLocal = Carbon::now('Asia/Irkutsk')->locale('ru')->isoFormat('D MMMM YYYY'); // Для строки
+                $nowDateUtc = Carbon::now('Asia/Irkutsk')->setTimezone('Europe/Moscow')->format('Y-m-d H:i:s'); // Для Bitrix
+            } else {
+                $nowDateLocal = Carbon::now('Europe/Moscow')->isoFormat('D MMMM YYYY'); // По умолчанию
+                $nowDateUtc =  Carbon::now('Europe/Moscow')->format('Y-m-d H:i:s');; // В Москве оба значения одинаковые
+            }
+
             $eventType = 'report';
             $isDone = true;
             $isExpired = false;
@@ -1358,7 +1384,7 @@ class BitrixListPresentationFlowService
             }
 
             $fieldsData = [
-                'NAME' => 'Презентация Спонтанная от' . $nowDate,
+                'NAME' => 'Презентация Спонтанная от' . $nowDateLocal,
 
             ];
 
@@ -1636,7 +1662,7 @@ class BitrixListPresentationFlowService
             );
             $commandKey = 'present_list_unplanned_' . $code;
             $batchCommands[$commandKey] = $batchCommand;
-         
+
 
 
             return $batchCommands;
