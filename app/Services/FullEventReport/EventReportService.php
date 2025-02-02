@@ -4261,7 +4261,7 @@ class EventReportService
                     'Презентация',
                     'plan',
                     // $this->stringType,
-                    $this->nowDate, //'', //$this->planDeadline,
+                    $nowDate, //'', //$this->planDeadline,
                     $this->planResponsibleId,
                     $this->planResponsibleId,
                     $this->planResponsibleId,
