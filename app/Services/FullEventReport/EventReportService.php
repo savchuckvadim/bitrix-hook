@@ -4085,17 +4085,25 @@ class EventReportService
         $nowDate = $currentNowDate->format('d.m.Y H:i:s');
 
       
+        Log::channel('telegram')
+        ->info('APRIL_HOOK init deadline', [
+            'list initdeadline' => $this->planDeadline
+        ]);
+        $planDeadline = $this->planDeadline;
         if ($this->domain === 'alfacentr.bitrix24.ru') {
 
-            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->planDeadline, 'Asia/Novosibirsk');
+            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $planDeadline, 'Asia/Novosibirsk');
             $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
-            $this->planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
+            $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
         } else   if ($this->domain === 'gsirk.bitrix24.ru') {
 
-            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->planDeadline, 'Asia/Irkutsk');
+            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $planDeadline, 'Asia/Irkutsk');
             $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
-            $this->planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
+            $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
         }
+        Log::channel('telegram')->info('APRIL_HOOK list deadline', [
+            'list result $this->planDeadline' => $planDeadline
+        ]);
      
 
         if (!empty($this->currentBtxDeals)) {
@@ -4148,29 +4156,8 @@ class EventReportService
                 if ($reportEventType !== 'presentation') {
 
                     //если текущий не презентация
-                    // BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию
-                    //     $this->hook,
-                    //     $this->bitrixLists,
-                    //     $reportEventType,
-                    //     $reportEventTypeName,
-                    //     $reportAction,
-                    //     // $this->stringType,
-                    //     $this->planDeadline,
-                    //     $this->planResponsibleId,
-                    //     $this->planResponsibleId,
-                    //     $this->planResponsibleId,
-                    //     $this->entityId,
-                    //     $this->comment,
-                    //     $this->workStatus['current'],
-                    //     $this->resultStatus, // result noresult expired,
-                    //     $this->noresultReason,
-                    //     $this->failReason,
-                    //     $this->failType,
-                    //     $currentDealIds,
-                    //     $currentBaseDealId
 
-                    // )->onQueue('low-priority');
-                    $deadline = $this->planDeadline;
+                    $deadline = $planDeadline;
 
 
                     if (!$this->isPlanned) {
@@ -4220,29 +4207,7 @@ class EventReportService
             if ($reportEventType !== 'presentation') {
                 //если текущее событие не през - значит uplanned
                 //значит надо запланировать през в холостую
-                // BtxCreateListItemJob::dispatch(  //запись о планировании и переносе
-                //     $this->hook,
-                //     $this->bitrixLists,
-                //     'presentation',
-                //     'Презентация',
-                //     'plan',
-                //     // $this->stringType,
-                //     $this->nowDate,
-                //     $this->planResponsibleId,
-                //     $this->planResponsibleId,
-                //     $this->planResponsibleId,
-                //     $this->entityId,
-                //     'не запланированая презентация',
-                //     ['code' => 'inJob'], //$this->workStatus['current'],
-                //     'result',  // result noresult expired
-                //     $this->noresultReason,
-                //     $this->failReason,
-                //     $this->failType,
-                //     $currentDealIds,
-                //     $currentBaseDealId
 
-
-                // )->onQueue('low-priority');
 
                 $currentNowDate->modify('+2 second');
                 $nowDate = $currentNowDate->format('d.m.Y H:i:s');
@@ -4274,29 +4239,8 @@ class EventReportService
 
                 );
             }
-            // BtxCreateListItemJob::dispatch(  //report - отчет по текущему событию - презентация
-            //     $this->hook,
-            //     $this->bitrixLists,
-            //     'presentation',
-            //     'Презентация',
-            //     'done',
-            //     // $this->stringType,
-            //     $this->planDeadline,
-            //     $this->planResponsibleId,
-            //     $this->planResponsibleId,
-            //     $this->planResponsibleId,
-            //     $this->entityId,
-            //     $this->comment,
-            //     $this->workStatus['current'],
-            //     $this->resultStatus, // result noresult expired,
-            //     $this->noresultReason,
-            //     $this->failReason,
-            //     $this->failType,
-            //     $currentDealIds,
-            //     $currentBaseDealId
 
-            // )->onQueue('low-priority');
-            $deadline = $this->planDeadline;
+            $deadline = $planDeadline;
             if (!$this->isPlanned) {
                 $deadline = null;
             }
@@ -4348,7 +4292,7 @@ class EventReportService
                         'Презентация',
                         'done',
                         // $this->stringType,
-                        $this->planDeadline, //'', //$this->planDeadline,
+                        $planDeadline, //'', //$this->planDeadline,
                         $tmcUserId,
                         $tmcUserId,
                         $this->planResponsibleId,
@@ -4376,28 +4320,7 @@ class EventReportService
         if (!$this->isSuccessSale && !$this->isFail) {
 
             if ($this->isPlanned) {
-                // BtxCreateListItemJob::dispatch(  //запись о планировании и переносе
-                //     $this->hook,
-                //     $this->bitrixLists,
-                //     $planEventType,
-                //     $planEventTypeName,
-                //     $eventAction,
-                //     // $this->stringType,
-                //     $this->planDeadline,
-                //     $this->planResponsibleId,
-                //     $this->planResponsibleId,
-                //     $this->planResponsibleId,
-                //     $this->entityId,
-                //     $planComment,
-                //     $this->workStatus['current'],
-                //     $this->resultStatus,  // result noresult expired
-                //     $this->noresultReason,
-                //     $this->failReason,
-                //     $this->failType,
-                //     $currentDealIds,
-                //     $currentBaseDealId
-
-                // )->onQueue('low-priority');
+        
 
                 $currentNowDate->modify('+5 second');
                 $nowDate = $currentNowDate->format('d.m.Y H:i:s');
@@ -4408,7 +4331,7 @@ class EventReportService
                     $planEventTypeName,
                     $eventAction,
                     // $this->stringType,
-                    $this->planDeadline, //'', //$this->planDeadline,
+                    $planDeadline, //'', //$this->planDeadline,
                     $this->planResponsibleId,
                     $this->planResponsibleId,
                     $this->planResponsibleId,
@@ -4433,28 +4356,7 @@ class EventReportService
 
 
         if ($this->isSuccessSale || $this->isFail) {
-            // BtxSuccessListItemJob::dispatch(  //запись о планировании и переносе
-            //     $this->hook,
-            //     $this->bitrixLists,
-            //     $planEventType,
-            //     $planEventTypeName,
-            //     'done',
-            //     // $this->stringType,
-            //     $this->planDeadline,
-            //     $this->planResponsibleId,
-            //     $this->planResponsibleId,
-            //     $this->planResponsibleId,
-            //     $this->entityId,
-            //     $planComment,
-            //     $this->workStatus['current'],
-            //     $this->resultStatus,  // result noresult expired
-            //     $this->noresultReason,
-            //     $this->failReason,
-            //     $this->failType,
-            //     $currentDealIds,
-            //     $currentBaseDealId
-
-            // )->onQueue('low-priority');
+  
             $eventType = 'success';
             if (!empty($this->isSuccessSale)) {
                 $eventType = 'success';
@@ -4470,7 +4372,7 @@ class EventReportService
                 $planEventTypeName,
                 'done',
                 // $this->stringType,
-                $this->planDeadline, //'', //$this->planDeadline,
+                $planDeadline, //'', //$this->planDeadline,
                 $this->planResponsibleId,
                 $this->planResponsibleId,
                 $this->planResponsibleId,
@@ -4852,20 +4754,20 @@ class EventReportService
         ->info('APRIL_HOOK init deadline', [
             'pres initdeadline' => $this->planDeadline
         ]);
-
+        $planDeadline = $this->planDeadline;
         if ($this->domain === 'alfacentr.bitrix24.ru') {
 
-            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->planDeadline, 'Asia/Novosibirsk');
+            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $planDeadline, 'Asia/Novosibirsk');
             $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
-            $this->planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
+            $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
         } else   if ($this->domain === 'gsirk.bitrix24.ru') {
 
-            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->planDeadline, 'Asia/Irkutsk');
+            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $planDeadline, 'Asia/Irkutsk');
             $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
-            $this->planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
+            $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
         }
         Log::channel('telegram')->info('APRIL_HOOK list deadline', [
-            'presresult $this->planDeadline' => $this->planDeadline
+            'presresult $this->planDeadline' => $planDeadline
         ]);
         // Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
         //     'planDeals' => $planPresDealIds['planDeals'],
@@ -4946,7 +4848,7 @@ class EventReportService
                 $currentDealIds,
                 $nowDate,
                 $eventType,
-                $this->planDeadline,
+                $planDeadline,
                 $this->planCreatedId,
                 $this->planResponsibleId,
                 $this->planTmcId,
@@ -5017,7 +4919,7 @@ class EventReportService
                     $nowDate,
                     $eventType,
                     $this->isExpired,
-                    $this->planDeadline,
+                    $planDeadline,
                     $this->planCreatedId,
                     $this->planResponsibleId,
                     $this->entityId,
@@ -5077,7 +4979,7 @@ class EventReportService
                     $nowDate,
                     'report',
                     $this->isExpired,
-                    $this->planDeadline,
+                    $planDeadline,
                     $this->planCreatedId,
                     $this->planResponsibleId,
                     $this->entityId,
