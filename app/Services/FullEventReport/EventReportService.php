@@ -4084,7 +4084,25 @@ class EventReportService
         $currentNowDate = new DateTime();
         $nowDate = $currentNowDate->format('d.m.Y H:i:s');
 
+        Log::channel('telegram')
+            ->info('APRIL_HOOK init deadline', [
+                'initdeadline' => $this->planDeadline
+            ]);
 
+        if ($this->domain === 'alfacentr.bitrix24.ru') {
+
+            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->planDeadline, 'Asia/Novosibirsk');
+            $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
+            $this->planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
+        } else   if ($this->domain === 'gsirk.bitrix24.ru') {
+
+            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->planDeadline, 'Asia/Irkutsk');
+            $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
+            $this->planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
+        }
+        Log::channel('telegram')->info('APRIL_HOOK list deadline', [
+            'result $this->planDeadline' => $this->planDeadline
+        ]);
 
 
         if (!empty($this->currentBtxDeals)) {
@@ -4160,33 +4178,13 @@ class EventReportService
 
                     // )->onQueue('low-priority');
                     $deadline = $this->planDeadline;
-                    Log::channel('telegram')
-                        ->info('APRIL_HOOK init deadline', [
-                             'initdeadline' => $this->planDeadline
-                        ]);
 
-                    if ($this->domain === 'alfacentr.bitrix24.ru') {
-
-
-
-                        $deadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->planDeadline, 'Asia/Novosibirsk');
-                        // $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
-                        // $moscowTime = $moscowTime->format('Y-m-d H:i:s');
-                    } else   if ($this->domain === 'gsirk.bitrix24.ru') {
-
-                        $deadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->planDeadline, 'Asia/Irkutsk');
-                        $deadline = $deadline->setTimezone('Europe/Moscow');
-                        $deadline = $deadline->format('Y-m-d H:i:s');
-                    }
 
                     if (!$this->isPlanned) {
                         $deadline = null;
                     }
 
-                    Log::channel('telegram')->info('APRIL_HOOK list deadline', [
-                        'deadline' => $deadline
-                   ]);
-
+                  
                     $currentNowDate->modify('+1 second');
                     $nowDate = $currentNowDate->format('d.m.Y H:i:s');
                     $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
