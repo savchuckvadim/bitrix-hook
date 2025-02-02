@@ -1382,7 +1382,7 @@ class BitrixListPresentationFlowService
                     }
                 }
             }
-            $unplannedName = 'Презентация Спонтанная от' . $nowDateLocal;
+            $unplannedName = 'Презентация Спонтанная от ' . $nowDateLocal;
             $fieldsData = [
                 'NAME' =>  $unplannedName,
 
@@ -1639,7 +1639,7 @@ class BitrixListPresentationFlowService
 
 
             // ]);
-            $fieldsData['NAME'] =  'Презентация Спонтанная от ' . $nowDate;
+            $fieldsData['NAME'] =  $unplannedName;
             $method = 'lists.element.add';
 
             if (empty($code)) {
