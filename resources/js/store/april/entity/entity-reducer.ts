@@ -146,9 +146,9 @@ export const getEntityItem = (url: string, entityName: string, entityId: number)
 
 }
 export const setOrupdateEntityItem = (history: (url: string) => void,
-    currentUrl: string, url: string, entityName: string, data: FormData, isFormData = true) => 
-        async (dispatch: AppDispatchType, getState: GetStateType) => {
-        debugger
+    currentUrl: string, url: string, entityName: string, data: FormData, isFormData = true) =>
+    async (dispatch: AppDispatchType, getState: GetStateType) => {
+
 
         if (url) {
 
@@ -321,6 +321,71 @@ export const getInitialEntityData = (url: string, router: any, currentUrl: strin
         console.log('no url')
     }
 }
+
+export const getRelationEntityData = (router: any, url: string, entityName: string, entityId: number) => async (dispatch: AppDispatchType, getState: GetStateType) => {
+    // parentEntityId //entityId
+    // router // location  navigate  params
+  
+  debugger
+    const entityState = getState().entity as EntityStateType
+    let cretingEntity = entityState.creating.formData
+
+    // if (url) {
+    //     let fullUrl = `initial${currentUrl}`
+    //     let targetUrl = currentUrl
+    //     if (fullUrl.endsWith("/rel")) {
+    //         fullUrl = fullUrl.slice(0, -4); // Обрезать последние 4 символа ("/add")
+
+
+
+    //     }
+    //     if (fullUrl.endsWith("ies")) {
+    //         // Удаляем 'ies' и добавляем 'y'
+    //         fullUrl = fullUrl.slice(0, -3) + "y";
+    //         targetUrl = targetUrl.slice(0, -3) + "y";
+    //         targetUrl = `${targetUrl}/rel`
+    //     }
+
+    //     if (fullUrl.endsWith("s")) {
+    //         targetUrl = targetUrl.slice(0, -1);
+    //         targetUrl = `${targetUrl}/rel`
+    //         fullUrl = fullUrl.slice(0, -1); // Обрезать последние 1 символа ("s")
+    //     }
+    //     if (fullUrl.endsWith("s/")) {
+    //         targetUrl = targetUrl.slice(0, -2);
+    //         targetUrl = `${targetUrl}/rel`
+    //         fullUrl = fullUrl.slice(0, -2); // Обрезать последние 2 символа ("s/")
+    //     }
+
+
+    //     dispatch(entityActions.setFetchingInitialAdd())
+
+    //     if (!cretingEntity) {
+    //         cretingEntity = await onlineAPI.service(fullUrl, API_METHOD.GET, 'initial', null) as InitialEntityData | null
+    //         if (cretingEntity) {
+
+    //             dispatch(entityActions.setInitialAdd(cretingEntity))
+    //         } else {
+    //             console.log('no initial data')
+    //         }
+    //     }
+
+
+
+
+
+    //     if (currentUrl !== targetUrl) {
+
+
+    //         router.navigate(targetUrl, { replace: true })
+    //     }
+
+    // } else {
+    //     console.log('no url')
+    // }
+}
+
+
 export const deleteEntityItem = (history: (url: string) => void, url: string, entityName: string, entityId: number) =>
     async (dispatch: AppDispatchType, getState: GetStateType) => {
 

@@ -133,6 +133,8 @@ export const allEntities = [
 
 
 
+
+
     },
 
     {
@@ -698,20 +700,29 @@ allEntities.push(
         100,
         'complect',
         'Комплекты GARANT',
-        []
+        [101]
     )
 )
 allEntities.push(
     getEntityRoute(
         101,
+        'cinfoblock',
+        'Связанные с Комплектом инфоблоки',
+        [4]
+    )
+)
+allEntities.push(
+    getEntityRoute(
+        102,
         'infogroup',
         'Группы инфоблоков',
-        []
+        [4]
     )
 )
+
 allEntities.push(
     getEntityRoute(
-        101,
+        103,
         'supply',
         'Виды поставки комплектов Гарант',
         []

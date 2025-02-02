@@ -75,7 +75,7 @@ export const getFormik = (router, creating, itemUrl, current, setOrupdateEntityI
             if (isFormData) {
                 formData = new FormData();
 
-                debugger
+                
                 for (const key in values) {
                     appendFormData(formData, key, values[key]);
                 }
@@ -87,7 +87,7 @@ export const getFormik = (router, creating, itemUrl, current, setOrupdateEntityI
                 }
 
             }
-            debugger
+            
             setOrupdateEntityItem(router.navigate, router.location.pathname, itemUrl, itemUrl, formData, isFormData)
 
         }

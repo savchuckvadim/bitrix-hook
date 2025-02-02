@@ -63,9 +63,11 @@ const EntityItems = ({ entityName, entityTitle, items, itemUrl, router, tableHea
                                                             tableHeaders
                                                                 .map((item, i) => <th key={`table-header-${entityName}-cell-${i}`}>{item}</th>)}
                                                         <th>Действие</th>
+                                                        <th>Связать</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    
                                                     {currentItems.map(entity => {
                                                         return <tr
                                                             onClick={() => {
@@ -102,6 +104,8 @@ const EntityItems = ({ entityName, entityTitle, items, itemUrl, router, tableHea
                                                                     }}
                                                                 >View</button>
                                                             </td>
+
+                                                          
                                                         </tr>;
                                                     })}
                                                 </tbody>

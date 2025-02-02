@@ -136,7 +136,7 @@ const EntityItemDynamicInput = ({
                 break;
 
             case 'boolean':
-debugger
+
                 input = <div>  <div className="form-check form-check-right mb-3">
                     <input
                         type="checkbox"

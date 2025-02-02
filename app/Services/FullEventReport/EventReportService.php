@@ -189,10 +189,9 @@ class EventReportService
         $data,
 
     ) {
-        date_default_timezone_set('Europe/Moscow');
-        $nowDate = new DateTime();
+    
         // Форматируем дату и время в нужный формат
-        $this->nowDate = $nowDate->format('d.m.Y H:i:s');
+      
 
 
         $domain = $data['domain'];
@@ -209,11 +208,17 @@ class EventReportService
                 $this->relationLead = $data['lead'];
             }
         }
+        date_default_timezone_set('Europe/Moscow');
+      
         if ($domain == 'gsirk.bitrix24.ru') {
             date_default_timezone_set('Asia/Irkutsk');
         } else if ($domain == 'alfacentr.bitrix24.ru') {
             date_default_timezone_set('Asia/Novosibirsk');
         }
+        $nowDate = new DateTime();
+        $this->nowDate = $nowDate->format('d.m.Y H:i:s');
+
+
         // if ($domain == 'gsirk.bitrix24.ru' || $domain == 'april-dev.bitrix24.ru' || $domain == 'april-garant.bitrix24.ru') {
         if (isset($data['plan']['isActive'])) {
             $this->isPlanActive = $data['plan']['isActive'];

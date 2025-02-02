@@ -18,6 +18,8 @@ import {
 import Breadcrumb from "../../../Common/Breadcrumb";
 import TypeEntityItemDynamicInput from "./Item/TypeItemDynamicInputs";
 import { getFormik } from "../../../../utils/entity-utils/form-util";
+import { useDispatch } from "react-redux";
+import { getRelationEntityData } from "../../../../store/april/entity/entity-reducer";
 
 
 const EntityItem = ({
@@ -74,6 +76,15 @@ const EntityItem = ({
         deleteEntityItem(router.navigate, itemUrl, entityName, entity.id)
     }
 
+    const dispatch = useDispatch()
+
+    const initRelation = () => {
+        dispatch(
+            getRelationEntityData(
+                router, itemUrl, entityName, entity.id
+            )
+        )
+    }
 
     return (
         <React.Fragment>
@@ -98,7 +109,16 @@ const EntityItem = ({
                                             justifyContent: 'flex-end',
                                             alignItems: 'center'
                                         }}>
-                                            <Button color="primary" type="submit">
+                                            <Button
+                                                color="success"
+                                                type="button"
+                                                onClick={initRelation}
+                                            >
+
+                                                Relation
+                                            </Button>
+
+                                            <Button style={{ marginLeft: '5px' }} color="primary" type="submit">
                                                 Submit form
                                             </Button>
 
@@ -108,7 +128,7 @@ const EntityItem = ({
                                                 Delete
                                             </Button>
                                         </div>
-                              
+
                                     </Form>
 
                                 </CardBody>
