@@ -4084,11 +4084,7 @@ class EventReportService
         $currentNowDate = new DateTime();
         $nowDate = $currentNowDate->format('d.m.Y H:i:s');
 
-        Log::channel('telegram')
-            ->info('APRIL_HOOK init deadline', [
-                'initdeadline' => $this->planDeadline
-            ]);
-
+      
         if ($this->domain === 'alfacentr.bitrix24.ru') {
 
             $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->planDeadline, 'Asia/Novosibirsk');
@@ -4100,10 +4096,7 @@ class EventReportService
             $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
             $this->planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
         }
-        Log::channel('telegram')->info('APRIL_HOOK list deadline', [
-            'result $this->planDeadline' => $this->planDeadline
-        ]);
-
+     
 
         if (!empty($this->currentBtxDeals)) {
 
@@ -4855,7 +4848,25 @@ class EventReportService
         date_default_timezone_set('Europe/Moscow');
         $currentNowDate = new DateTime();
         $nowDate = $currentNowDate->format('d.m.Y H:i:s');
+        Log::channel('telegram')
+        ->info('APRIL_HOOK init deadline', [
+            'pres initdeadline' => $this->planDeadline
+        ]);
 
+        if ($this->domain === 'alfacentr.bitrix24.ru') {
+
+            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->planDeadline, 'Asia/Novosibirsk');
+            $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
+            $this->planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
+        } else   if ($this->domain === 'gsirk.bitrix24.ru') {
+
+            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->planDeadline, 'Asia/Irkutsk');
+            $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
+            $this->planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
+        }
+        Log::channel('telegram')->info('APRIL_HOOK list deadline', [
+            'presresult $this->planDeadline' => $this->planDeadline
+        ]);
         // Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
         //     'planDeals' => $planPresDealIds['planDeals'],
 
