@@ -23,6 +23,7 @@ use App\Services\HookFlow\BitrixListFlowService;
 use App\Services\HookFlow\BitrixListPresentationFlowService;
 use Carbon\Carbon;
 use DateTime;
+use DateTimeZone;
 use Illuminate\Console\View\Components\Task;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Log;
@@ -215,7 +216,9 @@ class EventReportService
         } else if ($domain == 'alfacentr.bitrix24.ru') {
             date_default_timezone_set('Asia/Novosibirsk');
         }
-        $nowDate = new DateTime();
+        // $nowDate = new DateTime();
+        $nowDate = new DateTime("now", new DateTimeZone(date_default_timezone_get()));
+
         $this->nowDate = $nowDate->format('d.m.Y H:i:s');
 
 
