@@ -1382,9 +1382,9 @@ class BitrixListPresentationFlowService
                     }
                 }
             }
-
+            $unplannedName = 'Презентация Спонтанная от' . $nowDateLocal;
             $fieldsData = [
-                'NAME' => 'Презентация Спонтанная от' . $nowDateLocal,
+                'NAME' =>  $unplannedName,
 
             ];
 
@@ -1451,7 +1451,7 @@ class BitrixListPresentationFlowService
                 [
                     'code' => 'pres_plan_comment',
                     'name' => 'Комментарий к заявке',
-                    'value' => 'Презентация Спонтанная от ' . $nowDate,
+                    'value' =>  $unplannedName,
                 ],
                 [
                     'code' => 'pres_plan_contacts',
