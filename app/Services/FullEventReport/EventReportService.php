@@ -190,9 +190,9 @@ class EventReportService
         $data,
 
     ) {
-    
+
         // Форматируем дату и время в нужный формат
-      
+
 
 
         $domain = $data['domain'];
@@ -210,7 +210,7 @@ class EventReportService
             }
         }
         date_default_timezone_set('Europe/Moscow');
-      
+
         if ($domain == 'gsirk.bitrix24.ru') {
             date_default_timezone_set('Asia/Irkutsk');
         } else if ($domain == 'alfacentr.bitrix24.ru') {
@@ -1582,8 +1582,7 @@ class EventReportService
         $totalCommentsCount = 12;
         if ($this->domain === 'gsirk.bitrix24.ru') {
             $totalCommentsCount = 30;
-           
-        } 
+        }
         if (count($currentMComments) > $totalCommentsCount) {
             $currentMComments = array_slice($currentMComments, 0, $totalCommentsCount);
         }
@@ -4161,10 +4160,27 @@ class EventReportService
 
                     // )->onQueue('low-priority');
                     $deadline = $this->planDeadline;
+                    Log::channel('telegram')->info( 'APRIL_HOOK init deadline', $this->planDeadline);
+
+                    if ($this->domain === 'alfacentr.bitrix24.ru') {
+
+
+
+                        $deadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->planDeadline, 'Asia/Novosibirsk');
+                        // $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
+                        // $moscowTime = $moscowTime->format('Y-m-d H:i:s');
+                    } else   if ($this->domain === 'gsirk.bitrix24.ru') {
+
+                        $deadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->planDeadline, 'Asia/Irkutsk');
+                        // $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
+                        // $moscowTime = $moscowTime->format('Y-m-d H:i:s');
+                    }
+
                     if (!$this->isPlanned) {
                         $deadline = null;
                     }
 
+                    Log::channel('telegram')->info( 'APRIL_HOOK list deadline', $deadline);
 
                     $currentNowDate->modify('+1 second');
                     $nowDate = $currentNowDate->format('d.m.Y H:i:s');
