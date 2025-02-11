@@ -424,30 +424,30 @@ class EventReportService
             $this->currentPlanEventTypeName = $data['plan']['type']['current']['name'];
             $this->currentPlanEventName = $data['plan']['name'];
 
-            if ($this->currentPlanEventType) {
-                if ($this->currentPlanEventType === 'presentation' || $this->currentPlanEventType === 'pres') {
-                    $this->currentPlanEventTypeName = '⚡' . ' ' . $this->currentPlanEventTypeName;
-                }
-                if (
-                    $this->currentPlanEventType === 'hot' || 
-                    $this->currentPlanEventType === 'inProgress' || 
-                    $this->currentPlanEventType === 'in_progress'
+            // if ($this->currentPlanEventType) {
+            //     if ($this->currentPlanEventType === 'presentation' || $this->currentPlanEventType === 'pres') {
+            //         $this->currentPlanEventTypeName = '⚡' . ' ' . $this->currentPlanEventTypeName;
+            //     }
+            //     if (
+            //         $this->currentPlanEventType === 'hot' || 
+            //         $this->currentPlanEventType === 'inProgress' || 
+            //         $this->currentPlanEventType === 'in_progress'
                     
-                    ) {
-                    $this->currentPlanEventTypeName = '🔥' . ' ' . $this->currentPlanEventTypeName;
-                }
-                if (
-                    $this->currentPlanEventType === 'money' || 
-                    $this->currentPlanEventType === 'moneyAwait' || 
-                    $this->currentPlanEventType === 'money_await'
+            //         ) {
+            //         $this->currentPlanEventTypeName = '🔥' . ' ' . $this->currentPlanEventTypeName;
+            //     }
+            //     if (
+            //         $this->currentPlanEventType === 'money' || 
+            //         $this->currentPlanEventType === 'moneyAwait' || 
+            //         $this->currentPlanEventType === 'money_await'
                     
-                    ) {
-                    $this->currentPlanEventTypeName = '💰' . ' ' . $this->currentPlanEventTypeName;
-                }
+            //         ) {
+            //         $this->currentPlanEventTypeName = '💰' . ' ' . $this->currentPlanEventTypeName;
+            //     }
                 
 
 
-            }
+            // }
         };
 
         if (!empty($data['plan']['createdBy']) && !empty($data['plan']['createdBy']['ID'])) {
