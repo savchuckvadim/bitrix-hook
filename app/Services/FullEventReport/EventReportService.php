@@ -423,6 +423,31 @@ class EventReportService
             $this->currentPlanEventType = $data['plan']['type']['current']['code'];
             $this->currentPlanEventTypeName = $data['plan']['type']['current']['name'];
             $this->currentPlanEventName = $data['plan']['name'];
+
+            if ($this->currentPlanEventType) {
+                if ($this->currentPlanEventType === 'presentation' || $this->currentPlanEventType === 'pres') {
+                    $this->currentPlanEventTypeName = '⚡' . ' ' . $this->currentPlanEventTypeName;
+                }
+                if (
+                    $this->currentPlanEventType === 'hot' || 
+                    $this->currentPlanEventType === 'inProgress' || 
+                    $this->currentPlanEventType === 'in_progress'
+                    
+                    ) {
+                    $this->currentPlanEventTypeName = '🔥' . ' ' . $this->currentPlanEventTypeName;
+                }
+                if (
+                    $this->currentPlanEventType === 'money' || 
+                    $this->currentPlanEventType === 'moneyAwait' || 
+                    $this->currentPlanEventType === 'money_await'
+                    
+                    ) {
+                    $this->currentPlanEventTypeName = '💰' . ' ' . $this->currentPlanEventTypeName;
+                }
+                
+
+
+            }
         };
 
         if (!empty($data['plan']['createdBy']) && !empty($data['plan']['createdBy']['ID'])) {
@@ -4084,11 +4109,11 @@ class EventReportService
         $currentNowDate = new DateTime();
         $nowDate = $currentNowDate->format('d.m.Y H:i:s');
 
-      
+
         Log::channel('telegram')
-        ->info('APRIL_HOOK init deadline', [
-            'list initdeadline' => $this->planDeadline
-        ]);
+            ->info('APRIL_HOOK init deadline', [
+                'list initdeadline' => $this->planDeadline
+            ]);
         $planDeadline = $this->planDeadline;
         if ($this->domain === 'alfacentr.bitrix24.ru') {
 
@@ -4104,7 +4129,7 @@ class EventReportService
         Log::channel('telegram')->info('APRIL_HOOK list deadline', [
             'list result $this->planDeadline' => $planDeadline
         ]);
-     
+
 
         if (!empty($this->currentBtxDeals)) {
 
@@ -4164,7 +4189,7 @@ class EventReportService
                         $deadline = null;
                     }
 
-                  
+
                     $currentNowDate->modify('+1 second');
                     $nowDate = $currentNowDate->format('d.m.Y H:i:s');
                     $commands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
@@ -4320,7 +4345,7 @@ class EventReportService
         if (!$this->isSuccessSale && !$this->isFail) {
 
             if ($this->isPlanned) {
-        
+
 
                 $currentNowDate->modify('+5 second');
                 $nowDate = $currentNowDate->format('d.m.Y H:i:s');
@@ -4356,7 +4381,7 @@ class EventReportService
 
 
         if ($this->isSuccessSale || $this->isFail) {
-  
+
             $eventType = 'success';
             if (!empty($this->isSuccessSale)) {
                 $eventType = 'success';
@@ -4751,9 +4776,9 @@ class EventReportService
         $currentNowDate = new DateTime();
         $nowDate = $currentNowDate->format('d.m.Y H:i:s');
         Log::channel('telegram')
-        ->info('APRIL_HOOK init deadline', [
-            'pres initdeadline' => $this->planDeadline
-        ]);
+            ->info('APRIL_HOOK init deadline', [
+                'pres initdeadline' => $this->planDeadline
+            ]);
         $planDeadline = $this->planDeadline;
         if ($this->domain === 'alfacentr.bitrix24.ru') {
 
