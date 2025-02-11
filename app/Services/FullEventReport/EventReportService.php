@@ -176,7 +176,7 @@ class EventReportService
     protected $relationLead = null;
     protected $postFail;
 
-
+    protected $isPlannedImportant = false;
     // {
     //     name: 
     //     pnone:
@@ -428,26 +428,26 @@ class EventReportService
             if ($this->currentPlanEventType) {
                 if ($this->currentPlanEventType === 'presentation' || $this->currentPlanEventType === 'pres') {
                     $this->currentPlanEventTypeName = '⚡' . ' ' . $this->currentPlanEventTypeName;
+                     $this->isPlannedImportant =  true;
                 }
                 if (
-                    $this->currentPlanEventType === 'hot' || 
-                    $this->currentPlanEventType === 'inProgress' || 
+                    $this->currentPlanEventType === 'hot' ||
+                    $this->currentPlanEventType === 'inProgress' ||
                     $this->currentPlanEventType === 'in_progress'
-                    
-                    ) {
-                    $this->currentPlanEventTypeName =  '🔥' . ' ' .$this->currentPlanEventTypeName;
+
+                ) {
+                    $this->currentPlanEventTypeName =  '🔥' . ' ' . $this->currentPlanEventTypeName;
+                     $this->isPlannedImportant =  true;
                 }
                 if (
-                    $this->currentPlanEventType === 'money' || 
-                    $this->currentPlanEventType === 'moneyAwait' || 
+                    $this->currentPlanEventType === 'money' ||
+                    $this->currentPlanEventType === 'moneyAwait' ||
                     $this->currentPlanEventType === 'money_await'
-                    
-                    ) {
+
+                ) {
                     $this->currentPlanEventTypeName = '💎' . ' ' . $this->currentPlanEventTypeName;
+                     $this->isPlannedImportant =  true;
                 }
-                
-
-
             }
         };
 
@@ -1604,8 +1604,8 @@ class EventReportService
                 }
             }
         }
-        $comment = $this->getFullEventComment(); 
-      
+        $comment = $this->getFullEventComment();
+
         array_unshift($currentMComments, $this->nowDate . "\n" . $comment);
         $totalCommentsCount = 12;
         if ($this->domain === 'gsirk.bitrix24.ru') {
@@ -5232,14 +5232,15 @@ class EventReportService
         return $planComment;
     }
 
-    protected function removeEmojisIntl($string) {
+    protected function removeEmojisIntl($string)
+    {
         $result = '';
         $len = mb_strlen($string, 'UTF-8');
-        
+
         for ($i = 0; $i < $len; $i++) {
             $char = mb_substr($string, $i, 1, 'UTF-8');
             $code = IntlChar::ord($char);
-            
+
             // Удаляем эмодзи по диапазонам Unicode
             if (
                 ($code >= 0x1F600 && $code <= 0x1F64F) ||  // Эмодзи эмоций
@@ -5251,15 +5252,12 @@ class EventReportService
             ) {
                 continue; // Пропускаем эмодзи
             }
-    
+
             $result .= $char;
         }
-        
+
         return $result;
     }
-    
- 
-    
 }
 
 
