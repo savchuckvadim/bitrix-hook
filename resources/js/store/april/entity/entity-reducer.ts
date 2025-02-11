@@ -3,7 +3,7 @@ import { AppDispatchType, AppStateType, InferActionsTypes } from "../.."
 import { onlineAPI } from "../../../helpers/april-online/online-api"
 import { googleAPI } from "../../../helpers/google/google-api"
 import { API_METHOD } from "../../../types/app/app-type"
-import { CreatingEntityType, Entity, EntityField, EntityFormField, EntityStateType, InitialEntity, InitialEntityData, InitialEntityGroup, RelationState, TemplateAddData, TemplateInitialAddData } from "../../../types/entity/entity-types"
+import { CreatingEntityType, Entity, EntityField, EntityFormField, EntityStateType, InitialEntity, InitialEntityData, InitialEntityGroup, RelationsState, RelationState, TemplateAddData, TemplateInitialAddData } from "../../../types/entity/entity-types"
 import { Template } from "../../../types/entity/template-types"
 import { getDataForSetTField, getDataForSetTemplate, getInitialTemplateData, getInitialTemplateFieldData } from "../../../utils/template-utils"
 
@@ -33,7 +33,14 @@ const initialState = {
         parrentGroupName: null as string | null,
         // parrentFieldId: null as number | null,
 
-    }
+    },
+    relations: {
+        formData: null as null | InitialEntityData,
+        isInitialized: false as boolean,
+        isFetching: false as boolean,
+        isHaveGroup: false as boolean,
+        isActive: false as boolean,
+    } as RelationsState
     // fields: [],
 
 
@@ -63,6 +70,23 @@ export const entityActions = {
         (groups: Array<InitialEntityGroup>) =>
             ({ type: 'entity/SET_CREATED_RELATION', groups } as const),
 
+    setEntityInitRelations:
+        (initialData: InitialEntityData | null) =>
+            ({ type: 'entity/SET_ENTITY_INIT_RELATIONS', initialData } as const),
+    setEntityRelationsProp:
+        (groupName: string, apiName: string, id: number, value: any) =>
+        ({
+            type: 'entity/SET_ENTITY_RELATIONS_PROP', groupName,
+            apiName,
+            id,
+            value
+        } as const),
+
+    cleanEntityRelationsProp:
+        () =>
+        ({
+            type: 'entity/CLEAN_ENTITY_RELATIONS'
+        } as const),
 
 }
 
@@ -322,68 +346,6 @@ export const getInitialEntityData = (url: string, router: any, currentUrl: strin
     }
 }
 
-export const getRelationEntityData = (router: any, url: string, entityName: string, entityId: number) => async (dispatch: AppDispatchType, getState: GetStateType) => {
-    // parentEntityId //entityId
-    // router // location  navigate  params
-  
-  debugger
-    const entityState = getState().entity as EntityStateType
-    let cretingEntity = entityState.creating.formData
-
-    // if (url) {
-    //     let fullUrl = `initial${currentUrl}`
-    //     let targetUrl = currentUrl
-    //     if (fullUrl.endsWith("/rel")) {
-    //         fullUrl = fullUrl.slice(0, -4); // Обрезать последние 4 символа ("/add")
-
-
-
-    //     }
-    //     if (fullUrl.endsWith("ies")) {
-    //         // Удаляем 'ies' и добавляем 'y'
-    //         fullUrl = fullUrl.slice(0, -3) + "y";
-    //         targetUrl = targetUrl.slice(0, -3) + "y";
-    //         targetUrl = `${targetUrl}/rel`
-    //     }
-
-    //     if (fullUrl.endsWith("s")) {
-    //         targetUrl = targetUrl.slice(0, -1);
-    //         targetUrl = `${targetUrl}/rel`
-    //         fullUrl = fullUrl.slice(0, -1); // Обрезать последние 1 символа ("s")
-    //     }
-    //     if (fullUrl.endsWith("s/")) {
-    //         targetUrl = targetUrl.slice(0, -2);
-    //         targetUrl = `${targetUrl}/rel`
-    //         fullUrl = fullUrl.slice(0, -2); // Обрезать последние 2 символа ("s/")
-    //     }
-
-
-    //     dispatch(entityActions.setFetchingInitialAdd())
-
-    //     if (!cretingEntity) {
-    //         cretingEntity = await onlineAPI.service(fullUrl, API_METHOD.GET, 'initial', null) as InitialEntityData | null
-    //         if (cretingEntity) {
-
-    //             dispatch(entityActions.setInitialAdd(cretingEntity))
-    //         } else {
-    //             console.log('no initial data')
-    //         }
-    //     }
-
-
-
-
-
-    //     if (currentUrl !== targetUrl) {
-
-
-    //         router.navigate(targetUrl, { replace: true })
-    //     }
-
-    // } else {
-    //     console.log('no url')
-    // }
-}
 
 
 export const deleteEntityItem = (history: (url: string) => void, url: string, entityName: string, entityId: number) =>
@@ -690,6 +652,73 @@ const entity = (state: EntityStateType = initialState, action: EntityActionsType
                     parrentGroupName: null as string | null,
                     relationIndex: null as number | null,
 
+                },
+            }
+
+        case 'entity/SET_ENTITY_INIT_RELATIONS':
+
+            const relationData = action.initialData
+
+            return {
+                ...state,
+                relations: {
+                    formData: relationData,
+                    isInitialized: true,
+                    isFetching: false,
+                    isActive: true
+                },
+
+
+            }
+        // 
+        // CLEAN_ENTITY_RELATIONS
+
+        case 'entity/SET_ENTITY_RELATIONS_PROP':
+
+            const resultGroups = state.relations.formData?.groups.map(group => {
+
+                if (group.groupName === action.groupName) {
+
+                    return {
+                        ...group,
+                        fields: group.fields.map(field => {
+                            if (field.apiName === action.apiName && field.id === action.id) {
+
+                                return {
+                                    ...field,
+                                    value: action.value
+                                }
+                            }
+                            return field;
+                        })
+
+                    }
+                }
+                return group
+            })
+
+            return {
+                ...state,
+                relations: {
+                    ...state.relations,
+                    formData: {
+                        ...state.relations.formData,
+                        groups: resultGroups
+                    }
+
+                },
+
+
+            }
+
+        case "entity/CLEAN_ENTITY_RELATIONS":
+            return {
+                ...state,
+                relations: {
+                    formData: null,
+                    isInitialized: false,
+                    isFetching: false,
+                    isActive: false
                 },
             }
         // if (action.entity && action.entity.fields) {

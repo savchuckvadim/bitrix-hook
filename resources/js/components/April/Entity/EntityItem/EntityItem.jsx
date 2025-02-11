@@ -19,7 +19,10 @@ import Breadcrumb from "../../../Common/Breadcrumb";
 import TypeEntityItemDynamicInput from "./Item/TypeItemDynamicInputs";
 import { getFormik } from "../../../../utils/entity-utils/form-util";
 import { useDispatch } from "react-redux";
-import { getRelationEntityData } from "../../../../store/april/entity/entity-reducer";
+import { useSelector } from "react-redux";
+import RelationMenu from "./RelationMenu/RelationMenu";
+import { getRelationEntityData, sendEntityRelations } from "../../../../store/april/entity/entity-relations-thunk";
+import { entityActions } from "../../../../store/april/entity/entity-reducer";
 
 
 const EntityItem = ({
@@ -43,10 +46,6 @@ const EntityItem = ({
 
             if (entity.hasOwnProperty(key)) {
                 const value = entity[key];
-
-
-
-
 
                 result.push(
                     <Row className="mb-4">
@@ -86,11 +85,21 @@ const EntityItem = ({
         )
     }
 
+
+    const relations = useSelector(state => state.entity.relations)
+    const isRelationsActive = relations.isActive && relations.isInitialized && relations.formData
+    const relationsForm = relations.formData
+
     return (
         <React.Fragment>
             <div className="page-content">
                 <Container fluid={true}>
                     <Breadcrumb title="Forms" breadcrumbItem="Form Layouts" />
+                    {isRelationsActive &&
+                        <RelationMenu
+                            isActive={isRelationsActive}
+                            formData={relationsForm}
+                        />}
                     <Row>
 
 

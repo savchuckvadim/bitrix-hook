@@ -640,6 +640,11 @@ class BitrixTaskService
                 $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
                 $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
                 $moscowTime = $moscowTime->format('Y-m-d H:i:s');
+            }else   if ($domain === 'gsirk.bitrix24.ru') {
+
+                $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Irkutsk');
+                $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
+                $moscowTime = $moscowTime->format('Y-m-d H:i:s');
             }
 
 

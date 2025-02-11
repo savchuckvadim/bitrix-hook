@@ -94,16 +94,18 @@ export type EntityFieldSelectItem = {
 
 }
 
+export type FieldTypes = "string" | "boolean" | "text" | "data" | "img" | "entity" | "select"
 
 export type EntityFormField = {
     id: number
     title: string
     name: string
-    type: 'string' | 'text' | 'data' | 'boolean' | 'img' | 'entity' | 'select'
+    type: FieldTypes
     apiName: string
 
     validation: string
     initialValue: string | Array<InitialEntityGroup>
+    value?: any
     isCanAddField: boolean
     getSelect?: string | 'portals'
     dependOf?: Array<string> | null
@@ -121,6 +123,7 @@ export type EntityStateType = {
     current: null | any,
     creating: CreatingEntityType
     relation: RelationState
+    relations: RelationsState
     // fields: [],
 }
 
@@ -145,4 +148,12 @@ export type RelationState = {
     relationIndex: number
     //     entity: null | GeneralEntity
     //     formData: null | InitialEntityData
+}
+
+export type RelationsState = {
+    formData: null | InitialEntityData,
+    isInitialized: boolean,
+    isFetching: boolean,
+    isHaveGroup: boolean,
+  
 }
