@@ -1224,6 +1224,7 @@ class ColdBatchService
 
 
             $batchCommands =  $taskService->getCreateTaskBatchCommands(
+                false,
                 'cold',       //$type,   //cold warm presentation hot 
                 $this->stringType,
                 $this->portal,

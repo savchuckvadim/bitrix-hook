@@ -3841,6 +3841,7 @@ class EventReportService
 
                 if (!empty($this->isPlanned)) {
                     $batchCommands =  $taskService->getCreateTaskBatchCommands(
+                        $this->isPlannedImportant,
                         $this->currentPlanEventType,       //$type,   //cold warm presentation hot 
                         $this->currentPlanEventTypeName,
                         $this->portal,

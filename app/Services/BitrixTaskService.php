@@ -243,7 +243,7 @@ class BitrixTaskService
     public function getCreateTaskBatchCommands(
 
         //from bitrix hook
-
+        $isPriority,
         $type,   //cold warm presentation hot  $stringType = 'Холодный обзвон ';
         $stringType,
         $portal,
@@ -358,7 +358,7 @@ class BitrixTaskService
                 $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
                 $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
                 $moscowTime = $moscowTime->format('Y-m-d H:i:s');
-            }else   if ($domain === 'gsirk.bitrix24.ru') {
+            } else   if ($domain === 'gsirk.bitrix24.ru') {
 
                 $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Irkutsk');
                 $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
@@ -395,7 +395,7 @@ class BitrixTaskService
                     'DEADLINE' => $moscowTime, //- крайний срок;
                     'UF_CRM_TASK' => $crmItems,
                     'ALLOW_CHANGE_DEADLINE' => 'Y',
-                    'PRIORITY' => 1
+                    'PRIORITY' => $isPriority ? 2 : 1,
                     // 'DESCRIPTION' => $description
                 ]
             ];
@@ -643,7 +643,7 @@ class BitrixTaskService
                 $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
                 $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
                 $moscowTime = $moscowTime->format('Y-m-d H:i:s');
-            }else   if ($domain === 'gsirk.bitrix24.ru') {
+            } else   if ($domain === 'gsirk.bitrix24.ru') {
 
                 $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Irkutsk');
                 $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
