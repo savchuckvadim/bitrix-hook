@@ -628,7 +628,9 @@ class BitrixTaskService
 
     ) {
 
-
+        if ($domain === 'gsirk.bitrix24.ru') {
+            date_default_timezone_set('Asia/Irkutsk');
+        }
         $batchcommand = '';
         try {
 
