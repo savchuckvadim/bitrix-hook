@@ -428,14 +428,14 @@ class EventReportService
                 if ($this->currentPlanEventType === 'presentation' || $this->currentPlanEventType === 'pres') {
                     $this->currentPlanEventTypeName = '⚡' . ' ' . $this->currentPlanEventTypeName;
                 }
-                if (
-                    $this->currentPlanEventType === 'hot' || 
-                    $this->currentPlanEventType === 'inProgress' || 
-                    $this->currentPlanEventType === 'in_progress'
+                // if (
+                //     $this->currentPlanEventType === 'hot' || 
+                //     $this->currentPlanEventType === 'inProgress' || 
+                //     $this->currentPlanEventType === 'in_progress'
                     
-                    ) {
-                    $this->currentPlanEventTypeName =  $this->currentPlanEventTypeName;
-                }
+                //     ) {
+                //     $this->currentPlanEventTypeName =  $this->currentPlanEventTypeName;
+                // }
                 if (
                     $this->currentPlanEventType === 'money' || 
                     $this->currentPlanEventType === 'moneyAwait' || 
