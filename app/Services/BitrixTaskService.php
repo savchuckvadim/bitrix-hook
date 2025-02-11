@@ -395,7 +395,7 @@ class BitrixTaskService
                     'DEADLINE' => $moscowTime, //- крайний срок;
                     'UF_CRM_TASK' => $crmItems,
                     'ALLOW_CHANGE_DEADLINE' => 'Y',
-                    'PRIORITY' => 2
+                    'PRIORITY' => 1
                     // 'DESCRIPTION' => $description
                 ]
             ];
