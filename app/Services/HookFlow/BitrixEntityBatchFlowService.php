@@ -62,6 +62,7 @@ class BitrixEntityBatchFlowService
     }
 
     public function getBatchCommand(
+
         $portal,
         $currentBtxEntity,
         $portalCompanyData,
@@ -597,7 +598,7 @@ class BitrixEntityBatchFlowService
                                 //     );
 
 
-                                break;
+                            
                                 // /statusesCodes
                             case 'op_work_status':
                                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getWorkstatusFieldItemValue(
