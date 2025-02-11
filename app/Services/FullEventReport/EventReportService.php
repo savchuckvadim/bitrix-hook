@@ -27,6 +27,7 @@ use DateTimeZone;
 use Illuminate\Console\View\Components\Task;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Log;
+use IntlChar;
 
 class EventReportService
 
@@ -428,21 +429,21 @@ class EventReportService
                 if ($this->currentPlanEventType === 'presentation' || $this->currentPlanEventType === 'pres') {
                     $this->currentPlanEventTypeName = '⚡' . ' ' . $this->currentPlanEventTypeName;
                 }
-                // if (
-                //     $this->currentPlanEventType === 'hot' || 
-                //     $this->currentPlanEventType === 'inProgress' || 
-                //     $this->currentPlanEventType === 'in_progress'
+                if (
+                    $this->currentPlanEventType === 'hot' || 
+                    $this->currentPlanEventType === 'inProgress' || 
+                    $this->currentPlanEventType === 'in_progress'
                     
-                //     ) {
-                //     $this->currentPlanEventTypeName =  $this->currentPlanEventTypeName;
-                // }
+                    ) {
+                    $this->currentPlanEventTypeName =  '🔥' . ' ' .$this->currentPlanEventTypeName;
+                }
                 if (
                     $this->currentPlanEventType === 'money' || 
                     $this->currentPlanEventType === 'moneyAwait' || 
                     $this->currentPlanEventType === 'money_await'
                     
                     ) {
-                    $this->currentPlanEventTypeName = '💰' . ' ' . $this->currentPlanEventTypeName;
+                    $this->currentPlanEventTypeName = '💎' . ' ' . $this->currentPlanEventTypeName;
                 }
                 
 
@@ -1603,7 +1604,8 @@ class EventReportService
                 }
             }
         }
-        $comment = $this->getFullEventComment();
+        $comment = $this->getFullEventComment(); 
+      
         array_unshift($currentMComments, $this->nowDate . "\n" . $comment);
         $totalCommentsCount = 12;
         if ($this->domain === 'gsirk.bitrix24.ru') {
@@ -5155,7 +5157,7 @@ class EventReportService
     {
 
         $planComment = '';
-        $planEventTypeName = $this->currentPlanEventTypeName;
+        $planEventTypeName =  $this->removeEmojisIntl($this->currentPlanEventTypeName);
         $date = $this->planDeadline; // Предположим, это ваша дата
         // Создаем объект Carbon из строки
         $carbonDate = Carbon::createFromFormat('d.m.Y H:i:s', $date);
@@ -5166,14 +5168,13 @@ class EventReportService
         // Преобразуем в нужный формат: "1 ноября 12:30"
         $formattedDate = $carbonDate->isoFormat('D MMMM HH:mm');
 
-        log::channel('telegram')->info('');
 
         if ($this->isPlanned) {
             if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
                 //report
                 $eventAction = 'plan';
                 $planComment = 'Запланирован';
-                if ($this->currentPlanEventTypeName == 'Презентация') {
+                if ($this->removeEmojisIntl($this->currentPlanEventTypeName) == 'Презентация') {
                     $planComment = 'Запланирована';
                 }
             } else {
@@ -5230,6 +5231,35 @@ class EventReportService
         ]);
         return $planComment;
     }
+
+    protected function removeEmojisIntl($string) {
+        $result = '';
+        $len = mb_strlen($string, 'UTF-8');
+        
+        for ($i = 0; $i < $len; $i++) {
+            $char = mb_substr($string, $i, 1, 'UTF-8');
+            $code = IntlChar::ord($char);
+            
+            // Удаляем эмодзи по диапазонам Unicode
+            if (
+                ($code >= 0x1F600 && $code <= 0x1F64F) ||  // Эмодзи эмоций
+                ($code >= 0x1F300 && $code <= 0x1F5FF) ||  // Символы и пиктограммы
+                ($code >= 0x1F680 && $code <= 0x1F6FF) ||  // Транспорт
+                ($code >= 0x2600 && $code <= 0x26FF)   ||  // Разные символы
+                ($code >= 0x2700 && $code <= 0x27BF)   ||  // Дополнительные символы
+                ($code >= 0x1F1E0 && $code <= 0x1F1FF)     // Флаги
+            ) {
+                continue; // Пропускаем эмодзи
+            }
+    
+            $result .= $char;
+        }
+        
+        return $result;
+    }
+    
+ 
+    
 }
 
 
