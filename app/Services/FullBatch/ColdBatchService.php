@@ -96,7 +96,14 @@ class ColdBatchService
 
     ) {
         // $nowDate = new DateTime();
+        $domain = $data['domain'];
         Carbon::setLocale('ru'); // Устанавливаем локализацию Carbon
+        if ($domain == 'gsirk.bitrix24.ru') {
+            date_default_timezone_set('Asia/Irkutsk');
+        } else if ($domain == 'alfacentr.bitrix24.ru') {
+            date_default_timezone_set('Asia/Novosibirsk');
+        }
+
 
         if (isset($data['lead'])) {
             if (!empty($data['lead'])) {
@@ -129,7 +136,7 @@ class ColdBatchService
         // Форматируем дату в нужный формат
         $formattedStringNowDate = $nowDate->translatedFormat('d F Y');
 
-        $domain = $data['domain'];
+
         $this->entityType = $data['entityType'];
         $this->entityId = $data['entityId'];
         $this->responsibleId = $data['responsible'];
