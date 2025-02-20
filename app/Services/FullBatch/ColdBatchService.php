@@ -152,7 +152,13 @@ class ColdBatchService
         $this->createdId = $data['created'];
         $this->deadline = $data['deadline'];
         $this->name = 'от ' . $formattedStringNowDate;
-
+        Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
+            'data' => [
+                'message' => 'tst deadline',
+                '>deadline' => $this->deadline,
+                'domain' => $domain
+            ]
+        ]);
         if (isset($data['name'])) {
             if (!empty($data['name'])) {
                 $this->name = $data['name'];
