@@ -102,7 +102,8 @@ class BitrixHookController extends Controller
 
             // Форматируем дату в нужный формат
             $formattedStringNowDate = $nowDate->translatedFormat('d F Y');
-            $name = 'от ' . $formattedStringNowDate;
+            // $name = 'от ' . $formattedStringNowDate;
+            $name = '';
             if (isset($request['name'])) {
                 if (!empty($request['name'])) {
                     $name = $request['name'];
@@ -153,7 +154,7 @@ class BitrixHookController extends Controller
                 'responsible' => $responsibleId,
                 'created' => $createdId,
                 'deadline' => $deadline,
-                'name' => $name,
+                // 'name' => $name,
                 'isTmc' => $isTmc
 
             ];
