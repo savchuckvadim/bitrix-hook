@@ -154,7 +154,7 @@ class BitrixHookController extends Controller
                 'responsible' => $responsibleId,
                 'created' => $createdId,
                 'deadline' => $deadline,
-                // 'name' => $name,
+                'name' => $name,
                 'isTmc' => $isTmc
 
             ];
