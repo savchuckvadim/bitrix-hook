@@ -161,8 +161,8 @@ class ColdBatchService
         ]);
         if ($domain === 'gsirk.bitrix24.ru') {
             $this->deadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'Asia/Irkutsk')
-            ->setTimezone('Europe/Moscow')
-            ->format('d.m.Y H:i:s');
+                ->setTimezone('Europe/Moscow')
+                ->format('d.m.Y H:i:s');
         }
         Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
             'data' => [
@@ -386,7 +386,7 @@ class ColdBatchService
                                 $resultEntityFields['UF_CRM_' . $pField['bitrixId']] =  'Холодный в работе ' . $this->name;
 
                                 break;
-    
+
 
                             case 'op_work_status':
 
@@ -1042,8 +1042,21 @@ class ColdBatchService
             'code' => "inJob",
             'name' => "В работе"
         ];
+        $planDeadline = $this->deadline;
+        if ($this->domain === 'alfacentr.bitrix24.ru') {
 
+            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'Asia/Novosibirsk');
+            $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
+            $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
+        } else   if ($this->domain === 'gsirk.bitrix24.ru') {
 
+            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'Asia/Irkutsk');
+            $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
+            $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
+        }
+        Log::channel('telegram')->info('APRIL_HOOK list deadline', [
+            'cold list result planDeadline ' . $this->domain => $planDeadline
+        ]);
         $batchCommands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
             $this->hook,
             $this->bitrixLists,
@@ -1051,7 +1064,7 @@ class ColdBatchService
             'Холодный обзвон',
             'plan',
             // $this->stringType,
-            $this->deadline,
+            $planDeadline,
             $this->createdId,
             $this->responsibleId,
             $this->responsibleId,
