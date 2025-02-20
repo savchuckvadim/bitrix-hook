@@ -137,8 +137,8 @@ class ColdBatchService
             // $nowDateLocal = Carbon::now('Asia/Novosibirsk')->locale('ru')->isoFormat('D MMMM YYYY');
             // $nowDateUtc = Carbon::now('Asia/Novosibirsk')->setTimezone('Europe/Moscow')->format('Y-m-d H:i:s'); // Для Bitrix
         } elseif ($domain === 'gsirk.bitrix24.ru') {
-            $nowDateLocal = Carbon::now('Asia/Irkutsk')->locale('ru'); // Для строки
-            $formattedStringNowDate = $nowDateLocal->translatedFormat('d F Y');
+            $formattedStringNowDate = Carbon::now('Asia/Irkutsk')->locale('ru'); // Для строки
+            // $formattedStringNowDate = $nowDateLocal->translatedFormat('d F Y');
         } else {
             // $nowDateLocal = Carbon::now('Europe/Moscow')->locale('ru')->isoFormat('D MMMM YYYY'); // По умолчанию
             // $nowDateUtc =  Carbon::now('Europe/Moscow')->format('Y-m-d H:i:s');; // В Москве оба значения одинаковые
@@ -359,17 +359,14 @@ class ColdBatchService
                                 // }
 
 
-                                $resultEntityFields[$fullFieldId] =  $currentMComments;
+                                // $resultEntityFields[$fullFieldId] =  $currentMComments;
 
                                 break;
                             case 'op_current_status':
                                 $resultEntityFields['UF_CRM_' . $pField['bitrixId']] =  'Холодный в работе ' . $this->name;
 
                                 break;
-                            case 'op_current_status':
-                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] =  'Холодный в работе ' . $this->name;
-
-                                break;
+    
 
                             case 'op_work_status':
 
