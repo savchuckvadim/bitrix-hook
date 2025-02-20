@@ -132,9 +132,18 @@ class ColdBatchService
         //   $formattedStringNowDate = $formatter->format($nowDate);
         // Получаем текущую дату и время
         $nowDate = Carbon::now();
-
-        // Форматируем дату в нужный формат
         $formattedStringNowDate = $nowDate->translatedFormat('d F Y');
+        if ($domain === 'alfacentr.bitrix24.ru') {
+            // $nowDateLocal = Carbon::now('Asia/Novosibirsk')->locale('ru')->isoFormat('D MMMM YYYY');
+            // $nowDateUtc = Carbon::now('Asia/Novosibirsk')->setTimezone('Europe/Moscow')->format('Y-m-d H:i:s'); // Для Bitrix
+        } elseif ($domain === 'gsirk.bitrix24.ru') {
+            $nowDateLocal = Carbon::now('Asia/Irkutsk')->locale('ru'); // Для строки
+            $formattedStringNowDate = $nowDateLocal->translatedFormat('d F Y');
+        } else {
+            // $nowDateLocal = Carbon::now('Europe/Moscow')->locale('ru')->isoFormat('D MMMM YYYY'); // По умолчанию
+            // $nowDateUtc =  Carbon::now('Europe/Moscow')->format('Y-m-d H:i:s');; // В Москве оба значения одинаковые
+        }
+        // Форматируем дату в нужный формат
 
 
         $this->entityType = $data['entityType'];
