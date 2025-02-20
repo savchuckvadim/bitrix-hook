@@ -97,6 +97,7 @@ class ColdBatchService
     ) {
         // $nowDate = new DateTime();
         $domain = $data['domain'];
+        $this->domain = $domain;
         Carbon::setLocale('ru'); // Устанавливаем локализацию Carbon
         if ($domain == 'gsirk.bitrix24.ru') {
             date_default_timezone_set('Asia/Irkutsk');
@@ -1050,8 +1051,8 @@ class ColdBatchService
             $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
         } else   if ($this->domain === 'gsirk.bitrix24.ru') {
 
-            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'Asia/Irkutsk');
-            $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
+            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'Europe/Moscow');
+            // $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
             $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
         }
         Log::channel('telegram')->info('APRIL_HOOK list deadline', [
