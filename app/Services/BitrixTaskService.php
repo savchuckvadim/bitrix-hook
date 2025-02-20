@@ -369,9 +369,10 @@ class BitrixTaskService
 
             if (!empty($contactName)) {
                 $taskTitle .=  '  ' . $contactName;
-            } else {
-                $taskTitle .= '  ' . $deadline;
-            }
+            } 
+            // else {
+            //     $taskTitle .= '  ' . $deadline;
+            // }
 
 
             // if (!$isXO) {

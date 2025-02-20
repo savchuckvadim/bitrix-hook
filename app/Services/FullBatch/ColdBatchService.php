@@ -279,6 +279,16 @@ class ColdBatchService
         // $now =  new DateTime();
         // $now = $nowDate->format('d.m.Y H:i');
         $nowOnlyDate = $nowDate->format('d.m.Y');
+
+        $entityDeadline = $data['deadline'];
+        if ($domain === 'gsirk.bitrix24.ru') {
+
+            $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $data['deadline'], 'Asia/Irkutsk');
+            $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
+            $entityDeadline = $moscowTime->format('Y-m-d H:i');
+        }
+
+
         $currentMComments = [];
         if (!empty($this->currentBtxEntity)) {
             if (!empty($this->currentBtxEntity['UF_CRM_OP_MHISTORY'])) {
@@ -286,14 +296,13 @@ class ColdBatchService
                 $currentMComments = $currentBtxEntity['UF_CRM_OP_MHISTORY'];
             }
         }
-        $stringComment = $formattedStringNowDate . "\n"  . ' ХО запланирован на ' . $data['deadline'];
+        $stringComment = $formattedStringNowDate . "\n"  . ' ХО запланирован на ' . $entityDeadline;
 
         array_unshift($currentMComments,  $stringComment);
         // if (count($currentMComments) > 8) {
         //     $currentMComments = array_slice($currentMComments, 0, 8);
         // }
-
-
+       
         if (!empty($portal[$data['entityType']])) {
             if (!empty($portal[$data['entityType']]['bitrixfields'])) {
                 $currentEntityField = [];
@@ -313,7 +322,7 @@ class ColdBatchService
                                 break;
                             case 'xo_date':
                             case 'call_next_date':
-                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $data['deadline'];
+                                $resultEntityFields['UF_CRM_' . $pField['bitrixId']] = $entityDeadline;
 
                                 break;
                             case 'next_pres_plan_date':
@@ -1051,7 +1060,7 @@ class ColdBatchService
             $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
         } else   if ($this->domain === 'gsirk.bitrix24.ru') {
 
-       
+
             $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'Asia/Irkutsk');
             $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
             $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
@@ -1071,7 +1080,7 @@ class ColdBatchService
             $this->responsibleId,
             $this->responsibleId,
             $this->entityId,
-            'Холодный обзвон' . $this->name,
+            'Холодный обзвон ' . $this->name,
             $workStatus,
             'result', // result noresult expired,
             null,
