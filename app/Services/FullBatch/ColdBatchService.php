@@ -159,6 +159,20 @@ class ColdBatchService
                 'domain' => $domain
             ]
         ]);
+        if ($domain === 'gsirk.bitrix24.ru') {
+            $this->deadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'Europe/Moscow')
+            ->setTimezone('Asia/Irkutsk')
+            ->format('d.m.Y H:i:s');
+        }
+        Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
+            'data' => [
+                'message' => 'Irkutsk tst deadline',
+                '>deadline' => $this->deadline,
+                'domain' => $domain
+            ]
+        ]);
+
+
         if (isset($data['name'])) {
             if (!empty($data['name'])) {
                 $this->name = $data['name'];
