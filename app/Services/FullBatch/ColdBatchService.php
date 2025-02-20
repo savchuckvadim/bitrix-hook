@@ -137,7 +137,7 @@ class ColdBatchService
             // $nowDateLocal = Carbon::now('Asia/Novosibirsk')->locale('ru')->isoFormat('D MMMM YYYY');
             // $nowDateUtc = Carbon::now('Asia/Novosibirsk')->setTimezone('Europe/Moscow')->format('Y-m-d H:i:s'); // Для Bitrix
         } elseif ($domain === 'gsirk.bitrix24.ru') {
-            $nowDateLocal = Carbon::now('Asia/Irkutsk')->locale('ru'); // Для строки
+            $nowDateLocal = Carbon::now('Asia/Irkutsk')->setTimezone('Europe/Moscow')->locale('ru'); // Для строки
             $formattedStringNowDate = $nowDateLocal->translatedFormat('d F Y');
         } else {
             // $nowDateLocal = Carbon::now('Europe/Moscow')->locale('ru')->isoFormat('D MMMM YYYY'); // По умолчанию
