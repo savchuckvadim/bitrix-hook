@@ -281,11 +281,15 @@ class ColdBatchService
         $nowOnlyDate = $nowDate->format('d.m.Y');
 
         $entityDeadline = $data['deadline'];
+        $entityStringDeadline = $data['deadline'];
         if ($domain === 'gsirk.bitrix24.ru') {
 
             $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $data['deadline'], 'Asia/Irkutsk');
             $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
             $entityDeadline = $moscowTime->format('Y-m-d H:i');
+
+            $entityStringDeadline = $moscowTime->translatedFormat('d F Y H:i');
+
         }
 
 
@@ -296,7 +300,7 @@ class ColdBatchService
                 $currentMComments = $currentBtxEntity['UF_CRM_OP_MHISTORY'];
             }
         }
-        $stringComment = $formattedStringNowDate . "\n"  . ' ХО запланирован на ' . $entityDeadline;
+        $stringComment = $formattedStringNowDate . "\n"  . ' ХО запланирован на  ' . $entityStringDeadline;
 
         array_unshift($currentMComments,  $stringComment);
         // if (count($currentMComments) > 8) {
