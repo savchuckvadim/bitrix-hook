@@ -427,7 +427,7 @@ class EventReportService
 
             if ($this->currentPlanEventType) {
                 if ($this->currentPlanEventType === 'presentation' || $this->currentPlanEventType === 'pres') {
-                    // $this->currentPlanEventTypeName = '⚡' . ' ' . $this->currentPlanEventTypeName;
+                    $this->currentPlanEventTypeName = '⚡' . ' ' . $this->currentPlanEventTypeName;
                      $this->isPlannedImportant =  true;
                 }
                 if (
@@ -436,7 +436,7 @@ class EventReportService
                     $this->currentPlanEventType === 'in_progress'
 
                 ) {
-                    // $this->currentPlanEventTypeName =  '🔥' . ' ' . $this->currentPlanEventTypeName;
+                    $this->currentPlanEventTypeName =  '🔥' . ' ' . $this->currentPlanEventTypeName;
                      $this->isPlannedImportant =  true;
                 }
                 if (
@@ -445,7 +445,7 @@ class EventReportService
                     $this->currentPlanEventType === 'money_await'
 
                 ) {
-                    // $this->currentPlanEventTypeName = '💎' . ' ' . $this->currentPlanEventTypeName;
+                    $this->currentPlanEventTypeName = '💎' . ' ' . $this->currentPlanEventTypeName;
                      $this->isPlannedImportant =  true;
                 }
             }
