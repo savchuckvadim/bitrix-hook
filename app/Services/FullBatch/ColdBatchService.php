@@ -1001,8 +1001,8 @@ class ColdBatchService
         } else   if ($this->domain === 'gsirk.bitrix24.ru') {
 
             $tmpDeadline = $this->deadline;
-            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline);
-            $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
+            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'Europe/Moscow');
+            // $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
             // $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
         }
         Log::channel('telegram')->info('APRIL_HOOK list deadline', [
