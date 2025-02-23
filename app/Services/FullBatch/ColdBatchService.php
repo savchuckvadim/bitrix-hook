@@ -1001,7 +1001,7 @@ class ColdBatchService
         } else   if ($this->domain === 'gsirk.bitrix24.ru') {
 
 
-            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'Asia/Irkutsk');
+            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'UTC'); // ✅ Битрикс уже передает UTC
             $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
             $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
         }
