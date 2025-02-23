@@ -80,7 +80,7 @@ class BitrixHookController extends Controller
                 'data' => [
                     'message' => 'tst request',
                     'request deadline' => $request['deadline'],
-                    'domain' => $request['domain']
+                   
                 ]
             ]);
 
