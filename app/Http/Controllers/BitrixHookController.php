@@ -76,6 +76,14 @@ class BitrixHookController extends Controller
 
         // ]);
         try {
+            Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
+                'data' => [
+                    'message' => 'tst request',
+                    'request deadline' => $request['deadline'],
+                    'domain' => $request['domain']
+                ]
+            ]);
+
             date_default_timezone_set('Europe/Moscow');
             // $nowDate = new DateTime();
             Carbon::setLocale('ru'); // Устанавливаем локализацию Carbon
@@ -197,7 +205,7 @@ class BitrixHookController extends Controller
             date_default_timezone_set('Europe/Moscow');
             // $nowDate = new DateTime();
             Carbon::setLocale('ru'); // Устанавливаем локализацию Carbon
-        
+
             $nowDate = Carbon::now();
 
             // Форматируем дату в нужный формат
@@ -232,8 +240,8 @@ class BitrixHookController extends Controller
                 $entityType  = $request['entity_type'];
             }
 
-      
-  
+
+
             $data = [
                 'domain' => $domain,
                 'entityType' => $entityType,
@@ -243,7 +251,7 @@ class BitrixHookController extends Controller
             ];
             // Log::info('APRIL_HOOK pre rerdis', ['$data' => $data]);
 
-        
+
             dispatch(
                 new FailBufferBatchJob($data)
             )->onQueue('low-priority');
