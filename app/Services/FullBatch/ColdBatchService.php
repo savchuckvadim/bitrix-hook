@@ -160,11 +160,11 @@ class ColdBatchService
                 'domain' => $domain
             ]
         ]);
-        if ($domain === 'gsirk.bitrix24.ru') {
-            $this->deadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'Asia/Irkutsk')
-                ->setTimezone('Europe/Moscow')
-                ->format('d.m.Y H:i:s');
-        }
+        // if ($domain === 'gsirk.bitrix24.ru') {
+        //     $this->deadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'Asia/Irkutsk')
+        //         ->setTimezone('Europe/Moscow')
+        //         ->format('d.m.Y H:i:s');
+        // }
         Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
             'data' => [
                 'message' => 'Irkutsk tst deadline',
