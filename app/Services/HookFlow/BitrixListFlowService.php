@@ -501,8 +501,9 @@ class BitrixListFlowService
             $nextCommunication = $deadline;
             $isUniqPresPlan = false;
             $isUniqPresReport = false;
-
-
+            Log::channel('telegram')->info('APRIL_HOOK list deadline', [
+                'cold list result nextCommunication ' . $nextCommunication
+            ]);
             $crmValue = ['n0' => 'CO_' . $companyId];
             $dealIndex = 1;
             if (!empty($contactId)) {
