@@ -76,13 +76,13 @@ class BitrixHookController extends Controller
 
         // ]);
         try {
-            Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
-                'data' => [
-                    'message' => 'tst request',
-                    'request deadline' => $request['deadline'],
+            // Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
+            //     'data' => [
+            //         'message' => 'tst request',
+            //         'request deadline' => $request['deadline'],
                    
-                ]
-            ]);
+            //     ]
+            // ]);
 
             date_default_timezone_set('Europe/Moscow');
             // $nowDate = new DateTime();

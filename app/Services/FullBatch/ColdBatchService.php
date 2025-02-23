@@ -992,10 +992,10 @@ class ColdBatchService
             'name' => "В работе"
         ];
         $planDeadline = $this->deadline;
-        Log::channel('telegram')->info('DEBUG TIMEZONE', [
-            'original_deadline' => $this->deadline,
+        // Log::channel('telegram')->info('DEBUG TIMEZONE', [
+        //     'original_deadline' => $this->deadline,
            
-        ]);
+        // ]);
         if ($this->domain === 'alfacentr.bitrix24.ru') {
 
             $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'Asia/Novosibirsk');
