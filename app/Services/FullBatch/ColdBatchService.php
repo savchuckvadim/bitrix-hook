@@ -289,7 +289,6 @@ class ColdBatchService
             $entityDeadline = $moscowTime->format('Y-m-d H:i');
 
             $entityStringDeadline = $moscowTime->translatedFormat('d F Y H:i');
-
         }
 
 
@@ -306,7 +305,7 @@ class ColdBatchService
         // if (count($currentMComments) > 8) {
         //     $currentMComments = array_slice($currentMComments, 0, 8);
         // }
-       
+
         if (!empty($portal[$data['entityType']])) {
             if (!empty($portal[$data['entityType']]['bitrixfields'])) {
                 $currentEntityField = [];
@@ -560,7 +559,7 @@ class ColdBatchService
             // Log::channel('telegram')->info('plan deals ids', [
             //     'currentDealsIds' => $currentDealsIds
 
-    
+
 
             return APIOnlineController::getSuccess(['result' => 'success']);
         } catch (\Throwable $th) {
@@ -1006,9 +1005,11 @@ class ColdBatchService
         } else   if ($this->domain === 'gsirk.bitrix24.ru') {
 
 
-            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'UTC'); // ✅ Битрикс уже передает UTC
-            $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
-            $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
+            // $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'UTC'); // ✅ Битрикс уже передает UTC
+            // $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
+            // $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
+            $planDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'UTC')
+                ->format('Y-m-d H:i:sP');
         }
         Log::channel('telegram')->info('DEBUG TIMEZONE', [
             'planDeadline' => $planDeadline,
