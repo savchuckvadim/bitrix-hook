@@ -993,6 +993,11 @@ class ColdBatchService
             'name' => "В работе"
         ];
         $planDeadline = $this->deadline;
+        Log::channel('telegram')->info('DEBUG TIMEZONE', [
+            'original_deadline' => $this->deadline,
+            'utc_time' => Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'UTC')->format('Y-m-d H:i:s'),
+            'moscow_time' => Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'UTC')->setTimezone('Europe/Moscow')->format('Y-m-d H:i:s'),
+        ]);
         if ($this->domain === 'alfacentr.bitrix24.ru') {
 
             $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'Asia/Novosibirsk');
@@ -1005,6 +1010,11 @@ class ColdBatchService
             $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
             $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
         }
+        Log::channel('telegram')->info('DEBUG TIMEZONE', [
+            'planDeadline' => $planDeadline,
+            'utc_time' => Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'UTC')->format('Y-m-d H:i:s'),
+            'moscow_time' => Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'UTC')->setTimezone('Europe/Moscow')->format('Y-m-d H:i:s'),
+        ]);
         Log::channel('telegram')->info('APRIL_HOOK list deadline', [
             'cold list result planDeadline ' . $this->domain => $planDeadline
         ]);
