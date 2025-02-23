@@ -1009,7 +1009,8 @@ class ColdBatchService
             // $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
             // $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
             $planDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'UTC')
-                ->format('Y-m-d H:i:sP');
+            ->setTimezone('Asia/Irkutsk')
+            ->format('Y-m-d H:i:s');
         }
         Log::channel('telegram')->info('DEBUG TIMEZONE', [
             'planDeadline' => $planDeadline,
