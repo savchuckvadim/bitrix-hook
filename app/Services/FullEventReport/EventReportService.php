@@ -5050,16 +5050,22 @@ class EventReportService
         $eventAction = '';  // не состоялся и двигается крайний срок 
         $planComment = '';
         $planEventTypeName = $this->currentPlanEventTypeName;
-        $date = $this->planDeadline; // Предположим, это ваша дата
-        // Создаем объект Carbon из строки
-        $carbonDate = Carbon::createFromFormat('d.m.Y H:i:s', $date);
 
-        // Устанавливаем локализацию
-        $carbonDate->locale('ru');
+        $formattedDate = '';
+        if (!empty($this->planDeadline)) {
 
-        // Преобразуем в нужный формат: "1 ноября 12:30"
-        $formattedDate = $carbonDate->isoFormat('D MMMM HH:mm');
 
+
+            $date = $this->planDeadline; // Предположим, это ваша дата
+            // Создаем объект Carbon из строки
+            $carbonDate = Carbon::createFromFormat('d.m.Y H:i:s', $date);
+
+            // Устанавливаем локализацию
+            $carbonDate->locale('ru');
+
+            // Преобразуем в нужный формат: "1 ноября 12:30"
+            $formattedDate = $carbonDate->isoFormat('D MMMM HH:mm');
+        }
 
         if ($this->isPlanned) {
             if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
