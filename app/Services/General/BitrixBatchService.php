@@ -391,7 +391,7 @@ class BitrixBatchService
 
                 ]);
                 Log::channel('telegram')->info('HOOK TEST sendGeneralRecursiveBatchRequest Service BATCH', [
-                    'total' => $responseData['total']
+                    'total' => $responseData['result']['total']
 
 
                 ]);
