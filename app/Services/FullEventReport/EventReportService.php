@@ -4208,7 +4208,7 @@ class EventReportService
                     $reportAction = 'nodone';
                 }
 
-                if ($reportEventType !== 'presentation') {
+                if ($reportEventType !== 'presentation' ||  ($reportEventType == 'presentation' && !empty($this->isNoCall)) ) {
 
                     //если текущий не презентация
 
@@ -5260,14 +5260,14 @@ class EventReportService
             }
         }
 
-        APIOnlineController::sendLog('getFullEventComment', [
+        // APIOnlineController::sendLog('getFullEventComment', [
 
-            'planComment' => $planComment,
-            'work status' => $this->workStatus['current'],
-            'domain' => $this->domain,
+        //     'planComment' => $planComment,
+        //     'work status' => $this->workStatus['current'],
+        //     'domain' => $this->domain,
 
 
-        ]);
+        // ]);
         return $planComment;
     }
 
