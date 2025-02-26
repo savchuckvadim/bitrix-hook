@@ -350,12 +350,12 @@ class HistoryController extends Controller
             // 🟢 Проверяем, есть ли данные
             if (isset($responseData['result']['result'][$resultKey]) && !empty($responseData['result']['result'][$resultKey])) {
 
-                $resultResult = $responseData['result']['result'][$resultKey];
+                $resultResult = $responseData['result']['result_total'][$resultKey];
             }
 
             if (isset($responseData['result']['result'][$noresultKey]) && !empty($responseData['result']['result'][$noresultKey])) {
 
-                $noresultResult = $responseData['result']['result'][$noresultKey];
+                $noresultResult = $responseData['result']['result_total'][$noresultKey];
             }
 
 
@@ -372,14 +372,14 @@ class HistoryController extends Controller
                     // 'commands' => $command,
                     'noresultCount' => $noresultResult,
                     'resultCount' => $resultResult,
-                    'resultStatusField' => $resultStatusField,
-                    'resultStatusFieldId' => $resultStatusFieldId,
-                    'resultStatusItem' => $resultStatusItem,
-                    'resultStatusItemId' => $resultStatusItemId,
-                    'noResultStatusItem' => $noResultStatusItem,
-                    'noResultStatusItemId' => $noResultStatusItemId,
-                    'actionFieldId' => $actionFieldId,
-                    'resultActionItem' => $resultActionItem,
+                    // 'resultStatusField' => $resultStatusField,
+                    // 'resultStatusFieldId' => $resultStatusFieldId,
+                    // 'resultStatusItem' => $resultStatusItem,
+                    // 'resultStatusItemId' => $resultStatusItemId,
+                    // 'noResultStatusItem' => $noResultStatusItem,
+                    // 'noResultStatusItemId' => $noResultStatusItemId,
+                    // 'actionFieldId' => $actionFieldId,
+                    // 'resultActionItem' => $resultActionItem,
                 ]
             ]);
         } catch (\Throwable $th) {
