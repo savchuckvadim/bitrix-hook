@@ -288,49 +288,59 @@ class HistoryController extends Controller
 
             $url = $this->hook . '/batch';
             $method = 'lists.element.get';
-            $key = 'history_list';
-            $allResults = [];
+            $resultKey = 'result';
+            $noresultKey = 'noresult';
+     
+            $resultResult = null;
+            $noresultResult = null;
 
 
 
             // 🟢 Формируем параметры запроса с фильтрацией по `ID > lastId`
-            $data = [
+            $resultData = [
+                'IBLOCK_TYPE_ID' => 'lists',
+                'IBLOCK_ID' => $listId,
+                'filter' => [
+                    $companyIdFieldId => '%' . $companyId . '%',
+                    $resultStatusFieldId => $resultStatusItemId
+                ],
+
+            ];
+            $noresultData = [
                 'IBLOCK_TYPE_ID' => 'lists',
                 'IBLOCK_ID' => $listId,
                 'filter' => [
                     $companyIdFieldId => '%' . $companyId . '%',
                     $resultStatusFieldId => $noResultStatusItemId
                 ],
-                // 'select' => [
-                //     $commentFieldId,
-                //     $actionFieldId,
-                //     $actionTypeFieldId,
-                //     $noresultReasonFieldId,
-                //     $resultStatusFieldId
-                // ],
-                // 'order' => ['ID' => 'ASC'], // 🟢 Сортировка по ID
+
             ];
 
 
-
             // 🟢 Генерируем команду
-            $command = $method . '?' . http_build_query($data);
+            $commandResult = $method . '?' . http_build_query($resultData);
+            $commandNoResult = $method . '?' . http_build_query($noresultData);
 
             // 🟢 Делаем запрос
             $response = Http::post($url, [
                 'halt' => 0,
-                'cmd' => [$key => $command] // 🟢 Оборачиваем в массив, чтобы ключи совпадали
+                'cmd' => [$resultKey => $commandResult, $noresultKey => $commandNoResult] // 🟢 Оборачиваем в массив, чтобы ключи совпадали
             ]);
 
             $responseData = $response->json();
 
             // 🟢 Проверяем, есть ли данные
-            if (isset($responseData['result']['result'][$key]) && !empty($responseData['result']['result'][$key])) {
-                $batchResults = $responseData['result']['result'][$key];
-                // $allResults = array_merge($allResults, $batchResults);
-                // $lastId = end($batchResults)['ID'] ?? $lastId; // 🟢 Запоминаем последний ID
+            if (isset($responseData['result']['result'][$resultKey]) && !empty($responseData['result']['result'][$resultKey])) {
+       
+                $resultResult = $responseData['result']['result'][$resultKey];
+
             }
 
+            if (isset($responseData['result']['result'][$noresultKey]) && !empty($responseData['result']['result'][$noresultKey])) {
+       
+                $noresultResult = $responseData['result']['result'][$noresultKey];
+
+            }
 
 
             // 🟢 Логируем ошибки, если есть
@@ -343,9 +353,9 @@ class HistoryController extends Controller
             // 🟢 Возвращаем данные API
             return APIOnlineController::getSuccess([
                 'result' => [
-                    'commands' => $command,
-                    'noresultCount' => $batchResults,
-                    'resultCount' => $batchResults,
+                    // 'commands' => $command,
+                    'noresultCount' => $resultResult,
+                    'resultCount' => $noresultResult,
                     'resultStatusField' => $resultStatusField,
                     'resultStatusFieldId' => $resultStatusFieldId,
                     'resultStatusItem' => $resultStatusItem,
