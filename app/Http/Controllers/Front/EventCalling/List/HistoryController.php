@@ -176,7 +176,7 @@ class HistoryController extends Controller
 
                 }else{
                     Log::channel('telegram')->info('📡 Bitrix API Response', [
-                        'history' => $responseData['result']['result'][$key],
+                        'history' => $responseData['result'],
                         'next' => $responseData['result']['result_next'],
                     ]);
                 }
