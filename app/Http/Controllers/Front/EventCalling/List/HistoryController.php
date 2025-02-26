@@ -192,7 +192,10 @@ class HistoryController extends Controller
                     $allResults = array_merge($allResults, $batchResults);
                     $lastId = end($batchResults)['ID'] ?? $lastId; // 🟢 Запоминаем последний ID
                 }
-
+                Log::channel('telegram')->info('📡 Bitrix API Response', [
+                    'lastId' => $lastId
+                
+                ]);
                 // 🟢 Проверяем наличие `result_next` для следующего запроса
                 $next = $responseData['result']['result_next'][$key] ?? null;
             } while ($next !== null); // 🔄 Пока есть `result_next`, продолжаем
