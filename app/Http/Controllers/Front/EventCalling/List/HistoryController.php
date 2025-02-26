@@ -113,8 +113,10 @@ class HistoryController extends Controller
                     $companyIdFieldId => '%' . $companyId . '%',
                 ],
                 'select' => [
-            
-                    $commentFieldId
+
+                    $commentFieldId,
+                    $actionFieldId,
+                    $actionTypeFieldId
                 ]
 
             ];

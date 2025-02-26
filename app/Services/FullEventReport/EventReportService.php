@@ -4114,10 +4114,10 @@ class EventReportService
         $nowDate = $currentNowDate->format('d.m.Y H:i:s');
 
 
-        Log::channel('telegram')
-            ->info('APRIL_HOOK init deadline', [
-                'list initdeadline' => $this->planDeadline
-            ]);
+        // Log::channel('telegram')
+        //     ->info('APRIL_HOOK init deadline', [
+        //         'list initdeadline' => $this->planDeadline
+        //     ]);
         $planDeadline = $this->planDeadline;
         if ($this->domain === 'alfacentr.bitrix24.ru') {
 
@@ -4130,9 +4130,9 @@ class EventReportService
             $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
             $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
         }
-        Log::channel('telegram')->info('APRIL_HOOK list deadline', [
-            'list result $this->planDeadline' => $planDeadline
-        ]);
+        // Log::channel('telegram')->info('APRIL_HOOK list deadline', [
+        //     'list result $this->planDeadline' => $planDeadline
+        // ]);
 
 
         if (!empty($this->currentBtxDeals)) {
