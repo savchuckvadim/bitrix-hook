@@ -223,8 +223,8 @@ class HistoryController extends Controller
             $listId = $this->portalKPIList['bitrixId'];
             $listFields = $this->portalKPIList['bitrixfields'];
             $eventActionField = null;
-            $eventActionTypeField = null;
-
+            $actionFieldId = null;
+            $resultActionItemId = null;
 
             $companyIdField = null;
             $companyIdFieldId = null;
@@ -247,6 +247,21 @@ class HistoryController extends Controller
             if (!empty($listFields)) {
 
                 foreach ($listFields as $plField) {
+                    if ($plField['code'] === 'sales_history_event_action') {
+                        $eventActionField = $plField;
+                        $actionFieldId = $eventActionField['bitrixCamelId']; //like PROPERTY_2119 
+                        if (!empty($eventActionField) && !empty($eventActionField['items'])) {
+                            foreach ($eventActionField['items'] as $item) {
+                            
+                                if ($item['code'] === 'done') {
+                                    $resultActionItem = $item;
+                                    $resultActionItemId = $item['bitrixId'];
+                                }
+                               
+                            }
+                        }
+                    }
+
 
                     if ($plField['code'] === 'sales_history_crm') {
                         $companyIdField = $plField;
@@ -302,7 +317,9 @@ class HistoryController extends Controller
                 'IBLOCK_ID' => $listId,
                 'filter' => [
                     $companyIdFieldId => '%' . $companyId . '%',
-                    $resultStatusFieldId => $resultStatusItemId
+                    $responsibleFieldId => $userId,
+                    $resultStatusFieldId => $resultStatusItemId,
+                    $actionFieldId => $resultActionItemId
                 ],
 
             ];
@@ -311,6 +328,7 @@ class HistoryController extends Controller
                 'IBLOCK_ID' => $listId,
                 'filter' => [
                     $companyIdFieldId => '%' . $companyId . '%',
+                    $responsibleFieldId => $userId,
                     $resultStatusFieldId => $noResultStatusItemId
                 ],
 
@@ -354,8 +372,8 @@ class HistoryController extends Controller
             return APIOnlineController::getSuccess([
                 'result' => [
                     // 'commands' => $command,
-                    'noresultCount' => $resultResult,
-                    'resultCount' => $noresultResult,
+                    'noresultCount' => $noresultResult,
+                    'resultCount' => $resultResult,
                     'resultStatusField' => $resultStatusField,
                     'resultStatusFieldId' => $resultStatusFieldId,
                     'resultStatusItem' => $resultStatusItem,
