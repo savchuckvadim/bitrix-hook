@@ -169,7 +169,7 @@ class HistoryController extends Controller
                 $responseData = $response->json();
 
                 Log::channel('telegram')->info('📡 Bitrix API Response', [
-                    'responseData' => $responseData['result']['result'][0][0]['ID']
+                    'responseData' => $responseData['result']['result'][0]['ID']
                 ]);
 
                 // 🟢 Проверяем, есть ли данные
