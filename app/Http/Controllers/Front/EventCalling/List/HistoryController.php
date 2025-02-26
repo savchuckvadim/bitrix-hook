@@ -154,7 +154,7 @@ class HistoryController extends Controller
                 ];
 
                 if ($lastId) {
-                    $data['filter']['ID'] = ">" . $lastId;
+                    $data['filter']['>ID'] = $lastId;
                 }
 
                 // 🟢 Генерируем команду
@@ -168,19 +168,18 @@ class HistoryController extends Controller
 
                 $responseData = $response->json();
 
-                if(!empty($responseData['result']['result'][$key][0])){
+                if (!empty($responseData['result']['result'][$key][0])) {
                     Log::channel('telegram')->info('📡 Bitrix API Response', [
                         'history' => $responseData['result']['result'][$key][0]['ID'],
                         'next' => $responseData['result']['result_next'],
                     ]);
-
-                }else{
+                } else {
                     Log::channel('telegram')->info('📡 Bitrix API Response', [
                         'history' => $responseData['result'],
                         'next' => $responseData['result']['result_next'],
                     ]);
                 }
-           
+
                 // return APIOnlineController::getSuccess([
                 //     'commands' => $command,
                 //     'history' => $responseData['result']['result'][$key],
@@ -194,7 +193,7 @@ class HistoryController extends Controller
                 }
                 Log::channel('telegram')->info('📡 Bitrix API Response', [
                     'lastId' => $lastId
-                
+
                 ]);
                 // 🟢 Проверяем наличие `result_next` для следующего запроса
                 $next = $responseData['result']['result_next'][$key] ?? null;
