@@ -272,11 +272,11 @@ class HistoryController extends Controller
                             foreach ($resultStatusField['bitrixitems'] as $item) {
                                 if ($item['code'] === 'op_call_result_yes') {
                                     $resultStatusItem = $item;
-                                    $resultStatusItemId = $item['id'];
+                                    $resultStatusItemId = $item['bitrixId'];
                                 }
                                 if ($item['code'] === 'op_call_result_no') {
                                     $noResultStatusItem = $item;
-                                    $noResultStatusItemId = $item['id'];
+                                    $noResultStatusItemId = $item['bitrixId'];
                                     break;
                                 }
                             }
@@ -298,7 +298,7 @@ class HistoryController extends Controller
                 'IBLOCK_ID' => $listId,
                 'filter' => [
                     $companyIdFieldId => '%' . $companyId . '%',
-                    $resultStatusField => $noResultStatusItemId
+                    $resultStatusFieldId => $noResultStatusItemId
                 ],
                 // 'select' => [
                 //     $commentFieldId,
