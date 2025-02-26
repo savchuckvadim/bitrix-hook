@@ -81,8 +81,6 @@ class HistoryController extends Controller
             $commentFieldId = null;
 
 
-            $commentField = null;
-            $commentFieldId = null;
 
 
             $resultStatusField = null;
@@ -115,15 +113,15 @@ class HistoryController extends Controller
 
                     }
 
-                    if ($plField['code'] === 'op_noresult_reason') {
+                    if ($plField['code'] === 'sales_history_op_noresult_reason') {
                         $noresultReasonField = $plField;
-                        $noresultReasonFieldId = $commentField['bitrixCamelId']; //like PROPERTY_2119 
+                        $noresultReasonFieldId = $noresultReasonField['bitrixCamelId']; //like PROPERTY_2119 
 
                     }
 
-                    if ($plField['code'] === 'op_result_status') {
+                    if ($plField['code'] === 'sales_history_op_result_status') {
                         $resultStatusField = $plField;
-                        $resultStatusFieldId = $commentField['bitrixCamelId']; //like PROPERTY_2119 
+                        $resultStatusFieldId = $resultStatusField['bitrixCamelId']; //like PROPERTY_2119 
 
                     }
                 }
@@ -168,33 +166,13 @@ class HistoryController extends Controller
 
                 $responseData = $response->json();
 
-                if (!empty($responseData['result']['result'][$key][0])) {
-                    Log::channel('telegram')->info('📡 Bitrix API Response', [
-                        'history' => $responseData['result']['result'][$key][0]['ID'],
-                        'next' => $responseData['result']['result_next'],
-                    ]);
-                } else {
-                    Log::channel('telegram')->info('📡 Bitrix API Response', [
-                        'history' => $responseData['result'],
-                        'next' => $responseData['result']['result_next'],
-                    ]);
-                }
-
-                // return APIOnlineController::getSuccess([
-                //     'commands' => $command,
-                //     'history' => $responseData['result']['result'][$key],
-                //     'next' => $responseData['result']['result_next'],
-                // ]);
                 // 🟢 Проверяем, есть ли данные
                 if (isset($responseData['result']['result'][$key]) && !empty($responseData['result']['result'][$key])) {
                     $batchResults = $responseData['result']['result'][$key];
                     $allResults = array_merge($allResults, $batchResults);
                     $lastId = end($batchResults)['ID'] ?? $lastId; // 🟢 Запоминаем последний ID
                 }
-                Log::channel('telegram')->info('📡 Bitrix API Response', [
-                    'lastId' => $lastId
 
-                ]);
                 // 🟢 Проверяем наличие `result_next` для следующего запроса
                 $next = $responseData['result']['result_next'][$key] ?? null;
             } while ($next !== null); // 🔄 Пока есть `result_next`, продолжаем
@@ -210,6 +188,168 @@ class HistoryController extends Controller
             return APIOnlineController::getSuccess([
                 'commands' => $command,
                 'history' => $allResults,
+            ]);
+        } catch (\Throwable $th) {
+            $errorMessages =  [
+                'message'   => $th->getMessage(),
+                'file'      => $th->getFile(),
+                'line'      => $th->getLine(),
+                'trace'     => $th->getTraceAsString(),
+            ];
+            return APIOnlineController::getError(
+                $th->getMessage(),
+                [
+                    'list' => $this->portalKPIList,
+                    '$batchResults' => $batchResults,
+                    'error' => $errorMessages,
+                    'currentActionsData' => $currentActionsData
+                ]
+            );
+        }
+    }
+
+
+    public  function getNoresultCount($companyId, $userId)
+    {
+
+        $batchResults = null;
+        $currentActionsData = [];
+        $actionFieldId = null;
+        try {
+            // $domain = $request['domain'];
+
+
+            // $companyId = $request['companyId'];
+            $listId = $this->portalKPIList['bitrixId'];
+            $listFields = $this->portalKPIList['bitrixfields'];
+            $eventActionField = null;
+            $eventActionTypeField = null;
+
+
+            $companyIdField = null;
+            $companyIdFieldId = null;
+
+
+
+            $responsibleField = null;
+            $responsibleFieldId = null;
+
+
+            $resultStatusField = null;
+            $resultStatusFieldId = null;
+
+            $resultStatusItem = null;
+            $resultStatusItemId = null;
+
+            $noResultStatusItem = null;
+            $noResultStatusItemId = null;
+
+            if (!empty($listFields)) {
+
+                foreach ($listFields as $plField) {
+
+                    if ($plField['code'] === 'sales_history_crm') {
+                        $companyIdField = $plField;
+                        $companyIdFieldId = $companyIdField['bitrixCamelId']; //like PROPERTY_2119 
+
+                    }
+                    if ($plField['code'] === 'sales_history_responsible') {
+                        $responsibleField = $plField;
+                        $responsibleFieldId = $responsibleField['bitrixCamelId']; //like PROPERTY_2119 
+
+                    }
+
+                    if ($plField['code'] === 'sales_history_op_noresult_reason') {
+                        $noresultReasonField = $plField;
+                        $noresultReasonFieldId = $noresultReasonField['bitrixCamelId']; //like PROPERTY_2119 
+
+                    }
+
+                    if ($plField['code'] === 'sales_history_op_result_status') {
+                        $resultStatusField = $plField;
+                        $resultStatusFieldId = $resultStatusField['bitrixCamelId']; //like PROPERTY_2119 
+                        if (!empty($resultStatusField) && !empty($resultStatusField['bitrixitems'])) {
+                            foreach ($resultStatusField['bitrixitems'] as $item) {
+                                if ($item['code'] === 'op_call_result_yes') {
+                                    $resultStatusItem = $item;
+                                    $resultStatusItemId = $item['id'];
+                                }
+                                if ($item['code'] === 'op_call_result_no') {
+                                    $noResultStatusItem = $item;
+                                    $noResultStatusItemId = $item['id'];
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            $url = $this->hook . '/batch';
+            $method = 'lists.element.get';
+            $key = 'history_list';
+            $allResults = [];
+
+
+
+            // 🟢 Формируем параметры запроса с фильтрацией по `ID > lastId`
+            $data = [
+                'IBLOCK_TYPE_ID' => 'lists',
+                'IBLOCK_ID' => $listId,
+                'filter' => [
+                    $companyIdFieldId => '%' . $companyId . '%',
+                    $resultStatusField => $noResultStatusItemId
+                ],
+                // 'select' => [
+                //     $commentFieldId,
+                //     $actionFieldId,
+                //     $actionTypeFieldId,
+                //     $noresultReasonFieldId,
+                //     $resultStatusFieldId
+                // ],
+                // 'order' => ['ID' => 'ASC'], // 🟢 Сортировка по ID
+            ];
+
+
+
+            // 🟢 Генерируем команду
+            $command = $method . '?' . http_build_query($data);
+
+            // 🟢 Делаем запрос
+            $response = Http::post($url, [
+                'halt' => 0,
+                'cmd' => [$key => $command] // 🟢 Оборачиваем в массив, чтобы ключи совпадали
+            ]);
+
+            $responseData = $response->json();
+
+            // 🟢 Проверяем, есть ли данные
+            if (isset($responseData['result']['result'][$key]) && !empty($responseData['result']['result'][$key])) {
+                $batchResults = $responseData['result']['result'][$key];
+                // $allResults = array_merge($allResults, $batchResults);
+                // $lastId = end($batchResults)['ID'] ?? $lastId; // 🟢 Запоминаем последний ID
+            }
+
+
+
+            // 🟢 Логируем ошибки, если есть
+            if (!empty($responseData['result_error'])) {
+                Log::channel('telegram')->error('❌ Ошибка Bitrix BATCH', [
+                    'errors' => $responseData['result_error']
+                ]);
+            }
+
+            // 🟢 Возвращаем данные API
+            return APIOnlineController::getSuccess([
+                'commands' => $command,
+                'noresultCount' => $batchResults,
+                'resultCount' => $batchResults,
+                'resultStatusField' => $resultStatusField,
+                'resultStatusFieldId' => $resultStatusFieldId,
+                'resultStatusItem' => $resultStatusItem,
+                'resultStatusItemId' => $resultStatusItemId,
+                'noResultStatusItem' => $noResultStatusItem,
+                'noResultStatusItemId' => $noResultStatusItemId,
             ]);
         } catch (\Throwable $th) {
             $errorMessages =  [

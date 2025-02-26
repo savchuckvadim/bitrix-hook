@@ -13,5 +13,14 @@ Route::prefix('flow-front')->group(function () {
         return $controller->getHistory($companyId);
 
     });
+
+    Route::post('/result/count', function (Request $request) {
+        $domain = $request->domain;
+        $companyId = $request->companyId;
+        $userId = $request->userId;
+        $controller = new HistoryController($domain );
+        return $controller->getNoresultCount($companyId, $userId);
+
+    });
     
 });
