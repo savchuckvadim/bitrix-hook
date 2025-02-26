@@ -224,6 +224,7 @@ class HistoryController extends Controller
             $listFields = $this->portalKPIList['bitrixfields'];
             $eventActionField = null;
             $actionFieldId = null;
+            $resultActionItem = null;
             $resultActionItemId = null;
 
             $companyIdField = null;
@@ -252,12 +253,11 @@ class HistoryController extends Controller
                         $actionFieldId = $eventActionField['bitrixCamelId']; //like PROPERTY_2119 
                         if (!empty($eventActionField) && !empty($eventActionField['items'])) {
                             foreach ($eventActionField['items'] as $item) {
-                            
+
                                 if ($item['code'] === 'done') {
                                     $resultActionItem = $item;
                                     $resultActionItemId = $item['bitrixId'];
                                 }
-                               
                             }
                         }
                     }
@@ -285,7 +285,7 @@ class HistoryController extends Controller
                         $resultStatusFieldId = $resultStatusField['bitrixCamelId']; //like PROPERTY_2119 
                         if (!empty($resultStatusField) && !empty($resultStatusField['items'])) {
                             foreach ($resultStatusField['items'] as $item) {
-                            
+
                                 if ($item['code'] === 'op_call_result_yes') {
                                     $resultStatusItem = $item;
                                     $resultStatusItemId = $item['bitrixId'];
@@ -305,7 +305,7 @@ class HistoryController extends Controller
             $method = 'lists.element.get';
             $resultKey = 'result';
             $noresultKey = 'noresult';
-     
+
             $resultResult = null;
             $noresultResult = null;
 
@@ -349,15 +349,13 @@ class HistoryController extends Controller
 
             // 🟢 Проверяем, есть ли данные
             if (isset($responseData['result']['result'][$resultKey]) && !empty($responseData['result']['result'][$resultKey])) {
-       
-                $resultResult = $responseData['result']['result'][$resultKey];
 
+                $resultResult = $responseData['result']['result'][$resultKey];
             }
 
             if (isset($responseData['result']['result'][$noresultKey]) && !empty($responseData['result']['result'][$noresultKey])) {
-       
-                $noresultResult = $responseData['result']['result'][$noresultKey];
 
+                $noresultResult = $responseData['result']['result'][$noresultKey];
             }
 
 
@@ -380,6 +378,8 @@ class HistoryController extends Controller
                     'resultStatusItemId' => $resultStatusItemId,
                     'noResultStatusItem' => $noResultStatusItem,
                     'noResultStatusItemId' => $noResultStatusItemId,
+                    'actionFieldId' => $actionFieldId,
+                    'resultActionItem' => $resultActionItem,
                 ]
             ]);
         } catch (\Throwable $th) {
