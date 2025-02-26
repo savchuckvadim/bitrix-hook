@@ -376,12 +376,7 @@ class BitrixBatchService
                 'cmd' => $batchCommands
             ]);
             $responseData = $response->json();
-            // print_r("<br>");
-            // print_r($key);
-            // print_r("<br>");
-            // print_r($batchCommands);
-            // print_r("<br>");
-            // print_r($responseData);
+
             if (isset($responseData['result'])) {
                 $result[$key] = $responseData['result'];
          
@@ -391,7 +386,7 @@ class BitrixBatchService
 
                 ]);
                 Log::channel('telegram')->info('HOOK TEST sendGeneralRecursiveBatchRequest Service BATCH', [
-                    'total' => $responseData['result']
+                    'total' => $responseData['result']['result_next']
 
 
                 ]);

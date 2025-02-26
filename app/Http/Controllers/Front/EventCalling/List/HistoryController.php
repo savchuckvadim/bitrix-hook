@@ -8,7 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\PortalController;
 use App\Services\General\BitrixBatchService;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class HistoryController extends Controller
 
@@ -128,38 +129,72 @@ class HistoryController extends Controller
                 }
             }
 
-            // Добавляем команду в массив команд
+            $url = $this->hook . '/batch';
+            $method = 'lists.element.get';
+            $key = 'history_list';
+            $allResults = [];
+            $lastId = null;
 
-            $data = [
-                'IBLOCK_TYPE_ID' => 'lists',
-                'IBLOCK_ID' => $listId,
-                'filter' => [
-                    $companyIdFieldId => '%' . $companyId . '%',
-                ],
-                'select' => [
+            do {
+                // 🟢 Формируем параметры запроса с фильтрацией по `ID > lastId`
+                $data = [
+                    'IBLOCK_TYPE_ID' => 'lists',
+                    'IBLOCK_ID' => $listId,
+                    'filter' => [
+                        $companyIdFieldId => '%' . $companyId . '%',
+                    ],
+                    'select' => [
+                        $commentFieldId,
+                        $actionFieldId,
+                        $actionTypeFieldId,
+                        $noresultReasonFieldId,
+                        $resultStatusFieldId
+                    ],
+                    'order' => ['ID' => 'ASC'], // 🟢 Сортировка по ID
+                ];
 
-                    $commentFieldId,
-                    $actionFieldId,
-                    $actionTypeFieldId,
-                    $noresultReasonFieldId,
-                    $resultStatusFieldId
-                ]
+                if ($lastId) {
+                    $data['filter']['ID'] = ">" . $lastId;
+                }
 
-            ];
-            $batchService = new BitrixBatchService($this->hook);
-            $command = $batchService->getGeneralBatchCommand($data, 'lists.element.get');
-            //lists
-            // Отправляем batch запрос
-            $batchResults = $batchService->sendGeneralRecursiveBatchRequest([$command]);
+                // 🟢 Генерируем команду
+                $command = $method . '?' . http_build_query($data);
 
+                // 🟢 Делаем запрос
+                $response = Http::post($url, [
+                    'halt' => 0,
+                    'cmd' => [$key => $command] // 🟢 Оборачиваем в массив, чтобы ключи совпадали
+                ]);
 
-            //voximplant
-            return APIOnlineController::getSuccess(
-                [
-                    'commands' => $command,
-                    'history' =>  $batchResults,
-                ]
-            );
+                $responseData = $response->json();
+
+                Log::channel('telegram')->info('📡 Bitrix API Response', [
+                    'responseData' => $responseData
+                ]);
+
+                // 🟢 Проверяем, есть ли данные
+                if (isset($responseData['result'][$key]) && !empty($responseData['result'][$key])) {
+                    $batchResults = $responseData['result'][$key];
+                    $allResults = array_merge($allResults, $batchResults);
+                    $lastId = end($batchResults)['ID'] ?? $lastId; // 🟢 Запоминаем последний ID
+                }
+
+                // 🟢 Проверяем наличие `result_next` для следующего запроса
+                $next = $responseData['result']['result_next'][0] ?? null;
+            } while ($next !== null); // 🔄 Пока есть `result_next`, продолжаем
+
+            // 🟢 Логируем ошибки, если есть
+            if (!empty($responseData['result_error'])) {
+                Log::channel('telegram')->error('❌ Ошибка Bitrix BATCH', [
+                    'errors' => $responseData['result_error']
+                ]);
+            }
+
+            // 🟢 Возвращаем данные API
+            return APIOnlineController::getSuccess([
+                'commands' => $command,
+                'history' => $allResults,
+            ]);
         } catch (\Throwable $th) {
             $errorMessages =  [
                 'message'   => $th->getMessage(),
