@@ -821,25 +821,27 @@ class EventReportService
 
 
 
-
-            if (!empty($this->postFail)) {
-                if (!empty($this->postFail['postFailDate'])) {
-                    if (!empty($this->workStatus['current'])) {
-                        if (!empty($this->workStatus['current']['code'])) {
-                            $workStatusCode = $this->workStatus['current']['code'];
+            if (!$this->isNoCall) {
 
 
-                            if ($workStatusCode === 'fail') {  //если провал 
-                                $this->failFlow();
+                if (!empty($this->postFail)) {
+                    if (!empty($this->postFail['postFailDate'])) {
+                        if (!empty($this->workStatus['current'])) {
+                            if (!empty($this->workStatus['current']['code'])) {
+                                $workStatusCode = $this->workStatus['current']['code'];
+
+
+                                if ($workStatusCode === 'fail') {  //если провал 
+                                    $this->failFlow();
+                                }
                             }
                         }
                     }
                 }
+
+
+                $this->relationLeadFlow();
             }
-
-
-            $this->relationLeadFlow();
-
             // sleep(1);
 
             /** TESTING BATCH */
@@ -3092,6 +3094,10 @@ class EventReportService
         $entityBatchCommands = [];
         $isUnplanned = $this->isPresentationDone && $this->currentReportEventType !== 'presentation';
         $unplannedPresDeal =  null;
+ 
+ 
+ 
+ 
         if (empty($currentBtxDeals)) {   //если текущие сделки отсутствуют значит надо сначала создать базовую - чтобы нормально отработал поток
             $setNewDealData = [
                 'COMPANY_ID' => $this->entityId,
@@ -3692,17 +3698,18 @@ class EventReportService
         // }
         // $batchCommands =  $result['commands'];
         // if ($this->isExpired || $this->isPlanned) {
-        $resultBatchCommands = $this->getTaskFlowBatchCommand(
-            null,
-            $result['planDeals'],
-            $resultBatchCommands
-        );
-        // }
-        $resultBatchCommands =  $this->getListPresentationFlowBatch(
-            $result,
-            $resultBatchCommands
-        );
-
+        if (!$this->isNoCall) {
+            $resultBatchCommands = $this->getTaskFlowBatchCommand(
+                null,
+                $result['planDeals'],
+                $resultBatchCommands
+            );
+            // }
+            $resultBatchCommands =  $this->getListPresentationFlowBatch(
+                $result,
+                $resultBatchCommands
+            );
+        }
         $batchService->sendGeneralBatchRequest($resultBatchCommands);
         $this->setTimeLine();
         // Log::info('HOOK BATCH batchFlow report DEAL', ['report result' => $result]);
