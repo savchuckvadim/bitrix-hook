@@ -359,4 +359,74 @@ class BitrixBatchService
 
         return $method . '?' . http_build_query($data);
     }
+
+
+    public function sendGeneralRecursiveBatchRequest($commands)
+    {
+        $url = $this->hook . '/batch';
+        $maxCommandsPerBatch = 50; // Максимальное количество команд на один batch запрос
+        $batchRequests = array_chunk($commands, $maxCommandsPerBatch, true);
+        $result = [
+            // 'errors' => []
+        ];
+
+        foreach ($batchRequests as $key => $batchCommands) {
+            $response = Http::post($url, [
+                'halt' => 0,
+                'cmd' => $batchCommands
+            ]);
+            $responseData = $response->json();
+            // print_r("<br>");
+            // print_r($key);
+            // print_r("<br>");
+            // print_r($batchCommands);
+            // print_r("<br>");
+            // print_r($responseData);
+            if (isset($responseData['result'])) {
+                $result[$key] = $responseData['result'];
+         
+                Log::channel('telegram')->info('HOOK TEST sendGeneralRecursiveBatchRequest Service BATCH', [
+                    '1result[$key]' => $result[$key]
+
+
+                ]);
+                Log::channel('telegram')->info('HOOK TEST sendGeneralRecursiveBatchRequest Service BATCH', [
+                    'total' => $responseData['total']
+
+
+                ]);
+                if (isset($responseData['result']['result'])) {
+                    $result[$key] = $responseData['result']['result'];
+
+                  
+                }
+                if (!empty($responseData['result']['result'][0])) {
+                    $result[$key] = $responseData['result']['result'][0];
+                }
+                // print_r($result[$key]);
+                // print_r("<br>");
+            }
+            if (!empty($responseData['result_error'])) {
+                // $result['errors'][$key] = $responseData['result_error'];
+                Log::channel('telegram')->info('HOOK TEST Service BATCH', [
+                    'result' => $responseData['result_error']
+
+
+                ]);
+            }
+         
+        };
+
+        // if (isset($result[0])) {
+        //     $result = $result[0];
+        // }
+
+        // if (isset($result['result'])) {
+        //     $result = $result['result'];
+        // }
+
+        // print_r("<br>");
+        // print_r($result);
+        return $result;
+    }
 }

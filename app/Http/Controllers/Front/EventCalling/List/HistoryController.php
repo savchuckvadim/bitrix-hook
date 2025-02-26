@@ -150,7 +150,7 @@ class HistoryController extends Controller
             $command = $batchService->getGeneralBatchCommand($data, 'lists.element.get');
             //lists
             // Отправляем batch запрос
-            $batchResults = $batchService->sendGeneralBatchRequest([$command]);
+            $batchResults = $batchService->sendGeneralRecursiveBatchRequest([$command]);
 
 
             //voximplant
