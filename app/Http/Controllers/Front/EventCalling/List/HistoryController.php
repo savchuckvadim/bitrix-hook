@@ -168,10 +168,12 @@ class HistoryController extends Controller
 
                 $responseData = $response->json();
 
-             
+                // Log::channel('telegram')->info('📡 Bitrix API Response', [
+                //     'responseData' => $responseData['result']['result'][$key]
+                // ]);
                 return APIOnlineController::getSuccess([
                     'commands' => $command,
-                    'history' => $responseData['result']['result'][0]['ID'],
+                    'history' => $responseData['result']['result'][$key],
                     'next' => $responseData['result']['result_next'],
                 ]);
                 // 🟢 Проверяем, есть ли данные
