@@ -177,6 +177,9 @@ class EventReportService
     protected $postFail;
 
     protected $isPlannedImportant = false;
+
+
+    protected $isNoCall = false;
     // {
     //     name: 
     //     pnone:
@@ -260,6 +263,10 @@ class EventReportService
                 if (!empty($data['report']['contact']['ID'])) {
                     $this->reportContactId = $data['report']['contact']['ID'];
                 }
+            }
+
+            if (!empty($data['report']['isNoCall'])) {
+                $this->isNoCall = $data['report']['isNoCall'];
             }
         }
 
@@ -428,7 +435,7 @@ class EventReportService
             if ($this->currentPlanEventType) {
                 if ($this->currentPlanEventType === 'presentation' || $this->currentPlanEventType === 'pres') {
                     $this->currentPlanEventTypeName = '⚡' . ' ' . $this->currentPlanEventTypeName;
-                     $this->isPlannedImportant =  true;
+                    $this->isPlannedImportant =  true;
                 }
                 if (
                     $this->currentPlanEventType === 'hot' ||
@@ -437,7 +444,7 @@ class EventReportService
 
                 ) {
                     $this->currentPlanEventTypeName =  '🔥' . ' ' . $this->currentPlanEventTypeName;
-                     $this->isPlannedImportant =  true;
+                    $this->isPlannedImportant =  true;
                 }
                 if (
                     $this->currentPlanEventType === 'money' ||
@@ -446,7 +453,7 @@ class EventReportService
 
                 ) {
                     $this->currentPlanEventTypeName = '💎' . ' ' . $this->currentPlanEventTypeName;
-                     $this->isPlannedImportant =  true;
+                    $this->isPlannedImportant =  true;
                 }
             }
         };
@@ -4119,16 +4126,21 @@ class EventReportService
         //         'list initdeadline' => $this->planDeadline
         //     ]);
         $planDeadline = $this->planDeadline;
-        if ($this->domain === 'alfacentr.bitrix24.ru') {
+        if ($planDeadline) {
 
-            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $planDeadline, 'Asia/Novosibirsk');
-            $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
-            $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
-        } else   if ($this->domain === 'gsirk.bitrix24.ru') {
 
-            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $planDeadline, 'Asia/Irkutsk');
-            $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
-            $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
+
+            if ($this->domain === 'alfacentr.bitrix24.ru') {
+
+                $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $planDeadline, 'Asia/Novosibirsk');
+                $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
+                $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
+            } else   if ($this->domain === 'gsirk.bitrix24.ru') {
+
+                $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $planDeadline, 'Asia/Irkutsk');
+                $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
+                $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
+            }
         }
         // Log::channel('telegram')->info('APRIL_HOOK list deadline', [
         //     'list result $this->planDeadline' => $planDeadline
@@ -5170,7 +5182,7 @@ class EventReportService
         $formattedDate = $carbonDate->isoFormat('D MMMM HH:mm');
 
 
-        if ($this->isPlanned) {
+        if ($this->isPlanned && !$this->isNoCall) {
             if (!$this->isExpired) {  // если не перенос, то отчитываемся по прошедшему событию
                 //report
                 $eventAction = 'plan';

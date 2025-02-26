@@ -49,13 +49,13 @@ class ReportController extends Controller
             }
             if (isset($request->fail)) {
                 $data['fail'] = $request->fail;
-                Log::channel('telegram')->info(
-                    '$request->fail',
-                    [
-                        'fail' => $request->fail,
+                // Log::channel('telegram')->info(
+                //     '$request->fail',
+                //     [
+                //         'fail' => $request->fail,
 
-                    ]
-                );
+                //     ]
+                // );
             }
 
             if (isset($request->currentTask)) {
