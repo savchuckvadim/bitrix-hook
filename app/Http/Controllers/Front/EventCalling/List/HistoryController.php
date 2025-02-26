@@ -268,8 +268,9 @@ class HistoryController extends Controller
                     if ($plField['code'] === 'sales_history_op_result_status') {
                         $resultStatusField = $plField;
                         $resultStatusFieldId = $resultStatusField['bitrixCamelId']; //like PROPERTY_2119 
-                        if (!empty($resultStatusField) && !empty($resultStatusField['bitrixitems'])) {
-                            foreach ($resultStatusField['bitrixitems'] as $item) {
+                        if (!empty($resultStatusField) && !empty($resultStatusField['items'])) {
+                            foreach ($resultStatusField['items'] as $item) {
+                            
                                 if ($item['code'] === 'op_call_result_yes') {
                                     $resultStatusItem = $item;
                                     $resultStatusItemId = $item['bitrixId'];
