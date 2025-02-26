@@ -4177,7 +4177,7 @@ class EventReportService
 
         $reportEventType = $this->currentReportEventType;
         $reportEventTypeName = $this->currentReportEventName;
-        $planEventTypeName = $this->currentPlanEventTypeName;
+        $planEventTypeName = $this->removeEmojisIntl($this->currentPlanEventTypeName);
         $planEventType = $this->currentPlanEventType; //если перенос то тип будет автоматически взят из report - предыдущего события
         $eventAction = 'expired';  // не состоялся и двигается крайний срок 
         $planComment = 'Перенесен';
@@ -4185,12 +4185,15 @@ class EventReportService
             //report
             $eventAction = 'plan';
             $planComment = 'Запланирован';
+            if($planEventTypeName  == 'Презентация'){
+                $planComment = 'Запланирована';
+            }
         } else {
             $planEventTypeName = $this->currentReportEventName;
             $planEventType = $this->currentReportEventType;
         }
 
-        $planComment = $planComment . ' ' . $planEventTypeName . ' ' . $this->currentPlanEventName;
+        $planComment = $planComment . ' ' . $planEventTypeName . ' ' . $this->removeEmojisIntl($this->currentPlanEventName);
         if ($this->isNew || $this->isExpired) {
             $planComment .=  ' ' . $this->comment;
         }
@@ -4802,10 +4805,10 @@ class EventReportService
         date_default_timezone_set('Europe/Moscow');
         $currentNowDate = new DateTime();
         $nowDate = $currentNowDate->format('d.m.Y H:i:s');
-        Log::channel('telegram')
-            ->info('APRIL_HOOK init deadline', [
-                'pres initdeadline' => $this->planDeadline
-            ]);
+        // Log::channel('telegram')
+        //     ->info('APRIL_HOOK init deadline', [
+        //         'pres initdeadline' => $this->planDeadline
+        //     ]);
         $planDeadline = $this->planDeadline;
         if ($this->domain === 'alfacentr.bitrix24.ru') {
 
@@ -4818,9 +4821,9 @@ class EventReportService
             $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
             $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
         }
-        Log::channel('telegram')->info('APRIL_HOOK list deadline', [
-            'presresult $this->planDeadline' => $planDeadline
-        ]);
+        // Log::channel('telegram')->info('APRIL_HOOK list deadline', [
+        //     'presresult $this->planDeadline' => $planDeadline
+        // ]);
         // Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
         //     'planDeals' => $planPresDealIds['planDeals'],
 
