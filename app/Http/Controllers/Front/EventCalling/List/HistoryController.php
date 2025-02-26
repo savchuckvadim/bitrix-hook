@@ -173,7 +173,7 @@ class HistoryController extends Controller
                 // ]);
                 return APIOnlineController::getSuccess([
                     'commands' => $command,
-                    'history' => $responseData['result']['result'][$key],
+                    'history' => $responseData['result']['result'][$key][0]['ID'],
                     'next' => $responseData['result']['result_next'],
                 ]);
                 // 🟢 Проверяем, есть ли данные
