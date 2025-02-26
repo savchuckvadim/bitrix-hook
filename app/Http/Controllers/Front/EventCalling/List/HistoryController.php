@@ -80,6 +80,18 @@ class HistoryController extends Controller
             $commentFieldId = null;
 
 
+            $commentField = null;
+            $commentFieldId = null;
+
+
+            $resultStatusField = null;
+            $resultStatusFieldId = null;
+
+
+
+            $noresultReasonField = null;
+            $noresultReasonFieldId = null;
+
             if (!empty($listFields)) {
 
                 foreach ($listFields as $plField) {
@@ -101,6 +113,18 @@ class HistoryController extends Controller
                         $commentFieldId = $commentField['bitrixCamelId']; //like PROPERTY_2119 
 
                     }
+
+                    if ($plField['code'] === 'op_noresult_reason') {
+                        $noresultReasonField = $plField;
+                        $noresultReasonFieldId = $commentField['bitrixCamelId']; //like PROPERTY_2119 
+
+                    }
+
+                    if ($plField['code'] === 'op_result_status') {
+                        $resultStatusField = $plField;
+                        $resultStatusFieldId = $commentField['bitrixCamelId']; //like PROPERTY_2119 
+
+                    }
                 }
             }
 
@@ -116,7 +140,9 @@ class HistoryController extends Controller
 
                     $commentFieldId,
                     $actionFieldId,
-                    $actionTypeFieldId
+                    $actionTypeFieldId,
+                    $noresultReasonFieldId,
+                    $resultStatusFieldId
                 ]
 
             ];
