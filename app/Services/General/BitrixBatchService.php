@@ -427,6 +427,6 @@ class BitrixBatchService
 
         // print_r("<br>");
         // print_r($result);
-        return $result;
+        return $responseData;
     }
 }
