@@ -341,15 +341,17 @@ class HistoryController extends Controller
 
             // 🟢 Возвращаем данные API
             return APIOnlineController::getSuccess([
-                'commands' => $command,
-                'noresultCount' => $batchResults,
-                'resultCount' => $batchResults,
-                'resultStatusField' => $resultStatusField,
-                'resultStatusFieldId' => $resultStatusFieldId,
-                'resultStatusItem' => $resultStatusItem,
-                'resultStatusItemId' => $resultStatusItemId,
-                'noResultStatusItem' => $noResultStatusItem,
-                'noResultStatusItemId' => $noResultStatusItemId,
+                'result' => [
+                    'commands' => $command,
+                    'noresultCount' => $batchResults,
+                    'resultCount' => $batchResults,
+                    'resultStatusField' => $resultStatusField,
+                    'resultStatusFieldId' => $resultStatusFieldId,
+                    'resultStatusItem' => $resultStatusItem,
+                    'resultStatusItemId' => $resultStatusItemId,
+                    'noResultStatusItem' => $noResultStatusItem,
+                    'noResultStatusItemId' => $noResultStatusItemId,
+                ]
             ]);
         } catch (\Throwable $th) {
             $errorMessages =  [
