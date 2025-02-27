@@ -658,7 +658,7 @@ class ReportKPIController extends Controller
                 //     $type['count'] = 0;
                 // }
                 // Ждем некоторое время перед следующим запросом
-                // sleep(1); // Например, ждем 5 секунд
+                usleep(500); // Например, ждем 5 секунд
             }
             array_push($result, $resultUserReport);
             // } while ($next > 0); // Продолжаем цикл, пока значение "next" больше нуля
@@ -667,7 +667,7 @@ class ReportKPIController extends Controller
             [
 
                 'report' =>  $result,
-                'responses' =>  $responses,
+                // 'responses' =>  $responses,
      
      
 
