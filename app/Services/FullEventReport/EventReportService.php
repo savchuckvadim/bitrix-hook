@@ -823,24 +823,25 @@ class EventReportService
 
             if (!$this->isNoCall) {
 
+                if ($this->domain == 'gsirk.bitrix24.ru') {
+                    if (!empty($this->postFail)) {
+                        if (!empty($this->postFail['postFailDate'])) {
+                            if (!empty($this->workStatus['current'])) {
+                                if (!empty($this->workStatus['current']['code'])) {
+                                    $workStatusCode = $this->workStatus['current']['code'];
 
-                if (!empty($this->postFail)) {
-                    if (!empty($this->postFail['postFailDate'])) {
-                        if (!empty($this->workStatus['current'])) {
-                            if (!empty($this->workStatus['current']['code'])) {
-                                $workStatusCode = $this->workStatus['current']['code'];
 
-
-                                if ($workStatusCode === 'fail') {  //если провал 
-                                    $this->failFlow();
+                                    if ($workStatusCode === 'fail') {  //если провал 
+                                        $this->failFlow();
+                                    }
                                 }
                             }
                         }
                     }
+
+
+                    $this->relationLeadFlow();
                 }
-
-
-                $this->relationLeadFlow();
             }
             // sleep(1);
 
@@ -943,22 +944,22 @@ class EventReportService
 
 
                                 // if ($this->failType['code'] == 'failure') {
-                                    Log::channel('telegram')->info(
-                                        'failFlow',
-                                        [
-                                            'domain' => $this->domain,
-                                            // 'hook' => $this->hook,
-                                            'fail' => $this->postFail,
-                                            'companyId' => $this->entityId
-                                        ]
-                                    );
-                                    $postFailService = new EventReportPostFailService([
+                                Log::channel('telegram')->info(
+                                    'failFlow',
+                                    [
                                         'domain' => $this->domain,
-                                        'hook' => $this->hook,
+                                        // 'hook' => $this->hook,
                                         'fail' => $this->postFail,
                                         'companyId' => $this->entityId
-                                    ]);
-                                    $postFailService->processPostFail();
+                                    ]
+                                );
+                                $postFailService = new EventReportPostFailService([
+                                    'domain' => $this->domain,
+                                    'hook' => $this->hook,
+                                    'fail' => $this->postFail,
+                                    'companyId' => $this->entityId
+                                ]);
+                                $postFailService->processPostFail();
                                 // }
                             }
                         }
@@ -4185,7 +4186,7 @@ class EventReportService
             //report
             $eventAction = 'plan';
             $planComment = 'Запланирован';
-            if($planEventTypeName  == 'Презентация'){
+            if ($planEventTypeName  == 'Презентация') {
                 $planComment = 'Запланирована';
             }
         } else {
@@ -4208,7 +4209,7 @@ class EventReportService
                     $reportAction = 'nodone';
                 }
 
-                if ($reportEventType !== 'presentation' ||  ($reportEventType == 'presentation' && !empty($this->isNoCall)) ) {
+                if ($reportEventType !== 'presentation' ||  ($reportEventType == 'presentation' && !empty($this->isNoCall))) {
 
                     //если текущий не презентация
 
