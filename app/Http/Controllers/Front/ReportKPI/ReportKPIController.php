@@ -354,7 +354,7 @@ class ReportKPIController extends Controller
                     'report' =>  $report,
                     // 'total' =>  $totalReport['total'],
                     // 'medium' =>  $totalReport['medium'],
-                    'batchResults' =>  $batchResults,
+                    // 'batchResults' =>  $batchResults,
                     'listId' =>  $listId,
                     // 'commands' =>  $commands,
                     'list' => $this->portalKPIList,
@@ -530,6 +530,145 @@ class ReportKPIController extends Controller
     //         }
     //     }
     // }
+
+    protected function getVoximplantInReport($users, $dateFrom, $dateTo, $report)
+    {
+        $callingsTypes = [
+            [
+                'id' => 'all',
+                'action' => 'Наборов номера',
+                'count' => 0,
+                'duration' => 0,
+                'period' => []
+            ],
+            [
+                'id' => 30,
+                'action' => 'Звонки > 30 сек',
+                'count' => 0,
+                'duration' => 0,
+                'period' => []
+            ],
+            [
+                'id' => 60,
+                'action' => 'Звонки > минуты',
+                'count' => 0,
+                'duration' => 0,
+                'period' => []
+            ],
+            [
+                'id' => 180,
+                'action' => 'Звонки > 3 минут',
+                'count' => 0,
+                'duration' => 0,
+                'period' => []
+            ],
+            [
+                'id' => 300,
+                'action' => 'Звонки > 5 минут',
+                'count' => 0,
+                'duration' => 0,
+                'period' => []
+            ],
+            [
+                'id' => 600,
+                'action' => 'Звонки > 10 минут',
+                'count' => 0,
+                'duration' => 0,
+                'period' => []
+            ],
+
+        ];
+        $errors = [];
+        $responses = [];
+
+        $result = [];
+
+        $actionUrl = '/voximplant.statistic.get.json';
+        $url = $this->hook . $actionUrl;
+        $next = 0; // Начальное значение параметра "next"
+
+
+        foreach ($users as $k => $user) {
+
+            // $user = $userReport['user'];
+            $userId = $user['ID'];
+            $userIds = [$userId];
+            $resultUserReport = [
+                'user' => $user,
+                'userName' => $user['NAME'],
+                'callings' => [],
+             
+            ];
+            $resultUserReport['callings'] = $callingsTypes;
+
+
+
+            foreach ($resultUserReport['callings'] as $key => $type) {
+
+                if ($type['id'] === 'all') {
+                    $data =   [
+                        "FILTER" => [
+                            "PORTAL_USER_ID" => $userIds,
+                            // ">CALL_DURATION" => $type->duration,
+                            ">CALL_START_DATE" => $dateFrom,
+                            "<CALL_START_DATE" =>  $dateTo
+                        ]
+                    ];
+                } else {
+                    $data =   [
+                        "FILTER" => [
+                            "PORTAL_USER_ID" => $userIds,
+                            ">CALL_DURATION" => $type['id'],
+                            ">CALL_START_DATE" => $dateFrom,
+                            "<CALL_START_DATE" =>  $dateTo
+                        ]
+                    ];
+                }
+
+                $response = Http::get($url, $data);
+
+                array_push($responses, $response);
+
+                // if (isset($response['total'])) {
+                // Добавляем полученные звонки к общему списку
+                // $resultCallings = array_merge($resultCallings, $response['result']);
+                // if (isset($response['next'])) {
+                //     // Получаем значение "next" из ответа
+                //     $next = $response['next'];
+                // }
+
+                // $type['count'] = $response['total'];
+                if (isset($response['total'])) {
+                    $resultUserReport['callings'][$key]['count'] = $response['total'];
+                }
+
+                // } else { 
+                //     return APIController::getError(
+                //         'response total not found',
+                //         [
+                //             'response' => $response
+                //         ]
+                //     );
+                //     array_push($errors, $response);
+                //     $type['count'] = 0;
+                // }
+                // Ждем некоторое время перед следующим запросом
+                // sleep(1); // Например, ждем 5 секунд
+            }
+            array_push($result, $resultUserReport);
+            // } while ($next > 0); // Продолжаем цикл, пока значение "next" больше нуля
+        }
+        return APIOnlineController::getSuccess(
+            [
+
+                'report' =>  $result,
+                'responses' =>  $responses,
+     
+     
+
+            ]
+        );
+    }
     protected function addVoximplantInReport($dateFrom, $dateTo, $report)
     {
         $callingsTypes = [
