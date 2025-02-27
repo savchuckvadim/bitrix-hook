@@ -2617,16 +2617,16 @@ class ReportController extends Controller
 
 
             $sessionKey = 'department_' . $domain . '_' . $currentMonthDay;
-            // $sessionData = FullEventInitController::getSessionItem($sessionKey);
+            $sessionData = FullEventInitController::getSessionItem($sessionKey);
 
-            // if (!empty($sessionData)) {
+            if (!empty($sessionData)) {
 
-            //     if (!empty($sessionData['department'])) {
-            //         $result = $departmentResult = $sessionData;
-            //         $departmentResult = $sessionData['department'];
-            //         $result['fromSession'] = true;
-            //     }
-            // }
+                if (!empty($sessionData['department'])) {
+                    $result = $departmentResult = $sessionData;
+                    $departmentResult = $sessionData['department'];
+                    $result['fromSession'] = true;
+                }
+            }
 
             if (empty($departmentResult)) {                               // если в сессии нет department
                 $departamentService = new BitrixDepartamentService($hook);

@@ -347,15 +347,16 @@ class ReportKPIController extends Controller
             // $totalReport = $this->addTotalAndMediumKPI($report);
 
             //voximplant
+            $report = $this->addVoximplantInReport( $dateFrom, $dateTo, $report);
             return APIOnlineController::getSuccess(
                 [
-                    'commands' => $commands,
+                    // 'commands' => $commands,
                     'report' =>  $report,
                     // 'total' =>  $totalReport['total'],
                     // 'medium' =>  $totalReport['medium'],
                     'batchResults' =>  $batchResults,
                     'listId' =>  $listId,
-                    'commands' =>  $commands,
+                    // 'commands' =>  $commands,
                     'list' => $this->portalKPIList,
 
                 ]
