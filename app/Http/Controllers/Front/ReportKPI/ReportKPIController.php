@@ -531,8 +531,13 @@ class ReportKPIController extends Controller
     //     }
     // }
 
-    protected function getVoximplantInReport($users, $dateFrom, $dateTo, $report)
+    protected function getVoximplantInReport(Request $request)
     {
+        $users = $request['filters']['departament'];
+
+        $dateFrom = $request['filters']['dateFrom'];
+        $dateTo = $request['filters']['dateTo'];
+
         $callingsTypes = [
             [
                 'id' => 'all',
