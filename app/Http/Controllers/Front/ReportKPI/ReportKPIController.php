@@ -531,7 +531,7 @@ class ReportKPIController extends Controller
     //     }
     // }
 
-    protected function getVoximplantInReport(Request $request)
+    public function getVoximplantReport(Request $request)
     {
         $users = $request['filters']['departament'];
 

@@ -385,7 +385,7 @@ Route::prefix('full')->group(function () {
         Route::post('/callings', function (Request $request) {
             $domain = $request->domain;
             $controller = new ReportKPIController($domain);
-            return $controller->getVoximplantInReport($request);
+            return $controller->getVoximplantReport($request);
         });
 
 
