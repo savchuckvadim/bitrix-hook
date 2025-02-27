@@ -347,7 +347,7 @@ class ReportKPIController extends Controller
             // $totalReport = $this->addTotalAndMediumKPI($report);
 
             //voximplant
-            $report = $this->addVoximplantInReport( $dateFrom, $dateTo, $report);
+            // $report = $this->addVoximplantInReport( $dateFrom, $dateTo, $report);
             return APIOnlineController::getSuccess(
                 [
                     // 'commands' => $commands,
