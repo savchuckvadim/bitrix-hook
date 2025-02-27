@@ -2599,7 +2599,7 @@ class ReportController extends Controller
         $result = [];
         $departmentResult = null;
         $generalDepartment = null;
-
+        $department = null;
         $childrenDepartments = null;
         $resultGeneralDepartment = [];
 
@@ -2684,6 +2684,9 @@ class ReportController extends Controller
                             'generalDepartment' => $resultGeneralDepartment,
                             'childrenDepartments' => $resultChildrenDepartments,
                             'allUsers' => $allUsers,
+
+                            'department' => $department,
+       
                         ];
                         $result =  ['department' => $departmentResult];
                         FullEventInitController::setSessionItem(
