@@ -45,16 +45,17 @@ class EventReportPostFailService
     {
         try {
             sleep(2);
-            if (!empty($this->hook)) {
-                if (!empty($this->companyId)) {
-                    if (!empty($this->postFailDate)) {
-                        $postFailDateString = $this->postFailDate;
-                        // $this->postFailDate = date('d.m.Y H:i', strtotime($postFailDateString));
-                        $fields = [
-                            $this->postFailDateFieldId => $this->postFailDate,
+            if ($this->domain == 'gsirk.bitrix24.ru') {
+                if (!empty($this->hook)) {
+                    if (!empty($this->companyId)) {
+                        if (!empty($this->postFailDate)) {
+                            $postFailDateString = $this->postFailDate;
+                            // $this->postFailDate = date('d.m.Y H:i', strtotime($postFailDateString));
+                            $fields = [
+                                $this->postFailDateFieldId => $this->postFailDate,
 
-                        ];
-                        if ($this->domain == 'gsirk.bitrix24.ru') {
+                            ];
+
                             //USER
                             $fields = [
                                 'ASSIGNED_BY_ID' => $this->postFailUserId,
@@ -62,22 +63,23 @@ class EventReportPostFailService
                                 $this->postFailDateFieldId => $this->postFailDate,
 
                             ];
+
+                            $companyUpdate = BitrixGeneralService::updateEntity(
+                                $this->hook,
+                                'company',
+                                $this->companyId,
+                                $fields
+                            );
+                            APIOnlineController::sendLog('EventReportPostFailService', [
+
+                                'companyUpdate' => $companyUpdate,
+
+                                'domain' => $this->domain,
+                                'ASSIGNED_BY_ID' => $this->postFailUserId,
+                                'fields' => $fields,
+
+                            ]);
                         }
-                        $companyUpdate = BitrixGeneralService::updateEntity(
-                            $this->hook,
-                            'company',
-                            $this->companyId,
-                            $fields
-                        );
-                        APIOnlineController::sendLog('EventReportPostFailService', [
-
-                            'companyUpdate' => $companyUpdate,
-
-                            'domain' => $this->domain,
-                            'ASSIGNED_BY_ID' => $this->postFailUserId,
-                            'fields' => $fields,
-
-                        ]);
                     }
                 }
             }

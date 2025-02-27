@@ -942,7 +942,7 @@ class EventReportService
                                 // $reportFields['op_prospects_type'] = $this->failType['code'];
 
 
-                                if ($this->failType['code'] == 'failure') {
+                                // if ($this->failType['code'] == 'failure') {
                                     Log::channel('telegram')->info(
                                         'failFlow',
                                         [
@@ -959,7 +959,7 @@ class EventReportService
                                         'companyId' => $this->entityId
                                     ]);
                                     $postFailService->processPostFail();
-                                }
+                                // }
                             }
                         }
                     }
