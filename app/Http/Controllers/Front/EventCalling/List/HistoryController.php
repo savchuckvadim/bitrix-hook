@@ -348,11 +348,11 @@ class HistoryController extends Controller
             $moneyKey = 'money';
             $noresultKey = 'noresult';
 
-            $resultResult = null;
-            $presResult = null;
-            $progResult = null;
-            $moneyResult = null;
-            $noresultResult = null;
+            $resultResult = 0;
+            $presResult = 0;
+            $progResult = 0;
+            $moneyResult = 0;
+            $noresultResult = 0;
 
 
 
