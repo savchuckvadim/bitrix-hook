@@ -184,10 +184,71 @@ class HistoryController extends Controller
                 ]);
             }
 
+            $result = [];
+            foreach ($allResults as $item) {
+                if (!empty($item)) {
+                    $resultItem = [];
+                    if (!empty($listFields)) {
+                        $resultItem['id'] = $item['ID'];
+                        foreach ($listFields as $plField) {
+                            if ($plField['code'] === 'sales_history_event_action') {
+                                $eventActionField = $plField;
+                                $actionFieldId = $eventActionField['bitrixCamelId']; //like PROPERTY_2119 
+                                if (!empty($item[$actionFieldId])) {
+                                    foreach ($plField['items'] as $plFieldItem) {
+                                        if ($item[$actionFieldId] == $plFieldItem['bitrixId']) {
+                                            $resultItem['eventAction'] = $plFieldItem['name'];
+                                        }
+                                    }
+                                }
+                            }
+                            if ($plField['code'] === 'sales_history_event_type') {
+                                $eventActionTypeField = $plField;
+                                $actionTypeFieldId = $eventActionTypeField['bitrixCamelId']; //like PROPERTY_2119 
+
+                                if (!empty($item[$actionTypeFieldId])) {
+                                    foreach ($plField['items'] as $plFieldItem) {
+                                        if ($item[$actionTypeFieldId] == $plFieldItem['bitrixId']) {
+                                            $resultItem['eventActionType'] = $plFieldItem['name'];
+                                        }
+                                    }
+                                }
+                            }
+                            if ($plField['code'] === 'sales_history_crm') {
+                                $companyIdField = $plField;
+                                $companyIdFieldId = $companyIdField['bitrixCamelId']; //like PROPERTY_2119 
+
+                            }
+                            if ($plField['code'] === 'sales_history_manager_comment') {
+                                $commentField = $plField;
+                                $commentFieldId = $commentField['bitrixCamelId']; //like PROPERTY_2119 
+
+                                if (!empty($item[$commentFieldId])) {
+
+                                    $resultItem['comment'] = $item[$commentFieldId];
+                                }
+                            }
+
+                            if ($plField['code'] === 'sales_history_op_noresult_reason') {
+                                $noresultReasonField = $plField;
+                                $noresultReasonFieldId = $noresultReasonField['bitrixCamelId']; //like PROPERTY_2119 
+
+                            }
+
+                            if ($plField['code'] === 'sales_history_op_result_status') {
+                                $resultStatusField = $plField;
+                                $resultStatusFieldId = $resultStatusField['bitrixCamelId']; //like PROPERTY_2119 
+
+                            }
+                        }
+                    }
+                    $result[] = $resultItem;
+                }
+            }
             // 🟢 Возвращаем данные API
             return APIOnlineController::getSuccess([
                 'commands' => $command,
-                'history' => $allResults,
+                'history' => $result,
             ]);
         } catch (\Throwable $th) {
             $errorMessages =  [
