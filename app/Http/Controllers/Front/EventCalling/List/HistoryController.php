@@ -225,7 +225,14 @@ class HistoryController extends Controller
 
                                 if (!empty($item[$commentFieldId])) {
 
-                                    $resultItem['comment'] = $item[$commentFieldId];
+                                    if (is_array($item[$commentFieldId])) {
+                                        foreach ($item[$commentFieldId] as $key => $comment) {
+                                            $resultItem['comment'] .= $comment . ' ';
+                                        }
+                                    }else {
+                                        $resultItem['comment'] = $item[$commentFieldId];
+                                    }
+                                   
                                 }
                             }
 
