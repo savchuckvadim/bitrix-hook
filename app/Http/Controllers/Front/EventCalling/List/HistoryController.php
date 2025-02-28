@@ -222,17 +222,16 @@ class HistoryController extends Controller
                             if ($plField['code'] === 'sales_history_manager_comment') {
                                 $commentField = $plField;
                                 $commentFieldId = $commentField['bitrixCamelId']; //like PROPERTY_2119 
-
+                                $resultItem['comment'] = '';
                                 if (!empty($item[$commentFieldId])) {
 
                                     if (is_array($item[$commentFieldId])) {
                                         foreach ($item[$commentFieldId] as $key => $comment) {
                                             $resultItem['comment'] .= $comment . ' ';
                                         }
-                                    }else {
+                                    } else {
                                         $resultItem['comment'] = $item[$commentFieldId];
                                     }
-                                   
                                 }
                             }
 
