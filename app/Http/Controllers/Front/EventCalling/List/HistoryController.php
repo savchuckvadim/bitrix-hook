@@ -224,8 +224,23 @@ class HistoryController extends Controller
             $listFields = $this->portalKPIList['bitrixfields'];
             $eventActionField = null;
             $actionFieldId = null;
-            $resultActionItem = null;
+            $resultActionItem = null;  //сoстоялся
             $resultActionItemId = null;
+
+            $eventActionTypeField = null; // тип события
+            $actionTypeFieldId = null;
+
+
+            $actionTypePresentationItem = null; // презентация
+            $actionTypePresentationItemId = null; //
+
+
+            $actionTypeInProgressItem = null; //  в решении
+            $actionTypeInProgressItemId = null; //
+
+            $actionTypeMoneyItem = null; //  в оплате
+            $actionTypeMoneyItemId = null; //
+
 
             $companyIdField = null;
             $companyIdFieldId = null;
@@ -257,6 +272,30 @@ class HistoryController extends Controller
                                 if ($item['code'] === 'done') {
                                     $resultActionItem = $item;
                                     $resultActionItemId = $item['bitrixId'];
+                                }
+                            }
+                        }
+                    }
+                    if ($plField['code'] === 'sales_history_event_type') {
+                        $eventActionTypeField = $plField;
+                        $actionTypeFieldId = $eventActionTypeField['bitrixCamelId']; //like PROPERTY_2119 
+
+                        if (!empty($eventActionTypeField) && !empty($eventActionTypeField['items'])) {
+                            foreach ($eventActionTypeField['items'] as $item) {
+
+                                if ($item['code'] === 'presentation') {
+                                    $actionTypePresentationItem = $item;
+                                    $actionTypePresentationItemId = $item['bitrixId'];;
+                                }
+
+                                if ($item['code'] === 'call_in_progress') {
+                                    $actionTypeInProgressItem = $item;
+                                    $actionTypeInProgressItemId = $item['bitrixId'];;
+                                }
+
+                                if ($item['code'] === 'call_in_money') {
+                                    $actionTypeMoneyItem = $item;
+                                    $actionTypeMoneyItemId = $item['bitrixId'];;
                                 }
                             }
                         }
@@ -304,9 +343,15 @@ class HistoryController extends Controller
             $url = $this->hook . '/batch';
             $method = 'lists.element.get';
             $resultKey = 'result';
+            $presKey = 'pres';
+            $progKey = 'prog';
+            $moneyKey = 'money';
             $noresultKey = 'noresult';
 
             $resultResult = null;
+            $presResult = null;
+            $progResult = null;
+            $moneyResult = null;
             $noresultResult = null;
 
 
@@ -323,6 +368,47 @@ class HistoryController extends Controller
                 ],
 
             ];
+            $presentationData = [
+                'IBLOCK_TYPE_ID' => 'lists',
+                'IBLOCK_ID' => $listId,
+                'filter' => [
+                    $companyIdFieldId => '%' . $companyId . '%',
+                    $responsibleFieldId => $userId,
+                    $resultStatusFieldId => $resultStatusItemId,
+                    $actionFieldId => $resultActionItemId,
+                    $actionTypeFieldId => $actionTypePresentationItemId, //presentation
+
+                ],
+
+            ];
+            $inProgressData = [
+                'IBLOCK_TYPE_ID' => 'lists',
+                'IBLOCK_ID' => $listId,
+                'filter' => [
+                    $companyIdFieldId => '%' . $companyId . '%',
+                    $responsibleFieldId => $userId,
+                    $resultStatusFieldId => $resultStatusItemId,
+                    $actionFieldId => $resultActionItemId,
+                    $actionTypeFieldId => $actionTypeInProgressItemId, //InProgress
+
+                ],
+
+            ];
+
+            $moneyData = [
+                'IBLOCK_TYPE_ID' => 'lists',
+                'IBLOCK_ID' => $listId,
+                'filter' => [
+                    $companyIdFieldId => '%' . $companyId . '%',
+                    $responsibleFieldId => $userId,
+                    $resultStatusFieldId => $resultStatusItemId,
+                    $actionFieldId => $resultActionItemId,
+                    $actionTypeFieldId => $actionTypeMoneyItemId, //InProgress
+
+                ],
+
+            ];
+
             $noresultData = [
                 'IBLOCK_TYPE_ID' => 'lists',
                 'IBLOCK_ID' => $listId,
@@ -337,12 +423,22 @@ class HistoryController extends Controller
 
             // 🟢 Генерируем команду
             $commandResult = $method . '?' . http_build_query($resultData);
+            $commandPres = $method . '?' . http_build_query($presentationData);
+            $commandProg = $method . '?' . http_build_query($inProgressData);
+            $commandMoney = $method . '?' . http_build_query($moneyData);
             $commandNoResult = $method . '?' . http_build_query($noresultData);
 
             // 🟢 Делаем запрос
             $response = Http::post($url, [
                 'halt' => 0,
-                'cmd' => [$resultKey => $commandResult, $noresultKey => $commandNoResult] // 🟢 Оборачиваем в массив, чтобы ключи совпадали
+                'cmd' => [
+                    $resultKey => $commandResult,
+                    $noresultKey => $commandNoResult,
+                    $presKey => $commandPres,
+                    $progKey => $commandProg,
+                    $moneyKey => $commandMoney,
+
+                ] // 🟢 Оборачиваем в массив, чтобы ключи совпадали
             ]);
 
             $responseData = $response->json();
@@ -352,6 +448,26 @@ class HistoryController extends Controller
 
                 $resultResult = $responseData['result']['result_total'][$resultKey];
             }
+
+            //pres
+            if (isset($responseData['result']['result'][$presKey]) && !empty($responseData['result']['result'][$presKey])) {
+
+                $presResult = $responseData['result']['result_total'][$presKey];
+            }
+
+
+            if (isset($responseData['result']['result'][$progKey]) && !empty($responseData['result']['result'][$progKey])) {
+
+                $progResult = $responseData['result']['result_total'][$progKey];
+            }
+
+            if (isset($responseData['result']['result'][$moneyKey]) && !empty($responseData['result']['result'][$moneyKey])) {
+
+                $moneyResult = $responseData['result']['result_total'][$moneyKey];
+            }
+
+
+
 
             if (isset($responseData['result']['result'][$noresultKey]) && !empty($responseData['result']['result'][$noresultKey])) {
 
@@ -372,6 +488,9 @@ class HistoryController extends Controller
                     // 'commands' => $command,
                     'noresultCount' => $noresultResult,
                     'resultCount' => $resultResult,
+                    'presentationCount' => $presResult,
+                    'inProgressCount' => $progResult,
+                    'inMoneyCount' => $moneyResult,
                     // 'resultStatusField' => $resultStatusField,
                     // 'resultStatusFieldId' => $resultStatusFieldId,
                     // 'resultStatusItem' => $resultStatusItem,
