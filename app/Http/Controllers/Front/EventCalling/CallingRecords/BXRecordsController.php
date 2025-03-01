@@ -244,7 +244,7 @@ class BXRecordsController extends Controller
                 $data,
 
             );
-            array_merge($activities, $companyActivities);
+            array_push($activities, $companyActivities);
         }
         if (!empty($deals)) {
             foreach ($deals as $deal) {
@@ -262,7 +262,7 @@ class BXRecordsController extends Controller
                     'activity',
                     $data,
                 );
-                array_merge($activities, $dealActivities);
+                array_push($activities, $dealActivities);
 
             }
         }
@@ -282,7 +282,10 @@ class BXRecordsController extends Controller
                     'activity',
                     $data,
                 );
-                array_merge($activities, $contactActivities);
+                if(!empty($contactActivities)){
+                    array_push($activities, $contactActivities);
+
+                }
             }
         }
         // $key = 'entity' . '_' . 'company';
