@@ -63,81 +63,19 @@ class BXRecordsController extends Controller
 
         $batchResults = null;
         $currentActionsData = [];
-        $actionFieldId = null;
+        $records = null;
         try {
-            // $domain = $request['domain'];
 
-
-
-
-            $url = $this->hook . '/batch';
-            $method = 'lists.element.get';
-            $key = 'history_list';
-            $allResults = [];
-            $lastId = null;
-
-            // do {
-            //     // 🟢 Формируем параметры запроса с фильтрацией по `ID > lastId`
-            //     $data = [
-            //         'IBLOCK_TYPE_ID' => 'lists',
-            //         'IBLOCK_ID' => $listId,
-            //         'filter' => [
-            //             $companyIdFieldId => '%' . $companyId . '%',
-            //         ],
-            //         'select' => [
-            //             $commentFieldId,
-            //             $actionFieldId,
-            //             $actionTypeFieldId,
-            //             $noresultReasonFieldId,
-            //             $resultStatusFieldId
-            //         ],
-            //         'order' => ['ID' => 'ASC'], // 🟢 Сортировка по ID
-            //     ];
-
-            //     if ($lastId) {
-            //         $data['filter']['>ID'] = $lastId;
-            //     }
-
-            //     // 🟢 Генерируем команду
-            //     $command = $method . '?' . http_build_query($data);
-
-            //     // 🟢 Делаем запрос
-            //     $response = Http::post($url, [
-            //         'halt' => 0,
-            //         'cmd' => [$key => $command] // 🟢 Оборачиваем в массив, чтобы ключи совпадали
-            //     ]);
-
-            //     $responseData = $response->json();
-
-            //     // 🟢 Проверяем, есть ли данные
-            //     if (isset($responseData['result']['result'][$key]) && !empty($responseData['result']['result'][$key])) {
-            //         $batchResults = $responseData['result']['result'][$key];
-            //         $allResults = array_merge($allResults, $batchResults);
-            //         $lastId = end($batchResults)['ID'] ?? $lastId; // 🟢 Запоминаем последний ID
-            //     }
-
-            //     // 🟢 Проверяем наличие `result_next` для следующего запроса
-            //     $next = $responseData['result']['result_next'][$key] ?? null;
-            // } while ($next !== null); // 🔄 Пока есть `result_next`, продолжаем
-
-            // 🟢 Логируем ошибки, если есть
-            // if (!empty($responseData['result_error'])) {
-            //     Log::channel('telegram')->error('❌ Ошибка Bitrix BATCH', [
-            //         'errors' => $responseData['result_error']
-            //     ]);
-            // }
-
-            $result = [];
             $activities = [];
 
             $dealsIds = $this->getCurrentDealIds($companyId);
-            // $contacts = $this->getContacts($companyId);
             $activities =  $this->getActivities($companyId, $dealsIds, $contactIds);
             $records = $this->getFilesFromActivities($activities);
+         
             return APIOnlineController::getSuccess([
-                'deals' => $dealsIds,
-                'contactIds' => $contactIds,
-                'activities' => $activities,
+                // 'deals' => $dealsIds,
+                // 'contactIds' => $contactIds,
+                // 'activities' => $activities,
                 'records' => $records
             ]);
         } catch (\Throwable $th) {
