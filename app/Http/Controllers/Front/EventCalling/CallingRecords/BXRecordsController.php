@@ -130,11 +130,11 @@ class BXRecordsController extends Controller
             $result = [];
             $activities = [];
 
-            $deals = $this->getCurrentDeal($companyId);
+            $dealsIds = $this->getCurrentDealIds($companyId);
             // $contacts = $this->getContacts($companyId);
-            $activities =  $this->getActivities($companyId, $deals, $contactIds);
+            $activities =  $this->getActivities($companyId, $dealsIds, $contactIds);
             return APIOnlineController::getSuccess([
-                'deals' => $deals,
+                'deals' => $dealsIds,
                 'contactIds' => $contactIds,
                 'activities' => $activities
             ]);
@@ -177,8 +177,9 @@ class BXRecordsController extends Controller
         );
         return $contacts;
     }
-    protected function getCurrentDeal($companyId)
+    protected function getCurrentDealIds($companyId)
     {
+        $resultIds = [];
         $categoryId = $this->getSaleDealCategoryId();
         $filter = [
             'COMPANY_ID' => $companyId,
@@ -197,7 +198,10 @@ class BXRecordsController extends Controller
             $data,
 
         );
-        return $deals;
+        foreach ($deals as $deal) {
+            $resultIds[] = $deal['ID'];
+        }
+        return $resultIds;
     }
 
     protected function getSaleDealCategoryId()
@@ -224,7 +228,7 @@ class BXRecordsController extends Controller
     }
 
 
-    protected function getActivities($companyId, $deals, $contactIds)
+    protected function getActivities($companyId, $dealsIds, $contactIds)
     {
         $activities = [];
 
@@ -251,12 +255,12 @@ class BXRecordsController extends Controller
                 }
             }
         }
-        if (!empty($deals)) {
-            foreach ($deals as $deal) {
+        if (!empty($dealsIds)) {
+            // foreach ($dealsIds as $dealId) {
                 $filter =
                     [
                         'OWNER_TYPE_ID' => 2, // 2- deal 3 - contact 4 - company
-                        'OWNER_ID' => $deal['ID'], // 2976,
+                        'OWNER_ID' => $dealsIds, // 2976,
                         "TYPE_ID" => 2 // Тип активности - Звонок
                     ];
                 $data = [
@@ -275,7 +279,7 @@ class BXRecordsController extends Controller
 
                 }
 
-            }
+            // }
         }
         if (!empty($contactIds)) {
             foreach ($contactIds as $contactId) {
