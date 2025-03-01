@@ -337,9 +337,10 @@ class BXRecordsController extends Controller
                 throw new \Exception("Ошибка batch-запроса: " . $response->body());
             }
 
+            $responseData = $response->json();
             // Добавляем результаты в общий массив
-            $batchResults = $response->json()['result']['result'] ?? [];
-            $batchedResults = array_merge($batchedResults, $batchResults);
+            $batchedResults = $responseData['result'];
+            // $batchedResults = array_merge($batchedResults, $batchResults);
         }
 
         return $batchedResults;
