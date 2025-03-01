@@ -71,7 +71,7 @@ class BXRecordsController extends Controller
             $dealsIds = $this->getCurrentDealIds($companyId);
             $activities =  $this->getActivities($companyId, $dealsIds, $contactIds);
             $records = $this->getFilesFromActivities($activities);
-         
+
             return APIOnlineController::getSuccess([
                 'deals' => $dealsIds,
                 'contactIds' => $contactIds,
@@ -315,8 +315,8 @@ class BXRecordsController extends Controller
                 $files[$fileId]['url'] = $fileData['DOWNLOAD_URL'];
             }
         }
-
-        return array_values($files); // Возвращаем список файлов
+        return $batchResults;
+        // return array_values($files); // Возвращаем список файлов
     }
 
     public function sendBatchRequest(array $commands): array
