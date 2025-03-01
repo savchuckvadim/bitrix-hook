@@ -262,7 +262,10 @@ class BXRecordsController extends Controller
                     'activity',
                     $data,
                 );
-                array_push($activities, $dealActivities);
+                if(!empty($dealActivities)){
+                    array_push($activities, $dealActivities);
+
+                }
 
             }
         }
