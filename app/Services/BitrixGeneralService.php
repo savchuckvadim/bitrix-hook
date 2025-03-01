@@ -403,6 +403,26 @@ class BitrixGeneralService
         }
     }
 
+    static function getEntityListWithFullData($hook, $entityType, $data)
+    {
+        $resultFields = null;
+        try {
+            $method = '/crm.' . $entityType . '.list';
+            $url = $hook . $method;
+
+           
+
+
+            $smartFieldsResponse = Http::get($url, $data);
+            $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: getEntity' . $entityType . ' hook: ' . $hook);
+            $resultFields = $responseData;
+
+            return $resultFields;
+        } catch (\Throwable $th) {
+            return $resultFields;
+        }
+    }
+
     static function updateEntity(
         $hook,
         $entityType,
