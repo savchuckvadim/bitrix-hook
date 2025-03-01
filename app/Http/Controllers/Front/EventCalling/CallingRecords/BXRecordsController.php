@@ -342,8 +342,8 @@ class BXRecordsController extends Controller
 
             $responseData = $response->json();
             // Добавляем результаты в общий массив
-            $batchedResults = $responseData['result'];
-            // $batchedResults = array_merge($batchedResults, $batchResults);
+            $batchResults = $responseData['result']['result'] ?? [];
+            $batchedResults = array_merge($batchedResults, $batchResults);
         }
 
         return $batchedResults;
