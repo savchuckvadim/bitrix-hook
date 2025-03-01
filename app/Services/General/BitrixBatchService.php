@@ -121,11 +121,7 @@ class BitrixBatchService
         ];
 
         foreach ($batchRequests as $key => $batchCommands) {
-            Log::channel('telegram')->info('HOOK TEST Service BATCH', [
-                'key' => $key,
-                'batchCommands' => $batchCommands
-
-            ]);
+            
             $response = Http::post($url, [
                 'halt' => 0,
                 'cmd' => $batchCommands
@@ -144,11 +140,7 @@ class BitrixBatchService
 
                 if (isset($responseData['result']['result'])) {
                     $result[$key] = $responseData['result']['result'];
-                    Log::channel('telegram')->info('HOOK TEST Service BATCH', [
-                        'result' => $responseData['result']['result']
-
-
-                    ]);
+                   
                 }
                 if (!empty($responseData['result']['result'][0])) {
                     $result[$key] = $responseData['result']['result'][0];
