@@ -133,10 +133,12 @@ class BXRecordsController extends Controller
             $dealsIds = $this->getCurrentDealIds($companyId);
             // $contacts = $this->getContacts($companyId);
             $activities =  $this->getActivities($companyId, $dealsIds, $contactIds);
+            $records = $this->getFilesFromActivities($activities);
             return APIOnlineController::getSuccess([
                 'deals' => $dealsIds,
                 'contactIds' => $contactIds,
-                'activities' => $activities
+                'activities' => $activities,
+                'records' => $records
             ]);
         } catch (\Throwable $th) {
             $errorMessages =  [
@@ -307,15 +309,80 @@ class BXRecordsController extends Controller
             }
         }
 
-        usort($activities, function ($a, $b) {
-            return $b['ID'] <=> $a['ID']; // Сортировка по возрастанию
-        });
+        if (!empty($activities)) {
 
+
+
+            usort($activities, function ($a, $b) {
+                return $b['ID'] <=> $a['ID']; // Сортировка по возрастанию
+            });
+            $activities = array_filter($activities, function ($activity) {
+                return !empty($activity['FILES']); // Убираем пустые значения
+            });
+        }
         // $key = 'entity' . '_' . 'company';
         // $resultBatchCommands[$key] = $companyCommand; // в результате будет id
 
         // $batchService =  new BitrixBatchService($this->hook);
         // $batchService->sendGeneralBatchRequest($resultBatchCommands);
         return $activities;
+    }
+
+    public function getFilesFromActivities(array $activities): array
+    {
+        $files = [];
+
+        // 🔹 Собираем файлы из всех активностей
+        foreach ($activities as $activity) {
+            if (!empty($activity['FILES'])) {
+                foreach ($activity['FILES'] as $file) {
+                    $date = date("d.m.Y H:i:s", strtotime($activity['LAST_UPDATED']));
+                    $name = "{$activity['SUBJECT']} {$date}";
+
+                    $files[$file['id']] = [
+                        'activityId' => $activity['ID'],
+                        'id' => $file['id'],
+                        'name' => $name,
+                        'url' => $file['url'],
+                        'duration' => null,
+                        'isPlaying' => false,
+                    ];
+                }
+            }
+        }
+
+        // Если нет файлов, возвращаем пустой массив
+        if (empty($files)) {
+            return [];
+        }
+
+        // 🔹 Формируем batch-запрос
+        $batchCommands = [];
+        foreach ($files as $fileId => $file) {
+            $batchCommands["get_{$fileId}"] = [
+                'method' => 'disk.file.get',
+                'params' => ['id' => $fileId]
+            ];
+        }
+
+        // 🔹 Отправляем batch-запрос
+        $response = Http::post("{$this->hook}/batch", [
+            'cmd' => $batchCommands,
+        ]);
+
+        if ($response->failed()) {
+            throw new \Exception("Ошибка batch-запроса: " . $response->body());
+        }
+
+        // 🔹 Обновляем файлы с правильными URL
+        $batchResults = $response->json()['result'] ?? [];
+        foreach ($batchResults as $key => $fileData) {
+            $fileId = str_replace("get_", "", $key); // Извлекаем ID файла
+            if (isset($files[$fileId]) && isset($fileData['DOWNLOAD_URL'])) {
+                $files[$fileId]['url'] = $fileData['DOWNLOAD_URL'];
+            }
+        }
+
+        return array_values($files); // Возвращаем список файлов
     }
 }
