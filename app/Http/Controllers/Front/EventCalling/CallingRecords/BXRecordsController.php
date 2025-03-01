@@ -132,12 +132,12 @@ class BXRecordsController extends Controller
 
             $commands = $this->getCurrentDealCommand($companyId, $commands);
             $batch = new BitrixBatchService($this->hook);
-            $batchResults = $batch->sendGeneralBatchRequest($commands);
+            $batchResults = $batch->sendGeneralBatchRequest([$commands]);
             $contacts = $this->getContacts($companyId);
             //  $currentDealId = '$result[' . $key . ']';
             return APIOnlineController::getSuccess([
                 'commands' => $commands,
-                'batchResults' => $result,
+                'batchResults' => $batchResults,
                 'contacts' => $contacts
             ]);
         } catch (\Throwable $th) {
@@ -169,6 +169,7 @@ class BXRecordsController extends Controller
         $data = [
             'filter' => $filter,
             'order' => $sort,
+            'select' => ['ID', 'NAME', 'SECOND_NAME', 'POST', 'COMMENTS', 'PHONE', 'HAS_PHONE']
         ];
         $contacts = BitrixGeneralService::getEntityListWithFullData(
             $this->hook,
