@@ -229,14 +229,14 @@ class BXRecordsController extends Controller
         $activities = [];
 
         if (!empty($companyId)) {
-            $fields =
+            $filter =
                 [
                     'OWNER_TYPE_ID' => 3, // 2- deal 3 - contact 4 - company
                     'OWNER_ID' => $companyId, // 2976,
                     "TYPE_ID" => 2 // Тип активности - Звонок
                 ];
             $data = [
-                'fields' => $fields,
+                'filter' => $filter,
             ];
             $companyActivities = BitrixGeneralService::getEntityListWithFullData(
                 $this->hook,
@@ -248,14 +248,14 @@ class BXRecordsController extends Controller
         }
         if (!empty($deals)) {
             foreach ($deals as $deal) {
-                $fields =
+                $filter =
                     [
                         'OWNER_TYPE_ID' => 2, // 2- deal 3 - contact 4 - company
                         'OWNER_ID' => $deal['ID'], // 2976,
                         "TYPE_ID" => 2 // Тип активности - Звонок
                     ];
                 $data = [
-                    'fields' => $fields,
+                    'filter' => $filter,
                 ];
                 $dealActivities = BitrixGeneralService::getEntityListWithFullData(
                     $this->hook,
@@ -271,14 +271,14 @@ class BXRecordsController extends Controller
         }
         if (!empty($contacts)) {
             foreach ($contacts as $contact) {
-                $fields =
+                $filter =
                     [
                         'OWNER_TYPE_ID' => 3, // 2- deal 3 - contact 4 - company
                         'OWNER_ID' => $contact['ID'], // 2976,
                         "TYPE_ID" => 2 // Тип активности - Звонок
                     ];
                 $data = [
-                    'fields' => $fields,
+                    'filter' => $filter,
                 ];
                 $contactActivities = BitrixGeneralService::getEntityListWithFullData(
                     $this->hook,
