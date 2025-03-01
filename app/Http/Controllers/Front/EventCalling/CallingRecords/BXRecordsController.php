@@ -128,11 +128,11 @@ class BXRecordsController extends Controller
             // }
 
             $result = [];
-            $commands = [];
+            $activities = [];
 
             $deals = $this->getCurrentDeal($companyId);
             $contacts = $this->getContacts($companyId);
-            //  $currentDealId = '$result[' . $key . ']';
+            $activities =  $this->getActivities($companyId, $deals, $contacts);
             return APIOnlineController::getSuccess([
                 'deals' => $deals,
                 'contacts' => $contacts
@@ -166,7 +166,7 @@ class BXRecordsController extends Controller
         $data = [
             'filter' => $filter,
             'order' => $sort,
-            'select' => ['ID', 'NAME', 'SECOND_NAME', 'LAST_NAME','POST', 'COMMENTS', 'PHONE', 'HAS_PHONE']
+            'select' => ['ID', 'NAME', 'SECOND_NAME', 'LAST_NAME', 'POST', 'COMMENTS', 'PHONE', 'HAS_PHONE']
         ];
         $contacts = BitrixGeneralService::getEntityListWithFullData(
             $this->hook,
@@ -194,7 +194,7 @@ class BXRecordsController extends Controller
             $this->hook,
             'deal',
             $data,
-    
+
         );
         return $deals;
     }
@@ -220,5 +220,75 @@ class BXRecordsController extends Controller
         }
 
         return  $categoryBitrixId;
+    }
+
+
+    protected function getActivities($companyId, $deals, $contacts)
+    {
+        $activities = [];
+
+        if (!empty($companyId)) {
+            $fields =
+                [
+                    'OWNER_TYPE_ID' => 3, // 2- deal 3 - contact 4 - company
+                    'OWNER_ID' => $companyId, // 2976,
+                    "TYPE_ID" => 2 // Тип активности - Звонок
+                ];
+            $data = [
+                'fields' => $fields,
+            ];
+            $companyActivities = BitrixGeneralService::getEntityListWithFullData(
+                $this->hook,
+                'activity',
+                $data,
+
+            );
+            array_merge($activities, $companyActivities);
+        }
+        if (!empty($deals)) {
+            foreach ($deals as $deal) {
+                $fields =
+                    [
+                        'OWNER_TYPE_ID' => 2, // 2- deal 3 - contact 4 - company
+                        'OWNER_ID' => $deal['ID'], // 2976,
+                        "TYPE_ID" => 2 // Тип активности - Звонок
+                    ];
+                $data = [
+                    'fields' => $fields,
+                ];
+                $dealActivities = BitrixGeneralService::getEntityListWithFullData(
+                    $this->hook,
+                    'activity',
+                    $data,
+                );
+                array_merge($activities, $dealActivities);
+
+            }
+        }
+        if (!empty($contacts)) {
+            foreach ($contacts as $contact) {
+                $fields =
+                    [
+                        'OWNER_TYPE_ID' => 3, // 2- deal 3 - contact 4 - company
+                        'OWNER_ID' => $contact['ID'], // 2976,
+                        "TYPE_ID" => 2 // Тип активности - Звонок
+                    ];
+                $data = [
+                    'fields' => $fields,
+                ];
+                $contactActivities = BitrixGeneralService::getEntityListWithFullData(
+                    $this->hook,
+                    'activity',
+                    $data,
+                );
+                array_merge($activities, $contactActivities);
+            }
+        }
+        // $key = 'entity' . '_' . 'company';
+        // $resultBatchCommands[$key] = $companyCommand; // в результате будет id
+
+        // $batchService =  new BitrixBatchService($this->hook);
+        // $batchService->sendGeneralBatchRequest($resultBatchCommands);
+        return $activities;
     }
 }
