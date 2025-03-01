@@ -186,10 +186,10 @@ class BXRecordsController extends Controller
             // 'CATEGORY_ID' => $categoryId,
 
         ];
-        $sort = ['ID' => 'DESC'];
+        $order = ['ID' => 'DESC'];
         $data = [
             'filter' => $filter,
-            'order' => $sort,
+            'order' => $order,
             'select' => ['ID']
         ];
         $deals = BitrixGeneralService::getEntityListWithFullData(
@@ -248,66 +248,64 @@ class BXRecordsController extends Controller
                 $data,
 
             );
-            if(!empty($companyActivities)){
-                foreach($companyActivities as $cmpnActivity){
+            if (!empty($companyActivities)) {
+                foreach ($companyActivities as $cmpnActivity) {
                     array_push($activities, $cmpnActivity);
-
                 }
             }
         }
         if (!empty($dealsIds)) {
             // foreach ($dealsIds as $dealId) {
-                $filter =
-                    [
-                        'OWNER_TYPE_ID' => 2, // 2- deal 3 - contact 4 - company
-                        'OWNER_ID' => $dealsIds, // 2976,
-                        "TYPE_ID" => 2 // Тип активности - Звонок
-                    ];
-                $data = [
-                    'filter' => $filter,
+            $filter =
+                [
+                    'OWNER_TYPE_ID' => 2, // 2- deal 3 - contact 4 - company
+                    'OWNER_ID' => $dealsIds, // 2976,
+                    "TYPE_ID" => 2 // Тип активности - Звонок
                 ];
-                $dealActivities = BitrixGeneralService::getEntityListWithFullData(
-                    $this->hook,
-                    'activity',
-                    $data,
-                );
-                if(!empty($dealActivities)){
-                    foreach($dealActivities as $dealActivitiy){
-                        array_push($activities, $dealActivitiy);
-    
-                    }
 
+            $order = ['ID' => 'DESC'];
+            $data = [
+                'filter' => $filter,
+                'order' => $order,
+            ];
+            $dealActivities = BitrixGeneralService::getEntityListWithFullData(
+                $this->hook,
+                'activity',
+                $data,
+            );
+            if (!empty($dealActivities)) {
+                foreach ($dealActivities as $dealActivitiy) {
+                    array_push($activities, $dealActivitiy);
                 }
+            }
 
             // }
         }
         if (!empty($contactIds)) {
-            foreach ($contactIds as $contactId) {
-                $filter =
-                    [
-                        'OWNER_TYPE_ID' => 3, // 2- deal 3 - contact 4 - company
-                        'OWNER_ID' => $contactId, // 2976,
-                        "TYPE_ID" => 2 // Тип активности - Звонок
-                    ];
-                $data = [
-                    'filter' => $filter,
+            $filter =
+                [
+                    'OWNER_TYPE_ID' => 3, // 2- deal 3 - contact 4 - company
+                    'OWNER_ID' => $contactIds, // 2976,
+                    "TYPE_ID" => 2 // Тип активности - Звонок
                 ];
-                $contactActivities = BitrixGeneralService::getEntityListWithFullData(
-                    $this->hook,
-                    'activity',
-                    $data,
-                );
-                if(!empty($contactActivities)){
-             
-                        foreach($contactActivities as $contactActivity){
-                            array_push($activities, $contactActivity);
-        
-                        }
-    
-                    
+            $order = ['ID' => 'DESC'];
 
+            $data = [
+                'filter' => $filter,
+                'order' => $order,
+            ];
+            $contactActivities = BitrixGeneralService::getEntityListWithFullData(
+                $this->hook,
+                'activity',
+                $data,
+            );
+            if (!empty($contactActivities)) {
+
+                foreach ($contactActivities as $contactActivity) {
+                    array_push($activities, $contactActivity);
                 }
             }
+           
         }
         // $key = 'entity' . '_' . 'company';
         // $resultBatchCommands[$key] = $companyCommand; // в результате будет id
