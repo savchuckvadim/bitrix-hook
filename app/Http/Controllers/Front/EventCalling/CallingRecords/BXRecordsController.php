@@ -244,7 +244,12 @@ class BXRecordsController extends Controller
                 $data,
 
             );
-            array_push($activities, $companyActivities);
+            if(!empty($companyActivities)){
+                foreach($companyActivities as $cmpnActivity){
+                    array_push($activities, $cmpnActivity);
+
+                }
+            }
         }
         if (!empty($deals)) {
             foreach ($deals as $deal) {
@@ -263,7 +268,10 @@ class BXRecordsController extends Controller
                     $data,
                 );
                 if(!empty($dealActivities)){
-                    array_push($activities, $dealActivities);
+                    foreach($dealActivities as $dealActivitiy){
+                        array_push($activities, $dealActivitiy);
+    
+                    }
 
                 }
 
@@ -286,7 +294,13 @@ class BXRecordsController extends Controller
                     $data,
                 );
                 if(!empty($contactActivities)){
-                    array_push($activities, $contactActivities);
+             
+                        foreach($contactActivities as $contactActivity){
+                            array_push($activities, $contactActivity);
+        
+                        }
+    
+                    
 
                 }
             }
