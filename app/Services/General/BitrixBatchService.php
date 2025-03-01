@@ -121,6 +121,11 @@ class BitrixBatchService
         ];
 
         foreach ($batchRequests as $key => $batchCommands) {
+            Log::channel('telegram')->info('HOOK TEST Service BATCH', [
+                'key' => $key
+
+
+            ]);
             $response = Http::post($url, [
                 'halt' => 0,
                 'cmd' => $batchCommands
@@ -134,13 +139,16 @@ class BitrixBatchService
             // print_r($responseData);
             if (isset($responseData['result'])) {
                 $result[$key] = $responseData['result'];
-         
+
 
 
                 if (isset($responseData['result']['result'])) {
                     $result[$key] = $responseData['result']['result'];
+                    Log::channel('telegram')->info('HOOK TEST Service BATCH', [
+                        'result' => $responseData['result']['result']
 
-                  
+
+                    ]);
                 }
                 if (!empty($responseData['result']['result'][0])) {
                     $result[$key] = $responseData['result']['result'][0];
@@ -379,7 +387,7 @@ class BitrixBatchService
 
             if (isset($responseData['result'])) {
                 $result[$key] = $responseData['result'];
-         
+
                 Log::channel('telegram')->info('HOOK TEST sendGeneralRecursiveBatchRequest Service BATCH', [
                     '1result[$key]' => $result[$key]
 
@@ -392,8 +400,6 @@ class BitrixBatchService
                 ]);
                 if (isset($responseData['result']['result'])) {
                     $result[$key] = $responseData['result']['result'];
-
-                  
                 }
                 if (!empty($responseData['result']['result'][0])) {
                     $result[$key] = $responseData['result']['result'][0];
@@ -409,7 +415,6 @@ class BitrixBatchService
 
                 ]);
             }
-         
         };
 
         // if (isset($result[0])) {
