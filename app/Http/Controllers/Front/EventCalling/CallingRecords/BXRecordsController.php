@@ -188,14 +188,15 @@ class BXRecordsController extends Controller
         $data = [
             'filter' => $filter,
             'order' => $sort,
+            'select' => ['ID']
         ];
-        $getDealCommand = BitrixGeneralService::getEntityListWithFullData(
+        $deals = BitrixGeneralService::getEntityListWithFullData(
             $this->hook,
             'deal',
             $data,
     
         );
-        $commands['sales_deal'] = $getDealCommand;
+        $deals;
         return $commands;
     }
 
