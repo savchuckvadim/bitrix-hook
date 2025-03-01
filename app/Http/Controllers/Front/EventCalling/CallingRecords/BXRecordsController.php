@@ -73,9 +73,9 @@ class BXRecordsController extends Controller
             $records = $this->getFilesFromActivities($activities);
          
             return APIOnlineController::getSuccess([
-                // 'deals' => $dealsIds,
-                // 'contactIds' => $contactIds,
-                // 'activities' => $activities,
+                'deals' => $dealsIds,
+                'contactIds' => $contactIds,
+                'activities' => $activities,
                 'records' => $records
             ]);
         } catch (\Throwable $th) {
