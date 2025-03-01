@@ -374,7 +374,7 @@ class BXRecordsController extends Controller
         //     throw new \Exception("Ошибка batch-запроса: " . $response->body());
         // }
         $batchService = new BitrixBatchService($this->hook);
-        $result = $batchService->sendGeneralBatchRequest($batchCommands);
+        $result = $batchService->sendGeneralBatchRequest([$batchCommands]);
         // 🔹 Обновляем файлы с правильными URL
         // $batchResults = $response->json()['result'] ?? [];
         // foreach ($batchResults as $key => $fileData) {
