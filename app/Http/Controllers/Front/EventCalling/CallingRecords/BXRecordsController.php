@@ -58,7 +58,7 @@ class BXRecordsController extends Controller
 
 
 
-    public  function getRecords($companyId)
+    public  function getRecords($companyId, $contactIds)
     {
 
         $batchResults = null;
@@ -131,11 +131,11 @@ class BXRecordsController extends Controller
             $activities = [];
 
             $deals = $this->getCurrentDeal($companyId);
-            $contacts = $this->getContacts($companyId);
-            $activities =  $this->getActivities($companyId, $deals, $contacts);
+            // $contacts = $this->getContacts($companyId);
+            $activities =  $this->getActivities($companyId, $deals, $contactIds);
             return APIOnlineController::getSuccess([
                 'deals' => $deals,
-                'contacts' => $contacts,
+                'contactIds' => $contactIds,
                 'activities' => $activities
             ]);
         } catch (\Throwable $th) {
@@ -224,7 +224,7 @@ class BXRecordsController extends Controller
     }
 
 
-    protected function getActivities($companyId, $deals, $contacts)
+    protected function getActivities($companyId, $deals, $contactIds)
     {
         $activities = [];
 
@@ -269,12 +269,12 @@ class BXRecordsController extends Controller
 
             }
         }
-        if (!empty($contacts)) {
-            foreach ($contacts as $contact) {
+        if (!empty($contactIds)) {
+            foreach ($contactIds as $contactId) {
                 $filter =
                     [
                         'OWNER_TYPE_ID' => 3, // 2- deal 3 - contact 4 - company
-                        'OWNER_ID' => $contact['ID'], // 2976,
+                        'OWNER_ID' => $contactId, // 2976,
                         "TYPE_ID" => 2 // Тип активности - Звонок
                     ];
                 $data = [

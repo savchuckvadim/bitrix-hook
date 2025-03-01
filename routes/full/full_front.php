@@ -25,7 +25,8 @@ Route::prefix('flow-front')->group(function () {
         $domain = $request->domain;
         $companyId = $request->companyId;
         $userId = $request->userId;
+        $contactIds = $request->contactIds;
         $controller = new BXRecordsController($domain);
-        return $controller->getRecords($companyId);
+        return $controller->getRecords($companyId, $contactIds);
     });
 });
