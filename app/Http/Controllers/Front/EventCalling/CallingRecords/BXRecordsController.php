@@ -130,14 +130,11 @@ class BXRecordsController extends Controller
             $result = [];
             $commands = [];
 
-            $commands = $this->getCurrentDealCommand($companyId, $commands);
-            $batch = new BitrixBatchService($this->hook);
-            $batchResults = $batch->sendGeneralBatchRequest([$commands]);
+            $deals = $this->getCurrentDeal($companyId, $commands);
             $contacts = $this->getContacts($companyId);
             //  $currentDealId = '$result[' . $key . ']';
             return APIOnlineController::getSuccess([
-                'commands' => $commands,
-                'batchResults' => $batchResults,
+                'deals' => $deals,
                 'contacts' => $contacts
             ]);
         } catch (\Throwable $th) {
