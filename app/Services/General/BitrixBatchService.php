@@ -122,8 +122,8 @@ class BitrixBatchService
 
         foreach ($batchRequests as $key => $batchCommands) {
             Log::channel('telegram')->info('HOOK TEST Service BATCH', [
-                'key' => $key
-
+                'key' => $key,
+                'batchCommands' => $batchCommands
 
             ]);
             $response = Http::post($url, [
