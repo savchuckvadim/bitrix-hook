@@ -182,7 +182,7 @@ class BXRecordsController extends Controller
         $categoryId = $this->getSaleDealCategoryId();
         $filter = [
             'COMPANY_ID' => $companyId,
-            'CATEGORY_ID' => $categoryId,
+            // 'CATEGORY_ID' => $categoryId,
 
         ];
         $sort = ['ID' => 'DESC'];
