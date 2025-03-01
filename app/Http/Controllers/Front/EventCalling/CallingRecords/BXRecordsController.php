@@ -297,10 +297,13 @@ class BXRecordsController extends Controller
         // 🔹 Формируем batch-запрос
         $batchCommands = [];
         foreach ($files as $fileId => $file) {
-            $batchCommands["get_{$fileId}"] = [
-                'method' => 'disk.file.get',
-                'params' => ['id' => $fileId]
+            $method = 'disk.file.get';
+            $data = [
+             'id' => $fileId
             ];
+            $command = $method . '?' . http_build_query($data);
+  
+            $batchCommands["get_{$fileId}"] = $command;
         }
 
 
