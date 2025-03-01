@@ -179,7 +179,7 @@ class BXRecordsController extends Controller
         );
         return $contacts;
     }
-    protected function getCurrentDealCommand($companyId, $commands)
+    protected function getCurrentDeal($companyId, $commands)
     {
         $categoryId = $this->getSaleDealCategoryId();
         $filter = [
@@ -192,9 +192,11 @@ class BXRecordsController extends Controller
             'filter' => $filter,
             'order' => $sort,
         ];
-        $getDealCommand = BitrixBatchService::getGeneralBatchCommand(
+        $getDealCommand = BitrixGeneralService::getEntityListWithFullData(
+            $this->hook,
+            'deal',
             $data,
-            'crm.deal.get'
+    
         );
         $commands['sales_deal'] = $getDealCommand;
         return $commands;
