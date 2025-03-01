@@ -130,7 +130,7 @@ class BXRecordsController extends Controller
             $result = [];
             $commands = [];
 
-            $deals = $this->getCurrentDeal($companyId, $commands);
+            $deals = $this->getCurrentDeal($companyId);
             $contacts = $this->getContacts($companyId);
             //  $currentDealId = '$result[' . $key . ']';
             return APIOnlineController::getSuccess([
@@ -176,7 +176,7 @@ class BXRecordsController extends Controller
         );
         return $contacts;
     }
-    protected function getCurrentDeal($companyId, $commands)
+    protected function getCurrentDeal($companyId)
     {
         $categoryId = $this->getSaleDealCategoryId();
         $filter = [
@@ -196,8 +196,7 @@ class BXRecordsController extends Controller
             $data,
     
         );
-        $deals;
-        return $commands;
+        return $deals;
     }
 
     protected function getSaleDealCategoryId()
