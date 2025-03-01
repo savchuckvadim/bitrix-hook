@@ -166,7 +166,7 @@ class BXRecordsController extends Controller
         $data = [
             'filter' => $filter,
             'order' => $sort,
-            'select' => ['ID', 'NAME', 'SECOND_NAME', 'POST', 'COMMENTS', 'PHONE', 'HAS_PHONE']
+            'select' => ['ID', 'NAME', 'SECOND_NAME', 'LAST_NAME','POST', 'COMMENTS', 'PHONE', 'HAS_PHONE']
         ];
         $contacts = BitrixGeneralService::getEntityListWithFullData(
             $this->hook,
