@@ -366,23 +366,25 @@ class BXRecordsController extends Controller
         }
 
         // 🔹 Отправляем batch-запрос
-        $response = Http::post("{$this->hook}/batch", [
-            'cmd' => $batchCommands,
-        ]);
+        // $response = Http::post("{$this->hook}/batch", [
+        //     'cmd' => $batchCommands,
+        // ]);
 
-        if ($response->failed()) {
-            throw new \Exception("Ошибка batch-запроса: " . $response->body());
-        }
-
+        // if ($response->failed()) {
+        //     throw new \Exception("Ошибка batch-запроса: " . $response->body());
+        // }
+        $batchService = new BitrixBatchService($this->hook);
+        $result = $batchService->sendGeneralBatchRequest($batchCommands);
         // 🔹 Обновляем файлы с правильными URL
-        $batchResults = $response->json()['result'] ?? [];
-        foreach ($batchResults as $key => $fileData) {
-            $fileId = str_replace("get_", "", $key); // Извлекаем ID файла
-            if (isset($files[$fileId]) && isset($fileData['DOWNLOAD_URL'])) {
-                $files[$fileId]['url'] = $fileData['DOWNLOAD_URL'];
-            }
-        }
+        // $batchResults = $response->json()['result'] ?? [];
+        // foreach ($batchResults as $key => $fileData) {
+        //     $fileId = str_replace("get_", "", $key); // Извлекаем ID файла
+        //     if (isset($files[$fileId]) && isset($fileData['DOWNLOAD_URL'])) {
+        //         $files[$fileId]['url'] = $fileData['DOWNLOAD_URL'];
+        //     }
+        // }
 
-        return array_values($files); // Возвращаем список файлов
+        // return array_values($files); // Возвращаем список файлов
+        return $result;
     }
 }
