@@ -318,8 +318,8 @@ class BXRecordsController extends Controller
                 $files[$fileId]['url'] = $fileData['DOWNLOAD_URL'];
             }
         }
-        return $batchResults;
-        // return array_values($files); // Возвращаем список файлов
+     
+        return array_values($files); // Возвращаем список файлов
     }
 
     public function sendBatchRequest(array $commands): array
