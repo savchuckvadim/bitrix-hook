@@ -307,6 +307,11 @@ class BXRecordsController extends Controller
             }
            
         }
+
+        usort($activities, function ($a, $b) {
+            return $a->ID <=> $b->ID; // Сортировка по возрастанию
+        });
+        
         // $key = 'entity' . '_' . 'company';
         // $resultBatchCommands[$key] = $companyCommand; // в результате будет id
 
