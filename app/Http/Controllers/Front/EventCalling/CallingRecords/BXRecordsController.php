@@ -135,7 +135,8 @@ class BXRecordsController extends Controller
             $activities =  $this->getActivities($companyId, $deals, $contacts);
             return APIOnlineController::getSuccess([
                 'deals' => $deals,
-                'contacts' => $contacts
+                'contacts' => $contacts,
+                'activities' => $activities
             ]);
         } catch (\Throwable $th) {
             $errorMessages =  [
