@@ -1241,6 +1241,7 @@ class ColdBatchService
                 $this->responsibleId,
                 $this->deadline,
                 $this->name,
+                $this->name,
                 $currentSmartItemId,
                 true, //$isNeedCompleteOtherTasks
                 null,

@@ -3873,6 +3873,7 @@ class EventReportService
                         $this->planResponsibleId,
                         $this->planDeadline,
                         $this->currentPlanEventName,
+                        $this->comment,
                         null, // $currentSmartItemId,
                         false, //$isNeedCompleteOtherTasks
                         $currentTaskId, // null,

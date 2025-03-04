@@ -256,6 +256,7 @@ class BitrixTaskService
         $responsibleId,
         $deadline,
         $name,
+        $comment,
         $currentSmartItemId,
         $isNeedCompleteOtherTasks,
         $currentTaskId = null,
@@ -369,7 +370,7 @@ class BitrixTaskService
 
             if (!empty($contactName)) {
                 $taskTitle .=  '  ' . $contactName;
-            } 
+            }
             // else {
             //     $taskTitle .= '  ' . $deadline;
             // }
@@ -397,6 +398,7 @@ class BitrixTaskService
                     'UF_CRM_TASK' => $crmItems,
                     'ALLOW_CHANGE_DEADLINE' => 'Y',
                     'PRIORITY' => $isPriority ? 2 : 1,
+                    'UF_TASK_EVENT_COMMENT' =>  $comment
                     // 'DESCRIPTION' => $description
                 ]
             ];
