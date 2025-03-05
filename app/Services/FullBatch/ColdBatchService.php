@@ -361,7 +361,7 @@ class ColdBatchService
 
                                 break;
 
-                                // case 'op_history':
+                            // case 'op_history':
                             case 'op_mhistory':
 
                                 $fullFieldId = 'UF_CRM_' . $pField['bitrixId'];  //UF_CRM_OP_MHISTORY
@@ -994,7 +994,7 @@ class ColdBatchService
         $planDeadline = $this->deadline;
         // Log::channel('telegram')->info('DEBUG TIMEZONE', [
         //     'original_deadline' => $this->deadline,
-           
+
         // ]);
         if ($this->domain === 'alfacentr.bitrix24.ru') {
 
@@ -1004,14 +1004,14 @@ class ColdBatchService
         } else   if ($this->domain === 'gsirk.bitrix24.ru') {
 
 
-            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'Asia/Irkutsk'); 
+            $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'Asia/Irkutsk');
             $tmpDeadline = $tmpDeadline->setTimezone('Europe/Moscow');
             $planDeadline = $tmpDeadline->format('Y-m-d H:i:s');
             // $planDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'Europe/Moscow')
             // // ->setTimezone('Asia/Irkutsk')
             // ->format('Y-m-d H:i:s');
         }
-     
+
         Log::channel('telegram')->info('APRIL_HOOK list deadline', [
             'cold list result planDeadline ' . $this->domain => $planDeadline
         ]);
@@ -1117,13 +1117,16 @@ class ColdBatchService
         //         );
         //     }
         // }
+        if ($this->domain !== 'gsirk.bitrix24.ru') {
 
-        sleep(1);
-        BitrixGeneralService::updateContactsToCompanyRespnsible(
-            $this->hook,
-            $this->entityId,
-            ["ASSIGNED_BY_ID" => $this->responsibleId]
-        );
+
+            sleep(1);
+            BitrixGeneralService::updateContactsToCompanyRespnsible(
+                $this->hook,
+                $this->entityId,
+                ["ASSIGNED_BY_ID" => $this->responsibleId]
+            );
+        }
         return [
             'planDeals' => ' $planDeals',
         ];
