@@ -1684,7 +1684,7 @@ class EventReportService
             $this->currentPlanEventName,
             $this->comment,
             $reportFields,
-            $this->isPostSale
+            empty($this->isPostSale) ? false : true
         );
 
 
@@ -2019,7 +2019,7 @@ class EventReportService
             $this->currentPlanEventName,
             $this->comment,
             $reportFields,
-            $this->isPostSale
+            empty($this->isPostSale) ? false : true
         );
 
 
@@ -2218,20 +2218,20 @@ class EventReportService
 
 
 
+        if (empty($this->isPostSale)) {
+            if (empty($currentBtxDeals)) {   //если текущие сделки отсутствуют значит надо сначала создать базовую - чтобы нормально отработал поток
+                $setNewDealData = [
+                    'COMPANY_ID' => $this->entityId,
+                    'CATEGORY_ID' => $this->btxDealBaseCategoryId,
+                    'ASSIGNED_BY_ID' => $this->planResponsibleId,
+                ];
+                $currentDealId = BitrixDealService::setDeal(
+                    $this->hook,
+                    $setNewDealData,
 
-        if (empty($currentBtxDeals)) {   //если текущие сделки отсутствуют значит надо сначала создать базовую - чтобы нормально отработал поток
-            $setNewDealData = [
-                'COMPANY_ID' => $this->entityId,
-                'CATEGORY_ID' => $this->btxDealBaseCategoryId,
-                'ASSIGNED_BY_ID' => $this->planResponsibleId,
-            ];
-            $currentDealId = BitrixDealService::setDeal(
-                $this->hook,
-                $setNewDealData,
+                );
 
-            );
 
-            if (!$this->isPostSale) {
 
 
                 if (!empty($currentDealId) && empty($this->currentBaseDeal)) {
@@ -2340,7 +2340,7 @@ class EventReportService
 
 
         //DEALS FLOW
-        if (!$this->isPostSale) {
+        if (empty($this->isPostSale)) {
             foreach ($this->portalDealData['categories'] as $category) {
 
                 switch ($category['code']) {
