@@ -175,7 +175,7 @@ class BXRecordsController extends Controller
         if (!empty($companyId)) {
             $filter =
                 [
-                    'OWNER_TYPE_ID' => 3, // 2- deal 3 - contact 4 - company
+                    'OWNER_TYPE_ID' => 4, // 2- deal 3 - contact 4 - company
                     'OWNER_ID' => $companyId, // 2976,
                     "TYPE_ID" => 2 // Тип активности - Звонок
                 ];

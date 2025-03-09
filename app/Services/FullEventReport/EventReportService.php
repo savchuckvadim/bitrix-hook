@@ -180,6 +180,7 @@ class EventReportService
 
 
     protected $isNoCall = false;
+    protected $isPostSale = false;
     // {
     //     name: 
     //     pnone:
