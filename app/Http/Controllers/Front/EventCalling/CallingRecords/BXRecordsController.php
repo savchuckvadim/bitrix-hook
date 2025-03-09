@@ -69,7 +69,8 @@ class BXRecordsController extends Controller
             $activities = [];
 
             $dealsIds = $this->getCurrentDealIds($companyId);
-            $activities =  $this->getActivities($companyId, $dealsIds, $contactIds);
+            $leadsIds = $this->getCurrentLeadIds($companyId);
+            $activities =  $this->getActivities($companyId,$leadsIds, $dealsIds, $contactIds);
             $records = $this->getFilesFromActivities($activities);
 
             return APIOnlineController::getSuccess([
@@ -144,6 +145,31 @@ class BXRecordsController extends Controller
         return $resultIds;
     }
 
+    protected function getCurrentLeadIds($companyId)
+    {
+        $resultIds = [];
+        $filter = [
+            'COMPANY_ID' => $companyId,
+            // 'CATEGORY_ID' => $categoryId,
+
+        ];
+        $order = ['ID' => 'DESC'];
+        $data = [
+            'filter' => $filter,
+            'order' => $order,
+            'select' => ['ID']
+        ];
+        $leads = BitrixGeneralService::getEntityListWithFullData(
+            $this->hook,
+            'lead',
+            $data,
+
+        );
+        foreach ($leads as $lead) {
+            $resultIds[] = $lead['ID'];
+        }
+        return $resultIds;
+    }
     protected function getSaleDealCategoryId()
     {
         $portal = $this->portal;
@@ -168,16 +194,44 @@ class BXRecordsController extends Controller
     }
 
 
-    protected function getActivities($companyId, $dealsIds, $contactIds)
+    protected function getActivities($companyId,$leadsIds, $dealsIds, $contactIds)
     {
         $activities = [];
+
+        if (!empty($leadsIds)) {
+            // foreach ($dealsIds as $dealId) {
+            $filter =
+                [
+                    'OWNER_TYPE_ID' => 1, // 2- deal 3 - contact 4 - company
+                    'OWNER_ID' => $leadsIds, // 2976,
+                    "TYPE_ID" => 2 // Тип активности - Звонок
+                ];
+
+            $order = ['ID' => 'DESC'];
+            $data = [
+                'filter' => $filter,
+                'order' => $order,
+            ];
+            $leadActivities = BitrixGeneralService::getEntityListWithFullData(
+                $this->hook,
+                'activity',
+                $data,
+            );
+            if (!empty($leadActivities)) {
+                foreach ($leadActivities as $leadActivity) {
+                    array_push($activities, $leadActivity);
+                }
+            }
+
+            // }
+        }
 
         if (!empty($companyId)) {
             $filter =
                 [
                     'OWNER_TYPE_ID' => 4, // 2- deal 3 - contact 4 - company
-                    // 'OWNER_ID' => $companyId, // 2976,
-                    // "TYPE_ID" => 2 // Тип активности - Звонок
+                    'OWNER_ID' => $companyId, // 2976,
+                    "TYPE_ID" => 2 // Тип активности - Звонок
                 ];
             $order = ['ID' => 'DESC'];
             $data = [
