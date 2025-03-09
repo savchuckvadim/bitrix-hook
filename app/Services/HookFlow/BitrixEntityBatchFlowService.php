@@ -89,6 +89,7 @@ class BitrixEntityBatchFlowService
         $currentPlanEventName,
         $comment,
         $currentFieldsForUpdate,
+        $isPostSale
 
     ) {
 
@@ -155,7 +156,8 @@ class BitrixEntityBatchFlowService
                     $currentReportEventName,
                     $currentPlanEventName,
                     $comment,
-                    $entityType
+                    $entityType,
+                    $isPostSale
 
                 );
 
@@ -534,7 +536,8 @@ class BitrixEntityBatchFlowService
         $currentReportEventName,
         $currentPlanEventName,
         $comment,
-        $entityType
+        $entityType,
+        $isPostSale
 
     ) {
 
@@ -708,7 +711,7 @@ class BitrixEntityBatchFlowService
         }
 
 
-        if ($entityType == 'company') {
+        if ($entityType == 'company' && !$isPostSale) {
             $updatedFields['ASSIGNED_BY_ID'] = $responsibleId;
         }
         // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [

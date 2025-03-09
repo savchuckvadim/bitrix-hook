@@ -521,7 +521,7 @@ class BitrixListFlowService
 
             if ($eventType == 'xo' || $eventType == 'cold') {
                 $evTypeName = 'Холодный звонок';
-            } else if ($eventType == 'warm' || $eventType == 'call') {
+            } else if ($eventType == 'warm' || $eventType == 'call' || $eventType == 'supply') {
                 $evTypeName = 'Звонок';
             } else if ($eventType == 'presentation') {
                 $evTypeName = 'Презентация';
@@ -976,7 +976,7 @@ class BitrixListFlowService
         // Отказ	event_type	ev_fail
 
         $result = 'xo';
-        if ($eventType === 'call' || $eventType === 'warm') {
+        if ($eventType === 'call' || $eventType === 'warm' || $eventType === 'supply') {
             $result = 'call';
         } else if ($eventType === 'presentation') {
             $result = 'presentation';
