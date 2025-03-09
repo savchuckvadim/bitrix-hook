@@ -2329,14 +2329,14 @@ class EventReportService
 
         //         ]
         //     );
-        // Log::channel('telegram')
-        //     ->info(
-        //         'vheck',
-        //         [
-        //             'currentTMCDeal' => $this->currentTMCDeal,
+        Log::channel('telegram')
+            ->info(
+                'isPostSale',
+                [
+                    'isPostSale' => $this->isPostSale,
 
-        //         ]
-        //     );
+                ]
+            );
 
 
         //DEALS FLOW

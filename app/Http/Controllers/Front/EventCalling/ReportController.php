@@ -33,19 +33,20 @@ class ReportController extends Controller
                 'contact' => null,
                 'lead' => null,
                 'fail' => null,
+                'isPostSale' => false
 
             ];
             $isFullData = true;
             $dataRequest = $request->all();
             if (isset($dataRequest['lead'])) {
                 $data['lead'] = $dataRequest['lead'];
-                Log::channel('telegram')->info(
-                    'data[lead]',
-                    [
-                        'leadID' => $data['lead']['ID'],
+                // Log::channel('telegram')->info(
+                //     'isPostSale',
+                //     [
+                //         'isPostSale' => $data['isPostSale']['ID'],
 
-                    ]
-                );
+                //     ]
+                // );
             }
             if (isset($request->fail)) {
                 $data['fail'] = $request->fail;
@@ -99,6 +100,9 @@ class ReportController extends Controller
             }
             if (isset($request->contact)) {
                 $data['contact'] = $request->contact;
+            }
+            if (isset($request->isPostSale)) {
+                $data['isPostSale'] = $request->isPostSale;
             }
             if ($isFullData) {
                 // $service = new EventReportService($data);
