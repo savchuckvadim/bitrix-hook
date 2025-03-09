@@ -133,7 +133,7 @@ const Calender = props => {
     })
   );
   const { events, categories } = useSelector(calendarSelector);
-
+debugger
   const [modal, setModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [modalcategory, setModalcategory] = useState(false);
@@ -298,9 +298,9 @@ const Calender = props => {
                         <p className="text-muted">
                           Drag and drop your event or click in the calendar
                         </p>
-                        {categories &&
-                          categories.map((category, i) => (
-                            <div
+                        {categories && categories.length &&
+                          categories.map((category, i) => {
+                           return <div
                               className={`${category.type} external-event fc-event text-white`}
                               key={"cat-" + category.id}
                               draggable
@@ -309,7 +309,7 @@ const Calender = props => {
                               <i className="mdi mdi-checkbox-blank-circle font-size-11 me-2" />
                               {category.title}
                             </div>
-                          ))}
+                          })}
                       </div>
 
                       <Row className="justify-content-center mt-5">

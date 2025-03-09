@@ -264,9 +264,12 @@ class EventReportService
                     $this->reportContactId = $data['report']['contact']['ID'];
                 }
             }
+            if (isset($data['report']['isNoCall'])) {
 
-            if (!empty($data['report']['isNoCall'])) {
-                $this->isNoCall = $data['report']['isNoCall'];
+
+                if (!empty($data['report']['isNoCall'])) {
+                    $this->isNoCall = $data['report']['isNoCall'];
+                }
             }
         }
 
@@ -1122,10 +1125,10 @@ class EventReportService
             // ]);
             if ($this->isExpired) {
                 switch ($this->currentReportEventType) {
-                        // 0: {id: 1, code: "warm", name: "Звонок"}
-                        // // 1: {id: 2, code: "presentation", name: "Презентация"}
-                        // // 2: {id: 3, code: "hot", name: "Решение"}
-                        // // 3: {id: 4, code: "moneyAwait", name: "Оплата"}
+                    // 0: {id: 1, code: "warm", name: "Звонок"}
+                    // // 1: {id: 2, code: "presentation", name: "Презентация"}
+                    // // 2: {id: 3, code: "hot", name: "Решение"}
+                    // // 3: {id: 4, code: "moneyAwait", name: "Оплата"}
                     case 'xo':
                         $reportFields['xo_date'] = $this->planDeadline;
                         $reportFields['op_current_status'] = 'Перенос: ' . $this->currentReportEventName;
@@ -1161,10 +1164,10 @@ class EventReportService
 
 
                 switch ($currentPlanEventType) {
-                        // 0: {id: 1, code: "warm", name: "Звонок"}
-                        // // 1: {id: 2, code: "presentation", name: "Презентация"}
-                        // // 2: {id: 3, code: "hot", name: "Решение"}
-                        // // 3: {id: 4, code: "moneyAwait", name: "Оплата"}
+                    // 0: {id: 1, code: "warm", name: "Звонок"}
+                    // // 1: {id: 2, code: "presentation", name: "Презентация"}
+                    // // 2: {id: 3, code: "hot", name: "Решение"}
+                    // // 3: {id: 4, code: "moneyAwait", name: "Оплата"}
                     case 'xo':
                         $reportFields['xo_date'] = $this->planDeadline;
                         $reportFields['xo_name'] = $this->currentPlanEventName;
@@ -1491,10 +1494,10 @@ class EventReportService
 
 
             switch ($currentPlanEventType) {
-                    // 0: {id: 1, code: "warm", name: "Звонок"}
-                    // // 1: {id: 2, code: "presentation", name: "Презентация"}
-                    // // 2: {id: 3, code: "hot", name: "Решение"}
-                    // // 3: {id: 4, code: "moneyAwait", name: "Оплата"}
+                // 0: {id: 1, code: "warm", name: "Звонок"}
+                // // 1: {id: 2, code: "presentation", name: "Презентация"}
+                // // 2: {id: 3, code: "hot", name: "Решение"}
+                // // 3: {id: 4, code: "moneyAwait", name: "Оплата"}
                 case 'xo':
                     $reportFields['xo_date'] = $this->planDeadline;
                     $reportFields['xo_name'] = $this->currentPlanEventName;
@@ -1852,10 +1855,10 @@ class EventReportService
 
 
             switch ($currentPlanEventType) {
-                    // 0: {id: 1, code: "warm", name: "Звонок"}
-                    // // 1: {id: 2, code: "presentation", name: "Презентация"}
-                    // // 2: {id: 3, code: "hot", name: "Решение"}
-                    // // 3: {id: 4, code: "moneyAwait", name: "Оплата"}
+                // 0: {id: 1, code: "warm", name: "Звонок"}
+                // // 1: {id: 2, code: "presentation", name: "Презентация"}
+                // // 2: {id: 3, code: "hot", name: "Решение"}
+                // // 3: {id: 4, code: "moneyAwait", name: "Оплата"}
                 case 'xo':
                     $reportFields['xo_date'] = $this->planDeadline;
                     $reportFields['xo_name'] = $this->currentPlanEventName;
