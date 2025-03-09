@@ -177,10 +177,12 @@ class BXRecordsController extends Controller
                 [
                     'OWNER_TYPE_ID' => 4, // 2- deal 3 - contact 4 - company
                     'OWNER_ID' => $companyId, // 2976,
-                    "TYPE_ID" => 2 // Тип активности - Звонок
+                    // "TYPE_ID" => 2 // Тип активности - Звонок
                 ];
+            $order = ['ID' => 'DESC'];
             $data = [
                 'filter' => $filter,
+                'order' => $order,
             ];
             $companyActivities = BitrixGeneralService::getEntityListWithFullData(
                 $this->hook,
@@ -299,10 +301,10 @@ class BXRecordsController extends Controller
         foreach ($files as $fileId => $file) {
             $method = 'disk.file.get';
             $data = [
-             'id' => $fileId
+                'id' => $fileId
             ];
             $command = $method . '?' . http_build_query($data);
-  
+
             $batchCommands["get_{$fileId}"] = $command;
         }
 
@@ -318,7 +320,7 @@ class BXRecordsController extends Controller
                 $files[$fileId]['url'] = $fileData['DOWNLOAD_URL'];
             }
         }
-     
+
         return array_values($files); // Возвращаем список файлов
     }
 

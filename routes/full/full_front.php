@@ -24,7 +24,7 @@ Route::prefix('flow-front')->group(function () {
     Route::post('/records', function (Request $request) {
         $domain = $request->domain;
         $companyId = $request->companyId;
-        $userId = $request->userId;
+        // $userId = $request->userId;
         $contactIds = $request->contactIds;
         $controller = new BXRecordsController($domain);
         return $controller->getRecords($companyId, $contactIds);
