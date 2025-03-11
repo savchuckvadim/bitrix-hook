@@ -383,7 +383,7 @@ class BitrixTaskService
             }
             // }
             if ($companyId) {
-                array_push($tasksCrmRelations, 'CO_' . $companyId);
+                array_push($crmItems, 'CO_' . $companyId);
             }
 
             $taskData =  [
