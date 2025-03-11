@@ -16,7 +16,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/{any?}', [App\Http\Controllers\HomeController::class, 'index'])->where('any', '^(?!api\/)[\/\w\.-]*');
+Route::get('/{any?}', [App\Http\Controllers\HomeController::class, 'index'])
+    ->where('any', '^(?!api\/)[\/\w\.-]*');
+
+Route::post('/{any?}', [App\Http\Controllers\HomeController::class, 'index'])
+    ->where('any', '^(?!api\/)[\/\w\.-]*');
 
 // Auth::routes();
 

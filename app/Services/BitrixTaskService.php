@@ -309,9 +309,7 @@ class BitrixTaskService
             $currentSmartItem = null;
             $description = '';
             $tasksCrmRelations = [];
-            if ($companyId) {
-                array_push($tasksCrmRelations, 'CO_' . $companyId);
-            }
+
             if ($leadId) {
                 array_push($tasksCrmRelations, 'L_' . $leadId);
             }
@@ -384,7 +382,9 @@ class BitrixTaskService
                 }
             }
             // }
-
+            if ($companyId) {
+                array_push($tasksCrmRelations, 'CO_' . $companyId);
+            }
 
             $taskData =  [
                 'fields' => [
