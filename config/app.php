@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'name' => "Skote | React + Laravel 10 Admin And Dashboard Template",
+    'name' => "April Apps Manager",
 
     /*
     |--------------------------------------------------------------------------

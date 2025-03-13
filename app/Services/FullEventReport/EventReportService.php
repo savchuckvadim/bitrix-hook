@@ -2842,32 +2842,7 @@ class EventReportService
         }
         $batchService->sendGeneralBatchRequest($resultBatchCommands);
         $this->setTimeLine();
-        // Log::info('HOOK BATCH batchFlow report DEAL', ['report result' => $result]);
-        // Log::channel('telegram')->info('HOOK BATCH batchFlow', ['result' => $result]);
-        // Log::info('HOOK BATCH batchFlow report DEAL', ['planDeals planDeals' =>  $result['planDeals']]);
-        // Log::channel('telegram')->info('HOOK BATCH planDeals', ['planDeals' => $result['planDeals']]);
 
-        // if (!empty($result)) {
-        //     if (!empty($result['newPresDeal'])) {
-        //         $newPresDealId = $result['newPresDeal'];
-        //         $newPresDeal = BitrixDealService::getDeal(
-        //             $this->hook,
-        //             ['id' => $newPresDealId]
-
-
-        //         );
-        //     }
-        // }
-
-        // $result['unplannedPresDeals'] = [$unplannedPresDeal];
-        // $contactId = null;
-        // if (!empty($this->planContact)) {
-        //     if (!empty($this->planContact['current'])) {
-        //         if (!empty($this->planContact['current']['contact'])) {
-        //             $contactId = $this->planContact['current']['contact']['ID'];
-        //         }
-        //     }
-        // }
         return  $result;
     }
 
