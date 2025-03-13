@@ -42,7 +42,7 @@ export const generateRoutes = (entities, basePath = '') => {
 
     })
   } else {
-    console.log(entities)
+    // console.log(entities)
   }
 
 
@@ -73,7 +73,7 @@ export const generateChildrenRoutes = (entities) => {
         return entity.relations.includes(ent.id)
       })
       
-      console.log(childrenEntities)
+      // console.log(childrenEntities)
       if (childrenEntities && childrenEntities.length) {
         const newBasePath = `${entity.item.get.url}/:parentEntityId`;
         generateRoutes(childrenEntities, newBasePath).map(cheldrenRoute => {
@@ -84,8 +84,8 @@ export const generateChildrenRoutes = (entities) => {
     }
   });
 
-  console.log('children routes')
-  console.log(routes)
+  // console.log('children routes')
+  // console.log(routes)
 
   return routes;
 };
