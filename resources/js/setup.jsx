@@ -38,6 +38,9 @@ const Index = ({app}) => {
     );
     const { layoutType } = useSelector(selectLayoutData);
     const Layout = getLayout(layoutType);
+    const initial = window && window.__INITIAL_DATA__
+    console.log('initial')
+    console.log(initial)
     return (
         <React.Fragment>
         <Routes>

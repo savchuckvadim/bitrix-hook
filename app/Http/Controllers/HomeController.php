@@ -25,4 +25,14 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    public function post(Request $request)
+    {
+        $customData = [
+            // 'user' => $user ? ['id' => $user->id, 'name' => $user->name] : null,
+            'request_data' => $request->all(), // Передаём request-данные во фронт
+        ];
+
+        return view('bitrix', ['initialData' => json_encode($customData)]);
+    }
 }
