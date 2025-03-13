@@ -38,9 +38,8 @@ const Index = ({app}) => {
     );
     const { layoutType } = useSelector(selectLayoutData);
     const Layout = getLayout(layoutType);
-    const initial = window && window.__INITIAL_DATA__
-    console.log('initial')
-    console.log(initial)
+    const storedData = JSON.parse(localStorage.getItem("initialData"));
+    console.log("Данные из localStorage:", storedData);    console.log('initial')
     return (
         <React.Fragment>
         <Routes>
