@@ -211,7 +211,7 @@ class BitrixDealService
     ) {
         $responseData = null;
         try {
-            $methodSmart = '/crm.deal.get.json';
+            $methodSmart = '/crm.deal.get';
             $url = $hook . $methodSmart;
 
 

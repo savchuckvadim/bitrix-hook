@@ -1604,7 +1604,7 @@ class ReportController extends Controller
 
                             if (!empty($currentPresentationDeal)) {
                                 if (!empty($currentPresentationDeal['UF_CRM_TO_BASE_TMC'])) {
-                                    $tmcDeal =   BitrixDealService::getDealList(
+                                    $tmcDeal =   BitrixDealService::getDeal(
                                         $hook,
                                         ['ID' => $currentPresentationDeal['UF_CRM_TO_BASE_TMC']],
                                     );
@@ -1615,6 +1615,7 @@ class ReportController extends Controller
                         $result = [
                             'taskId' => $currentTask['id'],
                             'tmcDeal' => $tmcDeal,
+                            'presDeal' => $currentPresentationDeal
                         ];
                         array_push($results, $result);
                     }
