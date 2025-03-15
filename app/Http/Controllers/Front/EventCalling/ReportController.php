@@ -1461,6 +1461,199 @@ class ReportController extends Controller
         }
     }
 
+
+    public static function getFullTmcDealsFromPresTaks(Request $request) // GET DEALS AND INIT REDIS INIT EVENT FROM TASK  
+    {
+
+        // entities [deal, smart ...]
+        //companyId
+        //userId
+        //currentTask
+        $result = null;
+        try {
+            $data = $request->all();
+            if (
+                // !empty($data['userId'])  &&
+                // !empty($data['companyId']) &&
+                !empty($data['domain']) &&
+                !empty($data['tasks'])
+            ) {
+                $select = [
+                    'ID',
+                    'TITLE',
+                    'UF_CRM_PRES_COUNT',
+                    // 'UF_CRM_1709807026',
+
+
+                    'CATEGORY_ID',
+                    'ASSIGNED_BY_ID',
+                    // 'COMPANY_ID',
+                    'STAGE_ID',
+                    // 'XO_NAME',
+                    // 'XO_DATE',
+                    // 'XO_RESPONSIBLE',
+                    // 'XO_CREATED',
+                    // 'NEXT_PRES_PLAN_DATE',
+                    // 'LAST_PRES_PLAN_DATE',
+                    // 'LAST_PRES_DONE_DATE',
+                    // 'LAST_PRES_PLAN_RESPONSIBLE',
+                    // 'LAST_PRES_DONE_RESPONSIBLE',
+
+                    'UF_CRM_PRES_COMMENTS',
+                    'UF_CRM_MANAGER_OP',
+                    'UF_CRM_MANAGER_TMC',
+                    // 'MANAGER_OS',
+                    // 'MANAGER_EDU',
+                    // 'CALL_NEXT_DATE',
+                    // 'CALL_NEXT_NAME',
+                    // 'CALL_LAST_DATE',
+                    // 'GO_PLAN',
+                    'UF_CRM_OP_HISTORY',
+                    'UF_CRM_OP_MHISTORY',
+                    // 'OP_WORK_STATUS',
+                    // 'OP_PROSPECTS_TYPE',
+                    // 'OP_EFIELD_FAIL_REASON',
+                    // 'OP_FAIL_COMMENTS',
+                    // 'OP_NORESULT_REASON',
+                    // 'OP_CLIENT_STATUS',
+                    // 'OP_PROSPECTS',
+                    // 'OP_CLIENT_TYPE',
+                    // 'OP_CONCURENTS',
+                    // 'OP_CATEGORY',
+                    // 'OP_SMART_COMPANY_ID',
+                    // 'OP_SMART_ID',
+                    // 'OP_SMART_LID',
+                    // 'OP_SMART_LIDS',
+                    // 'OFFER_SUM',
+                    'UF_CRM_TO_BASE_SALES',
+                    'UF_CRM_TO_XO_SALES',
+                    'UF_CRM_TO_PRESENTATION_SALES',
+                    'UF_CRM_TO_BASE_TMC',
+                    'UF_CRM_TO_PRESENTATION_TMC',
+                    'UF_CRM_TO_BASE_SERVICE',
+                    'UF_CRM_OP_CURRENT_STATUS',
+
+                ];
+          
+                // $userId = $data['companyId'];
+                $domain = $data['domain'];
+                $companyId  = $data['domain'];
+                $btxDeals = []; //from task
+                $tasks =  $data['tasks'];
+
+
+
+                $portal = PortalController::getPortal($domain);
+                $portal = $portal['data'];
+                $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+                $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+             
+                $results = [];
+
+                if (!empty($tasks)) {
+                    foreach ($tasks as $currentTask) {
+                        //from task - получаем из task компании и сделки разных направлений
+                        $tmcDeal = null;
+                        $currentPresentationDeal = null;
+
+                        $currentBtxEntities =  BitrixEntityFlowService::getEntities(
+                            $hook,
+                            $currentTask,
+                        );
+                        if (!empty($currentBtxEntities)) {
+                            if (!empty($currentBtxEntities['companies'])) {
+                                $currentCompany = $currentBtxEntities['companies'][0];
+                            }
+                            if (!empty($currentBtxEntities['deals'])) {
+                                $btxDeals = $currentBtxEntities['deals'];
+                            }
+                        }
+
+
+
+                        $btxDealPortalCategories = null;
+
+                        if (!empty($portal['bitrixDeal'])) {
+                            if (!empty($portal['bitrixDeal']['categories'])) {
+                                $btxDealPortalCategories = $portal['bitrixDeal']['categories'];
+                            }
+                        }
+
+                        if (!empty($btxDealPortalCategories)) {
+
+                            //task current deals
+
+                            foreach ($btxDealPortalCategories as $btxDealPortalCategory) {
+                                if (!empty($btxDealPortalCategory['code'])) {
+
+                                    //ищем сделку категории Презентация из задачи
+                                    if ($btxDealPortalCategory['code'] == "sales_presentation") {
+                                        $currentPresentCategoryBtxId = $btxDealPortalCategory['bitrixId'];
+
+                                        foreach ($btxDeals as $btxDeal) {
+                                            if (!empty($btxDeal['CATEGORY_ID'])) {
+                                                if ($btxDeal['CATEGORY_ID'] == $currentPresentCategoryBtxId) {
+                                                    $currentPresentationDeal = $btxDeal;      // сделка презентации из задачи
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (!empty($currentPresentationDeal)) {
+                                if (!empty($currentPresentationDeal['UF_CRM_TO_BASE_TMC'])) {
+                                    $tmcDeal =   BitrixDealService::getDealList(
+                                        $hook,
+                                        ['ID' => $currentPresentationDeal['UF_CRM_TO_BASE_TMC']],
+                                    );
+                                }
+                            }
+                        }
+
+                        $result = [
+                            'taskId' => $currentTask['id'],
+                            'tmcDeal' => $tmcDeal,
+                        ];
+                        array_push($results, $result);
+                    }
+                }
+
+
+
+                return APIOnlineController::getSuccess(
+                    [
+                        'result' =>  $results,
+
+
+                    ]
+                );
+            } else {
+                return APIOnlineController::getError(
+                    'get tmc from pres tasks is not full data',
+                    [
+                        'rq' => $request->all()
+
+                    ]
+
+                );
+            }
+
+        } catch (\Throwable $th) {
+            return APIOnlineController::getError(
+                $th->getMessage(),
+                [
+                    'result' =>  $results,
+                    'rq' => $request->all()
+                ]
+
+            );
+        }
+    }
+
+
+
     public static function getDealsFromNewTaskInnerTMC(
         $domain,
         $hook,
@@ -2691,7 +2884,7 @@ class ReportController extends Controller
                             'allUsers' => $allUsers,
 
                             'department' => $department,
-       
+
                         ];
                         $result =  ['department' => $departmentResult];
                         FullEventInitController::setSessionItem(

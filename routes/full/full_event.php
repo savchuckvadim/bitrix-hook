@@ -331,6 +331,7 @@ Route::prefix('full')->group(function () {
     //TODO full department
 
     Route::post('/deals', [ReportController::class, 'getFullDeals']);
+    Route::post('/pres/tmcdeals', [ReportController::class, 'getFullTmcDealsFromPresTaks']);
     Route::post('/newTask/init', [ReportController::class, 'getDealsFromNewTaskInit']);
     Route::post('/supply', [ReportSupplyController::class, 'getSupplyForm']);
 
