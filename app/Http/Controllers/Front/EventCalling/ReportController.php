@@ -825,8 +825,9 @@ class ReportController extends Controller
                             'allXODeals' => $allXODeals,
                             'btxDeals' => $btxDeals,
                             'currentCompany' => $currentCompany,
-                            'fromSession' => $fromSession,
-                            'sessionKey' =>  $sessionKey,
+                            'currentTMCDeal' => $currentTMCDeal,
+                            // 'fromSession' => $fromSession,
+                            // 'sessionKey' =>  $sessionKey,
 
 
                         ],
