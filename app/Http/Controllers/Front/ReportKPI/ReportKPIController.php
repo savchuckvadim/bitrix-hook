@@ -280,12 +280,14 @@ class ReportKPIController extends Controller
                     //в каждом типе уникальный код и innerCode соответственно равно фильтру для комманды 
 
                     foreach ($currentActionsData as $currentAction) {
+                        $innerCode = $currentAction['innerCode'];
+                        $code = $currentAction['code'];
                         if (
                             strpos($innerCode, 'result_communication') === false
                             && strpos($innerCode, 'noresult_communication') === false
                         ) {
-                            $code = $currentAction['code'];
-                            $innerCode = $currentAction['innerCode'];
+                            
+                           
                             if (strpos($innerCode, 'call') === false) {  //только не звонки
 
 
