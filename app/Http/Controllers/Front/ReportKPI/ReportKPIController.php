@@ -243,17 +243,17 @@ class ReportKPIController extends Controller
                             }
                         }
 
-                        //result communication
-                        foreach ($eventActionTypeField['items'] as $actionType) { //презентация звонок
-                            foreach ($eventActionField['items'] as $action) { //plan, done
-                                $actionData = $this->getActionWithTypeDataResultCommunication($actionType, $action);
-                                if (!empty($actionData)) {
-                                    if (!empty($actionData['actionTypeItem']) && !empty($actionData['actionItem'])) {
-                                        array_push($currentActionsData, $actionData);
-                                    }
-                                }
-                            }
-                        }
+                        // //result communication
+                        // foreach ($eventActionTypeField['items'] as $actionType) { //презентация звонок
+                        //     foreach ($eventActionField['items'] as $action) { //plan, done
+                        //         $actionData = $this->getActionWithTypeDataResultCommunication($actionType, $action);
+                        //         if (!empty($actionData)) {
+                        //             if (!empty($actionData['actionTypeItem']) && !empty($actionData['actionItem'])) {
+                        //                 array_push($currentActionsData, $actionData);
+                        //             }
+                        //         }
+                        //     }
+                        // }
                     }
                 }
             }
@@ -290,16 +290,16 @@ class ReportKPIController extends Controller
                             }
                         } else {
                             //формирование нерезультативного фильтра - все innerCode noresult, code - разные
-                            if (strpos($innerCode, 'result_communication') !== false) {
-                                $value = $currentAction['actionTypeItem']['bitrixId'];
-                                $resultActionTypeFilter .= "&filter[$actionTypeFieldId][]=$value";
-                            }
+                            // if (strpos($innerCode, 'result_communication') !== false) {
+                            //     $value = $currentAction['actionTypeItem']['bitrixId'];
+                            //     $resultActionTypeFilter .= "&filter[$actionTypeFieldId][]=$value";
+                            // }
 
 
-                            if (strpos($innerCode, 'noresult_communication') !== false) {
-                                $value = $currentAction['actionTypeItem']['bitrixId'];
-                                $noResultActionTypeFilter .= "&filter[$actionTypeFieldId][]=$value";
-                            }
+                            // if (strpos($innerCode, 'noresult_communication') !== false) {
+                            //     $value = $currentAction['actionTypeItem']['bitrixId'];
+                            //     $noResultActionTypeFilter .= "&filter[$actionTypeFieldId][]=$value";
+                            // }
                         }
                     }
 
@@ -363,36 +363,36 @@ class ReportKPIController extends Controller
                             }
                         } else { //формирование комманд результативный / нерезультативный
 
-                            if (
-                                strpos($innerCode, 'result_communication') !== false
-                            ) {
-                                if (strpos($code, 'call') !== false) {  //взять только звонок без прогресс и моней но использовать массив типов - всех звонков
-                                    if ((strpos($code, 'xo') === false) && (strpos($code, 'call_in_progress') === false)
-                                        && (strpos($code, 'call_in_money') === false)
-                                        && (strpos($code, 'presentation') === false)
-                                    ) {  //взять только звонок без прогресс и моней но использовать массив типов - всех звонков
+                            // if (
+                            //     strpos($innerCode, 'result_communication') !== false
+                            // ) {
+                            //     if (strpos($code, 'call') !== false) {  //взять только звонок без прогресс и моней но использовать массив типов - всех звонков
+                            //         if ((strpos($code, 'xo') === false) && (strpos($code, 'call_in_progress') === false)
+                            //             && (strpos($code, 'call_in_money') === false)
+                            //             && (strpos($code, 'presentation') === false)
+                            //         ) {  //взять только звонок без прогресс и моней но использовать массив типов - всех звонков
 
 
 
 
-                                        $actionValuebitrixId = $currentAction['actionItem']['bitrixId'];
-                                        // $actionTypeValuebitrixId = $currentAction['actionTypeItem']['bitrixId'];
+                            //             $actionValuebitrixId = $currentAction['actionItem']['bitrixId'];
+                            //             // $actionTypeValuebitrixId = $currentAction['actionTypeItem']['bitrixId'];
 
-                                        // Формируем ключ команды, используя ID пользователя и ID действия для уникальности
-                                        $cmdKey = "user_{$userId}_action_{$code}";
-
-
+                            //             // Формируем ключ команды, используя ID пользователя и ID действия для уникальности
+                            //             $cmdKey = "user_{$userId}_action_{$code}";
 
 
-                                        // Добавляем команду в массив команд
-                                        $commands[$cmdKey] = "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID="
-                                            . $listId
-                                            . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId"
-                                            . $resultActionTypeFilter
-                                            . "&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
-                                    }
-                                }
-                            }
+
+
+                            //             // Добавляем команду в массив команд
+                            //             $commands[$cmdKey] = "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID="
+                            //                 . $listId
+                            //                 . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId"
+                            //                 . $resultActionTypeFilter
+                            //                 . "&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
+                            //         }
+                            //     }
+                            // }
                         }
                     }
                 }
@@ -406,6 +406,49 @@ class ReportKPIController extends Controller
             // $report = $this->cleanReport($report);
             // $totalReport = $this->addTotalAndMediumKPI($report);
 
+            foreach ($report as $userReport) {
+                $resultKpiDone = [
+                    'id' => 'result_communication_done',
+                    'count' => 0,
+                    'action' => [
+                        'actionItem' => [],
+                        'actionTypeItem' => [],
+                        'innerCode' => 'result_communication_done',
+                        'code' => 'call_done',
+                        'name' => 'Совершенные Результативные Коммуникации',
+
+                    ]
+                ];
+                $resultKpiPlan = [
+                    'id' => 'result_communication_plan',
+                    'count' => 0,
+                    'action' => [
+                        'actionItem' => [],
+                        'actionTypeItem' => [],
+                        'innerCode' => 'result_communication_plan',
+                        'code' => 'call_done',
+                        'name' => 'Запланированные коммуникации',
+
+                    ]
+                ];
+                foreach ($userReport['kpi'] as $kpi) {
+                
+                    if ($kpi['id'] == 'call_done' || $kpi['id'] == 'presentation_done') {
+                        $resultKpiDone['count'] += $kpi['count'];
+                        $resultKpiDone['action']['actionItem'] = $kpi['action']['actionItem'];
+                        $resultKpiDone['action']['actionTypeItem'] = $kpi['action']['actionTypeItem'];
+                    }
+
+                    if ($kpi['id'] == 'call_plan' || $kpi['id'] == 'presentation_plan') {
+                        $resultKpiPlan['count'] += $kpi['count'];
+                        $resultKpiPlan['action']['actionItem'] = $kpi['action']['actionItem'];
+                        $resultKpiPlan['action']['actionTypeItem'] = $kpi['action']['actionTypeItem'];
+                    }
+                    
+                }
+                array_unshift($userReport['kpi'], $resultKpiDone);
+                array_unshift($userReport['kpi'], $resultKpiPlan);
+            }
             //voximplant
             // $report = $this->addVoximplantInReport( $dateFrom, $dateTo, $report);
             return APIOnlineController::getSuccess(
@@ -455,27 +498,27 @@ class ReportKPIController extends Controller
             'code' => ''
         ];
         switch ($action['code']) {
-            case 'pound':
-            case 'act_noresult_fail':
-                if (
-                    $actionType['code'] == 'xo' ||
-                    $actionType['code'] == 'call' ||
-                    $actionType['code'] == 'call_in_progress' ||
-                    $actionType['code'] == 'call_in_money' ||
-                    $actionType['code'] == 'presentation'
-                ) {
-                    $innerCode = 'noresult_communication';
-                    $result['name'] = 'Нерезультативная коммуникация ';
-                    $result['actionTypeItem'] = $actionType;
-                    $result['actionItem'] = $action;
-                    $result['innerCode'] = $innerCode;
+            // case 'pound':
+            // case 'act_noresult_fail':
+            //     if (
+            //         $actionType['code'] == 'xo' ||
+            //         $actionType['code'] == 'call' ||
+            //         $actionType['code'] == 'call_in_progress' ||
+            //         $actionType['code'] == 'call_in_money' ||
+            //         $actionType['code'] == 'presentation'
+            //     ) {
+            //         $innerCode = 'noresult_communication';
+            //         $result['name'] = 'Нерезультативная коммуникация ';
+            //         $result['actionTypeItem'] = $actionType;
+            //         $result['actionItem'] = $action;
+            //         $result['innerCode'] = $innerCode;
 
-                    $code = $actionType['code'] . '_' . $action['code'];
-                    $result['code'] = $code;
-                }
+            //         $code = $actionType['code'] . '_' . $action['code'];
+            //         $result['code'] = $code;
+            //     }
 
 
-                break;
+            //     break;
             case 'plan':
             case 'done':
                 // case 'pound':

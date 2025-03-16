@@ -260,34 +260,36 @@ class BitrixBatchService
                             ]);
                         }
                     }
-                } else  if (
-                    strpos($innerCode, 'result_communication') !== false
-                    && strpos($innerCode, 'noresult_communication') === false
-                ) {
-                    if (strpos($innerCode, 'call') !== false) {
-                        if ((strpos($code, 'xo') === false) &&
-                            (strpos($code, 'call_in_progress') === false) &&
-                            (strpos($code, 'call_in_money') === false)  &&
-                            (strpos($code, 'presentation') === false)
-                        ) {
-                            //взять только звонок без прогресс и моней но использовать массив типов - всех звонков
-                            $kpiKey = "user_{$user['ID']}_action_{$code}";
-                            $count = 0;
-                            foreach ($batchResponseData as $cmdKey => $cmdResult) {
-                                if ($cmdKey == $kpiKey) {
-                                    $count = $cmdResult;
-                                }
-                            }
+                } 
+                
+                // else  if (
+                //     strpos($innerCode, 'result_communication') !== false
+                //     && strpos($innerCode, 'noresult_communication') === false
+                // ) {
+                //     if (strpos($innerCode, 'call') !== false) {
+                //         if ((strpos($code, 'xo') === false) &&
+                //             (strpos($code, 'call_in_progress') === false) &&
+                //             (strpos($code, 'call_in_money') === false)  &&
+                //             (strpos($code, 'presentation') === false)
+                //         ) {
+                //             //взять только звонок без прогресс и моней но использовать массив типов - всех звонков
+                //             $kpiKey = "user_{$user['ID']}_action_{$code}";
+                //             $count = 0;
+                //             foreach ($batchResponseData as $cmdKey => $cmdResult) {
+                //                 if ($cmdKey == $kpiKey) {
+                //                     $count = $cmdResult;
+                //                 }
+                //             }
 
-                            array_push($userKPI['kpi'], [
-                                'id' => $code,
-                                'action' =>  $currentAction,
-                                'count' =>  $count,
-                                'items' => []
-                            ]);
-                        }
-                    }
-                }
+                //             array_push($userKPI['kpi'], [
+                //                 'id' => $code,
+                //                 'action' =>  $currentAction,
+                //                 'count' =>  $count,
+                //                 'items' => []
+                //             ]);
+                //         }
+                //     }
+                // }
             }
 
             array_push($usersKPI, $userKPI);
