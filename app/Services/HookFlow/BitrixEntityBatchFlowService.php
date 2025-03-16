@@ -632,18 +632,18 @@ class BitrixEntityBatchFlowService
 
                                 break;
                             case 'op_fail_reason':
-
-                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getFailReason(
-                                    $pField, //with items
-                                    $failReason,
-                                    $failType
-                                );
                                 APIOnlineController::sendLog('return to tmc op_fail_reason', [
 
                                     'op_fail_reason' => $updatedFields['UF_CRM_' . $pField['bitrixId']],
 
 
                                 ]);
+                                $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getFailReason(
+                                    $pField, //with items
+                                    $failReason,
+                                    $failType
+                                );
+                               
 
                                 //                                     op_noresult_reason
                                 // op_fail_reason

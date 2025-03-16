@@ -88,8 +88,8 @@ class EventReportReturnToTmcService
                                 ]);
                                 $responseData = APIBitrixController::getBitrixRespone($response, 'cold: getCurrentTasksIds');
                                 APIOnlineController::sendLog('return to tmc get task list', [
-                                    // 'response' => $response,
-                                    'responseData' => $responseData,
+                                    'response' => $response,
+                                    // 'responseData' => $responseData,
 
 
                                 ]);
@@ -104,10 +104,10 @@ class EventReportReturnToTmcService
                                         if (is_array($responseData['tasks'])) {
                                             if (!empty($responseData['tasks'][0])) {
                                                 if (!empty($responseData['tasks'][0]['id'])) {
-
+                                                    $searchedTaskId = $responseData['tasks'][0]['id'];
                                                     $newDeadline = Carbon::now()->addHours(24)->toDateTimeString();
                                                     $taskData =  [
-                                                        'taskId' => $responseData[0]['id'],
+                                                        'taskId' => $searchedTaskId,
                                                         'fields' => [
                                                             'DEADLINE' => $newDeadline, //- крайний срок;
                                                             'ALLOW_CHANGE_DEADLINE' => 'Y',
