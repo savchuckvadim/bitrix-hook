@@ -406,7 +406,7 @@ class ReportKPIController extends Controller
             // $report = $this->cleanReport($report);
             // $totalReport = $this->addTotalAndMediumKPI($report);
 
-            foreach ($report as $userReport) {
+            foreach ($report as &$userReport) {
                 $resultKpiDone = [
                     'id' => 'result_communication_done',
                     'count' => 0,
