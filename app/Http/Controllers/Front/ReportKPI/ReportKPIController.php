@@ -262,52 +262,69 @@ class ReportKPIController extends Controller
 
                 if (!empty($currentActionsData)) {
                     foreach ($currentActionsData as $currentAction) {
+
                         $innerCode = $currentAction['innerCode'];
-                        if (strpos($innerCode, 'call') !== false) {
-                            $value = $currentAction['actionTypeItem']['bitrixId'];
-                            $callingActionTypeFilter .= "&filter[$actionTypeFieldId][]=$value";
+                        if (
+                            strpos($innerCode, 'result_communication') === false
+                            && strpos($innerCode, 'noresult_communication') === false
+                        ) {
+                            if (strpos($innerCode, 'call') !== false) {
+                                $value = $currentAction['actionTypeItem']['bitrixId'];
+                                $callingActionTypeFilter .= "&filter[$actionTypeFieldId][]=$value";
+                            }
                         }
                     }
                     foreach ($currentActionsData as $currentAction) {
-                        $code = $currentAction['code'];
-                        $innerCode = $currentAction['innerCode'];
-                        if (strpos($innerCode, 'call') === false) {  //только не звонки
-
-
-                            $actionValuebitrixId = $currentAction['actionItem']['bitrixId'];
-                            $actionTypeValuebitrixId = $currentAction['actionTypeItem']['bitrixId'];
-
-                            // Формируем ключ команды, используя ID пользователя и ID действия для уникальности
-                            $cmdKey = "user_{$userId}_action_{$code}";
-
-                            // Добавляем команду в массив команд
-                            $commands[$cmdKey] =
-                                // "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId&filter[$actionTypeFieldId]=$actionTypeValuebitrixId&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
-
-                                "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId&filter[$actionTypeFieldId]=$actionTypeValuebitrixId&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
-                        }
-                    }
-                    foreach ($currentActionsData as $currentAction) {
-                        $code = $currentAction['code'];
-                        if (strpos($code, 'call') !== false) {  //взять только звонок без прогресс и моней но использовать массив типов - всех звонков
-                            if ((strpos($code, 'xo') === false) && (strpos($code, 'call_in_progress') === false) && (strpos($code, 'call_in_money') === false)) {  //взять только звонок без прогресс и моней но использовать массив типов - всех звонков
+                        if (
+                            strpos($innerCode, 'result_communication') === false
+                            && strpos($innerCode, 'noresult_communication') === false
+                        ) {
+                            $code = $currentAction['code'];
+                            $innerCode = $currentAction['innerCode'];
+                            if (strpos($innerCode, 'call') === false) {  //только не звонки
 
 
                                 $actionValuebitrixId = $currentAction['actionItem']['bitrixId'];
-                                // $actionTypeValuebitrixId = $currentAction['actionTypeItem']['bitrixId'];
+                                $actionTypeValuebitrixId = $currentAction['actionTypeItem']['bitrixId'];
 
                                 // Формируем ключ команды, используя ID пользователя и ID действия для уникальности
                                 $cmdKey = "user_{$userId}_action_{$code}";
 
-
-
-
                                 // Добавляем команду в массив команд
-                                $commands[$cmdKey] = "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID="
-                                    . $listId
-                                    . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId"
-                                    . $callingActionTypeFilter
-                                    . "&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
+                                $commands[$cmdKey] =
+                                    // "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId&filter[$actionTypeFieldId]=$actionTypeValuebitrixId&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
+
+                                    "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId&filter[$actionTypeFieldId]=$actionTypeValuebitrixId&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
+                            }
+                        }
+                    }
+                    foreach ($currentActionsData as $currentAction) {
+                        $code = $currentAction['code'];
+                        $innerCode = $currentAction['innerCode'];
+                        if (
+                            strpos($innerCode, 'result_communication') === false
+                            && strpos($innerCode, 'noresult_communication') === false
+                        ) {
+                            if (strpos($code, 'call') !== false) {  //взять только звонок без прогресс и моней но использовать массив типов - всех звонков
+                                if ((strpos($code, 'xo') === false) && (strpos($code, 'call_in_progress') === false) && (strpos($code, 'call_in_money') === false)) {  //взять только звонок без прогресс и моней но использовать массив типов - всех звонков
+
+
+                                    $actionValuebitrixId = $currentAction['actionItem']['bitrixId'];
+                                    // $actionTypeValuebitrixId = $currentAction['actionTypeItem']['bitrixId'];
+
+                                    // Формируем ключ команды, используя ID пользователя и ID действия для уникальности
+                                    $cmdKey = "user_{$userId}_action_{$code}";
+
+
+
+
+                                    // Добавляем команду в массив команд
+                                    $commands[$cmdKey] = "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID="
+                                        . $listId
+                                        . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId"
+                                        . $callingActionTypeFilter
+                                        . "&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
+                                }
                             }
                         }
                     }
@@ -334,6 +351,7 @@ class ReportKPIController extends Controller
                     'listId' =>  $listId,
                     // 'commands' =>  $commands,
                     'list' => $this->portalKPIList,
+                    'currentActionsData'=> $currentActionsData
 
                 ]
             );
