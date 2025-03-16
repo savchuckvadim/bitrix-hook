@@ -415,7 +415,7 @@ class ReportKPIController extends Controller
                         'actionTypeItem' => [],
                         'innerCode' => 'result_communication_done',
                         'code' => 'call_done',
-                        'name' => 'Совершенные Результативные Коммуникации',
+                        'name' => 'Результативные Коммуникации',
 
                     ]
                 ];
