@@ -66,11 +66,11 @@ class EventReportReturnToTmcService
                                 $crmForCurrent = ['CO_' . $companyId, 'D_' . $tmcDealId];
                                 // for get
                                 $filter = [
-                                    'TITLE' => '%Презентация%',
+                                    '%TITLE' => 'Презентация',
                                     'GROUP_ID' => $this->callingTaskGroupId,
                                     'UF_CRM_TASK' => $crmForCurrent,
                                     'RESPONSIBLE_ID' => $assignedId,
-                                    // '!=STATUS' => 5, // Исключаем задачи со статусом "завершена"
+                                    '!=STATUS' => 5, // Исключаем задачи со статусом "завершена"
 
                                 ];
                                 // $select = ['ID'];
