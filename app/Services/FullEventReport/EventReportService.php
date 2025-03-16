@@ -890,6 +890,7 @@ class EventReportService
                         $returnToTmcService = new EventReportReturnToTmcService(
                             $this->domain,
                             $this->hook,
+                            $this->portal,
                             $this->returnToTmc,
                             $this->isNeedReturnToTmc,
                         );

@@ -15,6 +15,8 @@ class EventReportReturnToTmcService
 
 {
     protected $domain;
+  
+    protected $callingTaskGroupId;
     protected $hook;
 
     protected $returnToTmc = false;
@@ -28,6 +30,7 @@ class EventReportReturnToTmcService
 
         $domain,
         $hook,
+        $portal,
         $returnToTmc,
         $isNeedReturnToTmc,
 
@@ -37,6 +40,10 @@ class EventReportReturnToTmcService
         $this->hook = $hook;
         $this->returnToTmc = $returnToTmc;
         $this->isNeedReturnToTmc = $isNeedReturnToTmc;
+
+        if (isset($portal['bitrixCallingTasksGroup']) && isset($portal['bitrixCallingTasksGroup']['bitrixId'])) {
+            $this->callingTaskGroupId =  $portal['bitrixCallingTasksGroup']['bitrixId'];
+        }
     }
 
     public function process()
@@ -60,20 +67,25 @@ class EventReportReturnToTmcService
                                 // for get
                                 $filter = [
                                     'TITLE' => '%Презентация%',
-                                    // 'GROUP_ID' => $callingTaskGroupId,
+                                    'GROUP_ID' => $this->callingTaskGroupId,
                                     // 'UF_CRM_TASK' => $crmForCurrent,
                                     'RESPONSIBLE_ID' => $assignedId,
                                     '!=STATUS' => 5, // Исключаем задачи со статусом "завершена"
 
                                 ];
-                                $select = ['ID'];
+                                // $select = ['ID'];
                                 $getTaskData = [
                                     'filter' => $filter,
-                                    'select' => $select,
+                                    // 'select' => $select,
 
                                 ];
                                 $response = Http::get($url, $getTaskData);
+                                APIOnlineController::sendLog('return to tmc get task list', [
 
+                                    'url' => $url,
+                                    'getTaskData' => $getTaskData,
+
+                                ]);
                                 $responseData = APIBitrixController::getBitrixRespone($response, 'cold: getCurrentTasksIds');
                                 APIOnlineController::sendLog('return to tmc get task list', [
 
@@ -85,7 +97,7 @@ class EventReportReturnToTmcService
                                     if (is_array($responseData)) {
                                         if (!empty($responseData[0])) {
                                             if (!empty($responseData[0]['ID'])) {
-                                               
+
                                                 $newDeadline = Carbon::now()->addHours(24)->toDateTimeString();
                                                 $taskData =  [
                                                     'taskId' => $responseData[0]['ID'],
@@ -108,7 +120,11 @@ class EventReportReturnToTmcService
                                 }
 
                                 $entityData = [
-                                    'ASSIGNED_BY_ID' => $assignedId
+                                    'ID' => $companyId,
+                                    'fields' => [
+                                        'ASSIGNED_BY_ID' => $assignedId
+                                    ]
+
                                 ];
                                 $entitybatchKey = 'company_update';
                                 $entitybatchcommand =   BitrixBatchService::getGeneralBatchCommand(
