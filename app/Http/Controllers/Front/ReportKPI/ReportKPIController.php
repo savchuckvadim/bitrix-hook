@@ -244,11 +244,13 @@ class ReportKPIController extends Controller
                         }
 
                         //result communication
-                        foreach ($eventActionField['items'] as $action) { //plan, done
-                            $actionData = $this->getActionWithTypeDataResultCommunication($actionType, $action);
-                            if (!empty($actionData)) {
-                                if (!empty($actionData['actionTypeItem']) && !empty($actionData['actionItem'])) {
-                                    array_push($currentActionsData, $actionData);
+                        foreach ($eventActionTypeField['items'] as $actionType) { //презентация звонок
+                            foreach ($eventActionField['items'] as $action) { //plan, done
+                                $actionData = $this->getActionWithTypeDataResultCommunication($actionType, $action);
+                                if (!empty($actionData)) {
+                                    if (!empty($actionData['actionTypeItem']) && !empty($actionData['actionItem'])) {
+                                        array_push($currentActionsData, $actionData);
+                                    }
                                 }
                             }
                         }
@@ -478,7 +480,7 @@ class ReportKPIController extends Controller
             case 'done':
                 // case 'pound':
                 // case 'act_noresult_fail':
-           
+
                 if (
                     $actionType['code'] == 'xo' ||
                     $actionType['code'] == 'call' ||
@@ -587,7 +589,7 @@ class ReportKPIController extends Controller
             'code' => ''
         ];
         switch ($action['code']) {
-           
+
             case 'plan':
             case 'done':
                 // case 'pound':
@@ -612,10 +614,10 @@ class ReportKPIController extends Controller
                         $result['code'] = $code;
                     }
                 }
-                
+
                 break;
 
-        
+
             default:
                 # code...
                 break;
