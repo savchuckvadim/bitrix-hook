@@ -1637,7 +1637,7 @@ class EventReportService
                     if (!empty($this->failType)) {
                         APIOnlineController::sendLog('failReason', [
 
-                            // 'failType' => $this->failType,
+                            'failType' => $this->failType,
                             'failReason' => $this->failReason,
     
                         ]);
