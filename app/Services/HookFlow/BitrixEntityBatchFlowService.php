@@ -555,7 +555,10 @@ class BitrixEntityBatchFlowService
 
 
 
-                    if ($portalFieldCode === $targetFieldCode) {
+                    if ($portalFieldCode === $targetFieldCode
+                    || ($portalFieldCode === 'op_efield_fail_reason' && $targetFieldCode === 'op_fail_reason')
+                    
+                    ) {
 
 
                         switch ($portalFieldCode) {
@@ -623,6 +626,7 @@ class BitrixEntityBatchFlowService
 
                                 ]);
                                 break;
+
                             case 'op_noresult_reason':  //Перспективность
                                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getNoresultReson(
                                     $pField, //with items
@@ -631,7 +635,14 @@ class BitrixEntityBatchFlowService
                                 );
 
                                 break;
+                            case 'op_efield_fail_reason':
                             case 'op_fail_reason':
+                                APIOnlineController::sendLog('return to tmc op_fail_reason', [
+
+                                    'op_fail_reason' => 'test',
+
+
+                                ]);
                                 APIOnlineController::sendLog('return to tmc op_fail_reason', [
 
                                     'op_fail_reason' => $updatedFields['UF_CRM_' . $pField['bitrixId']],
@@ -643,7 +654,7 @@ class BitrixEntityBatchFlowService
                                     $failReason,
                                     $failType
                                 );
-                               
+
 
                                 //                                     op_noresult_reason
                                 // op_fail_reason
