@@ -354,7 +354,7 @@ class ReportKPIController extends Controller
                     'report' =>  $report,
                     // 'total' =>  $totalReport['total'],
                     // 'medium' =>  $totalReport['medium'],
-                    // 'batchResults' =>  $batchResults,
+                    'batchResults' =>  $batchResults,
                     'listId' =>  $listId,
                     // 'commands' =>  $commands,
                     'list' => $this->portalKPIList,

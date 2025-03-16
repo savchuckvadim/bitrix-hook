@@ -121,7 +121,7 @@ class BitrixBatchService
         ];
 
         foreach ($batchRequests as $key => $batchCommands) {
-            
+
             $response = Http::post($url, [
                 'halt' => 0,
                 'cmd' => $batchCommands
@@ -140,7 +140,6 @@ class BitrixBatchService
 
                 if (isset($responseData['result']['result'])) {
                     $result[$key] = $responseData['result']['result'];
-                   
                 }
                 if (!empty($responseData['result']['result'][0])) {
                     $result[$key] = $responseData['result']['result'][0];
@@ -219,27 +218,11 @@ class BitrixBatchService
 
                 $code = $currentAction['code'];
                 $innerCode = $currentAction['innerCode'];
-                if (strpos($innerCode, 'call') === false) {  //только не звонки
-                    $kpiKey = "user_{$user['ID']}_action_{$code}";
-                    $count = 0;
-                    foreach ($batchResponseData as $cmdKey => $cmdResult) {
-                        if ($cmdKey == $kpiKey) {
-                            $count = $cmdResult;
-                        }
-                    }
-
-                    array_push($userKPI['kpi'], [
-                        'id' => $code,
-                        'action' =>  $currentAction,
-                        'count' =>  $count,
-                        'items' => []
-                    ]);
-                } else {
-                    if ((strpos($code, 'xo') === false) &&
-                        (strpos($code, 'call_in_progress') === false) &&
-                        (strpos($code, 'call_in_money') === false)
-                    ) {
-                        //взять только звонок без прогресс и моней но использовать массив типов - всех звонков
+                if (
+                    strpos($innerCode, 'result_communication') === false
+                    && strpos($innerCode, 'noresult_communication') === false
+                ) {
+                    if (strpos($innerCode, 'call') === false) {  //только не звонки
                         $kpiKey = "user_{$user['ID']}_action_{$code}";
                         $count = 0;
                         foreach ($batchResponseData as $cmdKey => $cmdResult) {
@@ -254,6 +237,27 @@ class BitrixBatchService
                             'count' =>  $count,
                             'items' => []
                         ]);
+                    } else {
+                        if ((strpos($code, 'xo') === false) &&
+                            (strpos($code, 'call_in_progress') === false) &&
+                            (strpos($code, 'call_in_money') === false)
+                        ) {
+                            //взять только звонок без прогресс и моней но использовать массив типов - всех звонков
+                            $kpiKey = "user_{$user['ID']}_action_{$code}";
+                            $count = 0;
+                            foreach ($batchResponseData as $cmdKey => $cmdResult) {
+                                if ($cmdKey == $kpiKey) {
+                                    $count = $cmdResult;
+                                }
+                            }
+
+                            array_push($userKPI['kpi'], [
+                                'id' => $code,
+                                'action' =>  $currentAction,
+                                'count' =>  $count,
+                                'items' => []
+                            ]);
+                        }
                     }
                 }
             }
