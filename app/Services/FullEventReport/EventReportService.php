@@ -221,6 +221,12 @@ class EventReportService
                 }
             }
         }
+        APIOnlineController::sendLog('evreservice returnToTmc data', [
+
+            'isNeedReturnToTmc' => $this->isNeedReturnToTmc,
+            'returnToTmc' => $this->returnToTmc,
+
+        ]);
         if (isset($data['isPostSale'])) {
             $this->isPostSale = $data['isPostSale'];
         }
