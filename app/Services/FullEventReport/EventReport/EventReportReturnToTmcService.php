@@ -61,12 +61,12 @@ class EventReportReturnToTmcService
                                 $assignedId = $tmcDeal['ASSIGNED_BY_ID'];
                                 $companyId = $tmcDeal['COMPANY_ID'];
                                 $tmcDealId = $tmcDeal['ID'];
-                                $methodGet = '/tasks.task.list';
+                                $methodGet = '/tasks.task.list.json';
                                 $url = $this->hook . $methodGet;
                                 $crmForCurrent = ['CO_' . $companyId, 'D_' . $tmcDealId];
                                 // for get
                                 $filter = [
-                                    'TITLE' => '%Презентация%',
+                                    // 'TITLE' => '%Презентация%',
                                     'GROUP_ID' => $this->callingTaskGroupId,
                                     // 'UF_CRM_TASK' => $crmForCurrent,
                                     'RESPONSIBLE_ID' => $assignedId,
