@@ -404,7 +404,7 @@ class ReportKPIController extends Controller
                     $actionType['code'] == 'call_in_money' ||
                     $actionType['code'] == 'presentation'
                 ) {
-                    $innerCode = 'noresult_communication';
+                    $innerCode = 'noresult_communication_'. $action['code'];
                     $result['name'] = 'Нерезультативная коммуникация ';
                     $result['actionTypeItem'] = $actionType;
                     $result['actionItem'] = $action;
