@@ -30,7 +30,7 @@ class EventReportReturnToTmcService
         $hook,
         $returnToTmc,
         $isNeedReturnToTmc,
-  
+
 
     ) {
         $this->domain = $domain;
@@ -58,7 +58,7 @@ class EventReportReturnToTmcService
                                 $crmForCurrent = ['CO_' . $companyId, 'D_' . $tmcDealId];
                                 // for get
                                 $filter = [
-                                    'TITLE' => '%Презентация%',
+                                    // 'TITLE' => '%Презентация%',
                                     // 'GROUP_ID' => $callingTaskGroupId,
                                     'UF_CRM_TASK' => $crmForCurrent,
                                     'RESPONSIBLE_ID' => $assignedId,
@@ -101,32 +101,31 @@ class EventReportReturnToTmcService
                                                     'tasks.task.update'
                                                 );
                                                 $batchCommands[$batchKey] = $batchcommand;
-
-                                                $entityData = [
-                                                    'ASSIGNED_BY_ID' => $assignedId
-                                                ];
-                                                $entitybatchKey = 'company_update';
-                                                $entitybatchcommand =   BitrixBatchService::getGeneralBatchCommand(
-                                                    $entityData,
-                                                    'crm.company.update'
-                                                );
-                                                $batchCommands[$entitybatchKey] = $entitybatchcommand;
-                                                $result = $batchService->sendGeneralBatchRequest($batchCommands);
-                                                APIOnlineController::sendLog('return to tmc result', [
-                                                    'batchCommands' => $batchCommands,
-                                                    'result' => $result,
-
-
-                                                ]);
                                             }
                                         }
                                     }
                                 }
+
+                                $entityData = [
+                                    'ASSIGNED_BY_ID' => $assignedId
+                                ];
+                                $entitybatchKey = 'company_update';
+                                $entitybatchcommand =   BitrixBatchService::getGeneralBatchCommand(
+                                    $entityData,
+                                    'crm.company.update'
+                                );
+                                $batchCommands[$entitybatchKey] = $entitybatchcommand;
+                                $result = $batchService->sendGeneralBatchRequest($batchCommands);
+                                APIOnlineController::sendLog('return to tmc result', [
+                                    'batchCommands' => $batchCommands,
+                                    'result' => $result,
+
+
+                                ]);
                             }
                         }
                     }
                 }
-          
             }
         } catch (\Throwable $th) {
             $errorMessages =  [
