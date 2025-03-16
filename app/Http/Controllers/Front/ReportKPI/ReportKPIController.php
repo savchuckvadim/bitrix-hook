@@ -179,35 +179,6 @@ class ReportKPIController extends Controller
             $dateFrom = $request['filters']['dateFrom'];
             $dateTo = $request['filters']['dateTo'];
 
-            // Создаем объект DateTime для начальной даты
-            // $dateFromObj = DateTime::createFromFormat('d.m.Y', $dateFromInitial);
-            // $dateToObj = DateTime::createFromFormat('d.m.Y', $dateToInitial);
-
-            // // Отнимаем один день от начальной даты (для фильтра "больше")
-            // $dateFromObj->modify('-1 day');
-
-            // // Прибавляем один день к конечной дате (для фильтра "меньше")
-            // $dateToObj->modify('+1 day');
-            // $dateFromObj->setTime(0, 0, 0);
-            // $dateToObj->setTime(23, 59, 59);
-            
-            // // Форматируем дату обратно в формат "Y-m-d H:i:s"
-            // $dateFrom = $dateFromObj->format('Y-m-d H:i:s');
-            // $dateTo = $dateToObj->format('Y-m-d H:i:s');
-            
-
-
-
-            // $dateFieldForHookFrom = ">=DATE_CREATE";
-            // $dateFieldForHookTo = "<=DATE_CREATE";
-            // $currentActions = [];
-            // $lists = [];
-
-            // if ($currentActionsData) {
-            //     foreach ($currentActionsData as $id => $title) {
-            //         array_push($currentActions, $id);
-            //     }
-            // }
 
 
 
