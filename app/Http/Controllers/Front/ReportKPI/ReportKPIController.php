@@ -258,6 +258,8 @@ class ReportKPIController extends Controller
                 $userId = $user['ID'];
                 $userName = $user['LAST_NAME'] . ' ' . $user['NAME'];
                 $callingActionTypeFilter = '';
+                $noResultActionTypeFilter = '';
+                $resultActionTypeFilter = '';
 
 
                 //формирование фильтра из всех типов звонок
@@ -269,9 +271,22 @@ class ReportKPIController extends Controller
                             strpos($innerCode, 'result_communication') === false
                             && strpos($innerCode, 'noresult_communication') === false
                         ) {
+                            //формирование фильтра из всех типов звонок
                             if (strpos($innerCode, 'call') !== false) {
                                 $value = $currentAction['actionTypeItem']['bitrixId'];
                                 $callingActionTypeFilter .= "&filter[$actionTypeFieldId][]=$value";
+                            }
+                        } else {
+                            //формирование нерезультативного фильтра - все innerCode noresult, code - разные
+                            if (strpos($innerCode, 'result_communication') !== false) {
+                                $value = $currentAction['actionTypeItem']['bitrixId'];
+                                $resultActionTypeFilter .= "&filter[$actionTypeFieldId][]=$value";
+                            }
+
+
+                            if (strpos($innerCode, 'noresult_communication') !== false) {
+                                $value = $currentAction['actionTypeItem']['bitrixId'];
+                                $noResultActionTypeFilter .= "&filter[$actionTypeFieldId][]=$value";
                             }
                         }
                     }
@@ -286,8 +301,8 @@ class ReportKPIController extends Controller
                             strpos($innerCode, 'result_communication') === false
                             && strpos($innerCode, 'noresult_communication') === false
                         ) {
-                            
-                           
+
+
                             if (strpos($innerCode, 'call') === false) {  //только не звонки
 
 
@@ -301,7 +316,8 @@ class ReportKPIController extends Controller
                                 $commands[$cmdKey] =
                                     // "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId&filter[$actionTypeFieldId]=$actionTypeValuebitrixId&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
 
-                                    "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId&filter[$actionTypeFieldId]=$actionTypeValuebitrixId&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
+                                    "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID=" . $listId
+                                    . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId&filter[$actionTypeFieldId]=$actionTypeValuebitrixId&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
                             }
                         }
                     }
@@ -331,6 +347,38 @@ class ReportKPIController extends Controller
                                         . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId"
                                         . $callingActionTypeFilter
                                         . "&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
+                                }
+                            }
+                        } else { //формирование комманд результативный / нерезультативный
+
+                            if (
+                                strpos($innerCode, 'result_communication') !== false
+                            ) {
+                                if (strpos($code, 'call') !== false) {  //взять только звонок без прогресс и моней но использовать массив типов - всех звонков
+                                    if ((strpos($code, 'xo') === false) && (strpos($code, 'call_in_progress') === false)
+                                        && (strpos($code, 'call_in_money') === false)
+                                        && (strpos($code, 'presentation') === false)
+                                    ) {  //взять только звонок без прогресс и моней но использовать массив типов - всех звонков
+
+
+
+
+                                        $actionValuebitrixId = $currentAction['actionItem']['bitrixId'];
+                                        // $actionTypeValuebitrixId = $currentAction['actionTypeItem']['bitrixId'];
+
+                                        // Формируем ключ команды, используя ID пользователя и ID действия для уникальности
+                                        $cmdKey = "user_{$userId}_action_{$code}";
+
+
+
+
+                                        // Добавляем команду в массив команд
+                                        $commands[$cmdKey] = "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID="
+                                            . $listId
+                                            . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId"
+                                            . $resultActionTypeFilter
+                                            . "&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
+                                    }
                                 }
                             }
                         }
@@ -404,7 +452,7 @@ class ReportKPIController extends Controller
                     $actionType['code'] == 'call_in_money' ||
                     $actionType['code'] == 'presentation'
                 ) {
-                    $innerCode = 'noresult_communication_'. $action['code'];
+                    $innerCode = 'noresult_communication';
                     $result['name'] = 'Нерезультативная коммуникация ';
                     $result['actionTypeItem'] = $actionType;
                     $result['actionItem'] = $action;
@@ -430,7 +478,7 @@ class ReportKPIController extends Controller
                         $actionType['code'] == 'call_in_money' ||
                         $actionType['code'] == 'presentation'
                     ) {
-                        $innerCode = 'result_communication_' . $action['code'];
+                        $innerCode = 'result_communication';
                         $result['name'] = 'Результативная коммуникация ';
                         $result['actionTypeItem'] = $actionType;
                         $result['actionItem'] = $action;
