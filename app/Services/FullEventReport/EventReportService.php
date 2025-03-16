@@ -1647,11 +1647,21 @@ class EventReportService
 
                          
                             if ($this->failType['code'] == 'failure') { //если тип провала - отказ возражение
+                                APIOnlineController::sendLog('failReason', [
 
+                                 
+                                    'failReason' => $this->failReason,
+            
+                                ]);
 
                                 if (!empty($this->failReason)) {
                                     if (!empty($this->failReason['code'])) {
+                                        APIOnlineController::sendLog('failReason', [
 
+                                 
+                                            'failReason' => $this->failReason['code'],
+                    
+                                        ]);
                                         $reportFields['op_fail_reason'] = $this->failReason['code'];
                                     }
                                 }
@@ -1696,7 +1706,12 @@ class EventReportService
 
 
 
+        APIOnlineController::sendLog('reportFields op_fail_reason', [
 
+                                 
+            'reportFields' => $reportFields['op_fail_reason'],
+
+        ]);
 
         $entityCommand = $entityService->getBatchCommand(
             $this->portal,
