@@ -66,7 +66,7 @@ class EventReportReturnToTmcService
                                 $crmForCurrent = ['CO_' . $companyId, 'D_' . $tmcDealId];
                                 // for get
                                 $filter = [
-                                    // 'TITLE' => '%Презентация%',
+                                    'TITLE' => '%Презентация%',
                                     'GROUP_ID' => $this->callingTaskGroupId,
                                     'UF_CRM_TASK' => $crmForCurrent,
                                     'RESPONSIBLE_ID' => $assignedId,
@@ -94,26 +94,28 @@ class EventReportReturnToTmcService
 
                                 ]);
                                 if (!empty($responseData)) {
-                                    if (is_array($responseData)) {
-                                        if (!empty($responseData[0])) {
-                                            if (!empty($responseData[0]['ID'])) {
+                                    if (!empty($responseData['tasks'])) {
+                                        if (is_array($responseData['tasks'])) {
+                                            if (!empty($responseData['tasks'][0])) {
+                                                if (!empty($responseData['tasks'][0]['id'])) {
 
-                                                $newDeadline = Carbon::now()->addHours(24)->toDateTimeString();
-                                                $taskData =  [
-                                                    'taskId' => $responseData[0]['ID'],
-                                                    'fields' => [
-                                                        'DEADLINE' => $newDeadline, //- крайний срок;
-                                                        'ALLOW_CHANGE_DEADLINE' => 'Y',
-                                                        'TITLE' => 'Звонок: вернули из ОП'
+                                                    $newDeadline = Carbon::now()->addHours(24)->toDateTimeString();
+                                                    $taskData =  [
+                                                        'taskId' => $responseData[0]['id'],
+                                                        'fields' => [
+                                                            'DEADLINE' => $newDeadline, //- крайний срок;
+                                                            'ALLOW_CHANGE_DEADLINE' => 'Y',
+                                                            'TITLE' => 'Звонок: вернули из ОП'
 
-                                                    ]
-                                                ];
-                                                $batchKey = 'task_update';
-                                                $batchcommand =   $batchService->getGeneralBatchCommand(
-                                                    $taskData,
-                                                    'tasks.task.update'
-                                                );
-                                                $batchCommands[$batchKey] = $batchcommand;
+                                                        ]
+                                                    ];
+                                                    $batchKey = 'task_update';
+                                                    $batchcommand =   $batchService->getGeneralBatchCommand(
+                                                        $taskData,
+                                                        'tasks.task.update'
+                                                    );
+                                                    $batchCommands[$batchKey] = $batchcommand;
+                                                }
                                             }
                                         }
                                     }
