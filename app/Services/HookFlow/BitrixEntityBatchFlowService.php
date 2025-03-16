@@ -619,12 +619,7 @@ class BitrixEntityBatchFlowService
                                     $workStatus,
                                     $failType
                                 );
-                                APIOnlineController::sendLog('op_prospects_type', [
-
-                                    'op_prospects_type' => $updatedFields['UF_CRM_' . $pField['bitrixId']],
-
-
-                                ]);
+                             
                                 break;
 
                             case 'op_noresult_reason':  //Перспективность
@@ -637,24 +632,14 @@ class BitrixEntityBatchFlowService
                                 break;
                             case 'op_efield_fail_reason':
                             case 'op_fail_reason':
-                                APIOnlineController::sendLog('return to tmc op_fail_reason', [
-
-                                    'op_fail_reason' => 'test',
-
-
-                                ]);
+                              
                                 
                                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getFailReason(
                                     $pField, //with items
                                     $failReason,
                                     $failType
                                 );
-                                APIOnlineController::sendLog('return to tmc op_fail_reason', [
-
-                                    'op_fail_reason' => $updatedFields['UF_CRM_' . $pField['bitrixId']],
-
-
-                                ]);
+                               
 
                                 //                                     op_noresult_reason
                                 // op_fail_reason

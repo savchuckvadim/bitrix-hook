@@ -1706,18 +1706,7 @@ class EventReportService
 
 
 
-        APIOnlineController::sendLog('reportFields op_fail_reason', [
-
-                                 
-            'reportFields' => $reportFields,
-
-        ]);
-        APIOnlineController::sendLog('reportFields op_fail_reason', [
-
-                                 
-            'op_fail_reason' => $reportFields['op_fail_reason'],
-
-        ]);
+       
         $entityCommand = $entityService->getBatchCommand(
             $this->portal,
             $currentBtxEntity,
