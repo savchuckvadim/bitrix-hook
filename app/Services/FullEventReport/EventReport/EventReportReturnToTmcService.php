@@ -43,6 +43,7 @@ class EventReportReturnToTmcService
     {
         try {
             $batchcommands = [];
+            $batchService = new BitrixBatchService($this->hook);
             if (!empty($this->isNeedReturnToTmc)) {
                 if (!empty($this->returnToTmc)) {
 
@@ -58,9 +59,9 @@ class EventReportReturnToTmcService
                                 $crmForCurrent = ['CO_' . $companyId, 'D_' . $tmcDealId];
                                 // for get
                                 $filter = [
-                                    // 'TITLE' => '%Презентация%',
+                                    'TITLE' => '%Презентация%',
                                     // 'GROUP_ID' => $callingTaskGroupId,
-                                    'UF_CRM_TASK' => $crmForCurrent,
+                                    // 'UF_CRM_TASK' => $crmForCurrent,
                                     'RESPONSIBLE_ID' => $assignedId,
                                     '!=STATUS' => 5, // Исключаем задачи со статусом "завершена"
 
@@ -84,7 +85,7 @@ class EventReportReturnToTmcService
                                     if (is_array($responseData)) {
                                         if (!empty($responseData[0])) {
                                             if (!empty($responseData[0]['ID'])) {
-                                                $batchService = new BitrixBatchService($this->hook);
+                                               
                                                 $newDeadline = Carbon::now()->addHours(24)->toDateTimeString();
                                                 $taskData =  [
                                                     'taskId' => $responseData[0]['ID'],
