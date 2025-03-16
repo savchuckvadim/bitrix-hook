@@ -80,25 +80,10 @@ class EventReportReturnToTmcService
 
                                 ];
                                 $response = Http::get($url, $getTaskData);
-                                APIOnlineController::sendLog('return to tmc get task list', [
-
-                                    'url' => $url,
-                                    'getTaskData' => $getTaskData,
-
-                                ]);
+                   
                                 $responseData = APIBitrixController::getBitrixRespone($response, 'cold: getCurrentTasksIds');
-                                APIOnlineController::sendLog('return to tmc get task list', [
-                                    'response' => $response,
-                                    // 'responseData' => $responseData,
-
-
-                                ]);
-                                APIOnlineController::sendLog('return to tmc get task list', [
-                                    // 'response' => $response,
-                                    'responseData' => $responseData,
-
-
-                                ]);
+                             
+                               
                                 if (!empty($responseData)) {
                                     if (!empty($responseData['tasks'])) {
                                         if (is_array($responseData['tasks'])) {
