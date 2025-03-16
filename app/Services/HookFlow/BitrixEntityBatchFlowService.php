@@ -280,7 +280,7 @@ class BitrixEntityBatchFlowService
                                         $updatedFields['UF_CRM_' . $pField['bitrixId']] = $value;
                                         break;
 
-                                        // /statusesCodes
+                                    // /statusesCodes
                                     case 'op_work_status':
                                         $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getWorkstatusFieldItemValue(
                                             $pField, //with items
@@ -589,20 +589,20 @@ class BitrixEntityBatchFlowService
 
 
 
-                                // case 'op_history':
+                            // case 'op_history':
 
-                                //     $stringComment = $nowdate . ' ' . $currentReportEventName . ' ' . $resultStatus;
-                                //     $updatedFields = $this->getCommentsWithEntity(
-                                //         $currentBtxEntity,
-                                //         $pField,
-                                //         $stringComment,
-                                //         $updatedFields,
+                            //     $stringComment = $nowdate . ' ' . $currentReportEventName . ' ' . $resultStatus;
+                            //     $updatedFields = $this->getCommentsWithEntity(
+                            //         $currentBtxEntity,
+                            //         $pField,
+                            //         $stringComment,
+                            //         $updatedFields,
 
-                                //     );
+                            //     );
 
 
-                            
-                                // /statusesCodes
+
+                            // /statusesCodes
                             case 'op_work_status':
                                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getWorkstatusFieldItemValue(
                                     $pField, //with items
@@ -616,6 +616,12 @@ class BitrixEntityBatchFlowService
                                     $workStatus,
                                     $failType
                                 );
+                                APIOnlineController::sendLog('return to tmc get task list', [
+
+                                    'op_prospects_type' => $updatedFields['UF_CRM_' . $pField['bitrixId']],
+
+
+                                ]);
                                 break;
                             case 'op_noresult_reason':  //Перспективность
                                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getNoresultReson(
@@ -625,81 +631,87 @@ class BitrixEntityBatchFlowService
                                 );
 
                                 break;
-                            case 'op_fail_reason':  //Перспективность
+                            case 'op_fail_reason':
+
                                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getFailReason(
                                     $pField, //with items
                                     $failReason,
                                     $failType
                                 );
+                                APIOnlineController::sendLog('return to tmc get task list', [
 
+                                    'op_fail_reason' => $updatedFields['UF_CRM_' . $pField['bitrixId']],
+
+
+                                ]);
 
                                 //                                     op_noresult_reason
                                 // op_fail_reason
                                 break;
 
 
-                                //xo
+                            //xo
 
-                                //     //warm
-                                // case 'call_next_date':   //ОП Дата Следующего звонка
-                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $deadline;
-                                //     break;
-                                // case 'call_next_name':   //ОП Тема Следующего звонка
+                            //     //warm
+                            // case 'call_next_date':   //ОП Дата Следующего звонка
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $deadline;
+                            //     break;
+                            // case 'call_next_name':   //ОП Тема Следующего звонка
 
-                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $currentPlanEventName;
-                                //     break;
-                                // case 'call_last_date':  //ОП Дата последнего звонка 
-                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $nowdate;
-                                //     break;
-                                //     //in_progress
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $currentPlanEventName;
+                            //     break;
+                            // case 'call_last_date':  //ОП Дата последнего звонка 
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $nowdate;
+                            //     break;
+                            //     //in_progress
 
-                                //     //money_a
-
-
-
-                                //     //presentation
-                                // case 'next_pres_plan_date':
-                                // case 'last_pres_plan_date':
-                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $deadline;
-                                //     break;
-
-
-                                // case 'last_pres_done_date':
-                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $nowdate;
-                                //     break;
-
-
-                                // case 'last_pres_plan_responsible':
-                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $userId;
-                                //     break;
-
-                                // case 'last_pres_done_responsible':
+                            //     //money_a
 
 
 
+                            //     //presentation
+                            // case 'next_pres_plan_date':
+                            // case 'last_pres_plan_date':
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $deadline;
+                            //     break;
 
-                                // case 'pres_count':
-                                //     $count = 0;
-                                //     if (!empty($currentBtxEntity)) {
-                                //         if (!empty($currentBtxEntity['UF_CRM_' . $pField['bitrixId']])) {
-                                //             $count = (int)$currentBtxEntity['UF_CRM_' . $pField['bitrixId']];
-                                //         }
-                                //     }
-                                //     $count = $count + 1;
-                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $count;
-                                //     break;
-                                // case 'pres_comments':
-                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $comment;
-                                //     break;
+
+                            // case 'last_pres_done_date':
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $nowdate;
+                            //     break;
+
+
+                            // case 'last_pres_plan_responsible':
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $userId;
+                            //     break;
+
+                            // case 'last_pres_done_responsible':
 
 
 
 
+                            // case 'pres_count':
+                            //     $count = 0;
+                            //     if (!empty($currentBtxEntity)) {
+                            //         if (!empty($currentBtxEntity['UF_CRM_' . $pField['bitrixId']])) {
+                            //             $count = (int)$currentBtxEntity['UF_CRM_' . $pField['bitrixId']];
+                            //         }
+                            //     }
+                            //     $count = $count + 1;
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $count;
+                            //     break;
+                            // case 'pres_comments':
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $comment;
+                            //     break;
 
-                                //     //fail
-                                // case 'op_fail_comments':
-                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $comment;
-                                //     break;
+
+
+
+
+                            //     //fail
+                            // case 'op_fail_comments':
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $comment;
+                            //     break;
 
                             default:
                                 # code...
@@ -893,7 +905,7 @@ class BitrixEntityBatchFlowService
                         $resultCode = 'op_prospects_depend';
                         break;
 
-                        //todo
+                    //todo
                     case 'op_prospects_nophone':  //недозвон
                     case 'op_prospects_company': //компания не существует
                     case 'op_prospects_off': //не хотят общаться

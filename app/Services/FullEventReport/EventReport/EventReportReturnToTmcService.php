@@ -15,7 +15,7 @@ class EventReportReturnToTmcService
 
 {
     protected $domain;
-  
+
     protected $callingTaskGroupId;
     protected $hook;
 
@@ -88,7 +88,7 @@ class EventReportReturnToTmcService
                                 ]);
                                 $responseData = APIBitrixController::getBitrixRespone($response, 'cold: getCurrentTasksIds');
                                 APIOnlineController::sendLog('return to tmc get task list', [
-
+                                    'response' => $response,
                                     'responseData' => $responseData,
 
 
