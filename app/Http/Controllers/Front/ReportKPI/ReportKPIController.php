@@ -242,6 +242,16 @@ class ReportKPIController extends Controller
                                 }
                             }
                         }
+
+                        //result communication
+                        foreach ($eventActionField['items'] as $action) { //plan, done
+                            $actionData = $this->getActionWithTypeDataResultCommunication($actionType, $action);
+                            if (!empty($actionData)) {
+                                if (!empty($actionData['actionTypeItem']) && !empty($actionData['actionItem'])) {
+                                    array_push($currentActionsData, $actionData);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -468,26 +478,7 @@ class ReportKPIController extends Controller
             case 'done':
                 // case 'pound':
                 // case 'act_noresult_fail':
-                if ($action['code']  == 'done') {
-
-
-                    if (
-                        $actionType['code'] == 'xo' ||
-                        $actionType['code'] == 'call' ||
-                        $actionType['code'] == 'call_in_progress' ||
-                        $actionType['code'] == 'call_in_money' ||
-                        $actionType['code'] == 'presentation'
-                    ) {
-                        $innerCode = 'result_communication';
-                        $result['name'] = 'Результативная коммуникация ';
-                        $result['actionTypeItem'] = $actionType;
-                        $result['actionItem'] = $action;
-                        $result['innerCode'] = $innerCode;
-
-                        $code = $actionType['code'] . '_' . $action['code'];
-                        $result['code'] = $code;
-                    }
-                }
+           
                 if (
                     $actionType['code'] == 'xo' ||
                     $actionType['code'] == 'call' ||
@@ -574,6 +565,57 @@ class ReportKPIController extends Controller
             //     # code...
             //     break;
 
+            default:
+                # code...
+                break;
+        }
+
+        return $result;
+    }
+
+    protected function getActionWithTypeDataResultCommunication(
+        $actionType,   //presentation
+        $action  //done pound...
+    ) {
+        // pound перенос
+        // act_noresult_fail не состоялся
+        $result = [
+            'name' => '',
+            'actionTypeItem' => null,
+            'actionItem' => null,
+            'innerCode' => '',
+            'code' => ''
+        ];
+        switch ($action['code']) {
+           
+            case 'plan':
+            case 'done':
+                // case 'pound':
+                // case 'act_noresult_fail':
+                if ($action['code']  == 'done') {
+
+
+                    if (
+                        $actionType['code'] == 'xo' ||
+                        $actionType['code'] == 'call' ||
+                        $actionType['code'] == 'call_in_progress' ||
+                        $actionType['code'] == 'call_in_money' ||
+                        $actionType['code'] == 'presentation'
+                    ) {
+                        $innerCode = 'result_communication';
+                        $result['name'] = 'Результативная коммуникация ';
+                        $result['actionTypeItem'] = $actionType;
+                        $result['actionItem'] = $action;
+                        $result['innerCode'] = $innerCode;
+
+                        $code = $actionType['code'] . '_' . $action['code'];
+                        $result['code'] = $code;
+                    }
+                }
+                
+                break;
+
+        
             default:
                 # code...
                 break;
