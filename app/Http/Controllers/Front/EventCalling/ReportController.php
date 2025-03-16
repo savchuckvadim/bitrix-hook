@@ -33,7 +33,8 @@ class ReportController extends Controller
                 'contact' => null,
                 'lead' => null,
                 'fail' => null,
-                'isPostSale' => false
+                'isPostSale' => false,
+                'returnToTmc' => false
 
             ];
             $isFullData = true;
@@ -104,6 +105,11 @@ class ReportController extends Controller
             if (isset($request->isPostSale)) {
                 $data['isPostSale'] = $request->isPostSale;
             }
+            if (isset($request->returnToTmc)) {
+                $data['returnToTmc'] = $request->returnToTmc;
+            }
+
+            
             if ($isFullData) {
                 // $service = new EventReportService($data);
                 // $result = $service->getEventFlow();

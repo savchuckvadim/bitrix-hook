@@ -1012,9 +1012,7 @@ class ColdBatchService
             // ->format('Y-m-d H:i:s');
         }
 
-        Log::channel('telegram')->info('APRIL_HOOK list deadline', [
-            'cold list result planDeadline ' . $this->domain => $planDeadline
-        ]);
+       
         $batchCommands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
             $this->hook,
             $this->bitrixLists,

@@ -150,7 +150,7 @@ class BitrixBatchService
             }
             if (!empty($responseData['result_error'])) {
                 // $result['errors'][$key] = $responseData['result_error'];
-                Log::channel('telegram')->info('HOOK TEST Service BATCH', [
+                Log::channel('telegram')->error('HOOK TEST Service BATCH', [
                     'result' => $responseData['result_error']
 
 
