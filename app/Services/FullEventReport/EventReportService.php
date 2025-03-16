@@ -1627,20 +1627,20 @@ class EventReportService
 
                 if ($workStatusCode === 'fail') {  //если провал 
 
-                    APIOnlineController::sendLog('return to tmc get task list', [
+                    // APIOnlineController::sendLog('return to tmc get task list', [
 
-                        'workStatusCode' => $workStatusCode,
+                    //     'workStatusCode' => $workStatusCode,
                     
 
-                    ]);
+                    // ]);
 
                     if (!empty($this->failType)) {
-                        APIOnlineController::sendLog('return to tmc get task list', [
+                        // APIOnlineController::sendLog('return to tmc get task list', [
 
-                            'failType' => $this->failType,
-                            'failReason' => $this->failReason,
+                        //     'failType' => $this->failType,
+                        //     'failReason' => $this->failReason,
     
-                        ]);
+                        // ]);
                         if (!empty($this->failType['code'])) {
 
                             // $reportFields['op_prospects_type'] = $this->failType['code'];

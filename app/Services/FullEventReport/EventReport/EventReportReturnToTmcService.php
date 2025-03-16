@@ -68,7 +68,7 @@ class EventReportReturnToTmcService
                                 $filter = [
                                     // 'TITLE' => '%Презентация%',
                                     'GROUP_ID' => $this->callingTaskGroupId,
-                                    // 'UF_CRM_TASK' => $crmForCurrent,
+                                    'UF_CRM_TASK' => $crmForCurrent,
                                     'RESPONSIBLE_ID' => $assignedId,
                                     // '!=STATUS' => 5, // Исключаем задачи со статусом "завершена"
 

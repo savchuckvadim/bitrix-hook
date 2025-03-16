@@ -616,7 +616,7 @@ class BitrixEntityBatchFlowService
                                     $workStatus,
                                     $failType
                                 );
-                                APIOnlineController::sendLog('return to tmc get task list', [
+                                APIOnlineController::sendLog('op_prospects_type', [
 
                                     'op_prospects_type' => $updatedFields['UF_CRM_' . $pField['bitrixId']],
 
@@ -638,7 +638,7 @@ class BitrixEntityBatchFlowService
                                     $failReason,
                                     $failType
                                 );
-                                APIOnlineController::sendLog('return to tmc get task list', [
+                                APIOnlineController::sendLog('return to tmc op_fail_reason', [
 
                                     'op_fail_reason' => $updatedFields['UF_CRM_' . $pField['bitrixId']],
 
