@@ -1635,12 +1635,12 @@ class EventReportService
                     // ]);
 
                     if (!empty($this->failType)) {
-                        // APIOnlineController::sendLog('return to tmc get task list', [
+                        APIOnlineController::sendLog('failReason', [
 
-                        //     'failType' => $this->failType,
-                        //     'failReason' => $this->failReason,
+                            // 'failType' => $this->failType,
+                            'failReason' => $this->failReason,
     
-                        // ]);
+                        ]);
                         if (!empty($this->failType['code'])) {
 
                             // $reportFields['op_prospects_type'] = $this->failType['code'];
