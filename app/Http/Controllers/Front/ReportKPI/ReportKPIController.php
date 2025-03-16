@@ -260,6 +260,7 @@ class ReportKPIController extends Controller
                 $callingActionTypeFilter = '';
 
 
+                //формирование фильтра из всех типов звонок
                 if (!empty($currentActionsData)) {
                     foreach ($currentActionsData as $currentAction) {
 
@@ -274,6 +275,10 @@ class ReportKPIController extends Controller
                             }
                         }
                     }
+
+                    //формирование команд для не звонок (презентации, уник през, документы по отдельности) 
+                    //в каждом типе уникальный код и innerCode соответственно равно фильтру для комманды 
+
                     foreach ($currentActionsData as $currentAction) {
                         if (
                             strpos($innerCode, 'result_communication') === false
@@ -351,7 +356,7 @@ class ReportKPIController extends Controller
                     'listId' =>  $listId,
                     // 'commands' =>  $commands,
                     'list' => $this->portalKPIList,
-                    'currentActionsData'=> $currentActionsData
+                    'currentActionsData' => $currentActionsData
 
                 ]
             );
