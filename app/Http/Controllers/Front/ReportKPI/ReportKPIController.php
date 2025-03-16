@@ -25,6 +25,7 @@ class ReportKPIController extends Controller
     protected $domain;
     protected $portal;
     protected $portalKPIList;
+    protected $portalHistoryList;
     protected $hook;
 
     protected $filters;
@@ -54,6 +55,10 @@ class ReportKPIController extends Controller
                 foreach ($bitrixLists as $bitrixList) {
                     if ($bitrixList['type'] == 'kpi') {
                         $this->portalKPIList = $bitrixList;
+                    }
+
+                    if ($bitrixList['type'] == 'history') {
+                        $this->portalHistoryList = $bitrixList;
                     }
                 }
             }
@@ -351,8 +356,12 @@ class ReportKPIController extends Controller
         }
     }
 
-    protected function getActionWithTypeData($actionType, $action)
-    {
+    protected function getActionWithTypeData(
+        $actionType,   //presentation
+        $action  //done pound...
+    ) {
+        // pound перенос
+        // act_noresult_fail не состоялся
         $result = [
             'name' => '',
             'actionTypeItem' => null,
@@ -361,11 +370,49 @@ class ReportKPIController extends Controller
             'code' => ''
         ];
         switch ($action['code']) {
+            case 'pound':
+            case 'act_noresult_fail':
+                if (
+                    $actionType['code'] == 'xo' ||
+                    $actionType['code'] == 'call' ||
+                    $actionType['code'] == 'call_in_progress' ||
+                    $actionType['code'] == 'call_in_money' ||
+                    $actionType['code'] == 'presentation'
+                ) {
+                    $innerCode = 'noresult_communication_' . $action['code'];
+                    $result['name'] = 'Нерезультативная коммуникация ' . $action['name'];
+                    $result['actionTypeItem'] = $actionType;
+                    $result['actionItem'] = $action;
+                    $result['innerCode'] = $innerCode;
+
+                    $code = $actionType['code'] . '_' . $action['code'];
+                    $result['code'] = $code;
+                }
+
+
+                break;
             case 'plan':
-                // case 'expired':
             case 'done':
                 // case 'pound':
                 // case 'act_noresult_fail':
+                if (
+                    $actionType['code'] == 'xo' ||
+                    $actionType['code'] == 'call' ||
+                    $actionType['code'] == 'call_in_progress' ||
+                    $actionType['code'] == 'call_in_money' ||
+                    $actionType['code'] == 'presentation'
+                ) {
+                    $innerCode = 'result_communication_' . $action['code'];
+                    $result['name'] = 'Результативная коммуникация ' . $action['name'];
+                    $result['actionTypeItem'] = $actionType;
+                    $result['actionItem'] = $action;
+                    $result['innerCode'] = $innerCode;
+
+                    $code = $actionType['code'] . '_' . $action['code'];
+                    $result['code'] = $code;
+                }
+
+
                 if (
                     $actionType['code'] == 'xo' ||
                     $actionType['code'] == 'call' ||
@@ -409,12 +456,12 @@ class ReportKPIController extends Controller
                 }
 
                 break;
-                // case 'act_init_send':
-                //     # code...
-                //     break;
-                // case 'act_init_done':
-                //     # code...
-                //     break;
+            // case 'act_init_send':
+            //     # code...
+            //     break;
+            // case 'act_init_done':
+            //     # code...
+            //     break;
             case 'act_send':
                 if (
                     $actionType['code'] == 'ev_offer' ||
@@ -436,7 +483,7 @@ class ReportKPIController extends Controller
 
                         $actionType['code'] == 'ev_offer_pres'
                     ) {
-                        $result['name'] = 'КП с презентации';
+                        $result['name'] = 'КП после презентации';
                     }
 
 
@@ -445,12 +492,12 @@ class ReportKPIController extends Controller
                     $result['innerCode'] = $innerCode;
                 }
                 break;
-                // case 'act_sign':
-                //     # code...
-                //     break;
-                // case 'act_pay':
-                //     # code...
-                //     break;
+            // case 'act_sign':
+            //     # code...
+            //     break;
+            // case 'act_pay':
+            //     # code...
+            //     break;
 
             default:
                 # code...
@@ -469,7 +516,7 @@ class ReportKPIController extends Controller
             'Перенос' => 'Перенесена',
             'Не состоялся' => 'Не состоялась',
 
-            // Добавьте другие преобразования по мере необходимости
+          
         ];
 
         return $conversionMap[$actionName] ?? $actionName;
@@ -573,7 +620,7 @@ class ReportKPIController extends Controller
                 'user' => $user,
                 'userName' => $user['NAME'],
                 'callings' => [],
-             
+
             ];
             $resultUserReport['callings'] = $callingsTypes;
 
@@ -639,8 +686,8 @@ class ReportKPIController extends Controller
 
                 'report' =>  $result,
                 // 'responses' =>  $responses,
-     
-     
+
+
 
             ]
         );
