@@ -1635,33 +1635,18 @@ class EventReportService
                     // ]);
 
                     if (!empty($this->failType)) {
-                        APIOnlineController::sendLog('failReason', [
-
-                            'failType' => $this->failType,
-                            'failReason' => $this->failReason,
-    
-                        ]);
+                      
                         if (!empty($this->failType['code'])) {
 
                             // $reportFields['op_prospects_type'] = $this->failType['code'];
 
                          
                             if ($this->failType['code'] == 'failure') { //если тип провала - отказ возражение
-                                APIOnlineController::sendLog('failReason', [
-
-                                 
-                                    'failReason' => $this->failReason,
-            
-                                ]);
+                              
 
                                 if (!empty($this->failReason)) {
                                     if (!empty($this->failReason['code'])) {
-                                        APIOnlineController::sendLog('failReason', [
-
-                                 
-                                            'failReason' => $this->failReason['code'],
-                    
-                                        ]);
+                                        
                                         $reportFields['op_fail_reason'] = $this->failReason['code'];
                                     }
                                 }
