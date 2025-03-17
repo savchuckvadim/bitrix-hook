@@ -1116,7 +1116,8 @@ class EventReportTMCBatchService
             $this->currentReportEventName,
             $this->currentPlanEventName,
             $this->comment,
-            $reportFields
+            $reportFields,
+            false
         );
 
         return   $entityCommand;
