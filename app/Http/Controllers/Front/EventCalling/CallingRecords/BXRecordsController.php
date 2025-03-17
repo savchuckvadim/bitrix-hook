@@ -334,8 +334,7 @@ class BXRecordsController extends Controller
                     $name = "{$activity['SUBJECT']} {$date}";
 
                     $files[$file['id']] = [
-                        'activity' => $activity,
-                        'file' => $file,
+                        
                         'activityId' => $activity['ID'],
                         'id' => $file['id'],
                         'name' => $name,
