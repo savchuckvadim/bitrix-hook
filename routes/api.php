@@ -55,6 +55,8 @@ require __DIR__ . '/full/full_lead.php';
 require __DIR__ . '/full/full_front.php';
 require __DIR__ . '/alfa/alfa.php';
 require __DIR__ . '/helper/helper_router.php';
+require __DIR__ . '/yandex/routes.php';
+
 
 Route::get('/test/', function () {
 
