@@ -12,7 +12,9 @@
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ URL::asset('build/images/favicon.ico') }}">
     <script>
-         localStorage.setItem("initialBxRequest", JSON.stringify({!! $initialData !!}));
+         sessionStorage.setItem("initialBitrix", JSON.stringify({!! json_encode($initialData, JSON_UNESCAPED_UNICODE) !!}));
+         localStorage.setItem("initialBitrix", JSON.stringify({!! json_encode($initialData, JSON_UNESCAPED_UNICODE) !!}));
+         
     </script>
     <!-- Scripts -->
     @viteReactRefresh

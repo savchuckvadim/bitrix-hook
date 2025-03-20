@@ -13,10 +13,12 @@ import { Link } from "react-router-dom";
 
 //i18n
 import { withTranslation } from "react-i18next";
-import { allEntities } from "../../store/april/entity/initial-entities";
-
+// import { allEntities } from "../../store/april/entity/initial-entities";
+// import { bitrixEntities } from "../../store/april/entity/bitrix-entities";
+import { useEntities } from "../Hooks/Placement";
 const SidebarContentApril = props => {
   const ref = useRef();
+  const entities = useEntities()
   const activateParentDropdown = useCallback((item) => {
     item.classList.add("active");
     const parent = item.parentElement;
@@ -147,9 +149,9 @@ const SidebarContentApril = props => {
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled" id="side-menu">
             {/* <li className="menu-title">{props.t("Menu")} </li> */}
-     
+
             <li className="menu-title">{props.t("April App")}</li>
-            {allEntities.map(entity => {
+            {entities.map(entity => {
 
               return (
                 <li>
@@ -163,9 +165,9 @@ const SidebarContentApril = props => {
             })}
 
 
-            
 
-          
+
+
           </ul>
         </div>
       </SimpleBar>

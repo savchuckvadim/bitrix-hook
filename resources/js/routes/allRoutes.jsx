@@ -420,6 +420,7 @@ authProtectedRoutes.push(
 
 
 const publicRoutes = [
+  { path: "/bitrix/login", component: <LoginContainer /> },
   { path: "/login", component: <LoginContainer /> },
   { path: "/logout", component: <Logout /> },
   { path: "/forgot-password", component: <ForgetPwd /> },
@@ -450,5 +451,15 @@ const publicRoutes = [
   // { path: "/auth-two-step-verification", component: <TwostepVerification /> },
   // { path: "/auth-two-step-verification-2", component: <TwostepVerification2 /> },
 ];
+const bitrixRoutes = [
+  { path: 'bitrix', component: <SettingsContainer /> },
+  { path: 'bitrix/settings', component: <SettingsContainer /> },
+  { path: 'bitrix/install', component: <SettingsContainer /> },
 
-export { publicRoutes, authProtectedRoutes };
+  { path: "bitrix/pages-404", component: <Pages404 /> },
+  { path: "bitrix/pages-500", component: <Pages500 /> },
+  { path: "bitrix/crypto-ico-landing", component: <CryptoIcoLanding /> },
+
+
+];
+export { publicRoutes, authProtectedRoutes, bitrixRoutes };

@@ -2,6 +2,7 @@ import { connect } from "react-redux"
 import App from './setup';
 import { initialize } from "./store/april/app-reducer"
 import { useEffect } from "react"
+import { useInBitrix } from "./components/Hooks/Placement";
 
 const mapStateToProps = (state) => {
     return {
@@ -11,9 +12,9 @@ const mapStateToProps = (state) => {
 }
 
 const AppContainer = ({ app, initialize }) => {
-
+const inBitrix = useInBitrix()
     useEffect(() => {
-        !app.initialized && initialize()
+        !app.initialized && initialize(inBitrix)
     }, [app.initialized])
 
 
