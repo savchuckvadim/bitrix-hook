@@ -33,6 +33,7 @@ class TranscribationService
         $this->taskId = $taskId;
         $this->domain = $domain;
         $this->userId = $userId;
+        $this->pushStatus('constructor');
         // Получаем IAM-токен через AuthService
         $auth = new AuthService($taskId);
         $this->iamToken = $auth->getIamToken();
@@ -68,6 +69,7 @@ class TranscribationService
      */
     public function transcribe($fileUrl, $fileName): ?string
     {
+        $this->pushStatus('transcribe');
         $fileContent = Http::get($fileUrl)->body();
         if (!$fileContent) {
             Redis::set("transcription:{$this->taskId}:status", "error");
@@ -96,6 +98,7 @@ class TranscribationService
      */
     private function saveLocalFile($fileContent, $fileName): string
     {
+        $this->pushStatus('saveLocalFile');
         $filePath = "audio/{$this->domain}/{$this->userId}/{$fileName}";
         Storage::disk('public')->put($filePath, $fileContent);
 
@@ -107,6 +110,7 @@ class TranscribationService
      */
     private function uploadFileToStorage($localFilePath, $fileName): ?string
     {
+        $this->pushStatus('uploadFileToStorage');
         try {
             $result = $this->s3Client->putObject([
                 'Bucket' => $this->yaS3Bucket,
@@ -165,6 +169,7 @@ class TranscribationService
         }
         // APIOnlineController::sendLog('transcribeAudio', ['response' => $response->json()]);
 
+        $this->pushStatus('transcribeAudio');
         $operationId = $response->json()['id'] ?? null;
         APIOnlineController::sendLog('operationId', ['operationId' => $operationId]);
 
@@ -179,7 +184,7 @@ class TranscribationService
         $apiUrl = "https://operation.api.cloud.yandex.net/operations/{$operationId}";
         $maxAttempts = 20;
         $attempt = 0;
-
+        $this->pushStatus('getTranscriptionResult');
         while ($attempt < $maxAttempts) {
             sleep(2); // Ждем 2 секунды перед повторным запросом
 
@@ -221,8 +226,15 @@ class TranscribationService
      */
     private function extractTranscriptionText($operationData): ?string
     {
+        $this->pushStatus(message: 'extractTranscriptionText');
+
         if (empty($operationData['response']['chunks'])) {
-            APIOnlineController::sendLog('Нет данных в транскрибации', ['response' => $operationData['response']]);
+            APIOnlineController::sendLog(
+                'Нет данных в транскрибации',
+                [
+                    'response' => $operationData['response']
+                ]
+            );
             Redis::set("transcription:{$this->taskId}:status", "error");
             Redis::set("transcription:{$this->taskId}:error", "Нет данных в транскрибации");
             return null;
@@ -238,5 +250,22 @@ class TranscribationService
         Redis::set("transcription:{$this->taskId}:status", "done");
 
         return trim($text);
+    }
+
+    private function pushStatus($message = '')
+    {
+        $status =  Redis::get("transcription:{$this->taskId}:status");
+        $error = Redis::get("transcription:{$this->taskId}:error");
+        $text = Redis::get("transcription:{$this->taskId}:text");
+        APIOnlineController::sendLog(
+            'из redis',
+            [
+                'taskId' => $this->taskId,
+                'status' => $status,
+                'error' => $error,
+                'text' => $text,
+                'message' => $message
+            ]
+        );
     }
 }

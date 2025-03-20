@@ -73,7 +73,8 @@ class TranscribationController extends Controller
             Task not found or expired.', [
                 'taskId' => $taskId,
                 'status' => 'not_found',
-                'text' => $text
+                'text' => $text,
+                'error' =>  $error 
             ]);
         }
 
