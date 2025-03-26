@@ -87,7 +87,7 @@ class EventReportEntityHistoryService
     public function process()
     {
 
-        $maxLength = 60000;
+        $maxLength = 30000;
 
         $currentHistory = $this->entity['UF_CRM_OP_HISTORY'] ?? '';
         $isEmptyCurrentHistory = mb_strlen($currentHistory, 'UTF-8') < 1;
