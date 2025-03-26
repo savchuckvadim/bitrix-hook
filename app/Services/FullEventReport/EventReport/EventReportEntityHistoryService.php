@@ -82,9 +82,9 @@ class EventReportEntityHistoryService
     public function process()
     {
 
-        $maxLength = 30000;
+        $maxLength = 10000;
 
-        $currentHistory = $this->entity['UF_CRM_OP_HISTORY'] ?? '';
+        
         $entity = BitrixGeneralService::getEntityByID(
             $this->hook,
             $this->entityType,
@@ -93,6 +93,7 @@ class EventReportEntityHistoryService
             ['UF_CRM_OP_HISTORY']
         
         );
+        $currentHistory = $entity['UF_CRM_OP_HISTORY'] ?? '';
         APIOnlineController::sendLog('EventReportEntityHistoryService', [
 
            
