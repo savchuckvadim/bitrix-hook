@@ -210,11 +210,11 @@ class EventReportService
 
         // Форматируем дату и время в нужный формат
 
-        if (isset($data['department'])) {
-            if (!empty($data['department'])) {
+        if (isset($data['departament'])) {
+            if (!empty($data['departament'])) {
                 $this->department = $data['department'];
-                if (!empty($data['department']['currentUser'])) {
-                    $this->currentUser = $data['department']['currentUser'];
+                if (!empty($data['departament']['currentUser'])) {
+                    $this->currentUser = $data['departament']['currentUser'];
                 }
             }
         }
@@ -839,9 +839,9 @@ class EventReportService
         $this->historyService = new EventReportEntityHistoryService(
             $this->domain,
             $this->hook,
-            $entityType,
+            $this->entityType,
             $this->currentBtxEntity,
-            $this->currentUser,
+            $this->currentUser['NAME'],
             $this->nowDate,
             $this->comment,
             $this->isFail
@@ -917,7 +917,7 @@ class EventReportService
             }
 
 
-            
+
             if ($this->domain === 'gsirk.bitrix24.ru') {
 
 

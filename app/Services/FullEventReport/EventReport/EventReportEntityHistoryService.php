@@ -96,10 +96,8 @@ class EventReportEntityHistoryService
         }
 
         $fieldsData = [
-            'id' => $this->entityId,
-            'fields' => [
                 'UF_CRM_OP_HISTORY' => $newText
-            ]
+            
         ];
         BitrixGeneralService::updateEntity(
             $this->hook,
