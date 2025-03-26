@@ -65,24 +65,19 @@ class EventReportEntityHistoryService
                 $this->currentUserName .= ' ' . $this->currentUser['LAST_NAME'];
             }
         }
-        APIOnlineController::sendLog('EventReportEntityHistoryService', [
+        // APIOnlineController::sendLog('EventReportEntityHistoryService', [
 
-            'entityId' => $this->entityId,
+        //     'entityId' => $this->entityId,
 
-            'domain' => $this->domain,
-            'entityType' => $this->entityType,
-            'currentUserName' => $this->currentUserName,
+        //     'domain' => $this->domain,
+        //     'entityType' => $this->entityType,
+        //     'currentUserName' => $this->currentUserName,
 
-            'nowDate' => $this->nowDate,
-            'comment' => $this->comment,
-            'isFail' => $this->isFail,
-        ]);
-        APIOnlineController::sendLog('EventReportEntityHistoryService', [
-
-           
-            'currentUser' => $this->currentUser,
-
-        ]);
+        //     'nowDate' => $this->nowDate,
+        //     'comment' => $this->comment,
+        //     'isFail' => $this->isFail,
+        // ]);
+      
     }
     public function process()
     {
@@ -90,6 +85,20 @@ class EventReportEntityHistoryService
         $maxLength = 30000;
 
         $currentHistory = $this->entity['UF_CRM_OP_HISTORY'] ?? '';
+        $entity = BitrixGeneralService::getEntityByID(
+            $this->hook,
+            $this->entityType,
+            $this->entityId,
+            null,
+            ['UF_CRM_OP_HISTORY']
+        
+        );
+        APIOnlineController::sendLog('EventReportEntityHistoryService', [
+
+           
+            'entity' => $entity,
+
+        ]);
         $isEmptyCurrentHistory = mb_strlen($currentHistory, 'UTF-8') < 1;
         $currentComment = $this->getHistoryString($isEmptyCurrentHistory);
 
