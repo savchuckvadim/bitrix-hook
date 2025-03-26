@@ -9,6 +9,7 @@ use App\Http\Controllers\PortalController;
 use App\Jobs\BtxCreateListItemJob;
 use App\Jobs\BtxSuccessListItemJob;
 use App\Services\BitrixTaskService;
+use App\Services\FullEventReport\EventReport\EventReportEntityHistoryService;
 use App\Services\FullEventReport\EventReport\EventReportPostFailService;
 use App\Services\FullEventReport\EventReport\EventReportRelationLeadService;
 use App\Services\FullEventReport\EventReport\EventReportReturnToTmcService;
@@ -193,6 +194,9 @@ class EventReportService
 
     protected $returnToTmc = false;
     protected $isNeedReturnToTmc = false;
+    protected $department = null;
+    protected $currentUser = null;
+    protected $historyService = null;
     // returnToTmc: {
     //     data: searchedTmcItem as TmcDealsForReturn | undefined,
     //     isActive: returnToTmc.menu.isActive
@@ -206,7 +210,14 @@ class EventReportService
 
         // Форматируем дату и время в нужный формат
 
-
+        if (isset($data['department'])) {
+            if (!empty($data['department'])) {
+                $this->department = $data['department'];
+                if (!empty($data['department']['currentUser'])) {
+                    $this->currentUser = $data['department']['currentUser'];
+                }
+            }
+        }
 
         $domain = $data['domain'];
         $this->domain = $domain;
@@ -221,12 +232,7 @@ class EventReportService
                 }
             }
         }
-        APIOnlineController::sendLog('evreservice returnToTmc data', [
 
-            'isNeedReturnToTmc' => $this->isNeedReturnToTmc,
-            'returnToTmc' => $this->returnToTmc,
-
-        ]);
         if (isset($data['isPostSale'])) {
             $this->isPostSale = $data['isPostSale'];
         }
@@ -829,6 +835,17 @@ class EventReportService
                 $this->relationSalePresDeal = $data['sale']['relationSalePresDeal'];
             }
         }
+
+        $this->historyService = new EventReportEntityHistoryService(
+            $this->domain,
+            $this->hook,
+            $entityType,
+            $this->currentBtxEntity,
+            $this->currentUser,
+            $this->nowDate,
+            $this->comment,
+            $this->isFail
+        );
     }
 
 
@@ -897,6 +914,14 @@ class EventReportService
                         $returnToTmcService->process();
                     }
                 }
+            }
+
+
+            
+            if ($this->domain === 'gsirk.bitrix24.ru') {
+
+
+                $this->historyService->process();
             }
             return APIOnlineController::getSuccess(['data' => ['result' => $result, 'presInitLink' => null]]);
         } catch (\Throwable $th) {
@@ -1385,9 +1410,8 @@ class EventReportService
         $reportFields['op_fail_reason'] = '';
 
         // $reportFields['op_fail_comments'] = '';
-        $reportFields['op_history'] = '';
+        // $reportFields['op_history'] = '';
         $reportFields['op_mhistory'] = [];
-
 
         $currentPresCount = 0;
         $companyPresCount = 0;
@@ -1630,23 +1654,23 @@ class EventReportService
                     // APIOnlineController::sendLog('return to tmc get task list', [
 
                     //     'workStatusCode' => $workStatusCode,
-                    
+
 
                     // ]);
 
                     if (!empty($this->failType)) {
-                      
+
                         if (!empty($this->failType['code'])) {
 
                             // $reportFields['op_prospects_type'] = $this->failType['code'];
 
-                         
+
                             if ($this->failType['code'] == 'failure') { //если тип провала - отказ возражение
-                              
+
 
                                 if (!empty($this->failReason)) {
                                     if (!empty($this->failReason['code'])) {
-                                        
+
                                         $reportFields['op_fail_reason'] = $this->failReason['code'];
                                     }
                                 }
@@ -1691,7 +1715,7 @@ class EventReportService
 
 
 
-       
+
         $entityCommand = $entityService->getBatchCommand(
             $this->portal,
             $currentBtxEntity,
@@ -4399,6 +4423,8 @@ class EventReportService
         // ]);
         return $planComment;
     }
+
+
 
     protected function removeEmojisIntl($string)
     {

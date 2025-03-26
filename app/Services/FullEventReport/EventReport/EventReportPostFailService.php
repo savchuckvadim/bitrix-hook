@@ -15,6 +15,7 @@ class EventReportPostFailService
     protected $hook;
 
     protected $postFailDate;
+    protected $postFailDateString;
     protected $postFailUserId = 251; //gsirk postfail user
     protected $postFailDateStringFieldId = 'UF_CRM_1401340642';  //gsirk old postfail date field type string
     protected $postFailDateFieldId = 'UF_CRM_CALL_NEXT_DATE'; //postfail date field type datetime
@@ -34,6 +35,8 @@ class EventReportPostFailService
                 // $this->postFailDate = $data['fail']['postFailDate'];
                 $carbonDate = Carbon::parse($date);
                 $this->postFailDate =  $carbonDate->format('d.m.Y H:i:s');
+                $this->postFailDateString =  $carbonDate->format('d.m.Y');
+
             }
         }
         // {
@@ -59,7 +62,7 @@ class EventReportPostFailService
                             //USER
                             $fields = [
                                 'ASSIGNED_BY_ID' => $this->postFailUserId,
-                                $this->postFailDateStringFieldId => $this->postFailDate,
+                                $this->postFailDateStringFieldId => $this->postFailDateString,
                                 $this->postFailDateFieldId => $this->postFailDate,
 
                             ];
@@ -70,15 +73,15 @@ class EventReportPostFailService
                                 $this->companyId,
                                 $fields
                             );
-                            APIOnlineController::sendLog('EventReportPostFailService', [
+                            // APIOnlineController::sendLog('EventReportPostFailService', [
 
-                                'companyUpdate' => $companyUpdate,
+                            //     'companyUpdate' => $companyUpdate,
 
-                                'domain' => $this->domain,
-                                'ASSIGNED_BY_ID' => $this->postFailUserId,
-                                'fields' => $fields,
+                            //     'domain' => $this->domain,
+                            //     'ASSIGNED_BY_ID' => $this->postFailUserId,
+                            //     'fields' => $fields,
 
-                            ]);
+                            // ]);
                         }
                     }
                 }
