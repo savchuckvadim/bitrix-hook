@@ -841,7 +841,7 @@ class EventReportService
             $this->hook,
             $this->entityType,
             $this->currentBtxEntity,
-            $this->currentUser['NAME'],
+            $this->currentUser,
             $this->nowDate,
             $this->comment,
             $this->isFail

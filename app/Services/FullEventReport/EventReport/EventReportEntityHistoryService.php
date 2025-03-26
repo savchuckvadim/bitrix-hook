@@ -71,11 +71,17 @@ class EventReportEntityHistoryService
 
             'domain' => $this->domain,
             'entityType' => $this->entityType,
-            'currentUser' => $this->currentUser,
+            'currentUserName' => $this->currentUserName,
 
             'nowDate' => $this->nowDate,
             'comment' => $this->comment,
             'isFail' => $this->isFail,
+        ]);
+        APIOnlineController::sendLog('EventReportEntityHistoryService', [
+
+           
+            'currentUser' => $this->currentUser,
+
         ]);
     }
     public function process()
@@ -84,7 +90,7 @@ class EventReportEntityHistoryService
         $maxLength = 60000;
 
         $currentHistory = $this->entity['UF_CRM_OP_HISTORY'] ?? '';
-        $isEmptyCurrentHistory = mb_strlen($currentHistory, 'UTF-8') > 0;
+        $isEmptyCurrentHistory = mb_strlen($currentHistory, 'UTF-8') < 1;
         $currentComment = $this->getHistoryString($isEmptyCurrentHistory);
 
         // Склеиваем новый текст
