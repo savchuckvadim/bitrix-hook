@@ -96,7 +96,7 @@ class EventReportEntityHistoryService
         APIOnlineController::sendLog('EventReportEntityHistoryService', [
 
            
-            'entity' => $entity,
+            'entity' => $entity['UF_CRM_OP_HISTORY'],
 
         ]);
         $isEmptyCurrentHistory = mb_strlen($currentHistory, 'UTF-8') < 1;
