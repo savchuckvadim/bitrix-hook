@@ -129,10 +129,10 @@ class EventReportEntityHistoryService
         if ($this->isFail) {
             $fullCommentString .= ' __ РЕЗЮМЕ __ ';
         }
-        $fullCommentString .= '(' . $this->currentUserName . ') - ' . $this->comment;
+        $fullCommentString .= ' (' . $this->currentUserName . ') - ' . $this->comment;
 
         if ($this->isFail) {
-            $fullCommentString .= '_________';
+            $fullCommentString .= ' _________    ';
         }
 
 
