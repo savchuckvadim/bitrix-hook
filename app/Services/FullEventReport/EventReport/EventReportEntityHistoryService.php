@@ -82,7 +82,7 @@ class EventReportEntityHistoryService
     public function process()
     {
 
-        $maxLength = 10000;
+        $maxLength = 1340;
 
         
         $entity = BitrixGeneralService::getEntityByID(
