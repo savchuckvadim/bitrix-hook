@@ -212,7 +212,7 @@ class EventReportService
 
         if (isset($data['departament'])) {
             if (!empty($data['departament'])) {
-                $this->department = $data['department'];
+                $this->department = $data['departament'];
                 if (!empty($data['departament']['currentUser'])) {
                     $this->currentUser = $data['departament']['currentUser'];
                 }
