@@ -71,7 +71,7 @@ class EventReportEntityHistoryService
 
             'domain' => $this->domain,
             'entityType' => $this->entityType,
-            'currentUser' => $this->currentUser['NAME'],
+            'currentUser' => $this->currentUser,
 
             'nowDate' => $this->nowDate,
             'comment' => $this->comment,
