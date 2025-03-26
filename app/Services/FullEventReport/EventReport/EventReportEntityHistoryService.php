@@ -80,14 +80,16 @@ class EventReportEntityHistoryService
     }
     public function process()
     {
-        $currentComment = $this->getHistoryString();
+
         $maxLength = 60000;
 
         $currentHistory = $this->entity['UF_CRM_OP_HISTORY'] ?? '';
-    
+        $isEmptyCurrentHistory = mb_strlen($currentHistory, 'UTF-8') > 0;
+        $currentComment = $this->getHistoryString($isEmptyCurrentHistory);
+
         // Склеиваем новый текст
         $newText = $currentHistory . $currentComment;
-    
+
         // Проверка длины
         if (mb_strlen($newText, 'UTF-8') > $maxLength) {
             // Обрезаем начало
@@ -96,8 +98,8 @@ class EventReportEntityHistoryService
         }
 
         $fieldsData = [
-                'UF_CRM_OP_HISTORY' => $newText
-            
+            'UF_CRM_OP_HISTORY' => $newText
+
         ];
         BitrixGeneralService::updateEntity(
             $this->hook,
@@ -106,14 +108,18 @@ class EventReportEntityHistoryService
             $fieldsData
         );
     }
-    protected function getHistoryString()
+    protected function getHistoryString($isEmptyCurrentHistory)
     {
         // | 04.07.2024 - Шаматов Алексей - Не берут трубку 
         // | 04.07.2024 Шаматов Алексей - Попал в отдел управления персоналом, до гб можно дозвониться по номеру 481058 Елена Анатольевна. 
         // | 04.07.2024 - Шаматов Алексей - Не берут трубку 
         // | 08.07.2024 __ РЕЗЮМЕ __ (Шаматов А.) - Соединили с гб Еленой Анатольевной. Есть система, отказ от демо_________
 
-        $fullCommentString = '  |' . $this->nowDate;
+        $fullCommentString = '';
+        if (!$isEmptyCurrentHistory) {
+            $fullCommentString .= '  |  ';
+        }
+        $fullCommentString .=   $this->nowDate;
         if ($this->isFail) {
             $fullCommentString .= ' __ РЕЗЮМЕ __ ';
         }
