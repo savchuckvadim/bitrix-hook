@@ -85,21 +85,21 @@ class EventReportEntityHistoryService
         $maxLength = 1340;
 
         
-        $entity = BitrixGeneralService::getEntityByID(
-            $this->hook,
-            $this->entityType,
-            $this->entityId,
-            null,
-            ['UF_CRM_OP_HISTORY']
+        // $entity = BitrixGeneralService::getEntityByID(
+        //     $this->hook,
+        //     $this->entityType,
+        //     $this->entityId,
+        //     null,
+        //     ['UF_CRM_OP_HISTORY']
         
-        );
-        $currentHistory = $entity['UF_CRM_OP_HISTORY'] ?? '';
-        APIOnlineController::sendLog('EventReportEntityHistoryService', [
+        // );
+        $currentHistory = $this->entity['UF_CRM_OP_HISTORY'] ?? '';
+        // APIOnlineController::sendLog('EventReportEntityHistoryService', [
 
            
-            'entity' => $entity['UF_CRM_OP_HISTORY'],
+        //     'entity' => $entity['UF_CRM_OP_HISTORY'],
 
-        ]);
+        // ]);
         $isEmptyCurrentHistory = mb_strlen($currentHistory, 'UTF-8') < 1;
         $currentComment = $this->getHistoryString($isEmptyCurrentHistory);
 
