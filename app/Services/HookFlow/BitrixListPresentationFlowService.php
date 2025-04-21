@@ -902,12 +902,7 @@ class BitrixListPresentationFlowService
             }
 
             $fieldsData['NAME'] = $evTypeName . ' ' . $name;
-            Log::channel('telegram')->error('APRIL_HOOK pres LIST', [
-
-                'fieldsData' => $fieldsData,
-
-
-            ]);
+       
             $method = 'lists.element.add';
 
             if (empty($code)) {
