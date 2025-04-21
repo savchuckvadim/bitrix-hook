@@ -44,7 +44,7 @@ const Index = ({ app }) => {
     console.log("Данные из localStorage:", storedData);
     console.log('initial')
     const inBitrix = useInBitrix()
-    debugger
+
     return (
         <React.Fragment>
             <Routes>

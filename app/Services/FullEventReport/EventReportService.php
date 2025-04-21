@@ -545,15 +545,7 @@ class EventReportService
         }
 
 
-        // Log::info('HOOK TEST sessionData', [
-        //     'sessionData' => $sessionData
-
-        // ]);
-        // Log::channel('telegram')->info('HOOK TEST sessionData', [
-        //     'task from session' => $sessionData['currentTask']
-
-        // ]);
-
+       
 
         // if ($domain === 'april-dev.bitrix24.ru' || $domain === 'gsr.bitrix24.ru') {
         $this->isDealFlow = true;
@@ -1303,14 +1295,6 @@ class EventReportService
 
 
 
-        // Log::channel('telegram')->info('TST', [
-        //     'currentPresComments' => $currentPresComments,
-        //     'currentFailComments' => $currentFailComments,
-        // ]);
-        // Log::channel('telegram')->info('HOOK TEST getWorkstatusFieldItemValue', [
-        //     'failType' => $this->failType,
-        //     'failReason' => $this->failReason,
-        // ]);
 
         if (!empty($this->workStatus['current'])) {
             if (!empty($this->workStatus['current']['code'])) {

@@ -2,21 +2,14 @@
 
 namespace App\Http\Controllers\Front\ReportKPI;
 
-use App\Http\Controllers\APIBitrixController;
-use App\Http\Controllers\APIController;
+
 use App\Http\Controllers\APIOnlineController;
-use App\Http\Controllers\BitrixHookController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PortalController;
 use App\Services\General\BitrixBatchService;
-use App\Services\General\BitrixListService;
-use App\Services\HookFlow\BitrixEntityFlowService;
-use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Facades\Session;
+
 
 class ReportKPIController extends Controller
 

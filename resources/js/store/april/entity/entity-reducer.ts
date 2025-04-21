@@ -263,7 +263,7 @@ export const getInitialEntityData = (url: string, router: any, currentUrl: strin
     // parentEntityId //entityId
     const entityState = getState().entity as EntityStateType
     let cretingEntity = entityState.creating.formData
-
+    debugger
     if (url) {
         let fullUrl = `initial${currentUrl}`
         let targetUrl = currentUrl
@@ -324,7 +324,7 @@ export const getInitialEntityData = (url: string, router: any, currentUrl: strin
         if (!cretingEntity) {
             cretingEntity = await onlineAPI.service(fullUrl, API_METHOD.GET, 'initial', null) as InitialEntityData | null
             if (cretingEntity) {
-
+debugger
                 dispatch(entityActions.setInitialAdd(cretingEntity))
             } else {
                 console.log('no initial data')
@@ -591,7 +591,7 @@ const entity = (state: EntityStateType = initialState, action: EntityActionsType
         case 'entity/SET_INITIAL_CREATE_ENTITY':
 
             const initialData = action.initialData
-
+            debugger
             return {
                 ...state,
                 creating: {

@@ -728,6 +728,25 @@ allEntities.push(
         []
     )
 )
+
+allEntities.push(
+    getEntityRoute(
+        104,
+        'package',
+        'Пакеты (LT, Consalting, Start) GARANT',
+        [101]
+    )
+)
+allEntities.push(
+    getEntityRoute(
+        105,
+        'garant_prof_price',
+        'Цены PROF GARANT',
+        [100, 103, 104]
+    )
+)
+
+
 export const getRouteDataById = (id: number) => {
     return allEntities.find(routeData => routeData.id == id)
 }

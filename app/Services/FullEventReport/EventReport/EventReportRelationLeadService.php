@@ -36,28 +36,11 @@ class EventReportRelationLeadService
     public function processLead()
     {
         try {
-            Log::channel('telegram')->info(
-                'processLead',
-                [
-                    '$domain' => $this->domain,
-                    // '$hook' => $this->hook,
-                    '$status' => $this->status,
-
-                ]
-            );
+          
             if (!empty($this->leadId)) {
                 // if (!empty($this->lead['ID'])) {
 
-                Log::channel('telegram')->info(
-                    'processLead',
-                    [
-
-                        '$leadId' => $this->leadId,
-                        '$status' => $this->status,
-
-                    ]
-                );
-
+            
 
 
                 // $leadId = $this->lead['ID'];

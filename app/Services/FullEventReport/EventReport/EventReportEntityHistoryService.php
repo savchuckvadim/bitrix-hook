@@ -65,18 +65,7 @@ class EventReportEntityHistoryService
                 $this->currentUserName .= ' ' . $this->currentUser['LAST_NAME'];
             }
         }
-        // APIOnlineController::sendLog('EventReportEntityHistoryService', [
 
-        //     'entityId' => $this->entityId,
-
-        //     'domain' => $this->domain,
-        //     'entityType' => $this->entityType,
-        //     'currentUserName' => $this->currentUserName,
-
-        //     'nowDate' => $this->nowDate,
-        //     'comment' => $this->comment,
-        //     'isFail' => $this->isFail,
-        // ]);
       
     }
     public function process()
@@ -85,21 +74,9 @@ class EventReportEntityHistoryService
         $maxLength = 1340;
 
         
-        // $entity = BitrixGeneralService::getEntityByID(
-        //     $this->hook,
-        //     $this->entityType,
-        //     $this->entityId,
-        //     null,
-        //     ['UF_CRM_OP_HISTORY']
-        
-        // );
+      
         $currentHistory = $this->entity['UF_CRM_OP_HISTORY'] ?? '';
-        // APIOnlineController::sendLog('EventReportEntityHistoryService', [
-
-           
-        //     'entity' => $entity['UF_CRM_OP_HISTORY'],
-
-        // ]);
+    
         $isEmptyCurrentHistory = mb_strlen($currentHistory, 'UTF-8') < 1;
         $currentComment = $this->getHistoryString($isEmptyCurrentHistory);
 
@@ -117,6 +94,7 @@ class EventReportEntityHistoryService
             'UF_CRM_OP_HISTORY' => $newText
 
         ];
+        sleep(1);
         BitrixGeneralService::updateEntity(
             $this->hook,
             $this->entityType,
@@ -147,11 +125,7 @@ class EventReportEntityHistoryService
 
 
 
-        APIOnlineController::sendLog('getFullEventComment', [
-
-            'fullCommentString' => $fullCommentString,
-
-        ]);
+     
         return $fullCommentString;
     }
 }

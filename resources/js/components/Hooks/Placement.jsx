@@ -15,7 +15,7 @@ export const useInBitrix= () => {
     const bitrixAuth = localStorage.getItem("initialBitrix")
     let location = useLocation();
     if (location.pathname.includes("bitrix") || bitrixAuth) {
-        return true
+        return false
     }
     return false
 }

@@ -73,15 +73,7 @@ class EventReportPostFailService
                                 $this->companyId,
                                 $fields
                             );
-                            // APIOnlineController::sendLog('EventReportPostFailService', [
-
-                            //     'companyUpdate' => $companyUpdate,
-
-                            //     'domain' => $this->domain,
-                            //     'ASSIGNED_BY_ID' => $this->postFailUserId,
-                            //     'fields' => $fields,
-
-                            // ]);
+                         
                         }
                     }
                 }

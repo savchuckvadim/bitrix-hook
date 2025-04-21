@@ -20,7 +20,7 @@ function* loginUser({ payload: { user, history } }) {
     const response = yield axios.post('/api/login', user);
     
     const data = response.data;
-    debugger
+    
     if (data.success === true && data.message === 'success') {
       const logged_user = {
         login: true,

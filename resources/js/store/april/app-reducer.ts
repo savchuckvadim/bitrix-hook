@@ -44,7 +44,7 @@ const appActions = {
 //THUNKS
 export const initialize = (inBitrix: boolean): AuthThunkType => async (dispatch) => {
 
-    debugger
+
     if (!inBitrix) {
         const fireBack = initFirebaseBackend(firebaseConfig) as FirebaseAuthBackendInstanceType
         fireBack && dispatch(appActions.setFirebase(fireBack))
