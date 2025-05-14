@@ -566,7 +566,6 @@ class BitrixListFlowService
                 }
                 if ($workStatus['code'] === 'fail') {
                     $eventActionName .= ': Отказ';
-
                 }
             }
 
@@ -880,6 +879,72 @@ class BitrixListFlowService
                             // print_r("<resultBatchCommands bxlflowservice>");
                             // print_r("<br>");
                             // print_r($resultBatchCommands);
+                        }
+                    }
+                }
+
+
+
+                //for presentation_contact_uniq
+                if (!empty($contactId)) {
+                    if ($isUniqPresPlan || $isUniqPresReport) {
+                        $xoFields[9]['list']['code'] = 'presentation_contact_uniq';
+
+                        if ($isUniqPresPlan) {
+
+                            $code = $companyId . '_' . $currentBaseDealId . '_ ' . $contactId . '_plan';
+                        }
+
+                        if ($isUniqPresReport) {
+                            $code = $companyId . '_' . $currentBaseDealId .  '_ ' . $contactId . '_done';
+
+                            if ($responsible !== $suresponsible) { // значит ответственный - ТМЦ и на него надо сделать отдельный уникальный запись об отчете
+                                $code = $companyId . '_' . $currentBaseDealId .  '_ ' . $contactId . '_done_' . $responsible;
+                            }
+                        }
+
+                        foreach ($bitrixLists as $bitrixList) {
+                            if ($bitrixList['type'] === 'kpi' && $bitrixList['group'] === 'sales') {
+
+                                foreach ($xoFields as $xoValue) {
+                                    $currentDataField = [];
+                                    $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $xoValue['code'];
+                                    $btxId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, null);
+                                    if (!empty($xoValue)) {
+
+
+
+                                        if (!empty($xoValue['value'])) {
+                                            $fieldsData[$btxId] = $xoValue['value'];
+                                            $currentDataField[$btxId] = $xoValue['value'];
+                                        }
+
+                                        if (!empty($xoValue['list'])) {
+                                            $btxItemId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, $xoValue['list']['code']);
+                                            $currentDataField[$btxId] = [
+
+                                                $btxItemId =>  $xoValue['list']['code']
+                                            ];
+
+                                            $fieldsData[$btxId] =  $btxItemId;
+                                        }
+                                    }
+                                    // array_push($fieldsData, $currentDataField);
+                                }
+
+
+                                $command =  BitrixListService::getBatchCommandSetItem(
+                                    $hook,
+                                    $bitrixList['bitrixId'],
+                                    $fieldsData,
+                                    $code
+                                );
+                                $resultBatchCommands['set_list_item_' . $code] = $command;
+                                // print_r("<br>");
+                                // print_r("<resultBatchCommands bxlflowservice>");
+                                // print_r("<br>");
+                                // print_r($resultBatchCommands);
+                            }
                         }
                     }
                 }

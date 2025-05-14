@@ -281,19 +281,7 @@ class ReportKPIController extends Controller
                                 $value = $currentAction['actionTypeItem']['bitrixId'];
                                 $callingActionTypeFilter .= "&filter[$actionTypeFieldId][]=$value";
                             }
-                        } else {
-                            //формирование нерезультативного фильтра - все innerCode noresult, code - разные
-                            // if (strpos($innerCode, 'result_communication') !== false) {
-                            //     $value = $currentAction['actionTypeItem']['bitrixId'];
-                            //     $resultActionTypeFilter .= "&filter[$actionTypeFieldId][]=$value";
-                            // }
-
-
-                            // if (strpos($innerCode, 'noresult_communication') !== false) {
-                            //     $value = $currentAction['actionTypeItem']['bitrixId'];
-                            //     $noResultActionTypeFilter .= "&filter[$actionTypeFieldId][]=$value";
-                            // }
-                        }
+                        } 
                     }
 
                     //формирование команд для не звонок (презентации, уник през, документы по отдельности) 
@@ -354,39 +342,7 @@ class ReportKPIController extends Controller
                                         . "&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
                                 }
                             }
-                        } else { //формирование комманд результативный / нерезультативный
-
-                            // if (
-                            //     strpos($innerCode, 'result_communication') !== false
-                            // ) {
-                            //     if (strpos($code, 'call') !== false) {  //взять только звонок без прогресс и моней но использовать массив типов - всех звонков
-                            //         if ((strpos($code, 'xo') === false) && (strpos($code, 'call_in_progress') === false)
-                            //             && (strpos($code, 'call_in_money') === false)
-                            //             && (strpos($code, 'presentation') === false)
-                            //         ) {  //взять только звонок без прогресс и моней но использовать массив типов - всех звонков
-
-
-
-
-                            //             $actionValuebitrixId = $currentAction['actionItem']['bitrixId'];
-                            //             // $actionTypeValuebitrixId = $currentAction['actionTypeItem']['bitrixId'];
-
-                            //             // Формируем ключ команды, используя ID пользователя и ID действия для уникальности
-                            //             $cmdKey = "user_{$userId}_action_{$code}";
-
-
-
-
-                            //             // Добавляем команду в массив команд
-                            //             $commands[$cmdKey] = "lists.element.get?IBLOCK_TYPE_ID=lists&IBLOCK_ID="
-                            //                 . $listId
-                            //                 . "&filter[$eventResponsibleFieldId]=$userId&filter[$actionFieldId]=$actionValuebitrixId"
-                            //                 . $resultActionTypeFilter
-                            //                 . "&filter[$dateFieldForHookFrom]=$dateFrom&filter[$dateFieldForHookTo]=$dateTo";
-                            //         }
-                            //     }
-                            // }
-                        }
+                        } 
                     }
                 }
             }
@@ -807,30 +763,10 @@ class ReportKPIController extends Controller
 
                 array_push($responses, $response);
 
-                // if (isset($response['total'])) {
-                // Добавляем полученные звонки к общему списку
-                // $resultCallings = array_merge($resultCallings, $response['result']);
-                // if (isset($response['next'])) {
-                //     // Получаем значение "next" из ответа
-                //     $next = $response['next'];
-                // }
-
-                // $type['count'] = $response['total'];
                 if (isset($response['total'])) {
                     $resultUserReport['callings'][$key]['count'] = $response['total'];
                 }
 
-                // } else { 
-                //     return APIController::getError(
-                //         'response total not found',
-                //         [
-                //             'response' => $response
-                //         ]
-                //     );
-                //     array_push($errors, $response);
-                //     $type['count'] = 0;
-                // }
-                // Ждем некоторое время перед следующим запросом
                 usleep(500); // Например, ждем 5 секунд
             }
             array_push($result, $resultUserReport);
