@@ -95,12 +95,16 @@ export const entityActions = {
 //THUNK
 //entities items
 export const updateEntities = (token = null, entityName: string) => async (dispatch: AppDispatchType, getState: GetStateType) => {
-
+debugger
     const state = getState()
     //получить из гугла массив entities и вставить в firebase и april-online
 
     // dispatch(inProgress(true, 'component'))
     const fetchedData = await googleAPI.get(token)
+    debugger
+    if(entityName === 'garant_prof_price'){
+        debugger
+    }
     let savedfireData = null
     let onlineSavedData = null
     const firebaseAPI = state.app.firebaseBackend
