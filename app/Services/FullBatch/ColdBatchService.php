@@ -137,6 +137,8 @@ class ColdBatchService
         if ($domain === 'alfacentr.bitrix24.ru') {
             // $nowDateLocal = Carbon::now('Asia/Novosibirsk')->locale('ru')->isoFormat('D MMMM YYYY');
             // $nowDateUtc = Carbon::now('Asia/Novosibirsk')->setTimezone('Europe/Moscow')->format('Y-m-d H:i:s'); // Для Bitrix
+            $nowDateLocal = Carbon::now('Asia/Novosibirsk')->locale('ru'); // Для строки
+            $formattedStringNowDate = $nowDateLocal->translatedFormat('d F Y');
         } elseif ($domain === 'gsirk.bitrix24.ru') {
             $nowDateLocal = Carbon::now('Asia/Irkutsk')->locale('ru'); // Для строки
             $formattedStringNowDate = $nowDateLocal->translatedFormat('d F Y');
@@ -186,7 +188,7 @@ class ColdBatchService
         $portal = $portal['data'];
         $this->portal = $portal;
 
-        if ($domain === 'april-dev.bitrix24.ru' || $domain === 'gsr.bitrix24.ru' || $domain === 'gsirk.bitrix24.ru' || $domain === 'april-garant.bitrix24.ru') {
+        // if ($domain === 'april-dev.bitrix24.ru' || $domain === 'gsr.bitrix24.ru' || $domain === 'gsirk.bitrix24.ru' || $domain === 'april-garant.bitrix24.ru') {
             $this->isDealFlow = true;
             $this->withLists = true;
             $this->isSmartFlow = false;
@@ -197,7 +199,7 @@ class ColdBatchService
 
                 $this->bitrixLists = $portal['bitrixLists'];
             }
-        }
+        // }
 
         // if ($domain === 'gsr.bitrix24.ru') {
         //     $this->isSmartFlow = false;
@@ -438,68 +440,68 @@ class ColdBatchService
         $callThemeFieldCold = '';
 
 
-        if (!empty($portal['smarts'])) {
-            // foreach ($portal['smarts'] as $smart) {
-            $smart = null;
-            if (!empty($portal['smarts'])) {
+        // if (!empty($portal['smarts'])) {
+        //     // foreach ($portal['smarts'] as $smart) {
+        //     $smart = null;
+        //     if (!empty($portal['smarts'])) {
 
-                foreach ($portal['smarts'] as $pSmart) {
-                    if ($pSmart['group'] == 'sales') {
-                        $smart = $pSmart;
-                    }
-                }
-            }
-            if (!empty($smart)) {
-                $smartForStageId = $smart['forStage'];
+        //         foreach ($portal['smarts'] as $pSmart) {
+        //             if ($pSmart['group'] == 'sales') {
+        //                 $smart = $pSmart;
+        //             }
+        //         }
+        //     }
+        //     if (!empty($smart)) {
+        //         $smartForStageId = $smart['forStage'];
 
-                if (!empty($smart['categories'])) {
-                    foreach ($smart['categories'] as $category) {
+        //         if (!empty($smart['categories'])) {
+        //             foreach ($smart['categories'] as $category) {
 
-                        if ($category && !empty($category['code'])) {
+        //                 if ($category && !empty($category['code'])) {
 
-                            if ($category['code'] == 'sales_cold') {
+        //                     if ($category['code'] == 'sales_cold') {
 
-                                $targetCategoryId = $category['bitrixId'];
-                                if (!empty($category['stages'])) {
-                                    foreach ($category['stages'] as $stage) {
-                                        if ($stage['code'] == 'cold_plan') {
-                                            $targetStageId = $smartForStageId . $category['bitrixId'] . ':' . $stage['bitrixId'];
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                if (!empty($smart['bitrixfields'])) {
+        //                         $targetCategoryId = $category['bitrixId'];
+        //                         if (!empty($category['stages'])) {
+        //                             foreach ($category['stages'] as $stage) {
+        //                                 if ($stage['code'] == 'cold_plan') {
+        //                                     $targetStageId = $smartForStageId . $category['bitrixId'] . ':' . $stage['bitrixId'];
+        //                                 }
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //         if (!empty($smart['bitrixfields'])) {
 
-                    foreach ($smart['bitrixfields'] as $field) {
+        //             foreach ($smart['bitrixfields'] as $field) {
 
-                        if ($field && !empty($field['code'])) {
-                            if ($field['code'] == 'xo_call_name') {
-                                $callThemeFieldCold = $field['bitrixCamelId'];
-                            } else if ($field['code'] == 'xo_deadline') {
-                                $lastCallDateFieldCold = $field['bitrixCamelId'];
-                            } else if ($field['code'] == 'next_call_date') {
-                                $lastCallDateField = $field['bitrixCamelId'];
-                            } else if ($field['code'] == 'next_call_name') {
-                                $callThemeField = $field['bitrixCamelId'];
-                            }
-                        }
-                    }
-                }
-            } else {
-                Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
-                    'data' => [
-                        'message' => 'portal smart was not found 340',
-                        'smart' => $smart,
-                        'portal' => $portal
-                    ]
-                ]);
-            }
+        //                 if ($field && !empty($field['code'])) {
+        //                     if ($field['code'] == 'xo_call_name') {
+        //                         $callThemeFieldCold = $field['bitrixCamelId'];
+        //                     } else if ($field['code'] == 'xo_deadline') {
+        //                         $lastCallDateFieldCold = $field['bitrixCamelId'];
+        //                     } else if ($field['code'] == 'next_call_date') {
+        //                         $lastCallDateField = $field['bitrixCamelId'];
+        //                     } else if ($field['code'] == 'next_call_name') {
+        //                         $callThemeField = $field['bitrixCamelId'];
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     } else {
+        //         Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
+        //             'data' => [
+        //                 'message' => 'portal smart was not found 340',
+        //                 'smart' => $smart,
+        //                 'portal' => $portal
+        //             ]
+        //         ]);
+        //     }
 
-            // }
-        }
+        //     // }
+        // }
         // $targetStageId = 'DT158_13:NEW';
         $this->categoryId = $targetCategoryId;
         $this->stageId = $targetStageId;
