@@ -932,8 +932,8 @@ class ColdBatchService
         // Log::channel('telegram')->info('HOOK BATCH handle', ['handle result' => $planDeals]);
         // Log::info('HOOK BATCH handle', ['handle planDeals' => $planDeals]);
 
-        // Log::channel('telegram')->info('HOOK BATCH handle', ['handle result' => $planDeals]);
-        // Log::info('HOOK BATCH handle', ['handle planDeals' => $planDeals]);
+        Log::channel('telegram')->info('HOOK BATCH handle', ['handle result' => $planDeals]);
+        Log::info('HOOK BATCH handle', ['handle planDeals' => $planDeals]);
 
         // $entityBatchCommands = [];
         if (!empty($planDeals) && (is_object($planDeals) || is_array($planDeals))) {
@@ -983,10 +983,10 @@ class ColdBatchService
             'name' => "В работе"
         ];
         $planDeadline = $this->deadline;
-        // Log::channel('telegram')->info('DEBUG TIMEZONE', [
-        //     'original_deadline' => $this->deadline,
+        Log::channel('telegram')->info('DEBUG TIMEZONE', [
+            'original_deadline' => $this->deadline,
 
-        // ]);
+        ]);
         if ($this->domain === 'alfacentr.bitrix24.ru') {
 
             $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'Asia/Novosibirsk');
@@ -1037,16 +1037,16 @@ class ColdBatchService
 
 
         // ]);
-        // Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
-        //     'all batchCommands' => $batchCommands,
+        Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+            'all batchCommands' => $batchCommands,
 
 
-        // ]);
-        // Log::info('HOOK TEST COLD BATCH', [
-        //     'entityResult' => $entityResult,
+        ]);
+        Log::info('HOOK TEST COLD BATCH', [
+            'entityResult' => $entityResult,
 
 
-        // ]);
+        ]);
         // Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
         //     'entityResult' => $entityResult,
 
