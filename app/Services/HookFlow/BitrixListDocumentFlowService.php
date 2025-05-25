@@ -203,29 +203,30 @@ class BitrixListDocumentFlowService
             ];
 
             foreach ($bitrixLists as $bitrixList) {
-                if ($bitrixList['type'] === 'history') {
+                if ($bitrixList['type'] === 'history' && $bitrixList['group'] === 'entity') {
+                    if ($eventType !== 'ev_invoice_pres' && $eventType !== 'ev_offer_pres') { //их записываем  только kpi к каждому такому выше еще идет дубль обычного ev_offer | ev_invoice
+                        foreach ($xoFields as $xoValue) {
+                            $currentDataField = [];
+                            $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $xoValue['code'];
+                            $btxId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, null);
+                            if (!empty($xoValue)) {
 
-                    foreach ($xoFields as $xoValue) {
-                        $currentDataField = [];
-                        $fieldCode = $bitrixList['group'] . '_' . $bitrixList['type'] . '_' . $xoValue['code'];
-                        $btxId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, null);
-                        if (!empty($xoValue)) {
 
 
+                                if (!empty($xoValue['value'])) {
+                                    $fieldsData[$btxId] = $xoValue['value'];
+                                    $currentDataField[$btxId] = $xoValue['value'];
+                                }
 
-                            if (!empty($xoValue['value'])) {
-                                $fieldsData[$btxId] = $xoValue['value'];
-                                $currentDataField[$btxId] = $xoValue['value'];
-                            }
+                                if (!empty($xoValue['list'])) {
+                                    $btxItemId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, $xoValue['list']['code']);
+                                    $currentDataField[$btxId] = [
 
-                            if (!empty($xoValue['list'])) {
-                                $btxItemId = BitrixListFlowService::getBtxListCurrentData($bitrixList, $fieldCode, $xoValue['list']['code']);
-                                $currentDataField[$btxId] = [
+                                        $btxItemId =>  $xoValue['list']['code']
+                                    ];
 
-                                    $btxItemId =>  $xoValue['list']['code']
-                                ];
-
-                                $fieldsData[$btxId] =  $btxItemId;
+                                    $fieldsData[$btxId] =  $btxItemId;
+                                }
                             }
                         }
                         // array_push($fieldsData, $currentDataField);
@@ -248,7 +249,7 @@ class BitrixListDocumentFlowService
                     $dealId = $currentBaseDealId;
                 }
                 foreach ($bitrixLists as $bitrixList) {
-                    if ($bitrixList['type'] === 'kpi') {
+                    if ($bitrixList['type'] === 'kpi' && $bitrixList['group'] === 'sales') {
 
                         foreach ($xoFields as $xoValue) {
                             $currentDataField = [];

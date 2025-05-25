@@ -334,8 +334,6 @@ class EventDocumentService
 
             if (isset($data['isFromPresentation'])) {
                 $this->isFromPresentation = $data['isFromPresentation'];
-
-            
             }
 
             if (isset($data['isSupplyReport'])) {
@@ -344,89 +342,86 @@ class EventDocumentService
                 }
             }
 
-            if(empty($this->isSupplyReportDone)){
-              
+            if (empty($this->isSupplyReportDone)) {
 
-              
+
+
                 $this->isOfferDone = true;
                 if (!empty($data['invoice'])) {
-    
-    
+
+
                     if (!empty($data['invoice']['one'])) {
                         if (!empty($data['invoice']['one']['value'])) {
                             $this->isInvoiceDone = true;
                         }
                     }
                 }
-    
-    
-
             }
- 
 
 
-            if (!empty($portal['smarts'])) {
-                // foreach ($portal['smarts'] as $smart) {
-                $smart = null;
-                if (!empty($portal['smarts'])) {
 
-                    foreach ($portal['smarts'] as $pSmart) {
-                        if ($pSmart['group'] == 'sales') {
-                            $smart = $pSmart;
-                        }
-                    }
-                }
-                if (!empty($smart)) {
-                    $smartForStageId = $smart['forStage'];
+            // if (!empty($portal['smarts'])) {
+            //     // foreach ($portal['smarts'] as $smart) {
+            //     $smart = null;
+            //     if (!empty($portal['smarts'])) {
 
-                    if (!empty($smart['categories'])) {
-                        foreach ($smart['categories'] as $category) {
+            //         foreach ($portal['smarts'] as $pSmart) {
+            //             if ($pSmart['group'] == 'sales') {
+            //                 $smart = $pSmart;
+            //             }
+            //         }
+            //     }
+            //     if (!empty($smart)) {
+            //         $smartForStageId = $smart['forStage'];
 
-                            if ($category && !empty($category['code'])) {
+            //         if (!empty($smart['categories'])) {
+            //             foreach ($smart['categories'] as $category) {
 
-                                if ($category['code'] == 'sales_cold') {
+            //                 if ($category && !empty($category['code'])) {
 
-                                    $targetCategoryId = $category['bitrixId'];
-                                    if (!empty($category['stages'])) {
-                                        foreach ($category['stages'] as $stage) {
-                                            if ($stage['code'] == 'cold_plan') {
-                                                $targetStageId = $smartForStageId . $category['bitrixId'] . ':' . $stage['bitrixId'];
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (!empty($smart['bitrixfields'])) {
+            //                     if ($category['code'] == 'sales_cold') {
 
-                        foreach ($smart['bitrixfields'] as $field) {
+            //                         $targetCategoryId = $category['bitrixId'];
+            //                         if (!empty($category['stages'])) {
+            //                             foreach ($category['stages'] as $stage) {
+            //                                 if ($stage['code'] == 'cold_plan') {
+            //                                     $targetStageId = $smartForStageId . $category['bitrixId'] . ':' . $stage['bitrixId'];
+            //                                 }
+            //                             }
+            //                         }
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //         if (!empty($smart['bitrixfields'])) {
 
-                            if ($field && !empty($field['code'])) {
-                                if ($field['code'] == 'xo_call_name') {
-                                    $callThemeFieldCold = $field['bitrixCamelId'];
-                                } else if ($field['code'] == 'xo_deadline') {
-                                    $lastCallDateFieldCold = $field['bitrixCamelId'];
-                                } else if ($field['code'] == 'next_call_date') {
-                                    $lastCallDateField = $field['bitrixCamelId'];
-                                } else if ($field['code'] == 'next_call_name') {
-                                    $callThemeField = $field['bitrixCamelId'];
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
-                        'data' => [
-                            'message' => 'portal smart was not found 420',
-                            'smart' => $smart,
-                            'portal' => $portal
-                        ]
-                    ]);
-                }
+            //             foreach ($smart['bitrixfields'] as $field) {
 
-                // }
-            }
+            //                 if ($field && !empty($field['code'])) {
+            //                     if ($field['code'] == 'xo_call_name') {
+            //                         $callThemeFieldCold = $field['bitrixCamelId'];
+            //                     } else if ($field['code'] == 'xo_deadline') {
+            //                         $lastCallDateFieldCold = $field['bitrixCamelId'];
+            //                     } else if ($field['code'] == 'next_call_date') {
+            //                         $lastCallDateField = $field['bitrixCamelId'];
+            //                     } else if ($field['code'] == 'next_call_name') {
+            //                         $callThemeField = $field['bitrixCamelId'];
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     } else {
+            //         Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
+            //             'data' => [
+            //                 'message' => 'portal smart was not found 420',
+            //                 'smart' => $smart,
+            //                 'portal' => $portal
+            //             ]
+            //         ]);
+            //     }
+
+            //     // }
+            // }
 
 
             $this->currentDepartamentType = BitrixDepartamentService::getDepartamentTypeByUserId();
@@ -476,9 +471,8 @@ class EventDocumentService
             // } else {
             //     $result = $this->workStatus;
             // }
-            if(empty($this->isSupplyReportDone)){ //если не отчет о продаже
+            if (empty($this->isSupplyReportDone)) { //если не отчет о продаже
                 $this->getEntityFlow();
-
             }
             // обновляет поля связанные с документом kpi
             // sleep(1);
@@ -487,13 +481,13 @@ class EventDocumentService
             $this->getListFlow();
             sleep(1);
 
-            if(empty($this->isSupplyReportDone)){ //если не отчет о продаже
+            if (empty($this->isSupplyReportDone)) { //если не отчет о продаже
 
-            if ($this->isFromPresentation && $this->currentPresDeal) {
+                if ($this->isFromPresentation && $this->currentPresDeal) {
 
-                $this->getListPresentationFlow();
+                    $this->getListPresentationFlow();
+                }
             }
-        }
             return APIOnlineController::getSuccess(['data' => ['result' => $this->workStatus, 'presInitLink' => null]]);
         } catch (\Throwable $th) {
             $errorMessages =  [
@@ -706,7 +700,7 @@ class EventDocumentService
         $this->getEntityFlow(
             true,
             $this->currentBaseDeal,
-            'base'
+            // 'base'
         );
         // Log::channel('telegram')->error('APRIL_HOOK get deal flow', ['currentPresDeal' => $this->currentPresDeal]);
 
@@ -714,7 +708,7 @@ class EventDocumentService
             $this->getEntityFlow(
                 true,
                 $this->currentPresDeal,
-                'presentation'
+                // 'presentation'
             );
             // Log::info('APRIL_HOOK get deal flow', ['$this->productRows' => $this->productRows]);
 
@@ -1405,6 +1399,28 @@ class EventDocumentService
 
             $eventTypeCode = 'ev_offer';
             $eventTypeName = 'КП';
+            BitrixListDocumentFlowService::getListsFlow(  //report - отчет по текущему событию
+                $this->hook,
+                $this->bitrixLists,
+                $eventTypeCode,
+                $eventTypeName,
+                'act_send',  // сделано, отправлено
+                // $this->stringType,
+                // $this->nowDate,
+                $this->responsibleId,
+                $this->responsibleId,
+                $this->responsibleId,
+                $this->entityId,
+                $this->comment,
+                $currentBxDealIds,
+                $this->currentBaseDeal['ID']
+                // $this->workStatus['current'], 
+                // $this->resultStatus, // result noresult expired,
+                // $this->noresultReason,
+                // $this->failReason,
+                // $this->failType
+
+            );
             if ($this->isFromPresentation) { //кп после презентации
 
                 $eventTypeCode = 'ev_offer_pres';
@@ -1441,6 +1457,34 @@ class EventDocumentService
 
             $eventTypeCode = 'ev_invoice';
             $eventTypeName = 'Счет';
+
+            BitrixListDocumentFlowService::getListsFlow(  //report - отчет по текущему событию
+                $this->hook,
+                $this->bitrixLists,
+                $eventTypeCode,
+                $eventTypeName,
+                'act_send',  // сделано, отправлено
+                // $this->stringType,
+                // $this->nowDate,
+                $this->responsibleId,
+                $this->responsibleId,
+                $this->responsibleId,
+                $this->entityId,
+                $this->comment,
+                $currentBxDealIds,
+                $this->currentBaseDeal['ID'],
+                null,
+                null,
+
+                // $this->workStatus['current'], 
+                // $this->resultStatus, // result noresult expired,
+                // $this->noresultReason,
+                // $this->failReason,
+                // $this->failType
+
+            );
+
+
             if ($this->isFromPresentation) { //счет после презентации
                 $eventTypeCode = 'ev_invoice_pres';
                 $eventTypeName = 'Счет после презентации';
@@ -1480,7 +1524,7 @@ class EventDocumentService
 
             $eventTypeCode = 'ev_supply';
             $eventTypeName = 'Отчет о поставке';
-   
+
 
 
             BitrixListDocumentFlowService::getListsFlow(  //report - отчет по текущему событию
