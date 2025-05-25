@@ -203,7 +203,7 @@ class BitrixListDocumentFlowService
             ];
 
             foreach ($bitrixLists as $bitrixList) {
-                if ($bitrixList['type'] === 'history' && $bitrixList['group'] === 'entity') {
+                if ($bitrixList['type'] === 'history' && $bitrixList['group'] === 'sales') {
                     if ($eventType !== 'ev_invoice_pres' && $eventType !== 'ev_offer_pres') { //их записываем  только kpi к каждому такому выше еще идет дубль обычного ev_offer | ev_invoice
                         foreach ($xoFields as $xoValue) {
                             $currentDataField = [];
