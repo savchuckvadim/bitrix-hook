@@ -531,8 +531,8 @@ class ColdBatchService
     {
 
         try {
-            Log::channel('telegram')
-                ->info('APRIL_HOOK data', ['entityType' => $this->entityType]);
+            // Log::channel('telegram')
+            //     ->info('APRIL_HOOK data', ['entityType' => $this->entityType]);
 
             $currentDealsIds = [];
             $updatedCompany = null;
@@ -1051,16 +1051,16 @@ class ColdBatchService
 
 
         // ]);
-        Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
-            'all batchCommands' => $batchCommands,
+        // Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
+        //     'all batchCommands' => $batchCommands,
 
 
-        ]);
-        Log::info('HOOK TEST COLD BATCH', [
-            'entityResult' => $entityResult,
+        // ]);
+        // Log::info('HOOK TEST COLD BATCH', [
+        //     'entityResult' => $entityResult,
 
 
-        ]);
+        // ]);
         // Log::channel('telegram')->info('HOOK TEST COLD BATCH', [
         //     'entityResult' => $entityResult,
 
