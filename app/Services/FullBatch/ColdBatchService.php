@@ -153,13 +153,13 @@ class ColdBatchService
         $this->createdId = $data['created'];
         $this->deadline = $data['deadline'];
         $this->name = 'от ' . $formattedStringNowDate;
-      
+
         if ($domain === 'gsirk.bitrix24.ru') {
             $this->deadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'Asia/Irkutsk')
                 ->setTimezone('Europe/Moscow')
                 ->format('d.m.Y H:i:s');
         }
-        
+
 
         if (isset($data['name'])) {
             if (!empty($data['name'])) {
@@ -515,7 +515,9 @@ class ColdBatchService
     {
 
         try {
-            // Log::channel('telegram')->error('APRIL_HOOK data', ['entityType' => $this->entityType]);
+            Log::channel('telegram')
+                ->info('APRIL_HOOK data', ['entityType' => $this->entityType]);
+
             $currentDealsIds = [];
             $updatedCompany = null;
             $updatedLead = null;
@@ -999,7 +1001,7 @@ class ColdBatchService
             // ->format('Y-m-d H:i:s');
         }
 
-       
+
         $batchCommands = BitrixListFlowService::getBatchListFlow(  //report - отчет по текущему событию
             $this->hook,
             $this->bitrixLists,
