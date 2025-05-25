@@ -17,13 +17,13 @@ class PortalController extends Controller
             ];
             $cacheKey = 'portal_' . $domain;
             $cachedPortalData = Cache::get($cacheKey);
-            // if (!empty($cachedPortalData)) {
+            if (!empty($cachedPortalData)) {
 
-            //     $result = $cachedPortalData;
-            // } else {
+                $result = $cachedPortalData;
+            } else {
                 $result = APIOnlineController::online('post', 'getportal', $requestPortalData, 'portal');
-                Cache::put($cacheKey, $result, now()->addMinutes(10)); // Кешируем данные портала
-            // }
+                Cache::put($cacheKey, $result, now()->addMinutes(3600)); // Кешируем данные портала
+            }
             // Log::channel('telegram')->info('TEST PORTAL GET HOOK', [
             //     ['$result' => $result]
             // ]);
