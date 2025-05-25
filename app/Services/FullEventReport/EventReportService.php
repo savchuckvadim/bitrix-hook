@@ -545,7 +545,7 @@ class EventReportService
         }
 
 
-       
+
 
         // if ($domain === 'april-dev.bitrix24.ru' || $domain === 'gsr.bitrix24.ru') {
         $this->isDealFlow = true;
@@ -583,9 +583,8 @@ class EventReportService
 
 
 
-        if ($domain === 'gsr.bitrix24.ru' || $domain === 'gsirk.bitrix24.ru' || $domain === 'april-garant.bitrix24.ru') {
-            $this->isSmartFlow = false;
-        }
+        $this->isSmartFlow = false;
+
 
 
         $this->aprilSmartData = $portal['bitrixSmart'];

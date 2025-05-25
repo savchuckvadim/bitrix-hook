@@ -269,6 +269,9 @@ class BitrixTaskService
         if ($domain === 'gsirk.bitrix24.ru') {
             date_default_timezone_set('Asia/Irkutsk');
         }
+        if ($domain === 'alfacentr.bitrix24.ru') {
+            date_default_timezone_set('Asia/Novosibirsk');
+        }
         $nowDate = now();
         $contactId = null;
         $contactName = null;
@@ -352,7 +355,7 @@ class BitrixTaskService
 
             if ($domain === 'alfacentr.bitrix24.ru') {
 
-                $crmItems = [$smartId . ''  . '' . $currentSmartItemId];
+                // $crmItems = [$smartId . ''  . '' . $currentSmartItemId];
 
                 $novosibirskTime = Carbon::createFromFormat('d.m.Y H:i:s', $deadline, 'Asia/Novosibirsk');
                 $moscowTime = $novosibirskTime->setTimezone('Europe/Moscow');
@@ -634,6 +637,9 @@ class BitrixTaskService
 
         if ($domain === 'gsirk.bitrix24.ru') {
             date_default_timezone_set('Asia/Irkutsk');
+        }
+        if ($domain === 'alfacentr.bitrix24.ru') {
+            date_default_timezone_set('Asia/Novosibirsk');
         }
         $batchcommand = '';
         try {
