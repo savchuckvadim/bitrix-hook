@@ -1700,7 +1700,7 @@ class EventReportService
 
 
         $entityCommand = $entityService->getBatchCommand(
-            $this->portal,
+            $this->domain,
             $currentBtxEntity,
             $portalEntityData,
             $this->hook,

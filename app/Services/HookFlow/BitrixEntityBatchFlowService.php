@@ -63,7 +63,7 @@ class BitrixEntityBatchFlowService
 
     public function getBatchCommand(
 
-        $portal,
+        $domain,
         $currentBtxEntity,
         $portalCompanyData,
         $hook,
@@ -157,7 +157,8 @@ class BitrixEntityBatchFlowService
                     $currentPlanEventName,
                     $comment,
                     $entityType,
-                    $isPostSale
+                    $isPostSale,
+                    $domain
 
                 );
 
@@ -537,7 +538,8 @@ class BitrixEntityBatchFlowService
         $currentPlanEventName,
         $comment,
         $entityType,
-        $isPostSale
+        $isPostSale,
+        $domain
 
     ) {
 
@@ -719,7 +721,7 @@ class BitrixEntityBatchFlowService
         }
 
 
-        if ($entityType == 'company' && !$isPostSale) {
+        if ($entityType == 'company' && !$isPostSale && $domain !== 'alfacentr.bitrix24.ru') {
             $updatedFields['ASSIGNED_BY_ID'] = $responsibleId;
         }
         // Log::channel('telegram')->info('HOOK TEST CURRENTENTITY', [

@@ -434,7 +434,9 @@ class ColdBatchService
                 }
             }
         }
-        $resultEntityFields['ASSIGNED_BY_ID'] = $data['responsible'];
+        if ($this->domain !== 'alfacentr.bitrix24.ru') {
+            $resultEntityFields['ASSIGNED_BY_ID'] = $data['responsible'];
+        }
 
         if (!empty($resultEntityFields)) {
             $this->entityFieldsUpdatingContent = $resultEntityFields;
@@ -545,13 +547,13 @@ class ColdBatchService
 
             // }
 
-            if ($this->isSmartFlow) {
-                $rand = rand(1, 2);
-                sleep($rand);
-                $urand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
-                usleep($urand);
-                $this->getSmartFlow();
-            }
+            // if ($this->isSmartFlow) {
+            //     $rand = rand(1, 2);
+            //     sleep($rand);
+            //     $urand = mt_rand(300000, 2000000); // случайное число от 300000 до 900000 микросекунд (0.3 - 0.9 секунды)
+            //     usleep($urand);
+            //     $this->getSmartFlow();
+            // }
 
             if ($this->isDealFlow && $this->portalDealData) {
                 $currentDealsIds = $this->getDealFlow();
@@ -952,7 +954,7 @@ class ColdBatchService
         // $entityBatchCommands = [];
         if (!empty($planDeals) && (is_object($planDeals) || is_array($planDeals))) {
             $entityFieldsCopy = $this->entityFieldsUpdatingContent;
-
+            $entityFieldsCopy['ASSIGNED_BY_ID'] = $this->responsibleId;
             if (!empty($this->lead)) {
                 if (!empty($this->lead['TITLE'])) {
                     $entityFieldsCopy['TITLE'] = $this->lead['TITLE'];
@@ -1120,7 +1122,7 @@ class ColdBatchService
         //         );
         //     }
         // }
-        if ($this->domain !== 'gsirk.bitrix24.ru') {
+        if ($this->domain !== 'gsirk.bitrix24.ru' && $this->domain !== 'alfacentr.bitrix24.ru') {
 
 
             sleep(1);
