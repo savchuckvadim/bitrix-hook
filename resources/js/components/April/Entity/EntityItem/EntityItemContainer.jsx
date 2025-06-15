@@ -81,7 +81,7 @@ const EntityItemContainer = ({
     // setFormik(validation)
     // setHandleFile(handleFileChange)
 
-debugger
+
     return !isCreating ? <EntityItem
         // validation={validation}
         router={router}
@@ -104,7 +104,7 @@ debugger
             getInitialRelationEntity={getInitialRelationEntity}
             setRelation={setRelation}
             addRelation={addRelation}
-            // handleFileChange={handleFileChange}
+        // handleFileChange={handleFileChange}
 
         />
 

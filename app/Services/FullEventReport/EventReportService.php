@@ -8,6 +8,7 @@ use App\Http\Controllers\Front\EventCalling\ReportController;
 use App\Http\Controllers\PortalController;
 use App\Jobs\BtxCreateListItemJob;
 use App\Jobs\BtxSuccessListItemJob;
+use App\Services\BitrixGeneralService;
 use App\Services\BitrixTaskService;
 use App\Services\FullEventReport\EventReport\EventReportEntityHistoryService;
 use App\Services\FullEventReport\EventReport\EventReportPostFailService;
@@ -702,14 +703,14 @@ class EventReportService
             }
 
             if (isset($sessionData['currentCompany']) && isset($sessionData['deals'])) {
-                $this->currentBtxEntity  = $sessionData['currentCompany'];
+                // $this->currentBtxEntity  = $sessionData['currentCompany'];
 
 
                 $sessionDeals = $sessionData['deals'];
             }
 
             if (isset($sessionDeals) && isset($sessionDeals['currentBaseDeals'])) {
-                $this->currentBtxEntity  = $sessionData['currentCompany'];
+                // $this->currentBtxEntity  = $sessionData['currentCompany'];
 
                 if (is_array($sessionDeals['currentBaseDeals']) && !empty($sessionDeals['currentBaseDeals'])) {
                     $this->currentBtxDeals  = [$sessionDeals['currentBaseDeals'][0]];
@@ -740,6 +741,12 @@ class EventReportService
             $this->currentTMCDeal = $sessionData['tmcDeal'];
         }
 
+        $this->currentBtxEntity  = BitrixGeneralService::getEntityByID(
+            $this->hook,
+            'company',
+            $this->entityId,
+            
+        );
         if (!empty($portal['smarts'])) {
             // foreach ($portal['smarts'] as $smart) {
             $smart = null;
