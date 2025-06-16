@@ -68,7 +68,7 @@ class PortalController extends Controller
                 $webhookRestKey = $portal['key'];
             }
 
-            $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+           
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
 
             if ($domain == 'gsirk.bitrix24.ru') {
