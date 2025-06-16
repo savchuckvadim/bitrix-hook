@@ -69,11 +69,11 @@ class PortalController extends Controller
 
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
 
-            if ($domain == 'gsirk.bitrix24.ru') {
-                Log::channel('telegram')->info('TEST PORTAL GET HOOK', [
-                    ['$random' => $webhookRestKey]
-                ]);
-            }
+            // if ($domain == 'gsirk.bitrix24.ru') {
+            //     Log::channel('telegram')->info('TEST PORTAL GET HOOK', [
+            //         ['$random' => $webhookRestKey]
+            //     ]);
+            // }
 
             // return APIOnlineController::getResponse($portalsRespone['resultCode'], $portalsRespone['message'], $portalsRespone['data']);
             return $hook;
