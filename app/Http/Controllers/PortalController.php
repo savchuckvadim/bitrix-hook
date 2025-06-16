@@ -58,17 +58,15 @@ class PortalController extends Controller
             $number = random_int(1, 4);
             if ($number == 1) {
                 $webhookRestKey = $portal['C_REST_CLIENT_ID'];
-            }
-            if ($number == 2) {
+            } elseif ($number == 2) {
                 $webhookRestKey = $portal['C_REST_CLIENT_SECRET'];
-            }
-            if ($number == 3) {
+            } elseif ($number == 3) {
                 $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
             } else {
                 $webhookRestKey = $portal['key'];
             }
 
-           
+
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
 
             if ($domain == 'gsirk.bitrix24.ru') {

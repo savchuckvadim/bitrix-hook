@@ -595,22 +595,22 @@ class EventReportService
 
 
 
-        $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
-        $number = random_int(1, 4);
-        if ($number == 1) {
-            $webhookRestKey = $portal['C_REST_CLIENT_ID'];
-        }
-        if ($number == 2) {
-            $webhookRestKey = $portal['C_REST_CLIENT_SECRET'];
-        }
-        if ($number == 3) {
-            $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
-        }
-        if ($number == 4) {
-            $webhookRestKey = $portal['key'];
-        }
-        $this->hook = 'https://' . $domain  . '/' . $webhookRestKey;
-
+        // $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+        // $number = random_int(1, 4);
+        // if ($number == 1) {
+        //     $webhookRestKey = $portal['C_REST_CLIENT_ID'];
+        // }
+        // if ($number == 2) {
+        //     $webhookRestKey = $portal['C_REST_CLIENT_SECRET'];
+        // }
+        // if ($number == 3) {
+        //     $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+        // }
+        // if ($number == 4) {
+        //     $webhookRestKey = $portal['key'];
+        // }
+        // $this->hook = 'https://' . $domain  . '/' . $webhookRestKey;
+        $this->hook = PortalController::getHook($domain);
         $smartId = ''; //T9c_
         if (isset($portal['bitrixSmart']) && isset($portal['bitrixSmart']['crm'])) {
             $smartId =  $portal['bitrixSmart']['crm'] . '_';
