@@ -55,15 +55,13 @@ class PortalController extends Controller
             $portal = PortalController::getPortal($domain);
             $portal = $portal['data'];
             $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
-            $number = random_int(1, 4);
+            $number = random_int(1, 3);
             if ($number == 1) {
                 $webhookRestKey = $portal['C_REST_CLIENT_ID'];
             } elseif ($number == 2) {
                 $webhookRestKey = $portal['C_REST_CLIENT_SECRET'];
-            } elseif ($number == 3) {
-                $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
             } else {
-                $webhookRestKey = $portal['key'];
+                $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
             }
 
 
