@@ -867,7 +867,10 @@ class ReportController extends Controller
                 $th->getMessage(),
                 [
                     'task' => [
-                        'message' => 'success'
+                        'message' => 'success',
+                        'trace' => $th->getTraceAsString(),
+                        'file' => $th->getFile(),
+                        'line' => $th->getLine()
                     ],
                     'rq' => $request->all()
 
