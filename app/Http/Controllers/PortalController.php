@@ -25,13 +25,13 @@ class PortalController extends Controller
                 Cache::put($cacheKey, $result, now()->addMinutes(15)); // Кешируем данные портала
             }
 
-            if (!empty($result['data'])) {
-                if (!empty($result['data']['C_REST_WEB_HOOK_URL'])) {
-                    Log::channel('telegram')->info('TEST PORTAL GET HOOK', [
-                        ['$portal' => $result['data']['C_REST_WEB_HOOK_URL']]
-                    ]);
-                }
-            }
+            // if (!empty($result['data'])) {
+            //     if (!empty($result['data']['C_REST_WEB_HOOK_URL'])) {
+            //         Log::channel('telegram')->info('TEST PORTAL GET HOOK', [
+            //             ['$portal' => $result['data']['C_REST_WEB_HOOK_URL']]
+            //         ]);
+            //     }
+            // }
 
             // return APIOnlineController::getResponse($portalsRespone['resultCode'], $portalsRespone['message'], $portalsRespone['data']);
             return $result;
@@ -73,7 +73,7 @@ class PortalController extends Controller
 
             if ($domain == 'gsirk.bitrix24.ru') {
                 Log::channel('telegram')->info('TEST PORTAL GET HOOK', [
-                    ['$random' => $hook]
+                    ['$random' => $webhookRestKey]
                 ]);
             }
 
