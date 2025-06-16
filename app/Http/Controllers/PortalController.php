@@ -27,6 +27,13 @@ class PortalController extends Controller
             Log::channel('telegram')->info('TEST PORTAL GET HOOK', [
                 ['$result' => $result]
             ]);
+            if(!empty($portal['data'])){
+                if(!empty($portal['data']['C_REST_WEB_HOOK_URL'])){
+                    Log::channel('telegram')->info('TEST PORTAL GET HOOK', [
+                        ['$result' => $result['data']['C_REST_WEB_HOOK_URL']]
+                    ]);
+                }
+            }
 
             // return APIOnlineController::getResponse($portalsRespone['resultCode'], $portalsRespone['message'], $portalsRespone['data']);
             return $result;
