@@ -596,6 +596,19 @@ class EventReportService
 
 
         $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+        $number = random_int(1, 4);
+        if ($number == 1) {
+            $webhookRestKey = $portal['C_REST_CLIENT_ID'];
+        }
+        if ($number == 2) {
+            $webhookRestKey = $portal['C_REST_CLIENT_SECRET'];
+        }
+        if ($number == 3) {
+            $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+        }
+        if ($number == 4) {
+            $webhookRestKey = $portal['key'];
+        }
         $this->hook = 'https://' . $domain  . '/' . $webhookRestKey;
 
         $smartId = ''; //T9c_
@@ -740,12 +753,34 @@ class EventReportService
         if (isset($sessionData['tmcDeal'])) {
             $this->currentTMCDeal = $sessionData['tmcDeal'];
         }
+        $getCompanySelect = [
+            'ID',
+            'TITLE',
+            'ASSIGNED_BY_ID',
+            'UF_CRM_PRES_COUNT',
+            'UF_CRM_1709807026',
+            'UF_CRM_OP_MHISTORY',
+            'UF_CRM_OP_HISTORY',
+            'UF_CRM_OP_OFFER_Q',
+            'UF_CRM_OP_INVOICE_Q',
+            'UF_CRM_OP_INVOICE_DATE',
+            'UF_CRM_OP_INVOICE_PRES_Q',
+            'UF_CRM_OP_OFFER_DATE',
+            'UF_CRM_OP_OFFER_PRES_Q',
 
+            'UF_CRM_OP_FAIL_COMMENTS',
+            'UF_CRM_PRES_COMMENTS',
+            'UF_CRM_MANAGER_OP',
+            'UF_CRM_MANAGER_TMC',
+            'UF_CRM_OP_FAIL_COMMENTS',
+        ];
         $this->currentBtxEntity  = BitrixGeneralService::getEntityByID(
             $this->hook,
             'company',
             $this->entityId,
-            
+            null,
+            $getCompanySelect
+
         );
         if (!empty($portal['smarts'])) {
             // foreach ($portal['smarts'] as $smart) {
@@ -1003,15 +1038,15 @@ class EventReportService
 
 
                                 // if ($this->failType['code'] == 'failure') {
-                                Log::channel('telegram')->info(
-                                    'failFlow',
-                                    [
-                                        'domain' => $this->domain,
-                                        // 'hook' => $this->hook,
-                                        'fail' => $this->postFail,
-                                        'companyId' => $this->entityId
-                                    ]
-                                );
+                                // Log::channel('telegram')->info(
+                                //     'failFlow',
+                                //     [
+                                //         'domain' => $this->domain,
+                                //         // 'hook' => $this->hook,
+                                //         'fail' => $this->postFail,
+                                //         'companyId' => $this->entityId
+                                //     ]
+                                // );
                                 $postFailService = new EventReportPostFailService([
                                     'domain' => $this->domain,
                                     'hook' => $this->hook,

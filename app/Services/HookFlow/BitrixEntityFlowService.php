@@ -270,7 +270,7 @@ class BitrixEntityFlowService
                                         $updatedFields['UF_CRM_' . $pField['bitrixId']] = $value;
                                         break;
 
-                                        // /statusesCodes
+                                    // /statusesCodes
                                     case 'op_work_status':
                                         $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getWorkstatusFieldItemValue(
                                             $pField, //with items
@@ -382,6 +382,7 @@ class BitrixEntityFlowService
         $resultFields = null;
         $batchCommands = [];
         try {
+
             if (!empty($currentTask['ufCrmTask'])) {
                 foreach ($currentTask['ufCrmTask'] as $ufCrm) {
                     $parts = explode('_', $ufCrm); // Разделяем строку по символу '_'
@@ -394,33 +395,95 @@ class BitrixEntityFlowService
                         case 'CO':
                             $method = 'crm.company.get';
                             $keyName = 'company_' . $id;
+                            $company = BitrixGeneralService::getEntityByID(
+                                $hook,
+                                'company',
+                                $id,
+                                null,
+                                [
+                                    'ID',
+                                    'TITLE',
+                                    'ASSIGNED_BY_ID',
+                                    'UF_CRM_PRES_COUNT',
+                                    'UF_CRM_1709807026',
+                                    'UF_CRM_OP_MHISTORY',
+                                    'UF_CRM_OP_HISTORY',
+                                    'UF_CRM_OP_OFFER_Q',
+                                    'UF_CRM_OP_INVOICE_Q',
+                                    'UF_CRM_OP_INVOICE_DATE',
+                                    'UF_CRM_OP_INVOICE_PRES_Q',
+                                    'UF_CRM_OP_OFFER_DATE',
+                                    'UF_CRM_OP_OFFER_PRES_Q',
+
+                                    'UF_CRM_OP_FAIL_COMMENTS',
+                                    'UF_CRM_PRES_COMMENTS',
+                                    'UF_CRM_MANAGER_OP',
+                                    'UF_CRM_MANAGER_TMC',
+
+                                ]
+                            );
+                            $resultFields['companies'][] = $company;
 
                             break;
                         case 'D':
+                            sleep(1);
                             $method = 'crm.deal.get';
                             $keyName = 'deal_' . $id;
+                            $deal = BitrixGeneralService::getEntityByID(
+                                $hook,
+                                'deal',
+                                $id,
+                                null,
+                                [
+                                    'ID',
+                                    'TITLE',
+                                    'CATEGORY_ID',
+                                    'ASSIGNED_BY_ID',
+
+                                    'STAGE_ID',
+                                    'UF_CRM_PRES_COUNT',
+                                    'UF_CRM_1709807026',
+                                    'CATEGORY_ID ',
+                                    'UF_CRM_PRES_COMMENTS',
+                                    'UF_CRM_MANAGER_OP',
+                                    'UF_CRM_MANAGER_TMC',
+                                    'UF_CRM_OP_HISTORY',
+                                    'UF_CRM_OP_MHISTORY',
+                                    'UF_CRM_TO_BASE_SALES',
+                                    'UF_CRM_TO_XO_SALES',
+                                    'UF_CRM_TO_PRESENTATION_SALES',
+                                    'UF_CRM_TO_BASE_TMC',
+                                    'UF_CRM_TO_PRESENTATION_TMC',
+                                    'UF_CRM_TO_BASE_SERVICE',
+                                    'UF_CRM_OP_CURRENT_STATUS',
+
+                                ]
+                            );
+                            $resultFields['deals'][] = $deal;
+
                             break;
                         default:
                             # code...
                             break;
                     }
 
-                    $batchCommands['cmd'][$keyName] = $method . '?id=' . $id;
+                    // $batchCommands['cmd'][$keyName] = $method . '?id=' . $id;
                 }
             }
 
-            $response = Http::post($hook . '/batch', $batchCommands);
-            $responseData = APIBitrixController::getBitrixRespone($response, 'event: getEntities');
+            // $response = Http::post($hook . '/batch', $batchCommands);
+            // $responseData = APIBitrixController::getBitrixRespone($response, 'event: getEntities');
 
-            if (!empty($responseData['result'])) {
-                foreach ($responseData['result'] as $key => $value) {
-                    if (strpos($key, 'company_') === 0) {
-                        $resultFields['companies'][] = $value;
-                    } elseif (strpos($key, 'deal_') === 0) {
-                        $resultFields['deals'][] = $value;
-                    }
-                }
-            }
+
+            // if (!empty($responseData['result'])) {
+            //     foreach ($responseData['result'] as $key => $value) {
+            //         if (strpos($key, 'company_') === 0) {
+            //             $resultFields['companies'][] = $value;
+            //         } elseif (strpos($key, 'deal_') === 0) {
+            //             $resultFields['deals'][] = $value;
+            //         }
+            //     }
+            // }
 
             return $resultFields;
         } catch (\Throwable $th) {
@@ -591,7 +654,7 @@ class BitrixEntityFlowService
 
 
                                 break;
-                                // /statusesCodes
+                            // /statusesCodes
                             case 'op_work_status':
                                 $updatedFields['UF_CRM_' . $pField['bitrixId']] = $this->getWorkstatusFieldItemValue(
                                     $pField, //with items
@@ -627,68 +690,68 @@ class BitrixEntityFlowService
                                 break;
 
 
-                                //xo
+                            //xo
 
-                                //     //warm
-                                // case 'call_next_date':   //ОП Дата Следующего звонка
-                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $deadline;
-                                //     break;
-                                // case 'call_next_name':   //ОП Тема Следующего звонка
+                            //     //warm
+                            // case 'call_next_date':   //ОП Дата Следующего звонка
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $deadline;
+                            //     break;
+                            // case 'call_next_name':   //ОП Тема Следующего звонка
 
-                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $currentPlanEventName;
-                                //     break;
-                                // case 'call_last_date':  //ОП Дата последнего звонка 
-                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $nowdate;
-                                //     break;
-                                //     //in_progress
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $currentPlanEventName;
+                            //     break;
+                            // case 'call_last_date':  //ОП Дата последнего звонка 
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $nowdate;
+                            //     break;
+                            //     //in_progress
 
-                                //     //money_a
-
-
-
-                                //     //presentation
-                                // case 'next_pres_plan_date':
-                                // case 'last_pres_plan_date':
-                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $deadline;
-                                //     break;
-
-
-                                // case 'last_pres_done_date':
-                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $nowdate;
-                                //     break;
-
-
-                                // case 'last_pres_plan_responsible':
-                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $userId;
-                                //     break;
-
-                                // case 'last_pres_done_responsible':
+                            //     //money_a
 
 
 
+                            //     //presentation
+                            // case 'next_pres_plan_date':
+                            // case 'last_pres_plan_date':
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $deadline;
+                            //     break;
 
-                                // case 'pres_count':
-                                //     $count = 0;
-                                //     if (!empty($currentBtxEntity)) {
-                                //         if (!empty($currentBtxEntity['UF_CRM_' . $pField['bitrixId']])) {
-                                //             $count = (int)$currentBtxEntity['UF_CRM_' . $pField['bitrixId']];
-                                //         }
-                                //     }
-                                //     $count = $count + 1;
-                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $count;
-                                //     break;
-                                // case 'pres_comments':
-                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $comment;
-                                //     break;
+
+                            // case 'last_pres_done_date':
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $nowdate;
+                            //     break;
+
+
+                            // case 'last_pres_plan_responsible':
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $userId;
+                            //     break;
+
+                            // case 'last_pres_done_responsible':
 
 
 
 
+                            // case 'pres_count':
+                            //     $count = 0;
+                            //     if (!empty($currentBtxEntity)) {
+                            //         if (!empty($currentBtxEntity['UF_CRM_' . $pField['bitrixId']])) {
+                            //             $count = (int)$currentBtxEntity['UF_CRM_' . $pField['bitrixId']];
+                            //         }
+                            //     }
+                            //     $count = $count + 1;
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $count;
+                            //     break;
+                            // case 'pres_comments':
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $comment;
+                            //     break;
 
-                                //     //fail
-                                // case 'op_fail_comments':
-                                //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $comment;
-                                //     break;
+
+
+
+
+                            //     //fail
+                            // case 'op_fail_comments':
+                            //     $updatedFields['UF_CRM_' . $pField['bitrixId']] = $comment;
+                            //     break;
 
                             default:
                                 # code...
@@ -882,7 +945,7 @@ class BitrixEntityFlowService
                         $resultCode = 'op_prospects_depend';
                         break;
 
-                        //todo
+                    //todo
                     case 'op_prospects_nophone':  //недозвон
                     case 'op_prospects_company': //компания не существует
                     case 'op_prospects_off': //не хотят общаться

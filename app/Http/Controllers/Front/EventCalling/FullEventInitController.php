@@ -29,6 +29,7 @@ class FullEventInitController extends Controller
         $portal = $portal['data'];
         $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
         $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+        $hook = PortalController::getHook($domain);
         $method = '/tasks.task.list.json';
 
         $url = $hook . $method;
@@ -233,27 +234,28 @@ class FullEventInitController extends Controller
             }
 
             if ($isFullData) {
-                $portal = PortalController::getPortal($domain);
-                $portal = $portal['data'];
-                $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
-                $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+                // $portal = PortalController::getPortal($domain);
+                // $portal = $portal['data'];
+                // $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+                // $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+                // $hook = PortalController::getHook($domain);
                 // $currentCompany = BitrixGeneralService::getEntity($hook, 'company', $companyId);
 
 
                 //from task - получаем из task компании и сделки разных направлений
 
-                $currentBtxEntities =  BitrixEntityFlowService::getEntities(
-                    $hook,
-                    $currentTask,
-                );
-                if (!empty($currentBtxEntities)) {
-                    if (!empty($currentBtxEntities['companies'])) {
-                        $currentCompany = $currentBtxEntities['companies'][0];
-                    }
-                    if (!empty($currentBtxEntities['deals'])) {
-                        $btxDeals = $currentBtxEntities['deals'];
-                    }
-                }
+                // $currentBtxEntities =  BitrixEntityFlowService::getEntities(
+                //     $hook,
+                //     $currentTask,
+                // );
+                // if (!empty($currentBtxEntities)) {
+                //     if (!empty($currentBtxEntities['companies'])) {
+                //         $currentCompany = $currentBtxEntities['companies'][0];
+                //     }
+                //     if (!empty($currentBtxEntities['deals'])) {
+                //         $btxDeals = $currentBtxEntities['deals'];
+                //     }
+                // }
                 $sessionKey = $domain . '_' . $currentTask['id'];
 
                 $sessionValue = [

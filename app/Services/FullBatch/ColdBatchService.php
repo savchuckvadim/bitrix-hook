@@ -241,7 +241,9 @@ class ColdBatchService
             $currentBtxEntity = BitrixGeneralService::getEntity(
                 $this->hook,
                 $data['entityType'],
-                $data['entityId']
+                $data['entityId'],
+                null,
+                ['ID', 'TITLE', 'ASSIGNED_BY_ID', 'UF_CRM_OP_MHISTORY', 'UF_CRM_OP_HISTORY']
 
             );
             $this->currentBtxEntity =  $currentBtxEntity;
@@ -999,10 +1001,10 @@ class ColdBatchService
             'name' => "В работе"
         ];
         $planDeadline = $this->deadline;
-        Log::channel('telegram')->info('DEBUG TIMEZONE', [
-            'original_deadline' => $this->deadline,
+        // Log::channel('telegram')->info('DEBUG TIMEZONE', [
+        //     'original_deadline' => $this->deadline,
 
-        ]);
+        // ]);
         if ($this->domain === 'alfacentr.bitrix24.ru') {
 
             $tmpDeadline = Carbon::createFromFormat('d.m.Y H:i:s', $this->deadline, 'Asia/Novosibirsk');

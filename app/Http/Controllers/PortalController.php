@@ -22,11 +22,11 @@ class PortalController extends Controller
             //     $result = $cachedPortalData;
             // } else {
                 $result = APIOnlineController::online('post', 'getportal', $requestPortalData, 'portal');
-                // Cache::put($cacheKey, $result, now()->addMinutes(3600)); // Кешируем данные портала
+                Cache::put($cacheKey, $result, now()->addMinutes(15)); // Кешируем данные портала
             // }
-          
-            if(!empty($portal['data'])){
-                if(!empty($portal['data']['C_REST_WEB_HOOK_URL'])){
+
+            if (!empty($portal['data'])) {
+                if (!empty($portal['data']['C_REST_WEB_HOOK_URL'])) {
                     Log::channel('telegram')->info('TEST PORTAL GET HOOK', [
                         ['$result' => $result['data']['C_REST_WEB_HOOK_URL']]
                     ]);
@@ -54,6 +54,20 @@ class PortalController extends Controller
         try {
             $portal = PortalController::getPortal($domain);
             $portal = $portal['data'];
+            $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+            $number = random_int(1, 4);
+            if ($number == 1) {
+                $webhookRestKey = $portal['C_REST_CLIENT_ID'];
+            }
+            if ($number == 2) {
+                $webhookRestKey = $portal['C_REST_CLIENT_SECRET'];
+            }
+            if ($number == 3) {
+                $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+            } else {
+                $webhookRestKey = $portal['key'];
+            }
+
             $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
             $hook = 'https://' . $domain  . '/' . $webhookRestKey;
 

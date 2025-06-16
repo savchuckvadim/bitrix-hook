@@ -109,7 +109,7 @@ class ReportController extends Controller
                 $data['returnToTmc'] = $request->returnToTmc;
             }
 
-            
+
             if ($isFullData) {
                 // $service = new EventReportService($data);
                 // $result = $service->getEventFlow();
@@ -211,6 +211,7 @@ class ReportController extends Controller
                 $portal = $portal['data'];
                 $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
                 $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+                $hook = PortalController::getHook($domain);
                 // $currentCompany = BitrixGeneralService::getEntity($hook, 'company', $companyId);
 
 
@@ -294,7 +295,6 @@ class ReportController extends Controller
                 [
                     'result' => 'success',
                     'message' => 'job !'
-
                 ]
 
             );
@@ -410,8 +410,9 @@ class ReportController extends Controller
 
                 $portal = PortalController::getPortal($domain);
                 $portal = $portal['data'];
-                $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
-                $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+                // $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
+                // $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+                $hook = PortalController::getHook($domain);
                 // $currentCompany = BitrixGeneralService::getEntity($hook, 'company', $companyId);
                 $sessionKey = $domain . '_' . $currentTask['id'];
 
@@ -778,13 +779,13 @@ class ReportController extends Controller
                         }
                     }
 
-                    if ($listBitrixId) {
-                        $presList = BitrixListService::getList(
-                            $hook,
-                            $listBitrixId,
-                            $filter
-                        );
-                    }
+                    // if ($listBitrixId) {
+                    //     $presList = BitrixListService::getList(
+                    //         $hook,
+                    //         $listBitrixId,
+                    //         $filter
+                    //     );
+                    // }
                 }
 
 
@@ -803,7 +804,7 @@ class ReportController extends Controller
                             'currentPresentationDeal' => $currentPresentationDeal,
                             'basePresentationDeals' => $basePresentationDeals,
                             'allPresentationDeals' => $allPresentationDeals,
-                            'presList' => $presList,
+                            'presList' => [],
                             'currentXODeal' => $currentXODeal,
                             'allXODeals' => $allXODeals,
                             'currentTaskDeals' => $btxDeals,
@@ -826,7 +827,7 @@ class ReportController extends Controller
                             'currentPresentationDeal' => $currentPresentationDeal,
                             'basePresentationDeals' => $basePresentationDeals,
                             'allPresentationDeals' => $allPresentationDeals,
-                            'presList' => $presList,
+                            'presList' => [],
                             'currentXODeal' => $currentXODeal,
                             'allXODeals' => $allXODeals,
                             'btxDeals' => $btxDeals,
@@ -928,7 +929,8 @@ class ReportController extends Controller
                 $portal = PortalController::getPortal($domain);
                 $portal = $portal['data'];
                 $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
-                $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+                // $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+                $hook = PortalController::getHook($domain);
                 // $currentCompany = BitrixGeneralService::getEntity($hook, 'company', $companyId);
                 $sessionKey = 'newtask_' . $domain  . '_' . $companyId;
 
@@ -1319,8 +1321,33 @@ class ReportController extends Controller
                 ];
 
                 //from task - получаем из task компании и сделки разных направлений
+                $companyGetSelect = [
+                    'ID',
+                    'TITLE',
+                    'ASSIGNED_BY_ID',
+                    'UF_CRM_PRES_COUNT',
+                    'UF_CRM_1709807026',
+                    'UF_CRM_OP_MHISTORY',
+                    'UF_CRM_OP_HISTORY',
+                    'UF_CRM_OP_OFFER_Q',
+                    'UF_CRM_OP_INVOICE_Q',
+                    'UF_CRM_OP_INVOICE_DATE',
+                    'UF_CRM_OP_INVOICE_PRES_Q',
+                    'UF_CRM_OP_OFFER_DATE',
+                    'UF_CRM_OP_OFFER_PRES_Q',
 
-                $currentCompany = BitrixGeneralService::getEntity($hook, 'company', $companyId);
+                    'UF_CRM_OP_FAIL_COMMENTS',
+                    'UF_CRM_PRES_COMMENTS',
+                    'UF_CRM_MANAGER_OP',
+                    'UF_CRM_MANAGER_TMC',
+                ];
+                $currentCompany = BitrixGeneralService::getEntityByID(
+                    $hook,
+                    'company',
+                    $companyId,
+                    null,
+                    $companyGetSelect
+                );
                 // $currentBaseDeal = BitrixGeneralService::getEntity(
                 //     $hook,
                 //     'deal',
@@ -1540,7 +1567,7 @@ class ReportController extends Controller
                     'UF_CRM_OP_CURRENT_STATUS',
 
                 ];
-          
+
                 // $userId = $data['companyId'];
                 $domain = $data['domain'];
                 $companyId  = $data['domain'];
@@ -1553,7 +1580,7 @@ class ReportController extends Controller
                 $portal = $portal['data'];
                 $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
                 $hook = 'https://' . $domain  . '/' . $webhookRestKey;
-             
+
                 $results = [];
 
                 if (!empty($tasks)) {
@@ -1646,7 +1673,6 @@ class ReportController extends Controller
 
                 );
             }
-
         } catch (\Throwable $th) {
             return APIOnlineController::getError(
                 $th->getMessage(),
@@ -2377,7 +2403,8 @@ class ReportController extends Controller
                 $portal = PortalController::getPortal($domain);
                 $portal = $portal['data'];
                 $webhookRestKey = $portal['C_REST_WEB_HOOK_URL'];
-                $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+                // $hook = 'https://' . $domain  . '/' . $webhookRestKey;
+                $hook = PortalController::getHook($domain);
                 // $currentCompany = BitrixGeneralService::getEntity($hook, 'company', $companyId);
                 $sessionKey = $domain . '_' . $currentTask['id'];
 
@@ -2744,13 +2771,13 @@ class ReportController extends Controller
                         }
                     }
 
-                    if ($listBitrixId) {
-                        $presList = BitrixListService::getList(
-                            $hook,
-                            $listBitrixId,
-                            $filter
-                        );
-                    }
+                    // if ($listBitrixId) {
+                    //     $presList = BitrixListService::getList(
+                    //         $hook,
+                    //         $listBitrixId,
+                    //         $filter
+                    //     );
+                    // }
                 }
 
 
@@ -2765,7 +2792,7 @@ class ReportController extends Controller
                         'currentPresentationDeal' => $currentPresentationDeal,
                         'basePresentationDeals' => $basePresentationDeals,
                         'allPresentationDeals' => $allPresentationDeals,
-                        'presList' => $presList,
+                        'presList' => [],
                         'currentXODeal' => $currentXODeal,
                         'allXODeals' => $allXODeals,
                         'currentTaskDeals' => $btxDeals,
