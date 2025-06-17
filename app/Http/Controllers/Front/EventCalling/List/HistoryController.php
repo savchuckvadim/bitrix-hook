@@ -149,6 +149,7 @@ class HistoryController extends Controller
                         $resultStatusFieldId
                     ],
                     'order' => ['ID' => 'ASC'], // 🟢 Сортировка по ID
+                    'start' => -1,
                 ];
 
                 if ($lastId) {
