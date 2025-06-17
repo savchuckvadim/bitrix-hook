@@ -61,6 +61,7 @@ class BitrixDealService
 
                     ],
                     'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
+                    'start' => -1,
                 ];
             }
 
@@ -241,7 +242,7 @@ class BitrixDealService
             $methodSmart = '/crm.deal.list';
             $url = $hook . $methodSmart;
 
-
+            $data['start'] = -1;
 
             $smartFieldsResponse = Http::get($url, $data);
 

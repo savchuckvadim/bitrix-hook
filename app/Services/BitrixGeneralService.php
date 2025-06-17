@@ -386,7 +386,8 @@ class BitrixGeneralService
 
             $data = [
                 'filter' => $filter,
-                'select' => $select
+                'select' => $select,
+                'start' => -1,
 
             ];
 
@@ -408,7 +409,7 @@ class BitrixGeneralService
             $method = '/crm.' . $entityType . '.list';
             $url = $hook . $method;
 
-           
+            $data['start'] = -1;
 
 
             $smartFieldsResponse = Http::get($url, $data);
