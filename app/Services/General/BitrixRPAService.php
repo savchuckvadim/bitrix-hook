@@ -25,7 +25,7 @@ class BitrixRPAService
         // filter - список для фильтрации. Ключи для фильтрации по пользовательским полям должны быть в UPPER_CASE, остальные - в camelCase. Примеры фильтров ниже
     ) {
         $method = '/rpa.item.list';
-
+        $data['start'] = -1;
         $response = Http::get($this->hook . $method, $data);
         $result =  APIBitrixController::getBitrixRespone($response, 'getRPAList');
         return  $result;
@@ -42,7 +42,7 @@ class BitrixRPAService
         $data = [
             'typeId' => $typeId,
             'id' => $rpaItemId,
-
+            'start' => -1,
         ];
         $response = Http::get($this->hook . $method, $data);
         $result =  APIBitrixController::getBitrixRespone($response, 'getRPAList');
@@ -86,6 +86,7 @@ class BitrixRPAService
         //     'id' => $rpaItemId,
         //     'fields' => $fields
         // ];
+        $data['start'] = -1;
         $response = Http::get($this->hook . $method, $data);
         $result =  APIBitrixController::getBitrixRespone($response, 'getRPAList');
         return  $result;

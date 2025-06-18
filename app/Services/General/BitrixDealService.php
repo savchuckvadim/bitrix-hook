@@ -44,6 +44,7 @@ class BitrixDealService
 
                     ],
                     'select' => ["ID", "CATEGORY_ID", "STAGE_ID"],
+                    'start' => -1,
                 ];
             }
             if ($leadId) {
