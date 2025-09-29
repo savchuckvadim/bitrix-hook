@@ -321,6 +321,7 @@ class BitrixGeneralService
 
     static function getEntity($hook, $entityType, $entityId, $filter = null, $select = null)
     {
+        sleep(1);
         $resultFields = null;
         try {
             $methodSmart = '/crm.' . $entityType . '.get';
@@ -350,6 +351,7 @@ class BitrixGeneralService
 
     static function getEntityByID($hook, $entityType, $entityId, $filter = null, $select = null)
     {
+        sleep(1);
         $resultFields = null;
         try {
             $methodSmart = '/crm.' . $entityType . '.get';
@@ -404,6 +406,7 @@ class BitrixGeneralService
 
     static function getEntityListWithFullData($hook, $entityType, $data)
     {
+        sleep(1);
         $resultFields = null;
         try {
             $method = '/crm.' . $entityType . '.list';
@@ -428,6 +431,7 @@ class BitrixGeneralService
         $entityId,
         $fieldsData
     ) {
+        sleep(1);
         $resultLead = null;
         try {
             $methodSmart = '/crm.' . $entityType . '.update';
