@@ -67,17 +67,19 @@ class BXRecordsController extends Controller
         try {
 
             $activities = [];
-
+sleep(1);
             $dealsIds = $this->getCurrentDealIds($companyId);
-            $leadsIds = $this->getCurrentLeadIds($companyId);
-            $activities =  $this->getActivities($companyId,$leadsIds, $dealsIds, $contactIds);
-            $records = $this->getFilesFromActivities($activities);
-
+            sleep(1);
+            $leadsIds = []; // $this->getCurrentLeadIds($companyId);
+            // $activities =  $this->getActivities($companyId,$leadsIds, $dealsIds, $contactIds);
+            // sleep(1);
+            // $records = $this->getFilesFromActivities($activities);
+            sleep(1);
             return APIOnlineController::getSuccess([
                 'deals' => $dealsIds,
                 'contactIds' => $contactIds,
-                'activities' => $activities,
-                'records' => $records
+                'activities' => [], // $activities,
+                'records' => [] // $records
             ]);
         } catch (\Throwable $th) {
             $errorMessages =  [

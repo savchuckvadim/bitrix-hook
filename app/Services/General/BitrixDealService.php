@@ -220,7 +220,7 @@ class BitrixDealService
 
             $smartFieldsResponse = Http::get($url, $data);
 
-            $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: create Deal Item');
+            $responseData = APIBitrixController::getBitrixRespone($smartFieldsResponse, 'general service: get Deal Item');
 
             if (isset($responseData['item'])) {
                 $responseData = $responseData['item'];

@@ -123,12 +123,14 @@ class BitrixHookController extends Controller
 
 
             if (isset($request['created'])) {
+                Log::channel('telegram')->info('created: ' . $request['created']);     
                 $created = $request['created'];
                 $partsCreated = explode("_", $created);
                 $createdId = $partsCreated[1];
             }
 
             if (isset($request['responsible'])) {
+                Log::channel('telegram')->info('responsible: ' . $request['responsible']);   
                 $responsible = $request['responsible'];
                 $partsResponsible = explode("_", $responsible);
 
