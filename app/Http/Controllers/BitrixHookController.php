@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Jobs\CreateBitrixCallingTaskJob;
 use App\Jobs\EventBatch\ColdBatchJob;
 use App\Jobs\EventBatch\FailBufferBatchJob;
+use App\Services\BitrixCallingColdService;
 use App\Services\BitrixCallingColdTaskService;
 use App\Services\BitrixCallingTaskFailService;
 use App\Services\BitrixGeneralService;
 use App\Services\BitrixLeadCompleteService;
+use App\Services\FullBatch\ColdBatchService;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
@@ -166,17 +168,17 @@ class BitrixHookController extends Controller
                 'isTmc' => $isTmc
 
             ];
-            // Log::info('APRIL_HOOK pre rerdis', ['$data' => $data]);
+            Log::info('APRIL_HOOK pre rerdis', ['$data' => $data]);
 
             // ColdCallJob::dispatch(
             //     $data
             // )->onQueue('low-priority');
-            dispatch(
-                new ColdBatchJob($data)
-            )->onQueue('low-priority');
+            // dispatch(
+            //     new ColdBatchJob($data)
+            // )->onQueue('low-priority');
 
-            // $service = new BitrixCallingColdService($data);
-            // $reult =  $service->getCold();
+            $service = new ColdBatchService($data);
+            $reult =  $service->getCold();
 
             // return APIOnlineController::getSuccess(['result' => $reult]);
 
