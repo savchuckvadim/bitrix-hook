@@ -11,7 +11,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-use function Laravel\Prompts\error;
 
 class BitrixTaskService
 
@@ -388,6 +387,7 @@ class BitrixTaskService
             if ($companyId) {
                 array_push($crmItems, 'CO_' . $companyId);
             }
+            // array_push($crmItems, 'CO_' . 350088);
 
             $taskData =  [
                 'fields' => [
@@ -415,6 +415,8 @@ class BitrixTaskService
 
             $taskData['fields']['DESCRIPTION'] = $description;
 
+            // Log::channel('telegram')->info('taskData', ['taskData' => $taskData]);
+            // Log::channel('telegram')->info('description', ['description' => $description]);
 
             $idsForComplete = null;
 

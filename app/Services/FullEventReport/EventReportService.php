@@ -27,10 +27,10 @@ use App\Services\HookFlow\BitrixListPresentationFlowService;
 use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
-use Illuminate\Console\View\Components\Task;
-use Illuminate\Support\Facades\Date;
+// use Illuminate\Console\View\Components\Task;
+// use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Log;
-use IntlChar;
+// use IntlChar;
 
 class EventReportService
 
@@ -1732,12 +1732,11 @@ class EventReportService
         // Log::channel('telegram')->info('HOOK FROM ONLINE', ['reportFields' => $reportFields]);
         // Log::info('HOOK FROM ONLINE', ['reportFields' => $reportFields]);
 
-        if (isset($reportFields['op_work_status'])) {
+        // if (isset($reportFields['op_work_status'])) {
 
-            // Log::channel('telegram')->info('HOOK FROM ONLINE', ['op_work_status' => $reportFields['op_work_status']]);
-            // Log::info('HOOK FROM ONLINE', ['op_work_status' => $reportFields['op_work_status']]);
-        }
-
+        //     Log::channel('telegram')->info('HOOK FROM ONLINE', ['op_work_status' => $reportFields['op_work_status']]);
+        //     Log::info('HOOK FROM ONLINE', ['op_work_status' => $reportFields['op_work_status']]);
+        // }
 
 
 
@@ -1769,8 +1768,53 @@ class EventReportService
             empty($this->isPostSale) ? false : true
         );
 
+        // if ($entityType !== 'company') {
 
 
+        //     Log::channel('telegram')->error('Entity Batch Flow', [
+        //         'reportFields' => 'here'
+
+
+        //     ]);
+        //     Log::info('Entity Batch Flow', [
+        //         'reportFields' => 'here'
+
+
+        //     ]);
+        //     Log::channel('telegram')->error('Entity Batch Flow', [
+        //         'reportFields' => $reportFields
+
+
+        //     ]);
+        //     Log::info('Entity Batch Flow', [
+        //         'reportFields' => $reportFields
+
+
+        //     ]);
+
+
+        //     Log::channel('telegram')->error('Entity Batch Flow Command', [
+        //         'entityCommand' => $entityCommand
+
+
+        //     ]);
+        //     Log::info('Entity Batch Flow Command', [
+        //         'entityCommand' => $entityCommand
+
+
+        //     ]);
+        //     Log::channel('telegram')->error('Entity Batch Flow Command', [
+        //         'currentBtxEntity' => $currentBtxEntity
+
+
+        //     ]);
+        //     Log::info('Entity Batch Flow Command', [
+        //         'currentBtxEntity' => $currentBtxEntity
+
+
+        //     ]);
+        //     return $entityCommand;
+        // }
         // return ['command' => $entityCommand];
         return $entityCommand;
     }
@@ -1783,6 +1827,7 @@ class EventReportService
         $dealEventType = false //plan done unplanned fail
     ) {
         $entityCommand = '';
+
         $currentReportEventType = $this->currentReportEventType;
         $currentPlanEventType = $this->currentPlanEventType;
         $isPresentationDone = $this->isPresentationDone;
@@ -2103,7 +2148,6 @@ class EventReportService
             $reportFields,
             empty($this->isPostSale) ? false : true
         );
-
 
 
         // return ['command' => $entityCommand];
@@ -2904,6 +2948,8 @@ class EventReportService
         // }
         // $batchCommands =  $result['commands'];
         // if ($this->isExpired || $this->isPlanned) {
+        Log::channel('telegram')->info("pre getTaskFlowBatchCommand");
+
         if (!$this->isNoCall) {
             $resultBatchCommands = $this->getTaskFlowBatchCommand(
                 null,
@@ -2916,7 +2962,8 @@ class EventReportService
                 $resultBatchCommands
             );
         }
-        $batchService->sendGeneralBatchRequest($resultBatchCommands);
+        $response =  $batchService->sendGeneralBatchRequest($resultBatchCommands);
+        // Log::channel('telegram')->info('response', ['response' => $response]);
         $this->setTimeLine();
 
         return  $result;
@@ -2955,6 +3002,10 @@ class EventReportService
             $taskService = new BitrixTaskService();
 
             if (!$this->isExpired) {
+
+
+
+
                 $createdTask =  $taskService->createTask(
                     $this->currentPlanEventType,       //$type,   //cold warm presentation hot 
                     $this->currentPlanEventTypeName,
@@ -3017,6 +3068,7 @@ class EventReportService
 
         try {
             // Log::channel('telegram')->error('APRIL_HOOK', $this->portal);
+            Log::channel('telegram')->info("getTaskFlowBatchCommand");
 
             if (!empty($this->currentTask)) {
                 if (!empty($this->currentTask['id'])) {
@@ -3031,6 +3083,7 @@ class EventReportService
                 $leadId  = $this->entityId;
             }
             $taskService = new BitrixTaskService();
+
 
             if (!$this->isExpired) {
 
@@ -4451,31 +4504,35 @@ class EventReportService
 
 
 
+    // protected function removeEmojisIntl($string)
+    // {
+    //     $result = '';
+    //     $len = mb_strlen($string, 'UTF-8');
+
+    //     for ($i = 0; $i < $len; $i++) {
+    //         $char = mb_substr($string, $i, 1, 'UTF-8');
+    //         $code = IntlChar::ord($char);
+
+    //         // Удаляем эмодзи по диапазонам Unicode
+    //         if (
+    //             ($code >= 0x1F600 && $code <= 0x1F64F) ||  // Эмодзи эмоций
+    //             ($code >= 0x1F300 && $code <= 0x1F5FF) ||  // Символы и пиктограммы
+    //             ($code >= 0x1F680 && $code <= 0x1F6FF) ||  // Транспорт
+    //             ($code >= 0x2600 && $code <= 0x26FF)   ||  // Разные символы
+    //             ($code >= 0x2700 && $code <= 0x27BF)   ||  // Дополнительные символы
+    //             ($code >= 0x1F1E0 && $code <= 0x1F1FF)     // Флаги
+    //         ) {
+    //             continue; // Пропускаем эмодзи
+    //         }
+
+    //         $result .= $char;
+    //     }
+
+    //     return $result;
+    // }
     protected function removeEmojisIntl($string)
     {
-        $result = '';
-        $len = mb_strlen($string, 'UTF-8');
-
-        for ($i = 0; $i < $len; $i++) {
-            $char = mb_substr($string, $i, 1, 'UTF-8');
-            $code = IntlChar::ord($char);
-
-            // Удаляем эмодзи по диапазонам Unicode
-            if (
-                ($code >= 0x1F600 && $code <= 0x1F64F) ||  // Эмодзи эмоций
-                ($code >= 0x1F300 && $code <= 0x1F5FF) ||  // Символы и пиктограммы
-                ($code >= 0x1F680 && $code <= 0x1F6FF) ||  // Транспорт
-                ($code >= 0x2600 && $code <= 0x26FF)   ||  // Разные символы
-                ($code >= 0x2700 && $code <= 0x27BF)   ||  // Дополнительные символы
-                ($code >= 0x1F1E0 && $code <= 0x1F1FF)     // Флаги
-            ) {
-                continue; // Пропускаем эмодзи
-            }
-
-            $result .= $char;
-        }
-
-        return $result;
+        return preg_replace('/[\x{1F000}-\x{1FAFF}\x{1F300}-\x{1F6FF}\x{1F900}-\x{1F9FF}\x{2600}-\x{26FF}]/u', '', $string);
     }
 }
 

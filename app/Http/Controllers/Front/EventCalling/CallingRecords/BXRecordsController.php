@@ -67,7 +67,7 @@ class BXRecordsController extends Controller
         try {
 
             $activities = [];
-sleep(1);
+            sleep(1);
             $dealsIds = $this->getCurrentDealIds($companyId);
             sleep(1);
             $leadsIds = []; // $this->getCurrentLeadIds($companyId);
@@ -141,8 +141,12 @@ sleep(1);
             $data,
 
         );
-        foreach ($deals as $deal) {
-            $resultIds[] = $deal['ID'];
+        if (!empty($deals)) {
+            foreach ($deals as $deal) {
+                if (!empty($deal) && !empty($deal['ID'])) {
+                    $resultIds[] = $deal['ID'];
+                }
+            }
         }
         return $resultIds;
     }
@@ -167,8 +171,14 @@ sleep(1);
             $data,
 
         );
-        foreach ($leads as $lead) {
-            $resultIds[] = $lead['ID'];
+        if (!empty($leads)) {
+
+
+            foreach ($leads as $lead) {
+                if (!empty($lead) && !empty($lead['ID'])) {
+                    $resultIds[] = $lead['ID'];
+                }
+            }
         }
         return $resultIds;
     }
@@ -196,7 +206,7 @@ sleep(1);
     }
 
 
-    protected function getActivities($companyId,$leadsIds, $dealsIds, $contactIds)
+    protected function getActivities($companyId, $leadsIds, $dealsIds, $contactIds)
     {
         $activities = [];
 
@@ -336,7 +346,7 @@ sleep(1);
                     $name = "{$activity['SUBJECT']} {$date}";
 
                     $files[$file['id']] = [
-                        
+
                         'activityId' => $activity['ID'],
                         'id' => $file['id'],
                         'name' => $name,

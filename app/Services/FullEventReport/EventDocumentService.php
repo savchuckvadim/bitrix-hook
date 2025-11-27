@@ -313,6 +313,14 @@ class EventDocumentService
 
                 $this->currentBaseDeal = $sessionDeals['currentBaseDeal'];
 
+                if (empty($this->currentBaseDeal)) {
+                    $this->currentBaseDeal = BitrixGeneralService::getEntity($this->hook, 'deal', $baseDealId);
+                    Log::channel('telegram')
+                        ->info('currentBaseDeal', ['message' => ' документ flow : не было сделки в сессии, получаем из bitrix']);
+                    Log::channel('telegram')
+                        ->info('currentBaseDeal', ['currentBaseDeal' => $this->currentBaseDeal]);
+                }
+
                 $this->relationCompanyUserPresDeals = $sessionDeals['allPresentationDeals']; //allPresDeal 
                 $this->relationFromBasePresDeals = $sessionDeals['basePresentationDeals'];
             }

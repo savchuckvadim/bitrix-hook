@@ -131,15 +131,25 @@ class ReportController extends Controller
                 }
                 // if ($isTmc) {
                 //     // Log::channel('telegram')->info("Redis tmc queue.");
-                //     $service = new EventReportTMCService($data);
-                //     return $service->getEventFlow();
+                //     // $service = new EventReportTMCService($this->data);
+                //     $service = new EventReportTMCBatchService($data);
                 // } else {
+                //     Log::channel('telegram')->info("Redis sale queue.");
+                //     $service = new EventReportService($data);
+                // }
+                // $result = $service->getEventFlow();
+                // return APIOnlineController::getSuccess(
+                //     [
+                //         'result' => 'success',
+                //         'message' => 'job !',
+                //         'result' => $result
+                //     ]
 
-
+                // );
                 dispatch(
                     new EventJob($data)
                 )->onQueue('high-priority');
-                // }
+
                 return APIOnlineController::getSuccess(
                     [
                         'result' => 'success',

@@ -309,7 +309,7 @@ class BitrixGeneralService
 
             $resultLeadResponse = Http::get($url, $data);
 
-            $resultData = APIBitrixController::getBitrixRespone($resultLeadResponse, 'general service: updateEntity');
+            $resultData = APIBitrixController::getBitrixRespone($resultLeadResponse, 'general service: setEntity');
             $result = $resultData;
 
 
