@@ -312,7 +312,8 @@ class EventDocumentService
 
 
                 $this->currentBaseDeal = $sessionDeals['currentBaseDeal'];
-
+                Log::channel('telegram')
+                ->info('currentBaseDeal', ['currentBaseDeal' => $this->currentBaseDeal]);
                 if (empty($this->currentBaseDeal)) {
                     $this->currentBaseDeal = BitrixGeneralService::getEntity($this->hook, 'deal', $baseDealId);
                     Log::channel('telegram')
