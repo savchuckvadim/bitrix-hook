@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 const BASE_URL = 'https://garant-app.ru/api';
+
+// const BASE_URL = 'http://127.0.0.1/api';
+
 class APIOnlineController extends Controller
 {
     public static function online($method, $endpoint, $requestData, $dataname)
