@@ -24,7 +24,8 @@ class PortalController extends Controller
                 $result = APIOnlineController::online('post', 'getportal', $requestPortalData, 'portal');
                 Cache::put($cacheKey, $result, now()->addMinutes(15)); // Кешируем данные портала
             }
-
+            Log::info('API ONLINE: getPortal', ['domain' => $domain]);
+            Log::info('API ONLINE: getPortal', ['portal' => $result]);
             // if (!empty($result['data'])) {
             //     if (!empty($result['data']['C_REST_WEB_HOOK_URL'])) {
             //         Log::channel('telegram')->info('TEST PORTAL GET HOOK', [
