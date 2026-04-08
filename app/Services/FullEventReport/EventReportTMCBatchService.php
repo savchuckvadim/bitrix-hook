@@ -718,8 +718,8 @@ class EventReportTMCBatchService
                 Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
                     'data' => [
                         'message' => 'portal smart was not found 420',
-                        'smart' => $smart,
-                        'portal' => $portal
+                        // 'smart' => $smart,
+                        // 'portal' => $portal
                     ]
                 ]);
             }
