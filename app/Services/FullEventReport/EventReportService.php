@@ -2948,7 +2948,7 @@ class EventReportService
         // }
         // $batchCommands =  $result['commands'];
         // if ($this->isExpired || $this->isPlanned) {
-        Log::channel('telegram')->info("pre getTaskFlowBatchCommand");
+        // Log::channel('telegram')->info("pre getTaskFlowBatchCommand");
 
         if (!$this->isNoCall) {
             $resultBatchCommands = $this->getTaskFlowBatchCommand(
