@@ -3068,7 +3068,7 @@ class EventReportService
 
         try {
             // Log::channel('telegram')->error('APRIL_HOOK', $this->portal);
-            Log::channel('telegram')->info("getTaskFlowBatchCommand");
+         
 
             if (!empty($this->currentTask)) {
                 if (!empty($this->currentTask['id'])) {
