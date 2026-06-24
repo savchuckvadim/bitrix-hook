@@ -656,7 +656,7 @@ class EventReportTMCService
                     }
                 }
             } else {
-                Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
+                Log::channel('telegram')->error('APRIL_HOOK TMC sevice', [
                     'data' => [
                         'message' => 'portal smart was not found 420',
                         // 'smart' => $smart,

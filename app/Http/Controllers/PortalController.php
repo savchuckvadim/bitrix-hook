@@ -15,17 +15,24 @@ class PortalController extends Controller
             $requestPortalData = [
                 'domain' => $domain
             ];
+            $fromCache = false;
             $cacheKey = 'portal_' . $domain;
             $cachedPortalData = Cache::get($cacheKey);
+            if ($domain == 'garantservisvoronezh.bitrix24.ru') {
+                //временно отключаем кэширование для этого домена
+                $cachedPortalData =  null;
+                Log::channel('telegram')->info('TEST PORTAL GET PORTAL', ['domain' => $domain, 'cachedPortalData' => $cachedPortalData]);
+            }
             if (!empty($cachedPortalData)) {
 
                 $result = $cachedPortalData;
+                $fromCache = true;
             } else {
                 $result = APIOnlineController::online('post', 'getportal', $requestPortalData, 'portal');
                 Cache::put($cacheKey, $result, now()->addMinutes(60000)); // Кешируем данные портала
             }
-            Log::info('API ONLINE: getPortal', ['domain' => $domain]);
-            Log::info('API ONLINE: getPortal', ['portal' => $result]);
+            Log::info('API ONLINE: getPortal', ['domain' => $domain, 'fromCache' => $fromCache]);
+            // Log::info('API ONLINE: getPortal', ['portal' => $result]);
             // if (!empty($result['data'])) {
             //     if (!empty($result['data']['C_REST_WEB_HOOK_URL'])) {
             //         Log::channel('telegram')->info('TEST PORTAL GET HOOK', [

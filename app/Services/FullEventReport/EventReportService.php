@@ -833,7 +833,7 @@ class EventReportService
                     }
                 }
             } else {
-                Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
+                Log::channel('telegram')->error('APRIL_HOOK Event Report Service 836', [
                     'data' => [
                         'message' => 'portal smart was not found 420',
                         // 'smart' => $smart,

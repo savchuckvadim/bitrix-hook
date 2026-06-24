@@ -2008,6 +2008,7 @@ class ReportController extends Controller
         }
         return APIOnlineController::getSuccess([
             'deal' => $resultDeal,
+            'filter' => $filter,
         ]);
     }
     public static function getDocumentDealsInit(Request $request)

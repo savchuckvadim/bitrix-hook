@@ -366,69 +366,6 @@ class EventDocumentService
 
 
 
-            // if (!empty($portal['smarts'])) {
-            //     // foreach ($portal['smarts'] as $smart) {
-            //     $smart = null;
-            //     if (!empty($portal['smarts'])) {
-
-            //         foreach ($portal['smarts'] as $pSmart) {
-            //             if ($pSmart['group'] == 'sales') {
-            //                 $smart = $pSmart;
-            //             }
-            //         }
-            //     }
-            //     if (!empty($smart)) {
-            //         $smartForStageId = $smart['forStage'];
-
-            //         if (!empty($smart['categories'])) {
-            //             foreach ($smart['categories'] as $category) {
-
-            //                 if ($category && !empty($category['code'])) {
-
-            //                     if ($category['code'] == 'sales_cold') {
-
-            //                         $targetCategoryId = $category['bitrixId'];
-            //                         if (!empty($category['stages'])) {
-            //                             foreach ($category['stages'] as $stage) {
-            //                                 if ($stage['code'] == 'cold_plan') {
-            //                                     $targetStageId = $smartForStageId . $category['bitrixId'] . ':' . $stage['bitrixId'];
-            //                                 }
-            //                             }
-            //                         }
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //         if (!empty($smart['bitrixfields'])) {
-
-            //             foreach ($smart['bitrixfields'] as $field) {
-
-            //                 if ($field && !empty($field['code'])) {
-            //                     if ($field['code'] == 'xo_call_name') {
-            //                         $callThemeFieldCold = $field['bitrixCamelId'];
-            //                     } else if ($field['code'] == 'xo_deadline') {
-            //                         $lastCallDateFieldCold = $field['bitrixCamelId'];
-            //                     } else if ($field['code'] == 'next_call_date') {
-            //                         $lastCallDateField = $field['bitrixCamelId'];
-            //                     } else if ($field['code'] == 'next_call_name') {
-            //                         $callThemeField = $field['bitrixCamelId'];
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //     } else {
-            //         Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
-            //             'data' => [
-            //                 'message' => 'portal smart was not found 420',
-            //                 'smart' => $smart,
-            //                 'portal' => $portal
-            //             ]
-            //         ]);
-            //     }
-
-            //     // }
-            // }
-
 
             $this->currentDepartamentType = BitrixDepartamentService::getDepartamentTypeByUserId();
 
@@ -649,15 +586,6 @@ class EventDocumentService
 
 
         $entityService = new BitrixEntityFlowService();
-
-
-        // Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
-        //     'data' => [
-
-        //         'reportFields' => $reportFields,
-
-        //     ]
-        // ]);
 
         $entityService->documentFlowflow(
             $currentBtxEntity,
@@ -1382,13 +1310,13 @@ class EventDocumentService
         // protected $currentBaseDeal;
         // protected $currentPresDeal;
 
+        $currentBaseDealId = (is_array($this->currentBaseDeal) && isset($this->currentBaseDeal['ID']))
+            ? $this->currentBaseDeal['ID']
+            : null;
+
         $currentBxDealIds = [];
-        if (!empty($this->currentBaseDeal['ID'])) {
-
-            if (!empty($this->currentBaseDeal)) {
-
-                array_push($currentBxDealIds, $this->currentBaseDeal['ID']);
-            }
+        if ($currentBaseDealId !== null) {
+            array_push($currentBxDealIds, $currentBaseDealId);
         }
         if ($this->isFromPresentation) {  //если после презентации - вне зависимости от типа документа
             if (!empty($this->currentPresDeal['ID'])) {
@@ -1419,7 +1347,7 @@ class EventDocumentService
                 $this->entityId,
                 $this->comment,
                 $currentBxDealIds,
-                $this->currentBaseDeal['ID']
+                $currentBaseDealId
                 // $this->workStatus['current'], 
                 // $this->resultStatus, // result noresult expired,
                 // $this->noresultReason,
@@ -1448,7 +1376,7 @@ class EventDocumentService
                 $this->entityId,
                 $this->comment,
                 $currentBxDealIds,
-                $this->currentBaseDeal['ID']
+                $currentBaseDealId
                 // $this->workStatus['current'], 
                 // $this->resultStatus, // result noresult expired,
                 // $this->noresultReason,
@@ -1478,7 +1406,7 @@ class EventDocumentService
                 $this->entityId,
                 $this->comment,
                 $currentBxDealIds,
-                $this->currentBaseDeal['ID'],
+                $currentBaseDealId,
                 null,
                 null,
 
@@ -1511,7 +1439,7 @@ class EventDocumentService
                 $this->entityId,
                 $this->comment,
                 $currentBxDealIds,
-                $this->currentBaseDeal['ID'],
+                $currentBaseDealId,
                 null,
                 null,
 
@@ -1547,7 +1475,7 @@ class EventDocumentService
                 $this->entityId,
                 $this->comment,
                 $currentBxDealIds,
-                $this->currentBaseDeal['ID']
+                $currentBaseDealId
                 // $this->workStatus['current'], 
                 // $this->resultStatus, // result noresult expired,
                 // $this->noresultReason,

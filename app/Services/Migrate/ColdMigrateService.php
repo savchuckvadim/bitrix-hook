@@ -412,7 +412,7 @@ class ColdMigrateService
                     }
                 }
             } else {
-                Log::channel('telegram')->error('APRIL_HOOK COLD cold sevice', [
+                Log::channel('telegram')->error('APRIL_HOOK COLD migrate sevice', [
                     'data' => [
                         'message' => 'portal smart was not found 340',
                         // 'smart' => $smart,
