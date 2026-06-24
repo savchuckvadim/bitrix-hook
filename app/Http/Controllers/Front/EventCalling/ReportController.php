@@ -1968,7 +1968,7 @@ class ReportController extends Controller
             'UF_CRM_OP_CURRENT_STATUS',
 
         ];
-
+        $filter = [];
         if (!empty($portal['bitrixDeal'])) {
             if (!empty($portal['bitrixDeal']['categories'])) {
                 $btxDealPortalCategories = $portal['bitrixDeal']['categories'];

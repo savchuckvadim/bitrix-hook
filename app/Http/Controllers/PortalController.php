@@ -21,7 +21,7 @@ class PortalController extends Controller
             if ($domain == 'garantservisvoronezh.bitrix24.ru') {
                 //временно отключаем кэширование для этого домена
                 $cachedPortalData =  null;
-                Log::channel('telegram')->info('TEST PORTAL GET PORTAL', ['domain' => $domain, 'cachedPortalData' => $cachedPortalData]);
+                Log::channel('telegram')->info('TEST PORTAL GET PORTAL', ['domain' => $domain]);
             }
             if (!empty($cachedPortalData)) {
 
