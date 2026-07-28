@@ -15,10 +15,14 @@ class APIOnlineController extends Controller
     public static function online($method, $endpoint, $requestData, $dataname)
     {
         try {
-            $portalResponse = Http::withHeaders([
-                'X-Requested-With' => 'XMLHttpRequest',
-                'X-API-KEY' => env('API_KEY')
-            ])->$method(
+            // Жёсткий таймаут: garant-app живёт на этом же сервере/пуле php-fpm,
+            // вызов без таймаута под нагрузкой собирает взаимную блокировку воркеров.
+            $portalResponse = Http::timeout(10)
+                ->connectTimeout(5)
+                ->withHeaders([
+                    'X-Requested-With' => 'XMLHttpRequest',
+                    'X-API-KEY' => env('API_KEY')
+                ])->$method(
                 BASE_URL . '/' . $endpoint,
                 $requestData
             );
