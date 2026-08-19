@@ -14,6 +14,7 @@ use App\Services\FullEventReport\EventReport\EventReportEntityHistoryService;
 use App\Services\FullEventReport\EventReport\EventReportPostFailService;
 use App\Services\FullEventReport\EventReport\EventReportRelationLeadService;
 use App\Services\FullEventReport\EventReport\EventReportReturnToTmcService;
+use App\Services\FullEventReport\EventReport\EventReportSurveySignalService;
 use App\Services\General\BitrixBatchService;
 use App\Services\General\BitrixDealService;
 use App\Services\General\BitrixDepartamentService;
@@ -165,6 +166,10 @@ class EventReportService
     protected $relationFromBasePresDeals;
     protected $relationColdDeals;
     protected $relationTMCDeals;
+
+    // Реальные id unplanned-презентаций из ответа батча — для сигнала в Nest
+    // (EventReportSurveySignalService). До батча — пустой массив.
+    protected $unplannedPresDealRealIds = [];
 
 
     protected $btxDealBaseCategoryId;
@@ -956,6 +961,25 @@ class EventReportService
 
                 $this->historyService->process();
             }
+
+            // Сигнал в Nest про созданные unplanned-презентации: только id,
+            // без данных опросника. Выключатель — env EVENT_SURVEY_SIGNAL_URL
+            // (пусто = сервис нем); ошибки глотает сам сервис.
+            if (!empty($this->unplannedPresDealRealIds)) {
+                $surveySignalService = new EventReportSurveySignalService(
+                    $this->domain,
+                    $this->unplannedPresDealRealIds,
+                    !empty($this->currentBaseDeal['ID']) && is_numeric($this->currentBaseDeal['ID'])
+                        ? $this->currentBaseDeal['ID'] : null,
+                    $this->entityType == 'lead' && !empty($this->entityId)
+                        ? $this->entityId
+                        : (!empty($this->relationLead['ID']) ? $this->relationLead['ID'] : null),
+                    $this->entityType == 'company' && !empty($this->entityId)
+                        ? $this->entityId : null
+                );
+                $surveySignalService->process();
+            }
+
             return APIOnlineController::getSuccess(['data' => ['result' => $result, 'presInitLink' => null]]);
         } catch (\Throwable $th) {
             $errorMessages =  [
@@ -2964,6 +2988,9 @@ class EventReportService
         }
         $response =  $batchService->sendGeneralBatchRequest($resultBatchCommands);
         // Log::channel('telegram')->info('response', ['response' => $response]);
+        // Реальные id unplanned-презентаций (в $result они лишь плейсхолдеры
+        // '$result[...]') — нужны сигналу в Nest в конце getEventFlow.
+        $this->unplannedPresDealRealIds = EventReportSurveySignalService::extractUnplannedDealIds($response);
         $this->setTimeLine();
 
         return  $result;
