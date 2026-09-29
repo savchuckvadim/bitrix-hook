@@ -966,7 +966,7 @@ class EventReportService
             // без данных опросника. Выключатель — env EVENT_SURVEY_SIGNAL_URL
             // (пусто = сервис нем); ошибки глотает сам сервис.
             if (!empty($this->unplannedPresDealRealIds)) {
-                $surveySignalService = new EVENT_SURVEY_SIGNAL_URL (
+                $surveySignalService = new EventReportSurveySignalService(
                     $this->domain,
                     $this->unplannedPresDealRealIds,
                     !empty($this->currentBaseDeal['ID']) && is_numeric($this->currentBaseDeal['ID'])
