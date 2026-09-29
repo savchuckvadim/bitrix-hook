@@ -18,7 +18,10 @@ class PortalController extends Controller
             $fromCache = false;
             $cacheKey = 'portal_' . $domain;
             $cachedPortalData = Cache::get($cacheKey);
-            if ($domain == 'garantservisvoronezh.bitrix24.ru') {
+            if (
+                $domain == 'garantservisvoronezh.bitrix24.ru'
+                || $domain == 'gsirk.bitrix24.ru'
+            ) {
                 //временно отключаем кэширование для этого домена
                 $cachedPortalData =  null;
                 Log::channel('telegram')->info('TEST PORTAL GET PORTAL', ['domain' => $domain]);
